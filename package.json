@@ -1,0 +1,22 @@
+{
+  "name": "rumors-api",
+  "version": "1.0.0",
+  "description": "GraphQL API server for clients like rumors-site and rumors-line-bot",
+  "main": "index.js",
+  "repository": {
+    "url": "git@github.com:MrOrz/rumors-api.git",
+    "type": "git"
+  },
+  "author": "MrOrz <johnsonliang7@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+  },
+  "dependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015-node6": "^0.4.0",
+    "graphql": "^0.8.2",
+    "koa": "next",
+    "koa-graphql-next": "^1.0.5",
+    "node-fetch": "^1.6.3"
+  }
+}
