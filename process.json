@@ -1,0 +1,11 @@
+{
+  "apps": [{
+    "name": "rumors-api",
+    "script": "build/index.js",
+    "env_production": {
+      "NODE_ENV": "production"
+    },
+    "instances": 2,
+    "exec_mode": "cluster",
+  }]
+}

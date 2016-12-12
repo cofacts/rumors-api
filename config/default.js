@@ -1,1 +1,3 @@
-export const ELASTICSEARCH_URL = 'http://localhost:9200'
+module.exports = {
+  ELASTICSEARCH_URL: 'http://localhost:9200',
+};

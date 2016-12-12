@@ -10,8 +10,13 @@
   "author": "MrOrz <johnsonliang7@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "babel-node src",
-    "lint": "eslint --fix src/."
+    "dev": "pm2-dev start --timestamp process-dev.json",
+    "start": "pm2 startOrRestart process.json --env production --log-date-format=\"YYYY-MM-DD HH:mm Z\" --no-daemon",
+    "lint": "eslint --fix src/.",
+    "build": "npm run clean && npm run build:babel && npm run build:docker",
+    "build:babel": "babel src -d build",
+    "build:docker": "docker build",
+    "clean": "rm -rf build"
   },
   "dependencies": {
     "config": "^1.24.0",

@@ -1,0 +1,8 @@
+{
+  apps: [{
+    name: 'rumors-api',
+    script: 'src/index.js',
+    watch: true,
+    interpreter: './node_modules/.bin/babel-node'
+  }]
+}
