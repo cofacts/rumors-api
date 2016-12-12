@@ -6,19 +6,17 @@ import DataLoaders from './graphql/dataLoaders';
 
 const app = new Koa();
 
-app.use((ctx, next) => {
-  return graphqlHTTP({
-    schema,
-    graphiql: true,
-    context: {
-      loaders: new DataLoaders, // new loaders per request
-    },
-  })(ctx, next)
-});
+app.use((ctx, next) => graphqlHTTP({
+  schema,
+  graphiql: true,
+  context: {
+    loaders: new DataLoaders(), // new loaders per request
+  },
+})(ctx, next));
 
 const router = Router();
 
-router.get('/', ctx => {
+router.get('/', (ctx) => {
   ctx.body = 'Hello Koa';
 });
 

@@ -9,5 +9,5 @@ export default {
   type: Rumor,
   resolve() {
 
-  }
+  },
 };

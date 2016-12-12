@@ -17,9 +17,9 @@ export default new GraphQLSchema({
       Search,
       GetRumor,
       GetAnswer,
-    }
-  })
+    },
+  }),
   // mutation: new GraphQLSchema({
   //   name: 'Mutation'
   // })
-})
+});
