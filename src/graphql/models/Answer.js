@@ -20,10 +20,9 @@ export default new GraphQLObjectType({
       resolve: ({ versions }, { limit = Infinity }) => versions.slice(-limit),
     },
     rumors: {
-      type: Rumor,
-      resolve: async ({ id }, args, { loaders }) =>
-        (await loaders.rumorsByAnswerIdLoader.load(id))
-          .map(r => r._source),
+      type: new GraphQLList(Rumor),
+      resolve: ({ id }, args, { loaders }) =>
+        loaders.rumorsByAnswerIdLoader.load(id),
     },
   }),
 });
