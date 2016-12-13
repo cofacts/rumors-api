@@ -15,10 +15,11 @@
     "lint": "eslint --fix src/.",
     "build": "npm run clean && npm run build:babel && npm run build:docker",
     "build:babel": "babel src -d build",
-    "build:docker": "docker build .",
+    "build:docker": "docker build -t rumors-api:latest .",
     "clean": "rm -rf build"
   },
   "dependencies": {
+    "babel-runtime": "^6.20.0",
     "config": "^1.24.0",
     "dataloader": "^1.2.0",
     "elasticsearch": "^12.1.1",
@@ -26,7 +27,8 @@
     "koa": "next",
     "koa-graphql-next": "^1.0.5",
     "koa-router": "next",
-    "node-fetch": "^1.6.3"
+    "node-fetch": "^1.6.3",
+    "pm2": "^2.1.6"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
