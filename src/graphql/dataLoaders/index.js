@@ -1,11 +1,11 @@
-import answerLoaderFactory from './answerLoaderFactory';
+import docLoaderFactory from './docLoaderFactory';
 import rumorsByAnswerIdLoaderFactory from './rumorsByAnswerIdLoaderFactory';
 
 export default class DataLoaders {
 
   // List of data loaders
   //
-  get answerLoader() { return this._checkOrSetLoader('answerLoader', answerLoaderFactory); }
+  get docLoader() { return this._checkOrSetLoader('answerLoader', docLoaderFactory); }
   get rumorsByAnswerIdLoader() { return this._checkOrSetLoader('rumorsByAnswerIdLoader', rumorsByAnswerIdLoaderFactory); }
 
   // inner-workings

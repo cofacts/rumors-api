@@ -15,7 +15,7 @@
     "lint": "eslint --fix src/.",
     "build": "npm run clean && npm run build:babel && npm run build:docker",
     "build:babel": "babel src -d build",
-    "build:docker": "docker build",
+    "build:docker": "docker build .",
     "clean": "rm -rf build"
   },
   "dependencies": {

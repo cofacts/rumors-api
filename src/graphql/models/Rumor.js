@@ -1,6 +1,7 @@
 import {
   GraphQLObjectType,
   GraphQLString,
+  GraphQLList,
 } from 'graphql';
 
 import Answer from './Answer';
@@ -11,9 +12,10 @@ export default new GraphQLObjectType({
     id: { type: GraphQLString },
     text: { type: GraphQLString },
     answers: {
-      type: Answer,
-      resolve: ({ answerIds }, args, { loaders }) =>
-        loaders.answerLoader.loadMany(answerIds),
+      type: new GraphQLList(Answer),
+      resolve: async ({ answerIds }, args, { loaders }) =>
+        (await loaders.docLoader.loadMany(answerIds))
+          .map(r => r._source),
     },
   }),
 });
