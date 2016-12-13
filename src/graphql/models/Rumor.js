@@ -13,9 +13,8 @@ export default new GraphQLObjectType({
     text: { type: GraphQLString },
     answers: {
       type: new GraphQLList(Answer),
-      resolve: async ({ answerIds }, args, { loaders }) =>
-        (await loaders.docLoader.loadMany(answerIds))
-          .map(r => r._source),
+      resolve: ({ answerIds }, args, { loaders }) =>
+        loaders.docLoader.loadMany(answerIds.map(id => `/answers/basic/${id}`)),
     },
   }),
 });
