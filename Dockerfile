@@ -11,6 +11,6 @@ RUN yarn --production --pure-lockfile
 #
 COPY . .
 
-EXPOSE 3000
+EXPOSE 5000
 
 ENTRYPOINT NODE_ENV=production ELASTIC_LOG_LEVEL=info npm start
