@@ -1,5 +1,6 @@
 import Koa from 'koa';
 import Router from 'koa-router';
+import config from 'config';
 import graphqlHTTP from 'koa-graphql-next';
 import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
@@ -23,7 +24,6 @@ router.get('/', (ctx) => {
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log('Listening port', port);
+app.listen(config.get('PORT'), () => {
+  console.log('Listening port', config.get('PORT'));
 });

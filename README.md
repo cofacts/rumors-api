@@ -21,5 +21,5 @@ $ npm run build
 Run the docker image on local machine
 
 ```
-$ docker run --rm -d rumors-api -e "PORT=xxxx"
+$ docker run --rm -d -e "PORT=xxxx" rumors-api
 ```
