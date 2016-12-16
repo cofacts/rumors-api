@@ -13,8 +13,9 @@
     "dev": "pm2-dev start --timestamp process-dev.json",
     "start": "pm2 startOrRestart process.json --env production --log-date-format=\"YYYY-MM-DD HH:mm Z\" --no-daemon",
     "lint": "eslint --fix src/.",
-    "build": "npm run clean && npm run build:babel && npm run build:docker",
+    "build": "npm run clean && npm run build:babel && npm run build:cp && npm run build:docker",
     "build:babel": "babel src -d build",
+    "build:cp": "cp -R src/jade build/jade",
     "build:docker": "docker build -t mrorz/rumors-api:latest .",
     "clean": "rm -rf build"
   },
