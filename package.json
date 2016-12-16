@@ -23,6 +23,7 @@
     "config": "^1.24.0",
     "dataloader": "^1.2.0",
     "elasticsearch": "^12.1.1",
+    "form-data": "^2.1.2",
     "graphql": "^0.8.2",
     "graphql-server-koa": "^0.4.3",
     "koa": "next",

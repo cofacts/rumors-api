@@ -1,6 +1,8 @@
 import {
   GraphQLString,
 } from 'graphql';
+import fetch from 'node-fetch';
+import FormData from 'form-data';
 
 import getInFactory from 'util/getInFactory';
 import client, { processMeta } from 'util/client';
@@ -20,23 +22,34 @@ export default {
     text: { type: GraphQLString },
   },
   async resolve(rootValue, { text }) {
-    const { responses } = await client.msearch({
-      body: [
-        { index: 'rumors', type: 'basic' },
-        { query: { match: { text } } },
-        { index: 'answers', type: 'basic' },
-        { query: { match: { 'versions.text': text } } },
-      ],
-    });
+    const crawledFormData = new FormData();
+    crawledFormData.append('content', text);
 
-    const [rumorResult, answerResult] = responses;
-    const getInRumorResult = getInFactory(rumorResult);
-    const getInAnswerResult = getInFactory(answerResult);
+    const [elasticResult, crawledResult] = await Promise.all([
+      client.msearch({
+        body: [
+          { index: 'rumors', type: 'basic' },
+          { query: { match: { text } } },
+          { index: 'answers', type: 'basic' },
+          { query: { match: { 'versions.text': text } } },
+        ],
+      }),
+      fetch('https://rumor-search.g0v.ronny.tw/query.php', {
+        method: 'POST', body: crawledFormData,
+      }).then(resp => resp.json()),
+    ]);
+
+    const [rumorResult, answerResult] = elasticResult.responses;
 
     return {
-      rumors: getInRumorResult(['hits', 'hits'], []).map(processScoredDoc),
-      answers: getInAnswerResult(['hits', 'hits'], []).map(processScoredDoc),
-      crawledDocs: [],
+      rumors: getInFactory(rumorResult)(['hits', 'hits'], []).map(processScoredDoc),
+      answers: getInFactory(answerResult)(['hits', 'hits'], []).map(processScoredDoc),
+      crawledDocs: getInFactory(crawledResult)(['hits', 'hits'], [])
+        .map(processScoredDoc)
+        .map(({ doc, score }) => ({
+          doc: { rumor: doc.title, answer: doc.content, url: doc.url },
+          score,
+        })),
     };
   },
 };

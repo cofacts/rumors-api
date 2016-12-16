@@ -34,12 +34,12 @@ const ResultDocument = new GraphQLUnionType({
   },
 });
 
-function theBestDoc(scoredDocs) {
+function theBestDoc(scoredDocs, singleDocThreshold) {
   // If the first match has score > 10,
   // or the first match is 2x larger than the second match,
   // return the first match.
   if (
-    (scoredDocs.length >= 1 && scoredDocs[0].score > 10) ||
+    (scoredDocs.length >= 1 && scoredDocs[0].score > singleDocThreshold) ||
     (scoredDocs.length > 1 && scoredDocs[0].score > 2 * scoredDocs[1].score)
   ) {
     return scoredDocs[0];
@@ -58,21 +58,21 @@ export default new GraphQLObjectType({
       description: 'The document that is the best match in this search.',
       type: ResultDocument,
       resolve({ rumors: scoredRumors, answers: scoredAnswers, crawledDocs: scoredCrawledDocs }) {
-        const bestScoredRumor = theBestDoc(scoredRumors);
+        const bestScoredRumor = theBestDoc(scoredRumors, 15);
         if (bestScoredRumor) {
           return {
             ...bestScoredRumor.doc, _type: 'RUMOR',
           };
         }
 
-        const bestScoredAnswer = theBestDoc(scoredAnswers);
+        const bestScoredAnswer = theBestDoc(scoredAnswers, 10);
         if (bestScoredAnswer) {
           return {
             ...bestScoredAnswer.doc, _type: 'ANSWER',
           };
         }
 
-        const bestScoredCrawledDoc = theBestDoc(scoredCrawledDocs);
+        const bestScoredCrawledDoc = theBestDoc(scoredCrawledDocs, 0.8);
         if (bestScoredCrawledDoc) {
           return {
             ...bestScoredCrawledDoc.doc, _type: 'CRAWLED_DOC',
