@@ -24,11 +24,14 @@
     "dataloader": "^1.2.0",
     "elasticsearch": "^12.1.1",
     "graphql": "^0.8.2",
+    "graphql-server-koa": "^0.4.3",
     "koa": "next",
-    "koa-graphql-next": "^1.0.5",
+    "koa-bodyparser": "^2.3.0",
     "koa-router": "next",
+    "koa-static": "next",
     "node-fetch": "^1.6.3",
-    "pm2": "^2.1.6"
+    "pm2": "^2.1.6",
+    "pug": "^2.0.0-beta6"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
