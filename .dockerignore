@@ -4,3 +4,4 @@
 !process.json
 !package.json
 !yarn.lock
+!static
