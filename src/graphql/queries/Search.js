@@ -36,6 +36,7 @@ export default {
     return {
       rumors: getInRumorResult(['hits', 'hits'], []).map(processScoredDoc),
       answers: getInAnswerResult(['hits', 'hits'], []).map(processScoredDoc),
+      crawledDocs: [],
     };
   },
 };
