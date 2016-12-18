@@ -39,7 +39,7 @@ function theBestDoc(scoredDocs, singleDocThreshold) {
   // return the first match.
   if (
     (scoredDocs.length === 1 && scoredDocs[0].score > singleDocThreshold) ||
-    (scoredDocs.length > 1 && scoredDocs[0].score > 2 * scoredDocs[1].score)
+    (scoredDocs.length > 1 && scoredDocs[0].score > 1.6 * scoredDocs[1].score)
   ) {
     return scoredDocs[0];
   }
@@ -58,7 +58,7 @@ export default new GraphQLObjectType({
       type: ResultDocument,
       resolve({ rumors: scoredRumors, answers: scoredAnswers, crawledDocs: scoredCrawledDocs }) {
         const bestScoredRumor = theBestDoc(scoredRumors, 15);
-        if (bestScoredRumor) {
+        if (bestScoredRumor && bestScoredRumor.doc.answerIds.length) {
           return {
             ...bestScoredRumor.doc, _type: 'RUMOR',
           };
