@@ -3,7 +3,6 @@ import {
   GraphQLFloat,
   GraphQLList,
   GraphQLUnionType,
-  GraphQLEnumType,
 } from 'graphql';
 
 import Answer from 'graphql/models/Answer';
@@ -35,11 +34,11 @@ const ResultDocument = new GraphQLUnionType({
 });
 
 function theBestDoc(scoredDocs, singleDocThreshold) {
-  // If the first match has score > 10,
+  // If there is only one doc and has score over threshold,
   // or the first match is 2x larger than the second match,
   // return the first match.
   if (
-    (scoredDocs.length >= 1 && scoredDocs[0].score > singleDocThreshold) ||
+    (scoredDocs.length === 1 && scoredDocs[0].score > singleDocThreshold) ||
     (scoredDocs.length > 1 && scoredDocs[0].score > 2 * scoredDocs[1].score)
   ) {
     return scoredDocs[0];
