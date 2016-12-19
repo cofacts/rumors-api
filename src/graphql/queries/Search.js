@@ -1,5 +1,6 @@
 import {
   GraphQLString,
+  GraphQLBoolean,
 } from 'graphql';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
@@ -20,8 +21,13 @@ export default {
   type: SearchResult,
   args: {
     text: { type: GraphQLString },
+    findInCrawled: {
+      type: GraphQLBoolean,
+      defaultValue: true,
+      description: 'When false, does not query crawled doc server at all.',
+    },
   },
-  async resolve(rootValue, { text }) {
+  async resolve(rootValue, { text, findInCrawled }) {
     const crawledFormData = new FormData();
     crawledFormData.append('content', text);
 
@@ -34,9 +40,11 @@ export default {
           { query: { match: { 'versions.text': text } } },
         ],
       }),
-      fetch('https://rumor-search.g0v.ronny.tw/query.php', {
-        method: 'POST', body: crawledFormData,
-      }).then(resp => resp.json()),
+      findInCrawled ?
+        fetch('https://rumor-search.g0v.ronny.tw/query.php', {
+          method: 'POST', body: crawledFormData,
+        }).then(resp => resp.json()) :
+        Promise.resolve({}),
     ]);
 
     const [rumorResult, answerResult] = elasticResult.responses;
