@@ -6,6 +6,12 @@ import client, { processMeta } from 'util/client';
 import getIn from 'util/getInFactory';
 import GraphQL from '../util/GraphQL';
 
+function truncate(text, size = 25) {
+  text = JSON.stringify(text);
+  if (text.length > size - 3) return `${text.slice(0, size - 3)}...`;
+  return text;
+}
+
 async function main() {
   // Get all rummors with answer specified.
   //
@@ -35,11 +41,6 @@ async function main() {
             doc {
               id
               text
-              answers {
-                versions {
-                  text
-                }
-              }
             }
           }
           suggestedResult {
@@ -63,10 +64,20 @@ async function main() {
   let invalidCount = 0;
   allResults.forEach(({ data }, i) => {
     const rumor = allRumors[i];
-    if (data.Search.suggestedResult === null || data.Search.suggestedResult.id !== rumor.id) {
-      invalidCount += 1;
-      console.log(rumor.id, data.Search.suggestedResult && data.Search.suggestedResult.id);
+    if (data.Search.suggestedResult && data.Search.suggestedResult.id === rumor.id) {
+      return; // continue
     }
+    invalidCount += 1;
+
+    if (data.Search.suggestedResult === null) {
+      console.log(`\n[NOT FOUND] ${rumor.id} ------`);
+    } else {
+      console.log(`\n[WRONG DOC] ${rumor.id} ------`);
+    }
+
+    console.log(truncate(rumor.text, 50));
+    console.log('Search result:');
+    console.log(data.Search.rumors.map((r, idx) => `\t#${idx + 1} (score=${r.score} / id=${r.doc.id}) ${truncate(r.doc.text)}`).join('\n'));
   });
 
   console.log('---- Summary ----');
