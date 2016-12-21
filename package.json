@@ -47,6 +47,7 @@
     "eslint-import-resolver-babel-module": "^2.2.1",
     "eslint-plugin-import": "^2.1.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.6.0"
+    "eslint-plugin-react": "^6.6.0",
+    "progress": "^1.1.8"
   }
 }
