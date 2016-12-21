@@ -1,16 +1,25 @@
-/* eslint no-console: off */
+/* eslint no-console: off, import/no-extraneous-dependencies: off */
 
 import 'util/catchUnhandledRejection';
+import Progress from 'progress';
 import client, { processMeta } from 'util/client';
 import getIn from 'util/getInFactory';
 import GraphQL from '../util/GraphQL';
-import Progress from 'progress';
 
 async function main() {
+  // Get all rummors with answer specified.
+  //
   const allRumors = getIn(await client.search({
     index: 'rumors',
     body: {
       size: 10000,
+
+      // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-script-query.html
+      //
+      query: { bool: { must: { script: { script: {
+        lang: 'painless',
+        inline: "doc['answerIds'].length > 0",
+      } } } } },
     },
   }))(['hits', 'hits'], []).map(processMeta);
 
