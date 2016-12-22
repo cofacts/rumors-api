@@ -4,6 +4,7 @@ import {
 } from 'graphql';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
+import rollbar from 'rollbar';
 
 import getInFactory from 'util/getInFactory';
 import client, { processMeta } from 'util/client';
@@ -42,8 +43,11 @@ export default {
       }),
       findInCrawled ?
         fetch('https://rumor-search.g0v.ronny.tw/query.php', {
-          method: 'POST', body: crawledFormData,
-        }).then(resp => resp.json()) :
+          method: 'POST', body: crawledFormData, timeout: 5000,
+        }).then(resp => resp.json()).catch((err) => {
+          rollbar.handleError(err);
+          return {};
+        }) :
         Promise.resolve({}),
     ]);
 

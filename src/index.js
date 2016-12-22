@@ -5,6 +5,7 @@ import path from 'path';
 import pug from 'pug';
 import { printSchema } from 'graphql/utilities';
 import { graphqlKoa, graphiqlKoa } from 'graphql-server-koa';
+import rollbar from 'rollbar';
 import koaStatic from 'koa-static';
 import koaBody from 'koa-bodyparser';
 import schema from './graphql/schema';
@@ -12,6 +13,21 @@ import DataLoaders from './graphql/dataLoaders';
 
 const app = new Koa();
 const router = Router();
+
+rollbar.init(config.get('ROLLBAR_TOKEN'), {
+  environment: config.get('ROLLBAR_ENV'),
+});
+
+rollbar.handleUncaughtExceptionsAndRejections();
+
+app.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (err) {
+    rollbar.handleError(err, ctx.request);
+    throw err;
+  }
+});
 
 app.use(koaBody());
 

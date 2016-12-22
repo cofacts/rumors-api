@@ -34,7 +34,8 @@
     "koa-static": "next",
     "node-fetch": "^1.6.3",
     "pm2": "^2.1.6",
-    "pug": "^2.0.0-beta6"
+    "pug": "^2.0.0-beta6",
+    "rollbar": "^0.6.3"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
