@@ -1,3 +1,7 @@
+# Builds production image for rumors-api.
+# Environments not included, should be composed in https://github.com/MrOrz/rumors-deploy.
+#
+
 FROM kkarczmarczyk/node-yarn:6.9
 WORKDIR /srv/www
 

@@ -1,0 +1,38 @@
+# Builds developing environment for rumors-api
+#
+version: '2'
+services:
+  db:
+    image: elasticsearch
+    ports:
+      - "62222:9200"
+
+  kibana:
+    image: kibana
+    depends_on:
+      - db
+    environment:
+      ELASTICSEARCH_URL: http://db:9200 # Through docker network, not exposed port
+    ports:
+      - "6222:5601"
+
+  yarn-install:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    user: "$USER_ID"
+    volumes:
+      - ".:/srv/www"
+
+  api:
+    image: kkarczmarczyk/node-yarn:6.9
+    container_name: rumors-api
+    depends_on:
+      - db
+      - yarn-install
+    working_dir: "/srv/www"
+    entrypoint: npm run dev
+    volumes:
+      - ".:/srv/www"
+    ports:
+      - "5000:5000"
