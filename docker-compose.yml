@@ -34,5 +34,7 @@ services:
     entrypoint: npm run dev
     volumes:
       - ".:/srv/www"
+    environment:
+      NODE_CONFIG: '{"ELASTICSEARCH_URL": "http://db:9200"}'
     ports:
       - "5000:5000"

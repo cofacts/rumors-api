@@ -1,5 +1,5 @@
 module.exports = {
-  ELASTICSEARCH_URL: 'http://localhost:62222',
+  ELASTICSEARCH_URL: 'http://localhost:62222', // Shared by api-server and CLI evaluation script
   ELASTIC_LOG_LEVEL: 'warning',
   PORT: 5000,
   ROLLBAR_TOKEN: 'YOUR_ROLLBAR_TOKEN',
