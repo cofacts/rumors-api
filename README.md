@@ -74,10 +74,10 @@ $ npm run build
 ```
 
 Run the docker image on local machine, then visit `http://localhost:5000`.
-(You should make sure elastic search server is running at port 9200)
+(To test functions envolving DB, ElasticSearch DB must work as `config/.defaultjs` specified.)
 
 ```
-$ docker run --rm -p 5000:5000 mrorz/rumors-api
+$ docker run --rm -it -p 5000:5000 mrorz/rumors-api
 ```
 
 Push to dockerhub
