@@ -58,6 +58,14 @@ If not, you can also run:
 $ docker run --rm -it -v `pwd`:/srv -w /srv --network=rumorsapi_default -e 'NODE_CONFIG={"ELASTICSEARCH_URL":"http://db:9200"}' kkarczmarczyk/node-yarn:6.9 npm run validate:sameDoc
 ```
 
+
+### But I have `docker`, `npm` & `yarn` installed, why typing so long?
+
+Sure you need not.
+
+If you have `npm` and `yarn` installed, you can just invoke `yarn install` to add packages, `npm run XXX` to run scripts (as long as it does not uses a port in use). Actually we recommend developers to have `npm` and `yarn` installed and do all the work, and only use `docker-compose` to spin up the services the API server depends on.
+
+
 ## Deploy
 
 Build docker image
