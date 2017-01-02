@@ -23,7 +23,7 @@ If you omit `USER_ID=$UID` you will see `WARNING: The USER_ID variable is not se
 
 To stop the servers, just `ctrl-c` and all docker containers will be stopped.
 
-### Seeding the data
+### Populate ElasticSearch with seed data
 
 Please clone [rumors-db](https://github.com/MrOrz/rumors-db) and follow the instructions in it.
 
@@ -40,6 +40,22 @@ Access the logs using:
 ```
 $ docker-compose logs api     # `api' can also be `db', `kibana' or `yarn-install'.
 $ docker-compose logs -f api  # Tail mode
+```
+
+### Validate the score functions
+
+#### Same-doc validation
+
+The script tests if the DB can find the correct document when we query against any existing document in DB.
+
+If you have `npm` installed, just run:
+```
+$ npm run validate:sameDoc
+```
+
+If not, you can also run:
+```
+$ docker run --rm -it -v `pwd`:/srv -w /srv --network=rumorsapi_default -e 'NODE_CONFIG={"ELASTICSEARCH_URL":"http://db:9200"}' kkarczmarczyk/node-yarn:6.9 npm run validate:sameDoc
 ```
 
 ## Deploy

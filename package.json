@@ -17,7 +17,7 @@
     "build:babel": "babel src -d build",
     "build:cp": "cp -R src/jade build/jade",
     "build:docker": "docker build -t mrorz/rumors-api:latest .",
-    "validate:sameDoc": "NODE_CONFIG='{\"ELASTIC_LOG_LEVEL\":\"error\"}' babel-node test/evaluation/identicalDocRetrieval.js",
+    "validate:sameDoc": "babel-node test/evaluation/identicalDocRetrieval.js",
     "clean": "rm -rf build"
   },
   "dependencies": {
