@@ -30,15 +30,21 @@ export default {
   },
   async resolve(rootValue, { text, findInCrawled }) {
     const crawledFormData = new FormData();
-    crawledFormData.append('content', text);
+
+    // Avoid hitting TooManyClauses exception. Default is 1024 clauses,
+    // and we are using unigram so text length = clause number.
+    // https://wiki.apache.org/lucene-java/LuceneFAQ#Why_am_I_getting_a_TooManyClauses_exception.3F
+    //
+    const truncatedText = text.slice(0, 1024);
+    crawledFormData.append('content', truncatedText);
 
     const [elasticResult, crawledResult] = await Promise.all([
       client.msearch({
         body: [
           { index: 'rumors', type: 'basic' },
-          { query: { match: { text } } },
+          { query: { match: { text: truncatedText } } },
           { index: 'answers', type: 'basic' },
-          { query: { match: { 'versions.text': text } } },
+          { query: { match: { 'versions.text': truncatedText } } },
         ],
       }),
       findInCrawled ?
