@@ -65,6 +65,16 @@ If not, you can also run:
 $ docker run --rm -it -v `pwd`:/srv -w /srv --network=rumorsapi_default -e 'NODE_CONFIG={"ELASTICSEARCH_URL":"http://db:9200"}' kkarczmarczyk/node-yarn:6.9 npm run validate:sameDoc
 ```
 
+## Test
+
+Clone [rumors-db](https://github.com/MrOrz/rumors-db) and prepare the test database as instructed in its README.
+
+Then, in `rumors-api` run:
+
+```
+$ npm t
+```
+
 ## Deploy
 
 Build docker image
