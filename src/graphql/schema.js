@@ -10,6 +10,10 @@ import Search from './queries/Search';
 import GetRumor from './queries/GetRumor';
 import GetAnswer from './queries/GetAnswer';
 
+// Set individual objects
+import SetRumor from './mutations/SetRumor';
+import SetAnswer from './mutations/SetAnswer';
+
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -19,7 +23,11 @@ export default new GraphQLSchema({
       GetAnswer,
     },
   }),
-  // mutation: new GraphQLSchema({
-  //   name: 'Mutation'
-  // })
+  mutation: new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+      SetRumor,
+      SetAnswer,
+    },
+  }),
 });
