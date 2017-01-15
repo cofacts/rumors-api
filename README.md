@@ -1,4 +1,7 @@
 # rumors-api
+
+[![Build Status](https://travis-ci.org/MrOrz/rumors-api.svg?branch=master)](https://travis-ci.org/MrOrz/rumors-api)
+
 GraphQL API server for clients like rumors-site and rumors-line-bot
 
 

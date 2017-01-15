@@ -1,0 +1,27 @@
+sudo: required
+
+services:
+  - docker
+
+language: node_js
+
+node_js: '6'
+
+cache: yarn
+
+before_install:
+  # Startup test db
+  #
+  - docker run -d -p "62223:9200" --name rumors-test-db elasticsearch
+  - sleep 10 # wait for elasticsearch
+
+  # Run mapping settings
+  # Ref: https://docs.travis-ci.com/user/installing-dependencies/
+  #
+  - wget https://github.com/mrorz/rumors-db/archive/master.tar.gz -O /tmp/rumors-db
+  - tar -xvf /tmp/rumors-db
+  - cd rumors-db && npm t
+
+after_script:
+  - docker stop rumors-test-db
+  - docker rm rumors-test-db
