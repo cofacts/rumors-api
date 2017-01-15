@@ -1,6 +1,6 @@
 # rumors-api
 
-[![Build Status](https://travis-ci.org/MrOrz/rumors-api.svg?branch=master)](https://travis-ci.org/MrOrz/rumors-api)
+[![Build Status](https://travis-ci.org/MrOrz/rumors-api.svg?branch=master)](https://travis-ci.org/MrOrz/rumors-api) [![Coverage Status](https://coveralls.io/repos/github/MrOrz/rumors-api/badge.svg?branch=master)](https://coveralls.io/github/MrOrz/rumors-api?branch=master)
 
 GraphQL API server for clients like rumors-site and rumors-line-bot
 

@@ -23,6 +23,12 @@ before_install:
   - cd rumors-db-master && npm i && npm t
   - cd ../
 
+script:
+  - npm t -- --coverage
+
+after_success:
+  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+
 after_script:
   - docker stop rumors-test-db
   - docker rm rumors-test-db
