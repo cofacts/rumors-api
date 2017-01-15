@@ -20,7 +20,7 @@ before_install:
   #
   - wget https://github.com/mrorz/rumors-db/archive/master.tar.gz -O /tmp/rumors-db
   - tar -xvf /tmp/rumors-db
-  - cd rumors-db-master && npm t
+  - cd rumors-db-master && npm i && npm t
 
 after_script:
   - docker stop rumors-test-db
