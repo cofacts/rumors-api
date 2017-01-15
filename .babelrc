@@ -2,7 +2,7 @@
   presets: ["es2015-node6", "es2017", "stage-3"],
   plugins: [
     ["module-resolver", {
-      root: ["./src"],
+      root: ["./src", "./test"],
     }]
   ]
 }

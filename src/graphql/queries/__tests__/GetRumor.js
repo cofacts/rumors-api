@@ -1,10 +1,10 @@
 import client from 'util/client';
-import GraphQL from '../../../../test/util/GraphQL';
+import GraphQL from 'util/GraphQL';
+import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/GetRumor';
 
 describe('GetRumor', () => {
-  let items;
-  beforeAll(() => client.bulk({body: fixtures}).then((r) => { items = r.items; }));
+  beforeAll(() => loadFixtures(fixtures));
 
   it('should get rumor & associated answers from ID', async () => {
     expect(await GraphQL(`{
@@ -20,5 +20,5 @@ describe('GetRumor', () => {
     }`)).toMatchSnapshot();
   });
 
-  afterAll(() => console.log('rRRrrrRR', items));
+  afterAll(() => unloadFixtures(fixtures));
 });
