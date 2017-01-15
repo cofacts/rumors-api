@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "pm2-dev start --timestamp process-dev.json",
-    "test": "jest",
+    "test": "NODE_ENV=test jest",
     "start": "pm2 startOrRestart process.json --env production --log-date-format=\"YYYY-MM-DD HH:mm Z\" --no-daemon",
     "lint": "eslint --fix src/.",
     "build": "npm run clean && npm run build:babel && npm run build:cp && npm run build:docker",

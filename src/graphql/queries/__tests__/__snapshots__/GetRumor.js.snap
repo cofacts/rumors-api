@@ -1,0 +1,19 @@
+exports[`GetRumor should get rumor & associated answers from ID 1`] = `
+Object {
+  "data": Object {
+    "GetRumor": Object {
+      "answers": Array [
+        Object {
+          "versions": Array [
+            Object {
+              "reference": "barbar",
+              "text": "bar",
+            },
+          ],
+        },
+      ],
+      "text": "foofoo",
+    },
+  },
+}
+`;
