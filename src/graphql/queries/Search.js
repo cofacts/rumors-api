@@ -42,9 +42,9 @@ export default {
       client.msearch({
         body: [
           { index: 'rumors', type: 'basic' },
-          { query: { match: { text: truncatedText } } },
+          { query: { more_like_this: { 'fields': ['text'], 'like': text, 'min_term_freq': 1, 'min_doc_freq': 1 } } },
           { index: 'answers', type: 'basic' },
-          { query: { match: { 'versions.text': truncatedText } } },
+          { query: { more_like_this: { 'fields': ['versions.text'], 'like': text, 'min_term_freq': 1, 'min_doc_freq': 1 } } },
         ],
       }),
       findInCrawled ?
