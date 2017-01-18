@@ -39,7 +39,10 @@ function theBestDoc(scoredDocs, singleDocThreshold) {
   // return the first match.
   if (
     (scoredDocs.length === 1 && scoredDocs[0].score > singleDocThreshold) ||
-    (scoredDocs.length > 1 && scoredDocs[0].score > 1.6 * scoredDocs[1].score)
+    (
+      scoredDocs.length > 1 &&
+      scoredDocs[0].score > 2 * scoredDocs[Math.floor(scoredDocs.length / 2)].score
+    )
   ) {
     return scoredDocs[0];
   }
