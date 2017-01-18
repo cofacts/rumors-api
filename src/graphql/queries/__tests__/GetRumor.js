@@ -1,4 +1,3 @@
-import client from 'util/client';
 import GraphQL from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/GetRumor';

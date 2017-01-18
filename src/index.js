@@ -32,7 +32,7 @@ app.use(async (ctx, next) => {
 app.use(koaBody({
   formLimit: '1mb',
   jsonLimit: '10mb',
-  textLimit: '10mb'
+  textLimit: '10mb',
 }));
 
 router.post('/graphql', graphqlKoa(() => ({
