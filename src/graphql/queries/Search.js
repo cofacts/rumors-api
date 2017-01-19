@@ -42,9 +42,9 @@ export default {
       client.msearch({
         body: [
           { index: 'rumors', type: 'basic' },
-          { query: { more_like_this: { fields: ['text'], like: text, min_term_freq: 1, min_doc_freq: 1 } } },
+          { query: { more_like_this: { fields: ['text'], like: text, min_term_freq: 1, min_doc_freq: 1,max_query_terms:1024 } } },
           { index: 'answers', type: 'basic' },
-          { query: { more_like_this: { fields: ['versions.text'], like: text, min_term_freq: 1, min_doc_freq: 1 } } },
+          { query: { more_like_this: { fields: ['versions.text'], like: text, min_term_freq: 1, min_doc_freq: 1,max_query_terms:1024 } } },
         ],
       }),
       findInCrawled ?
