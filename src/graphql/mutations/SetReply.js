@@ -4,20 +4,19 @@ import {
 } from 'graphql';
 
 import Reply from 'graphql/models/Reply';
+import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 
 export default {
   type: Reply,
-  description: 'Create or update a reply',
+  description: 'Create a reply',
   args: {
-    id: { type: GraphQLString },
+    articleId: { type: new GraphQLNonNull(GraphQLString) },
     text: { type: new GraphQLNonNull(GraphQLString) },
+    type: { type: new GraphQLNonNull(ReplyTypeEnum) },
     reference: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(rootValue, { id, text }, { loaders }) {
     const reply = loaders.docLoader.load(`/replies/basic/${id}`);
-
-    // TODO: When reply does not exist, create a new  with reply1 AnswerVersion.
-    // else, append text & reference to the existing reply's versions.
 
     return reply;
   },
