@@ -7,6 +7,12 @@ import client from 'util/client';
 // }
 //
 
+function wait(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 export function loadFixtures(fixtureMap) {
   const body = [];
   Object.keys(fixtureMap).forEach((key) => {
@@ -14,7 +20,9 @@ export function loadFixtures(fixtureMap) {
     body.push({ index: { _index, _type, _id } });
     body.push(fixtureMap[key]);
   });
-  return client.bulk({ body });
+
+  // After bulk operation, wait for 1sec for ElasticSearch to index.
+  return client.bulk({ body }).then(() => wait(1000));
 }
 
 export function unloadFixtures(fixtureMap) {
