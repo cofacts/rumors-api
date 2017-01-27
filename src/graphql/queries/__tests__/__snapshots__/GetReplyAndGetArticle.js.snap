@@ -1,0 +1,46 @@
+exports[`GetArticle should get the specified article & associated replies from ID 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "references": Array [
+        Object {
+          "type": "LINE",
+        },
+      ],
+      "replies": Array [
+        Object {
+          "versions": Array [
+            Object {
+              "reference": "barbar",
+              "text": "bar",
+              "type": "NOT_ARTICLE",
+            },
+          ],
+        },
+      ],
+      "text": "foofoo",
+    },
+  },
+}
+`;
+
+exports[`GetReply should get the specified reply & associated articles from ID 1`] = `
+Object {
+  "data": Object {
+    "GetReply": Object {
+      "articles": Array [
+        Object {
+          "text": "foofoo",
+        },
+      ],
+      "versions": Array [
+        Object {
+          "reference": "barbar",
+          "text": "bar",
+          "type": "NOT_ARTICLE",
+        },
+      ],
+    },
+  },
+}
+`;
