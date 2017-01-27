@@ -9,6 +9,7 @@ describe('GetArticle', () => {
     expect(await GraphQL(`{
       GetArticle(id: "foo") {
         text
+        references { type }
         replies {
           versions {
             text

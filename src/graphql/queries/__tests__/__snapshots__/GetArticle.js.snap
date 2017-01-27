@@ -2,6 +2,11 @@ exports[`GetArticle should get articles & associated replies from ID 1`] = `
 Object {
   "data": Object {
     "GetArticle": Object {
+      "references": Array [
+        Object {
+          "type": "LINE",
+        },
+      ],
       "replies": Array [
         Object {
           "versions": Array [
