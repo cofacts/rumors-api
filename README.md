@@ -78,6 +78,8 @@ Then, in `rumors-api` run:
 $ npm t
 ```
 
+If you get "unknown error" when testing GraphQL stuff, please check if test database is running. Consult [rumors-db README](https://github.com/MrOrz/rumors-db#prepare-database-for-unit-test) for troubleshooting.
+
 ## Deploy
 
 Build docker image
