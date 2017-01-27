@@ -5,12 +5,15 @@ export default {
 
       微之，微之！此夕此心，君知之乎！
     `,
+    replyIds: ['notexist1', 'notexist2'],
   },
   '/articles/basic/not_related': {
     text: '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',
+    replyIds: ['notexist1', 'notexist2'],
   },
   '/articles/basic/not_related2': {
     text: '人生幾何，離闊如此！況以膠漆之心，置於胡越之身，進不得相合，退不能相忘，牽攣乖隔，各欲白首。',
+    replyIds: ['notexist1', 'notexist2'],
   },
   '/replies/basic/related': {
     versions: [{ text: `

@@ -62,7 +62,9 @@ export default new GraphQLObjectType({
       resolve({
         articles: scoredArticles, replies: scoredReplies, crawledDocs: scoredCrawledDocs,
       }) {
-        const bestScoredArticle = theBestDoc(scoredArticles, 15);
+        const bestScoredArticle = theBestDoc(scoredArticles.filter(
+          article => article.doc.replyIds && article.doc.replyIds.length,
+        ), 13);
         if (bestScoredArticle && bestScoredArticle.doc.replyIds.length) {
           return {
             ...bestScoredArticle.doc, _type: 'ARTICLE',

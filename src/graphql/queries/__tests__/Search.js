@@ -17,6 +17,11 @@ describe('Search', () => {
         replies {
           doc { versions { text } }
         }
+        suggestedResult {
+          ... on Article {
+            text
+          }
+        }
       }
     }`)).toMatchSnapshot();
   });
