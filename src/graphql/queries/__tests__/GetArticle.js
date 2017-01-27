@@ -1,17 +1,18 @@
 import GraphQL from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import fixtures from '../__fixtures__/GetRumor';
+import fixtures from '../__fixtures__/GetArticle';
 
-describe('GetRumor', () => {
+describe('GetArticle', () => {
   beforeAll(() => loadFixtures(fixtures));
 
-  it('should get rumor & associated answers from ID', async () => {
+  it('should get articles & associated replies from ID', async () => {
     expect(await GraphQL(`{
-      GetRumor(id: "foo") {
+      GetArticle(id: "foo") {
         text
-        answers {
+        replies {
           versions {
             text
+            type
             reference
           }
         }

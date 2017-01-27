@@ -2,13 +2,13 @@ import {
   GraphQLString,
 } from 'graphql';
 
-import Rumor from 'graphql/models/Rumor';
+import Article from 'graphql/models/Article';
 
 export default {
-  type: Rumor,
+  type: Article,
   args: {
     id: { type: GraphQLString },
   },
   resolve: async (rootValue, { id }, { loaders }) =>
-    loaders.docLoader.load(`/rumors/basic/${id}`),
+    loaders.docLoader.load(`/articles/basic/${id}`),
 };

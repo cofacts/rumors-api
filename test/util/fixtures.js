@@ -2,8 +2,8 @@ import client from 'util/client';
 
 // fixtureMap:
 // {
-//   '/rumors/basic/1': { ... body of rumor 1 ... },
-//   '/answers/basic/2': { ... body of answer 2 ... },
+//   '/articles/basic/1': { ... body of article 1 ... },
+//   '/replies/basic/2': { ... body of reply 2 ... },
 // }
 //
 

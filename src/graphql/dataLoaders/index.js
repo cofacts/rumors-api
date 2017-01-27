@@ -1,12 +1,12 @@
 import docLoaderFactory from './docLoaderFactory';
-import rumorsByAnswerIdLoaderFactory from './rumorsByAnswerIdLoaderFactory';
+import articlesByReplyIdLoaderFactory from './articlesByReplyIdLoaderFactory';
 
 export default class DataLoaders {
 
   // List of data loaders
   //
-  get docLoader() { return this._checkOrSetLoader('answerLoader', docLoaderFactory); }
-  get rumorsByAnswerIdLoader() { return this._checkOrSetLoader('rumorsByAnswerIdLoader', rumorsByAnswerIdLoaderFactory); }
+  get docLoader() { return this._checkOrSetLoader('docLoader', docLoaderFactory); }
+  get articlesByReplyIdLoader() { return this._checkOrSetLoader('articlesByReplyIdLoader', articlesByReplyIdLoaderFactory); }
 
   // inner-workings
   //

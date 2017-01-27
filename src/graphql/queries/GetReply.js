@@ -2,13 +2,13 @@ import {
   GraphQLString,
 } from 'graphql';
 
-import Answer from 'graphql/models/Answer';
+import Reply from 'graphql/models/Reply';
 
 export default {
-  type: Answer,
+  type: Reply,
   args: {
     id: { type: GraphQLString },
   },
   resolve: async (rootValue, { id }, { loaders }) =>
-    loaders.docLoader.load(`/answers/basic/${id}`),
+    loaders.docLoader.load(`/replies/basic/${id}`),
 };

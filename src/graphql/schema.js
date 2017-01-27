@@ -7,27 +7,27 @@ import {
 import Search from './queries/Search';
 
 // Get individual objects
-import GetRumor from './queries/GetRumor';
-import GetAnswer from './queries/GetAnswer';
+import GetArticle from './queries/GetArticle';
+import GetReply from './queries/GetReply';
 
 // Set individual objects
-import SetRumor from './mutations/SetRumor';
-import SetAnswer from './mutations/SetAnswer';
+import SetArticle from './mutations/SetArticle';
+import SetReply from './mutations/SetReply';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
       Search,
-      GetRumor,
-      GetAnswer,
+      GetArticle,
+      GetReply,
     },
   }),
   mutation: new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-      SetRumor,
-      SetAnswer,
+      SetArticle,
+      SetReply,
     },
   }),
 });

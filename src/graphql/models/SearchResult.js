@@ -5,8 +5,8 @@ import {
   GraphQLUnionType,
 } from 'graphql';
 
-import Answer from 'graphql/models/Answer';
-import Rumor from 'graphql/models/Rumor';
+import Reply from 'graphql/models/Reply';
+import Article from 'graphql/models/Article';
 import CrawledDoc from 'graphql/models/CrawledDoc';
 
 function scoredDocFactory(name, type) {
@@ -21,13 +21,13 @@ function scoredDocFactory(name, type) {
 
 const ResultDocument = new GraphQLUnionType({
   name: 'ResultDocument',
-  types: [Rumor, Answer, CrawledDoc],
+  types: [Article, Reply, CrawledDoc],
   resolveType(result) {
     if (!result) return CrawledDoc;
 
     switch (result._type) {
-      case 'RUMOR': return Rumor;
-      case 'ANSWER': return Answer;
+      case 'ARTICLE': return Article;
+      case 'REPLY': return Reply;
       default: return CrawledDoc;
     }
   },
@@ -53,24 +53,26 @@ function theBestDoc(scoredDocs, singleDocThreshold) {
 export default new GraphQLObjectType({
   name: 'SearchResult',
   fields: () => ({
-    rumors: { type: new GraphQLList(scoredDocFactory('ScoredRumor', Rumor)) },
-    answers: { type: new GraphQLList(scoredDocFactory('ScoredAnswer', Answer)) },
+    articles: { type: new GraphQLList(scoredDocFactory('ScoredArticle', Article)) },
+    replies: { type: new GraphQLList(scoredDocFactory('ScoredReply', Reply)) },
     crawledDoc: { type: new GraphQLList(scoredDocFactory('ScoredCrawledDoc', CrawledDoc)) },
     suggestedResult: {
       description: 'The document that is the best match in this search.',
       type: ResultDocument,
-      resolve({ rumors: scoredRumors, answers: scoredAnswers, crawledDocs: scoredCrawledDocs }) {
-        const bestScoredRumor = theBestDoc(scoredRumors, 15);
-        if (bestScoredRumor && bestScoredRumor.doc.answerIds.length) {
+      resolve({
+        articles: scoredArticles, replies: scoredReplies, crawledDocs: scoredCrawledDocs,
+      }) {
+        const bestScoredArticle = theBestDoc(scoredArticles, 15);
+        if (bestScoredArticle && bestScoredArticle.doc.replyIds.length) {
           return {
-            ...bestScoredRumor.doc, _type: 'RUMOR',
+            ...bestScoredArticle.doc, _type: 'ARTICLE',
           };
         }
 
-        const bestScoredAnswer = theBestDoc(scoredAnswers, 10);
-        if (bestScoredAnswer) {
+        const bestScoredReply = theBestDoc(scoredReplies, 10);
+        if (bestScoredReply) {
           return {
-            ...bestScoredAnswer.doc, _type: 'ANSWER',
+            ...bestScoredReply.doc, _type: 'REPLY',
           };
         }
 

@@ -87,7 +87,7 @@ $ npm run build
 ```
 
 Run the docker image on local machine, then visit `http://localhost:5000`.
-(To test functions envolving DB, ElasticSearch DB must work as `config/.defaultjs` specified.)
+(To test functions involving DB, ElasticSearch DB must work as `config/default.js` specified.)
 
 ```
 $ docker run --rm -it -p 5000:5000 mrorz/rumors-api

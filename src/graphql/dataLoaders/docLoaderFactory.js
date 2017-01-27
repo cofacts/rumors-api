@@ -1,7 +1,7 @@
 import DataLoader from 'dataloader';
 import client, { processMeta } from 'util/client';
 
-// Given document URLs like ['/answers/basic/1', '/rumors/basic/2'],
+// Given document URLs like ['/replies/basic/1', '/articles/basic/2'],
 // returns all documents.
 //
 export default () => new DataLoader(async (urls) => {

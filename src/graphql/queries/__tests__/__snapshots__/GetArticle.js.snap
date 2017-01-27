@@ -1,13 +1,14 @@
-exports[`GetRumor should get rumor & associated answers from ID 1`] = `
+exports[`GetArticle should get articles & associated replies from ID 1`] = `
 Object {
   "data": Object {
-    "GetRumor": Object {
-      "answers": Array [
+    "GetArticle": Object {
+      "replies": Array [
         Object {
           "versions": Array [
             Object {
               "reference": "barbar",
               "text": "bar",
+              "type": "NOT_ARTICLE",
             },
           ],
         },

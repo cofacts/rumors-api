@@ -6,10 +6,10 @@ import {
   GraphQLList,
 } from 'graphql';
 
-import Rumor from 'graphql/models/Rumor';
+import Article from 'graphql/models/Article';
 
 export default {
-  type: Rumor,
+  type: Article,
   description: 'Create or update a rumor',
   args: {
     id: { type: GraphQLString }, // If no id is given, generate one.

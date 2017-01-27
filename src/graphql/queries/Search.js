@@ -41,9 +41,9 @@ export default {
     const [elasticResult, crawledResult] = await Promise.all([
       client.msearch({
         body: [
-          { index: 'rumors', type: 'basic' },
+          { index: 'articles', type: 'basic' },
           { query: { more_like_this: { fields: ['text'], like: text, min_term_freq: 1, min_doc_freq: 1 } } },
-          { index: 'answers', type: 'basic' },
+          { index: 'replies', type: 'basic' },
           { query: { more_like_this: { fields: ['versions.text'], like: text, min_term_freq: 1, min_doc_freq: 1 } } },
         ],
       }),
@@ -57,11 +57,11 @@ export default {
         Promise.resolve({}),
     ]);
 
-    const [rumorResult, answerResult] = elasticResult.responses;
+    const [articleResult, replyResult] = elasticResult.responses;
 
     return {
-      rumors: getInFactory(rumorResult)(['hits', 'hits'], []).map(processScoredDoc),
-      answers: getInFactory(answerResult)(['hits', 'hits'], []).map(processScoredDoc),
+      articles: getInFactory(articleResult)(['hits', 'hits'], []).map(processScoredDoc),
+      replies: getInFactory(replyResult)(['hits', 'hits'], []).map(processScoredDoc),
       crawledDocs: getInFactory(crawledResult)(['hits', 'hits'], [])
         .map(processScoredDoc)
         .map(({ doc, score }) => ({

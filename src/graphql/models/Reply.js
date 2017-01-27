@@ -5,24 +5,24 @@ import {
   GraphQLInt,
 } from 'graphql';
 
-import Rumor from './Rumor';
-import AnswerVersion from './AnswerVersion';
+import Article from './Article';
+import ReplyVersion from './ReplyVersion';
 
 export default new GraphQLObjectType({
-  name: 'Answer',
+  name: 'Reply',
   fields: () => ({
     id: { type: GraphQLString },
     versions: {
       args: {
         limit: { type: GraphQLInt },
       },
-      type: new GraphQLList(AnswerVersion),
+      type: new GraphQLList(ReplyVersion),
       resolve: ({ versions }, { limit = Infinity }) => versions.slice(-limit),
     },
-    rumors: {
-      type: new GraphQLList(Rumor),
+    articles: {
+      type: new GraphQLList(Article),
       resolve: ({ id }, args, { loaders }) =>
-        loaders.rumorsByAnswerIdLoader.load(id),
+        loaders.articlesByReplyIdLoader.load(id),
     },
   }),
 });
