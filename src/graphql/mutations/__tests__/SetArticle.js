@@ -8,7 +8,7 @@ import MockDate from 'mockdate';
 describe('SetArticle', () => {
   // beforeAll(() => loadFixtures(fixtures));
 
-  it.only('creates articles', async () => {
+  it('creates articles', async () => {
     MockDate.set(1485593157011);
     const { data, errors } = await GraphQL({
       query: `mutation(
@@ -29,8 +29,6 @@ describe('SetArticle', () => {
     MockDate.reset();
 
     expect(errors).toBeUndefined();
-
-    console.log('data', data);
 
     const doc = await client.get({ index: 'articles', type: 'basic', id: data.SetArticle.id });
     delete doc._id;
