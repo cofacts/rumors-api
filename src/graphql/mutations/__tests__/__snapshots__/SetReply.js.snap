@@ -1,0 +1,27 @@
+exports[`SetReply creates replies and associates itself with specified article 1`] = `
+Object {
+  "createdAt": "2017-01-28T08:45:57.011Z",
+  "versions": Array [
+    Object {
+      "createdAt": "2017-01-28T08:45:57.011Z",
+      "reference": "http://google.com",
+      "text": "FOO FOO",
+      "type": "RUMOR",
+    },
+  ],
+}
+`;
+
+exports[`SetReply creates replies and associates itself with specified article 2`] = `
+Object {
+  "references": Array [
+    Object {
+      "type": "LINE",
+    },
+  ],
+  "replyIds": Array [
+    null,
+  ],
+  "text": "foofoo",
+}
+`;
