@@ -45,7 +45,7 @@ export default {
     });
 
     if (!created) {
-      throw new Error(`Data insertion error: ${result}`);
+      throw new Error(`Cannot create article: ${result}`);
     }
 
     return loaders.docLoader.load(`/articles/basic/${newId}`);

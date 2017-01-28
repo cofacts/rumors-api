@@ -31,7 +31,7 @@ describe('SetArticle', () => {
     expect(errors).toBeUndefined();
 
     const doc = await client.get({ index: 'articles', type: 'basic', id: data.SetArticle.id });
-    delete doc._id;
+    delete doc._id; // delete auto-generated id from being snapshot
 
     expect(doc).toMatchSnapshot();
 
