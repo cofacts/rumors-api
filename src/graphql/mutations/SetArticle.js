@@ -4,11 +4,11 @@ import {
 } from 'graphql';
 import client from 'util/client';
 
-import Article from 'graphql/models/Article';
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
+import MutationResult from 'graphql/models/MutationResult';
 
 export default {
-  type: Article,
+  type: MutationResult,
   description: 'Create an article, or update its references',
   args: {
     id: {
@@ -21,7 +21,7 @@ export default {
       description: 'When updating, createdAt will be automatically inserted.',
     },
   },
-  async resolve(rootValue, { id, text, references }, { loaders }) {
+  async resolve(rootValue, { id, text, references }) {
     // If ID does not exist (i.e. creating new rumor),
     // throw an error if any of its data is missing
     //
@@ -48,6 +48,6 @@ export default {
       throw new Error(`Cannot create article: ${result}`);
     }
 
-    return loaders.docLoader.load(`/articles/basic/${newId}`);
+    return {id: newId}
   },
 };
