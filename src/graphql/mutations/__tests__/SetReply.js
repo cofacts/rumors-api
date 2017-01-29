@@ -40,7 +40,7 @@ describe('SetReply', () => {
     expect(reply._source).toMatchSnapshot();
 
     const article = await client.get({ index: 'articles', type: 'basic', id: 'setReplyTest1' });
-    expect(article._source).toMatchSnapshot();
+    expect(article._source.replyIds[0]).toBe(data.SetReply.id);
 
     // Cleanup
     await client.delete({ index: 'replies', type: 'basic', id: data.SetReply.id });

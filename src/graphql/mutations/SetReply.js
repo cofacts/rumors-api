@@ -41,8 +41,10 @@ export default {
       type: 'basic',
       id: articleId,
       body: {
-        script: 'ctx._source.replyIds.add(params.replyId)',
-        params: { replyId },
+        script: {
+          inline: 'ctx._source.replyIds.add(params.replyId)',
+          params: { replyId },
+        },
       },
     });
 

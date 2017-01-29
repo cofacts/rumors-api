@@ -11,17 +11,3 @@ Object {
   ],
 }
 `;
-
-exports[`SetReply creates replies and associates itself with specified article 2`] = `
-Object {
-  "references": Array [
-    Object {
-      "type": "LINE",
-    },
-  ],
-  "replyIds": Array [
-    null,
-  ],
-  "text": "foofoo",
-}
-`;

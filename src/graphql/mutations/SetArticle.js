@@ -48,6 +48,6 @@ export default {
       throw new Error(`Cannot create article: ${result}`);
     }
 
-    return {id: newId}
+    return { id: newId };
   },
 };
