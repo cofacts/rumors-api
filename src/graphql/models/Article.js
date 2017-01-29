@@ -5,8 +5,6 @@ import {
   GraphQLInt,
 } from 'graphql';
 
-import getIn from 'util/getInFactory';
-import ArticleReference from 'graphql/models/ArticleReference';
 import {
   getFilterableType,
   pagingArgs,
@@ -15,6 +13,9 @@ import {
   getSortArgs,
   getOperatorAndOperand,
 } from 'graphql/util';
+
+import getIn from 'util/getInFactory';
+import ArticleReference from 'graphql/models/ArticleReference';
 
 import client, { processMeta } from 'util/client';
 import Reply from './Reply';
