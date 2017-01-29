@@ -7,6 +7,8 @@ import {
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
+// Filtering args definition & parsing
+//
 
 export function getArithmeticExpressionType(typeName, argType) {
   return new GraphQLInputObjectType({
@@ -30,37 +32,6 @@ export function getOperatorAndOperand(expression) {
   return {};
 }
 
-/*
-  input expressionMap = {
-    fieldName: {EQ: xxx},
-    fieldName2: {LTE: xxx, GT: xxx},
-    ...
-  }
-
-  returns {
-    fieldName: xxx,
-    fieldName2: {lte: xxx, gt: xxx},
-    ...
-  }
-*/
-export function getFilter(expressionMap) {
-  if (!expressionMap) return null;
-
-  return Object.keys(expressionMap).reduce((map, fieldName) => {
-    if (typeof expressionMap[fieldName].EQ !== 'undefined') {
-      return { ...map, [fieldName]: expressionMap[fieldName].EQ };
-    }
-
-    return {
-      ...map,
-      [fieldName]: Object.keys(expressionMap[fieldName]).reduce(
-        (agg, operand) => ({ ...agg, [operand.toLowerCase()]: expressionMap[fieldName][operand] }),
-        {},
-      ),
-    };
-  }, {});
-}
-
 export function getFilterableType(typeName, args) {
   const filterType = new GraphQLInputObjectType({
     name: typeName,
@@ -73,6 +44,10 @@ export function getFilterableType(typeName, args) {
   });
   return filterType;
 }
+
+//
+// Sort args definition & parsing
+//
 
 const SortOrderEnum = new GraphQLEnumType({
   name: 'SortOrderEnum',

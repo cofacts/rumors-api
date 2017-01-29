@@ -3,6 +3,8 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/ListArticles';
 
 function purifyResult(result) {
+  // Other test's fixture would get in... Orz
+  //
   return result.data.ListArticles.filter(({ id }) => id.startsWith('listArticleTest'));
 }
 
