@@ -1,0 +1,35 @@
+exports[`Search lists all articles 1`] = `
+Array [
+  Object {
+    "id": "listArticleTest2",
+  },
+  Object {
+    "id": "listArticleTest1",
+  },
+  Object {
+    "id": "listArticleTest3",
+  },
+]
+`;
+
+exports[`Search lists all articles 2`] = `
+Array [
+  Object {
+    "id": "listArticleTest3",
+  },
+  Object {
+    "id": "listArticleTest2",
+  },
+  Object {
+    "id": "listArticleTest1",
+  },
+]
+`;
+
+exports[`Search lists all articles 3`] = `
+Array [
+  Object {
+    "id": "listArticleTest1",
+  },
+]
+`;
