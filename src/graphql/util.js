@@ -13,12 +13,21 @@ export function getArithmeticExpressionType(typeName, argType) {
     name: typeName,
     fields: {
       LT: { type: argType },
-      LTE: { type: argType },
       GT: { type: argType },
-      GTE: { type: argType },
       EQ: { type: argType },
     },
   });
+}
+
+export function getOperatorAndOperand(expression) {
+  if (typeof expression.EQ !== 'undefined') {
+    return { operator: '=', operand: expression.EQ };
+  } else if (typeof expression.LT !== 'undefined') {
+    return { operator: '<', operand: expression.LT };
+  } else if (typeof expression.GT !== 'undefined') {
+    return { operator: '>', operand: expression.GT };
+  }
+  return {};
 }
 
 /*
@@ -34,7 +43,7 @@ export function getArithmeticExpressionType(typeName, argType) {
     ...
   }
 */
-export function getRangeFilter(expressionMap) {
+export function getFilter(expressionMap) {
   if (!expressionMap) return null;
 
   return Object.keys(expressionMap).reduce((map, fieldName) => {
@@ -57,6 +66,7 @@ export function getFilterableType(typeName, args) {
     name: typeName,
     fields: () => ({
       ...args,
+      // TODO: converting nested AND / OR to elasticsearch
       // AND: { type: new GraphQLList(filterType) },
       // OR: { type: new GraphQLList(filterType) },
     }),
@@ -106,36 +116,6 @@ export const pagingArgs = {
   },
 };
 
-export function getSearchArgs({ first = 10, skip = 0 }) {
-  return {
-    from: skip,
-    size: first,
-  };
-}
-
-// http://stackoverflow.com/a/36299930/1582110
-//
-export function getBody({ filter, orderBy = [] }, query, otherBodyParams = {}) {
-  const args = otherBodyParams;
-  if (orderBy.length) {
-    // https://www.elastic.co/guide/en/elasticsearch/reference/5.1/search-request-sort.html#_sort_values
-    //
-    args.sort = orderBy.map(({ field, order }) => ({ [field]: { order: order.toLowerCase() } }));
-  }
-
-  if (!query) {
-    throw new Error('getBody should have both filter and query specified.');
-  }
-  if (!filter) {
-    return { query, ...args };
-  }
-  return {
-    query: {
-      bool: {
-        must: query,
-        filter: getRangeFilter(filter),
-      },
-    },
-    ...args,
-  };
+export function getSortArgs(orderBy) {
+  return orderBy.map(({ field, order }) => ({ [field]: { order: order.toLowerCase() } }));
 }

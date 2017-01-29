@@ -12,8 +12,8 @@ import {
   pagingArgs,
   getArithmeticExpressionType,
   getSortableType,
-  getSearchArgs,
-  getBody,
+  getSortArgs,
+  getOperatorAndOperand,
 } from 'graphql/util';
 
 import client, { processMeta } from 'util/client';
@@ -43,22 +43,45 @@ const Article = new GraphQLObjectType({
         },
         ...pagingArgs,
       },
-      async resolve({ id }, args) {
+      async resolve({ id }, { filter = {}, orderBy = [], first, skip }) {
+        const body = {
+          query: {
+            more_like_this: {
+              fields: ['text'],
+              like: [{ _index: 'articles', _type: 'basic', _id: id }],
+              min_term_freq: 1,
+              min_doc_freq: 1,
+            },
+          },
+        };
+
+        if (orderBy.length) {
+          body.sort = getSortArgs(orderBy);
+        }
+
+        if (filter.replyCount) {
+          // Switch to bool query so that we can filter more_like_this results
+          //
+          const { operator, operand } = getOperatorAndOperand(filter.replyCount);
+          body.query = {
+            bool: {
+              must: body.query,
+              filter: { script: { script: {
+                inline: `doc['replyIds'].length ${operator} params.operand`,
+                params: {
+                  operand,
+                },
+              } } },
+            },
+          };
+        }
+
         return getIn(await client.search({
           index: 'articles',
           type: 'basic',
-          body: getBody(
-            args,
-            {
-              more_like_this: {
-                fields: ['text'],
-                like: [{ _index: 'articles', _type: 'basic', _id: id }],
-                min_term_freq: 1,
-                min_doc_freq: 1,
-              },
-            },
-          ),
-          ...getSearchArgs(args),
+          body,
+          from: skip,
+          size: first,
         }))(['hits', 'hits'], []).map(processMeta);
       },
     },
