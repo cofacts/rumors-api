@@ -1,3 +1,56 @@
+exports[`GetArticle relatedArticles should work 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Array [
+        Object {
+          "id": "foo3",
+          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+        },
+        Object {
+          "id": "foo2",
+          "text": "Lorum ipsum Lorum ipsum",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`GetArticle relatedArticles should work 2`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Array [
+        Object {
+          "id": "foo3",
+          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`GetArticle relatedArticles should work 3`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Array [
+        Object {
+          "id": "foo2",
+          "text": "Lorum ipsum Lorum ipsum",
+        },
+        Object {
+          "id": "foo3",
+          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`GetArticle should get the specified article & associated replies from ID 1`] = `
 Object {
   "data": Object {
@@ -18,7 +71,7 @@ Object {
           ],
         },
       ],
-      "text": "foofoo",
+      "text": "Lorum ipsum",
     },
   },
 }
@@ -30,7 +83,7 @@ Object {
     "GetReply": Object {
       "articles": Array [
         Object {
-          "text": "foofoo",
+          "text": "Lorum ipsum",
         },
       ],
       "versions": Array [

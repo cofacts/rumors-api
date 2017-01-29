@@ -20,6 +20,41 @@ describe('GetArticle', () => {
       }
     }`)).toMatchSnapshot();
   });
+
+  it('relatedArticles should work', async () => {
+    // No param
+    //
+    expect(await GraphQL(`{
+      GetArticle(id: "foo") {
+        relatedArticles {
+          id
+          text
+        }
+      }
+    }`)).toMatchSnapshot();
+
+    // filter
+    //
+    expect(await GraphQL(`{
+      GetArticle(id: "foo") {
+        relatedArticles(filter: {replyCount: {GT: 1}}) {
+          id
+          text
+        }
+      }
+    }`)).toMatchSnapshot();
+
+    // sort
+    //
+    expect(await GraphQL(`{
+      GetArticle(id: "foo") {
+        relatedArticles(orderBy: [{field: _score, order: ASC}]) {
+          id
+          text
+        }
+      }
+    }`)).toMatchSnapshot();
+  });
 });
 
 describe('GetReply', () => {
