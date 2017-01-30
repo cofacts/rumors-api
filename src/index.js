@@ -8,6 +8,7 @@ import { graphqlKoa, graphiqlKoa } from 'graphql-server-koa';
 import rollbar from 'rollbar';
 import koaStatic from 'koa-static';
 import koaBody from 'koa-bodyparser';
+import cors from 'kcors';
 import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
 
@@ -28,6 +29,8 @@ app.use(async (ctx, next) => {
     throw err;
   }
 });
+
+app.use(cors({ credentials: true }));
 
 app.use(koaBody({
   formLimit: '1mb',
