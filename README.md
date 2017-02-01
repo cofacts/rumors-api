@@ -30,7 +30,7 @@ sample rumors & answers.
 
 See [rumors-api](https://github.com/MrOrz/rumors-api)
 
-## Prepare database for search performance validation
+## Prepare database for search performance evaluation
 
 See [rumors-api](https://github.com/MrOrz/rumors-api)
 

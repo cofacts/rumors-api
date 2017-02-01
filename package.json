@@ -12,7 +12,7 @@
     "clear": "babel-node db/clear.js",
     "seed": "npm run clear && npm run schema && npm run json -- `ls -r data/*.json | head -n 1`",
     "test": "NODE_ENV=test npm run clear && NODE_ENV=test npm run schema",
-    "validate": "NODE_ENV=test npm run clear && NODE_ENV=test npm run schema && NODE_ENV=test npm run json -- data/20170119-0010.json"
+    "evaluate": "NODE_ENV=test npm run clear && NODE_ENV=test npm run schema && NODE_ENV=test npm run json -- data/20170119-0010.json"
   },
   "dependencies": {
     "babel-cli": "^6.18.0",
