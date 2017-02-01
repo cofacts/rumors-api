@@ -57,6 +57,10 @@ Sure you need not.
 If you have `npm` and `yarn` installed, you can just invoke `yarn install` to add packages, `npm run XXX` to run scripts (as long as it does not uses a port in use). Actually we suggest developers to install `npm` and `yarn` installed and do all the work. Only use `docker-compose` to spin up the services the API server depends on.
 
 
+### About `test/rumors-db`
+
+This directory is managed by git-subtree. Please don't modify anything inside `test/rumors-db`; send pull requests to https://github.com/MrOrz/rumors-db instead.
+
 ## Evaluate search performance
 
 > 知之為知之，不知為不知，是知也。
