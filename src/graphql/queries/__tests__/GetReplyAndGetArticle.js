@@ -10,6 +10,7 @@ describe('GetArticle', () => {
       GetArticle(id: "foo") {
         text
         references { type }
+        replyCount
         replies {
           versions {
             text

@@ -26,6 +26,10 @@ const Article = new GraphQLObjectType({
     id: { type: GraphQLString },
     text: { type: GraphQLString },
     references: { type: new GraphQLList(ArticleReference) },
+    replyCount: {
+      type: GraphQLInt,
+      resolve: ({ replyIds }) => (replyIds || []).length,
+    },
     replies: {
       type: new GraphQLList(Reply),
       resolve: ({ replyIds }, args, { loaders }) =>
