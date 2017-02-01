@@ -52,7 +52,7 @@ Sure you need not.
 If you have `npm` and `yarn` installed, you can just invoke `yarn install` to add packages, `npm run XXX` to run scripts (as long as it does not uses a port in use). Actually we suggest developers to install `npm` and `yarn` installed and do all the work. Only use `docker-compose` to spin up the services the API server depends on.
 
 
-### Evaluate search performance
+## Evaluate search performance
 
 > 知之為知之，不知為不知，是知也。
 
@@ -81,12 +81,12 @@ $ npm run evaluate
 $ docker run --rm -it -v `pwd`:/srv -w /srv --network=rumorsapi_default -e 'NODE_CONFIG={"ELASTICSEARCH_URL":"http://db:9200"}' kkarczmarczyk/node-yarn:6.9 npm run evaluate
 ```
 
-#### 知之為知之：False-negative test (previously: same-doc validation)
+### 知之為知之：False-negative test (previously: same-doc validation)
 
 Tests if the DB can find the correct document when we query against any existing document in DB.
 
 
-#### 不知為不知：False-positive test
+### 不知為不知：False-positive test
 
 From all documents that is not in DB but reported by the user in ["Is This Useful"](https://airtable.com/shr23o1yosGdfd3Xy) reports, tests if `Search` erroneously match an article in DB.
 
