@@ -52,21 +52,42 @@ Sure you need not.
 If you have `npm` and `yarn` installed, you can just invoke `yarn install` to add packages, `npm run XXX` to run scripts (as long as it does not uses a port in use). Actually we suggest developers to install `npm` and `yarn` installed and do all the work. Only use `docker-compose` to spin up the services the API server depends on.
 
 
-### Validate the score functions
+### Evaluate search performance
 
-#### Same-doc validation
+|                            | Found          | Not Found      |
+|----------------------------|----------------|----------------|
+| DB has such rumor          | True positive  | False negative |
+| DB doesn't have such rumor | False positive | True negative  |
 
-The script tests if the DB can find the correct document when we query against any existing document in DB.
+We use a static set of articles to test false positives and false negatives inside test DB.
 
-If you have `npm` installed, just run:
+To prepare test DB, first start an elastic search server on port 62223:
+
 ```
-$ npm run validate:sameDoc
+$ docker run -d -p "62223:9200" --name "rumors-test-db" elasticsearch
+# If it says 'The name "rumors-test-db" is already in use',
+# Just run:
+$ docker start rumors-test-db
 ```
 
-If not, you can also run:
+Then run:
+
 ```
-$ docker run --rm -it -v `pwd`:/srv -w /srv --network=rumorsapi_default -e 'NODE_CONFIG={"ELASTICSEARCH_URL":"http://db:9200"}' kkarczmarczyk/node-yarn:6.9 npm run validate:sameDoc
+$ npm run evaluate
+
+# If you don't have npm, run:
+$ docker run --rm -it -v `pwd`:/srv -w /srv --network=rumorsapi_default -e 'NODE_CONFIG={"ELASTICSEARCH_URL":"http://db:9200"}' kkarczmarczyk/node-yarn:6.9 npm run evaluate
 ```
+
+#### False-negative test (previously: same-doc validation)
+
+Tests if the DB can find the correct document when we query against any existing document in DB.
+
+
+#### False-positive test
+
+From all documents that is not in DB but reported by the user in ["Is This Useful"](https://airtable.com/shr23o1yosGdfd3Xy) reports, tests if `Search` erroneously match an article in DB.
+
 
 ## Test
 
