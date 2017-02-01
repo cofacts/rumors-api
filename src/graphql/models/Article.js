@@ -3,6 +3,8 @@ import {
   GraphQLString,
   GraphQLList,
   GraphQLInt,
+  GraphQLBoolean,
+  GraphQLNonNull,
 } from 'graphql';
 
 import {
@@ -34,6 +36,29 @@ const Article = new GraphQLObjectType({
       type: new GraphQLList(Reply),
       resolve: ({ replyIds }, args, { loaders }) =>
         loaders.docLoader.loadMany(replyIds.map(id => `/replies/basic/${id}`)),
+    },
+    replyRequestCount: {
+      type: GraphQLInt,
+      resolve: ({ id }, args, { loaders }) =>
+        loaders.replyRequestsByArticleIdLoader.load(id).then(requests => requests.length),
+    },
+    requestedForReply: {
+      type: GraphQLBoolean,
+      description: 'If the specified user has requested for reply for this article',
+      args: {
+        userId: {
+          type: new GraphQLNonNull(GraphQLString),
+          description: 'Whose reply request record to look for',
+        },
+        from: {
+          type: new GraphQLNonNull(GraphQLString),
+          deprecationReason: 'Will remove after API keys are implemented',
+        },
+      },
+      resolve: async ({ id }, { userId, from }, { loaders }) => {
+        const requests = await loaders.replyRequestsByArticleIdLoader.load(id);
+        return !!requests.find(r => r.userId === userId && r.from === from);
+      },
     },
     relatedArticles: {
       type: new GraphQLList(Article),

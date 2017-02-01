@@ -18,6 +18,8 @@ describe('GetArticle', () => {
             reference
           }
         }
+        replyRequestCount
+        requestedForReply(userId: "fakeUser", from: "LINE")
       }
     }`()).toMatchSnapshot();
   });

@@ -72,6 +72,8 @@ Object {
         },
       ],
       "replyCount": 1,
+      "replyRequestCount": 1,
+      "requestedForReply": true,
       "text": "Lorum ipsum",
     },
   },
