@@ -5,12 +5,7 @@ import Progress from 'progress';
 import client, { processMeta } from 'util/client';
 import getIn from 'util/getInFactory';
 import gql from '../util/GraphQL';
-
-function truncate(text, size = 25) {
-  text = JSON.stringify(text);
-  if (text.length > size - 3) return `${text.slice(0, size - 3)}...`;
-  return text;
-}
+import { truncate } from '../util/strings';
 
 async function main() {
   console.log('=== False Negative Validation ===');
