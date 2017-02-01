@@ -15,16 +15,8 @@ before_install:
   - docker run -d -p "62223:9200" --name rumors-test-db elasticsearch
   - sleep 10 # wait for elasticsearch
 
-  # Run mapping settings
-  # Ref: https://docs.travis-ci.com/user/installing-dependencies/
-  #
-  - wget https://github.com/mrorz/rumors-db/archive/master.tar.gz -O /tmp/rumors-db
-  - tar -xvf /tmp/rumors-db
-  - cd rumors-db-master && npm i && npm t
-  - cd ../
-
 script:
-  - npm t -- --coverage
+  - npm run rumors-db:test && npm run test:jest -- --coverage
 
 after_success:
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
