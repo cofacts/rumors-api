@@ -2,15 +2,16 @@ import { graphql } from 'graphql';
 import schema from 'graphql/schema';
 import DataLoaders from 'graphql/dataLoaders';
 
-export default function GraphQL(query) {
-  if (typeof query === 'string') {
-    query = {
-      query,
-      variables: undefined,
-    };
-  }
-
-  return graphql(schema, query.query, null, {
-    loaders: new DataLoaders(), // new loaders per request
-  }, query.variables);
-}
+// Usage:
+//
+// import gql from './util/GraphQL';
+// gql`query($var: Type) { foo }`({var: 123}).then(...)
+//
+// We use template string here so that Atom's language-babel does syntax highlight
+// for us.
+//
+export default (query, ...substitutes) =>
+  variables =>
+    graphql(schema, String.raw(query, ...substitutes), null, {
+      loaders: new DataLoaders(), // new loaders per request
+    }, variables);

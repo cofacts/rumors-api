@@ -4,7 +4,7 @@ import 'util/catchUnhandledRejection';
 import Progress from 'progress';
 import client, { processMeta } from 'util/client';
 import getIn from 'util/getInFactory';
-import GraphQL from '../util/GraphQL';
+import gql from '../util/GraphQL';
 
 function truncate(text, size = 25) {
   text = JSON.stringify(text);
@@ -34,8 +34,8 @@ async function main() {
   console.log('Querying articles in DB...');
   const progress = new Progress('[:bar] :current/:total :etas', { total: allRumors.length });
 
-  const allResults = await Promise.all(allRumors.map(({ text }) => GraphQL({
-    query: `
+  const allResults = await Promise.all(allRumors.map(({ text }) =>
+    gql`
       query ($text: String) {
         Search(text: $text, findInCrawled: false) {
           articles {
@@ -54,14 +54,13 @@ async function main() {
           }
         }
       }
-    `,
-    variables: {
+    `({
       text,
-    },
-  }).then((data) => {
+    }),
+  ).then((data) => {
     progress.tick();
     return data;
-  })));
+  }));
 
   let invalidCount = 0;
   allResults.forEach(({ data }, i) => {

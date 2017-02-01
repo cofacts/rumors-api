@@ -1,4 +1,4 @@
-import GraphQL from 'util/GraphQL';
+import gql from 'util/GraphQL';
 // import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 // import fixtures from '../__fixtures__/SetArticle';
@@ -10,8 +10,8 @@ describe('SetArticle', () => {
 
   it('creates articles', async () => {
     MockDate.set(1485593157011);
-    const { data, errors } = await GraphQL({
-      query: `mutation(
+    const { data, errors } = await gql`
+      mutation(
         $text: String!
         $references: [ArticleReferenceInput!]
       ) {
@@ -21,10 +21,9 @@ describe('SetArticle', () => {
         ) {
           id
         }
-      }`,
-      variables: {
-        text: 'FOO FOO', references: [{ type: 'LINE' }],
-      },
+      }
+    `({
+      text: 'FOO FOO', references: [{ type: 'LINE' }],
     });
     MockDate.reset();
 
@@ -42,8 +41,8 @@ describe('SetArticle', () => {
   it('updates references for existing article, only 1 LINE reference is available, and permalink is filled for URL references');
 
   it('throws error if both id and text is not given', async () => {
-    const { errors } = await GraphQL({
-      query: `mutation(
+    const { errors } = await gql`
+      mutation(
         $references: [ArticleReferenceInput!]
       ) {
         SetArticle(
@@ -51,10 +50,9 @@ describe('SetArticle', () => {
         ) {
           id
         }
-      }`,
-      variable: {
-        references: [{ type: 'LINE' }],
-      },
+      }
+    `({
+      references: [{ type: 'LINE' }],
     });
     expect(errors).toMatchSnapshot();
   });

@@ -1,4 +1,4 @@
-import GraphQL from 'util/GraphQL';
+import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
@@ -9,8 +9,8 @@ describe('SetReply', () => {
 
   it('creates replies and associates itself with specified article', async () => {
     MockDate.set(1485593157011);
-    const { data, errors } = await GraphQL({
-      query: `mutation(
+    const { data, errors } = await gql`
+      mutation(
         $articleId: String!
         $text: String!
         $type: ReplyTypeEnum!
@@ -24,13 +24,12 @@ describe('SetReply', () => {
         ) {
           id
         }
-      }`,
-      variables: {
-        articleId: 'setReplyTest1',
-        text: 'FOO FOO',
-        type: 'RUMOR',
-        reference: 'http://google.com',
-      },
+      }
+    `({
+      articleId: 'setReplyTest1',
+      text: 'FOO FOO',
+      type: 'RUMOR',
+      reference: 'http://google.com',
     });
     MockDate.reset();
 

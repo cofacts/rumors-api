@@ -1,4 +1,4 @@
-import GraphQL from 'util/GraphQL';
+import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/ListArticles';
 
@@ -12,25 +12,25 @@ describe('Search', () => {
   beforeAll(() => loadFixtures(fixtures));
 
   it('lists all articles', async () => {
-    expect(purifyResult(await GraphQL(`{
+    expect(purifyResult(await gql`{
       ListArticles {
         id
       }
-    }`))).toMatchSnapshot();
+    }`())).toMatchSnapshot();
 
     // sort
-    expect(purifyResult(await GraphQL(`{
+    expect(purifyResult(await gql`{
       ListArticles(orderBy: [{field: updatedAt}]) {
         id
       }
-    }`))).toMatchSnapshot();
+    }`())).toMatchSnapshot();
 
     // filter
-    expect(purifyResult(await GraphQL(`{
+    expect(purifyResult(await gql`{
       ListArticles(filter: {replyCount: {GT: 1}}) {
         id
       }
-    }`))).toMatchSnapshot();
+    }`())).toMatchSnapshot();
   });
 
   afterAll(() => unloadFixtures(fixtures));

@@ -1,4 +1,4 @@
-import GraphQL from 'util/GraphQL';
+import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/GetReplyAndArticle';
 
@@ -6,7 +6,7 @@ beforeAll(() => loadFixtures(fixtures));
 
 describe('GetArticle', () => {
   it('should get the specified article & associated replies from ID', async () => {
-    expect(await GraphQL(`{
+    expect(await gql`{
       GetArticle(id: "foo") {
         text
         references { type }
@@ -18,48 +18,48 @@ describe('GetArticle', () => {
           }
         }
       }
-    }`)).toMatchSnapshot();
+    }`()).toMatchSnapshot();
   });
 
   it('relatedArticles should work', async () => {
     // No param
     //
-    expect(await GraphQL(`{
+    expect(await gql`{
       GetArticle(id: "foo") {
         relatedArticles {
           id
           text
         }
       }
-    }`)).toMatchSnapshot();
+    }`()).toMatchSnapshot();
 
     // filter
     //
-    expect(await GraphQL(`{
+    expect(await gql`{
       GetArticle(id: "foo") {
         relatedArticles(filter: {replyCount: {GT: 1}}) {
           id
           text
         }
       }
-    }`)).toMatchSnapshot();
+    }`()).toMatchSnapshot();
 
     // sort
     //
-    expect(await GraphQL(`{
+    expect(await gql`{
       GetArticle(id: "foo") {
         relatedArticles(orderBy: [{field: _score, order: ASC}]) {
           id
           text
         }
       }
-    }`)).toMatchSnapshot();
+    }`()).toMatchSnapshot();
   });
 });
 
 describe('GetReply', () => {
   it('should get the specified reply & associated articles from ID', async () => {
-    expect(await GraphQL(`{
+    expect(await gql`{
       GetReply(id: "bar") {
         versions {
           text
@@ -70,7 +70,7 @@ describe('GetReply', () => {
           text
         }
       }
-    }`)).toMatchSnapshot();
+    }`()).toMatchSnapshot();
   });
 });
 
