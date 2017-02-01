@@ -11,7 +11,7 @@ if (process.argv.length !== 3) {
 
 const client = new elasticsearch.Client({
   host: config.get('ELASTICSEARCH_URL'),
-  log: 'trace',
+  log: 'info',
 });
 
 function writeToElasticSearch(indexName, records) {
@@ -23,6 +23,8 @@ function writeToElasticSearch(indexName, records) {
     // document
     body.push(doc);
   });
+
+  console.log(`Writing ${records.length} document(s) to index ${indexName}...`);
 
   return client.bulk({
     body,
