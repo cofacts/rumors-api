@@ -51,11 +51,11 @@ async function main() {
       }
     `({
       text,
+    }).then((data) => {
+      progress.tick();
+      return data;
     }),
-  ).then((data) => {
-    progress.tick();
-    return data;
-  }));
+  ));
 
   let invalidCount = 0;
   allResults.forEach(({ data }, i) => {
