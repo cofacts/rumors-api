@@ -13,6 +13,7 @@ Object.keys(schema).forEach((index) => {
   client.indices.create({
     index,
     body: {
+      settings: { number_of_shards: 1 },
       mappings: { basic: schema[index] },
     },
   }).then(() => {
