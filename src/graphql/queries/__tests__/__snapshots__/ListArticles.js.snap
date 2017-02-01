@@ -1,10 +1,10 @@
 exports[`Search lists all articles 1`] = `
 Array [
   Object {
-    "id": "listArticleTest2",
+    "id": "listArticleTest1",
   },
   Object {
-    "id": "listArticleTest1",
+    "id": "listArticleTest2",
   },
   Object {
     "id": "listArticleTest3",

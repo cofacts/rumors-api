@@ -4,12 +4,12 @@ Object {
     "GetArticle": Object {
       "relatedArticles": Array [
         Object {
-          "id": "foo3",
-          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
-        },
-        Object {
           "id": "foo2",
           "text": "Lorum ipsum Lorum ipsum",
+        },
+        Object {
+          "id": "foo3",
+          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
         },
       ],
     },
@@ -38,12 +38,12 @@ Object {
     "GetArticle": Object {
       "relatedArticles": Array [
         Object {
-          "id": "foo2",
-          "text": "Lorum ipsum Lorum ipsum",
-        },
-        Object {
           "id": "foo3",
           "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+        },
+        Object {
+          "id": "foo2",
+          "text": "Lorum ipsum Lorum ipsum",
         },
       ],
     },
