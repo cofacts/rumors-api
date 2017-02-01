@@ -5,7 +5,6 @@ import parse from 'csv-parse/lib/sync';
 import fs from 'fs';
 import path from 'path';
 import Progress from 'progress';
-import getIn from 'util/getInFactory';
 import gql from '../util/GraphQL';
 import { truncate } from '../util/strings';
 
