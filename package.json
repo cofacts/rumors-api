@@ -19,7 +19,8 @@
     "build:cp": "cp -R src/jade build/jade",
     "build:docker": "docker build -t mrorz/rumors-api:latest .",
     "validate:sameDoc": "babel-node test/evaluation/identicalDocRetrieval.js",
-    "clean": "rm -rf build"
+    "clean": "rm -rf build",
+    "update:rumors-db": "git subtree pull --prefix test/rumors-db git@github.com:MrOrz/rumors-db.git master --squash"
   },
   "dependencies": {
     "babel-runtime": "^6.20.0",
