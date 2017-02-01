@@ -19,10 +19,13 @@
     "build:babel": "babel src -d build",
     "build:cp": "cp -R src/jade build/jade",
     "build:docker": "docker build -t mrorz/rumors-api:latest .",
-    "validate:sameDoc": "babel-node test/evaluation/identicalDocRetrieval.js",
+    "validate:sameDoc": "echo Please run 'npm run evaluate' instead. See README.md for setting up test db.",
+    "evaluate": "npm run rumors-db:evaluate && npm run evaluate:fn",
+    "evaluate:fn": "NODE_ENV=test babel-node test/evaluation/identicalDocRetrieval.js",
     "clean": "rm -rf build",
     "rumors-db:pull": "git subtree pull --prefix test/rumors-db git@github.com:MrOrz/rumors-db.git master --squash",
-    "rumors-db:test": "cd test/rumors-db && npm t"
+    "rumors-db:test": "cd test/rumors-db && npm t",
+    "rumors-db:evaluate": "cd test/rumors-db && npm run evaluate"
   },
   "dependencies": {
     "babel-runtime": "^6.20.0",

@@ -13,10 +13,12 @@ function truncate(text, size = 25) {
 }
 
 async function main() {
+  console.log('=== False Negative Validation ===');
+
   // Get all rummors with answer specified.
   //
   const allRumors = getIn(await client.search({
-    index: 'rumors',
+    index: 'articles',
     body: {
       size: 10000,
 
@@ -24,19 +26,19 @@ async function main() {
       //
       query: { bool: { must: { script: { script: {
         lang: 'painless',
-        inline: "doc['answerIds'].length > 0",
+        inline: "doc['replyIds'].length > 0",
       } } } } },
     },
   }))(['hits', 'hits'], []).map(processMeta);
 
-  console.log('Querying rumors in DB...');
+  console.log('Querying articles in DB...');
   const progress = new Progress('[:bar] :current/:total :etas', { total: allRumors.length });
 
   const allResults = await Promise.all(allRumors.map(({ text }) => GraphQL({
     query: `
       query ($text: String) {
         Search(text: $text, findInCrawled: false) {
-          rumors {
+          articles {
             score
             doc {
               id
@@ -45,7 +47,7 @@ async function main() {
           }
           suggestedResult {
             __typename
-            ... on Rumor {
+            ... on Article {
               id
               text
             }
@@ -77,11 +79,11 @@ async function main() {
 
     console.log(truncate(rumor.text, 50));
     console.log('Search result:');
-    console.log(data.Search.rumors.map((r, idx) => `\t#${idx + 1} (score=${r.score} / id=${r.doc.id}) ${truncate(r.doc.text)}`).join('\n'));
+    console.log(data.Search.articles.map((r, idx) => `\t#${idx + 1} (score=${r.score} / id=${r.doc.id}) ${truncate(r.doc.text)}`).join('\n'));
   });
 
   console.log('---- Summary ----');
-  console.log(`${allRumors.length - invalidCount}/${allRumors.length} correct`);
+  console.log(`${invalidCount} false negatives out of ${allRumors.length} articles.`);
   console.log(`${(100 * ((allRumors.length - invalidCount) / allRumors.length)).toFixed(2)} % correct.`);
 }
 
