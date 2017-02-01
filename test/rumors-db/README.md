@@ -28,25 +28,12 @@ sample rumors & answers.
 
 ## Prepare database for unit test
 
-To prepare test DB, first start an elastic search server on port 62223:
+See [rumors-api](https://github.com/MrOrz/rumors-api)
 
-```
-$ docker run -d -p "62223:9200" --name "rumors-test-db" elasticsearch
-# If it says 'The name "rumors-test-db" is already in use',
-# Just run:
-$ docker start rumors-test-db
-```
+## Prepare database for search performance validation
 
-Then run this to reset the test database:
+See [rumors-api](https://github.com/MrOrz/rumors-api)
 
-```
-$ npm t
-
-# If you have docker but don't have npm, run:
-$ docker run --rm -it -v `pwd`:/srv -w /srv  -e 'NODE_ENV=test' kkarczmarczyk/node-yarn:6.9 npm t
-```
-
-It connects to the test database, deletes all its existing data and then applies the latest mappings on the test database.
 
 ---
 
