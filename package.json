@@ -11,7 +11,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "pm2-dev start --timestamp process-dev.json",
-    "test": "NODE_ENV=test jest",
+    "test": "npm run rumors-db:test && npm run test:jest",
+    "test:jest": "NODE_ENV=test jest",
     "start": "pm2 startOrRestart process.json --env production --log-date-format=\"YYYY-MM-DD HH:mm Z\" --no-daemon",
     "lint": "eslint --fix src/.",
     "build": "npm run clean && npm run build:babel && npm run build:cp && npm run build:docker",
@@ -20,7 +21,8 @@
     "build:docker": "docker build -t mrorz/rumors-api:latest .",
     "validate:sameDoc": "babel-node test/evaluation/identicalDocRetrieval.js",
     "clean": "rm -rf build",
-    "update:rumors-db": "git subtree pull --prefix test/rumors-db git@github.com:MrOrz/rumors-db.git master --squash"
+    "rumors-db:pull": "git subtree pull --prefix test/rumors-db git@github.com:MrOrz/rumors-db.git master --squash",
+    "rumors-db:test": "cd test/rumors-db && npm t"
   },
   "dependencies": {
     "babel-runtime": "^6.20.0",

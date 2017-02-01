@@ -70,15 +70,28 @@ $ docker run --rm -it -v `pwd`:/srv -w /srv --network=rumorsapi_default -e 'NODE
 
 ## Test
 
-Clone [rumors-db](https://github.com/MrOrz/rumors-db) and prepare the test database as instructed in its README.
+To prepare test DB, first start an elastic search server on port 62223:
 
-Then, in `rumors-api` run:
+```
+$ docker run -d -p "62223:9200" --name "rumors-test-db" elasticsearch
+# If it says 'The name "rumors-test-db" is already in use',
+# Just run:
+$ docker start rumors-test-db
+```
+
+Then run this to start testing:
 
 ```
 $ npm t
 ```
 
-If you get "unknown error" when testing GraphQL stuff, please check if test database is running. Consult [rumors-db README](https://github.com/MrOrz/rumors-db#prepare-database-for-unit-test) for troubleshooting.
+If you get "Elasticsearch ERROR : DELETE http://localhost:62223/replies => socket hang up", please check if test database is running. It takes some time for elasticsearch to boot.
+
+When you want to update jest snapshot, run:
+
+```
+$ npm run test:jest -- -u
+```
 
 ## Deploy
 
