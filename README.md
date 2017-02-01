@@ -54,6 +54,8 @@ If you have `npm` and `yarn` installed, you can just invoke `yarn install` to ad
 
 ### Evaluate search performance
 
+> 知之為知之，不知為不知，是知也。
+
 |                            | Found          | Not Found      |
 |----------------------------|----------------|----------------|
 | DB has such rumor          | True positive  | False negative |
@@ -79,14 +81,16 @@ $ npm run evaluate
 $ docker run --rm -it -v `pwd`:/srv -w /srv --network=rumorsapi_default -e 'NODE_CONFIG={"ELASTICSEARCH_URL":"http://db:9200"}' kkarczmarczyk/node-yarn:6.9 npm run evaluate
 ```
 
-#### False-negative test (previously: same-doc validation)
+#### 知之為知之：False-negative test (previously: same-doc validation)
 
 Tests if the DB can find the correct document when we query against any existing document in DB.
 
 
-#### False-positive test
+#### 不知為不知：False-positive test
 
 From all documents that is not in DB but reported by the user in ["Is This Useful"](https://airtable.com/shr23o1yosGdfd3Xy) reports, tests if `Search` erroneously match an article in DB.
+
+The "Rumor samples not in DB" is in `test/evalutation/non-db-samples-xxx.csv`.
 
 
 ## Test
