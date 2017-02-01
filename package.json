@@ -11,6 +11,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "pm2-dev start --timestamp process-dev.json",
+    "seed": "cd test/rumors-db && npm run seed",
     "test": "npm run rumors-db:test && npm run test:jest",
     "test:jest": "NODE_ENV=test jest",
     "start": "pm2 startOrRestart process.json --env production --log-date-format=\"YYYY-MM-DD HH:mm Z\" --no-daemon",

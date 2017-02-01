@@ -28,7 +28,12 @@ To stop the servers, just `ctrl-c` and all docker containers will be stopped.
 
 ### Populate ElasticSearch with seed data
 
-Please clone [rumors-db](https://github.com/MrOrz/rumors-db) and follow the instructions in it.
+First, make sure the elastic search is working (should be handled by the previous step),
+Then just run:
+
+```
+$ npm run seed
+```
 
 ### Detached mode & Logs
 
