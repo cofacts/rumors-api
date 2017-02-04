@@ -104,7 +104,6 @@ export function getSortArgs(orderBy) {
 export function getCursor(sortArr, node) {
   return Buffer.from(JSON.stringify(sortArr.map((key) => {
     const fieldName = key.slice(0, key.lastIndexOf(':'));
-
     if (fieldName === '_uid') return `basic#${node.id}`;
 
     return node[fieldName];
@@ -150,7 +149,6 @@ export function getPagedType(
         type: new GraphQLObjectType({
           name: `${typeName}PageInfo`,
           fields: {
-            hasNextPage: { type: GraphQLBoolean },
             lastCursor: { type: GraphQLString },
           },
         }),

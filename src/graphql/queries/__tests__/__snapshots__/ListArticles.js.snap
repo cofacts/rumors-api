@@ -22,6 +22,9 @@ Object {
           },
         },
       ],
+      "pageInfo": Object {
+        "lastCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
+      },
       "totalCount": 3,
     },
   },

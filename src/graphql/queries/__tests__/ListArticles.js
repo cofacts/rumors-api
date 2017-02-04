@@ -24,6 +24,9 @@ describe('Search', () => {
           }
           cursor
         }
+        pageInfo {
+          lastCursor
+        }
       }
     }`())).toMatchSnapshot();
 

@@ -30,8 +30,18 @@ export default {
         cursor: getCursor(searchContext.sort, node),
       }));
     },
-    async resolvePageInfo(searchContext) {
+    async resolvePageInfo({ sort, otherSearchContext }) {
+      const reverseSearchContext = {
+        ...otherSearchContext,
+        sort: sort.map(s => (s.endsWith(':asc') ? s.replace(/asc$/, 'desc') : s.replace(/desc$/, 'asc'))),
+        size: 1,
+      };
 
+      const lastNode = getIn(await client.search(reverseSearchContext))(['hits', 'hits'], []).map(processMeta)[0];
+
+      return {
+        lastCursor: getCursor(sort, lastNode),
+      };
     },
   }),
   args: {
