@@ -1,12 +1,14 @@
 import {
   GraphQLInt,
-  GraphQLList,
 } from 'graphql';
 
 import {
   getFilterableType,
   getSortableType,
   getSortArgs,
+  getPagedType,
+  getCursor,
+  getSearchAfterFromCursor,
   pagingArgs,
   getArithmeticExpressionType,
   getOperatorAndOperand,
@@ -18,7 +20,20 @@ import client, { processMeta } from 'util/client';
 import Article from 'graphql/models/Article';
 
 export default {
-  type: new GraphQLList(Article),
+  // type: new GraphQLList(Article),
+  type: getPagedType('ArticleResult', Article, {
+    async resolveEdges(searchContext) {
+      const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processMeta);
+
+      return nodes.map(node => ({
+        node,
+        cursor: getCursor(searchContext.sort, node),
+      }));
+    },
+    async resolvePageInfo(searchContext) {
+
+    },
+  }),
   args: {
     filter: {
       type: getFilterableType('ListArticleFilter', {
@@ -26,21 +41,24 @@ export default {
       }),
     },
     orderBy: {
-      type: getSortableType('ListArticleOrderBy', ['_score', 'updatedAt', 'createdAt']),
+      type: getSortableType('ListArticleOrderBy', [
+        'updatedAt',
+        'createdAt',
+      ]),
     },
     ...pagingArgs,
   },
-  async resolve(rootValue, { filter = {}, orderBy = [], first, skip }) {
-    // Ref: http://stackoverflow.com/a/8831494/1582110
-    //
+  async resolve(rootValue, { filter = {}, orderBy = [], first, after }) {
     const body = {
       query: {
+        // Ref: http://stackoverflow.com/a/8831494/1582110
+        //
         match_all: {},
       },
     };
 
-    if (orderBy.length) {
-      body.sort = getSortArgs(orderBy);
+    if (after) {
+      body.search_after = getSearchAfterFromCursor(after);
     }
 
     if (filter.replyCount) {
@@ -60,12 +78,13 @@ export default {
       };
     }
 
-    return getIn(await client.search({
+    // should return search context for resolveEdges & resolvePageInfo
+    return {
       index: 'articles',
       type: 'basic',
       body,
-      from: skip,
+      sort: getSortArgs(orderBy),
       size: first,
-    }))(['hits', 'hits'], []).map(processMeta);
+    };
   },
 };

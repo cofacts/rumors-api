@@ -1,9 +1,14 @@
 import {
   GraphQLInputObjectType,
+  GraphQLObjectType,
+  GraphQLString,
   GraphQLInt,
   GraphQLList,
   GraphQLEnumType,
+  GraphQLBoolean,
 } from 'graphql';
+
+import client from 'util/client';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -84,13 +89,73 @@ export const pagingArgs = {
     description: 'Returns only first <first> results',
     defaultValue: 10,
   },
-  skip: {
-    type: GraphQLInt,
-    description: 'Skips the first <skip> results',
-    defaultValue: 0,
+  after: {
+    type: GraphQLString,
+    description: 'Returns result after this cursor',
   },
 };
 
 export function getSortArgs(orderBy) {
-  return orderBy.map(({ field, order }) => ({ [field]: { order: order.toLowerCase() } }));
+  return orderBy
+    .map(({ field, order }) => `${field}:${order}`)
+    .concat('_uid:desc'); // enforce at least 1 sort order for pagination
+}
+
+export function getCursor(sortArr, node) {
+  return Buffer.from(JSON.stringify(sortArr.map((key) => {
+    const fieldName = key.slice(0, key.lastIndexOf(':'));
+
+    if (fieldName === '_uid') return `basic#${node.id}`;
+
+    return node[fieldName];
+  }))).toString('base64');
+}
+
+export function getSearchAfterFromCursor(cursor) {
+  return JSON.parse(Buffer.from(cursor, 'base64').toString('utf8'));
+}
+
+// All search
+//
+export function getPagedType(
+  typeName,
+  nodeType,
+  {
+    // .count() does not acceot sort & size
+    // eslint-disable-next-line
+    resolveTotalCount = async ({ sort, size, ...searchContext }) =>
+      (await client.count(searchContext)).count,
+    resolveEdges = () => {},
+    resolvePageInfo = () => {},
+  },
+) {
+  return new GraphQLObjectType({
+    name: typeName,
+    fields: {
+      totalCount: {
+        type: GraphQLInt,
+        resolve: resolveTotalCount,
+      },
+      edges: {
+        type: new GraphQLList(new GraphQLObjectType({
+          name: `${typeName}Edges`,
+          fields: {
+            node: { type: nodeType },
+            cursor: { type: GraphQLString },
+          },
+        })),
+        resolve: resolveEdges,
+      },
+      pageInfo: {
+        type: new GraphQLObjectType({
+          name: `${typeName}PageInfo`,
+          fields: {
+            hasNextPage: { type: GraphQLBoolean },
+            lastCursor: { type: GraphQLString },
+          },
+        }),
+        resolve: resolvePageInfo,
+      },
+    },
+  });
 }
