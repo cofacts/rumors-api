@@ -20,30 +20,6 @@ import client, { processMeta } from 'util/client';
 import Article from 'graphql/models/Article';
 
 export default {
-  // type: new GraphQLList(Article),
-  type: getPagedType('ArticleResult', Article, {
-    async resolveEdges(searchContext) {
-      const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processMeta);
-
-      return nodes.map(node => ({
-        node,
-        cursor: getCursor(searchContext.sort, node),
-      }));
-    },
-    async resolvePageInfo({ sort, otherSearchContext }) {
-      const reverseSearchContext = {
-        ...otherSearchContext,
-        sort: sort.map(s => (s.endsWith(':asc') ? s.replace(/asc$/, 'desc') : s.replace(/desc$/, 'asc'))),
-        size: 1,
-      };
-
-      const lastNode = getIn(await client.search(reverseSearchContext))(['hits', 'hits'], []).map(processMeta)[0];
-
-      return {
-        lastCursor: getCursor(sort, lastNode),
-      };
-    },
-  }),
   args: {
     filter: {
       type: getFilterableType('ListArticleFilter', {
@@ -97,4 +73,27 @@ export default {
       size: first,
     };
   },
+  type: getPagedType('ArticleResult', Article, {
+    async resolveEdges(searchContext) {
+      const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processMeta);
+
+      return nodes.map(node => ({
+        node,
+        cursor: getCursor(searchContext.sort, node),
+      }));
+    },
+    async resolvePageInfo({ sort, otherSearchContext }) {
+      const reverseSearchContext = {
+        ...otherSearchContext,
+        sort: sort.map(s => (s.endsWith(':asc') ? s.replace(/asc$/, 'desc') : s.replace(/desc$/, 'asc'))),
+        size: 1,
+      };
+
+      const lastNode = getIn(await client.search(reverseSearchContext))(['hits', 'hits'], []).map(processMeta)[0];
+
+      return {
+        lastCursor: getCursor(sort, lastNode),
+      };
+    },
+  }),
 };
