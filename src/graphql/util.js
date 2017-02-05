@@ -5,7 +5,6 @@ import {
   GraphQLInt,
   GraphQLList,
   GraphQLEnumType,
-  GraphQLBoolean,
 } from 'graphql';
 
 import client from 'util/client';
