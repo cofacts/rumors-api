@@ -27,9 +27,14 @@ export async function loadFixtures(fixtureMap) {
   await client.indices.refresh({ index: Array.from(indexes) });
 }
 
-export function unloadFixtures(fixtureMap) {
-  return client.bulk({ body: Object.keys(fixtureMap).map((key) => {
+export async function unloadFixtures(fixtureMap) {
+  const indexes = new Set();
+
+  await client.bulk({ body: Object.keys(fixtureMap).forEach((key) => {
     const [, _index, _type, _id] = key.split('/');
+    indexes.add(_index);
     return { delete: { _index, _type, _id } };
   }) });
+
+  await client.indices.refresh({ index: Array.from(indexes) });
 }
