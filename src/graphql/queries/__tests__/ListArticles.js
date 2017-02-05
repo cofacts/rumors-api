@@ -8,6 +8,13 @@ function purifyResult(result) {
   //
   result.data.ListArticles.edges =
     result.data.ListArticles.edges.filter(({ node: { id } }) => id.startsWith('listArticleTest'));
+
+  // Other tests' fixture will mess up with total count...
+  //
+  if (result.totalCount) {
+    expect(result.totalCount).toBeGreaterThan(0);
+    delete result.totalCount;
+  }
   return result;
 }
 
