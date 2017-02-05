@@ -1,56 +1,3 @@
-exports[`GetArticle relatedArticles should work 1`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "relatedArticles": Array [
-        Object {
-          "id": "foo2",
-          "text": "Lorum ipsum Lorum ipsum",
-        },
-        Object {
-          "id": "foo3",
-          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
-        },
-      ],
-    },
-  },
-}
-`;
-
-exports[`GetArticle relatedArticles should work 2`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "relatedArticles": Array [
-        Object {
-          "id": "foo3",
-          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
-        },
-      ],
-    },
-  },
-}
-`;
-
-exports[`GetArticle relatedArticles should work 3`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "relatedArticles": Array [
-        Object {
-          "id": "foo3",
-          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
-        },
-        Object {
-          "id": "foo2",
-          "text": "Lorum ipsum Lorum ipsum",
-        },
-      ],
-    },
-  },
-}
-`;
-
 exports[`GetArticle should get the specified article & associated replies from ID 1`] = `
 Object {
   "data": Object {
@@ -96,6 +43,84 @@ Object {
           "type": "NOT_ARTICLE",
         },
       ],
+    },
+  },
+}
+`;
+
+exports[`relatedArticle filter test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Object {
+        "edges": Array [],
+      },
+    },
+  },
+}
+`;
+
+exports[`relatedArticle no-param test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WyJiYXNpYyNmb28zIl0=",
+            "node": Object {
+              "doc": Object {
+                "id": "foo3",
+                "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+              },
+              "score": 0.8696344,
+            },
+          },
+          Object {
+            "cursor": "WyJiYXNpYyNmb28yIl0=",
+            "node": Object {
+              "doc": Object {
+                "id": "foo2",
+                "text": "Lorum ipsum Lorum ipsum",
+              },
+              "score": 0.7911257,
+            },
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`relatedArticle sorting test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WzAuNzkxMTI1NywiYmFzaWMjZm9vMiJd",
+            "node": Object {
+              "doc": Object {
+                "id": "foo2",
+                "text": "Lorum ipsum Lorum ipsum",
+              },
+              "score": 0.7911257,
+            },
+          },
+          Object {
+            "cursor": "WzAuODY5NjM0NCwiYmFzaWMjZm9vMyJd",
+            "node": Object {
+              "doc": Object {
+                "id": "foo3",
+                "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+              },
+              "score": 0.8696344,
+            },
+          },
+        ],
+      },
     },
   },
 }

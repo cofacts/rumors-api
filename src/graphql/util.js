@@ -5,9 +5,20 @@ import {
   GraphQLInt,
   GraphQLList,
   GraphQLEnumType,
+  GraphQLFloat,
 } from 'graphql';
 
 import client from 'util/client';
+
+export function scoredDocFactory(name, type) {
+  return new GraphQLObjectType({
+    name,
+    fields: {
+      score: { type: GraphQLFloat },
+      doc: { type },
+    },
+  });
+}
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -96,17 +107,14 @@ export const pagingArgs = {
 
 export function getSortArgs(orderBy) {
   return orderBy
-    .map(({ field, order }) => `${field}:${order}`)
+    .map(({ field, order }) => `${field}:${order.toLowerCase()}`)
     .concat('_uid:desc'); // enforce at least 1 sort order for pagination
 }
 
-export function getCursor(sortArr, node) {
-  return Buffer.from(JSON.stringify(sortArr.map((key) => {
-    const fieldName = key.slice(0, key.lastIndexOf(':'));
-    if (fieldName === '_uid') return `basic#${node.id}`;
-
-    return node[fieldName];
-  }))).toString('base64');
+export function getCursor(node) {
+  // _cursor is inserted to node via processMeta() or processScoredDoc().
+  //
+  return Buffer.from(JSON.stringify(node._cursor)).toString('base64');
 }
 
 export function getSearchAfterFromCursor(cursor) {

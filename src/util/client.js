@@ -15,9 +15,21 @@ export function processMeta({
 
   found, // for mget queries
   _score: score, // for search queries
+
+  sort, // cursor when sorted
 }) {
   if (found || score !== undefined) {
-    return { id, ...source };
+    return { id, ...source, _cursor: sort };
   }
   return null; // not found
+}
+
+// Processes {_id, _version, found, _source: {...}, _score} to
+// {doc: {id, ..._source}, score}.
+//
+export function processScoredDoc(hit) {
+  return {
+    score: hit._score,
+    doc: processMeta(hit),
+  };
 }

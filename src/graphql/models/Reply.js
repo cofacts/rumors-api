@@ -5,10 +5,14 @@ import {
   GraphQLInt,
 } from 'graphql';
 
+import {
+  scoredDocFactory,
+} from 'graphql/util';
+
 import Article from './Article';
 import ReplyVersion from './ReplyVersion';
 
-export default new GraphQLObjectType({
+const Reply = new GraphQLObjectType({
   name: 'Reply',
   fields: () => ({
     id: { type: GraphQLString },
@@ -26,3 +30,7 @@ export default new GraphQLObjectType({
     },
   }),
 });
+
+export const ScoredReply = scoredDocFactory('ScoredReply', Reply);
+
+export default Reply;

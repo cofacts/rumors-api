@@ -30,33 +30,48 @@ describe('GetArticle', () => {
     expect(await gql`{
       GetArticle(id: "foo") {
         relatedArticles {
-          id
-          text
+          edges {
+            cursor
+            node {
+              score
+              doc { id, text }
+            }
+          }
         }
       }
-    }`()).toMatchSnapshot();
+    }`()).toMatchSnapshot('relatedArticle no-param test');
 
     // filter
     //
     expect(await gql`{
       GetArticle(id: "foo") {
-        relatedArticles(filter: {replyCount: {GT: 1}}) {
-          id
-          text
+        relatedArticles(filter: {replyCount: {GT: 0}}) {
+          edges {
+            cursor
+            node {
+              score
+              doc { id, text }
+            }
+          }
         }
       }
-    }`()).toMatchSnapshot();
+    }`()).toMatchSnapshot('relatedArticle filter test');
 
     // sort
     //
     expect(await gql`{
       GetArticle(id: "foo") {
         relatedArticles(orderBy: [{field: _score, order: ASC}]) {
-          id
-          text
+          edges {
+            cursor
+            node {
+              score
+              doc { id, text }
+            }
+          }
         }
       }
-    }`()).toMatchSnapshot();
+    }`()).toMatchSnapshot('relatedArticle sorting test');
   });
 });
 

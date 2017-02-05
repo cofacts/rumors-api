@@ -7,16 +7,9 @@ import FormData from 'form-data';
 import rollbar from 'rollbar';
 
 import getInFactory from 'util/getInFactory';
-import client, { processMeta } from 'util/client';
+import client, { processScoredDoc } from 'util/client';
 
 import SearchResult from 'graphql/models/SearchResult';
-
-function processScoredDoc(hit) {
-  return {
-    score: hit._score,
-    doc: processMeta(hit),
-  };
-}
 
 export default {
   type: SearchResult,
