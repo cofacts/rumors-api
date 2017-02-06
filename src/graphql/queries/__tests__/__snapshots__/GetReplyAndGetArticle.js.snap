@@ -1,4 +1,4 @@
-exports[`GetArticle should get the specified article & associated replies from ID 1`] = `
+exports[`GetReplyAndGetArticle GetArticle should get the specified article & associated replies from ID 1`] = `
 Object {
   "data": Object {
     "GetArticle": Object {
@@ -27,7 +27,7 @@ Object {
 }
 `;
 
-exports[`GetReply should get the specified reply & associated articles from ID 1`] = `
+exports[`GetReplyAndGetArticle GetReply should get the specified reply & associated articles from ID 1`] = `
 Object {
   "data": Object {
     "GetReply": Object {
@@ -61,7 +61,7 @@ Object {
                 "id": "foo3",
                 "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
               },
-              "score": 0.8935098,
+              "score": 0.35971722,
             },
           },
           Object {
@@ -71,7 +71,7 @@ Object {
                 "id": "foo2",
                 "text": "Lorum ipsum Lorum ipsum",
               },
-              "score": 0.9210748,
+              "score": 0.3672113,
             },
           },
         ],
@@ -94,7 +94,7 @@ Object {
                 "id": "foo3",
                 "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
               },
-              "score": 0.8935098,
+              "score": 0.35971722,
             },
           },
           Object {
@@ -104,7 +104,7 @@ Object {
                 "id": "foo2",
                 "text": "Lorum ipsum Lorum ipsum",
               },
-              "score": 0.9210748,
+              "score": 0.3672113,
             },
           },
         ],
@@ -121,23 +121,23 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuODkzNTA5OCwiYmFzaWMjZm9vMyJd",
+            "cursor": "WzAuMzU5NzE3MjIsImJhc2ljI2ZvbzMiXQ==",
             "node": Object {
               "doc": Object {
                 "id": "foo3",
                 "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
               },
-              "score": 0.8935098,
+              "score": 0.35971722,
             },
           },
           Object {
-            "cursor": "WzAuOTIxMDc0OCwiYmFzaWMjZm9vMiJd",
+            "cursor": "WzAuMzY3MjExMywiYmFzaWMjZm9vMiJd",
             "node": Object {
               "doc": Object {
                 "id": "foo2",
                 "text": "Lorum ipsum Lorum ipsum",
               },
-              "score": 0.9210748,
+              "score": 0.3672113,
             },
           },
         ],
