@@ -2,27 +2,11 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/ListArticles';
 
-function purifyResult(result) {
-  expect(result.errors).toBeUndefined();
-  // Other test's fixture would get in... Orz
-  //
-  result.data.ListArticles.edges =
-    result.data.ListArticles.edges.filter(({ node: { id } }) => id.startsWith('listArticleTest'));
-
-  // Other tests' fixture will mess up with total count...
-  //
-  if (result.totalCount) {
-    expect(result.totalCount).toBeGreaterThan(0);
-    delete result.totalCount;
-  }
-  return result;
-}
-
-describe('Search', () => {
+describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
 
   it('lists all articles', async () => {
-    expect(purifyResult(await gql`{
+    expect(await gql`{
       ListArticles {
         totalCount
         edges {
@@ -35,10 +19,10 @@ describe('Search', () => {
           lastCursor
         }
       }
-    }`())).toMatchSnapshot();
+    }`()).toMatchSnapshot();
 
     // sort
-    expect(purifyResult(await gql`{
+    expect(await gql`{
       ListArticles(orderBy: [{field: updatedAt}]) {
         edges {
           node {
@@ -46,10 +30,10 @@ describe('Search', () => {
           }
         }
       }
-    }`())).toMatchSnapshot();
+    }`()).toMatchSnapshot();
 
     // filter
-    expect(purifyResult(await gql`{
+    expect(await gql`{
       ListArticles(filter: {replyCount: {GT: 1}}) {
         edges {
           node {
@@ -57,10 +41,10 @@ describe('Search', () => {
           }
         }
       }
-    }`())).toMatchSnapshot();
+    }`()).toMatchSnapshot();
 
     // after
-    expect(purifyResult(await gql`query($cursor: String) {
+    expect(await gql`query($cursor: String) {
       ListArticles(after: $cursor) {
         edges {
           node {
@@ -70,7 +54,7 @@ describe('Search', () => {
       }
     }`(
       { cursor: Buffer.from(JSON.stringify(['basic#listArticleTest2'])).toString('base64') },
-    ))).toMatchSnapshot();
+    )).toMatchSnapshot();
   });
 
   afterAll(() => unloadFixtures(fixtures));

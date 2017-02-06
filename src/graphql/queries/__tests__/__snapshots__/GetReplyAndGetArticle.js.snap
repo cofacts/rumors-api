@@ -1,57 +1,4 @@
-exports[`GetArticle relatedArticles should work 1`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "relatedArticles": Array [
-        Object {
-          "id": "foo2",
-          "text": "Lorum ipsum Lorum ipsum",
-        },
-        Object {
-          "id": "foo3",
-          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
-        },
-      ],
-    },
-  },
-}
-`;
-
-exports[`GetArticle relatedArticles should work 2`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "relatedArticles": Array [
-        Object {
-          "id": "foo3",
-          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
-        },
-      ],
-    },
-  },
-}
-`;
-
-exports[`GetArticle relatedArticles should work 3`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "relatedArticles": Array [
-        Object {
-          "id": "foo3",
-          "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
-        },
-        Object {
-          "id": "foo2",
-          "text": "Lorum ipsum Lorum ipsum",
-        },
-      ],
-    },
-  },
-}
-`;
-
-exports[`GetArticle should get the specified article & associated replies from ID 1`] = `
+exports[`GetReplyAndGetArticle GetArticle should get the specified article & associated replies from ID 1`] = `
 Object {
   "data": Object {
     "GetArticle": Object {
@@ -80,7 +27,7 @@ Object {
 }
 `;
 
-exports[`GetReply should get the specified reply & associated articles from ID 1`] = `
+exports[`GetReplyAndGetArticle GetReply should get the specified reply & associated articles from ID 1`] = `
 Object {
   "data": Object {
     "GetReply": Object {
@@ -96,6 +43,105 @@ Object {
           "type": "NOT_ARTICLE",
         },
       ],
+    },
+  },
+}
+`;
+
+exports[`relatedArticle filter test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WyJiYXNpYyNmb28zIl0=",
+            "node": Object {
+              "doc": Object {
+                "id": "foo3",
+                "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+              },
+              "score": 0.35971722,
+            },
+          },
+          Object {
+            "cursor": "WyJiYXNpYyNmb28yIl0=",
+            "node": Object {
+              "doc": Object {
+                "id": "foo2",
+                "text": "Lorum ipsum Lorum ipsum",
+              },
+              "score": 0.3672113,
+            },
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`relatedArticle no-param test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WyJiYXNpYyNmb28zIl0=",
+            "node": Object {
+              "doc": Object {
+                "id": "foo3",
+                "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+              },
+              "score": 0.35971722,
+            },
+          },
+          Object {
+            "cursor": "WyJiYXNpYyNmb28yIl0=",
+            "node": Object {
+              "doc": Object {
+                "id": "foo2",
+                "text": "Lorum ipsum Lorum ipsum",
+              },
+              "score": 0.3672113,
+            },
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`relatedArticle sorting test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WzAuMzU5NzE3MjIsImJhc2ljI2ZvbzMiXQ==",
+            "node": Object {
+              "doc": Object {
+                "id": "foo3",
+                "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+              },
+              "score": 0.35971722,
+            },
+          },
+          Object {
+            "cursor": "WzAuMzY3MjExMywiYmFzaWMjZm9vMiJd",
+            "node": Object {
+              "doc": Object {
+                "id": "foo2",
+                "text": "Lorum ipsum Lorum ipsum",
+              },
+              "score": 0.3672113,
+            },
+          },
+        ],
+      },
     },
   },
 }

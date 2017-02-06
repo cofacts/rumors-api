@@ -8,18 +8,22 @@ import {
 } from 'graphql';
 
 import {
+  scoredDocFactory,
   getFilterableType,
   pagingArgs,
+  getPagedType,
   getArithmeticExpressionType,
   getSortableType,
   getSortArgs,
+  getCursor,
+  getSearchAfterFromCursor,
   getOperatorAndOperand,
 } from 'graphql/util';
 
 import getIn from 'util/getInFactory';
 import ArticleReference from 'graphql/models/ArticleReference';
 
-import client, { processMeta } from 'util/client';
+import client, { processScoredDoc } from 'util/client';
 import Reply from './Reply';
 
 const Article = new GraphQLObjectType({
@@ -61,7 +65,6 @@ const Article = new GraphQLObjectType({
       },
     },
     relatedArticles: {
-      type: new GraphQLList(Article),
       args: {
         filter: {
           type: getFilterableType('RelatedArticleFilter', {
@@ -73,7 +76,7 @@ const Article = new GraphQLObjectType({
         },
         ...pagingArgs,
       },
-      async resolve({ id }, { filter = {}, orderBy = [], first, skip }) {
+      async resolve({ id }, { filter = {}, orderBy = [], first, after }) {
         const body = {
           query: {
             more_like_this: {
@@ -85,8 +88,8 @@ const Article = new GraphQLObjectType({
           },
         };
 
-        if (orderBy.length) {
-          body.sort = getSortArgs(orderBy);
+        if (after) {
+          body.search_after = getSearchAfterFromCursor(after);
         }
 
         if (filter.replyCount) {
@@ -106,16 +109,29 @@ const Article = new GraphQLObjectType({
           };
         }
 
-        return getIn(await client.search({
+        return {
           index: 'articles',
           type: 'basic',
           body,
-          from: skip,
+          sort: getSortArgs(orderBy),
           size: first,
-        }))(['hits', 'hits'], []).map(processMeta);
+          trackScores: true, // required to always populate score
+        };
       },
+
+      type: getPagedType('RelatedArticleResult', ScoredArticle, { // eslint-disable-line
+        async resolveEdges(searchContext) {
+          const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processScoredDoc);
+          return nodes.map(node => ({
+            node,
+            cursor: getCursor(node.doc),
+          }));
+        },
+      }),
     },
   }),
 });
+
+export const ScoredArticle = scoredDocFactory('ScoredArticle', Article);
 
 export default Article;

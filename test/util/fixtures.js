@@ -17,19 +17,21 @@ export async function loadFixtures(fixtureMap) {
     indexes.add(_index);
   });
 
-  await client.bulk({ body });
-
   // refresh() should be invoked after bulk insert, or re-index happens every 1 seconds
   //
   // ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html#bulk
   //      https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html
   //
-  await client.indices.refresh({ index: Array.from(indexes) });
+  await client.bulk({ body, refresh: 'true' });
 }
 
-export function unloadFixtures(fixtureMap) {
-  return client.bulk({ body: Object.keys(fixtureMap).map((key) => {
+export async function unloadFixtures(fixtureMap) {
+  const indexes = new Set();
+  const body = Object.keys(fixtureMap).map((key) => {
     const [, _index, _type, _id] = key.split('/');
+    indexes.add(_index);
     return { delete: { _index, _type, _id } };
-  }) });
+  });
+
+  await client.bulk({ body, refresh: 'true' });
 }

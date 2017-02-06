@@ -1,23 +1,13 @@
 import {
   GraphQLObjectType,
-  GraphQLFloat,
   GraphQLList,
   GraphQLUnionType,
 } from 'graphql';
 
-import Reply from 'graphql/models/Reply';
-import Article from 'graphql/models/Article';
-import CrawledDoc from 'graphql/models/CrawledDoc';
+import Reply, { ScoredReply } from 'graphql/models/Reply';
+import Article, { ScoredArticle } from 'graphql/models/Article';
+import CrawledDoc, { ScoredCrawledDoc } from 'graphql/models/CrawledDoc';
 
-function scoredDocFactory(name, type) {
-  return new GraphQLObjectType({
-    name,
-    fields: {
-      score: { type: GraphQLFloat },
-      doc: { type },
-    },
-  });
-}
 
 const ResultDocument = new GraphQLUnionType({
   name: 'ResultDocument',
@@ -53,9 +43,9 @@ function theBestDoc(scoredDocs, singleDocThreshold) {
 export default new GraphQLObjectType({
   name: 'SearchResult',
   fields: () => ({
-    articles: { type: new GraphQLList(scoredDocFactory('ScoredArticle', Article)) },
-    replies: { type: new GraphQLList(scoredDocFactory('ScoredReply', Reply)) },
-    crawledDoc: { type: new GraphQLList(scoredDocFactory('ScoredCrawledDoc', CrawledDoc)) },
+    articles: { type: new GraphQLList(ScoredArticle) },
+    replies: { type: new GraphQLList(ScoredReply) },
+    crawledDoc: { type: new GraphQLList(ScoredCrawledDoc) },
     suggestedResult: {
       description: 'The document that is the best match in this search.',
       type: ResultDocument,

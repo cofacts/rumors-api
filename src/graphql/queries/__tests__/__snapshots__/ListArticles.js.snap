@@ -1,4 +1,4 @@
-exports[`Search lists all articles 1`] = `
+exports[`ListArticles lists all articles 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
@@ -31,7 +31,7 @@ Object {
 }
 `;
 
-exports[`Search lists all articles 2`] = `
+exports[`ListArticles lists all articles 2`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
@@ -57,7 +57,7 @@ Object {
 }
 `;
 
-exports[`Search lists all articles 3`] = `
+exports[`ListArticles lists all articles 3`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
@@ -73,7 +73,7 @@ Object {
 }
 `;
 
-exports[`Search lists all articles 4`] = `
+exports[`ListArticles lists all articles 4`] = `
 Object {
   "data": Object {
     "ListArticles": Object {

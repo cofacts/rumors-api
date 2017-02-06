@@ -79,7 +79,7 @@ export default {
 
       return nodes.map(node => ({
         node,
-        cursor: getCursor(searchContext.sort, node),
+        cursor: getCursor(node),
       }));
     },
     async resolvePageInfo({ sort, otherSearchContext }) {
@@ -92,7 +92,7 @@ export default {
       const lastNode = getIn(await client.search(reverseSearchContext))(['hits', 'hits'], []).map(processMeta)[0];
 
       return {
-        lastCursor: getCursor(sort, lastNode),
+        lastCursor: getCursor(lastNode),
       };
     },
   }),
