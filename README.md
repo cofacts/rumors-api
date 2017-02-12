@@ -14,9 +14,11 @@ GraphQL API server for clients like rumors-site and rumors-line-bot
 
 ### First-time setup
 
-After cloning this repository & cd into project directory, run:
+After cloning this repository & cd into project directory, then install the dependencies.
 
 ```
+$ git clone --recursive git@github.com:MrOrz/rumors-api.git # --recursive for the submodules
+$ cd rumors-api
 $ yarn
 ```
 
