@@ -7,12 +7,23 @@ GraphQL API server for clients like rumors-site and rumors-line-bot
 
 ## Development
 
-We use `docker-compose` to build up dev environment. The docker images contains
-elasticsearch, kibana and NodeJS (Yes, you don't even need to install node on your machine!).
-If you have got [docker-compose working](https://docs.docker.com/compose/install/) working, just:
+### Prerequisite
+
+* node 6+ with [yarn](https://yarnpkg.com/en/) available as global command
+* Docker & [docker-compose](https://docs.docker.com/compose/install/)
+
+### First-time setup
+
+After cloning this repository & cd into project directory, run:
 
 ```
-$ USER_ID=$UID docker-compose up
+$ yarn
+```
+
+### Start development servers
+
+```
+$ docker-compose up
 ```
 
 This will:
@@ -40,7 +51,7 @@ $ npm run seed
 If you do not want a console occupied by docker-compose, you may use detached mode:
 
 ```
-$ USER_ID=$UID docker-compose up -d
+$ docker-compose up -d
 ```
 
 Access the logs using:
@@ -49,13 +60,6 @@ Access the logs using:
 $ docker-compose logs api     # `api' can also be `db', `kibana' or `yarn-install'.
 $ docker-compose logs -f api  # Tail mode
 ```
-
-### But I have `docker`, `npm` & `yarn` installed, why typing so many characters?
-
-Sure you need not.
-
-If you have `npm` and `yarn` installed, you can just invoke `yarn install` to add packages, `npm run XXX` to run scripts (as long as it does not uses a port in use). Actually we suggest developers to install `npm` and `yarn` installed and do all the work. Only use `docker-compose` to spin up the services the API server depends on.
-
 
 ### About `test/rumors-db`
 
@@ -85,9 +89,6 @@ Then run:
 
 ```
 $ npm run evaluate
-
-# If you don't have npm, run:
-$ docker run --rm -it -v `pwd`:/srv -w /srv --network=rumorsapi_default -e 'NODE_CONFIG={"ELASTICSEARCH_URL":"http://db:9200"}' kkarczmarczyk/node-yarn:6.9 npm run evaluate
 ```
 
 ### 知之為知之：False-negative test (previously: same-doc validation)
