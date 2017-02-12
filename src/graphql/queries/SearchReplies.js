@@ -40,12 +40,13 @@ export default {
       body.search_after = getSearchAfterFromCursor(after);
     }
 
+    body.sort = getSortArgs(orderBy);
+
     // should return search context for resolveEdges & resolvePageInfo
     return {
       index: 'replies',
       type: 'basic',
       body,
-      sort: getSortArgs(orderBy),
       size: first,
       trackScores: true,
     };

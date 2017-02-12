@@ -106,11 +106,12 @@ const Article = new GraphQLObjectType({
           };
         }
 
+        body.sort = getSortArgs(orderBy);
+
         return {
           index: 'articles',
           type: 'basic',
           body,
-          sort: getSortArgs(orderBy),
           size: first,
           trackScores: true, // required to always populate score
         };

@@ -61,12 +61,13 @@ export default {
       };
     }
 
+    body.sort = getSortArgs(orderBy);
+
     // should return search context for resolveEdges & resolvePageInfo
     return {
       index: 'articles',
       type: 'basic',
       body,
-      sort: getSortArgs(orderBy),
       size: first,
     };
   },

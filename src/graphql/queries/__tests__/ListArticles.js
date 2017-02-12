@@ -20,8 +20,9 @@ describe('ListArticles', () => {
         }
       }
     }`()).toMatchSnapshot();
+  });
 
-    // sort
+  it('sorts', async () => {
     expect(await gql`{
       ListArticles(orderBy: [{field: updatedAt}]) {
         edges {
@@ -31,8 +32,9 @@ describe('ListArticles', () => {
         }
       }
     }`()).toMatchSnapshot();
+  });
 
-    // filter
+  it('filters', async () => {
     expect(await gql`{
       ListArticles(filter: {replyCount: {GT: 1}}) {
         edges {
@@ -42,8 +44,9 @@ describe('ListArticles', () => {
         }
       }
     }`()).toMatchSnapshot();
+  });
 
-    // after
+  it('supports after', async () => {
     expect(await gql`query($cursor: String) {
       ListArticles(after: $cursor) {
         edges {

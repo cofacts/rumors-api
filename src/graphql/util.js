@@ -109,10 +109,10 @@ export const pagingArgs = {
   },
 };
 
-export function getSortArgs(orderBy) {
+export function getSortArgs(orderBy, fieldMap = {}) {
   return orderBy
-    .map(({ field, order }) => `${field}:${order.toLowerCase()}`)
-    .concat('_uid:desc'); // enforce at least 1 sort order for pagination
+    .map(({ field, order }) => fieldMap[field] || ({ [field]: { order: order.toLowerCase() } }))
+    .concat({ _uid: { order: 'desc' } }); // enforce at least 1 sort order for pagination
 }
 
 // Export for custom resolveEdges() and resolvePageInfo()
@@ -134,10 +134,16 @@ export function getPagedType(
     // Default resolvers
     //
 
-    // .count() does not accept sort & size
-    // eslint-disable-next-line
-    resolveTotalCount = async ({ sort, size, ...searchContext }) =>
-      (await client.count(searchContext)).count,
+    resolveTotalCount = async searchContext =>
+      // .count() does not accept sort & size
+       (await client.count({
+         ...searchContext,
+         size: undefined,
+         body: {
+           ...searchContext.body,
+           sort: undefined,
+         },
+       })).count,
 
     resolveEdges = async (searchContext) => {
       const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processMeta);
@@ -146,10 +152,26 @@ export function getPagedType(
       }));
     },
 
-    resolvePageInfo = async ({ sort, ...otherSearchContext }) => {
+    resolvePageInfo = async (searchContext) => {
+      // sort: [{fieldName: {order: 'desc'}}, {fieldName2: {order: 'desc'}}, ...]
+      //
+      const newSort = searchContext.body.sort.map((item) => {
+        const field = Object.keys(item)[0];
+        const order = item[field].order === 'desc' ? 'asc' : 'desc';
+        return {
+          [field]: {
+            ...item[field],
+            order,
+          },
+        };
+      });
+
       const lastNode = getIn(await client.search({
-        ...otherSearchContext,
-        sort: sort.map(s => (s.endsWith(':asc') ? s.replace(/asc$/, 'desc') : s.replace(/desc$/, 'asc'))),
+        ...searchContext,
+        body: {
+          ...searchContext.body,
+          sort: newSort,
+        },
         size: 1,
       }))(['hits', 'hits'], []).map(processMeta)[0];
 
