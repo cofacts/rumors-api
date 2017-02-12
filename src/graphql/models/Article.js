@@ -40,8 +40,7 @@ const Article = new GraphQLObjectType({
     },
     replyRequestCount: {
       type: GraphQLInt,
-      resolve: ({ id }, args, { loaders }) =>
-        loaders.replyRequestsByArticleIdLoader.load(id).then(requests => requests.length),
+      resolve: ({ replyRequestIds }) => replyRequestIds.length,
     },
     requestedForReply: {
       type: GraphQLBoolean,
@@ -56,8 +55,8 @@ const Article = new GraphQLObjectType({
           deprecationReason: 'Will remove after API keys are implemented',
         },
       },
-      resolve: async ({ id }, { userId, from }, { loaders }) => {
-        const requests = await loaders.replyRequestsByArticleIdLoader.load(id);
+      resolve: async ({ replyRequestIds }, { userId, from }, { loaders }) => {
+        const requests = await loaders.docLoader.loadMany(replyRequestIds.map(id => `/replyrequests/basic/${id}`));
         return !!requests.find(r => r.userId === userId && r.from === from);
       },
     },
