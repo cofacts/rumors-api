@@ -119,12 +119,13 @@ const Article = new GraphQLObjectType({
         };
       },
 
-      type: getPagedType('RelatedArticleResult', ScoredArticle, { // eslint-disable-line
+      type: getPagedType('RelatedArticleResult', Article, { // eslint-disable-line
         async resolveEdges(searchContext) {
           const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processScoredDoc);
-          return nodes.map(node => ({
-            node,
-            cursor: getCursor(node.doc),
+          return nodes.map(({ score, doc }) => ({
+            node: doc,
+            cursor: getCursor(doc),
+            score,
           }));
         },
       }),

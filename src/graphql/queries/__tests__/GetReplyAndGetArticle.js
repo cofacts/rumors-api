@@ -34,9 +34,9 @@ describe('GetReplyAndGetArticle', () => {
             edges {
               cursor
               node {
-                score
-                doc { id, text }
+                id, text
               }
+              score
             }
           }
         }
@@ -50,9 +50,9 @@ describe('GetReplyAndGetArticle', () => {
             edges {
               cursor
               node {
-                score
-                doc { id, text }
+                id, text
               }
+              score
             }
           }
         }
@@ -66,9 +66,9 @@ describe('GetReplyAndGetArticle', () => {
             edges {
               cursor
               node {
-                score
-                doc { id, text }
+                id, text
               }
+              score
             }
           }
         }

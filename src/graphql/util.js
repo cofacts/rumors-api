@@ -148,6 +148,7 @@ export function getPagedType(
           fields: {
             node: { type: nodeType },
             cursor: { type: GraphQLString },
+            score: { type: GraphQLFloat },
           },
         })),
         resolve: resolveEdges,
