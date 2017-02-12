@@ -48,7 +48,7 @@ export default {
     }
 
     if (filter.replyCount) {
-      // Switch to bool query so that we can filter more_like_this results
+      // Switch to bool query so that we can filter match_all results
       //
       const { operator, operand } = getOperatorAndOperand(filter.replyCount);
       body.query = {
