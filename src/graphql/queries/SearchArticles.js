@@ -8,15 +8,12 @@ import {
   getSortableType,
   getSortArgs,
   getPagedType,
-  getCursor,
   getSearchAfterFromCursor,
   pagingArgs,
   getArithmeticExpressionType,
   getOperatorAndOperand,
 } from 'graphql/util';
 
-import getIn from 'util/getInFactory';
-import client, { processScoredDoc } from 'util/client';
 import Article from 'graphql/models/Article';
 
 export default {
@@ -83,14 +80,5 @@ export default {
     };
   },
 
-  type: getPagedType('SearchArticleResult', Article, { // eslint-disable-line
-    async resolveEdges(searchContext) {
-      const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processScoredDoc);
-      return nodes.map(({ score, doc }) => ({
-        node: doc,
-        cursor: getCursor(doc),
-        score,
-      }));
-    },
-  }),
+  type: getPagedType('SearchArticleResult', Article),
 };

@@ -14,16 +14,18 @@ export function processMeta({
   _source: source,
 
   found, // for mget queries
-  _score: score, // for search queries
+  _score, // for search queries
 
   sort, // cursor when sorted
 }) {
-  if (found || score !== undefined) {
-    return { id, ...source, _cursor: sort };
+  if (found || _score !== undefined) {
+    return { id, ...source, _cursor: sort, _score };
   }
   return null; // not found
 }
 
+// Deprecated.
+//
 // Processes {_id, _version, found, _source: {...}, _score} to
 // {doc: {id, ..._source}, score}.
 //

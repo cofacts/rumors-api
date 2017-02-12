@@ -7,16 +7,13 @@ import {
   getSortableType,
   getSortArgs,
   getPagedType,
-  getCursor,
   getSearchAfterFromCursor,
   pagingArgs,
   getArithmeticExpressionType,
   getOperatorAndOperand,
 } from 'graphql/util';
 
-import getIn from 'util/getInFactory';
 
-import client, { processMeta } from 'util/client';
 import Article from 'graphql/models/Article';
 
 export default {
@@ -73,27 +70,5 @@ export default {
       size: first,
     };
   },
-  type: getPagedType('ArticleResult', Article, {
-    async resolveEdges(searchContext) {
-      const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processMeta);
-
-      return nodes.map(node => ({
-        node,
-        cursor: getCursor(node),
-      }));
-    },
-    async resolvePageInfo({ sort, otherSearchContext }) {
-      const reverseSearchContext = {
-        ...otherSearchContext,
-        sort: sort.map(s => (s.endsWith(':asc') ? s.replace(/asc$/, 'desc') : s.replace(/desc$/, 'asc'))),
-        size: 1,
-      };
-
-      const lastNode = getIn(await client.search(reverseSearchContext))(['hits', 'hits'], []).map(processMeta)[0];
-
-      return {
-        lastCursor: getCursor(lastNode),
-      };
-    },
-  }),
+  type: getPagedType('ArticleResult', Article),
 };

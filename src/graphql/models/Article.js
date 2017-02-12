@@ -15,15 +15,12 @@ import {
   getArithmeticExpressionType,
   getSortableType,
   getSortArgs,
-  getCursor,
   getSearchAfterFromCursor,
   getOperatorAndOperand,
 } from 'graphql/util';
 
-import getIn from 'util/getInFactory';
 import ArticleReference from 'graphql/models/ArticleReference';
 
-import client, { processScoredDoc } from 'util/client';
 import Reply from './Reply';
 
 const Article = new GraphQLObjectType({
@@ -119,16 +116,7 @@ const Article = new GraphQLObjectType({
         };
       },
 
-      type: getPagedType('RelatedArticleResult', Article, { // eslint-disable-line
-        async resolveEdges(searchContext) {
-          const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processScoredDoc);
-          return nodes.map(({ score, doc }) => ({
-            node: doc,
-            cursor: getCursor(doc),
-            score,
-          }));
-        },
-      }),
+      type: getPagedType('RelatedArticleResult', Article),
     },
   }),
 });

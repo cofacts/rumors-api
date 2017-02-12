@@ -8,7 +8,9 @@ import {
   GraphQLFloat,
 } from 'graphql';
 
-import client from 'util/client';
+import client, { processMeta } from 'util/client';
+
+import getIn from 'util/getInFactory';
 
 export function scoredDocFactory(name, type) {
   return new GraphQLObjectType({
@@ -111,10 +113,10 @@ export function getSortArgs(orderBy) {
     .concat('_uid:desc'); // enforce at least 1 sort order for pagination
 }
 
-export function getCursor(node) {
-  // _cursor is inserted to node via processMeta() or processScoredDoc().
-  //
-  return Buffer.from(JSON.stringify(node._cursor)).toString('base64');
+// Export for custom resolveEdges() and resolvePageInfo()
+//
+export function getCursor(cursor) {
+  return Buffer.from(JSON.stringify(cursor)).toString('base64');
 }
 
 export function getSearchAfterFromCursor(cursor) {
@@ -127,13 +129,33 @@ export function getPagedType(
   typeName,
   nodeType,
   {
-    // .count() does not acceot sort & size
+    // Default resolvers
+    //
+
+    // .count() does not accept sort & size
     // eslint-disable-next-line
     resolveTotalCount = async ({ sort, size, ...searchContext }) =>
       (await client.count(searchContext)).count,
-    resolveEdges = () => {},
-    resolvePageInfo = () => {},
-  },
+
+    resolveEdges = async (searchContext) => {
+      const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processMeta);
+      return nodes.map(({ _score: score, _cursor, ...node }) => ({
+        node, cursor: getCursor(_cursor), score,
+      }));
+    },
+
+    resolvePageInfo = async ({ sort, ...otherSearchContext }) => {
+      const lastNode = getIn(await client.search({
+        ...otherSearchContext,
+        sort: sort.map(s => (s.endsWith(':asc') ? s.replace(/asc$/, 'desc') : s.replace(/desc$/, 'asc'))),
+        size: 1,
+      }))(['hits', 'hits'], []).map(processMeta)[0];
+
+      return {
+        lastCursor: getCursor(lastNode._cursor),
+      };
+    },
+  } = {},
 ) {
   return new GraphQLObjectType({
     name: typeName,
