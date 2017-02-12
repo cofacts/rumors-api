@@ -77,6 +77,7 @@ export default {
       body,
       sort: getSortArgs(orderBy),
       size: first,
+      trackScores: true,
     };
   },
 
