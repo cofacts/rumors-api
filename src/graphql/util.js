@@ -12,6 +12,8 @@ import client, { processMeta } from 'util/client';
 
 import getIn from 'util/getInFactory';
 
+// Deprecated.
+//
 export function scoredDocFactory(name, type) {
   return new GraphQLObjectType({
     name,

@@ -12,6 +12,7 @@ import CrawledDoc, { ScoredCrawledDoc } from 'graphql/models/CrawledDoc';
 const ResultDocument = new GraphQLUnionType({
   name: 'ResultDocument',
   types: [Article, Reply, CrawledDoc],
+  deprecationReason: 'Use SearchArticle, SearchReply and SearchCrawledDoc instead.',
   resolveType(result) {
     if (!result) return CrawledDoc;
 
