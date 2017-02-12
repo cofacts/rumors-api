@@ -76,24 +76,14 @@ const SortOrderEnum = new GraphQLEnumType({
   },
 });
 
-export function getSortableType(typeName, filterableFieldNames = [], defaultValue = null) {
+export function getSortableType(typeName, filterableFieldNames = []) {
   return new GraphQLList(new GraphQLInputObjectType({
     name: typeName,
-    fields: {
-      field: {
-        type: new GraphQLEnumType({
-          name: `${typeName}Enum`,
-          values: filterableFieldNames.reduce(
-            (values, field) => ({ ...values, [field]: { value: field } }), {},
-          ),
-        }),
-        defaultValue: defaultValue === null ? filterableFieldNames[0] : defaultValue,
-      },
-      order: {
-        type: SortOrderEnum,
-        defaultValue: 'desc',
-      },
-    },
+    description: 'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
+    fields: filterableFieldNames.reduce(
+      (fields, fieldName) => ({ ...fields, [fieldName]: { type: SortOrderEnum } }),
+      {},
+    ),
   }));
 }
 
@@ -111,7 +101,9 @@ export const pagingArgs = {
 
 export function getSortArgs(orderBy, fieldFnMap = {}) {
   return orderBy
-    .map(({ field, order }) => {
+    .map((item) => {
+      const field = Object.keys(item)[0];
+      const order = item[field];
       const defaultFieldFn = o => ({ [field]: { order: o } });
 
       return (fieldFnMap[field] || defaultFieldFn)(order);

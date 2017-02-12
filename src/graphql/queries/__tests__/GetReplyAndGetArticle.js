@@ -62,7 +62,7 @@ describe('GetReplyAndGetArticle', () => {
       //
       expect(await gql`{
         GetArticle(id: "foo") {
-          relatedArticles(orderBy: [{field: _score, order: ASC}]) {
+          relatedArticles(orderBy: [{_score: ASC}]) {
             edges {
               cursor
               node {

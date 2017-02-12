@@ -24,7 +24,7 @@ describe('ListArticles', () => {
 
   it('sorts', async () => {
     expect(await gql`{
-      ListArticles(orderBy: [{field: updatedAt}]) {
+      ListArticles(orderBy: [{updatedAt: DESC}]) {
         edges {
           node {
             id
@@ -34,7 +34,7 @@ describe('ListArticles', () => {
     }`()).toMatchSnapshot();
 
     expect(await gql`{
-      ListArticles(orderBy: [{field: replyRequestCount, order: DESC}]) {
+      ListArticles(orderBy: [{replyRequestCount: DESC}]) {
         edges {
           node {
             id
