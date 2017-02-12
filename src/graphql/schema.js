@@ -11,6 +11,7 @@ import GetArticle from './queries/GetArticle';
 import GetReply from './queries/GetReply';
 import ListArticles from './queries/ListArticles';
 import SearchArticles from './queries/SearchArticles';
+import SearchReplies from './queries/SearchReplies';
 
 // Set individual objects
 import SetArticle from './mutations/SetArticle';
@@ -25,6 +26,7 @@ export default new GraphQLSchema({
       GetReply,
       ListArticles,
       SearchArticles,
+      SearchReplies,
     },
   }),
   mutation: new GraphQLObjectType({

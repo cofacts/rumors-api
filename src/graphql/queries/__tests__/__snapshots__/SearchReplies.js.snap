@@ -1,0 +1,24 @@
+exports[`SearchReplies fetches related replies 1`] = `
+Object {
+  "data": Object {
+    "SearchReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "versions": Array [
+              Object {
+                "text": "
+      憶昔封書與君夜，金鑾殿後欲明天。今夜封書在何處？廬山庵裏曉燈前。籠鳥檻猿俱未死，人間相見是何年？
+
+      微之，微之！此夕此心，君知之乎！
+    ",
+              },
+            ],
+          },
+          "score": 19.518982,
+        },
+      ],
+    },
+  },
+}
+`;
