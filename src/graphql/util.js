@@ -71,8 +71,8 @@ export function getFilterableType(typeName, args) {
 const SortOrderEnum = new GraphQLEnumType({
   name: 'SortOrderEnum',
   values: {
-    ASC: { value: 'ASC' },
-    DESC: { value: 'DESC' },
+    ASC: { value: 'asc' },
+    DESC: { value: 'desc' },
   },
 });
 
@@ -109,10 +109,13 @@ export const pagingArgs = {
   },
 };
 
-export function getSortArgs(orderBy, fieldMap = {}) {
+export function getSortArgs(orderBy, fieldFnMap = {}) {
   return orderBy
-    .map(({ field, order }) => fieldMap[field] || ({ [field]: { order: order.toLowerCase() } }))
-    .concat({ _uid: { order: 'desc' } }); // enforce at least 1 sort order for pagination
+    .map(({ field, order }) => {
+      const defaultFieldFn = o => ({ [field]: { order: o } });
+
+      return (fieldFnMap[field] || defaultFieldFn)(order);
+    }).concat({ _uid: { order: 'desc' } }); // enforce at least 1 sort order for pagination
 }
 
 // Export for custom resolveEdges() and resolvePageInfo()

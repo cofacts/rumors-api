@@ -32,6 +32,16 @@ describe('ListArticles', () => {
         }
       }
     }`()).toMatchSnapshot();
+
+    expect(await gql`{
+      ListArticles(orderBy: [{field: replyRequestCount, order: DESC}]) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }`()).toMatchSnapshot();
   });
 
   it('filters', async () => {

@@ -27,6 +27,7 @@ export default {
       type: getSortableType('ListArticleOrderBy', [
         'updatedAt',
         'createdAt',
+        'replyRequestCount',
       ]),
     },
     ...pagingArgs,
@@ -61,7 +62,17 @@ export default {
       };
     }
 
-    body.sort = getSortArgs(orderBy);
+    body.sort = getSortArgs(orderBy, {
+      replyRequestCount(order) {
+        return {
+          _script: {
+            type: 'number',
+            script: { inline: "doc['replyRequestIds'].values.size()" },
+            order,
+          },
+        };
+      },
+    });
 
     // should return search context for resolveEdges & resolvePageInfo
     return {

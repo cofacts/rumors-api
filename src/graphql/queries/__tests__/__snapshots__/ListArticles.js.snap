@@ -73,6 +73,32 @@ Object {
 }
 `;
 
+exports[`ListArticles sorts 2`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest3",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`ListArticles supports after 1`] = `
 Object {
   "data": Object {
