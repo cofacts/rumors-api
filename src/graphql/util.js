@@ -91,7 +91,7 @@ export function getSortableType(typeName, filterableFieldNames = [], defaultValu
       },
       order: {
         type: SortOrderEnum,
-        defaultValue: 'DESC',
+        defaultValue: 'desc',
       },
     },
   }));
