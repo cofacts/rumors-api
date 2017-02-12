@@ -13,6 +13,7 @@ import SearchResult from 'graphql/models/SearchResult';
 
 export default {
   type: SearchResult,
+  deprecationReason: 'Will be replaced by SearchArticle, SearchReply and SearchCrawledDocs',
   args: {
     text: { type: GraphQLString },
     findInCrawled: {
