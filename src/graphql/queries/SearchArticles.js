@@ -46,6 +46,9 @@ export default {
           minimum_should_match: '10<70%',
         },
       },
+      size: first,
+      track_scores: true,
+      sort: getSortArgs(orderBy),
     };
 
     if (after) {
@@ -69,15 +72,11 @@ export default {
       };
     }
 
-    body.sort = getSortArgs(orderBy);
-
     // should return search context for resolveEdges & resolvePageInfo
     return {
       index: 'articles',
       type: 'basic',
       body,
-      size: first,
-      trackScores: true,
     };
   },
 

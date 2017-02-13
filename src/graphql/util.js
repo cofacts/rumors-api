@@ -8,9 +8,7 @@ import {
   GraphQLFloat,
 } from 'graphql';
 
-import client, { processMeta } from 'util/client';
-
-import getIn from 'util/getInFactory';
+import client from 'util/client';
 
 // Deprecated.
 //
@@ -133,21 +131,21 @@ export function createConnectionType(
       // .count() does not accept sort & size
        (await client.count({
          ...searchContext,
-         size: undefined,
          body: {
            ...searchContext.body,
+           size: undefined,
            sort: undefined,
          },
        })).count,
 
-    resolveEdges = async (searchContext) => {
-      const nodes = getIn(await client.search(searchContext))(['hits', 'hits'], []).map(processMeta);
+    resolveEdges = async (searchContext, args, { loaders }) => {
+      const nodes = await loaders.searchResultLoader.load(searchContext);
       return nodes.map(({ _score: score, _cursor, ...node }) => ({
         node, cursor: getCursor(_cursor), score,
       }));
     },
 
-    resolvePageInfo = async (searchContext) => {
+    resolvePageInfo = async (searchContext, args, { loaders }) => {
       // sort: [{fieldName: {order: 'desc'}}, {fieldName2: {order: 'desc'}}, ...]
       //
       const newSort = searchContext.body.sort.map((item) => {
@@ -161,14 +159,14 @@ export function createConnectionType(
         };
       });
 
-      const lastNode = getIn(await client.search({
+      const lastNode = (await loaders.searchResultLoader.load({
         ...searchContext,
         body: {
           ...searchContext.body,
           sort: newSort,
         },
         size: 1,
-      }))(['hits', 'hits'], []).map(processMeta)[0];
+      }))[0];
 
       return {
         lastCursor: getCursor(lastNode._cursor),

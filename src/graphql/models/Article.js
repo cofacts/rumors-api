@@ -82,6 +82,9 @@ const Article = new GraphQLObjectType({
               min_doc_freq: 1,
             },
           },
+          sort: getSortArgs(orderBy),
+          size: first,
+          track_scores: true,  // required to always populate score
         };
 
         if (after) {
@@ -105,14 +108,10 @@ const Article = new GraphQLObjectType({
           };
         }
 
-        body.sort = getSortArgs(orderBy);
-
         return {
           index: 'articles',
           type: 'basic',
           body,
-          size: first,
-          trackScores: true, // required to always populate score
         };
       },
 

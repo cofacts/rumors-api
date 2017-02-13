@@ -38,6 +38,18 @@ export default {
         //
         match_all: {},
       },
+      size: first,
+      sort: getSortArgs(orderBy, {
+        replyRequestCount(order) {
+          return {
+            _script: {
+              type: 'number',
+              script: { inline: "doc['replyRequestIds'].values.size()" },
+              order,
+            },
+          };
+        },
+      }),
     };
 
     if (after) {
@@ -61,24 +73,11 @@ export default {
       };
     }
 
-    body.sort = getSortArgs(orderBy, {
-      replyRequestCount(order) {
-        return {
-          _script: {
-            type: 'number',
-            script: { inline: "doc['replyRequestIds'].values.size()" },
-            order,
-          },
-        };
-      },
-    });
-
     // should return search context for resolveEdges & resolvePageInfo
     return {
       index: 'articles',
       type: 'basic',
       body,
-      size: first,
     };
   },
   type: ArticleConnection,

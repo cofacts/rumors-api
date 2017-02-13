@@ -34,21 +34,20 @@ export default {
           minimum_should_match: '10<70%',
         },
       },
+      sort: getSortArgs(orderBy),
+      size: first,
+      track_scores: true,
     };
 
     if (after) {
       body.search_after = getSearchAfterFromCursor(after);
     }
 
-    body.sort = getSortArgs(orderBy);
-
     // should return search context for resolveEdges & resolvePageInfo
     return {
       index: 'replies',
       type: 'basic',
       body,
-      size: first,
-      trackScores: true,
     };
   },
 

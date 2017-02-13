@@ -1,5 +1,6 @@
 import docLoaderFactory from './docLoaderFactory';
 import articlesByReplyIdLoaderFactory from './articlesByReplyIdLoaderFactory';
+import searchResultLoaderFactory from './searchResultLoaderFactory';
 
 export default class DataLoaders {
 
@@ -7,6 +8,7 @@ export default class DataLoaders {
   //
   get docLoader() { return this._checkOrSetLoader('docLoader', docLoaderFactory); }
   get articlesByReplyIdLoader() { return this._checkOrSetLoader('articlesByReplyIdLoader', articlesByReplyIdLoaderFactory); }
+  get searchResultLoader() { return this._checkOrSetLoader('searchResultLoader', searchResultLoaderFactory); }
 
   // inner-workings
   //
