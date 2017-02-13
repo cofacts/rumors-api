@@ -36,7 +36,7 @@ const Article = new GraphQLObjectType({
     replies: {
       type: new GraphQLList(Reply),
       resolve: ({ replyIds }, args, { loaders }) =>
-        loaders.docLoader.loadMany(replyIds.map(id => `/replies/basic/${id}`)),
+        loaders.docLoader.loadMany(replyIds.map(id => ({ index: 'replies', id }))),
     },
     replyRequestCount: {
       type: GraphQLInt,
@@ -56,7 +56,7 @@ const Article = new GraphQLObjectType({
         },
       },
       resolve: async ({ replyRequestIds }, { userId, from }, { loaders }) => {
-        const requests = await loaders.docLoader.loadMany(replyRequestIds.map(id => `/replyrequests/basic/${id}`));
+        const requests = await loaders.docLoader.loadMany(replyRequestIds.map(id => ({ index: 'replyrequests', id })));
         return !!requests.find(r => r.userId === userId && r.from === from);
       },
     },

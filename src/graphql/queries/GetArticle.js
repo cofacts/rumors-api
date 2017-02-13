@@ -10,5 +10,5 @@ export default {
     id: { type: GraphQLString },
   },
   resolve: async (rootValue, { id }, { loaders }) =>
-    loaders.docLoader.load(`/articles/basic/${id}`),
+    loaders.docLoader.load({ index: 'articles', id }),
 };
