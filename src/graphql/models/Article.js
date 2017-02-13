@@ -9,14 +9,14 @@ import {
 
 import {
   scoredDocFactory,
-  getFilterableType,
   pagingArgs,
-  getPagedType,
   getArithmeticExpressionType,
-  getSortableType,
   getSortArgs,
   getSearchAfterFromCursor,
   getOperatorAndOperand,
+  createFilterType,
+  createSortType,
+  createConnectionType,
 } from 'graphql/util';
 
 import ArticleReference from 'graphql/models/ArticleReference';
@@ -63,12 +63,12 @@ const Article = new GraphQLObjectType({
     relatedArticles: {
       args: {
         filter: {
-          type: getFilterableType('RelatedArticleFilter', {
+          type: createFilterType('RelatedArticleFilter', {
             replyCount: { type: getArithmeticExpressionType('ReplyCountExpr', GraphQLInt) },
           }),
         },
         orderBy: {
-          type: getSortableType('RelatedArticleOrderBy', ['_score', 'updatedAt']),
+          type: createSortType('RelatedArticleOrderBy', ['_score', 'updatedAt']),
         },
         ...pagingArgs,
       },
@@ -116,10 +116,14 @@ const Article = new GraphQLObjectType({
         };
       },
 
-      type: getPagedType('RelatedArticleResult', Article),
+      // eslint-disable-next-line no-use-before-define
+      type: ArticleConnection,
     },
   }),
 });
+
+
+export const ArticleConnection = createConnectionType('ArticleConnection', Article);
 
 export const ScoredArticle = scoredDocFactory('ScoredArticle', Article);
 

@@ -3,9 +3,9 @@ import {
 } from 'graphql';
 
 import {
-  getSortableType,
+  createSortType,
   getSortArgs,
-  getPagedType,
+  createConnectionType,
   getSearchAfterFromCursor,
   pagingArgs,
 } from 'graphql/util';
@@ -16,7 +16,7 @@ export default {
   args: {
     text: { type: GraphQLString },
     orderBy: {
-      type: getSortableType('SearchReplyOrderBy', [
+      type: createSortType('SearchReplyOrderBy', [
         '_score',
       ]),
     },
@@ -52,5 +52,5 @@ export default {
     };
   },
 
-  type: getPagedType('SearchReplyResult', Reply),
+  type: createConnectionType('SearchReplyConnection', Reply),
 };

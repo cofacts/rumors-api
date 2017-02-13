@@ -3,10 +3,9 @@ import {
 } from 'graphql';
 
 import {
-  getFilterableType,
-  getSortableType,
+  createFilterType,
+  createSortType,
   getSortArgs,
-  getPagedType,
   getSearchAfterFromCursor,
   pagingArgs,
   getArithmeticExpressionType,
@@ -14,17 +13,17 @@ import {
 } from 'graphql/util';
 
 
-import Article from 'graphql/models/Article';
+import { ArticleConnection } from 'graphql/models/Article';
 
 export default {
   args: {
     filter: {
-      type: getFilterableType('ListArticleFilter', {
+      type: createFilterType('ListArticleFilter', {
         replyCount: { type: getArithmeticExpressionType('ListArticleReplyCountExpr', GraphQLInt) },
       }),
     },
     orderBy: {
-      type: getSortableType('ListArticleOrderBy', [
+      type: createSortType('ListArticleOrderBy', [
         'updatedAt',
         'createdAt',
         'replyRequestCount',
@@ -82,5 +81,5 @@ export default {
       size: first,
     };
   },
-  type: getPagedType('ArticleResult', Article),
+  type: ArticleConnection,
 };

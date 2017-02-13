@@ -51,7 +51,7 @@ export function getOperatorAndOperand(expression) {
   return {};
 }
 
-export function getFilterableType(typeName, args) {
+export function createFilterType(typeName, args) {
   const filterType = new GraphQLInputObjectType({
     name: typeName,
     fields: () => ({
@@ -76,7 +76,7 @@ const SortOrderEnum = new GraphQLEnumType({
   },
 });
 
-export function getSortableType(typeName, filterableFieldNames = []) {
+export function createSortType(typeName, filterableFieldNames = []) {
   return new GraphQLList(new GraphQLInputObjectType({
     name: typeName,
     description: 'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
@@ -122,7 +122,7 @@ export function getSearchAfterFromCursor(cursor) {
 
 // All search
 //
-export function getPagedType(
+export function createConnectionType(
   typeName,
   nodeType,
   {

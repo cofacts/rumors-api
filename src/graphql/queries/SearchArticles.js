@@ -4,28 +4,27 @@ import {
 } from 'graphql';
 
 import {
-  getFilterableType,
-  getSortableType,
+  createFilterType,
+  createSortType,
   getSortArgs,
-  getPagedType,
   getSearchAfterFromCursor,
   pagingArgs,
   getArithmeticExpressionType,
   getOperatorAndOperand,
 } from 'graphql/util';
 
-import Article from 'graphql/models/Article';
+import { ArticleConnection } from 'graphql/models/Article';
 
 export default {
   args: {
     text: { type: GraphQLString },
     filter: {
-      type: getFilterableType('SearchArticleFilter', {
+      type: createFilterType('SearchArticleFilter', {
         replyCount: { type: getArithmeticExpressionType('SearchArticleReplyCountExpr', GraphQLInt) },
       }),
     },
     orderBy: {
-      type: getSortableType('SearchArticleOrderBy', [
+      type: createSortType('SearchArticleOrderBy', [
         '_score',
         'updatedAt',
         'createdAt',
@@ -82,5 +81,5 @@ export default {
     };
   },
 
-  type: getPagedType('SearchArticleResult', Article),
+  type: ArticleConnection,
 };

@@ -12,7 +12,7 @@ import getIn from 'util/getInFactory';
 import CrawledDoc from 'graphql/models/CrawledDoc';
 
 import {
-  getPagedType,
+  createConnectionType,
 } from 'graphql/util';
 
 export default {
@@ -36,7 +36,7 @@ export default {
     return getIn(crawledResult)(['hits', 'hits'], []).map(processMeta);
   },
 
-  type: getPagedType('SearchCrawledDocResult', CrawledDoc, {
+  type: createConnectionType('SearchCrawledDocConnection', CrawledDoc, {
     resolveEdges(docs) {
       return docs.map(({ title, content, url, _score: score }) => ({
         node: { rumor: title, answer: content, url },
