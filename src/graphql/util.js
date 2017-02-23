@@ -156,7 +156,7 @@ export function createConnectionType(
         body: {
           ...searchContext.body,
           sort: undefined,
-        }
+        },
       })).count,
 
     resolveEdges = async ({ first, before, after, ...searchContext }, args, { loaders }) => {
@@ -180,6 +180,7 @@ export function createConnectionType(
       if (before) {
         nodes.reverse();
       }
+
       return nodes.map(({ _score: score, _cursor, ...node }) => ({
         node, cursor: getCursor(_cursor), score,
       }));

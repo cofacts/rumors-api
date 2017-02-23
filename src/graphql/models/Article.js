@@ -12,7 +12,6 @@ import {
   pagingArgs,
   getArithmeticExpressionType,
   getSortArgs,
-  getSearchAfterFromCursor,
   getOperatorAndOperand,
   createFilterType,
   createSortType,
