@@ -25,7 +25,7 @@
     "evaluate:fn": "NODE_ENV=test babel-node test/evaluation/falseNegative.js",
     "evaluate:fp": "NODE_ENV=test babel-node test/evaluation/falsePositive.js",
     "clean": "rm -rf build",
-    "rumors-db:pull": "git submodule update --init --recursive",
+    "rumors-db:pull": "cd test/rumors-db && git pull",
     "rumors-db:test": "cd test/rumors-db && npm t",
     "rumors-db:evaluate": "cd test/rumors-db && npm run evaluate"
   },
