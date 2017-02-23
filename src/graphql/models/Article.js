@@ -72,7 +72,7 @@ const Article = new GraphQLObjectType({
         },
         ...pagingArgs,
       },
-      async resolve({ id }, { filter = {}, orderBy = [], first, after }) {
+      async resolve({ id }, { filter = {}, orderBy = [], ...otherParams }) {
         const body = {
           query: {
             more_like_this: {
@@ -83,13 +83,8 @@ const Article = new GraphQLObjectType({
             },
           },
           sort: getSortArgs(orderBy),
-          size: first,
           track_scores: true,  // required to always populate score
         };
-
-        if (after) {
-          body.search_after = getSearchAfterFromCursor(after);
-        }
 
         if (filter.replyCount) {
           // Switch to bool query so that we can filter more_like_this results
@@ -112,6 +107,7 @@ const Article = new GraphQLObjectType({
           index: 'articles',
           type: 'basic',
           body,
+          ...otherParams,
         };
       },
 

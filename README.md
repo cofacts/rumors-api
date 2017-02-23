@@ -65,7 +65,11 @@ $ docker-compose logs -f api  # Tail mode
 
 ### About `test/rumors-db`
 
-This directory is managed by git-subtree. Please don't modify anything inside `test/rumors-db`; send pull requests to https://github.com/MrOrz/rumors-db instead.
+This directory is managed by git submodule. Use the following command to update:
+
+```
+$ npm run rumors-db:pull
+```
 
 ## Evaluate search performance
 

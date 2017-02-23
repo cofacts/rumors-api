@@ -40,7 +40,7 @@ export function getArithmeticExpressionType(typeName, argType) {
 
 export function getOperatorAndOperand(expression) {
   if (typeof expression.EQ !== 'undefined') {
-    return { operator: '=', operand: expression.EQ };
+    return { operator: '==', operand: expression.EQ };
   } else if (typeof expression.LT !== 'undefined') {
     return { operator: '<', operand: expression.LT };
   } else if (typeof expression.GT !== 'undefined') {
@@ -93,7 +93,11 @@ export const pagingArgs = {
   },
   after: {
     type: GraphQLString,
-    description: 'Returns result after this cursor',
+    description: 'Specify a cursor, returns results after this cursor. cannot be used with "before".',
+  },
+  before: {
+    type: GraphQLString,
+    description: 'Specify a cursor, returns results before this cursor. cannot be used with "after".',
   },
 };
 
@@ -108,13 +112,31 @@ export function getSortArgs(orderBy, fieldFnMap = {}) {
     }).concat({ _uid: { order: 'desc' } }); // enforce at least 1 sort order for pagination
 }
 
-// Export for custom resolveEdges() and resolvePageInfo()
+// sort: [{fieldName: {order: 'desc'}}, {fieldName2: {order: 'desc'}}, ...]
+// This utility function reverts the direction of each sort params.
+//
+function reverseSortArgs(sort) {
+  if (!sort) return undefined;
+  return sort.map((item) => {
+    const field = Object.keys(item)[0];
+    const order = item[field].order === 'desc' ? 'asc' : 'desc';
+    return {
+      [field]: {
+        ...item[field],
+        order,
+      },
+    };
+  });
+}
+
+// Export for custom resolveEdges() and resolveLastCursor()
 //
 export function getCursor(cursor) {
   return Buffer.from(JSON.stringify(cursor)).toString('base64');
 }
 
 export function getSearchAfterFromCursor(cursor) {
+  if (!cursor) return undefined;
   return JSON.parse(Buffer.from(cursor, 'base64').toString('utf8'));
 }
 
@@ -126,52 +148,67 @@ export function createConnectionType(
   {
     // Default resolvers
     //
-
-    resolveTotalCount = async searchContext =>
+    // eslint-disable-next-line no-unused-vars
+    resolveTotalCount = async ({ first, before, after, ...searchContext }) =>
       // .count() does not accept sort & size
-       (await client.count({
-         ...searchContext,
-         body: {
-           ...searchContext.body,
-           size: undefined,
-           sort: undefined,
-         },
-       })).count,
+      (await client.count({
+        ...searchContext,
+        body: {
+          ...searchContext.body,
+          sort: undefined,
+        }
+      })).count,
 
-    resolveEdges = async (searchContext, args, { loaders }) => {
-      const nodes = await loaders.searchResultLoader.load(searchContext);
+    resolveEdges = async ({ first, before, after, ...searchContext }, args, { loaders }) => {
+      if (before && after) {
+        throw new Error('Use of before & after is prohibited.');
+      }
+
+      const nodes = await loaders.searchResultLoader.load({
+        ...searchContext,
+        body: {
+          ...searchContext.body,
+          size: first,
+          search_after: getSearchAfterFromCursor(before || after),
+
+          // if "before" is given, reverse the sort order and later reverse back
+          //
+          sort: before ? reverseSortArgs(searchContext.body.sort) : searchContext.body.sort,
+        },
+      });
+
+      if (before) {
+        nodes.reverse();
+      }
       return nodes.map(({ _score: score, _cursor, ...node }) => ({
         node, cursor: getCursor(_cursor), score,
       }));
     },
 
-    resolvePageInfo = async (searchContext, args, { loaders }) => {
-      // sort: [{fieldName: {order: 'desc'}}, {fieldName2: {order: 'desc'}}, ...]
-      //
-      const newSort = searchContext.body.sort.map((item) => {
-        const field = Object.keys(item)[0];
-        const order = item[field].order === 'desc' ? 'asc' : 'desc';
-        return {
-          [field]: {
-            ...item[field],
-            order,
-          },
-        };
-      });
-
+    // eslint-disable-next-line no-unused-vars
+    resolveLastCursor = async ({ first, before, after, ...searchContext }, args, { loaders }) => {
       const lastNode = (await loaders.searchResultLoader.load({
         ...searchContext,
         body: {
           ...searchContext.body,
-          sort: newSort,
+          sort: reverseSortArgs(searchContext.body.sort),
         },
         size: 1,
       }))[0];
 
-      return {
-        lastCursor: getCursor(lastNode._cursor),
-      };
+      return getCursor(lastNode._cursor);
     },
+
+    // eslint-disable-next-line no-unused-vars
+    resolveFirstCursor = async ({ first, before, after, ...searchContext }, args, { loaders }) => {
+      const firstNode = (await loaders.searchResultLoader.load({
+        ...searchContext,
+        size: 1,
+      }))[0];
+
+      return getCursor(firstNode._cursor);
+    },
+
   } = {},
 ) {
   return new GraphQLObjectType({
@@ -179,6 +216,7 @@ export function createConnectionType(
     fields: {
       totalCount: {
         type: GraphQLInt,
+        description: 'The total count of the entire collection, regardless of "before", "after".',
         resolve: resolveTotalCount,
       },
       edges: {
@@ -196,10 +234,19 @@ export function createConnectionType(
         type: new GraphQLObjectType({
           name: `${typeName}PageInfo`,
           fields: {
-            lastCursor: { type: GraphQLString },
+            lastCursor: {
+              type: GraphQLString,
+              description: 'The cursor pointing to the last node of the entire collection, regardless of "before" and "after". Can be used to determine if is in the last page.',
+              resolve: resolveLastCursor,
+            },
+            firstCursor: {
+              type: GraphQLString,
+              description: 'The cursor pointing to the first node of the entire collection, regardless of "before" and "after". Can be used to determine if is in first page.',
+              resolve: resolveFirstCursor,
+            },
           },
         }),
-        resolve: resolvePageInfo,
+        resolve: params => params,
       },
     },
   });

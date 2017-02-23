@@ -6,7 +6,6 @@ import {
   createFilterType,
   createSortType,
   getSortArgs,
-  getSearchAfterFromCursor,
   pagingArgs,
   getArithmeticExpressionType,
   getOperatorAndOperand,
@@ -31,14 +30,13 @@ export default {
     },
     ...pagingArgs,
   },
-  async resolve(rootValue, { filter = {}, orderBy = [], first, after }) {
+  async resolve(rootValue, { filter = {}, orderBy = [], ...otherParams }) {
     const body = {
       query: {
         // Ref: http://stackoverflow.com/a/8831494/1582110
         //
         match_all: {},
       },
-      size: first,
       sort: getSortArgs(orderBy, {
         replyRequestCount(order) {
           return {
@@ -51,10 +49,6 @@ export default {
         },
       }),
     };
-
-    if (after) {
-      body.search_after = getSearchAfterFromCursor(after);
-    }
 
     if (filter.replyCount) {
       // Switch to bool query so that we can filter match_all results
@@ -78,6 +72,7 @@ export default {
       index: 'articles',
       type: 'basic',
       body,
+      ...otherParams,
     };
   },
   type: ArticleConnection,

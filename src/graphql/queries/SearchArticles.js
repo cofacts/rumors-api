@@ -33,7 +33,7 @@ export default {
     ...pagingArgs,
   },
 
-  async resolve(rootValue, { text, filter = {}, orderBy = [], first, after }) {
+  async resolve(rootValue, { text, filter = {}, orderBy = [], ...otherParams }) {
     const body = {
       query: {
         // Ref: http://stackoverflow.com/a/8831494/1582110
@@ -46,14 +46,9 @@ export default {
           minimum_should_match: '10<70%',
         },
       },
-      size: first,
       track_scores: true,
       sort: getSortArgs(orderBy),
     };
-
-    if (after) {
-      body.search_after = getSearchAfterFromCursor(after);
-    }
 
     if (filter.replyCount) {
       // Switch to bool query so that we can filter more_like_this results
@@ -77,6 +72,7 @@ export default {
       index: 'articles',
       type: 'basic',
       body,
+      ...otherParams,
     };
   },
 
