@@ -39,6 +39,7 @@ Object {
         },
       ],
       "pageInfo": Object {
+        "firstCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
         "lastCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
       "totalCount": 3,
@@ -107,6 +108,22 @@ Object {
         Object {
           "node": Object {
             "id": "listArticleTest1",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListArticles supports before 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest3",
           },
         },
       ],

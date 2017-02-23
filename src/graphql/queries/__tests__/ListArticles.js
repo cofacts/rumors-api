@@ -1,5 +1,6 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
+import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListArticles';
 
 describe('ListArticles', () => {
@@ -16,6 +17,7 @@ describe('ListArticles', () => {
           cursor
         }
         pageInfo {
+          firstCursor
           lastCursor
         }
       }
@@ -66,7 +68,21 @@ describe('ListArticles', () => {
         }
       }
     }`(
-      { cursor: Buffer.from(JSON.stringify(['basic#listArticleTest2'])).toString('base64') },
+      { cursor: getCursor(['basic#listArticleTest2']) },
+    )).toMatchSnapshot();
+  });
+
+  it('supports before', async () => {
+    expect(await gql`query($cursor: String) {
+      ListArticles(before: $cursor) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }`(
+      { cursor: getCursor(['basic#listArticleTest2']) },
     )).toMatchSnapshot();
   });
 
