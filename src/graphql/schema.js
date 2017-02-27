@@ -9,6 +9,7 @@ import Search from './queries/Search';
 // Get individual objects
 import GetArticle from './queries/GetArticle';
 import GetReply from './queries/GetReply';
+import GetUser from './queries/GetUser';
 import ListArticles from './queries/ListArticles';
 import SearchArticles from './queries/SearchArticles';
 import SearchReplies from './queries/SearchReplies';
@@ -25,6 +26,7 @@ export default new GraphQLSchema({
       Search,
       GetArticle,
       GetReply,
+      GetUser,
       ListArticles,
       SearchArticles,
       SearchReplies,

@@ -11,7 +11,8 @@ import DataLoaders from 'graphql/dataLoaders';
 // for us.
 //
 export default (query, ...substitutes) =>
-  variables =>
+  (variables = {}, context = {}) =>
     graphql(schema, String.raw(query, ...substitutes), null, {
       loaders: new DataLoaders(), // new loaders per request
+      ...context,
     }, variables);

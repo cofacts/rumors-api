@@ -1,0 +1,21 @@
+exports[`GetUser Get current user specified in context when no ID is given 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "email": "hi@me.com",
+      "name": "current user",
+    },
+  },
+}
+`;
+
+exports[`GetUser Get limited data 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "email": null,
+      "name": "test user",
+    },
+  },
+}
+`;
