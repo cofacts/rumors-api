@@ -21,6 +21,25 @@ rollbar.init(config.get('ROLLBAR_TOKEN'), {
 
 rollbar.handleUncaughtExceptionsAndRejections();
 
+async function allowCORS(ctx, next) {
+  let origin;
+  if (ctx.method === 'OPTIONS') { // Pre-flight, no header available, just allow all
+    origin = ctx.get('Origin');
+  } else if (ctx.get('x-app-id') === 'RUMORS_SITE') {
+    // Shortcut for rumors-site -- no DB queries
+    origin = config.get('RUMORS_SITE_CORS_ORIGIN');
+  }
+
+  // TODO: Fill up origin from DB according to x-app-id
+
+  return cors({
+    credentials: true,
+    // cors can skip processing only when origin is function @@
+    // if we don't pass function here, cors() will stop nothing.
+    origin: () => origin,
+  })(ctx, next);
+}
+
 app.use(async (ctx, next) => {
   try {
     await next();
@@ -30,8 +49,6 @@ app.use(async (ctx, next) => {
   }
 });
 
-app.use(cors({ credentials: true }));
-
 app.use(koaBody({
   formLimit: '1mb',
   jsonLimit: '10mb',
@@ -39,6 +56,8 @@ app.use(koaBody({
 }));
 
 router.post('/graphql', graphqlKoa(() => ({
+router.options('/graphql', allowCORS);
+router.post('/graphql', allowCORS, graphqlKoa(ctx => ({
   schema,
   context: {
     loaders: new DataLoaders(), // new loaders per request
@@ -54,8 +73,7 @@ router.get('/', (ctx) => {
 });
 
 app.use(koaStatic(path.join(__dirname, '../static/')));
-app.use(router.routes());
-app.use(router.allowedMethods());
+app.use(router.routes(), router.allowedMethods());
 
 app.listen(config.get('PORT'), () => {
   console.log('Listening port', config.get('PORT')); // eslint-disable-line no-console
