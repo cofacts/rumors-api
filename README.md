@@ -35,8 +35,6 @@ This will:
 * Kibana on `http://localhost:6222`.
 * ElasticSearch DB on `http://localhost:62222`.
 
-If you omit `USER_ID=$UID` you will see `WARNING: The USER_ID variable is not set. Defaulting to a blank string.` and stuff in `node_modules` will be installed using root access, which is probably not what you want.
-
 To stop the servers, just `ctrl-c` and all docker containers will be stopped.
 
 ### Populate ElasticSearch with seed data
