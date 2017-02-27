@@ -58,5 +58,5 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 app.listen(config.get('PORT'), () => {
-  console.log('Listening port', config.get('PORT'));
+  console.log('Listening port', config.get('PORT')); // eslint-disable-line no-console
 });
