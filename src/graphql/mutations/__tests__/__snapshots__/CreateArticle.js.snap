@@ -10,6 +10,7 @@ Object {
       },
     ],
     "replyConnectionIds": Array [],
+    "replyRequestIds": Array [],
     "text": "FOO FOO",
     "updatedAt": "2017-01-28T08:45:57.011Z",
     "userId": "test",

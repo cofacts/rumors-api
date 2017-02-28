@@ -28,13 +28,14 @@ export default {
       index: 'articles',
       type: 'basic',
       body: {
-        from,
-        userId,
         replyConnectionIds: [],
+        replyRequestIds: [],
         text,
-        references: [reference],
         createdAt: now,
         updatedAt: now,
+        userId,
+        from,
+        references: [reference],
       },
     });
 
