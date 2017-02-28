@@ -2,6 +2,7 @@ import passport from 'koa-passport';
 import config from 'config';
 import client, { processMeta } from 'util/client';
 import FacebookStrategy from 'passport-facebook';
+import TwitterStrategy from 'passport-twitter';
 import Router from 'koa-router';
 import url from 'url';
 
@@ -39,7 +40,7 @@ passport.use(new FacebookStrategy({
       return done(null, processMeta(users.hits.hits[0]));
     }
 
-    if (profile.emails[0].value) {
+    if (profile.emails && profile.emails[0].value) {
       // search with email
       //
       const usersWithEmail = await client.search({
@@ -47,23 +48,23 @@ passport.use(new FacebookStrategy({
       });
 
       if (usersWithEmail.hits.total) {
+        const id = usersWithEmail.hits.hits[0]._id;
         // Connect user with facebookId for faster login next time.
-        // No need to await.
         //
-        client.update({
+        const updateUserResult = await client.update({
           index: 'users',
           type: 'basic',
-          id: usersWithEmail.hits.hits[0]._id,
+          id,
           body: {
-            facebookId: profile.id,
-            updatedAt: now,
+            doc: {
+              facebookId: profile.id,
+              updatedAt: now,
+            },
           },
+          _source: true,
         });
 
-        return done(null, {
-          ...processMeta(usersWithEmail.hits.hits[0]),
-          facebookId: profile.id,
-        });
+        return done(null, processMeta({ ...updateUserResult.get, _id: id }));
       }
     }
 
@@ -75,6 +76,79 @@ passport.use(new FacebookStrategy({
         email: profile.emails[0].value,
         name: profile.displayName,
         avatarUrl: profile.photos[0].value,
+        facebookId: profile.id,
+        createdAt: now,
+        updatedAt: now,
+      },
+    });
+
+    if (createUserResult.created) {
+      return done(null, processMeta(await client.get({ index: 'users', type: 'basic', id: createUserResult._id })));
+    }
+    return done(createUserResult.result);
+  } catch (e) {
+    return done(e);
+  }
+}));
+
+passport.use(new TwitterStrategy({
+  consumerKey: config.get('TWITTER_CONSUMER_KEY'),
+  consumerSecret: config.get('TWITTER_CONSUMER_SECRET'),
+  callbackURL: config.get('TWITTER_CALLBACK_URL'),
+
+  // https://github.com/jaredhanson/passport-twitter/issues/67#issuecomment-275288663
+  userProfileURL: 'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
+}, async (token, tokenSecret, profile, done) => {
+  const now = (new Date()).toISOString();
+
+  try {
+    const users = await client.search({
+      index: 'users', type: 'basic', q: `twitterId:${profile.id}`,
+    });
+
+
+    if (users.hits.total) {
+      // Has user with such user id
+      return done(null, processMeta(users.hits.hits[0]));
+    }
+
+    if (profile.emails && profile.emails[0].value) {
+      // search with email
+      //
+      const usersWithEmail = await client.search({
+        index: 'users', type: 'basic', q: `email:${profile.emails[0].value}`,
+      });
+
+      if (usersWithEmail.hits.total) {
+        // Connect user with facebookId for faster login next time.
+        //
+        const id = usersWithEmail.hits.hits[0]._id;
+        const updateUserResult = await client.update({
+          index: 'users',
+          type: 'basic',
+          id,
+          body: {
+            doc: {
+              twitterId: profile.id,
+              updatedAt: now,
+            },
+          },
+          _source: true,
+        });
+
+        return done(null, processMeta({ ...updateUserResult.get, _id: id }));
+      }
+    }
+
+    // No user in DB, create one
+    const createUserResult = await client.index({
+      index: 'users',
+      type: 'basic',
+      body: {
+        email: profile.emails[0].value,
+        name: profile.displayName,
+        avatarUrl: profile.photos[0].value,
+        twitterId: profile.id,
         createdAt: now,
         updatedAt: now,
       },
@@ -103,7 +177,22 @@ export const loginRouter = Router()
     ctx.session.redirect = ctx.query.redirect;
     return next();
   })
-  .get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+  .get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
+  .get('/twitter', passport.authenticate('twitter'));
+
+const handlePassportCallback = strategy => (ctx, next) => passport.authenticate(
+  strategy,
+  (err, user) => {
+    if (!err && !user) err = new Error('No such user');
+
+    if (err) {
+      err.status = 401; throw err;
+    }
+
+    ctx.login(user);
+  },
+)(ctx, next);
+
 
 export const authRouter = Router()
 
@@ -129,6 +218,5 @@ export const authRouter = Router()
     ctx.session.appId = undefined;
     ctx.session.redirect = undefined;
   })
-  .get('/facebook', (ctx, next) =>
-    passport.authenticate('facebook', (err, user) => ctx.login(user))(ctx, next),
-  );
+  .get('/facebook', handlePassportCallback('facebook'))
+  .get('/twitter', handlePassportCallback('twitter'));
