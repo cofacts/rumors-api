@@ -19,6 +19,7 @@ import {
 } from 'graphql/util';
 
 import ArticleReference from 'graphql/models/ArticleReference';
+import User, { userFieldResolver } from 'graphql/models/User';
 
 import ReplyConnection from './ReplyConnection';
 
@@ -58,6 +59,11 @@ const Article = new GraphQLObjectType({
         const requests = await loaders.docLoader.loadMany(replyRequestIds.map(id => ({ index: 'replyrequests', id })));
         return !!requests.find(r => r.userId === userId && r.from === from);
       },
+    },
+    user: {
+      type: User,
+      description: 'The user submitted this article',
+      resolve: userFieldResolver,
     },
     relatedArticles: {
       args: {
