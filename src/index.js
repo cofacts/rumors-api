@@ -65,6 +65,10 @@ router.post('/graphql', checkHeaders(), graphqlKoa(ctx => ({
   context: {
     loaders: new DataLoaders(), // new loaders per request
     user: ctx.state.user,
+
+    // userId-from pair that is used in replyRequests and replyConnectionFeedbacks.
+    //
+    userId: ctx.from === 'WEBSITE' || ctx.from === 'DEVELOPMENT_FRONTEND' ? (ctx.state.user || {}).id : ctx.query.userId,
     from: ctx.from,
   },
 })));
