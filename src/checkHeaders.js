@@ -27,9 +27,12 @@ async function checkAppId(ctx, next) {
   } else if (appId === 'RUMORS_SITE') {
     // Shortcut for official rumors-site -- no DB queries
     origin = config.get('RUMORS_SITE_CORS_ORIGIN');
-    ctx.from = 'RUMORS_SITE';
+    ctx.from = 'WEBSITE';
 
   // else if(appId) { ...
+  // ctx.from = 'WEBSITE'; // other apps share the same "from"
+  // // because ctx.user set by passport as well
+  //
   // TODO: Fill up origin from DB according to appId
   } else {
     // No header is given. Allow localhost access only.
