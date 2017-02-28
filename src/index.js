@@ -10,7 +10,7 @@ import koaStatic from 'koa-static';
 import koaBody from 'koa-bodyparser';
 import session from 'koa-session2';
 import passport from 'koa-passport';
-import allowCORS from './allowCORS';
+import checkHeaders from './checkHeaders';
 import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
 
@@ -53,18 +53,19 @@ app.use(passport.session());
 router.use('/login', loginRouter.routes(), loginRouter.allowedMethods());
 router.use('/callback', authRouter.routes(), authRouter.allowedMethods());
 
-router.options('/logout', allowCORS());
-router.post('/logout', allowCORS(), (ctx) => {
+router.options('/logout', checkHeaders());
+router.post('/logout', checkHeaders(), (ctx) => {
   ctx.logout();
   ctx.body = { success: true };
 });
 
-router.options('/graphql', allowCORS());
-router.post('/graphql', allowCORS(), graphqlKoa(ctx => ({
+router.options('/graphql', checkHeaders());
+router.post('/graphql', checkHeaders(), graphqlKoa(ctx => ({
   schema,
   context: {
     loaders: new DataLoaders(), // new loaders per request
     user: ctx.state.user,
+    from: ctx.from,
   },
 })));
 

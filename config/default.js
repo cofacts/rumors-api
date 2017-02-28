@@ -4,7 +4,12 @@ module.exports = {
   PORT: 5000,
   ROLLBAR_TOKEN: 'YOUR_ROLLBAR_TOKEN',
   ROLLBAR_ENV: 'localhost',
-  RUMORS_SITE_CORS_ORIGIN: 'http://localhost:3000',
+
+  HTTP_HEADER_APP_ID: 'x-app-id',
+  HTTP_HEADER_APP_SECRET: 'x-app-secret',
+  RUMORS_SITE_CORS_ORIGIN: 'http://localhost:3000', // official web clients
+  RUMORS_LINE_BOT_SECRET: 'secret', // official line bot client
+
   COOKIE_MAXAGE: 86400 * 1000 * 14,
   COOKIE_SECRETS: ['foo', 'bar'],
   FACEBOOK_APP_ID: 'YOUR_FB_ID',
