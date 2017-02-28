@@ -47,5 +47,54 @@ describe('CreateReplyConnection', () => {
     });
   });
 
+  it('cannot connect the same article and reply twice', async () => {
+    const { data: { CreateReplyConnection: { id } } } = await gql`
+      mutation(
+        $articleId: String!
+        $replyId: String!
+      ) {
+        CreateReplyConnection(
+          articleId: $articleId
+          replyId: $replyId
+        ) {
+          id
+        }
+      }
+    `({
+      articleId: 'createReplyConnection1',
+      replyId: 'createReplyConnection2',
+    }, { userId: 'test', from: 'test' });
+
+    const { errors } = await gql`
+      mutation(
+        $articleId: String!
+        $replyId: String!
+      ) {
+        CreateReplyConnection(
+          articleId: $articleId
+          replyId: $replyId
+        ) {
+          id
+        }
+      }
+    `({
+      articleId: 'createReplyConnection1',
+      replyId: 'createReplyConnection2',
+    }, { userId: 'anotherUser', from: 'test' });
+
+    expect(errors[0]).toEqual(expect.stringMatching(/document already exists/));
+
+    // Cleanup
+    await client.delete({ index: 'replyconnections', type: 'basic', id });
+    await client.update({
+      index: 'articles',
+      type: 'basic',
+      id: 'createReplyConnection1',
+      body: {
+        doc: fixtures['/articles/basic/createReplyConnection1'],
+      },
+    });
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });
