@@ -1,25 +1,21 @@
-exports[`SetArticle creates articles 1`] = `
+exports[`CreateArticle creates articles 1`] = `
 Object {
   "_index": "articles",
   "_source": Object {
     "createdAt": "2017-01-28T08:45:57.011Z",
+    "from": "foo",
     "references": Array [
       Object {
         "type": "LINE",
       },
     ],
-    "replyIds": Array [],
+    "replyConnectionIds": Array [],
     "text": "FOO FOO",
     "updatedAt": "2017-01-28T08:45:57.011Z",
+    "userId": "test",
   },
   "_type": "basic",
   "_version": 1,
   "found": true,
 }
-`;
-
-exports[`SetArticle throws error if both id and text is not given 1`] = `
-Array [
-  [GraphQLError: When id is not given (creating new Articles), text & references are required.],
-]
 `;
