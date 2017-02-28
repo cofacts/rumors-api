@@ -52,7 +52,8 @@ async function verifyProfile(profile, fieldName) {
 
     if (usersWithEmail.hits.total) {
       const id = usersWithEmail.hits.hits[0]._id;
-      // Fill in fieldName with profile.id for faster login next time.
+      // Fill in fieldName with profile.id so that it does not matter if user's
+      // email gets changed in the future.
       //
       const updateUserResult = await client.update({
         index: 'users',
