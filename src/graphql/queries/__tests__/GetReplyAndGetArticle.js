@@ -12,11 +12,13 @@ describe('GetReplyAndGetArticle', () => {
           text
           references { type }
           replyCount
-          replies {
-            versions {
-              text
-              type
-              reference
+          replyConnections {
+            reply {
+              versions {
+                text
+                type
+                reference
+              }
             }
           }
           replyRequestCount
@@ -85,8 +87,10 @@ describe('GetReplyAndGetArticle', () => {
             type
             reference
           }
-          articles {
-            text
+          replyConnections {
+            article {
+              text
+            }
           }
         }
       }`()).toMatchSnapshot();

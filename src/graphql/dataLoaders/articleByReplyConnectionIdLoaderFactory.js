@@ -1,10 +1,10 @@
 import DataLoader from 'dataloader';
 import client, { processMeta } from 'util/client';
 
-export default () => new DataLoader(async (replyIds) => {
+export default () => new DataLoader(async (replyConnectionIds) => {
   const body = [];
 
-  replyIds.forEach((id) => {
+  replyConnectionIds.forEach((id) => {
     body.push({ index: 'articles', type: 'basic' });
 
     // https://www.elastic.co/guide/en/elasticsearch/guide/current/_finding_multiple_exact_values.html
@@ -14,7 +14,7 @@ export default () => new DataLoader(async (replyIds) => {
         constant_score: {
           filter: {
             term: {
-              replyIds: id,
+              replyConnectionIds: id,
             },
           },
         },
@@ -25,7 +25,7 @@ export default () => new DataLoader(async (replyIds) => {
   return (await client.msearch({
     body,
   })).responses.map(({ hits }) => {
-    if (!hits || !hits.hits) return [];
-    return hits.hits.map(processMeta);
+    if (!hits || !hits.hits) return null;
+    return processMeta(hits.hits[0]);
   });
 });

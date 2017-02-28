@@ -58,7 +58,7 @@ export default {
         bool: {
           must: body.query,
           filter: { script: { script: {
-            inline: `doc['replyIds'].length ${operator} params.operand`,
+            inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
             params: {
               operand,
             },

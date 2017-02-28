@@ -20,7 +20,7 @@ import {
 
 import ArticleReference from 'graphql/models/ArticleReference';
 
-import Reply from './Reply';
+import ReplyConnection from './ReplyConnection';
 
 const Article = new GraphQLObjectType({
   name: 'Article',
@@ -30,16 +30,16 @@ const Article = new GraphQLObjectType({
     references: { type: new GraphQLList(ArticleReference) },
     replyCount: {
       type: GraphQLInt,
-      resolve: ({ replyIds }) => (replyIds || []).length,
+      resolve: ({ replyConnectionIds = [] }) => replyConnectionIds.length,
     },
-    replies: {
-      type: new GraphQLList(Reply),
-      resolve: ({ replyIds }, args, { loaders }) =>
-        loaders.docLoader.loadMany(replyIds.map(id => ({ index: 'replies', id }))),
+    replyConnections: {
+      type: new GraphQLList(ReplyConnection),
+      resolve: ({ replyConnectionIds = [] }, args, { loaders }) =>
+        loaders.docLoader.loadMany(replyConnectionIds.map(id => ({ index: 'replyconnections', id }))),
     },
     replyRequestCount: {
       type: GraphQLInt,
-      resolve: ({ replyRequestIds }) => replyRequestIds.length,
+      resolve: ({ replyRequestIds = [] }) => replyRequestIds.length,
     },
     requestedForReply: {
       type: GraphQLBoolean,
@@ -54,7 +54,7 @@ const Article = new GraphQLObjectType({
           deprecationReason: 'Will remove after API keys are implemented',
         },
       },
-      resolve: async ({ replyRequestIds }, { userId, from }, { loaders }) => {
+      resolve: async ({ replyRequestIds = [] }, { userId, from }, { loaders }) => {
         const requests = await loaders.docLoader.loadMany(replyRequestIds.map(id => ({ index: 'replyrequests', id })));
         return !!requests.find(r => r.userId === userId && r.from === from);
       },
@@ -93,7 +93,7 @@ const Article = new GraphQLObjectType({
             bool: {
               must: body.query,
               filter: { script: { script: {
-                inline: `doc['replyIds'].length ${operator} params.operand`,
+                inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
                 params: {
                   operand,
                 },

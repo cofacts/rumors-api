@@ -7,15 +7,17 @@ Object {
           "type": "LINE",
         },
       ],
-      "replies": Array [
+      "replyConnections": Array [
         Object {
-          "versions": Array [
-            Object {
-              "reference": "barbar",
-              "text": "bar",
-              "type": "NOT_ARTICLE",
-            },
-          ],
+          "reply": Object {
+            "versions": Array [
+              Object {
+                "reference": "barbar",
+                "text": "bar",
+                "type": "NOT_ARTICLE",
+              },
+            ],
+          },
         },
       ],
       "replyCount": 1,
@@ -31,9 +33,11 @@ exports[`GetReplyAndGetArticle GetReply should get the specified reply & associa
 Object {
   "data": Object {
     "GetReply": Object {
-      "articles": Array [
+      "replyConnections": Array [
         Object {
-          "text": "Lorum ipsum",
+          "article": Object {
+            "text": "Lorum ipsum",
+          },
         },
       ],
       "versions": Array [

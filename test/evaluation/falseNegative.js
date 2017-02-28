@@ -21,7 +21,7 @@ async function main() {
       //
       query: { bool: { must: { script: { script: {
         lang: 'painless',
-        inline: "doc['replyIds'].length > 0",
+        inline: "doc['replyConnectionIds'].length > 0",
       } } } } },
     },
   }))(['hits', 'hits'], []).map(processMeta);

@@ -9,7 +9,7 @@ import {
   scoredDocFactory,
 } from 'graphql/util';
 
-import Article from './Article';
+import ReplyConnection from './ReplyConnection';
 import ReplyVersion from './ReplyVersion';
 
 const Reply = new GraphQLObjectType({
@@ -23,10 +23,10 @@ const Reply = new GraphQLObjectType({
       type: new GraphQLList(ReplyVersion),
       resolve: ({ versions }, { limit = Infinity }) => versions.slice(-limit),
     },
-    articles: {
-      type: new GraphQLList(Article),
+    replyConnections: {
+      type: new GraphQLList(ReplyConnection),
       resolve: ({ id }, args, { loaders }) =>
-        loaders.articlesByReplyIdLoader.load(id),
+        loaders.replyConnectionsByReplyIdLoader.load(id),
     },
   }),
 });
