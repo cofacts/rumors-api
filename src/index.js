@@ -8,9 +8,13 @@ import { graphqlKoa, graphiqlKoa } from 'graphql-server-koa';
 import rollbar from 'rollbar';
 import koaStatic from 'koa-static';
 import koaBody from 'koa-bodyparser';
+import session from 'koa-session2';
+import passport from 'koa-passport';
 import cors from 'kcors';
 import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
+
+import { loginRouter, authRouter } from './auth';
 
 const app = new Koa();
 const router = Router();
@@ -55,12 +59,30 @@ app.use(koaBody({
   textLimit: '10mb',
 }));
 
-router.post('/graphql', graphqlKoa(() => ({
+app.keys = config.get('COOKIE_SECRETS');
+
+app.use(session({
+  signed: true,
+  maxAge: config.get('COOKIE_MAXAGE'),
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+router.use('/login', loginRouter.routes(), loginRouter.allowedMethods());
+router.use('/callback', authRouter.routes(), authRouter.allowedMethods());
+
+router.options('/logout', allowCORS);
+router.post('/logout', allowCORS, (ctx) => {
+  ctx.logout();
+  ctx.body = { success: true };
+});
+
 router.options('/graphql', allowCORS);
 router.post('/graphql', allowCORS, graphqlKoa(ctx => ({
   schema,
   context: {
     loaders: new DataLoaders(), // new loaders per request
+    user: ctx.state.user,
   },
 })));
 
