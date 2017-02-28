@@ -1,5 +1,5 @@
 import gql from 'util/GraphQL';
-import { loadFixtures, unloadFixtures } from 'util/fixtures';
+import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateReplyConnectionFeedback';
@@ -33,14 +33,7 @@ describe('CreateOrUpdateReplyConnectionFeedback', () => {
 
     // Cleanup
     await client.delete({ index: 'replyconnectionfeedbacks', type: 'basic', id });
-    await client.update({
-      index: 'replyconnections',
-      type: 'basic',
-      id: 'createReplyConnectionFeedback1',
-      body: {
-        doc: fixtures['/replyconnections/basic/createReplyConnectionFeedback1'],
-      },
-    });
+    await resetFrom(fixtures, '/replyconnections/basic/createReplyConnectionFeedback1');
   });
 
   it('updates existing feedback', async () => {
@@ -64,14 +57,7 @@ describe('CreateOrUpdateReplyConnectionFeedback', () => {
     expect(await client.get({ index: 'replyconnectionfeedbacks', type: 'basic', id })).toMatchSnapshot();
 
     // Cleanup
-    await client.update({
-      index: 'replyconnectionfeedbacks',
-      type: 'basic',
-      id,
-      body: {
-        doc: fixtures[`/replyconnectionfeedbacks/basic/${id}`],
-      },
-    });
+    await resetFrom(fixtures, `/replyconnectionfeedbacks/basic/${id}`);
   });
 
   afterAll(() => unloadFixtures(fixtures));

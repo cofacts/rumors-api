@@ -1,5 +1,5 @@
 import gql from 'util/GraphQL';
-import { loadFixtures, unloadFixtures } from 'util/fixtures';
+import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateReply';
@@ -46,14 +46,7 @@ describe('CreateReply', () => {
     // Cleanup
     await client.delete({ index: 'replies', type: 'basic', id: replyId });
     await client.delete({ index: 'replyconnections', type: 'basic', id: connId });
-    await client.update({
-      index: 'articles',
-      type: 'basic',
-      id: 'setReplyTest1',
-      body: {
-        doc: fixtures['/articles/basic/setReplyTest1'],
-      },
-    });
+    await resetFrom(fixtures, '/articles/basic/setReplyTest1');
   });
 
   afterAll(() => unloadFixtures(fixtures));

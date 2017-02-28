@@ -35,3 +35,18 @@ export async function unloadFixtures(fixtureMap) {
 
   await client.bulk({ body, refresh: 'true' });
 }
+
+// Reset a document to fixture
+//
+export async function resetFrom(fixtureMap, key) {
+  const [, index, type, id] = key.split('/');
+  await client.update({
+    index,
+    type,
+    id,
+    body: {
+      doc: fixtureMap[key],
+    },
+    refresh: true,
+  });
+}

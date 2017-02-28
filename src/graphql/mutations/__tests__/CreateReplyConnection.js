@@ -1,5 +1,5 @@
 import gql from 'util/GraphQL';
-import { loadFixtures, unloadFixtures } from 'util/fixtures';
+import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateReplyConnection';
@@ -37,14 +37,7 @@ describe('CreateReplyConnection', () => {
 
     // Cleanup
     await client.delete({ index: 'replyconnections', type: 'basic', id: data.CreateReplyConnection.id });
-    await client.update({
-      index: 'articles',
-      type: 'basic',
-      id: 'createReplyConnection1',
-      body: {
-        doc: fixtures['/articles/basic/createReplyConnection1'],
-      },
-    });
+    await resetFrom(fixtures, '/articles/basic/createReplyConnection1');
   });
 
   it('cannot connect the same article and reply twice', async () => {
@@ -86,14 +79,7 @@ describe('CreateReplyConnection', () => {
 
     // Cleanup
     await client.delete({ index: 'replyconnections', type: 'basic', id });
-    await client.update({
-      index: 'articles',
-      type: 'basic',
-      id: 'createReplyConnection1',
-      body: {
-        doc: fixtures['/articles/basic/createReplyConnection1'],
-      },
-    });
+    await resetFrom(fixtures, '/articles/basic/createReplyConnection1');
   });
 
   afterAll(() => unloadFixtures(fixtures));

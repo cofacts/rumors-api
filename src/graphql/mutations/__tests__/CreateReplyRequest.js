@@ -1,5 +1,5 @@
 import gql from 'util/GraphQL';
-import { loadFixtures, unloadFixtures } from 'util/fixtures';
+import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateReplyRequest';
@@ -36,14 +36,7 @@ describe('CreateReplyRequest', () => {
 
     // Cleanup
     await client.delete({ index: 'replyrequests', type: 'basic', id });
-    await client.update({
-      index: 'articles',
-      type: 'basic',
-      id: 'createReplyRequestTest1',
-      body: {
-        doc: fixtures['/articles/basic/createReplyRequestTest1'],
-      },
-    });
+    await resetFrom(fixtures, '/articles/basic/createReplyRequestTest1');
   });
 
   it('cannot attach a reply request to an article twice', async () => {
