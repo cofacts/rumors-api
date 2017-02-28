@@ -10,7 +10,7 @@ import koaStatic from 'koa-static';
 import koaBody from 'koa-bodyparser';
 import session from 'koa-session2';
 import passport from 'koa-passport';
-import cors from 'kcors';
+import allowCORS from './allowCORS';
 import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
 
@@ -25,24 +25,6 @@ rollbar.init(config.get('ROLLBAR_TOKEN'), {
 
 rollbar.handleUncaughtExceptionsAndRejections();
 
-async function allowCORS(ctx, next) {
-  let origin;
-  if (ctx.method === 'OPTIONS') { // Pre-flight, no header available, just allow all
-    origin = ctx.get('Origin');
-  } else if (ctx.get('x-app-id') === 'RUMORS_SITE') {
-    // Shortcut for rumors-site -- no DB queries
-    origin = config.get('RUMORS_SITE_CORS_ORIGIN');
-  }
-
-  // TODO: Fill up origin from DB according to x-app-id
-
-  return cors({
-    credentials: true,
-    // cors can skip processing only when origin is function @@
-    // if we don't pass function here, cors() will stop nothing.
-    origin: () => origin,
-  })(ctx, next);
-}
 
 app.use(async (ctx, next) => {
   try {
@@ -71,14 +53,14 @@ app.use(passport.session());
 router.use('/login', loginRouter.routes(), loginRouter.allowedMethods());
 router.use('/callback', authRouter.routes(), authRouter.allowedMethods());
 
-router.options('/logout', allowCORS);
-router.post('/logout', allowCORS, (ctx) => {
+router.options('/logout', allowCORS());
+router.post('/logout', allowCORS(), (ctx) => {
   ctx.logout();
   ctx.body = { success: true };
 });
 
-router.options('/graphql', allowCORS);
-router.post('/graphql', allowCORS, graphqlKoa(ctx => ({
+router.options('/graphql', allowCORS());
+router.post('/graphql', allowCORS(), graphqlKoa(ctx => ({
   schema,
   context: {
     loaders: new DataLoaders(), // new loaders per request
