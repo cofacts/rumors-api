@@ -3,6 +3,7 @@ import config from 'config';
 import client, { processMeta } from 'util/client';
 import FacebookStrategy from 'passport-facebook';
 import TwitterStrategy from 'passport-twitter';
+import GithubStrategy from 'passport-github2';
 import Router from 'koa-router';
 import url from 'url';
 
@@ -116,6 +117,14 @@ passport.use(new TwitterStrategy({
   verifyProfile(profile, 'twitterId').then(user => done(null, user)).catch(done),
 ));
 
+passport.use(new GithubStrategy({
+  clientID: config.get('GITHUB_CLIENT_ID'),
+  clientSecret: config.get('GITHUB_SECRET'),
+  callbackURL: config.get('GITHUB_CALLBACK_URL'),
+}, (token, tokenSecret, profile, done) =>
+  verifyProfile(profile, 'githubId').then(user => done(null, user)).catch(done),
+));
+
 
 // Exports route handlers
 //
@@ -133,7 +142,8 @@ export const loginRouter = Router()
     return next();
   })
   .get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
-  .get('/twitter', passport.authenticate('twitter'));
+  .get('/twitter', passport.authenticate('twitter'))
+  .get('/github', passport.authenticate('github', { scope: ['user:email'] }));
 
 const handlePassportCallback = strategy => (ctx, next) => passport.authenticate(
   strategy,
@@ -173,4 +183,5 @@ export const authRouter = Router()
     ctx.session.redirect = undefined;
   })
   .get('/facebook', handlePassportCallback('facebook'))
-  .get('/twitter', handlePassportCallback('twitter'));
+  .get('/twitter', handlePassportCallback('twitter'))
+  .get('/github', handlePassportCallback('github'));
