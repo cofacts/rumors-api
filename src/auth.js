@@ -21,75 +21,89 @@ passport.deserializeUser(async (userId, done) => {
   }
 });
 
+
+// Common verify callback for all login strategies.
+//
+// It tries first authenticating user with profile.id agains fieldName in DB.
+// If not applicatble, search for existing users with their email.
+// If still not applicable, create a user with currently given profile.
+//
+async function verifyProfile(profile, fieldName) {
+  // Find user with such user id
+  //
+  const users = await client.search({
+    index: 'users', type: 'basic', q: `${fieldName}:${profile.id}`,
+  });
+
+  if (users.hits.total) {
+    return processMeta(users.hits.hits[0]);
+  }
+
+  const now = (new Date()).toISOString();
+  const email = profile.emails && profile.emails[0].value;
+
+  // Find user with such email
+  //
+  if (email) {
+    const usersWithEmail = await client.search({
+      index: 'users', type: 'basic', q: `email:${email}`,
+    });
+
+    if (usersWithEmail.hits.total) {
+      const id = usersWithEmail.hits.hits[0]._id;
+      // Fill in fieldName with profile.id for faster login next time.
+      //
+      const updateUserResult = await client.update({
+        index: 'users',
+        type: 'basic',
+        id,
+        body: {
+          doc: {
+            [fieldName]: profile.id,
+            updatedAt: now,
+          },
+        },
+        _source: true,
+      });
+
+      if (updateUserResult.result === 'updated') {
+        return processMeta({ ...updateUserResult.get, _id: id });
+      }
+
+      throw new Error(updateUserResult.result);
+    }
+  }
+
+  // No user in DB, create one
+  //
+  const createUserResult = await client.index({
+    index: 'users',
+    type: 'basic',
+    body: {
+      email,
+      name: profile.displayName,
+      avatarUrl: profile.photos[0].value,
+      [fieldName]: profile.id,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  if (createUserResult.created) {
+    return processMeta(await client.get({ index: 'users', type: 'basic', id: createUserResult._id }));
+  }
+
+  throw new Error(createUserResult.result);
+}
+
 passport.use(new FacebookStrategy({
   clientID: config.get('FACEBOOK_APP_ID'),
   clientSecret: config.get('FACEBOOK_SECRET'),
   callbackURL: config.get('FACEBOOK_CALLBACK_URL'),
   profileFields: ['id', 'displayName', 'photos', 'email'],
-}, async (token, tokenSecret, profile, done) => {
-  const now = (new Date()).toISOString();
-
-  try {
-    const users = await client.search({
-      index: 'users', type: 'basic', q: `facebookId:${profile.id}`,
-    });
-
-
-    if (users.hits.total) {
-      // Has user with such user id
-      return done(null, processMeta(users.hits.hits[0]));
-    }
-
-    if (profile.emails && profile.emails[0].value) {
-      // search with email
-      //
-      const usersWithEmail = await client.search({
-        index: 'users', type: 'basic', q: `email:${profile.emails[0].value}`,
-      });
-
-      if (usersWithEmail.hits.total) {
-        const id = usersWithEmail.hits.hits[0]._id;
-        // Connect user with facebookId for faster login next time.
-        //
-        const updateUserResult = await client.update({
-          index: 'users',
-          type: 'basic',
-          id,
-          body: {
-            doc: {
-              facebookId: profile.id,
-              updatedAt: now,
-            },
-          },
-          _source: true,
-        });
-
-        return done(null, processMeta({ ...updateUserResult.get, _id: id }));
-      }
-    }
-
-    // No user in DB, create one
-    const createUserResult = await client.index({
-      index: 'users',
-      type: 'basic',
-      body: {
-        email: profile.emails[0].value,
-        name: profile.displayName,
-        avatarUrl: profile.photos[0].value,
-        facebookId: profile.id,
-        createdAt: now,
-        updatedAt: now,
-      },
-    });
-
-    if (createUserResult.created) {
-      return done(null, processMeta(await client.get({ index: 'users', type: 'basic', id: createUserResult._id })));
-    }
-    return done(createUserResult.result);
-  } catch (e) {
-    return done(e);
-  }
-}));
+}, (token, tokenSecret, profile, done) =>
+  verifyProfile(profile, 'facebookId').then(user => done(null, user)).catch(done),
+));
 
 passport.use(new TwitterStrategy({
   consumerKey: config.get('TWITTER_CONSUMER_KEY'),
@@ -98,72 +112,13 @@ passport.use(new TwitterStrategy({
 
   // https://github.com/jaredhanson/passport-twitter/issues/67#issuecomment-275288663
   userProfileURL: 'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
-}, async (token, tokenSecret, profile, done) => {
-  const now = (new Date()).toISOString();
-
-  try {
-    const users = await client.search({
-      index: 'users', type: 'basic', q: `twitterId:${profile.id}`,
-    });
+}, (token, tokenSecret, profile, done) =>
+  verifyProfile(profile, 'twitterId').then(user => done(null, user)).catch(done),
+));
 
 
-    if (users.hits.total) {
-      // Has user with such user id
-      return done(null, processMeta(users.hits.hits[0]));
-    }
-
-    if (profile.emails && profile.emails[0].value) {
-      // search with email
-      //
-      const usersWithEmail = await client.search({
-        index: 'users', type: 'basic', q: `email:${profile.emails[0].value}`,
-      });
-
-      if (usersWithEmail.hits.total) {
-        // Connect user with facebookId for faster login next time.
-        //
-        const id = usersWithEmail.hits.hits[0]._id;
-        const updateUserResult = await client.update({
-          index: 'users',
-          type: 'basic',
-          id,
-          body: {
-            doc: {
-              twitterId: profile.id,
-              updatedAt: now,
-            },
-          },
-          _source: true,
-        });
-
-        return done(null, processMeta({ ...updateUserResult.get, _id: id }));
-      }
-    }
-
-    // No user in DB, create one
-    const createUserResult = await client.index({
-      index: 'users',
-      type: 'basic',
-      body: {
-        email: profile.emails[0].value,
-        name: profile.displayName,
-        avatarUrl: profile.photos[0].value,
-        twitterId: profile.id,
-        createdAt: now,
-        updatedAt: now,
-      },
-    });
-
-    if (createUserResult.created) {
-      return done(null, processMeta(await client.get({ index: 'users', type: 'basic', id: createUserResult._id })));
-    }
-    return done(createUserResult.result);
-  } catch (e) {
-    return done(e);
-  }
-}));
-
-
+// Exports route handlers
+//
 export const loginRouter = Router()
   .use((ctx, next) => {
     // Memorize redirect in session
@@ -195,7 +150,6 @@ const handlePassportCallback = strategy => (ctx, next) => passport.authenticate(
 
 
 export const authRouter = Router()
-
   .use(async (ctx, next) => {
     // Perform redirect after login
     //
