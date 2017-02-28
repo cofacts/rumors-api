@@ -2,6 +2,7 @@ import {
   GraphQLObjectType,
   GraphQLList,
   GraphQLInt,
+  GraphQLString,
 } from 'graphql';
 
 import Article from './Article';
@@ -22,6 +23,10 @@ export default new GraphQLObjectType({
       type: Article,
       resolve: ({ id }, args, { loaders }) =>
         loaders.articleByReplyConnectionIdLoader.load(id),
+    },
+
+    id: {
+      type: GraphQLString,
     },
 
     user: {

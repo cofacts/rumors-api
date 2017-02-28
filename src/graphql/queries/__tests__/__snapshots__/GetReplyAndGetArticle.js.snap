@@ -9,6 +9,7 @@ Object {
       ],
       "replyConnections": Array [
         Object {
+          "id": "foo-bar",
           "reply": Object {
             "versions": Array [
               Object {

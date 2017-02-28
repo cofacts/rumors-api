@@ -13,6 +13,7 @@ describe('GetReplyAndGetArticle', () => {
           references { type }
           replyCount
           replyConnections {
+            id
             reply {
               versions {
                 text
