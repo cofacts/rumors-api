@@ -17,7 +17,8 @@ import SearchCrawledDocs from './queries/SearchCrawledDocs';
 
 // Set individual objects
 import SetArticle from './mutations/SetArticle';
-import SetReply from './mutations/SetReply';
+import CreateReply from './mutations/CreateReply';
+import CreateReplyConnection from './mutations/CreateReplyConnection';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -37,7 +38,8 @@ export default new GraphQLSchema({
     name: 'Mutation',
     fields: {
       SetArticle,
-      SetReply,
+      CreateReply,
+      CreateReplyConnection,
     },
   }),
 });

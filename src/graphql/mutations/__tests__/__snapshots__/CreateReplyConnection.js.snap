@@ -1,0 +1,10 @@
+exports[`CreateReplyConnection connects article and reply together 1`] = `
+Object {
+  "createdAt": "2017-01-28T08:45:57.011Z",
+  "feedbackIds": Array [],
+  "from": "test",
+  "replyId": "createReplyConnection2",
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "test",
+}
+`;

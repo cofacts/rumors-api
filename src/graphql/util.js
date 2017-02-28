@@ -252,3 +252,15 @@ export function createConnectionType(
     },
   });
 }
+
+export function assertUser({ userId, from }) {
+  if (!userId) {
+    const err = new Error('userId is not set via query string.');
+    err.status = 403; err.expose = true; throw err;
+  }
+
+  if (userId && !from) {
+    const err = new Error('userId is set, but x-app-id or x-app-secret is not set accordingly.');
+    err.status = 403; err.expose = true; throw err;
+  }
+}

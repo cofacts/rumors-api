@@ -2,9 +2,9 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
-import fixtures from '../__fixtures__/SetReply';
+import fixtures from '../__fixtures__/CreateReply';
 
-describe('SetReply', () => {
+describe('CreateReply', () => {
   beforeAll(() => loadFixtures(fixtures));
 
   it('creates replies and associates itself with specified article', async () => {
@@ -16,7 +16,7 @@ describe('SetReply', () => {
         $type: ReplyTypeEnum!
         $reference: String!
       ) {
-        SetReply(
+        CreateReply(
           articleId: $articleId
           text: $text
           type: $type
@@ -30,19 +30,22 @@ describe('SetReply', () => {
       text: 'FOO FOO',
       type: 'RUMOR',
       reference: 'http://google.com',
-    });
+    }, { userId: 'test', from: 'test' });
     MockDate.reset();
 
     expect(errors).toBeUndefined();
 
-    const reply = await client.get({ index: 'replies', type: 'basic', id: data.SetReply.id });
+    const replyId = data.CreateReply.id;
+    const reply = await client.get({ index: 'replies', type: 'basic', id: replyId });
     expect(reply._source).toMatchSnapshot();
 
     const article = await client.get({ index: 'articles', type: 'basic', id: 'setReplyTest1' });
-    expect(article._source.replyIds[0]).toBe(data.SetReply.id);
+    const connId = `${article._id}__${replyId}`;
+    expect(article._source.replyConnectionIds[0]).toBe(connId);
 
     // Cleanup
-    await client.delete({ index: 'replies', type: 'basic', id: data.SetReply.id });
+    await client.delete({ index: 'replies', type: 'basic', id: replyId });
+    await client.delete({ index: 'replyconnections', type: 'basic', id: connId });
     await client.update({
       index: 'articles',
       type: 'basic',

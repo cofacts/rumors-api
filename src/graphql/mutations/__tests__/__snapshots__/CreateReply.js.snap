@@ -1,12 +1,14 @@
-exports[`SetReply creates replies and associates itself with specified article 1`] = `
+exports[`CreateReply creates replies and associates itself with specified article 1`] = `
 Object {
   "createdAt": "2017-01-28T08:45:57.011Z",
   "versions": Array [
     Object {
       "createdAt": "2017-01-28T08:45:57.011Z",
+      "from": "test",
       "reference": "http://google.com",
       "text": "FOO FOO",
       "type": "RUMOR",
+      "userId": "test",
     },
   ],
 }
