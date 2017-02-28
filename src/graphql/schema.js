@@ -19,6 +19,7 @@ import SearchCrawledDocs from './queries/SearchCrawledDocs';
 import CreateArticle from './mutations/CreateArticle';
 import CreateReply from './mutations/CreateReply';
 import CreateReplyConnection from './mutations/CreateReplyConnection';
+import CreateOrUpdateReplyConnectionFeedback from './mutations/CreateOrUpdateReplyConnectionFeedback';
 import CreateReplyRequest from './mutations/CreateReplyRequest';
 
 export default new GraphQLSchema({
@@ -42,6 +43,7 @@ export default new GraphQLSchema({
       CreateReply,
       CreateReplyConnection,
       CreateReplyRequest,
+      CreateOrUpdateReplyConnectionFeedback,
     },
   }),
 });
