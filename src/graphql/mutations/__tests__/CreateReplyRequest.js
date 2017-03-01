@@ -16,7 +16,7 @@ describe('CreateReplyRequest', () => {
         CreateReplyRequest(
           articleId: $articleId
         ) {
-          replyCount
+          replyRequestCount
         }
       }
     `({
@@ -42,13 +42,13 @@ describe('CreateReplyRequest', () => {
   it('cannot attach a reply request to an article twice', async () => {
     await gql`
       mutation( $articleId: String! ) {
-        CreateReplyRequest( articleId: $articleId ) { replyCount }
+        CreateReplyRequest( articleId: $articleId ) { replyRequestCount }
       }
     `({ articleId: 'createReplyRequestTest1' }, { userId: 'test', from: 'test' });
 
     const { errors } = await gql`
       mutation( $articleId: String! ) {
-        CreateReplyRequest( articleId: $articleId ) { replyCount }
+        CreateReplyRequest( articleId: $articleId ) { replyRequestCount }
       }
     `({ articleId: 'createReplyRequestTest1' }, { userId: 'test', from: 'test' });
 

@@ -1,7 +1,7 @@
 exports[`CreateReplyRequest attaches a reply request to an article 1`] = `
 Object {
   "CreateReplyRequest": Object {
-    "replyCount": 1,
+    "replyRequestCount": 1,
   },
 }
 `;

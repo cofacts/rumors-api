@@ -15,7 +15,7 @@ export default {
   type: new GraphQLObjectType({
     name: 'CreateReplyRequestResult',
     fields: {
-      replyCount: {
+      replyRequestCount: {
         type: GraphQLInt,
       },
     },
