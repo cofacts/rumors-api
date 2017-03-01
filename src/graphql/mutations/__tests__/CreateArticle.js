@@ -26,7 +26,10 @@ describe('CreateArticle', () => {
     expect(errors).toBeUndefined();
 
     const doc = await client.get({ index: 'articles', type: 'basic', id: data.CreateArticle.id });
+    expect(doc._source.replyRequestIds).toHaveLength(1);
+
     delete doc._id; // delete auto-generated id from being snapshot
+    delete doc._source.replyRequestIds;
 
     expect(doc).toMatchSnapshot();
 

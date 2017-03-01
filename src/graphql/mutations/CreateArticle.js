@@ -9,6 +9,7 @@ import client from 'util/client';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
+import { createReplyRequest } from './CreateReplyRequest';
 
 export default {
   type: MutationResult,
@@ -37,11 +38,14 @@ export default {
         from,
         references: [reference],
       },
+      refresh: true, // Make sure the data is indexed when re create ReplyRequest
     });
 
     if (!created) {
       throw new Error(`Cannot create article: ${result}`);
     }
+
+    await createReplyRequest({ articleId: newId, userId, from });
 
     return { id: newId };
   },
