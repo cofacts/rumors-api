@@ -23,9 +23,9 @@ describe('GetReplyAndGetArticle', () => {
             }
           }
           replyRequestCount
-          requestedForReply(userId: "fakeUser", from: "LINE")
+          requestedForReply
         }
-      }`()).toMatchSnapshot();
+      }`({}, { userId: 'fakeUser', from: 'LINE' })).toMatchSnapshot();
     });
 
     it('relatedArticles should work', async () => {

@@ -16,6 +16,7 @@ import {
   createFilterType,
   createSortType,
   createConnectionType,
+  assertUser,
 } from 'graphql/util';
 
 import ArticleReference from 'graphql/models/ArticleReference';
@@ -44,18 +45,9 @@ const Article = new GraphQLObjectType({
     },
     requestedForReply: {
       type: GraphQLBoolean,
-      description: 'If the specified user has requested for reply for this article',
-      args: {
-        userId: {
-          type: new GraphQLNonNull(GraphQLString),
-          description: 'Whose reply request record to look for',
-        },
-        from: {
-          type: new GraphQLNonNull(GraphQLString),
-          deprecationReason: 'Will remove after API keys are implemented',
-        },
-      },
-      resolve: async ({ replyRequestIds = [] }, { userId, from }, { loaders }) => {
+      description: 'If the current user has requested for reply for this article',
+      resolve: async ({ replyRequestIds = [] }, args, { loaders, userId, from }) => {
+        assertUser({ userId, from });
         const requests = await loaders.docLoader.loadMany(replyRequestIds.map(id => ({ index: 'replyrequests', id })));
         return !!requests.find(r => r.userId === userId && r.from === from);
       },
