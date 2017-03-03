@@ -253,14 +253,14 @@ export function createConnectionType(
   });
 }
 
+export const AUTH_ERROR_MSG = 'userId is not set via query string.';
+
 export function assertUser({ userId, from }) {
   if (!userId) {
-    const err = new Error('userId is not set via query string.');
-    err.status = 403; err.expose = true; throw err;
+    throw new Error(AUTH_ERROR_MSG);
   }
 
   if (userId && !from) {
-    const err = new Error('userId is set, but x-app-id or x-app-secret is not set accordingly.');
-    err.status = 403; err.expose = true; throw err;
+    throw new Error('userId is set, but x-app-id or x-app-secret is not set accordingly.');
   }
 }

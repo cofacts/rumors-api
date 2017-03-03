@@ -10,9 +10,11 @@ import koaStatic from 'koa-static';
 import koaBody from 'koa-bodyparser';
 import session from 'koa-session2';
 import passport from 'koa-passport';
+import { formatError } from 'graphql';
 import checkHeaders from './checkHeaders';
 import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
+import { AUTH_ERROR_MSG } from './graphql/util';
 
 import { loginRouter, authRouter } from './auth';
 
@@ -70,6 +72,13 @@ router.post('/graphql', checkHeaders(), graphqlKoa(ctx => ({
     //
     userId: ctx.from === 'WEBSITE' || ctx.from === 'DEVELOPMENT_FRONTEND' ? (ctx.state.user || {}).id : ctx.query.userId,
     from: ctx.from,
+  },
+  formatError(err) {
+    // make web clients know they should login
+    //
+    const formattedError = formatError(err);
+    formattedError.authError = err.message === AUTH_ERROR_MSG;
+    return formattedError;
   },
 })));
 
