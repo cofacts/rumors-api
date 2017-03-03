@@ -21,10 +21,14 @@ export default {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
     text: { type: new GraphQLNonNull(GraphQLString) },
     type: { type: new GraphQLNonNull(ReplyTypeEnum) },
-    reference: { type: new GraphQLNonNull(GraphQLString) },
+    reference: { type: GraphQLString },
   },
   async resolve(rootValue, { articleId, text, type, reference }, { userId, from }) {
     assertUser({ userId, from });
+
+    if (type !== 'NOT_ARTICLE' && !reference) {
+      throw new Error('reference is required for type !== NOT_ARTICLE');
+    }
 
     const { created, _id: replyId, result } = await client.index({
       index: 'replies',
