@@ -15,6 +15,7 @@ import checkHeaders from './checkHeaders';
 import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
 import { AUTH_ERROR_MSG } from './graphql/util';
+import CookieStore from './CookieStore';
 
 import { loginRouter, authRouter } from './auth';
 
@@ -46,6 +47,7 @@ app.use(koaBody({
 app.keys = config.get('COOKIE_SECRETS');
 
 app.use(session({
+  store: new CookieStore({ password: app.keys[0] }),
   signed: true,
   maxAge: config.get('COOKIE_MAXAGE'),
 }));
