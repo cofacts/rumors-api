@@ -84,7 +84,7 @@ async function verifyProfile(profile, fieldName) {
     body: {
       email,
       name: profile.displayName,
-      avatarUrl: profile.photos[0].value,
+      avatarUrl: profile.photos.length ? profile.photos[0].value : null,
       [fieldName]: profile.id,
       createdAt: now,
       updatedAt: now,
