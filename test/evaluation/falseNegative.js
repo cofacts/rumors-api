@@ -7,6 +7,16 @@ import getIn from 'util/getInFactory';
 import gql from '../util/GraphQL';
 import { truncate } from '../util/strings';
 
+function isHit(edges, queriedRumor) {
+  // considered a search hit if queriedRumor exists in first 3 results
+  //
+  for (let i = 0; i < 3 && i < edges.length; i += 1) {
+    if (edges[i].node.id === queriedRumor.id) return true;
+  }
+
+  return false;
+}
+
 async function main() {
   console.log('=== False Negative Validation ===');
 
@@ -32,17 +42,10 @@ async function main() {
   const allResults = await Promise.all(allRumors.map(({ text }) =>
     gql`
       query ($text: String) {
-        Search(text: $text, findInCrawled: false) {
-          articles {
+        SearchArticles(text: $text) {
+          edges {
             score
-            doc {
-              id
-              text
-            }
-          }
-          suggestedResult {
-            __typename
-            ... on Article {
+            node {
               id
               text
             }
@@ -60,12 +63,11 @@ async function main() {
   let invalidCount = 0;
   allResults.forEach(({ data }, i) => {
     const rumor = allRumors[i];
-    if (data.Search.suggestedResult && data.Search.suggestedResult.id === rumor.id) {
-      return; // continue
-    }
+    if (isHit(data.SearchArticles.edges, rumor)) return; // continue
+
     invalidCount += 1;
 
-    if (data.Search.suggestedResult === null) {
+    if (!data.SearchArticles.edges.length) {
       console.log(`\n[NOT FOUND] ${rumor.id} ------`);
     } else {
       console.log(`\n[WRONG DOC] ${rumor.id} ------`);
@@ -73,7 +75,7 @@ async function main() {
 
     console.log(truncate(rumor.text, 50));
     console.log('Search result:');
-    console.log(data.Search.articles.map((r, idx) => `\t#${idx + 1} (score=${r.score} / id=${r.doc.id}) ${truncate(r.doc.text)}`).join('\n'));
+    console.log(data.SearchArticles.edges.map(({ score, node }, idx) => `\t#${idx + 1} (score=${score} / id=${node.id}) ${truncate(node.text)}`).join('\n'));
   });
 
   console.log('---- Summary ----');
