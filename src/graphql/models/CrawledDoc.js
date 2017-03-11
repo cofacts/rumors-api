@@ -3,10 +3,6 @@ import {
   GraphQLString,
 } from 'graphql';
 
-import {
-  scoredDocFactory,
-} from 'graphql/util';
-
 const CrawledDoc = new GraphQLObjectType({
   name: 'CrawledDoc',
   description: 'A document that is crawled from selected myth-busting websites',
@@ -16,7 +12,5 @@ const CrawledDoc = new GraphQLObjectType({
     url: { type: GraphQLString },
   },
 });
-
-export const ScoredCrawledDoc = scoredDocFactory('ScoredCrawledDoc', CrawledDoc);
 
 export default CrawledDoc;

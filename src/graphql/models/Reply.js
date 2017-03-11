@@ -5,10 +5,6 @@ import {
   GraphQLInt,
 } from 'graphql';
 
-import {
-  scoredDocFactory,
-} from 'graphql/util';
-
 import ReplyConnection from './ReplyConnection';
 import ReplyVersion from './ReplyVersion';
 
@@ -30,7 +26,5 @@ const Reply = new GraphQLObjectType({
     },
   }),
 });
-
-export const ScoredReply = scoredDocFactory('ScoredReply', Reply);
 
 export default Reply;

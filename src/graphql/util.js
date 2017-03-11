@@ -10,18 +10,6 @@ import {
 
 import client from 'util/client';
 
-// Deprecated.
-//
-export function scoredDocFactory(name, type) {
-  return new GraphQLObjectType({
-    name,
-    fields: {
-      score: { type: GraphQLFloat },
-      doc: { type },
-    },
-  });
-}
-
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
 // Filtering args definition & parsing

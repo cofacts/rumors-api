@@ -1,6 +1,6 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import fixtures from '../__fixtures__/Search';
+import fixtures from '../__fixtures__/SearchArticle';
 
 describe('SearchReplies', () => {
   beforeAll(() => loadFixtures(fixtures));

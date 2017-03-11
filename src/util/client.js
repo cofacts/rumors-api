@@ -23,15 +23,3 @@ export function processMeta({
   }
   return null; // not found
 }
-
-// Deprecated.
-//
-// Processes {_id, _version, found, _source: {...}, _score} to
-// {doc: {id, ..._source}, score}.
-//
-export function processScoredDoc(hit) {
-  return {
-    score: hit._score,
-    doc: processMeta(hit),
-  };
-}

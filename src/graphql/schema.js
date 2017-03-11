@@ -3,9 +3,6 @@ import {
   GraphQLSchema,
 } from 'graphql';
 
-// Full-text search
-import Search from './queries/Search';
-
 // Get individual objects
 import GetArticle from './queries/GetArticle';
 import GetReply from './queries/GetReply';
@@ -26,7 +23,6 @@ export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
-      Search,
       GetArticle,
       GetReply,
       GetUser,

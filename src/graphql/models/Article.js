@@ -4,11 +4,9 @@ import {
   GraphQLList,
   GraphQLInt,
   GraphQLBoolean,
-  GraphQLNonNull,
 } from 'graphql';
 
 import {
-  scoredDocFactory,
   pagingArgs,
   getArithmeticExpressionType,
   getSortArgs,
@@ -116,7 +114,5 @@ const Article = new GraphQLObjectType({
 
 
 export const ArticleConnection = createConnectionType('ArticleConnection', Article);
-
-export const ScoredArticle = scoredDocFactory('ScoredArticle', Article);
 
 export default Article;
