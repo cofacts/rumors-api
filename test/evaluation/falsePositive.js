@@ -51,7 +51,7 @@ async function main() {
     console.log('Queried Sample --');
     console.log(truncate(sample.rumor, 50));
     console.log('Returned results --');
-    console.log(data.SearchArticles.edges.map(({node, score}, idx) => `\t#${idx + 1} (score=${score} / id=${node.id}) ${truncate(node.text)}`).join('\n'));
+    console.log(data.SearchArticles.edges.map(({ node, score }, idx) => `\t#${idx + 1} (score=${score} / id=${node.id}) ${truncate(node.text)}`).join('\n'));
   });
 
   console.log('---- Summary ----');
