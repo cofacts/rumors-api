@@ -71,7 +71,7 @@ export default {
         id: replyConnectionId,
         body: {
           script: {
-            inline: 'ctx._source.feedbackIds.add(params.id)',
+            inline: 'if(!ctx._source.feedbackIds.contains(params.id)) {ctx._source.feedbackIds.add(params.id)}',
             params: { id },
           },
         },

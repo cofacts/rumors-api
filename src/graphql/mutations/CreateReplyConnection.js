@@ -45,7 +45,7 @@ export async function createReplyConnection({ articleId, replyId, userId, from }
     id: articleId,
     body: {
       script: {
-        inline: 'ctx._source.replyConnectionIds.add(params.id)',
+        inline: 'if(!ctx._source.replyConnectionIds.contains(params.id)) {ctx._source.replyConnectionIds.add(params.id)}',
         params: { id },
       },
     },

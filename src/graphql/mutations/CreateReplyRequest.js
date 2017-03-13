@@ -43,7 +43,7 @@ export async function createReplyRequest({ articleId, userId, from }) {
     id: articleId,
     body: {
       script: {
-        inline: 'ctx._source.replyRequestIds.add(params.id)',
+        inline: 'if(!ctx._source.replyRequestIds.contains(params.id)) {ctx._source.replyRequestIds.add(params.id)}',
         params: { id },
       },
     },
