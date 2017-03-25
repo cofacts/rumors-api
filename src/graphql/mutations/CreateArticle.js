@@ -21,9 +21,8 @@ export default {
   async resolve(rootValue, { text, reference }, { from, userId }) {
     assertUser({ from, userId });
 
-    // TODO: If exists a rumor that has same ID or text, just merge the change of replyIds.
-    // Otherwise, create a new rumor document.
     const now = (new Date()).toISOString();
+    reference.createdAt = now;
 
     const { created, _id: newId, result } = await client.index({
       index: 'articles',

@@ -27,6 +27,8 @@ const Article = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLString },
     text: { type: GraphQLString },
+    createdAt: { type: GraphQLString },
+    updatedAt: { type: GraphQLString },
     references: { type: new GraphQLList(ArticleReference) },
     replyCount: {
       type: GraphQLInt,

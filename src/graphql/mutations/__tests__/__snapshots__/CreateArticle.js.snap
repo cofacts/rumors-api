@@ -6,6 +6,7 @@ Object {
     "from": "foo",
     "references": Array [
       Object {
+        "createdAt": "2017-01-28T08:45:57.011Z",
         "type": "LINE",
       },
     ],
