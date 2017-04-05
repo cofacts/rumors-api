@@ -1,0 +1,46 @@
+{
+  "repo": "cofacts/rumors-api",
+  "author": "MrOrz",
+  "status": "Beta",
+  "name": "cofacts",
+  "name_zh": "真的假的",
+  "description": "A experimental platform that puts collaborative fact-checking to test. In the real world, in Taiwan.",
+  "description_zh": "開放大眾編輯的闢謠與回應網路文章的試驗性平台。內容與程式碼本身均為開放授權，希望能讓第三方查證平台遍地開花、讓大眾可以更容易接觸到不同的聲音。",
+  "homepage": "https://rumors.hacktabl.org/",
+  "thumbnail": "https://avatars2.githubusercontent.com/u/26894329?s=400",
+  "document": "http://beta.hackfoldr.org/cofacts",
+  "repository": "https://github.com/cofacts",
+  "licenses": [
+    "MIT - All source codes",
+    "CC0 - Reply content"
+  ],
+  "keywords": [
+    "fact-checking",
+    "crowd-sourcing",
+    "collaborative fact-checking"
+  ],
+  "audience": [
+    "對網路訊息抱持懷疑，但不熟悉 google 而熟悉 LINE 轉傳功能的人（ex: 最近兩年才接觸網際網路的老年人）",
+    "想查證訊息來源，但沒有時間慢慢 google 的人"
+  ],
+  "products": [
+    "https://rumors.hacktabl.org/",
+    "https://cofacts-api.hacktabl.org/"
+  ],
+  "partOf": "",
+  "contributors": [
+    "MrOrz",
+    "kytu800",
+    "sayuan",
+    "quad",
+    "linekin",
+    "LucienLee",
+    "godgunman",
+    "darkbtf",
+    "bil4444",
+    "hazelwei"
+  ],
+  "needs": [
+    "txt 組 - 闢謠"
+  ]
+}
