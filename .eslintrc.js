@@ -1,9 +1,20 @@
 module.exports = {
-  extends: 'airbnb',
-  env: {node: true, browser: false, jest: true},
+  parser: 'babel-eslint',
+  extends: [
+    'eslint:recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'prettier',
+  ],
+  env: {node: true, es6: true, jest: true},
+  plugins: [
+    'prettier',
+  ],
   rules: {
-    'no-underscore-dangle': 'off', // elastic search results uses dangling underscore a lot (like _source)
-    'no-param-reassign': 'off', // ctx.body = xxx is how koa2 works.
+    'prettier/prettier': ['error', {
+      trailingComma: 'es5',
+      'singleQuote': true,
+    }],
   },
   settings: {
     'import/resolver': {
