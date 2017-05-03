@@ -16,6 +16,7 @@ before_install:
   - sleep 10 # wait for elasticsearch
 
 script:
+  - npm run lint:check
   - npm run rumors-db:test && npm run test:jest -- --coverage
 
 after_success:

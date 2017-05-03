@@ -16,6 +16,7 @@
     "test:jest": "NODE_ENV=test jest --runInBand",
     "start": "pm2 startOrRestart process.json --env production --log-date-format=\"YYYY-MM-DD HH:mm Z\" --no-daemon",
     "lint": "eslint --fix src/.",
+    "lint:check": "eslint src/.",
     "build": "npm run clean && npm run build:babel && npm run build:cp && npm run build:docker",
     "build:babel": "babel src -d build",
     "build:cp": "cp -R src/jade build/jade",
