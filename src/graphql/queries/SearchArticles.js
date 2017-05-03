@@ -1,13 +1,9 @@
-import {
-  GraphQLString,
-  GraphQLInt,
-} from 'graphql';
+import { GraphQLString, GraphQLInt } from 'graphql';
 
 import {
   createFilterType,
   createSortType,
   getSortArgs,
-  getSearchAfterFromCursor,
   pagingArgs,
   getArithmeticExpressionType,
   getOperatorAndOperand,
@@ -20,7 +16,12 @@ export default {
     text: { type: GraphQLString },
     filter: {
       type: createFilterType('SearchArticleFilter', {
-        replyCount: { type: getArithmeticExpressionType('SearchArticleReplyCountExpr', GraphQLInt) },
+        replyCount: {
+          type: getArithmeticExpressionType(
+            'SearchArticleReplyCountExpr',
+            GraphQLInt
+          ),
+        },
       }),
     },
     orderBy: {
@@ -33,7 +34,10 @@ export default {
     ...pagingArgs,
   },
 
-  async resolve(rootValue, { text, filter = {}, orderBy = [], ...otherParams }) {
+  async resolve(
+    rootValue,
+    { text, filter = {}, orderBy = [], ...otherParams }
+  ) {
     const body = {
       query: {
         // Ref: http://stackoverflow.com/a/8831494/1582110
@@ -57,12 +61,16 @@ export default {
       body.query = {
         bool: {
           must: body.query,
-          filter: { script: { script: {
-            inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
-            params: {
-              operand,
+          filter: {
+            script: {
+              script: {
+                inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
+                params: {
+                  operand,
+                },
+              },
             },
-          } } },
+          },
         },
       };
     }

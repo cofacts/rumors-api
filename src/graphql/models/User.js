@@ -1,7 +1,4 @@
-import {
-  GraphQLObjectType,
-  GraphQLString,
-} from 'graphql';
+import { GraphQLObjectType, GraphQLString } from 'graphql';
 
 const currentUserOnlyField = (key, type) => ({
   type,
@@ -29,10 +26,15 @@ const User = new GraphQLObjectType({
 
 export default User;
 
-export const userFieldResolver = ({ userId, from }, args, { loaders, ...context }) => {
+export const userFieldResolver = (
+  { userId, from },
+  args,
+  { loaders, ...context }
+) => {
   // If the root document is created by website users, we can resolve user from userId.
   //
-  if (from === 'WEBSITE') return loaders.docLoader.load({ index: 'users', id: userId });
+  if (from === 'WEBSITE')
+    return loaders.docLoader.load({ index: 'users', id: userId });
 
   // If the user comes from the same client as the root document, return the user id.
   //

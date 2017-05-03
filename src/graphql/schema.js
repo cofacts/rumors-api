@@ -1,7 +1,4 @@
-import {
-  GraphQLObjectType,
-  GraphQLSchema,
-} from 'graphql';
+import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 
 // Get individual objects
 import GetArticle from './queries/GetArticle';
@@ -16,7 +13,8 @@ import SearchCrawledDocs from './queries/SearchCrawledDocs';
 import CreateArticle from './mutations/CreateArticle';
 import CreateReply from './mutations/CreateReply';
 import CreateReplyConnection from './mutations/CreateReplyConnection';
-import CreateOrUpdateReplyConnectionFeedback from './mutations/CreateOrUpdateReplyConnectionFeedback';
+import CreateOrUpdateReplyConnectionFeedback
+  from './mutations/CreateOrUpdateReplyConnectionFeedback';
 import CreateReplyRequest from './mutations/CreateReplyRequest';
 
 export default new GraphQLSchema({

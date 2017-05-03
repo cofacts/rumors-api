@@ -7,7 +7,8 @@ describe('GetReplyAndGetArticle', () => {
 
   describe('GetArticle', () => {
     it('should get the specified article & associated replies from ID', async () => {
-      expect(await gql`{
+      expect(
+        await gql`{
         GetArticle(id: "foo") {
           text
           references { type }
@@ -25,13 +26,15 @@ describe('GetReplyAndGetArticle', () => {
           replyRequestCount
           requestedForReply
         }
-      }`({}, { userId: 'fakeUser', from: 'LINE' })).toMatchSnapshot();
+      }`({}, { userId: 'fakeUser', from: 'LINE' })
+      ).toMatchSnapshot();
     });
 
     it('relatedArticles should work', async () => {
       // No param
       //
-      expect(await gql`{
+      expect(
+        await gql`{
         GetArticle(id: "foo") {
           relatedArticles {
             edges {
@@ -43,11 +46,13 @@ describe('GetReplyAndGetArticle', () => {
             }
           }
         }
-      }`()).toMatchSnapshot('relatedArticle no-param test');
+      }`()
+      ).toMatchSnapshot('relatedArticle no-param test');
 
       // filter
       //
-      expect(await gql`{
+      expect(
+        await gql`{
         GetArticle(id: "foo") {
           relatedArticles(filter: {replyCount: {GT: 0}}) {
             edges {
@@ -59,11 +64,13 @@ describe('GetReplyAndGetArticle', () => {
             }
           }
         }
-      }`()).toMatchSnapshot('relatedArticle filter test');
+      }`()
+      ).toMatchSnapshot('relatedArticle filter test');
 
       // sort
       //
-      expect(await gql`{
+      expect(
+        await gql`{
         GetArticle(id: "foo") {
           relatedArticles(orderBy: [{_score: ASC}]) {
             edges {
@@ -75,13 +82,15 @@ describe('GetReplyAndGetArticle', () => {
             }
           }
         }
-      }`()).toMatchSnapshot('relatedArticle sorting test');
+      }`()
+      ).toMatchSnapshot('relatedArticle sorting test');
     });
   });
 
   describe('GetReply', () => {
     it('should get the specified reply & associated articles from ID', async () => {
-      expect(await gql`{
+      expect(
+        await gql`{
         GetReply(id: "bar") {
           versions {
             text
@@ -94,7 +103,8 @@ describe('GetReplyAndGetArticle', () => {
             }
           }
         }
-      }`()).toMatchSnapshot();
+      }`()
+      ).toMatchSnapshot();
     });
   });
 

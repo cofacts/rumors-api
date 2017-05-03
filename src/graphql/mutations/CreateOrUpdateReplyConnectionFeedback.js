@@ -6,9 +6,7 @@ import {
   GraphQLEnumType,
 } from 'graphql';
 
-import {
-  assertUser,
-} from 'graphql/util';
+import { assertUser } from 'graphql/util';
 
 import client from 'util/client';
 
@@ -25,24 +23,30 @@ export default {
   args: {
     replyConnectionId: { type: new GraphQLNonNull(GraphQLString) },
     vote: {
-      type: new GraphQLNonNull(new GraphQLEnumType({
-        name: 'FeedbackVote',
-        values: {
-          UPVOTE: { value: 1 },
-          NEUTRAL: { value: 0 },
-          DOWNVOTE: { value: -1 },
-        },
-      })),
+      type: new GraphQLNonNull(
+        new GraphQLEnumType({
+          name: 'FeedbackVote',
+          values: {
+            UPVOTE: { value: 1 },
+            NEUTRAL: { value: 0 },
+            DOWNVOTE: { value: -1 },
+          },
+        })
+      ),
     },
     comment: {
       type: GraphQLString,
       description: 'Optional text comment explaining why vote like this',
     },
   },
-  async resolve(rootValue, { replyConnectionId, vote, comment }, { from, userId }) {
+  async resolve(
+    rootValue,
+    { replyConnectionId, vote, comment },
+    { from, userId }
+  ) {
     assertUser({ from, userId });
 
-    const now = (new Date()).toISOString();
+    const now = new Date().toISOString();
 
     // (replyConnectionId, userId, from) should be unique
     // but user can update
@@ -78,13 +82,19 @@ export default {
         _source: true,
       });
       if (connectionUpdateResult.result !== 'updated') {
-        throw new Error(`Cannot append feedback ${id} to replyConnection ${replyConnectionId}`);
+        throw new Error(
+          `Cannot append feedback ${id} to replyConnection ${replyConnectionId}`
+        );
       }
       feedbackCount = connectionUpdateResult.get._source.feedbackIds.length;
     } else {
       // No feedback is newly created, it is just updated.
       //
-      const connectionGetResult = await client.get({ index: 'replyconnections', type: 'basic', id: replyConnectionId });
+      const connectionGetResult = await client.get({
+        index: 'replyconnections',
+        type: 'basic',
+        id: replyConnectionId,
+      });
       feedbackCount = connectionGetResult._source.feedbackIds.length;
     }
 

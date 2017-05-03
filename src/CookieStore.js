@@ -25,5 +25,4 @@ export default class CookieStore extends Store {
     crypted += cipher.final('hex');
     return crypted;
   }
-
 }

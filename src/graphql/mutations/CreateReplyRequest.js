@@ -4,16 +4,14 @@ import {
   GraphQLInt,
   GraphQLObjectType,
 } from 'graphql';
-import {
-  assertUser,
-} from 'graphql/util';
+import { assertUser } from 'graphql/util';
 
 import client, { processMeta } from 'util/client';
 
 export async function createReplyRequest({ articleId, userId, from }) {
   assertUser({ from, userId });
 
-  const now = (new Date()).toISOString();
+  const now = new Date().toISOString();
 
   const replyRequest = {
     // (articleId, userId, from) should be unique
@@ -54,7 +52,10 @@ export async function createReplyRequest({ articleId, userId, from }) {
     throw new Error(`Cannot append replyRequest ${id} to article ${articleId}`);
   }
 
-  return { replyRequest, article: processMeta({ ...articleUpdateResult.get, _id: id }) };
+  return {
+    replyRequest,
+    article: processMeta({ ...articleUpdateResult.get, _id: id }),
+  };
 }
 
 export default {

@@ -1,19 +1,23 @@
-import {
-  GraphQLString,
-  GraphQLNonNull,
-} from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 import client from 'util/client';
 import { assertUser } from 'graphql/util';
 import MutationResult from 'graphql/models/MutationResult';
 
-export async function createReplyConnection({ articleId, replyId, userId, from }) {
+export async function createReplyConnection({
+  articleId,
+  replyId,
+  userId,
+  from,
+}) {
   assertUser({ userId, from });
   if (!articleId || !replyId) {
-    throw new Error('articleId and replyId are mandatory when creating replyConnections.');
+    throw new Error(
+      'articleId and replyId are mandatory when creating replyConnections.'
+    );
   }
 
-  const now = (new Date()).toISOString();
+  const now = new Date().toISOString();
 
   const replyConnection = {
     id: `${articleId}__${replyId}`,
@@ -36,7 +40,9 @@ export async function createReplyConnection({ articleId, replyId, userId, from }
   });
 
   if (!created) {
-    throw new Error(`Cannot create replyConnection: ${JSON.stringify(replyConnection)}`);
+    throw new Error(
+      `Cannot create replyConnection: ${JSON.stringify(replyConnection)}`
+    );
   }
 
   const { result: articleResult } = await client.update({
@@ -52,7 +58,9 @@ export async function createReplyConnection({ articleId, replyId, userId, from }
   });
 
   if (articleResult !== 'updated') {
-    throw new Error(`Cannot append replyConnection ${JSON.stringify(replyConnection)} to article ${articleId}`);
+    throw new Error(
+      `Cannot append replyConnection ${JSON.stringify(replyConnection)} to article ${articleId}`
+    );
   }
 
   return replyConnection;
@@ -66,7 +74,12 @@ export default {
     replyId: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(rootValue, { articleId, replyId }, { userId, from }) {
-    const { id } = await createReplyConnection({ articleId, replyId, userId, from });
+    const { id } = await createReplyConnection({
+      articleId,
+      replyId,
+      userId,
+      from,
+    });
     return { id };
   },
 };

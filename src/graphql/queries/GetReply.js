@@ -1,6 +1,4 @@
-import {
-  GraphQLString,
-} from 'graphql';
+import { GraphQLString } from 'graphql';
 
 import Reply from 'graphql/models/Reply';
 

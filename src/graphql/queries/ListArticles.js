@@ -1,6 +1,4 @@
-import {
-  GraphQLInt,
-} from 'graphql';
+import { GraphQLInt } from 'graphql';
 
 import {
   createFilterType,
@@ -11,14 +9,18 @@ import {
   getOperatorAndOperand,
 } from 'graphql/util';
 
-
 import { ArticleConnection } from 'graphql/models/Article';
 
 export default {
   args: {
     filter: {
       type: createFilterType('ListArticleFilter', {
-        replyCount: { type: getArithmeticExpressionType('ListArticleReplyCountExpr', GraphQLInt) },
+        replyCount: {
+          type: getArithmeticExpressionType(
+            'ListArticleReplyCountExpr',
+            GraphQLInt
+          ),
+        },
       }),
     },
     orderBy: {
@@ -57,12 +59,16 @@ export default {
       body.query = {
         bool: {
           must: body.query,
-          filter: { script: { script: {
-            inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
-            params: {
-              operand,
+          filter: {
+            script: {
+              script: {
+                inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
+                params: {
+                  operand,
+                },
+              },
             },
-          } } },
+          },
         },
       };
     }

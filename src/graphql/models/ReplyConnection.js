@@ -43,7 +43,9 @@ export default new GraphQLObjectType({
     feedbacks: {
       type: new GraphQLList(ReplyConnectionFeedback),
       resolve: ({ feedbackIds = [] }, args, { loaders }) =>
-        loaders.docLoader.loadMany(feedbackIds.map(id => ({ index: 'replyconnectionfeedbacks', id }))),
+        loaders.docLoader.loadMany(
+          feedbackIds.map(id => ({ index: 'replyconnectionfeedbacks', id }))
+        ),
     },
   }),
 });

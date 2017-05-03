@@ -18,14 +18,22 @@ describe('CreateArticle', () => {
           id
         }
       }
-    `({
-      text: 'FOO FOO', reference: { type: 'LINE' },
-    }, { userId: 'test', from: 'foo' });
+    `(
+      {
+        text: 'FOO FOO',
+        reference: { type: 'LINE' },
+      },
+      { userId: 'test', from: 'foo' }
+    );
     MockDate.reset();
 
     expect(errors).toBeUndefined();
 
-    const doc = await client.get({ index: 'articles', type: 'basic', id: data.CreateArticle.id });
+    const doc = await client.get({
+      index: 'articles',
+      type: 'basic',
+      id: data.CreateArticle.id,
+    });
     expect(doc._source.replyRequestIds).toHaveLength(1);
 
     delete doc._id; // delete auto-generated id from being snapshot
@@ -34,6 +42,10 @@ describe('CreateArticle', () => {
     expect(doc).toMatchSnapshot();
 
     // Cleanup
-    await client.delete({ index: 'articles', type: 'basic', id: data.CreateArticle.id });
+    await client.delete({
+      index: 'articles',
+      type: 'basic',
+      id: data.CreateArticle.id,
+    });
   });
 });

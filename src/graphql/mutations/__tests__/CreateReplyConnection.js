@@ -21,22 +21,39 @@ describe('CreateReplyConnection', () => {
           id
         }
       }
-    `({
-      articleId: 'createReplyConnection1',
-      replyId: 'createReplyConnection2',
-    }, { userId: 'test', from: 'test' });
+    `(
+      {
+        articleId: 'createReplyConnection1',
+        replyId: 'createReplyConnection2',
+      },
+      { userId: 'test', from: 'test' }
+    );
     MockDate.reset();
 
     expect(errors).toBeUndefined();
 
-    const conn = await client.get({ index: 'replyconnections', type: 'basic', id: data.CreateReplyConnection.id });
+    const conn = await client.get({
+      index: 'replyconnections',
+      type: 'basic',
+      id: data.CreateReplyConnection.id,
+    });
     expect(conn._source).toMatchSnapshot();
 
-    const article = await client.get({ index: 'articles', type: 'basic', id: 'createReplyConnection1' });
-    expect(article._source.replyConnectionIds[0]).toBe(data.CreateReplyConnection.id);
+    const article = await client.get({
+      index: 'articles',
+      type: 'basic',
+      id: 'createReplyConnection1',
+    });
+    expect(article._source.replyConnectionIds[0]).toBe(
+      data.CreateReplyConnection.id
+    );
 
     // Cleanup
-    await client.delete({ index: 'replyconnections', type: 'basic', id: data.CreateReplyConnection.id });
+    await client.delete({
+      index: 'replyconnections',
+      type: 'basic',
+      id: data.CreateReplyConnection.id,
+    });
     await resetFrom(fixtures, '/articles/basic/createReplyConnection1');
   });
 
@@ -53,10 +70,13 @@ describe('CreateReplyConnection', () => {
           id
         }
       }
-    `({
-      articleId: 'createReplyConnection1',
-      replyId: 'createReplyConnection2',
-    }, { userId: 'test', from: 'test' });
+    `(
+      {
+        articleId: 'createReplyConnection1',
+        replyId: 'createReplyConnection2',
+      },
+      { userId: 'test', from: 'test' }
+    );
 
     const { errors } = await gql`
       mutation(
@@ -70,10 +90,13 @@ describe('CreateReplyConnection', () => {
           id
         }
       }
-    `({
-      articleId: 'createReplyConnection1',
-      replyId: 'createReplyConnection2',
-    }, { userId: 'anotherUser', from: 'test' });
+    `(
+      {
+        articleId: 'createReplyConnection1',
+        replyId: 'createReplyConnection2',
+      },
+      { userId: 'anotherUser', from: 'test' }
+    );
 
     expect(errors[0]).toEqual(expect.stringMatching(/document already exists/));
 

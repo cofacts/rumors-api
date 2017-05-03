@@ -19,19 +19,30 @@ describe('CreateReplyRequest', () => {
           replyRequestCount
         }
       }
-    `({
-      articleId: 'createReplyRequestTest1',
-    }, { userId: 'test', from: 'test' });
+    `(
+      {
+        articleId: 'createReplyRequestTest1',
+      },
+      { userId: 'test', from: 'test' }
+    );
     MockDate.reset();
 
     const id = 'createReplyRequestTest1__test__test';
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const conn = await client.get({ index: 'replyrequests', type: 'basic', id });
+    const conn = await client.get({
+      index: 'replyrequests',
+      type: 'basic',
+      id,
+    });
     expect(conn._source).toMatchSnapshot();
 
-    const article = await client.get({ index: 'articles', type: 'basic', id: 'createReplyRequestTest1' });
+    const article = await client.get({
+      index: 'articles',
+      type: 'basic',
+      id: 'createReplyRequestTest1',
+    });
     expect(article._source.replyRequestIds[0]).toBe(id);
 
     // Cleanup
@@ -44,18 +55,28 @@ describe('CreateReplyRequest', () => {
       mutation( $articleId: String! ) {
         CreateReplyRequest( articleId: $articleId ) { replyRequestCount }
       }
-    `({ articleId: 'createReplyRequestTest1' }, { userId: 'test', from: 'test' });
+    `(
+      { articleId: 'createReplyRequestTest1' },
+      { userId: 'test', from: 'test' }
+    );
 
     const { errors } = await gql`
       mutation( $articleId: String! ) {
         CreateReplyRequest( articleId: $articleId ) { replyRequestCount }
       }
-    `({ articleId: 'createReplyRequestTest1' }, { userId: 'test', from: 'test' });
+    `(
+      { articleId: 'createReplyRequestTest1' },
+      { userId: 'test', from: 'test' }
+    );
 
     expect(errors[0]).toEqual(expect.stringMatching(/document already exists/));
 
     // Cleanup
-    await client.delete({ index: 'replyrequests', type: 'basic', id: 'createReplyRequestTest1__test__test' });
+    await client.delete({
+      index: 'replyrequests',
+      type: 'basic',
+      id: 'createReplyRequestTest1__test__test',
+    });
   });
 
   afterAll(() => unloadFixtures(fixtures));

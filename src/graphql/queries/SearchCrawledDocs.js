@@ -1,7 +1,4 @@
-import {
-  GraphQLString,
-  GraphQLList,
-} from 'graphql';
+import { GraphQLString } from 'graphql';
 
 import fetch from 'node-fetch';
 import FormData from 'form-data';
@@ -11,9 +8,7 @@ import { processMeta } from 'util/client';
 import getIn from 'util/getInFactory';
 import CrawledDoc from 'graphql/models/CrawledDoc';
 
-import {
-  createConnectionType,
-} from 'graphql/util';
+import { createConnectionType } from 'graphql/util';
 
 export default {
   description: 'Search for crawled doc in rumor-search.g0v.ronny.tw',
@@ -26,12 +21,19 @@ export default {
     const crawledFormData = new FormData();
     crawledFormData.append('content', text);
 
-    const crawledResult = await fetch('https://rumor-search.g0v.ronny.tw/query.php', {
-      method: 'POST', body: crawledFormData, timeout: 5000,
-    }).then(resp => resp.json()).catch((err) => {
-      rollbar.handleError(err);
-      return {};
-    });
+    const crawledResult = await fetch(
+      'https://rumor-search.g0v.ronny.tw/query.php',
+      {
+        method: 'POST',
+        body: crawledFormData,
+        timeout: 5000,
+      }
+    )
+      .then(resp => resp.json())
+      .catch(err => {
+        rollbar.handleError(err);
+        return {};
+      });
 
     return getIn(crawledResult)(['hits', 'hits'], []).map(processMeta);
   },

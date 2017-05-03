@@ -1,10 +1,5 @@
-import {
-  GraphQLString,
-  GraphQLNonNull,
-} from 'graphql';
-import {
-  assertUser,
-} from 'graphql/util';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
+import { assertUser } from 'graphql/util';
 import client from 'util/client';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
@@ -21,7 +16,7 @@ export default {
   async resolve(rootValue, { text, reference }, { from, userId }) {
     assertUser({ from, userId });
 
-    const now = (new Date()).toISOString();
+    const now = new Date().toISOString();
     reference.createdAt = now;
 
     const { created, _id: newId, result } = await client.index({

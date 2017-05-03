@@ -1,6 +1,4 @@
-import {
-  GraphQLEnumType,
-} from 'graphql';
+import { GraphQLEnumType } from 'graphql';
 
 export default new GraphQLEnumType({
   name: 'ReplyTypeEnum',

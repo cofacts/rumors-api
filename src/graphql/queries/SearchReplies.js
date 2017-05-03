@@ -1,6 +1,4 @@
-import {
-  GraphQLString,
-} from 'graphql';
+import { GraphQLString } from 'graphql';
 
 import {
   createSortType,
@@ -16,9 +14,7 @@ export default {
   args: {
     text: { type: GraphQLString },
     orderBy: {
-      type: createSortType('SearchReplyOrderBy', [
-        '_score',
-      ]),
+      type: createSortType('SearchReplyOrderBy', ['_score']),
     },
     ...pagingArgs,
   },

@@ -16,24 +16,42 @@ describe('CreateOrUpdateReplyConnectionFeedback', () => {
           vote: UPVOTE
         ) { feedbackCount }
       }
-    `({
-      id: 'createReplyConnectionFeedback1',
-    }, { userId: 'test', from: 'test' });
+    `(
+      {
+        id: 'createReplyConnectionFeedback1',
+      },
+      { userId: 'test', from: 'test' }
+    );
     MockDate.reset();
 
     const id = 'createReplyConnectionFeedback1__test__test';
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const conn = await client.get({ index: 'replyconnectionfeedbacks', type: 'basic', id });
+    const conn = await client.get({
+      index: 'replyconnectionfeedbacks',
+      type: 'basic',
+      id,
+    });
     expect(conn._source).toMatchSnapshot();
 
-    const article = await client.get({ index: 'replyconnections', type: 'basic', id: 'createReplyConnectionFeedback1' });
+    const article = await client.get({
+      index: 'replyconnections',
+      type: 'basic',
+      id: 'createReplyConnectionFeedback1',
+    });
     expect(article._source.feedbackIds.slice(-1)[0]).toBe(id);
 
     // Cleanup
-    await client.delete({ index: 'replyconnectionfeedbacks', type: 'basic', id });
-    await resetFrom(fixtures, '/replyconnections/basic/createReplyConnectionFeedback1');
+    await client.delete({
+      index: 'replyconnectionfeedbacks',
+      type: 'basic',
+      id,
+    });
+    await resetFrom(
+      fixtures,
+      '/replyconnections/basic/createReplyConnectionFeedback1'
+    );
   });
 
   it('updates existing feedback', async () => {
@@ -45,16 +63,21 @@ describe('CreateOrUpdateReplyConnectionFeedback', () => {
           vote: DOWNVOTE
         ) { feedbackCount }
       }
-    `({
-      id: 'createReplyConnectionFeedback1',
-    }, { userId: 'testUser', from: 'testClient' });
+    `(
+      {
+        id: 'createReplyConnectionFeedback1',
+      },
+      { userId: 'testUser', from: 'testClient' }
+    );
     MockDate.reset();
 
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
     const id = 'createReplyConnectionFeedback1__testUser__testClient';
-    expect(await client.get({ index: 'replyconnectionfeedbacks', type: 'basic', id })).toMatchSnapshot();
+    expect(
+      await client.get({ index: 'replyconnectionfeedbacks', type: 'basic', id })
+    ).toMatchSnapshot();
 
     // Cleanup
     await resetFrom(fixtures, `/replyconnectionfeedbacks/basic/${id}`);

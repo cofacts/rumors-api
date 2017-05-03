@@ -37,7 +37,9 @@ const Article = new GraphQLObjectType({
     replyConnections: {
       type: new GraphQLList(ReplyConnection),
       resolve: ({ replyConnectionIds = [] }, args, { loaders }) =>
-        loaders.docLoader.loadMany(replyConnectionIds.map(id => ({ index: 'replyconnections', id }))),
+        loaders.docLoader.loadMany(
+          replyConnectionIds.map(id => ({ index: 'replyconnections', id }))
+        ),
     },
     replyRequestCount: {
       type: GraphQLInt,
@@ -46,9 +48,15 @@ const Article = new GraphQLObjectType({
     requestedForReply: {
       type: GraphQLBoolean,
       description: 'If the current user has requested for reply for this article',
-      resolve: async ({ replyRequestIds = [] }, args, { loaders, userId, from }) => {
+      resolve: async (
+        { replyRequestIds = [] },
+        args,
+        { loaders, userId, from }
+      ) => {
         assertUser({ userId, from });
-        const requests = await loaders.docLoader.loadMany(replyRequestIds.map(id => ({ index: 'replyrequests', id })));
+        const requests = await loaders.docLoader.loadMany(
+          replyRequestIds.map(id => ({ index: 'replyrequests', id }))
+        );
         return !!requests.find(r => r.userId === userId && r.from === from);
       },
     },
@@ -61,11 +69,16 @@ const Article = new GraphQLObjectType({
       args: {
         filter: {
           type: createFilterType('RelatedArticleFilter', {
-            replyCount: { type: getArithmeticExpressionType('ReplyCountExpr', GraphQLInt) },
+            replyCount: {
+              type: getArithmeticExpressionType('ReplyCountExpr', GraphQLInt),
+            },
           }),
         },
         orderBy: {
-          type: createSortType('RelatedArticleOrderBy', ['_score', 'updatedAt']),
+          type: createSortType('RelatedArticleOrderBy', [
+            '_score',
+            'updatedAt',
+          ]),
         },
         ...pagingArgs,
       },
@@ -80,22 +93,28 @@ const Article = new GraphQLObjectType({
             },
           },
           sort: getSortArgs(orderBy),
-          track_scores: true,  // required to always populate score
+          track_scores: true, // required to always populate score
         };
 
         if (filter.replyCount) {
           // Switch to bool query so that we can filter more_like_this results
           //
-          const { operator, operand } = getOperatorAndOperand(filter.replyCount);
+          const { operator, operand } = getOperatorAndOperand(
+            filter.replyCount
+          );
           body.query = {
             bool: {
               must: body.query,
-              filter: { script: { script: {
-                inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
-                params: {
-                  operand,
+              filter: {
+                script: {
+                  script: {
+                    inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
+                    params: {
+                      operand,
+                    },
+                  },
                 },
-              } } },
+              },
             },
           };
         }
@@ -114,7 +133,9 @@ const Article = new GraphQLObjectType({
   }),
 });
 
-
-export const ArticleConnection = createConnectionType('ArticleConnection', Article);
+export const ArticleConnection = createConnectionType(
+  'ArticleConnection',
+  Article
+);
 
 export default Article;

@@ -1,7 +1,4 @@
-import {
-  GraphQLObjectType,
-  GraphQLString,
-} from 'graphql';
+import { GraphQLObjectType, GraphQLString } from 'graphql';
 
 import ReplyTypeEnum from './ReplyTypeEnum';
 import User, { userFieldResolver } from './User';

@@ -7,21 +7,25 @@ describe('GetUser', () => {
   beforeAll(() => loadFixtures(fixtures));
 
   it('Get current user specified in context when no ID is given', async () => {
-    expect(await gql`{
+    expect(
+      await gql`{
       GetUser {
         name
         email
       }
-    }`({}, { user: currentUser })).toMatchSnapshot();
+    }`({}, { user: currentUser })
+    ).toMatchSnapshot();
   });
 
   it('Get limited data', async () => {
-    expect(await gql`{
+    expect(
+      await gql`{
       GetUser(id: "test-user") {
         name
         email
       }
-    }`({}, { user: currentUser })).toMatchSnapshot();
+    }`({}, { user: currentUser })
+    ).toMatchSnapshot();
   });
 
   afterAll(() => unloadFixtures(fixtures));

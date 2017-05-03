@@ -28,7 +28,6 @@ rollbar.init(config.get('ROLLBAR_TOKEN'), {
 
 rollbar.handleUncaughtExceptionsAndRejections();
 
-
 app.use(async (ctx, next) => {
   try {
     await next();
@@ -38,19 +37,23 @@ app.use(async (ctx, next) => {
   }
 });
 
-app.use(koaBody({
-  formLimit: '1mb',
-  jsonLimit: '10mb',
-  textLimit: '10mb',
-}));
+app.use(
+  koaBody({
+    formLimit: '1mb',
+    jsonLimit: '10mb',
+    textLimit: '10mb',
+  })
+);
 
 app.keys = config.get('COOKIE_SECRETS');
 
-app.use(session({
-  store: new CookieStore({ password: app.keys[0] }),
-  signed: true,
-  maxAge: config.get('COOKIE_MAXAGE'),
-}));
+app.use(
+  session({
+    store: new CookieStore({ password: app.keys[0] }),
+    signed: true,
+    maxAge: config.get('COOKIE_MAXAGE'),
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -58,37 +61,43 @@ router.use('/login', loginRouter.routes(), loginRouter.allowedMethods());
 router.use('/callback', authRouter.routes(), authRouter.allowedMethods());
 
 router.options('/logout', checkHeaders());
-router.post('/logout', checkHeaders(), (ctx) => {
+router.post('/logout', checkHeaders(), ctx => {
   ctx.logout();
   ctx.body = { success: true };
 });
 
 router.options('/graphql', checkHeaders());
-router.post('/graphql', checkHeaders(), graphqlKoa(ctx => ({
-  schema,
-  context: {
-    loaders: new DataLoaders(), // new loaders per request
-    user: ctx.state.user,
+router.post(
+  '/graphql',
+  checkHeaders(),
+  graphqlKoa(ctx => ({
+    schema,
+    context: {
+      loaders: new DataLoaders(), // new loaders per request
+      user: ctx.state.user,
 
-    // userId-from pair that is used in replyRequests and replyConnectionFeedbacks.
-    //
-    userId: ctx.from === 'WEBSITE' || ctx.from === 'DEVELOPMENT_FRONTEND' ? (ctx.state.user || {}).id : ctx.query.userId,
-    from: ctx.from,
-  },
-  formatError(err) {
-    // make web clients know they should login
-    //
-    const formattedError = formatError(err);
-    formattedError.authError = err.message === AUTH_ERROR_MSG;
-    return formattedError;
-  },
-})));
+      // userId-from pair that is used in replyRequests and replyConnectionFeedbacks.
+      //
+      userId: ctx.from === 'WEBSITE' || ctx.from === 'DEVELOPMENT_FRONTEND'
+        ? (ctx.state.user || {}).id
+        : ctx.query.userId,
+      from: ctx.from,
+    },
+    formatError(err) {
+      // make web clients know they should login
+      //
+      const formattedError = formatError(err);
+      formattedError.authError = err.message === AUTH_ERROR_MSG;
+      return formattedError;
+    },
+  }))
+);
 
 router.get('/graphql', graphiqlKoa({ endpointURL: '/graphql' }));
 
 const indexFn = pug.compileFile(path.join(__dirname, 'jade/index.jade'));
 const schemaStr = printSchema(schema);
-router.get('/', (ctx) => {
+router.get('/', ctx => {
   ctx.body = indexFn({ schemaStr });
 });
 

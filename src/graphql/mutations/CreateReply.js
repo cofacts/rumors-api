@@ -1,11 +1,6 @@
-import {
-  GraphQLString,
-  GraphQLNonNull,
-} from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 
-import {
-  assertUser,
-} from 'graphql/util';
+import { assertUser } from 'graphql/util';
 
 import client from 'util/client';
 
@@ -23,7 +18,11 @@ export default {
     type: { type: new GraphQLNonNull(ReplyTypeEnum) },
     reference: { type: GraphQLString },
   },
-  async resolve(rootValue, { articleId, text, type, reference }, { userId, from }) {
+  async resolve(
+    rootValue,
+    { articleId, text, type, reference },
+    { userId, from }
+  ) {
     assertUser({ userId, from });
 
     if (type !== 'NOT_ARTICLE' && !reference) {
@@ -34,14 +33,16 @@ export default {
       index: 'replies',
       type: 'basic',
       body: {
-        versions: [{
-          userId,
-          from,
-          type,
-          text,
-          reference,
-          createdAt: new Date(),
-        }],
+        versions: [
+          {
+            userId,
+            from,
+            type,
+            text,
+            reference,
+            createdAt: new Date(),
+          },
+        ],
         createdAt: new Date(),
       },
     });

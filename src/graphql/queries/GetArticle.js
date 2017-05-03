@@ -1,6 +1,4 @@
-import {
-  GraphQLString,
-} from 'graphql';
+import { GraphQLString } from 'graphql';
 
 import Article from 'graphql/models/Article';
 

@@ -63,14 +63,19 @@ const SortOrderEnum = new GraphQLEnumType({
 });
 
 export function createSortType(typeName, filterableFieldNames = []) {
-  return new GraphQLList(new GraphQLInputObjectType({
-    name: typeName,
-    description: 'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
-    fields: filterableFieldNames.reduce(
-      (fields, fieldName) => ({ ...fields, [fieldName]: { type: SortOrderEnum } }),
-      {},
-    ),
-  }));
+  return new GraphQLList(
+    new GraphQLInputObjectType({
+      name: typeName,
+      description: 'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
+      fields: filterableFieldNames.reduce(
+        (fields, fieldName) => ({
+          ...fields,
+          [fieldName]: { type: SortOrderEnum },
+        }),
+        {}
+      ),
+    })
+  );
 }
 
 export const pagingArgs = {
@@ -91,13 +96,14 @@ export const pagingArgs = {
 
 export function getSortArgs(orderBy, fieldFnMap = {}) {
   return orderBy
-    .map((item) => {
+    .map(item => {
       const field = Object.keys(item)[0];
       const order = item[field];
       const defaultFieldFn = o => ({ [field]: { order: o } });
 
       return (fieldFnMap[field] || defaultFieldFn)(order);
-    }).concat({ _uid: { order: 'desc' } }); // enforce at least 1 sort order for pagination
+    })
+    .concat({ _uid: { order: 'desc' } }); // enforce at least 1 sort order for pagination
 }
 
 // sort: [{fieldName: {order: 'desc'}}, {fieldName2: {order: 'desc'}}, ...]
@@ -105,7 +111,7 @@ export function getSortArgs(orderBy, fieldFnMap = {}) {
 //
 function reverseSortArgs(sort) {
   if (!sort) return undefined;
-  return sort.map((item) => {
+  return sort.map(item => {
     const field = Object.keys(item)[0];
     const order = item[field].order === 'desc' ? 'asc' : 'desc';
     return {
@@ -147,7 +153,11 @@ export function createConnectionType(
         },
       })).count,
 
-    resolveEdges = async ({ first, before, after, ...searchContext }, args, { loaders }) => {
+    resolveEdges = async (
+      { first, before, after, ...searchContext },
+      args,
+      { loaders }
+    ) => {
       if (before && after) {
         throw new Error('Use of before & after is prohibited.');
       }
@@ -161,7 +171,9 @@ export function createConnectionType(
 
           // if "before" is given, reverse the sort order and later reverse back
           //
-          sort: before ? reverseSortArgs(searchContext.body.sort) : searchContext.body.sort,
+          sort: before
+            ? reverseSortArgs(searchContext.body.sort)
+            : searchContext.body.sort,
         },
       });
 
@@ -170,12 +182,18 @@ export function createConnectionType(
       }
 
       return nodes.map(({ _score: score, _cursor, ...node }) => ({
-        node, cursor: getCursor(_cursor), score,
+        node,
+        cursor: getCursor(_cursor),
+        score,
       }));
     },
 
     // eslint-disable-next-line no-unused-vars
-    resolveLastCursor = async ({ first, before, after, ...searchContext }, args, { loaders }) => {
+    resolveLastCursor = async (
+      { first, before, after, ...searchContext },
+      args,
+      { loaders }
+    ) => {
       const lastNode = (await loaders.searchResultLoader.load({
         ...searchContext,
         body: {
@@ -189,7 +207,11 @@ export function createConnectionType(
     },
 
     // eslint-disable-next-line no-unused-vars
-    resolveFirstCursor = async ({ first, before, after, ...searchContext }, args, { loaders }) => {
+    resolveFirstCursor = async (
+      { first, before, after, ...searchContext },
+      args,
+      { loaders }
+    ) => {
       const firstNode = (await loaders.searchResultLoader.load({
         ...searchContext,
         size: 1,
@@ -197,8 +219,7 @@ export function createConnectionType(
 
       return getCursor(firstNode._cursor);
     },
-
-  } = {},
+  } = {}
 ) {
   return new GraphQLObjectType({
     name: typeName,
@@ -209,14 +230,16 @@ export function createConnectionType(
         resolve: resolveTotalCount,
       },
       edges: {
-        type: new GraphQLList(new GraphQLObjectType({
-          name: `${typeName}Edges`,
-          fields: {
-            node: { type: nodeType },
-            cursor: { type: GraphQLString },
-            score: { type: GraphQLFloat },
-          },
-        })),
+        type: new GraphQLList(
+          new GraphQLObjectType({
+            name: `${typeName}Edges`,
+            fields: {
+              node: { type: nodeType },
+              cursor: { type: GraphQLString },
+              score: { type: GraphQLFloat },
+            },
+          })
+        ),
         resolve: resolveEdges,
       },
       pageInfo: {
@@ -249,6 +272,8 @@ export function assertUser({ userId, from }) {
   }
 
   if (userId && !from) {
-    throw new Error('userId is set, but x-app-id or x-app-secret is not set accordingly.');
+    throw new Error(
+      'userId is set, but x-app-id or x-app-secret is not set accordingly.'
+    );
   }
 }

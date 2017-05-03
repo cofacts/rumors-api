@@ -7,8 +7,8 @@ async function checkSecret(ctx, next) {
     // Shortcut for official rumors-line-bot -- no DB queries
     ctx.from = 'RUMORS_LINE_BOT';
 
-  // else if(secret) { ...
-  // TODO: Fill up ctx.from with app id after looking up DB with secret
+    // else if(secret) { ...
+    // TODO: Fill up ctx.from with app id after looking up DB with secret
   } else {
     // secret do not match anything
     ctx.from = 'DEVELOPMENT_BACKEND'; // FIXME: Remove this after developer key function rolls out.
@@ -29,11 +29,11 @@ async function checkAppId(ctx, next) {
     origin = config.get('RUMORS_SITE_CORS_ORIGIN');
     ctx.from = 'WEBSITE';
 
-  // else if(appId) { ...
-  // ctx.from = 'WEBSITE'; // other apps share the same "from"
-  // // because ctx.user set by passport as well
-  //
-  // TODO: Fill up origin from DB according to appId
+    // else if(appId) { ...
+    // ctx.from = 'WEBSITE'; // other apps share the same "from"
+    // // because ctx.user set by passport as well
+    //
+    // TODO: Fill up origin from DB according to appId
   } else {
     // No header is given. Allow localhost access only.
     // FIXME: After developer key function rolls out, these kind of request

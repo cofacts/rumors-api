@@ -16,11 +16,15 @@ export default {
     replyIds: ['notexist1', 'notexist2'],
   },
   '/replies/basic/related': {
-    versions: [{ text: `
+    versions: [
+      {
+        text: `
       憶昔封書與君夜，金鑾殿後欲明天。今夜封書在何處？廬山庵裏曉燈前。籠鳥檻猿俱未死，人間相見是何年？
 
       微之，微之！此夕此心，君知之乎！
-    ` }],
+    `,
+      },
+    ],
   },
   '/replies/basic/not_related': {
     versions: [{ text: '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。' }],

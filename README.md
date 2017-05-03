@@ -1,6 +1,6 @@
 # rumors-api
 
-[![Build Status](https://travis-ci.org/cofacts/rumors-api.svg?branch=master)](https://travis-ci.org/cofacts/rumors-api) [![Coverage Status](https://coveralls.io/repos/github/cofacts/rumors-api/badge.svg?branch=master)](https://coveralls.io/github/cofacts/rumors-api?branch=master) 
+[![Build Status](https://travis-ci.org/cofacts/rumors-api.svg?branch=master)](https://travis-ci.org/cofacts/rumors-api) [![Coverage Status](https://coveralls.io/repos/github/cofacts/rumors-api/badge.svg?branch=master)](https://coveralls.io/github/cofacts/rumors-api?branch=master)
 
 GraphQL API server for clients like rumors-site and rumors-line-bot
 
@@ -121,6 +121,12 @@ From all documents that is not in DB but reported by the user in ["Is This Usefu
 
 The "Rumor samples not in DB" is in `test/evalutation/non-db-samples-xxx.csv`.
 
+
+## Lint
+
+```
+$ npm run lint # Automatically fixes format error
+```
 
 ## Test
 

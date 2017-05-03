@@ -7,7 +7,8 @@ describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
 
   it('lists all articles', async () => {
-    expect(await gql`{
+    expect(
+      await gql`{
       ListArticles {
         totalCount
         edges {
@@ -21,11 +22,13 @@ describe('ListArticles', () => {
           lastCursor
         }
       }
-    }`()).toMatchSnapshot();
+    }`()
+    ).toMatchSnapshot();
   });
 
   it('sorts', async () => {
-    expect(await gql`{
+    expect(
+      await gql`{
       ListArticles(orderBy: [{updatedAt: DESC}]) {
         edges {
           node {
@@ -33,9 +36,11 @@ describe('ListArticles', () => {
           }
         }
       }
-    }`()).toMatchSnapshot();
+    }`()
+    ).toMatchSnapshot();
 
-    expect(await gql`{
+    expect(
+      await gql`{
       ListArticles(orderBy: [{replyRequestCount: DESC}]) {
         edges {
           node {
@@ -43,11 +48,13 @@ describe('ListArticles', () => {
           }
         }
       }
-    }`()).toMatchSnapshot();
+    }`()
+    ).toMatchSnapshot();
   });
 
   it('filters', async () => {
-    expect(await gql`{
+    expect(
+      await gql`{
       ListArticles(filter: {replyCount: {GT: 1}}) {
         edges {
           node {
@@ -55,11 +62,13 @@ describe('ListArticles', () => {
           }
         }
       }
-    }`()).toMatchSnapshot();
+    }`()
+    ).toMatchSnapshot();
   });
 
   it('supports after', async () => {
-    expect(await gql`query($cursor: String) {
+    expect(
+      await gql`query($cursor: String) {
       ListArticles(after: $cursor) {
         edges {
           node {
@@ -67,13 +76,13 @@ describe('ListArticles', () => {
           }
         }
       }
-    }`(
-      { cursor: getCursor(['basic#listArticleTest2']) },
-    )).toMatchSnapshot();
+    }`({ cursor: getCursor(['basic#listArticleTest2']) })
+    ).toMatchSnapshot();
   });
 
   it('supports before', async () => {
-    expect(await gql`query($cursor: String) {
+    expect(
+      await gql`query($cursor: String) {
       ListArticles(before: $cursor) {
         edges {
           node {
@@ -81,9 +90,8 @@ describe('ListArticles', () => {
           }
         }
       }
-    }`(
-      { cursor: getCursor(['basic#listArticleTest2']) },
-    )).toMatchSnapshot();
+    }`({ cursor: getCursor(['basic#listArticleTest2']) })
+    ).toMatchSnapshot();
   });
 
   afterAll(() => unloadFixtures(fixtures));
