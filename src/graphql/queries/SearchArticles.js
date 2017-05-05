@@ -12,6 +12,8 @@ import {
 import { ArticleConnection } from 'graphql/models/Article';
 
 export default {
+  deprecationReason: 'Prefer ListArticle with moreLikeThis filter.',
+
   args: {
     text: { type: GraphQLString },
     filter: {

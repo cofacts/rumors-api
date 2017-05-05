@@ -14,6 +14,27 @@ Object {
 }
 `;
 
+exports[`ListArticles filters 2`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`ListArticles lists all articles 1`] = `
 Object {
   "data": Object {

@@ -64,6 +64,18 @@ describe('ListArticles', () => {
       }
     }`()
     ).toMatchSnapshot();
+
+    expect(
+      await gql`{
+      ListArticles(filter: {moreLikeThis: {like: "人間相見是何年？牽攣乖隔，各欲白首。", minimumShouldMatch: "5%"}}) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }`()
+    ).toMatchSnapshot();
   });
 
   it('supports after', async () => {
