@@ -1,4 +1,4 @@
-import { GraphQLInt } from 'graphql';
+import { GraphQLInt, GraphQLString, GraphQLInputObjectType } from 'graphql';
 
 import {
   createFilterType,
@@ -21,6 +21,15 @@ export default {
             GraphQLInt
           ),
         },
+        moreLikeThis: {
+          type: new GraphQLInputObjectType({
+            name: 'ListArticleMoreLikeThisInput',
+            fields: {
+              like: { type: GraphQLString },
+              minimumShouldMatch: { type: GraphQLString },
+            },
+          }),
+        },
       }),
     },
     orderBy: {
@@ -34,11 +43,6 @@ export default {
   },
   async resolve(rootValue, { filter = {}, orderBy = [], ...otherParams }) {
     const body = {
-      query: {
-        // Ref: http://stackoverflow.com/a/8831494/1582110
-        //
-        match_all: {},
-      },
       sort: getSortArgs(orderBy, {
         replyRequestCount(order) {
           return {
@@ -51,6 +55,27 @@ export default {
         },
       }),
     };
+
+    if (filter.moreLikeThis) {
+      body.query = {
+        // Ref: http://stackoverflow.com/a/8831494/1582110
+        //
+        more_like_this: {
+          fields: ['text'],
+          like: filter.moreLikeThis.like,
+          min_term_freq: 1,
+          min_doc_freq: 1,
+          minimum_should_match: filter.moreLikeThis.minimumShouldMatch ||
+            '10<70%',
+        },
+      };
+    } else {
+      body.query = {
+        // Ref: http://stackoverflow.com/a/8831494/1582110
+        //
+        match_all: {},
+      };
+    }
 
     if (filter.replyCount) {
       // Switch to bool query so that we can filter match_all results
