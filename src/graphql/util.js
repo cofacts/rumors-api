@@ -149,7 +149,10 @@ export function createConnectionType(
         ...searchContext,
         body: {
           ...searchContext.body,
+
+          // totalCount cannot support these
           sort: undefined,
+          track_scores: undefined,
         },
       })).count,
 

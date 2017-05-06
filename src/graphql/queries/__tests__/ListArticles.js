@@ -35,6 +35,11 @@ describe('ListArticles', () => {
             id
           }
         }
+        totalCount
+        pageInfo {
+          firstCursor
+          lastCursor
+        }
       }
     }`()
     ).toMatchSnapshot();
@@ -46,6 +51,11 @@ describe('ListArticles', () => {
           node {
             id
           }
+        }
+        totalCount
+        pageInfo {
+          firstCursor
+          lastCursor
         }
       }
     }`()
@@ -61,6 +71,11 @@ describe('ListArticles', () => {
             id
           }
         }
+        totalCount
+        pageInfo {
+          firstCursor
+          lastCursor
+        }
       }
     }`()
     ).toMatchSnapshot();
@@ -72,6 +87,11 @@ describe('ListArticles', () => {
           node {
             id
           }
+        }
+        totalCount
+        pageInfo {
+          firstCursor
+          lastCursor
         }
       }
     }`()
@@ -87,6 +107,11 @@ describe('ListArticles', () => {
             id
           }
         }
+        totalCount
+        pageInfo {
+          firstCursor
+          lastCursor
+        }
       }
     }`({ cursor: getCursor(['basic#listArticleTest2']) })
     ).toMatchSnapshot();
@@ -100,6 +125,11 @@ describe('ListArticles', () => {
           node {
             id
           }
+        }
+        totalCount
+        pageInfo {
+          firstCursor
+          lastCursor
         }
       }
     }`({ cursor: getCursor(['basic#listArticleTest2']) })

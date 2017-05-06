@@ -150,7 +150,7 @@ If you get "Elasticsearch ERROR : DELETE http://localhost:62223/replies => socke
 When you want to update jest snapshot, run:
 
 ```
-$ npm run test:jest -- -u
+$ npm run test:update
 ```
 
 ## Deploy
