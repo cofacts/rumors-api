@@ -34,6 +34,7 @@ export default {
     },
     orderBy: {
       type: createSortType('ListArticleOrderBy', [
+        '_score',
         'updatedAt',
         'createdAt',
         'replyRequestCount',
@@ -54,6 +55,7 @@ export default {
           };
         },
       }),
+      track_scores: true, // for _score sorting
     };
 
     if (filter.moreLikeThis) {
