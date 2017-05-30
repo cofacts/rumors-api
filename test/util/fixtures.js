@@ -1,5 +1,10 @@
 import client from 'util/client';
 
+function parseFixtureKey(keyStr) {
+  const [, _index, _type, _id, _parent] = keyStr.match(/^\/([^/]+)\/([^/]+)\/([^/]+)(?:\?parent=(.+))?$/)
+  return {_index, _type, _id, _parent};
+}
+
 // fixtureMap:
 // {
 //   '/articles/basic/1': { ... body of article 1 ... },
@@ -9,12 +14,10 @@ import client from 'util/client';
 
 export async function loadFixtures(fixtureMap) {
   const body = [];
-  const indexes = new Set();
-  Object.keys(fixtureMap).forEach((key) => {
-    const [, _index, _type, _id] = key.split('/');
-    body.push({ index: { _index, _type, _id } });
+  Object.keys(fixtureMap).forEach(key => {
+    const indexParams = parseFixtureKey(key);
+    body.push({ index: indexParams });
     body.push(fixtureMap[key]);
-    indexes.add(_index);
   });
 
   // refresh() should be invoked after bulk insert, or re-index happens every 1 seconds
@@ -26,11 +29,9 @@ export async function loadFixtures(fixtureMap) {
 }
 
 export async function unloadFixtures(fixtureMap) {
-  const indexes = new Set();
-  const body = Object.keys(fixtureMap).map((key) => {
-    const [, _index, _type, _id] = key.split('/');
-    indexes.add(_index);
-    return { delete: { _index, _type, _id } };
+  const body = Object.keys(fixtureMap).map(key => {
+    const indexParams = parseFixtureKey(key);
+    return { delete: indexParams };
   });
 
   await client.bulk({ body, refresh: 'true' });
@@ -39,11 +40,9 @@ export async function unloadFixtures(fixtureMap) {
 // Reset a document to fixture
 //
 export async function resetFrom(fixtureMap, key) {
-  const [, index, type, id] = key.split('/');
+  const indexParams = key.split('/');
   await client.update({
-    index,
-    type,
-    id,
+    ...indexParams,
     body: {
       doc: fixtureMap[key],
     },
