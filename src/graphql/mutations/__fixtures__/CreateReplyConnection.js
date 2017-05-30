@@ -1,10 +1,9 @@
 export default {
-  '/articles/basic/createReplyConnection1': {
+  '/data/articles/createReplyConnection1': {
     text: 'foofoo',
-    replyConnectionIds: [],
     references: [{ type: 'LINE' }],
   },
-  '/replies/basic/createReplyConnection2': {
+  '/data/replies/createReplyConnection2': {
     versions: [],
   },
 };

@@ -1,5 +1,5 @@
 export default {
-  '/articles/basic/listArticleTest1': {
+  '/data/articles/listArticleTest1': {
     replyRequestIds: ['listArticleTest1-1r', 'listArticleTest1-2r'],
     replyConnectionIds: ['listArticleTest1-1', 'listArticleTest1-2'],
     updatedAt: 1,
@@ -9,13 +9,13 @@ export default {
       微之，微之！此夕此心，君知之乎！
     `,
   },
-  '/articles/basic/listArticleTest2': {
+  '/data/articles/listArticleTest2': {
     replyRequestIds: ['listArticleTest2-1r'],
     replyConnectionIds: ['listArticleTest2-1'],
     updatedAt: 2,
     text: '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',
   },
-  '/articles/basic/listArticleTest3': {
+  '/data/articles/listArticleTest3': {
     replyRequestIds: [],
     replyConnectionIds: [],
     updatedAt: 3,
