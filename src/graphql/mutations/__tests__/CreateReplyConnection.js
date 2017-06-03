@@ -33,15 +33,15 @@ describe('CreateReplyConnection', () => {
     expect(errors).toBeUndefined();
 
     const conn = await client.get({
-      index: 'replyconnections',
-      type: 'basic',
+      index: 'data',
+      type: 'replyconnections',
       id: data.CreateReplyConnection.id,
     });
     expect(conn._source).toMatchSnapshot();
 
     const article = await client.get({
-      index: 'articles',
-      type: 'basic',
+      index: 'data',
+      type: 'articles',
       id: 'createReplyConnection1',
     });
     expect(article._source.replyConnectionIds[0]).toBe(
@@ -50,11 +50,11 @@ describe('CreateReplyConnection', () => {
 
     // Cleanup
     await client.delete({
-      index: 'replyconnections',
-      type: 'basic',
+      index: 'data',
+      type: 'replyconnections',
       id: data.CreateReplyConnection.id,
     });
-    await resetFrom(fixtures, '/articles/basic/createReplyConnection1');
+    await resetFrom(fixtures, '/data/articles/createReplyConnection1');
   });
 
   it('cannot connect the same article and reply twice', async () => {
@@ -102,7 +102,7 @@ describe('CreateReplyConnection', () => {
 
     // Cleanup
     await client.delete({ index: 'replyconnections', type: 'basic', id });
-    await resetFrom(fixtures, '/articles/basic/createReplyConnection1');
+    await resetFrom(fixtures, '/data/articles/createReplyConnection1');
   });
 
   afterAll(() => unloadFixtures(fixtures));

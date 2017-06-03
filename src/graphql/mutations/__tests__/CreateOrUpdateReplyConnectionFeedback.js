@@ -24,33 +24,33 @@ describe('CreateOrUpdateReplyConnectionFeedback', () => {
     );
     MockDate.reset();
 
-    const id = 'createReplyConnectionFeedback1__test__test';
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const conn = await client.get({
-      index: 'replyconnectionfeedbacks',
-      type: 'basic',
+    const id = 'createReplyConnectionFeedback1__test__test';
+    const connFb = await client.get({
+      index: 'data',
+      type: 'replyconnectionfeedbacks',
       id,
     });
-    expect(conn._source).toMatchSnapshot();
+    expect(connFb._source).toMatchSnapshot();
 
-    const article = await client.get({
-      index: 'replyconnections',
-      type: 'basic',
+    const conn = await client.get({
+      index: 'data',
+      type: 'replyconnections',
       id: 'createReplyConnectionFeedback1',
     });
-    expect(article._source.feedbackIds.slice(-1)[0]).toBe(id);
+    expect(conn._source.feedbackIds.slice(-1)[0]).toBe(id);
 
     // Cleanup
     await client.delete({
-      index: 'replyconnectionfeedbacks',
-      type: 'basic',
+      index: 'data',
+      type: 'replyconnectionfeedbacks',
       id,
     });
     await resetFrom(
       fixtures,
-      '/replyconnections/basic/createReplyConnectionFeedback1'
+      '/data/replyconnections/createReplyConnectionFeedback1'
     );
   });
 
@@ -76,11 +76,11 @@ describe('CreateOrUpdateReplyConnectionFeedback', () => {
 
     const id = 'createReplyConnectionFeedback1__testUser__testClient';
     expect(
-      await client.get({ index: 'replyconnectionfeedbacks', type: 'basic', id })
+      await client.get({ index: 'data', type: 'replyconnectionfeedbacks', id })
     ).toMatchSnapshot();
 
     // Cleanup
-    await resetFrom(fixtures, `/replyconnectionfeedbacks/basic/${id}`);
+    await resetFrom(fixtures, `/data/replyconnectionfeedbacks/${id}`);
   });
 
   afterAll(() => unloadFixtures(fixtures));

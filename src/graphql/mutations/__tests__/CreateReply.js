@@ -47,8 +47,8 @@ describe('CreateReply', () => {
     expect(reply._source).toMatchSnapshot();
 
     const article = await client.get({
-      index: 'articles',
-      type: 'basic',
+      index: 'data',
+      type: 'articles',
       id: 'setReplyTest1',
     });
     const connId = `${article._id}__${replyId}`;
@@ -57,11 +57,11 @@ describe('CreateReply', () => {
     // Cleanup
     await client.delete({ index: 'replies', type: 'basic', id: replyId });
     await client.delete({
-      index: 'replyconnections',
-      type: 'basic',
+      index: 'data',
+      type: 'replyconnections',
       id: connId,
     });
-    await resetFrom(fixtures, '/articles/basic/setReplyTest1');
+    await resetFrom(fixtures, '/data/articles/setReplyTest1');
   });
 
   afterAll(() => unloadFixtures(fixtures));

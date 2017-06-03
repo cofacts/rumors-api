@@ -30,22 +30,42 @@ describe('CreateArticle', () => {
     expect(errors).toBeUndefined();
 
     const doc = await client.get({
-      index: 'articles',
-      type: 'basic',
+      index: 'data',
+      type: 'articles',
       id: data.CreateArticle.id,
     });
-    expect(doc._source.replyRequestIds).toHaveLength(1);
 
     delete doc._id; // delete auto-generated id from being snapshot
-    delete doc._source.replyRequestIds;
 
     expect(doc).toMatchSnapshot();
 
+    // Assert replyrequest is created
+    //
+    const replyRequestResult = await client.search({
+      index: 'data',
+      body: {
+        query: {
+          parent_id: {
+            type: 'replyrequests',
+            id: data.CreateArticle.id,
+          },
+        },
+      },
+    });
+    expect(replyRequestResult).toHaveProperty('hits.total', 1);
+    const replyRequest = replyRequestResult.hits.hits[0];
+    expect(replyRequest._source).toMatchSnapshot();
+
     // Cleanup
     await client.delete({
-      index: 'articles',
-      type: 'basic',
+      index: 'data',
+      type: 'articles',
       id: data.CreateArticle.id,
+    });
+    await client.delete({
+      index: 'data',
+      type: 'replyrequests',
+      id: replyRequest._id,
     });
   });
 });

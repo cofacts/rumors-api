@@ -32,22 +32,22 @@ describe('CreateReplyRequest', () => {
     expect(data).toMatchSnapshot();
 
     const conn = await client.get({
-      index: 'replyrequests',
-      type: 'basic',
+      index: 'data',
+      type: 'replyrequests',
       id,
     });
     expect(conn._source).toMatchSnapshot();
 
     const article = await client.get({
-      index: 'articles',
-      type: 'basic',
+      index: 'data',
+      type: 'articles',
       id: 'createReplyRequestTest1',
     });
     expect(article._source.replyRequestIds[0]).toBe(id);
 
     // Cleanup
     await client.delete({ index: 'replyrequests', type: 'basic', id });
-    await resetFrom(fixtures, '/articles/basic/createReplyRequestTest1');
+    await resetFrom(fixtures, '/data/articles/createReplyRequestTest1');
   });
 
   it('cannot attach a reply request to an article twice', async () => {
@@ -73,8 +73,8 @@ describe('CreateReplyRequest', () => {
 
     // Cleanup
     await client.delete({
-      index: 'replyrequests',
-      type: 'basic',
+      index: 'dats',
+      type: 'replyrequests',
       id: 'createReplyRequestTest1__test__test',
     });
   });

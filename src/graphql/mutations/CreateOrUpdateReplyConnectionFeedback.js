@@ -53,8 +53,8 @@ export default {
     const id = `${replyConnectionId}__${userId}__${from}`;
 
     const { created } = await client.index({
-      index: 'replyconnectionfeedbacks',
-      type: 'basic',
+      index: 'data',
+      type: 'replyconnectionfeedbacks',
       id,
       body: {
         score: vote,
