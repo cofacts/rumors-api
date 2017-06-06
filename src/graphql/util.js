@@ -123,6 +123,13 @@ function reverseSortArgs(sort) {
   });
 }
 
+/**
+ * Returns if the orderBy graphql args include a specific sorting criteria
+ */
+export function hasSortParam(orderBy, sortParamToFind) {
+  return !!orderBy.find(o => Object.keys(o)[0] === sortParamToFind);
+}
+
 // Export for custom resolveEdges() and resolveLastCursor()
 //
 export function getCursor(cursor) {

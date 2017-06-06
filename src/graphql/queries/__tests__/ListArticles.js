@@ -113,7 +113,7 @@ describe('ListArticles', () => {
           lastCursor
         }
       }
-    }`({ cursor: getCursor(['basic#listArticleTest2']) })
+    }`({ cursor: getCursor(['articles#listArticleTest2']) })
     ).toMatchSnapshot();
   });
 
@@ -132,7 +132,7 @@ describe('ListArticles', () => {
           lastCursor
         }
       }
-    }`({ cursor: getCursor(['basic#listArticleTest2']) })
+    }`({ cursor: getCursor(['articles#listArticleTest2']) })
     ).toMatchSnapshot();
   });
 

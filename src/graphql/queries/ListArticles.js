@@ -7,6 +7,7 @@ import {
   pagingArgs,
   getArithmeticExpressionType,
   getOperatorAndOperand,
+  hasSortParam,
 } from 'graphql/util';
 
 import { ArticleConnection } from 'graphql/models/Article';
@@ -46,20 +47,22 @@ export default {
     const body = {
       sort: getSortArgs(orderBy, {
         replyRequestCount(order) {
-          return {
-            _script: {
-              type: 'number',
-              script: { inline: "doc['replyRequestIds'].values.size()" },
-              order,
-            },
-          };
+          return { _score: { order } };
         },
       }),
+      query: {
+        bool: {
+          must: [{ match_all: {} }],
+          should: [],
+          filter: [],
+        },
+      },
       track_scores: true, // for _score sorting
     };
 
     if (filter.moreLikeThis) {
-      body.query = {
+      const mlt = {
+        // More-like-this should affect score sorting
         // Ref: http://stackoverflow.com/a/8831494/1582110
         //
         more_like_this: {
@@ -71,39 +74,61 @@ export default {
             '10<70%',
         },
       };
-    } else {
-      body.query = {
-        // Ref: http://stackoverflow.com/a/8831494/1582110
+
+      if (hasSortParam(orderBy, '_score')) {
+        // MLT query score should be taken into account
         //
-        match_all: {},
-      };
+        body.query.bool.must.push(mlt);
+      } else {
+        // MLT query should act as filter only
+        //
+        body.query.bool.filter.push(mlt);
+      }
     }
 
     if (filter.replyCount) {
-      // Switch to bool query so that we can filter match_all results
-      //
       const { operator, operand } = getOperatorAndOperand(filter.replyCount);
-      body.query = {
-        bool: {
-          must: body.query,
-          filter: {
-            script: {
-              script: {
-                inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
-                params: {
-                  operand,
-                },
-              },
-            },
-          },
-        },
+      const hasChildFilter = {
+        type: 'replyconnections',
+        query: { match_all: {} },
       };
+      switch (operator) {
+        case '==':
+          hasChildFilter.max_children = +operand;
+          hasChildFilter.min_children = +operand;
+          break;
+        case '>':
+          hasChildFilter.min_children = +operand + 1;
+          break;
+        case '<':
+          hasChildFilter.max_children = +operand - 1;
+          break;
+      }
+
+      // replyCount filter do not affect score
+      //
+      body.query.bool.filter.push({
+        has_child: hasChildFilter,
+      });
+    }
+
+    if (hasSortParam(orderBy, 'replyRequestCount')) {
+      // When sort using replyRequestCount,
+      // number of reply requests should be taken into account in score.
+      //
+      body.query.bool.should.push({
+        has_child: {
+          type: 'replyrequests',
+          score_mode: 'sum',
+          query: { match_all: {} },
+        },
+      });
     }
 
     // should return search context for resolveEdges & resolvePageInfo
     return {
-      index: 'articles',
-      type: 'basic',
+      index: 'data',
+      type: 'articles',
       body,
       ...otherParams,
     };
