@@ -1,8 +1,10 @@
 import client from 'util/client';
 
 function parseFixtureKey(keyStr) {
-  const [, _index, _type, _id, _parent] = keyStr.match(/^\/([^/]+)\/([^/]+)\/([^/]+)(?:\?parent=(.+))?$/)
-  return {_index, _type, _id, _parent};
+  const [, _index, _type, _id, _parent] = keyStr.match(
+    /^\/([^/]+)\/([^/]+)\/([^?]+)(?:\?parent=(.+))?$/
+  );
+  return { _index, _type, _id, _parent };
 }
 
 // fixtureMap:
