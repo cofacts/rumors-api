@@ -11,6 +11,8 @@ import {
 import Reply from 'graphql/models/Reply';
 
 export default {
+  deprecationReason: 'No actual use cases. Should be renamed to "ListReplies" to align with "ListArticles"',
+
   args: {
     text: { type: GraphQLString },
     orderBy: {

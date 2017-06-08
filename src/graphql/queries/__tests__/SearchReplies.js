@@ -1,8 +1,8 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import fixtures from '../__fixtures__/SearchArticle';
+import fixtures from '../__fixtures__/ListArticles';
 
-describe('SearchReplies', () => {
+describe.skip('SearchReplies', () => {
   beforeAll(() => loadFixtures(fixtures));
 
   it('fetches related replies', async () => {

@@ -21,8 +21,12 @@ export default new GraphQLObjectType({
     },
     article: {
       type: Article,
-      resolve: ({ id }, args, { loaders }) =>
-        loaders.articleByReplyConnectionIdLoader.load(id),
+      resolve: ({ _parent }, args, { loaders }) =>
+        loaders.docLoader.load({
+          index: 'data',
+          type: 'articles',
+          id: _parent,
+        }),
     },
 
     id: {

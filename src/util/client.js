@@ -15,11 +15,12 @@ export function processMeta({
 
   found, // for mget queries
   _score, // for search queries
+  _parent,
 
   sort, // cursor when sorted
 }) {
   if (found || _score !== undefined) {
-    return { id, ...source, _cursor: sort, _score };
+    return { id, ...source, _cursor: sort, _score, _parent };
   }
   return null; // not found
 }

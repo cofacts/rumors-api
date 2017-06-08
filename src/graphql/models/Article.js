@@ -32,32 +32,48 @@ const Article = new GraphQLObjectType({
     references: { type: new GraphQLList(ArticleReference) },
     replyCount: {
       type: GraphQLInt,
-      resolve: ({ replyConnectionIds = [] }) => replyConnectionIds.length,
+      resolve: ({ id }, args, { loaders }) =>
+        loaders.childrenCountLoader.load({
+          parentId: id,
+          childType: 'replyconnections',
+        }),
     },
     replyConnections: {
       type: new GraphQLList(ReplyConnection),
-      resolve: ({ replyConnectionIds = [] }, args, { loaders }) =>
-        loaders.docLoader.loadMany(
-          replyConnectionIds.map(id => ({ index: 'replyconnections', id }))
-        ),
+      resolve: ({ id }, args, { loaders }) =>
+        loaders.childrenLoader.load({
+          parentId: id,
+          childType: 'replyconnections',
+        }),
     },
     replyRequestCount: {
       type: GraphQLInt,
-      resolve: ({ replyRequestIds = [] }) => replyRequestIds.length,
+      resolve: ({ id }, args, { loaders }) =>
+        loaders.childrenCountLoader.load({
+          parentId: id,
+          childType: 'replyrequests',
+        }),
     },
     requestedForReply: {
       type: GraphQLBoolean,
       description: 'If the current user has requested for reply for this article',
-      resolve: async (
-        { replyRequestIds = [] },
-        args,
-        { loaders, userId, from }
-      ) => {
+      resolve: async ({ id }, args, { loaders, userId, from }) => {
         assertUser({ userId, from });
-        const requests = await loaders.docLoader.loadMany(
-          replyRequestIds.map(id => ({ index: 'replyrequests', id }))
-        );
-        return !!requests.find(r => r.userId === userId && r.from === from);
+        const result = await loaders.searchResultLoader.load({
+          body: {
+            query: {
+              bool: {
+                must: [
+                  { parent_id: { type: 'replyrequests', id } },
+                  { term: { userId } },
+                ],
+              },
+            },
+          },
+          _index: 'data',
+        });
+
+        return result.length >= 1;
       },
     },
     user: {
@@ -85,11 +101,16 @@ const Article = new GraphQLObjectType({
       async resolve({ id }, { filter = {}, orderBy = [], ...otherParams }) {
         const body = {
           query: {
-            more_like_this: {
-              fields: ['text'],
-              like: [{ _index: 'articles', _type: 'basic', _id: id }],
-              min_term_freq: 1,
-              min_doc_freq: 1,
+            bool: {
+              must: {
+                more_like_this: {
+                  fields: ['text'],
+                  like: [{ _index: 'data', _type: 'articles', _id: id }],
+                  min_term_freq: 1,
+                  min_doc_freq: 1,
+                },
+              },
+              filter: [],
             },
           },
           sort: getSortArgs(orderBy),
@@ -97,31 +118,36 @@ const Article = new GraphQLObjectType({
         };
 
         if (filter.replyCount) {
-          // Switch to bool query so that we can filter more_like_this results
-          //
           const { operator, operand } = getOperatorAndOperand(
             filter.replyCount
           );
-          body.query = {
-            bool: {
-              must: body.query,
-              filter: {
-                script: {
-                  script: {
-                    inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
-                    params: {
-                      operand,
-                    },
-                  },
-                },
-              },
-            },
+          const hasChildFilter = {
+            type: 'replyconnections',
+            query: { match_all: {} },
           };
+          switch (operator) {
+            case '==':
+              hasChildFilter.max_children = +operand;
+              hasChildFilter.min_children = +operand;
+              break;
+            case '>':
+              hasChildFilter.min_children = +operand + 1;
+              break;
+            case '<':
+              hasChildFilter.max_children = +operand - 1;
+              break;
+          }
+
+          // replyCount filter do not affect score
+          //
+          body.query.bool.filter.push({
+            has_child: hasChildFilter,
+          });
         }
 
         return {
-          index: 'articles',
-          type: 'basic',
+          index: 'data',
+          type: 'articles',
           body,
           ...otherParams,
         };

@@ -8,5 +8,5 @@ export default {
     id: { type: GraphQLString },
   },
   resolve: async (rootValue, { id }, { loaders }) =>
-    loaders.docLoader.load({ index: 'articles', id }),
+    loaders.docLoader.load({ index: 'data', type: 'articles', id }),
 };

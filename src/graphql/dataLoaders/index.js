@@ -1,21 +1,15 @@
 import docLoaderFactory from './docLoaderFactory';
-import articleByReplyConnectionIdLoaderFactory
-  from './articleByReplyConnectionIdLoaderFactory';
 import replyConnectionsByReplyIdLoaderFactory
   from './replyConnectionsByReplyIdLoaderFactory';
 import searchResultLoaderFactory from './searchResultLoaderFactory';
+import childrenCountLoaderFactory from './childrenCountLoaderFactory';
+import childrenLoaderFactory from './childrenLoaderFactory';
 
 export default class DataLoaders {
   // List of data loaders
   //
   get docLoader() {
     return this._checkOrSetLoader('docLoader', docLoaderFactory);
-  }
-  get articleByReplyConnectionIdLoader() {
-    return this._checkOrSetLoader(
-      'articleByReplyConnectionIdLoader',
-      articleByReplyConnectionIdLoaderFactory
-    );
   }
   get replyConnectionsByReplyIdLoader() {
     return this._checkOrSetLoader(
@@ -28,6 +22,16 @@ export default class DataLoaders {
       'searchResultLoader',
       searchResultLoaderFactory
     );
+  }
+  get childrenCountLoader() {
+    return this._checkOrSetLoader(
+      'childrenCountLoader',
+      childrenCountLoaderFactory
+    );
+  }
+
+  get childrenLoader() {
+    return this._checkOrSetLoader('childrenLoader', childrenLoaderFactory);
   }
 
   // inner-workings

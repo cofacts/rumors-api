@@ -6,7 +6,7 @@ export default () =>
     const body = [];
 
     replyIds.forEach(id => {
-      body.push({ index: 'replyconnections', type: 'basic' });
+      body.push({ index: 'data', type: 'replyconnections' });
 
       body.push({
         query: {
