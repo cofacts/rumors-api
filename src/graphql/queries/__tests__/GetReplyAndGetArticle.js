@@ -15,6 +15,7 @@ describe('GetReplyAndGetArticle', () => {
           replyCount
           replyConnections {
             id
+            status
             reply {
               versions {
                 text
