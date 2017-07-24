@@ -11,6 +11,8 @@ import {
 import Reply from 'graphql/models/Reply';
 
 export default {
+  deprecationReason: 'Prefer ListReplies with moreLikeThis filter.',
+
   args: {
     text: { type: GraphQLString },
     orderBy: {
