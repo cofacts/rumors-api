@@ -10,9 +10,14 @@ import DataLoaders from 'graphql/dataLoaders';
 // We use template string here so that Atom's language-babel does syntax highlight
 // for us.
 //
-export default (query, ...substitutes) =>
-  (variables = {}, context = {}) =>
-    graphql(schema, String.raw(query, ...substitutes), null, {
+export default (query, ...substitutes) => (variables = {}, context = {}) =>
+  graphql(
+    schema,
+    String.raw(query, ...substitutes),
+    null,
+    {
       loaders: new DataLoaders(), // new loaders per request
       ...context,
-    }, variables);
+    },
+    variables
+  );
