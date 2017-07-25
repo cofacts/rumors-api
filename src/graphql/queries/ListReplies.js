@@ -73,7 +73,7 @@ export default {
         // Ref: http://stackoverflow.com/a/8831494/1582110
         //
         more_like_this: {
-          fields: ['text'],
+          fields: ['versions.text', 'versions.reference'],
           like: filter.moreLikeThis.like,
           min_term_freq: 1,
           min_doc_freq: 1,
@@ -98,7 +98,10 @@ export default {
     }
 
     if (filter.selfOnly) {
-      body.query.bool.filter.push({ term: { userId } }, { term: { from } });
+      body.query.bool.filter.push(
+        { term: { 'versions.userId': userId } },
+        { term: { 'versions.from': from } }
+      );
     }
 
     // should return search context for resolveEdges & resolvePageInfo

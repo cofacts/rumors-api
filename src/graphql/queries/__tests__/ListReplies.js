@@ -9,58 +9,98 @@ describe('ListReplies', () => {
   it('lists all replies', async () => {
     expect(
       await gql`{
-      ListReplies {
-        totalCount
-        edges {
-          node {
-            id
+        ListReplies {
+          totalCount
+          edges {
+            node {
+              id
+            }
+            cursor
           }
-          cursor
+          pageInfo {
+            firstCursor
+            lastCursor
+          }
         }
-        pageInfo {
-          firstCursor
-          lastCursor
-        }
-      }
-    }`()
+      }`()
     ).toMatchSnapshot();
   });
 
   it('sorts', async () => {
     expect(
       await gql`{
-      ListReplies(orderBy: [{createdAt: DESC}]) {
-        edges {
-          node {
-            id
+        ListReplies(orderBy: [{createdAt: DESC}]) {
+          edges {
+            node {
+              id
+            }
+          }
+          totalCount
+          pageInfo {
+            firstCursor
+            lastCursor
           }
         }
-        totalCount
-        pageInfo {
-          firstCursor
-          lastCursor
-        }
-      }
-    }`()
+      }`()
     ).toMatchSnapshot();
   });
 
   it('filters', async () => {
     expect(
       await gql`{
-      ListReplies(filter: {moreLikeThis: {like: "foo", minimumShouldMatch: "5%"}}) {
-        edges {
-          node {
-            id
+        ListReplies(filter: {moreLikeThis: {like: "foo", minimumShouldMatch: "5%"}}) {
+          edges {
+            node {
+              id
+            }
+          }
+          totalCount
+          pageInfo {
+            firstCursor
+            lastCursor
           }
         }
-        totalCount
-        pageInfo {
-          firstCursor
-          lastCursor
+      }`()
+    ).toMatchSnapshot();
+
+    expect(
+      await gql`{
+        ListReplies(filter: {selfOnly: true}) {
+          edges {
+            node {
+              id
+            }
+          }
+          totalCount
+          pageInfo {
+            firstCursor
+            lastCursor
+          }
         }
-      }
-    }`()
+      }`(
+        {},
+        {
+          userId: 'foo',
+          from: 'test',
+        }
+      )
+    ).toMatchSnapshot();
+
+    expect(
+      await gql`{
+        ListReplies(filter: {type: RUMOR}) {
+          edges {
+            node {
+              id
+            }
+          }
+          totalCount
+          pageInfo {
+            firstCursor
+            lastCursor
+          }
+        }
+      }`()
     ).toMatchSnapshot();
   });
 
@@ -86,19 +126,19 @@ describe('ListReplies', () => {
   it('supports before', async () => {
     expect(
       await gql`query($cursor: String) {
-      ListReplies(before: $cursor) {
-        edges {
-          node {
-            id
+        ListReplies(before: $cursor) {
+          edges {
+            node {
+              id
+            }
+          }
+          totalCount
+          pageInfo {
+            firstCursor
+            lastCursor
           }
         }
-        totalCount
-        pageInfo {
-          firstCursor
-          lastCursor
-        }
-      }
-    }`({ cursor: getCursor(['basic#moreLikeThis1']) })
+      }`({ cursor: getCursor(['basic#moreLikeThis1']) })
     ).toMatchSnapshot();
   });
 

@@ -1,0 +1,195 @@
+exports[`ListReplies filters 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "moreLikeThis2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "moreLikeThis1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMyIl0=",
+        "lastCursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMxIl0=",
+      },
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListReplies filters 2`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "userFoo",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
+        "lastCursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
+      },
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListReplies filters 3`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "rumor",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJiYXNpYyNydW1vciJd",
+        "lastCursor": "WyJiYXNpYyNydW1vciJd",
+      },
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListReplies lists all replies 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "cursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
+          "node": Object {
+            "id": "userFoo",
+          },
+        },
+        Object {
+          "cursor": "WyJiYXNpYyNydW1vciJd",
+          "node": Object {
+            "id": "rumor",
+          },
+        },
+        Object {
+          "cursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMyIl0=",
+          "node": Object {
+            "id": "moreLikeThis2",
+          },
+        },
+        Object {
+          "cursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMxIl0=",
+          "node": Object {
+            "id": "moreLikeThis1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
+        "lastCursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMxIl0=",
+      },
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListReplies sorts 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "userFoo",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "moreLikeThis1",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "moreLikeThis2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "rumor",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WzQsImJhc2ljI3VzZXJGb28iXQ==",
+        "lastCursor": "WzEsImJhc2ljI3J1bW9yIl0=",
+      },
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListReplies supports after 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "moreLikeThis1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
+        "lastCursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMxIl0=",
+      },
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListReplies supports before 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "userFoo",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "rumor",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "moreLikeThis2",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
+        "lastCursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMxIl0=",
+      },
+      "totalCount": 4,
+    },
+  },
+}
+`;

@@ -1,6 +1,6 @@
 export default {
   '/replies/basic/moreLikeThis1': {
-    versions: [{ text: 'foo foo', reference: 'barbar', type: 'NOT_ARTICLE' }],
+    versions: [{ text: 'foo foo', reference: 'bar bar', type: 'NOT_ARTICLE' }],
     createdAt: 3,
   },
   '/replies/basic/moreLikeThis2': {
