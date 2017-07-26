@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLNonNull } from 'graphql';
+import { GraphQLString, GraphQLNonNull, GraphQLEnumType } from 'graphql';
 
 import client from 'util/client';
 import MutationResult from 'graphql/models/MutationResult';
@@ -8,8 +8,23 @@ export default {
   description: 'Remove sspecified reply from specified article.',
   args: {
     replyConnectionId: { type: new GraphQLNonNull(GraphQLString) },
+    status: {
+      type: new GraphQLNonNull(
+        new GraphQLEnumType({
+          name: 'ReplyConnectionStatusEnum',
+          values: {
+            NORMAL: {
+              value: 'NORMAL',
+            },
+            DELETED: {
+              value: 'DELETED',
+            },
+          },
+        })
+      ),
+    },
   },
-  async resolve(rootValue, { replyConnectionId }, { userId }) {
+  async resolve(rootValue, { replyConnectionId, status }, { userId }) {
     const { _source: { userId: replyConnectionUserId } } = await client.get({
       index: 'replyconnections',
       type: 'basic',
@@ -18,7 +33,7 @@ export default {
     });
 
     if (replyConnectionUserId !== userId) {
-      throw new Error("You cannot delete other's ReplyConnection");
+      throw new Error("You cannot change other's ReplyConnection's status");
     }
 
     const { result } = await client.update({
@@ -27,14 +42,14 @@ export default {
       id: replyConnectionId,
       body: {
         doc: {
-          status: 'DELETED',
+          status,
           updatedAt: new Date(),
         },
       },
     });
 
     if (result !== 'updated' && result !== 'noop') {
-      throw new Error(`Cannot delete reply connection: ${result}`);
+      throw new Error(`Cannot change status for reply connection: ${result}`);
     }
 
     return { id: replyConnectionId };

@@ -16,7 +16,8 @@ import CreateReplyConnection from './mutations/CreateReplyConnection';
 import CreateOrUpdateReplyConnectionFeedback
   from './mutations/CreateOrUpdateReplyConnectionFeedback';
 import CreateReplyRequest from './mutations/CreateReplyRequest';
-import DeleteReplyConnection from './mutations/DeleteReplyConnection';
+import UpdateReplyConnectionStatus
+  from './mutations/UpdateReplyConnectionStatus';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -39,7 +40,7 @@ export default new GraphQLSchema({
       CreateReplyConnection,
       CreateReplyRequest,
       CreateOrUpdateReplyConnectionFeedback,
-      DeleteReplyConnection,
+      UpdateReplyConnectionStatus,
     },
   }),
 });

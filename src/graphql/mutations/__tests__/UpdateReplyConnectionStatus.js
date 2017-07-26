@@ -2,10 +2,10 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
-import fixtures from '../__fixtures__/DeleteReplyConnection';
+import fixtures from '../__fixtures__/UpdateReplyConnectionStatus';
 
-describe('DeleteReplyConnection', () => {
-  beforeAll(() => {
+describe('UpdateReplyConnectionStatus', () => {
+  beforeEach(() => {
     MockDate.set(1485593157011);
     return loadFixtures(fixtures);
   });
@@ -13,8 +13,9 @@ describe('DeleteReplyConnection', () => {
   it("should not allow users to delete other's replyconnections", async () => {
     const { errors } = await gql`
       mutation {
-        DeleteReplyConnection(
+        UpdateReplyConnectionStatus(
           replyConnectionId: "others"
+          status: DELETED
         ) {
           id
         }
@@ -27,8 +28,8 @@ describe('DeleteReplyConnection', () => {
   it('should set replyconnections fields correctly', async () => {
     const { data } = await gql`
       mutation {
-        normal: DeleteReplyConnection( replyConnectionId: "normal" ) { id }
-        deleted: DeleteReplyConnection( replyConnectionId: "deleted" ) { id }
+        normal: UpdateReplyConnectionStatus( replyConnectionId: "normal", status: DELETED ) { id }
+        deleted: UpdateReplyConnectionStatus( replyConnectionId: "deleted", status: DELETED ) { id }
       }
     `({}, { userId: 'foo', from: 'test' });
 
@@ -53,7 +54,7 @@ describe('DeleteReplyConnection', () => {
     await resetFrom(fixtures, '/replyconnections/basic/deleted');
   });
 
-  afterAll(() => {
+  afterEach(() => {
     MockDate.reset();
     return unloadFixtures(fixtures);
   });
