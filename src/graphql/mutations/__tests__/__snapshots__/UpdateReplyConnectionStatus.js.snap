@@ -1,0 +1,32 @@
+exports[`UpdateReplyConnectionStatus should not allow users to delete other's replyconnections 1`] = `
+Array [
+  [GraphQLError: You cannot change other's ReplyConnection's status],
+]
+`;
+
+exports[`UpdateReplyConnectionStatus should set replyconnections fields correctly 1`] = `
+Object {
+  "deleted": Object {
+    "id": "deleted",
+  },
+  "normal": Object {
+    "id": "normal",
+  },
+}
+`;
+
+exports[`UpdateReplyConnectionStatus should set replyconnections fields correctly 2`] = `
+Object {
+  "status": "DELETED",
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "foo",
+}
+`;
+
+exports[`UpdateReplyConnectionStatus should set replyconnections fields correctly 3`] = `
+Object {
+  "status": "DELETED",
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "foo",
+}
+`;

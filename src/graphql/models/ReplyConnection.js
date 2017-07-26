@@ -47,5 +47,9 @@ export default new GraphQLObjectType({
           feedbackIds.map(id => ({ index: 'replyconnectionfeedbacks', id }))
         ),
     },
+
+    status: {
+      type: GraphQLString,
+    },
   }),
 });

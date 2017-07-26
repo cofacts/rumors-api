@@ -17,6 +17,7 @@ export default {
   },
   '/replyconnections/basic/foo-bar': {
     replyId: 'bar',
+    status: 'NORMAL',
   },
   '/replyconnections/basic/foo2-bar2': {
     replyId: 'bar2',
