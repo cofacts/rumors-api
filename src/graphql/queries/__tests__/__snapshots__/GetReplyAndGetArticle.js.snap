@@ -9,6 +9,7 @@ Object {
       ],
       "replyConnections": Array [
         Object {
+          "canUpdateStatus": false,
           "id": "foo-bar",
           "reply": Object {
             "versions": Array [
@@ -40,6 +41,7 @@ Object {
           "article": Object {
             "text": "Lorum ipsum",
           },
+          "canUpdateStatus": true,
         },
       ],
       "versions": Array [

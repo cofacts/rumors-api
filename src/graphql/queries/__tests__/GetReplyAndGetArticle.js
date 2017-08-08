@@ -16,6 +16,7 @@ describe('GetReplyAndGetArticle', () => {
           replyConnections {
             id
             status
+            canUpdateStatus
             reply {
               versions {
                 text
@@ -99,6 +100,7 @@ describe('GetReplyAndGetArticle', () => {
             reference
           }
           replyConnections {
+            canUpdateStatus
             article {
               text
             }
