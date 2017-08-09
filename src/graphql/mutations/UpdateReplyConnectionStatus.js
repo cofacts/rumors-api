@@ -1,7 +1,7 @@
 import { GraphQLString, GraphQLNonNull, GraphQLEnumType } from 'graphql';
-
 import client from 'util/client';
 import MutationResult from 'graphql/models/MutationResult';
+import { auth } from 'graphql/models/ReplyConnection';
 
 export default {
   type: MutationResult,
@@ -32,7 +32,7 @@ export default {
       _sourceInclude: ['userId'],
     });
 
-    if (replyConnectionUserId !== userId) {
+    if (!auth.canUpdateStatus(userId, replyConnectionUserId)) {
       throw new Error("You cannot change other's ReplyConnection's status");
     }
 

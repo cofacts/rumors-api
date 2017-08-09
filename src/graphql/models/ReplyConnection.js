@@ -3,12 +3,19 @@ import {
   GraphQLList,
   GraphQLInt,
   GraphQLString,
+  GraphQLBoolean,
 } from 'graphql';
 
 import Article from './Article';
 import User, { userFieldResolver } from './User';
 import Reply from './Reply';
 import ReplyConnectionFeedback from './ReplyConnectionFeedback';
+
+export const auth = {
+  canUpdateStatus(currentUserId, replyConnectionUserId) {
+    return replyConnectionUserId === currentUserId;
+  },
+};
 
 export default new GraphQLObjectType({
   name: 'ReplyConnection',
@@ -33,6 +40,13 @@ export default new GraphQLObjectType({
       type: User,
       description: 'The user who conencted this reply and this article.',
       resolve: userFieldResolver,
+    },
+
+    canUpdateStatus: {
+      type: GraphQLBoolean,
+      resolve: ({ userId }, args, { userId: currentUserId }) => {
+        return auth.canUpdateStatus(currentUserId, userId);
+      },
     },
 
     feedbackCount: {
