@@ -1,3 +1,27 @@
+exports[`GetReplyAndGetArticle GetArticle should allow filtering replyConnections 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "replyConnections": Array [
+        Object {
+          "id": "foo-bar",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`GetReplyAndGetArticle GetArticle should allow filtering replyConnections 2`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "replyConnections": Array [],
+    },
+  },
+}
+`;
+
 exports[`GetReplyAndGetArticle GetArticle should get the specified article & associated replies from ID 1`] = `
 Object {
   "data": Object {

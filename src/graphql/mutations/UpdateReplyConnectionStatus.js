@@ -1,7 +1,9 @@
-import { GraphQLString, GraphQLNonNull, GraphQLEnumType } from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 import client from 'util/client';
 import MutationResult from 'graphql/models/MutationResult';
 import { auth } from 'graphql/models/ReplyConnection';
+import ReplyConnectionStatusEnum
+  from 'graphql/models/ReplyConnectionStatusEnum';
 
 export default {
   type: MutationResult,
@@ -9,19 +11,7 @@ export default {
   args: {
     replyConnectionId: { type: new GraphQLNonNull(GraphQLString) },
     status: {
-      type: new GraphQLNonNull(
-        new GraphQLEnumType({
-          name: 'ReplyConnectionStatusEnum',
-          values: {
-            NORMAL: {
-              value: 'NORMAL',
-            },
-            DELETED: {
-              value: 'DELETED',
-            },
-          },
-        })
-      ),
+      type: new GraphQLNonNull(ReplyConnectionStatusEnum),
     },
   },
   async resolve(rootValue, { replyConnectionId, status }, { userId }) {
