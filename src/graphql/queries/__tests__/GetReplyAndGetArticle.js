@@ -37,7 +37,15 @@ describe('GetReplyAndGetArticle', () => {
     it('should allow filtering replyConnections', async () => {
       expect(
         await gql`{
-          GetArticle(id: "foo") {
+          GetArticle(id: "foo3") {
+            replyConnections { id }
+          }
+        }`({}, { userId: 'fakeUser', from: 'LINE' })
+      ).toMatchSnapshot();
+
+      expect(
+        await gql`{
+          GetArticle(id: "foo3") {
             replyConnections(status: NORMAL) { id }
           }
         }`({}, { userId: 'fakeUser', from: 'LINE' })
@@ -45,7 +53,7 @@ describe('GetReplyAndGetArticle', () => {
 
       expect(
         await gql`{
-          GetArticle(id: "foo") {
+          GetArticle(id: "foo3") {
             replyConnections(status: DELETED) { id }
           }
         }`({}, { userId: 'fakeUser', from: 'LINE' })

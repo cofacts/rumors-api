@@ -4,7 +4,10 @@ Object {
     "GetArticle": Object {
       "replyConnections": Array [
         Object {
-          "id": "foo-bar",
+          "id": "foo3-bar2",
+        },
+        Object {
+          "id": "foo3-fofo",
         },
       ],
     },
@@ -16,7 +19,25 @@ exports[`GetReplyAndGetArticle GetArticle should allow filtering replyConnection
 Object {
   "data": Object {
     "GetArticle": Object {
-      "replyConnections": Array [],
+      "replyConnections": Array [
+        Object {
+          "id": "foo3-fofo",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`GetReplyAndGetArticle GetArticle should allow filtering replyConnections 3`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "replyConnections": Array [
+        Object {
+          "id": "foo3-bar2",
+        },
+      ],
     },
   },
 }

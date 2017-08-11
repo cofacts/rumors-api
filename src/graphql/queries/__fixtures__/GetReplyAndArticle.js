@@ -17,7 +17,6 @@ export default {
   },
   '/replyconnections/basic/foo-bar': {
     replyId: 'bar',
-    status: 'NORMAL',
     createdAt: '2015-01-01T12:10:30Z',
     updatedAt: '2015-01-02T12:10:30Z',
   },
@@ -26,9 +25,11 @@ export default {
   },
   '/replyconnections/basic/foo3-fofo': {
     replyId: 'fofo',
+    status: 'NORMAL',
   },
   '/replyconnections/basic/foo3-bar2': {
     replyId: 'bar2',
+    status: 'DELETED',
   },
   '/replies/basic/bar': {
     versions: [{ text: 'bar', reference: 'barbar', type: 'NOT_ARTICLE' }],

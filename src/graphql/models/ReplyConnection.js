@@ -10,6 +10,7 @@ import Article from './Article';
 import User, { userFieldResolver } from './User';
 import Reply from './Reply';
 import ReplyConnectionFeedback from './ReplyConnectionFeedback';
+import ReplyConnectionStatusEnum from './ReplyConnectionStatusEnum';
 
 export const auth = {
   canUpdateStatus(currentUserId, replyConnectionUserId) {
@@ -63,7 +64,8 @@ export default new GraphQLObjectType({
     },
 
     status: {
-      type: GraphQLString,
+      type: ReplyConnectionStatusEnum,
+      resolve: ({ status }) => (status === undefined ? 'NORMAL' : status),
     },
 
     createdAt: { type: GraphQLString },

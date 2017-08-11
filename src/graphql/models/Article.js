@@ -50,7 +50,11 @@ const Article = new GraphQLObjectType({
         );
 
         if (!status) return replyConnections;
-        return replyConnections.filter(conn => conn.status === status);
+        return replyConnections.filter(conn => {
+          if (status !== 'NORMAL') return conn.status === status;
+
+          return conn.status === undefined || conn.status === 'NORMAL';
+        });
       },
     },
     replyRequestCount: {
