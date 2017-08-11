@@ -44,7 +44,9 @@ const Article = new GraphQLObjectType({
       },
       resolve: async ({ replyConnectionIds = [] }, { status }, { loaders }) => {
         const replyConnections = await loaders.docLoader.loadMany(
-          replyConnectionIds.map(id => ({ index: 'replyconnections', id }))
+          replyConnectionIds
+            .reverse() // latest inserted replyConnection goes first
+            .map(id => ({ index: 'replyconnections', id }))
         );
 
         if (!status) return replyConnections;
