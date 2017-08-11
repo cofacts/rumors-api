@@ -17,6 +17,8 @@ describe('GetReplyAndGetArticle', () => {
             id
             status
             canUpdateStatus
+            createdAt
+            updatedAt
             reply {
               versions {
                 text
