@@ -34,6 +34,7 @@ Object {
       "replyConnections": Array [
         Object {
           "canUpdateStatus": false,
+          "createdAt": "2015-01-01T12:10:30Z",
           "id": "foo-bar",
           "reply": Object {
             "versions": Array [
@@ -45,6 +46,7 @@ Object {
             ],
           },
           "status": "NORMAL",
+          "updatedAt": "2015-01-02T12:10:30Z",
         },
       ],
       "replyCount": 1,

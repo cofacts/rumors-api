@@ -18,6 +18,8 @@ export default {
   '/replyconnections/basic/foo-bar': {
     replyId: 'bar',
     status: 'NORMAL',
+    createdAt: '2015-01-01T12:10:30Z',
+    updatedAt: '2015-01-02T12:10:30Z',
   },
   '/replyconnections/basic/foo2-bar2': {
     replyId: 'bar2',
