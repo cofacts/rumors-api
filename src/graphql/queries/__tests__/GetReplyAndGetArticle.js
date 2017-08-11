@@ -32,6 +32,24 @@ describe('GetReplyAndGetArticle', () => {
       ).toMatchSnapshot();
     });
 
+    it('should allow filtering replyConnections', async () => {
+      expect(
+        await gql`{
+          GetArticle(id: "foo") {
+            replyConnections(status: NORMAL) { id }
+          }
+        }`({}, { userId: 'fakeUser', from: 'LINE' })
+      ).toMatchSnapshot();
+
+      expect(
+        await gql`{
+          GetArticle(id: "foo") {
+            replyConnections(status: DELETED) { id }
+          }
+        }`({}, { userId: 'fakeUser', from: 'LINE' })
+      ).toMatchSnapshot();
+    });
+
     it('relatedArticles should work', async () => {
       // No param
       //

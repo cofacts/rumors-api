@@ -19,7 +19,7 @@ import {
 
 import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
-
+import ReplyConnectionStatusEnum from './ReplyConnectionStatusEnum';
 import ReplyConnection from './ReplyConnection';
 
 const Article = new GraphQLObjectType({
@@ -36,10 +36,20 @@ const Article = new GraphQLObjectType({
     },
     replyConnections: {
       type: new GraphQLList(ReplyConnection),
-      resolve: ({ replyConnectionIds = [] }, args, { loaders }) =>
-        loaders.docLoader.loadMany(
+      args: {
+        status: {
+          type: ReplyConnectionStatusEnum,
+          description: 'When specified, returns only reply connections with the specified status',
+        },
+      },
+      resolve: async ({ replyConnectionIds = [] }, { status }, { loaders }) => {
+        const replyConnections = await loaders.docLoader.loadMany(
           replyConnectionIds.map(id => ({ index: 'replyconnections', id }))
-        ),
+        );
+
+        if (!status) return replyConnections;
+        return replyConnections.filter(conn => conn.status === status);
+      },
     },
     replyRequestCount: {
       type: GraphQLInt,
