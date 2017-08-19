@@ -34,6 +34,9 @@ export default {
   '/replies/basic/bar': {
     versions: [{ text: 'bar', reference: 'barbar', type: 'NOT_ARTICLE' }],
   },
+  '/replies/basic/bar2': {
+    versions: [{ text: 'bar2', reference: 'barbar2', type: 'NOT_ARTICLE' }],
+  },
   '/replyrequests/basic/articleTest1': {
     userId: 'fakeUser',
     from: 'LINE',

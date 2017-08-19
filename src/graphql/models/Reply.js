@@ -5,6 +5,8 @@ import {
   GraphQLInt,
 } from 'graphql';
 
+import { filterReplyConnectionsByStatus } from 'graphql/util';
+import ReplyConnectionStatusEnum from './ReplyConnectionStatusEnum';
 import ReplyConnection from './ReplyConnection';
 import ReplyVersion from './ReplyVersion';
 
@@ -21,8 +23,18 @@ const Reply = new GraphQLObjectType({
     },
     replyConnections: {
       type: new GraphQLList(ReplyConnection),
-      resolve: ({ id }, args, { loaders }) =>
-        loaders.replyConnectionsByReplyIdLoader.load(id),
+      args: {
+        status: {
+          type: ReplyConnectionStatusEnum,
+          description: 'When specified, returns only reply connections with the specified status',
+        },
+      },
+      resolve: async ({ id }, { status }, { loaders }) => {
+        const replyConnections = await loaders.replyConnectionsByReplyIdLoader.load(
+          id
+        );
+        return filterReplyConnectionsByStatus(replyConnections, status);
+      },
     },
   }),
 });

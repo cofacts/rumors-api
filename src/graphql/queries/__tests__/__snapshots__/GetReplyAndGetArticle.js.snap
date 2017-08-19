@@ -2,40 +2,26 @@ exports[`GetReplyAndGetArticle GetArticle should allow filtering replyConnection
 Object {
   "data": Object {
     "GetArticle": Object {
+      "deletedReplies": Array [
+        Object {
+          "id": "foo3-bar2",
+          "status": "DELETED",
+        },
+      ],
+      "normalReplies": Array [
+        Object {
+          "id": "foo3-fofo",
+          "status": "NORMAL",
+        },
+      ],
       "replyConnections": Array [
         Object {
           "id": "foo3-bar2",
+          "status": "DELETED",
         },
         Object {
           "id": "foo3-fofo",
-        },
-      ],
-    },
-  },
-}
-`;
-
-exports[`GetReplyAndGetArticle GetArticle should allow filtering replyConnections 2`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "replyConnections": Array [
-        Object {
-          "id": "foo3-fofo",
-        },
-      ],
-    },
-  },
-}
-`;
-
-exports[`GetReplyAndGetArticle GetArticle should allow filtering replyConnections 3`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "replyConnections": Array [
-        Object {
-          "id": "foo3-bar2",
+          "status": "NORMAL",
         },
       ],
     },
@@ -74,6 +60,37 @@ Object {
       "replyRequestCount": 1,
       "requestedForReply": true,
       "text": "Lorum ipsum",
+    },
+  },
+}
+`;
+
+exports[`GetReplyAndGetArticle GetReply should get allow filtering replyConnections 1`] = `
+Object {
+  "data": Object {
+    "GetReply": Object {
+      "deletedReplies": Array [
+        Object {
+          "id": "foo3-bar2",
+          "status": "DELETED",
+        },
+      ],
+      "normalReplies": Array [
+        Object {
+          "id": "foo2-bar2",
+          "status": "NORMAL",
+        },
+      ],
+      "replyConnections": Array [
+        Object {
+          "id": "foo2-bar2",
+          "status": "NORMAL",
+        },
+        Object {
+          "id": "foo3-bar2",
+          "status": "DELETED",
+        },
+      ],
     },
   },
 }

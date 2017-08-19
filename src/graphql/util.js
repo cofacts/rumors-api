@@ -280,3 +280,15 @@ export function assertUser({ userId, from }) {
     );
   }
 }
+
+export function filterReplyConnectionsByStatus(replyConnections, status) {
+  if (!status) return replyConnections;
+
+  // If a replyConnection does not have status, it is considered "NORMAL".
+  //
+  return replyConnections.filter(conn => {
+    if (status !== 'NORMAL') return conn.status === status;
+
+    return conn.status === undefined || conn.status === 'NORMAL';
+  });
+}
