@@ -1,3 +1,18 @@
+exports[`ListArticles correctly handles empty lists without errors 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [],
+      "pageInfo": Object {
+        "firstCursor": null,
+        "lastCursor": null,
+      },
+      "totalCount": 0,
+    },
+  },
+}
+`;
+
 exports[`ListArticles filters 1`] = `
 Object {
   "data": Object {

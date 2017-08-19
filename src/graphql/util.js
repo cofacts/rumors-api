@@ -206,7 +206,7 @@ export function createConnectionType(
         size: 1,
       }))[0];
 
-      return getCursor(lastNode._cursor);
+      return lastNode && getCursor(lastNode._cursor);
     },
 
     // eslint-disable-next-line no-unused-vars
@@ -220,7 +220,7 @@ export function createConnectionType(
         size: 1,
       }))[0];
 
-      return getCursor(firstNode._cursor);
+      return firstNode && getCursor(firstNode._cursor);
     },
   } = {}
 ) {
