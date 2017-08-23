@@ -136,5 +136,24 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
+  it('correctly handles empty lists without errors', async () => {
+    expect(
+      await gql`{
+      ListArticles(filter: {moreLikeThis: {like: "ThisShouldNotExist"}}) {
+        edges {
+          node {
+            id
+          }
+        }
+        totalCount
+        pageInfo {
+          firstCursor
+          lastCursor
+        }
+      }
+    }`()
+    ).toMatchSnapshot();
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });
