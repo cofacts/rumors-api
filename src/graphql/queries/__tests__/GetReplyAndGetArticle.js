@@ -38,23 +38,9 @@ describe('GetReplyAndGetArticle', () => {
       expect(
         await gql`{
           GetArticle(id: "foo3") {
-            replyConnections { id }
-          }
-        }`({}, { userId: 'fakeUser', from: 'LINE' })
-      ).toMatchSnapshot();
-
-      expect(
-        await gql`{
-          GetArticle(id: "foo3") {
-            replyConnections(status: NORMAL) { id }
-          }
-        }`({}, { userId: 'fakeUser', from: 'LINE' })
-      ).toMatchSnapshot();
-
-      expect(
-        await gql`{
-          GetArticle(id: "foo3") {
-            replyConnections(status: DELETED) { id }
+            replyConnections { id, status }
+            normalReplies: replyConnections(status: NORMAL) { id, status }
+            deletedReplies: replyConnections(status: DELETED) { id, status }
           }
         }`({}, { userId: 'fakeUser', from: 'LINE' })
       ).toMatchSnapshot();
@@ -133,6 +119,18 @@ describe('GetReplyAndGetArticle', () => {
               text
             }
           }
+        }
+      }`()
+      ).toMatchSnapshot();
+    });
+
+    it('should get allow filtering replyConnections', async () => {
+      expect(
+        await gql`{
+        GetReply(id: "bar2") {
+          replyConnections { id, status }
+          normalReplies: replyConnections(status: NORMAL) { id, status }
+          deletedReplies: replyConnections(status: DELETED) { id, status }
         }
       }`()
       ).toMatchSnapshot();

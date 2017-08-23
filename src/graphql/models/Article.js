@@ -15,6 +15,7 @@ import {
   createSortType,
   createConnectionType,
   assertUser,
+  filterReplyConnectionsByStatus,
 } from 'graphql/util';
 
 import ArticleReference from 'graphql/models/ArticleReference';
@@ -49,12 +50,7 @@ const Article = new GraphQLObjectType({
             .map(id => ({ index: 'replyconnections', id }))
         );
 
-        if (!status) return replyConnections;
-        return replyConnections.filter(conn => {
-          if (status !== 'NORMAL') return conn.status === status;
-
-          return conn.status === undefined || conn.status === 'NORMAL';
-        });
+        return filterReplyConnectionsByStatus(replyConnections, status);
       },
     },
     replyRequestCount: {
