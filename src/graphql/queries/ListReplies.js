@@ -98,6 +98,7 @@ export default {
     }
 
     if (filter.selfOnly) {
+      if (!userId) throw new Error('selfOnly can be set only after log in');
       body.query.bool.filter.push(
         { term: { 'versions.userId': userId } },
         { term: { 'versions.from': from } }

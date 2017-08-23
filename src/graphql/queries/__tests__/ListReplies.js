@@ -142,5 +142,24 @@ describe('ListReplies', () => {
     ).toMatchSnapshot();
   });
 
+  it('handles selfOnly filter properly if not logged in', async () => {
+    expect(
+      await gql`{
+        ListReplies(filter: {selfOnly: true}) {
+          edges {
+            node {
+              id
+            }
+          }
+          totalCount
+          pageInfo {
+            firstCursor
+            lastCursor
+          }
+        }
+      }`()
+    ).toMatchSnapshot();
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });

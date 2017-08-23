@@ -66,6 +66,17 @@ Object {
 }
 `;
 
+exports[`ListReplies handles selfOnly filter properly if not logged in 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": null,
+  },
+  "errors": Array [
+    [GraphQLError: selfOnly can be set only after log in],
+  ],
+}
+`;
+
 exports[`ListReplies lists all replies 1`] = `
 Object {
   "data": Object {
