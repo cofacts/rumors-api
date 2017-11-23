@@ -6,6 +6,15 @@ import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
 import { createReplyRequest } from './CreateReplyRequest';
 
+/**
+ * Creates a new article in ElasticSearch
+ *
+ * @param {String} param.text
+ * @param {String} param.reference
+ * @param {String} param.userId
+ * @param {String} param.from
+ * @returns {String} the new article's ID
+ */
 async function createNewArticle({ text, reference, userId, from }) {
   const now = new Date().toISOString();
   reference.createdAt = now;
@@ -57,10 +66,13 @@ export default {
       },
     });
 
+    // Don't create new articles if a hit is found;
+    // return the existing article's ID instead
     const articleId = searchResult.hits.total > 0
       ? searchResult.hits.hits[0]._id
       : await createNewArticle({ text, reference, userId, from });
 
+    // No matter we created an article or not, we should always add replyRequest.
     await createReplyRequest({ articleId, userId, from });
 
     return { id: articleId };

@@ -79,7 +79,8 @@ describe('CreateArticle', () => {
     MockDate.reset();
     expect(errors).toBeUndefined();
 
-    // Expects no new article is created
+    // Expects no new article is created,
+    // and it returns the existing ID
     expect(data.CreateArticle.id).toBe('existing');
 
     const { _source: article } = await client.get({
