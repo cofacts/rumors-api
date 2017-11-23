@@ -5,6 +5,7 @@ import MockDate from 'mockdate';
 
 describe('CreateArticle', () => {
   it('creates articles', async () => {
+  it('creates articles and a reply request', async () => {
     MockDate.set(1485593157011);
     const { data, errors } = await gql`
       mutation(
@@ -29,17 +30,17 @@ describe('CreateArticle', () => {
 
     expect(errors).toBeUndefined();
 
-    const doc = await client.get({
+    const { _source: article } = await client.get({
       index: 'articles',
       type: 'basic',
       id: data.CreateArticle.id,
     });
-    expect(doc._source.replyRequestIds).toHaveLength(1);
+    expect(article.replyRequestIds).toHaveLength(1);
 
-    delete doc._id; // delete auto-generated id from being snapshot
-    delete doc._source.replyRequestIds;
+    // delete auto-generated id from being snapshot
+    delete article.replyRequestIds;
 
-    expect(doc).toMatchSnapshot();
+    expect(article).toMatchSnapshot();
 
     // Cleanup
     await client.delete({

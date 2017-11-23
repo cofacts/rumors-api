@@ -1,22 +1,16 @@
-exports[`CreateArticle creates articles 1`] = `
+exports[`CreateArticle creates articles and a reply request 1`] = `
 Object {
-  "_index": "articles",
-  "_source": Object {
-    "createdAt": "2017-01-28T08:45:57.011Z",
-    "from": "foo",
-    "references": Array [
-      Object {
-        "createdAt": "2017-01-28T08:45:57.011Z",
-        "type": "LINE",
-      },
-    ],
-    "replyConnectionIds": Array [],
-    "text": "FOO FOO",
-    "updatedAt": "2017-01-28T08:45:57.011Z",
-    "userId": "test",
-  },
-  "_type": "basic",
-  "_version": 2,
-  "found": true,
+  "createdAt": "2017-01-28T08:45:57.011Z",
+  "from": "foo",
+  "references": Array [
+    Object {
+      "createdAt": "2017-01-28T08:45:57.011Z",
+      "type": "LINE",
+    },
+  ],
+  "replyConnectionIds": Array [],
+  "text": "FOO FOO",
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "test",
 }
 `;
