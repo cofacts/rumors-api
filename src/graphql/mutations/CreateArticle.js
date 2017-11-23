@@ -6,9 +6,36 @@ import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
 import { createReplyRequest } from './CreateReplyRequest';
 
+async function createNewArticle({ text, reference, userId, from }) {
+  const now = new Date().toISOString();
+  reference.createdAt = now;
+
+  const { created, _id: newId, result } = await client.index({
+    index: 'articles',
+    type: 'basic',
+    body: {
+      replyConnectionIds: [],
+      replyRequestIds: [],
+      text,
+      createdAt: now,
+      updatedAt: now,
+      userId,
+      from,
+      references: [reference],
+    },
+    refresh: true, // Make sure the data is indexed when we create ReplyRequest
+  });
+
+  if (!created) {
+    throw new Error(`Cannot create article: ${result}`);
+  }
+
+  return newId;
+}
+
 export default {
   type: MutationResult,
-  description: 'Create an article',
+  description: 'Create an article and/or a replyRequest',
   args: {
     text: { type: new GraphQLNonNull(GraphQLString) },
     reference: { type: new GraphQLNonNull(ArticleReferenceInput) },
@@ -16,31 +43,26 @@ export default {
   async resolve(rootValue, { text, reference }, { from, userId }) {
     assertUser({ from, userId });
 
-    const now = new Date().toISOString();
-    reference.createdAt = now;
-
-    const { created, _id: newId, result } = await client.index({
+    // Check article existence
+    const searchResult = await client.search({
       index: 'articles',
       type: 'basic',
       body: {
-        replyConnectionIds: [],
-        replyRequestIds: [],
-        text,
-        createdAt: now,
-        updatedAt: now,
-        userId,
-        from,
-        references: [reference],
+        query: {
+          // match_phrase should match both positions and words.
+          // ref:
+          // https://www.elastic.co/guide/en/elasticsearch/guide/current/phrase-matching.html
+          match_phrase: { text },
+        },
       },
-      refresh: true, // Make sure the data is indexed when re create ReplyRequest
     });
 
-    if (!created) {
-      throw new Error(`Cannot create article: ${result}`);
-    }
+    const articleId = searchResult.hits.total > 0
+      ? searchResult.hits.hits[0]._id
+      : await createNewArticle({ text, reference, userId, from });
 
-    await createReplyRequest({ articleId: newId, userId, from });
+    await createReplyRequest({ articleId, userId, from });
 
-    return { id: newId };
+    return { id: articleId };
   },
 };
