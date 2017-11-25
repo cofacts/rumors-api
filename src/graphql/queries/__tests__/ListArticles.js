@@ -63,6 +63,7 @@ describe('ListArticles', () => {
   });
 
   it('filters', async () => {
+    // Lists only articles with more than one reply.
     expect(
       await gql`{
       ListArticles(filter: {replyCount: {GT: 1}}) {
@@ -80,6 +81,7 @@ describe('ListArticles', () => {
     }`()
     ).toMatchSnapshot();
 
+    // moreLikeThis query
     expect(
       await gql`{
       ListArticles(filter: {moreLikeThis: {like: "人間相見是何年？牽攣乖隔，各欲白首。", minimumShouldMatch: "5%"}}) {
@@ -93,6 +95,20 @@ describe('ListArticles', () => {
           firstCursor
           lastCursor
         }
+      }
+    }`()
+    ).toMatchSnapshot();
+
+    // Lists only articles with more than 1 reply requests
+    expect(
+      await gql`{
+      ListArticles(filter: {replyRequestCount: {GT: 1}}) {
+        edges {
+          node {
+            id
+          }
+        }
+        totalCount
       }
     }`()
     ).toMatchSnapshot();
