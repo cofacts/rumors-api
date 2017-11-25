@@ -20,15 +20,27 @@ export default {
             'ListArticleReplyCountExpr',
             GraphQLInt
           ),
+          description: 'List only the articles whose number of replies matches the criteria.',
         },
         moreLikeThis: {
           type: new GraphQLInputObjectType({
             name: 'ListArticleMoreLikeThisInput',
             fields: {
-              like: { type: GraphQLString },
+              like: {
+                type: GraphQLString,
+                description: 'The text string to query.',
+              },
               minimumShouldMatch: { type: GraphQLString },
             },
           }),
+          description: 'List all articles related to a given string.',
+        },
+        replyRequestCount: {
+          type: getArithmeticExpressionType(
+            'ListArticleReplyRequestCountExpr',
+            GraphQLInt
+          ),
+          description: 'List only the articles whose number of replies matches the criteria.',
         },
       }),
     },
@@ -58,8 +70,12 @@ export default {
       track_scores: true, // for _score sorting
     };
 
+    // Collecting queries that will be used in bool queries later
+    const mustQueries = []; // Affects scores
+    const filterQueries = []; // Not affects scores
+
     if (filter.moreLikeThis) {
-      body.query = {
+      mustQueries.push({
         // Ref: http://stackoverflow.com/a/8831494/1582110
         //
         more_like_this: {
@@ -70,35 +86,45 @@ export default {
           minimum_should_match: filter.moreLikeThis.minimumShouldMatch ||
             '10<70%',
         },
-      };
-    } else {
-      body.query = {
-        // Ref: http://stackoverflow.com/a/8831494/1582110
-        //
-        match_all: {},
-      };
+      });
     }
 
     if (filter.replyCount) {
-      // Switch to bool query so that we can filter match_all results
-      //
       const { operator, operand } = getOperatorAndOperand(filter.replyCount);
-      body.query = {
-        bool: {
-          must: body.query,
-          filter: {
-            script: {
-              script: {
-                inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
-                params: {
-                  operand,
-                },
-              },
+      filterQueries.push({
+        script: {
+          script: {
+            inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
+            params: {
+              operand,
             },
           },
         },
-      };
+      });
     }
+
+    if (filter.replyRequestCount) {
+      const { operator, operand } = getOperatorAndOperand(
+        filter.replyRequestCount
+      );
+      filterQueries.push({
+        script: {
+          script: {
+            inline: `doc['replyRequestIds'].length ${operator} params.operand`,
+            params: {
+              operand,
+            },
+          },
+        },
+      });
+    }
+
+    body.query = {
+      bool: {
+        must: mustQueries.length === 0 ? { match_all: {} } : mustQueries,
+        filter: filterQueries,
+      },
+    };
 
     // should return search context for resolveEdges & resolvePageInfo
     return {
