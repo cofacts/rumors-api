@@ -147,10 +147,17 @@ $ npm t
 
 If you get "Elasticsearch ERROR : DELETE http://localhost:62223/replies => socket hang up", please check if test database is running. It takes some time for elasticsearch to boot.
 
+If you want to run test on a specific file (ex: `src/xxx/__tests__/ooo.js`), run:
+
+```
+$ npm t -- src/xxx/__tests__/ooo.js
+```
+
+
 When you want to update jest snapshot, run:
 
 ```
-$ npm run test:update
+$ npm t -- -u
 ```
 
 ## Deploy
