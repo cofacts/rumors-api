@@ -7,9 +7,9 @@
     }],
     "stage-3"
   ],
-  plugins: [
+  "plugins": [
     ["module-resolver", {
-      root: ["./src", "./test"],
+      "root": ["./src", "./test"]
     }]
   ]
 }
