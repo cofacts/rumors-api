@@ -134,6 +134,89 @@ export function getSearchAfterFromCursor(cursor) {
   return JSON.parse(Buffer.from(cursor, 'base64').toString('utf8'));
 }
 
+async function defaultResolveTotalCount({
+  first, // eslint-disable-line no-unused-vars
+  before, // eslint-disable-line no-unused-vars
+  after, // eslint-disable-line no-unused-vars
+  ...searchContext
+}) {
+  return (await client.count({
+    ...searchContext,
+    body: {
+      ...searchContext.body,
+
+      // totalCount cannot support these
+      sort: undefined,
+      track_scores: undefined,
+    },
+  })).count;
+}
+
+async function defaultResolveEdges(
+  { first, before, after, ...searchContext },
+  args,
+  { loaders }
+) {
+  if (before && after) {
+    throw new Error('Use of before & after is prohibited.');
+  }
+
+  const nodes = await loaders.searchResultLoader.load({
+    ...searchContext,
+    body: {
+      ...searchContext.body,
+      size: first,
+      search_after: getSearchAfterFromCursor(before || after),
+
+      // if "before" is given, reverse the sort order and later reverse back
+      //
+      sort: before
+        ? reverseSortArgs(searchContext.body.sort)
+        : searchContext.body.sort,
+    },
+  });
+
+  if (before) {
+    nodes.reverse();
+  }
+
+  return nodes.map(({ _score: score, _cursor, ...node }) => ({
+    node,
+    cursor: getCursor(_cursor),
+    score,
+  }));
+}
+
+async function defaultResolveLastCursor(
+  { first, before, after, ...searchContext },
+  args,
+  { loaders }
+) {
+  const lastNode = (await loaders.searchResultLoader.load({
+    ...searchContext,
+    body: {
+      ...searchContext.body,
+      sort: reverseSortArgs(searchContext.body.sort),
+    },
+    size: 1,
+  }))[0];
+
+  return lastNode && getCursor(lastNode._cursor);
+}
+
+async function defaultResolveFirstCursor(
+  { first, before, after, ...searchContext },
+  args,
+  { loaders }
+) {
+  const firstNode = (await loaders.searchResultLoader.load({
+    ...searchContext,
+    size: 1,
+  }))[0];
+
+  return firstNode && getCursor(firstNode._cursor);
+}
+
 // All search
 //
 export function createConnectionType(
@@ -141,87 +224,10 @@ export function createConnectionType(
   nodeType,
   {
     // Default resolvers
-    //
-    // eslint-disable-next-line no-unused-vars
-    resolveTotalCount = async ({ first, before, after, ...searchContext }) =>
-      // .count() does not accept sort & size
-      (await client.count({
-        ...searchContext,
-        body: {
-          ...searchContext.body,
-
-          // totalCount cannot support these
-          sort: undefined,
-          track_scores: undefined,
-        },
-      })).count,
-
-    resolveEdges = async (
-      { first, before, after, ...searchContext },
-      args,
-      { loaders }
-    ) => {
-      if (before && after) {
-        throw new Error('Use of before & after is prohibited.');
-      }
-
-      const nodes = await loaders.searchResultLoader.load({
-        ...searchContext,
-        body: {
-          ...searchContext.body,
-          size: first,
-          search_after: getSearchAfterFromCursor(before || after),
-
-          // if "before" is given, reverse the sort order and later reverse back
-          //
-          sort: before
-            ? reverseSortArgs(searchContext.body.sort)
-            : searchContext.body.sort,
-        },
-      });
-
-      if (before) {
-        nodes.reverse();
-      }
-
-      return nodes.map(({ _score: score, _cursor, ...node }) => ({
-        node,
-        cursor: getCursor(_cursor),
-        score,
-      }));
-    },
-
-    // eslint-disable-next-line no-unused-vars
-    resolveLastCursor = async (
-      { first, before, after, ...searchContext },
-      args,
-      { loaders }
-    ) => {
-      const lastNode = (await loaders.searchResultLoader.load({
-        ...searchContext,
-        body: {
-          ...searchContext.body,
-          sort: reverseSortArgs(searchContext.body.sort),
-        },
-        size: 1,
-      }))[0];
-
-      return lastNode && getCursor(lastNode._cursor);
-    },
-
-    // eslint-disable-next-line no-unused-vars
-    resolveFirstCursor = async (
-      { first, before, after, ...searchContext },
-      args,
-      { loaders }
-    ) => {
-      const firstNode = (await loaders.searchResultLoader.load({
-        ...searchContext,
-        size: 1,
-      }))[0];
-
-      return firstNode && getCursor(firstNode._cursor);
-    },
+    resolveTotalCount = defaultResolveTotalCount,
+    resolveEdges = defaultResolveEdges,
+    resolveLastCursor = defaultResolveLastCursor,
+    resolveFirstCursor = defaultResolveFirstCursor,
   } = {}
 ) {
   return new GraphQLObjectType({
