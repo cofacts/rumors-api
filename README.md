@@ -133,7 +133,7 @@ $ npm run lint # Automatically fixes format error
 To prepare test DB, first start an elastic search server on port 62223:
 
 ```
-$ docker run -d -p "62223:9200" --name "rumors-test-db" elasticsearch
+$ docker run -d -p "62223:9200" --name "rumors-test-db" docker.elastic.co/elasticsearch/elasticsearch:6.1.0
 # If it says 'The name "rumors-test-db" is already in use',
 # Just run:
 $ docker start rumors-test-db
