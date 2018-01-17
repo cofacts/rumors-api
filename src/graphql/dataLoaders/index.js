@@ -1,8 +1,6 @@
 import docLoaderFactory from './docLoaderFactory';
-import articleByReplyConnectionIdLoaderFactory
-  from './articleByReplyConnectionIdLoaderFactory';
-import replyConnectionsByReplyIdLoaderFactory
-  from './replyConnectionsByReplyIdLoaderFactory';
+import articleByReplyConnectionIdLoaderFactory from './articleByReplyConnectionIdLoaderFactory';
+import articleRepliesByReplyIdLoaderFactory from './articleRepliesByReplyIdLoaderFactory';
 import searchResultLoaderFactory from './searchResultLoaderFactory';
 
 export default class DataLoaders {
@@ -17,10 +15,10 @@ export default class DataLoaders {
       articleByReplyConnectionIdLoaderFactory
     );
   }
-  get replyConnectionsByReplyIdLoader() {
+  get articleRepliesByReplyIdLoader() {
     return this._checkOrSetLoader(
-      'replyConnectionsByReplyIdLoader',
-      replyConnectionsByReplyIdLoaderFactory
+      'articleRepliesByReplyIdLoader',
+      articleRepliesByReplyIdLoaderFactory
     );
   }
   get searchResultLoader() {

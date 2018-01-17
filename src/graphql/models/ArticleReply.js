@@ -9,17 +9,17 @@ import {
 import Article from './Article';
 import User, { userFieldResolver } from './User';
 import Reply from './Reply';
-import ReplyConnectionFeedback from './ReplyConnectionFeedback';
-import ReplyConnectionStatusEnum from './ReplyConnectionStatusEnum';
+import ArticleReplyFeedback from './ArticleReplyFeedback';
+import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 
 export const auth = {
-  canUpdateStatus(currentUserId, replyConnectionUserId) {
-    return replyConnectionUserId === currentUserId;
+  canUpdateStatus(currentUserId, articleReplyUserId) {
+    return articleReplyUserId === currentUserId;
   },
 };
 
 export default new GraphQLObjectType({
-  name: 'ReplyConnection',
+  name: 'ArticleReply',
   description: 'The linkage between an Article and a Reply',
   fields: () => ({
     reply: {
@@ -29,12 +29,13 @@ export default new GraphQLObjectType({
     },
     article: {
       type: Article,
-      resolve: ({ id }, args, { loaders }) =>
-        loaders.articleByReplyConnectionIdLoader.load(id),
+      resolve: ({ articleId }, args, { loaders }) =>
+        loaders.docLoader.load({ index: 'articles', id: articleId }),
     },
 
     id: {
       type: GraphQLString,
+      deprecationReason: 'Use article.id and reply.id instead',
     },
 
     user: {
@@ -52,11 +53,15 @@ export default new GraphQLObjectType({
 
     feedbackCount: {
       type: GraphQLInt,
-      resolve: ({ feedbackIds = [] }) => feedbackIds.length,
+      resolve: ({ positiveFeedbackCount = 0, negativeFeedbackCount = 0 }) =>
+        positiveFeedbackCount + negativeFeedbackCount,
     },
 
+    positiveFeedbackCount: { type: GraphQLInt },
+    negativeFeedbackCount: { type: GraphQLInt },
+
     feedbacks: {
-      type: new GraphQLList(ReplyConnectionFeedback),
+      type: new GraphQLList(ArticleReplyFeedback),
       resolve: ({ feedbackIds = [] }, args, { loaders }) =>
         loaders.docLoader.loadMany(
           feedbackIds.map(id => ({ index: 'replyconnectionfeedbacks', id }))
@@ -64,7 +69,7 @@ export default new GraphQLObjectType({
     },
 
     status: {
-      type: ReplyConnectionStatusEnum,
+      type: ArticleReplyStatusEnum,
       resolve: ({ status }) => (status === undefined ? 'NORMAL' : status),
     },
 

@@ -27,18 +27,18 @@ const User = new GraphQLObjectType({
 export default User;
 
 export const userFieldResolver = (
-  { userId, from },
+  { userId, appId },
   args,
   { loaders, ...context }
 ) => {
   // If the root document is created by website users, we can resolve user from userId.
   //
-  if (from === 'WEBSITE')
+  if (appId === 'WEBSITE')
     return loaders.docLoader.load({ index: 'users', id: userId });
 
   // If the user comes from the same client as the root document, return the user id.
   //
-  if (context.from === from) return { id: userId };
+  if (context.from === appId) return { id: userId };
 
   // If not, this client is not allowed to see user.
   //

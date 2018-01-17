@@ -3,8 +3,8 @@ import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
 import User, { userFieldResolver } from './User';
 
 export default new GraphQLObjectType({
-  name: 'ReplyConnectionFeedback',
-  description: 'User feedback to a ReplyConnection',
+  name: 'ArticleReplyFeedback',
+  description: 'User feedback to an ArticleReply',
   fields: () => ({
     user: {
       type: User,

@@ -14,11 +14,9 @@ import SearchCrawledDocs from './queries/SearchCrawledDocs';
 import CreateArticle from './mutations/CreateArticle';
 import CreateReply from './mutations/CreateReply';
 import CreateReplyConnection from './mutations/CreateReplyConnection';
-import CreateOrUpdateReplyConnectionFeedback
-  from './mutations/CreateOrUpdateReplyConnectionFeedback';
+import CreateOrUpdateReplyConnectionFeedback from './mutations/CreateOrUpdateReplyConnectionFeedback';
 import CreateReplyRequest from './mutations/CreateReplyRequest';
-import UpdateReplyConnectionStatus
-  from './mutations/UpdateReplyConnectionStatus';
+import UpdateReplyConnectionStatus from './mutations/UpdateReplyConnectionStatus';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({

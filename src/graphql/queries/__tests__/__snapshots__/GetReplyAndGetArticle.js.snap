@@ -1,26 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GetReplyAndGetArticle GetArticle relatedArticles should work: relatedArticle filter test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Object {
+        "edges": Array [],
+      },
+    },
+  },
+}
+`;
+
+exports[`GetReplyAndGetArticle GetArticle relatedArticles should work: relatedArticle no-param test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WyJkb2MjZm9vMyJd",
+            "node": Object {
+              "id": "foo3",
+              "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+            },
+            "score": 0.37905684,
+          },
+          Object {
+            "cursor": "WyJkb2MjZm9vMiJd",
+            "node": Object {
+              "id": "foo2",
+              "text": "Lorum ipsum Lorum ipsum",
+            },
+            "score": 0.3672113,
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`GetReplyAndGetArticle GetArticle relatedArticles should work: relatedArticle sorting test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WzAuMzY3MjExMywiZG9jI2ZvbzIiXQ==",
+            "node": Object {
+              "id": "foo2",
+              "text": "Lorum ipsum Lorum ipsum",
+            },
+            "score": 0.3672113,
+          },
+          Object {
+            "cursor": "WzAuMzc5MDU2ODQsImRvYyNmb28zIl0=",
+            "node": Object {
+              "id": "foo3",
+              "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+            },
+            "score": 0.37905684,
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
 exports[`GetReplyAndGetArticle GetArticle should allow filtering replyConnections 1`] = `
 Object {
   "data": Object {
     "GetArticle": Object {
+      "articleReplies": Array [
+        Object {
+          "reply": Object {
+            "id": "fofo",
+          },
+          "status": "NORMAL",
+        },
+        Object {
+          "reply": Object {
+            "id": "bar2",
+          },
+          "status": "DELETED",
+        },
+      ],
       "deletedReplies": Array [
         Object {
-          "id": "foo3-bar2",
+          "reply": Object {
+            "id": "bar2",
+          },
           "status": "DELETED",
         },
       ],
       "normalReplies": Array [
         Object {
-          "id": "foo3-fofo",
-          "status": "NORMAL",
-        },
-      ],
-      "replyConnections": Array [
-        Object {
-          "id": "foo3-bar2",
-          "status": "DELETED",
-        },
-        Object {
-          "id": "foo3-fofo",
+          "reply": Object {
+            "id": "fofo",
+          },
           "status": "NORMAL",
         },
       ],
@@ -33,17 +113,15 @@ exports[`GetReplyAndGetArticle GetArticle should get the specified article & ass
 Object {
   "data": Object {
     "GetArticle": Object {
-      "references": Array [
+      "articleReplies": Array [
         Object {
-          "type": "LINE",
-        },
-      ],
-      "replyConnections": Array [
-        Object {
+          "article": Object {
+            "id": "foo",
+          },
           "canUpdateStatus": false,
           "createdAt": "2015-01-01T12:10:30Z",
-          "id": "foo-bar",
           "reply": Object {
+            "id": "bar",
             "versions": Array [
               Object {
                 "reference": "barbar",
@@ -56,9 +134,14 @@ Object {
           "updatedAt": "2015-01-02T12:10:30Z",
         },
       ],
+      "references": Array [
+        Object {
+          "type": "LINE",
+        },
+      ],
       "replyCount": 1,
       "replyRequestCount": 1,
-      "requestedForReply": true,
+      "requestedForReply": false,
       "text": "Lorum ipsum",
     },
   },
@@ -69,26 +152,34 @@ exports[`GetReplyAndGetArticle GetReply should get allow filtering replyConnecti
 Object {
   "data": Object {
     "GetReply": Object {
+      "articleReplies": Array [
+        Object {
+          "article": Object {
+            "id": "foo2",
+          },
+          "status": "NORMAL",
+        },
+        Object {
+          "article": Object {
+            "id": "foo3",
+          },
+          "status": "DELETED",
+        },
+      ],
       "deletedReplies": Array [
         Object {
-          "id": "foo3-bar2",
+          "article": Object {
+            "id": "foo3",
+          },
           "status": "DELETED",
         },
       ],
       "normalReplies": Array [
         Object {
-          "id": "foo2-bar2",
+          "article": Object {
+            "id": "foo2",
+          },
           "status": "NORMAL",
-        },
-      ],
-      "replyConnections": Array [
-        Object {
-          "id": "foo2-bar2",
-          "status": "NORMAL",
-        },
-        Object {
-          "id": "foo3-bar2",
-          "status": "DELETED",
         },
       ],
     },
@@ -115,93 +206,6 @@ Object {
           "type": "NOT_ARTICLE",
         },
       ],
-    },
-  },
-}
-`;
-
-exports[`relatedArticle filter test 1`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "relatedArticles": Object {
-        "edges": Array [
-          Object {
-            "cursor": "WyJiYXNpYyNmb28zIl0=",
-            "node": Object {
-              "id": "foo3",
-              "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
-            },
-            "score": 0.35971722,
-          },
-          Object {
-            "cursor": "WyJiYXNpYyNmb28yIl0=",
-            "node": Object {
-              "id": "foo2",
-              "text": "Lorum ipsum Lorum ipsum",
-            },
-            "score": 0.3672113,
-          },
-        ],
-      },
-    },
-  },
-}
-`;
-
-exports[`relatedArticle no-param test 1`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "relatedArticles": Object {
-        "edges": Array [
-          Object {
-            "cursor": "WyJiYXNpYyNmb28zIl0=",
-            "node": Object {
-              "id": "foo3",
-              "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
-            },
-            "score": 0.35971722,
-          },
-          Object {
-            "cursor": "WyJiYXNpYyNmb28yIl0=",
-            "node": Object {
-              "id": "foo2",
-              "text": "Lorum ipsum Lorum ipsum",
-            },
-            "score": 0.3672113,
-          },
-        ],
-      },
-    },
-  },
-}
-`;
-
-exports[`relatedArticle sorting test 1`] = `
-Object {
-  "data": Object {
-    "GetArticle": Object {
-      "relatedArticles": Object {
-        "edges": Array [
-          Object {
-            "cursor": "WzAuMzU5NzE3MjIsImJhc2ljI2ZvbzMiXQ==",
-            "node": Object {
-              "id": "foo3",
-              "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
-            },
-            "score": 0.35971722,
-          },
-          Object {
-            "cursor": "WzAuMzY3MjExMywiYmFzaWMjZm9vMiJd",
-            "node": Object {
-              "id": "foo2",
-              "text": "Lorum ipsum Lorum ipsum",
-            },
-            "score": 0.3672113,
-          },
-        ],
-      },
     },
   },
 }

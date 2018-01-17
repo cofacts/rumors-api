@@ -76,7 +76,7 @@ router.post(
       loaders: new DataLoaders(), // new loaders per request
       user: ctx.state.user,
 
-      // userId-from pair that is used in replyRequests and replyConnectionFeedbacks.
+      // userId-from pair
       //
       userId: ctx.from === 'WEBSITE' || ctx.from === 'DEVELOPMENT_FRONTEND'
         ? (ctx.state.user || {}).id

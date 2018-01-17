@@ -9,6 +9,7 @@ export default {
       },
     ],
     references: [{ type: 'LINE' }],
+    replyRequestCount: 1,
   },
   '/articles/doc/foo2': {
     text: 'Lorum ipsum Lorum ipsum',
@@ -41,6 +42,11 @@ export default {
   '/replies/doc/bar2': {
     text: 'bar2',
     reference: 'barbar2',
+    type: 'NOT_ARTICLE',
+  },
+  '/replies/doc/fofo': {
+    text: 'fofo',
+    reference: 'barfofo',
     type: 'NOT_ARTICLE',
   },
   '/replyrequests/doc/articleTest1': {

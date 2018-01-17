@@ -15,13 +15,13 @@ import {
   createSortType,
   createConnectionType,
   assertUser,
-  filterReplyConnectionsByStatus,
+  filterArticleRepliesByStatus,
 } from 'graphql/util';
 
 import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
-import ReplyConnectionStatusEnum from './ReplyConnectionStatusEnum';
-import ReplyConnection from './ReplyConnection';
+import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
+import ArticleReply from './ArticleReply';
 
 const Article = new GraphQLObjectType({
   name: 'Article',
@@ -33,33 +33,51 @@ const Article = new GraphQLObjectType({
     references: { type: new GraphQLList(ArticleReference) },
     replyCount: {
       type: GraphQLInt,
-      resolve: ({ replyConnectionIds = [] }) => replyConnectionIds.length,
+      resolve: ({ articleReplies = [] }) => articleReplies.length,
     },
     replyConnections: {
-      type: new GraphQLList(ReplyConnection),
+      type: new GraphQLList(ArticleReply),
+      deprecationReason: 'Use articleReplies instead',
       args: {
         status: {
-          type: ReplyConnectionStatusEnum,
-          description: 'When specified, returns only reply connections with the specified status',
+          type: ArticleReplyStatusEnum,
+          description:
+            'When specified, returns only article replies with the specified status',
         },
       },
-      resolve: async ({ replyConnectionIds = [] }, { status }, { loaders }) => {
-        const replyConnections = await loaders.docLoader.loadMany(
-          replyConnectionIds
-            .reverse() // latest inserted replyConnection goes first
-            .map(id => ({ index: 'replyconnections', id }))
-        );
-
-        return filterReplyConnectionsByStatus(replyConnections, status);
+      resolve: async ({ id, articleReplies = [] }, { status }) =>
+        filterArticleRepliesByStatus(
+          articleReplies.map(articleReply => {
+            articleReply.articleId = id;
+            return articleReply;
+          }),
+          status
+        ),
+    },
+    articleReplies: {
+      type: new GraphQLList(ArticleReply),
+      args: {
+        status: {
+          type: ArticleReplyStatusEnum,
+          description:
+            'When specified, returns only article replies with the specified status',
+        },
       },
+      resolve: async ({ id, articleReplies = [] }, { status }) =>
+        filterArticleRepliesByStatus(
+          // Inject articleId to each articleReply
+          articleReplies.map(articleReply => {
+            articleReply.articleId = id;
+            return articleReply;
+          }),
+          status
+        ),
     },
-    replyRequestCount: {
-      type: GraphQLInt,
-      resolve: ({ replyRequestIds = [] }) => replyRequestIds.length,
-    },
+    replyRequestCount: { type: GraphQLInt },
     requestedForReply: {
       type: GraphQLBoolean,
-      description: 'If the current user has requested for reply for this article',
+      description:
+        'If the current user has requested for reply for this article',
       resolve: async (
         { replyRequestIds = [] },
         args,
@@ -99,7 +117,7 @@ const Article = new GraphQLObjectType({
           query: {
             more_like_this: {
               fields: ['text'],
-              like: [{ _index: 'articles', _type: 'basic', _id: id }],
+              like: [{ _index: 'articles', _type: 'doc', _id: id }],
               min_term_freq: 1,
               min_doc_freq: 1,
             },
@@ -120,7 +138,7 @@ const Article = new GraphQLObjectType({
               filter: {
                 script: {
                   script: {
-                    inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
+                    inline: `doc['articleReplies'].length ${operator} params.operand`,
                     params: {
                       operand,
                     },
@@ -133,7 +151,7 @@ const Article = new GraphQLObjectType({
 
         return {
           index: 'articles',
-          type: 'basic',
+          type: 'doc',
           body,
           ...otherParams,
         };
