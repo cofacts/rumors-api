@@ -11,8 +11,11 @@ export default () =>
         mSearchBody.push(body);
       });
 
-      return (await client.msearch({ body: mSearchBody })).responses.map(resp =>
-        getIn(resp)(['hits', 'hits'], []).map(processMeta)
+      return (await client.msearch({ body: mSearchBody })).responses.map(
+        resp => {
+          if (resp.error) throw new Error(JSON.stringify(resp.error));
+          return getIn(resp)(['hits', 'hits'], []).map(processMeta);
+        }
       );
     },
     {
