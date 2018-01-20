@@ -66,7 +66,8 @@ export function createSortType(typeName, filterableFieldNames = []) {
   return new GraphQLList(
     new GraphQLInputObjectType({
       name: typeName,
-      description: 'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
+      description:
+        'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
       fields: filterableFieldNames.reduce(
         (fields, fieldName) => ({
           ...fields,
@@ -86,11 +87,13 @@ export const pagingArgs = {
   },
   after: {
     type: GraphQLString,
-    description: 'Specify a cursor, returns results after this cursor. cannot be used with "before".',
+    description:
+      'Specify a cursor, returns results after this cursor. cannot be used with "before".',
   },
   before: {
     type: GraphQLString,
-    description: 'Specify a cursor, returns results before this cursor. cannot be used with "after".',
+    description:
+      'Specify a cursor, returns results before this cursor. cannot be used with "after".',
   },
 };
 
@@ -235,7 +238,8 @@ export function createConnectionType(
     fields: {
       totalCount: {
         type: GraphQLInt,
-        description: 'The total count of the entire collection, regardless of "before", "after".',
+        description:
+          'The total count of the entire collection, regardless of "before", "after".',
         resolve: resolveTotalCount,
       },
       edges: {
@@ -257,12 +261,14 @@ export function createConnectionType(
           fields: {
             lastCursor: {
               type: GraphQLString,
-              description: 'The cursor pointing to the last node of the entire collection, regardless of "before" and "after". Can be used to determine if is in the last page.',
+              description:
+                'The cursor pointing to the last node of the entire collection, regardless of "before" and "after". Can be used to determine if is in the last page.',
               resolve: resolveLastCursor,
             },
             firstCursor: {
               type: GraphQLString,
-              description: 'The cursor pointing to the first node of the entire collection, regardless of "before" and "after". Can be used to determine if is in first page.',
+              description:
+                'The cursor pointing to the first node of the entire collection, regardless of "before" and "after". Can be used to determine if is in first page.',
               resolve: resolveFirstCursor,
             },
           },
