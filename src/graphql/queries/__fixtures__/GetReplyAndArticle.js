@@ -8,6 +8,7 @@ export default {
         updatedAt: '2015-01-02T12:10:30Z',
       },
     ],
+    normalArticleReplyCount: 1,
     references: [{ type: 'LINE' }],
     replyRequestCount: 1,
   },
@@ -18,6 +19,7 @@ export default {
         replyId: 'bar2',
       },
     ],
+    normalArticleReplyCount: 1,
     references: [{ type: 'LINE' }],
   },
   '/articles/doc/foo3': {
@@ -32,6 +34,7 @@ export default {
         status: 'DELETED',
       },
     ],
+    normalArticleReplyCount: 1,
     references: [{ type: 'LINE' }],
   },
   '/replies/doc/bar': {

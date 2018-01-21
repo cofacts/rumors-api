@@ -5,7 +5,24 @@ Object {
   "data": Object {
     "GetArticle": Object {
       "relatedArticles": Object {
-        "edges": Array [],
+        "edges": Array [
+          Object {
+            "cursor": "WyJkb2MjZm9vMyJd",
+            "node": Object {
+              "id": "foo3",
+              "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+            },
+            "score": 0.37905684,
+          },
+          Object {
+            "cursor": "WyJkb2MjZm9vMiJd",
+            "node": Object {
+              "id": "foo2",
+              "text": "Lorum ipsum Lorum ipsum",
+            },
+            "score": 0.3672113,
+          },
+        ],
       },
     },
   },
