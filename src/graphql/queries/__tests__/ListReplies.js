@@ -8,76 +8,86 @@ describe('ListReplies', () => {
 
   it('lists all replies', async () => {
     expect(
-      await gql`{
-        ListReplies {
-          totalCount
-          edges {
-            node {
-              id
+      await gql`
+        {
+          ListReplies {
+            totalCount
+            edges {
+              node {
+                id
+              }
+              cursor
             }
-            cursor
-          }
-          pageInfo {
-            firstCursor
-            lastCursor
+            pageInfo {
+              firstCursor
+              lastCursor
+            }
           }
         }
-      }`()
+      `()
     ).toMatchSnapshot();
   });
 
   it('sorts', async () => {
     expect(
-      await gql`{
-        ListReplies(orderBy: [{createdAt: DESC}]) {
-          edges {
-            node {
-              id
+      await gql`
+        {
+          ListReplies(orderBy: [{ createdAt: DESC }]) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
             }
           }
-          totalCount
-          pageInfo {
-            firstCursor
-            lastCursor
-          }
         }
-      }`()
+      `()
     ).toMatchSnapshot();
   });
 
   it('filters', async () => {
     expect(
-      await gql`{
-        ListReplies(filter: {moreLikeThis: {like: "foo", minimumShouldMatch: "5%"}}) {
-          edges {
-            node {
-              id
+      await gql`
+        {
+          ListReplies(
+            filter: { moreLikeThis: { like: "foo", minimumShouldMatch: "5%" } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
             }
           }
-          totalCount
-          pageInfo {
-            firstCursor
-            lastCursor
-          }
         }
-      }`()
+      `()
     ).toMatchSnapshot();
 
     expect(
-      await gql`{
-        ListReplies(filter: {selfOnly: true}) {
-          edges {
-            node {
-              id
+      await gql`
+        {
+          ListReplies(filter: { selfOnly: true }) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
             }
           }
-          totalCount
-          pageInfo {
-            firstCursor
-            lastCursor
-          }
         }
-      }`(
+      `(
         {},
         {
           userId: 'foo',
@@ -87,77 +97,85 @@ describe('ListReplies', () => {
     ).toMatchSnapshot();
 
     expect(
-      await gql`{
-        ListReplies(filter: {type: RUMOR}) {
-          edges {
-            node {
-              id
+      await gql`
+        {
+          ListReplies(filter: { type: RUMOR }) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
             }
           }
-          totalCount
-          pageInfo {
-            firstCursor
-            lastCursor
-          }
         }
-      }`()
+      `()
     ).toMatchSnapshot();
   });
 
   it('supports after', async () => {
     expect(
-      await gql`query($cursor: String) {
-      ListReplies(after: $cursor) {
-        edges {
-          node {
-            id
+      await gql`
+        query($cursor: String) {
+          ListReplies(after: $cursor) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
+            }
           }
         }
-        totalCount
-        pageInfo {
-          firstCursor
-          lastCursor
-        }
-      }
-    }`({ cursor: getCursor(['basic#moreLikeThis2']) })
+      `({ cursor: getCursor(['doc#moreLikeThis2']) })
     ).toMatchSnapshot();
   });
 
   it('supports before', async () => {
     expect(
-      await gql`query($cursor: String) {
-        ListReplies(before: $cursor) {
-          edges {
-            node {
-              id
+      await gql`
+        query($cursor: String) {
+          ListReplies(before: $cursor) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
             }
           }
-          totalCount
-          pageInfo {
-            firstCursor
-            lastCursor
-          }
         }
-      }`({ cursor: getCursor(['basic#moreLikeThis1']) })
+      `({ cursor: getCursor(['doc#moreLikeThis1']) })
     ).toMatchSnapshot();
   });
 
   it('handles selfOnly filter properly if not logged in', async () => {
     expect(
-      await gql`{
-        ListReplies(filter: {selfOnly: true}) {
-          edges {
-            node {
-              id
+      await gql`
+        {
+          ListReplies(filter: { selfOnly: true }) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
             }
           }
-          totalCount
-          pageInfo {
-            firstCursor
-            lastCursor
-          }
         }
-      }`()
+      `()
     ).toMatchSnapshot();
   });
 
