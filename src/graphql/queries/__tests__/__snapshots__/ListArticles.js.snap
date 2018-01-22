@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`ListArticles correctly handles empty lists without errors 1`] = `
 Object {
   "data": Object {
@@ -25,8 +27,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
-        "lastCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
+        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
+        "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
       },
       "totalCount": 1,
     },
@@ -51,8 +53,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
-        "lastCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
+        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
+        "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
       },
       "totalCount": 2,
     },
@@ -83,27 +85,27 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
+          "cursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
           "node": Object {
             "id": "listArticleTest3",
           },
         },
         Object {
-          "cursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QyIl0=",
+          "cursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MiJd",
           "node": Object {
             "id": "listArticleTest2",
           },
         },
         Object {
-          "cursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
+          "cursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
           "node": Object {
             "id": "listArticleTest1",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
-        "lastCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
+        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
+        "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
       },
       "totalCount": 3,
     },
@@ -133,8 +135,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzMsImJhc2ljI2xpc3RBcnRpY2xlVGVzdDMiXQ==",
-        "lastCursor": "WzEsImJhc2ljI2xpc3RBcnRpY2xlVGVzdDEiXQ==",
+        "firstCursor": "WzMsImRvYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "lastCursor": "WzEsImRvYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
       "totalCount": 3,
     },
@@ -164,8 +166,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzIsImJhc2ljI2xpc3RBcnRpY2xlVGVzdDEiXQ==",
-        "lastCursor": "WzAsImJhc2ljI2xpc3RBcnRpY2xlVGVzdDMiXQ==",
+        "firstCursor": "WzIsImRvYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
+        "lastCursor": "WzAsImRvYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
       },
       "totalCount": 3,
     },
@@ -185,8 +187,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
-        "lastCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
+        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
+        "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
       },
       "totalCount": 3,
     },
@@ -206,8 +208,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
-        "lastCursor": "WyJiYXNpYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
+        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
+        "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
       },
       "totalCount": 3,
     },

@@ -20,7 +20,8 @@ export default {
             'ListArticleReplyCountExpr',
             GraphQLInt
           ),
-          description: 'List only the articles whose number of replies matches the criteria.',
+          description:
+            'List only the articles whose number of replies matches the criteria.',
         },
         moreLikeThis: {
           type: new GraphQLInputObjectType({
@@ -40,7 +41,8 @@ export default {
             'ListArticleReplyRequestCountExpr',
             GraphQLInt
           ),
-          description: 'List only the articles whose number of replies matches the criteria.',
+          description:
+            'List only the articles whose number of replies matches the criteria.',
         },
       }),
     },
@@ -56,17 +58,7 @@ export default {
   },
   async resolve(rootValue, { filter = {}, orderBy = [], ...otherParams }) {
     const body = {
-      sort: getSortArgs(orderBy, {
-        replyRequestCount(order) {
-          return {
-            _script: {
-              type: 'number',
-              script: { inline: "doc['replyRequestIds'].values.size()" },
-              order,
-            },
-          };
-        },
-      }),
+      sort: getSortArgs(orderBy),
       track_scores: true, // for _score sorting
     };
 
@@ -83,8 +75,8 @@ export default {
           like: filter.moreLikeThis.like,
           min_term_freq: 1,
           min_doc_freq: 1,
-          minimum_should_match: filter.moreLikeThis.minimumShouldMatch ||
-            '10<70%',
+          minimum_should_match:
+            filter.moreLikeThis.minimumShouldMatch || '10<70%',
         },
       });
     }
@@ -94,7 +86,7 @@ export default {
       filterQueries.push({
         script: {
           script: {
-            inline: `doc['replyConnectionIds'].length ${operator} params.operand`,
+            inline: `doc['normalArticleReplyCount'].value ${operator} params.operand`,
             params: {
               operand,
             },
@@ -110,7 +102,7 @@ export default {
       filterQueries.push({
         script: {
           script: {
-            inline: `doc['replyRequestIds'].length ${operator} params.operand`,
+            inline: `doc['replyRequestCount'].value ${operator} params.operand`,
             params: {
               operand,
             },
@@ -129,7 +121,7 @@ export default {
     // should return search context for resolveEdges & resolvePageInfo
     return {
       index: 'articles',
-      type: 'basic',
+      type: 'doc',
       body,
       ...otherParams,
     };
