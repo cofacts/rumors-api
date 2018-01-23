@@ -3,7 +3,7 @@
 exports[`CreateReplyRequest attaches a reply request to an article 1`] = `
 Object {
   "CreateReplyRequest": Object {
-    "replyRequestCount": 1,
+    "replyRequestCount": 2,
     "status": "SUCCESS",
   },
 }
@@ -13,16 +13,31 @@ exports[`CreateReplyRequest attaches a reply request to an article 2`] = `
 Object {
   "appId": "test",
   "createdAt": "2017-01-28T08:45:57.011Z",
-  "updatedAt": "2017-01-28T08:45:57.011Z",
   "userId": "test",
+}
+`;
+
+exports[`CreateReplyRequest attaches a reply request to an article 3`] = `
+Object {
+  "lastRequestedAt": "2017-01-28T08:45:57.011Z",
+  "replyRequestCount": 2,
+  "text": "foofoo",
 }
 `;
 
 exports[`CreateReplyRequest cannot attach a reply request to an article twice 1`] = `
 Object {
   "CreateReplyRequest": Object {
-    "replyRequestCount": 1,
+    "replyRequestCount": 2,
     "status": "DUPLICATE",
   },
+}
+`;
+
+exports[`CreateReplyRequest cannot attach a reply request to an article twice 2`] = `
+Object {
+  "lastRequestedAt": "2017-01-28T08:45:57.011Z",
+  "replyRequestCount": 2,
+  "text": "foofoo",
 }
 `;

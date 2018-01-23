@@ -74,6 +74,7 @@ const Article = new GraphQLObjectType({
         ),
     },
     replyRequestCount: { type: GraphQLInt },
+    lastRequestedAt: { type: GraphQLString },
     requestedForReply: {
       type: GraphQLBoolean,
       description:

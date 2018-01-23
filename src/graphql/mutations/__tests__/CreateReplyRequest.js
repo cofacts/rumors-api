@@ -40,7 +40,7 @@ describe('CreateReplyRequest', () => {
       type: 'doc',
       id: 'createReplyRequestTest1',
     });
-    expect(article._source.replyRequestCount).toBe(1);
+    expect(article._source).toMatchSnapshot();
 
     // Cleanup
     await client.delete({ index: 'replyrequests', type: 'doc', id });
@@ -48,6 +48,7 @@ describe('CreateReplyRequest', () => {
   });
 
   it('cannot attach a reply request to an article twice', async () => {
+    MockDate.set(1485593157011);
     await gql`
       mutation($articleId: String!) {
         CreateReplyRequest(articleId: $articleId) {
@@ -71,6 +72,8 @@ describe('CreateReplyRequest', () => {
       { userId: 'test', appId: 'test' }
     );
 
+    MockDate.reset();
+
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
@@ -79,7 +82,7 @@ describe('CreateReplyRequest', () => {
       type: 'doc',
       id: 'createReplyRequestTest1',
     });
-    expect(article._source.replyRequestCount).toBe(1);
+    expect(article._source).toMatchSnapshot();
 
     // Cleanup
     await client.delete({
