@@ -3,46 +3,59 @@ import {
   GraphQLNonNull,
   GraphQLInt,
   GraphQLObjectType,
+  GraphQLEnumType,
 } from 'graphql';
 import { assertUser } from 'graphql/util';
 
 import client, { processMeta } from 'util/client';
 
-export async function createReplyRequest({ articleId, userId, from }) {
-  assertUser({ from, userId });
+export class DuplicatedReplyRequestError extends Error {
+  constructor({ userId, appId, articleId } = {}) {
+    super(
+      `User ${userId} in app ${appId} already have requested replies to article ${articleId}`
+    );
+    Object.assign(this, { userId, appId, articleId });
+  }
+}
+
+/**
+ * Indexes a reply request and increments the replyRequestCount for article
+ *
+ * @param {Object} opt
+ * @param {String} opt.articleId - The article to add reply request to
+ * @param {String} opt.userId - The user that submits this request
+ * @param {String} opt.appId - The app that the user logged in to
+ * @returns {Object<article>} The updated article instance
+ */
+export async function createReplyRequest({ articleId, userId, appId }) {
+  assertUser({ appId, userId });
 
   const now = new Date().toISOString();
+  const id = `${articleId}__${userId}__${appId}`;
 
-  const replyRequest = {
-    // (articleId, userId, from) should be unique
-    id: `${articleId}__${userId}__${from}`,
-    from,
-    userId,
-    createdAt: now,
-    updatedAt: now,
-  };
-  const { id, ...body } = replyRequest;
-
-  const { created } = await client.index({
+  const { result } = await client.index({
     index: 'replyrequests',
-    type: 'basic',
+    type: 'doc',
     id,
-    body,
-    opType: 'create',
+    body: {
+      appId,
+      userId,
+      createdAt: now,
+      updatedAt: now,
+    },
   });
 
-  if (!created) {
-    throw new Error(`Cannot create reply request ${id}`);
+  if (result !== 'created') {
+    throw new DuplicatedReplyRequestError({ articleId, userId, appId });
   }
 
   const articleUpdateResult = await client.update({
     index: 'articles',
-    type: 'basic',
+    type: 'doc',
     id: articleId,
     body: {
       script: {
-        inline: 'if(!ctx._source.replyRequestIds.contains(params.id)) {ctx._source.replyRequestIds.add(params.id)}',
-        params: { id },
+        inline: 'ctx._source.replyRequestCount += 1',
       },
     },
     _source: true,
@@ -53,7 +66,6 @@ export async function createReplyRequest({ articleId, userId, from }) {
   }
 
   return {
-    replyRequest,
     article: processMeta({ ...articleUpdateResult.get, _id: id }),
   };
 }
@@ -65,15 +77,55 @@ export default {
     fields: {
       replyRequestCount: {
         type: GraphQLInt,
+        description:
+          'Reply request count for the given article after creating the reply request',
+      },
+      status: {
+        type: new GraphQLEnumType({
+          name: 'CreateReplyRequstResultStatus',
+          values: {
+            SUCCESS: {
+              value: 'SUCCESS',
+              description: 'Successfully inserted a new reply request',
+            },
+            DUPLICATE: {
+              value: 'DUPLICATE',
+              description:
+                'The user has already requested reply for this article',
+            },
+          },
+        }),
       },
     },
   }),
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
   },
-  async resolve(rootValue, { articleId }, { from, userId }) {
-    const { article } = await createReplyRequest({ articleId, from, userId });
+  async resolve(rootValue, { articleId }, { appId, userId, loaders }) {
+    try {
+      const { article } = await createReplyRequest({
+        articleId,
+        appId,
+        userId,
+      });
+      return {
+        replyRequestCount: article.replyRequestCount,
+        status: 'SUCCESS',
+      };
+    } catch (err) {
+      if (!(err instanceof DuplicatedReplyRequestError)) {
+        throw err;
+      }
 
-    return { replyRequestCount: article.replyRequestIds.length };
+      const article = await loaders.docLoader.load({
+        index: 'articles',
+        id: articleId,
+      });
+
+      return {
+        replyRequestCount: article.replyRequestCount,
+        status: 'DUPLICATE',
+      };
+    }
   },
 };
