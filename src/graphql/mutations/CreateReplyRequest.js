@@ -30,14 +30,20 @@ export async function createReplyRequest({ articleId, userId, appId }) {
   const now = new Date().toISOString();
   const id = `${articleId}__${userId}__${appId}`;
 
-  const { result } = await client.index({
+  const { result } = await client.update({
     index: 'replyrequests',
     type: 'doc',
     id,
     body: {
-      appId,
-      userId,
-      createdAt: now,
+      doc: {
+        updatedAt: now,
+      },
+      upsert: {
+        appId,
+        userId,
+        createdAt: now,
+        updatedAt: now,
+      },
     },
   });
 

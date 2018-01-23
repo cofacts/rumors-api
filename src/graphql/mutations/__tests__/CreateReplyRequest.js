@@ -60,6 +60,8 @@ describe('CreateReplyRequest', () => {
       { userId: 'test', appId: 'test' }
     );
 
+    MockDate.set(1485593257011);
+
     const { data, errors } = await gql`
       mutation($articleId: String!) {
         CreateReplyRequest(articleId: $articleId) {
@@ -74,8 +76,16 @@ describe('CreateReplyRequest', () => {
 
     MockDate.reset();
 
+    const id = 'createReplyRequestTest1__test__test';
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
+
+    const conn = await client.get({
+      index: 'replyrequests',
+      type: 'doc',
+      id,
+    });
+    expect(conn._source).toMatchSnapshot();
 
     const article = await client.get({
       index: 'articles',
@@ -85,11 +95,7 @@ describe('CreateReplyRequest', () => {
     expect(article._source).toMatchSnapshot();
 
     // Cleanup
-    await client.delete({
-      index: 'replyrequests',
-      type: 'doc',
-      id: 'createReplyRequestTest1__test__test',
-    });
+    await client.delete({ index: 'replyrequests', type: 'doc', id });
     await resetFrom(fixtures, '/articles/doc/createReplyRequestTest1');
   });
 
