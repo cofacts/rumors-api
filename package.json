@@ -51,7 +51,8 @@
     "passport-twitter": "^1.0.4",
     "pm2": "^2.1.6",
     "pug": "^2.0.0-beta6",
-    "rollbar": "^0.6.3"
+    "rollbar": "^0.6.3",
+    "xxhashjs": "^0.2.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
