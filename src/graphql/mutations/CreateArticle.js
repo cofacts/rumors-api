@@ -20,7 +20,7 @@ const xxhash64 = h64();
  * @param {string} text The article text
  * @returns {string} generated article ID
  */
-function generateArticleId(text) {
+export function getArticleId(text) {
   return xxhash64
     .update(text)
     .digest()
@@ -38,10 +38,20 @@ function generateArticleId(text) {
  * @param {string} param.appId
  * @returns {string} the new article's ID
  */
-async function createNewArticle({ text, reference, userId, appId }) {
-  const articleId = generateArticleId(text);
+async function createNewArticle({
+  text,
+  reference: originalReference,
+  userId,
+  appId,
+}) {
+  const articleId = getArticleId(text);
   const now = new Date().toISOString();
-  reference.createdAt = now;
+  const reference = {
+    ...originalReference,
+    createdAt: now,
+    userId: userId,
+    appId: appId,
+  };
 
   await client.update({
     index: 'articles',

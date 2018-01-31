@@ -1,6 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CreateArticle creates articles and a reply request 1`] = `
+exports[`avoids creating duplicated articles and adds replyRequests automatically 1`] = `
+Object {
+  "lastRequestedAt": "2017-01-28T08:45:57.011Z",
+  "references": Array [
+    Object {
+      "type": "LINE",
+    },
+    Object {
+      "appId": "foo",
+      "createdAt": "2017-01-28T08:45:57.011Z",
+      "type": "LINE",
+      "userId": "test",
+    },
+  ],
+  "replyRequestCount": 2,
+  "text": "I think I am I exist",
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+}
+`;
+
+exports[`avoids creating duplicated articles and adds replyRequests automatically 2`] = `
+Object {
+  "appId": "foo",
+  "articleId": "20xz7y20qzyt6",
+  "createdAt": "2017-01-28T08:45:57.011Z",
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "test",
+}
+`;
+
+exports[`creates articles and a reply request 1`] = `
 Object {
   "appId": "foo",
   "articleReplies": Array [],
@@ -9,8 +39,10 @@ Object {
   "normalArticleReplycount": 0,
   "references": Array [
     Object {
+      "appId": "foo",
       "createdAt": "2017-01-28T08:45:57.011Z",
       "type": "LINE",
+      "userId": "test",
     },
   ],
   "replyRequestCount": 1,
@@ -21,7 +53,7 @@ Object {
 }
 `;
 
-exports[`CreateArticle creates articles and a reply request 2`] = `
+exports[`creates articles and a reply request 2`] = `
 Object {
   "appId": "foo",
   "articleId": "mdw91a2ngnnt",
