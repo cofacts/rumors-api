@@ -1,15 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`CreateArticle creates articles and a reply request 1`] = `
 Object {
+  "appId": "foo",
+  "articleReplies": Array [],
   "createdAt": "2017-01-28T08:45:57.011Z",
-  "from": "foo",
+  "lastRequestedAt": "2017-01-28T08:45:57.011Z",
+  "normalArticleReplycount": 0,
   "references": Array [
     Object {
       "createdAt": "2017-01-28T08:45:57.011Z",
       "type": "LINE",
     },
   ],
-  "replyConnectionIds": Array [],
+  "replyRequestCount": 1,
+  "tags": Array [],
   "text": "FOO FOO",
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "test",
+}
+`;
+
+exports[`CreateArticle creates articles and a reply request 2`] = `
+Object {
+  "appId": "foo",
+  "articleId": "mdw91a2ngnnt",
+  "createdAt": "2017-01-28T08:45:57.011Z",
   "updatedAt": "2017-01-28T08:45:57.011Z",
   "userId": "test",
 }

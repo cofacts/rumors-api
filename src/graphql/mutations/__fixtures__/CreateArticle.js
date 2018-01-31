@@ -1,12 +1,12 @@
 export default {
-  '/articles/basic/existing-but-different': {
+  '/articles/doc/existing-but-different': {
     text: 'I think I exist I am',
-    replyRequestIds: [],
+    replyRequestCount: 0,
     references: [{ type: 'LINE' }],
   },
-  '/articles/basic/existing': {
+  '/articles/doc/existing': {
     text: 'I think I am I exist',
-    replyRequestIds: [],
+    replyRequestCount: 0,
     references: [{ type: 'LINE' }],
   },
 };

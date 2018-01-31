@@ -31,46 +31,49 @@ function generateArticleId(text) {
  * Creates a new article in ElasticSearch,
  * or updates its reference by adding a new reference
  *
- * @param {String} param.text
+ * @param {object} param
+ * @param {string} param.text
  * @param {ArticleReferenceInput} param.reference
- * @param {String} param.userId
- * @param {String} param.from
- * @returns {String} the new article's ID
+ * @param {string} param.userId
+ * @param {string} param.appId
+ * @returns {string} the new article's ID
  */
-async function createNewArticle({ text, reference, userId, from }) {
+async function createNewArticle({ text, reference, userId, appId }) {
   const articleId = generateArticleId(text);
   const now = new Date().toISOString();
   reference.createdAt = now;
 
-  const { created, result } = await client.update({
+  await client.update({
     index: 'articles',
     type: 'doc',
     id: articleId,
     body: {
-      script: `
-        ctx._source.updatedAt = params.updatedAt;
-        ctx._source.references.add(reference);
-      `,
-      params: {
-        updatedAt: now,
-        reference,
+      script: {
+        source: `
+          ctx._source.updatedAt = params.updatedAt;
+          ctx._source.references.add(params.reference);
+        `,
+        lang: 'painless',
+        params: {
+          updatedAt: now,
+          reference,
+        },
       },
       upsert: {
-        articleReplies: [],
         text,
         createdAt: now,
         updatedAt: now,
         userId,
-        from,
+        appId,
         references: [reference],
+        articleReplies: [],
+        normalArticleReplycount: 0,
+        replyRequestCount: 0,
+        tags: [],
       },
     },
     refresh: true, // Make sure the data is indexed when we create ReplyRequest
   });
-
-  if (!created) {
-    throw new Error(`Cannot create article: ${result}`);
-  }
 
   return articleId;
 }
@@ -82,11 +85,17 @@ export default {
     text: { type: new GraphQLNonNull(GraphQLString) },
     reference: { type: new GraphQLNonNull(ArticleReferenceInput) },
   },
-  async resolve(rootValue, { text, reference }, { from, userId }) {
-    assertUser({ from, userId });
+  async resolve(rootValue, { text, reference }, { appId, userId }) {
+    assertUser({ appId, userId });
 
-    const articleId = await createNewArticle({ text, reference, userId, from });
-    await createReplyRequest({ articleId, userId, from });
+    const articleId = await createNewArticle({
+      text,
+      reference,
+      userId,
+      appId,
+    });
+
+    await createReplyRequest({ articleId, userId, appId });
 
     return { id: articleId };
   },

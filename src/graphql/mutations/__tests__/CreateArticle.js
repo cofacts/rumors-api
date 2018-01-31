@@ -3,21 +3,19 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateArticle';
+import { getReplyRequestId } from '../CreateReplyRequest';
 
 describe('CreateArticle', () => {
   beforeAll(() => loadFixtures(fixtures));
 
-  it('creates articles and a reply request', async () => {
+  fit('creates articles and a reply request', async () => {
     MockDate.set(1485593157011);
+    const userId = 'test';
+    const appId = 'foo';
+
     const { data, errors } = await gql`
-      mutation(
-        $text: String!
-        $reference: ArticleReferenceInput!
-      ) {
-        CreateArticle(
-          text: $text
-          reference: $reference
-        ) {
+      mutation($text: String!, $reference: ArticleReferenceInput!) {
+        CreateArticle(text: $text, reference: $reference) {
           id
         }
       }
@@ -26,7 +24,7 @@ describe('CreateArticle', () => {
         text: 'FOO FOO',
         reference: { type: 'LINE' },
       },
-      { userId: 'test', from: 'foo' }
+      { userId, appId }
     );
     MockDate.reset();
 
@@ -34,21 +32,38 @@ describe('CreateArticle', () => {
 
     const { _source: article } = await client.get({
       index: 'articles',
-      type: 'basic',
+      type: 'doc',
       id: data.CreateArticle.id,
     });
-    expect(article.replyRequestIds).toHaveLength(1);
 
-    // delete auto-generated id from being snapshot
-    delete article.replyRequestIds;
-
+    expect(article.replyRequestCount).toBe(1);
     expect(article).toMatchSnapshot();
+
+    const replyRequestId = getReplyRequestId({
+      articleId: data.CreateArticle.id,
+      userId,
+      appId,
+    });
+
+    const { _source: replyRequest } = await client.get({
+      index: 'replyrequests',
+      type: 'doc',
+      id: replyRequestId,
+    });
+
+    expect(replyRequest).toMatchSnapshot();
 
     // Cleanup
     await client.delete({
       index: 'articles',
-      type: 'basic',
+      type: 'doc',
       id: data.CreateArticle.id,
+    });
+
+    await client.delete({
+      index: 'replyrequests',
+      type: 'doc',
+      id: replyRequestId,
     });
   });
 
@@ -58,14 +73,8 @@ describe('CreateArticle', () => {
     const userId = 'test';
 
     const { data, errors } = await gql`
-      mutation(
-        $text: String!
-        $reference: ArticleReferenceInput!
-      ) {
-        CreateArticle(
-          text: $text
-          reference: $reference
-        ) {
+      mutation($text: String!, $reference: ArticleReferenceInput!) {
+        CreateArticle(text: $text, reference: $reference) {
           id
         }
       }
@@ -74,7 +83,7 @@ describe('CreateArticle', () => {
         text: existingArticle.text,
         reference: existingArticle.references[0],
       },
-      { userId, from: 'foo' }
+      { userId, appId: 'foo' }
     );
     MockDate.reset();
     expect(errors).toBeUndefined();
