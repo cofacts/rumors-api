@@ -6,7 +6,7 @@ import ArticleReplyStatusEnum from 'graphql/models/ArticleReplyStatusEnum';
 
 export default {
   type: MutationResult,
-  description: 'Remove sspecified reply from specified article.',
+  description: 'Remove specified reply from specified article.',
   args: {
     replyConnectionId: { type: new GraphQLNonNull(GraphQLString) },
     status: {
