@@ -10,6 +10,21 @@ import { assertUser } from 'graphql/util';
 import client, { processMeta } from 'util/client';
 
 /**
+ * @typedef {Object} ReplyRequestParam
+ * @property {string} opt.articleId - The article to add reply request to
+ * @property {string} opt.userId - The user that submits this request
+ * @property {string} opt.appId - The app that the user logged in to
+ */
+
+/**
+ * @param {ReplyRequestParam} params
+ * @returns {string} the reply request ID for the givne params
+ */
+export function getReplyRequestId({ articleId, userId, appId }) {
+  return `${articleId}__${userId}__${appId}`;
+}
+
+/**
  * @typedef {Object} CreateReplyRequestResult
  * @property {Object} article - The update article instance
  * @property {boolean} isCreated - If the reply request is created
@@ -18,17 +33,14 @@ import client, { processMeta } from 'util/client';
 /**
  * Indexes a reply request and increments the replyRequestCount for article
  *
- * @param {Object} opt
- * @param {string} opt.articleId - The article to add reply request to
- * @param {string} opt.userId - The user that submits this request
- * @param {string} opt.appId - The app that the user logged in to
+ * @param {ReplyRequestParam} param
  * @returns {CreateReplyRequstResult}
  */
 export async function createReplyRequest({ articleId, userId, appId }) {
   assertUser({ appId, userId });
 
   const now = new Date().toISOString();
-  const id = `${articleId}__${userId}__${appId}`;
+  const id = getReplyRequestId({ articleId, userId, appId });
 
   const { result } = await client.update({
     index: 'replyrequests',
@@ -39,8 +51,9 @@ export async function createReplyRequest({ articleId, userId, appId }) {
         updatedAt: now,
       },
       upsert: {
-        appId,
+        articleId,
         userId,
+        appId,
         createdAt: now,
         updatedAt: now,
       },

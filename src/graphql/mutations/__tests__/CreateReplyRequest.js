@@ -2,6 +2,7 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
+import { getReplyRequestId } from '../CreateReplyRequest';
 import fixtures from '../__fixtures__/CreateReplyRequest';
 
 describe('CreateReplyRequest', () => {
@@ -9,6 +10,10 @@ describe('CreateReplyRequest', () => {
 
   it('attaches a reply request to an article', async () => {
     MockDate.set(1485593157011);
+    const articleId = 'createReplyRequestTest1';
+    const userId = 'test';
+    const appId = 'test';
+
     const { data, errors } = await gql`
       mutation($articleId: String!) {
         CreateReplyRequest(articleId: $articleId) {
@@ -18,13 +23,13 @@ describe('CreateReplyRequest', () => {
       }
     `(
       {
-        articleId: 'createReplyRequestTest1',
+        articleId,
       },
-      { userId: 'test', appId: 'test' }
+      { userId, appId }
     );
     MockDate.reset();
 
-    const id = 'createReplyRequestTest1__test__test';
+    const id = getReplyRequestId({ articleId, userId, appId });
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
@@ -38,27 +43,28 @@ describe('CreateReplyRequest', () => {
     const article = await client.get({
       index: 'articles',
       type: 'doc',
-      id: 'createReplyRequestTest1',
+      id: articleId,
     });
     expect(article._source).toMatchSnapshot();
 
     // Cleanup
     await client.delete({ index: 'replyrequests', type: 'doc', id });
-    await resetFrom(fixtures, '/articles/doc/createReplyRequestTest1');
+    await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
 
   it('cannot attach a reply request to an article twice', async () => {
     MockDate.set(1485593157011);
+    const articleId = 'createReplyRequestTest1';
+    const userId = 'test';
+    const appId = 'test';
+
     await gql`
       mutation($articleId: String!) {
         CreateReplyRequest(articleId: $articleId) {
           replyRequestCount
         }
       }
-    `(
-      { articleId: 'createReplyRequestTest1' },
-      { userId: 'test', appId: 'test' }
-    );
+    `({ articleId }, { userId, appId });
 
     MockDate.set(1485593257011);
 
@@ -69,14 +75,11 @@ describe('CreateReplyRequest', () => {
           status
         }
       }
-    `(
-      { articleId: 'createReplyRequestTest1' },
-      { userId: 'test', appId: 'test' }
-    );
+    `({ articleId }, { userId, appId });
 
     MockDate.reset();
 
-    const id = 'createReplyRequestTest1__test__test';
+    const id = getReplyRequestId({ articleId, userId, appId });
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
@@ -90,13 +93,13 @@ describe('CreateReplyRequest', () => {
     const article = await client.get({
       index: 'articles',
       type: 'doc',
-      id: 'createReplyRequestTest1',
+      id: articleId,
     });
     expect(article._source).toMatchSnapshot();
 
     // Cleanup
     await client.delete({ index: 'replyrequests', type: 'doc', id });
-    await resetFrom(fixtures, '/articles/doc/createReplyRequestTest1');
+    await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
 
   afterAll(() => unloadFixtures(fixtures));
