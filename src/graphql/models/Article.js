@@ -82,13 +82,13 @@ const Article = new GraphQLObjectType({
       resolve: async (
         { replyRequestIds = [] },
         args,
-        { loaders, userId, from }
+        { loaders, userId, appId }
       ) => {
-        assertUser({ userId, from });
+        assertUser({ userId, appId });
         const requests = await loaders.docLoader.loadMany(
           replyRequestIds.map(id => ({ index: 'replyrequests', id }))
         );
-        return !!requests.find(r => r.userId === userId && r.from === from);
+        return !!requests.find(r => r.userId === userId && r.appId === appId);
       },
     },
     user: {
