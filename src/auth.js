@@ -7,15 +7,21 @@ import GithubStrategy from 'passport-github2';
 import Router from 'koa-router';
 import url from 'url';
 
+/**
+ * Serialize to session
+ */
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
+/**
+ * De-serialize and populates ctx.state.user
+ */
 passport.deserializeUser(async (userId, done) => {
   try {
     const user = await client.get({
       index: 'users',
-      type: 'basic',
+      type: 'doc',
       id: userId,
     });
     done(null, processMeta(user));
@@ -24,18 +30,21 @@ passport.deserializeUser(async (userId, done) => {
   }
 });
 
-// Common verify callback for all login strategies.
-//
-// It tries first authenticating user with profile.id agains fieldName in DB.
-// If not applicatble, search for existing users with their email.
-// If still not applicable, create a user with currently given profile.
-//
+/**
+ * Common verify callback for all login strategies.
+ * It tries first authenticating user with profile.id agains fieldName in DB.
+ * If not applicatble, search for existing users with their email.
+ * If still not applicable, create a user with currently given profile.
+ *
+ * @param {object} profile - passport profile object
+ * @param {'facebookId'|'githubId'|'twitterId'} fieldName - The elasticsearch ID field name in user document
+ */
 async function verifyProfile(profile, fieldName) {
   // Find user with such user id
   //
   const users = await client.search({
     index: 'users',
-    type: 'basic',
+    type: 'doc',
     q: `${fieldName}:${profile.id}`,
   });
 
@@ -52,7 +61,7 @@ async function verifyProfile(profile, fieldName) {
   if (email) {
     const usersWithEmail = await client.search({
       index: 'users',
-      type: 'basic',
+      type: 'doc',
       q: `email:${email}`,
     });
 
@@ -63,7 +72,7 @@ async function verifyProfile(profile, fieldName) {
       //
       const updateUserResult = await client.update({
         index: 'users',
-        type: 'basic',
+        type: 'doc',
         id,
         body: {
           doc: {
@@ -86,7 +95,7 @@ async function verifyProfile(profile, fieldName) {
   //
   const createUserResult = await client.index({
     index: 'users',
-    type: 'basic',
+    type: 'doc',
     body: {
       email,
       name: profile.displayName,
@@ -101,7 +110,7 @@ async function verifyProfile(profile, fieldName) {
     return processMeta(
       await client.get({
         index: 'users',
-        type: 'basic',
+        type: 'doc',
         id: createUserResult._id,
       })
     );
@@ -133,7 +142,8 @@ passport.use(
       callbackURL: config.get('TWITTER_CALLBACK_URL'),
 
       // https://github.com/jaredhanson/passport-twitter/issues/67#issuecomment-275288663
-      userProfileURL: 'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
+      userProfileURL:
+        'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
     },
     (token, tokenSecret, profile, done) =>
       verifyProfile(profile, 'twitterId')
