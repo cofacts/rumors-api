@@ -38,7 +38,7 @@ export const userFieldResolver = (
 
   // If the user comes from the same client as the root document, return the user id.
   //
-  if (context.from === appId) return { id: userId };
+  if (context.appId === appId) return { id: userId };
 
   // If not, this client is not allowed to see user.
   //
