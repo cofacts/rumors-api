@@ -1,5 +1,4 @@
 import docLoaderFactory from './docLoaderFactory';
-import articleByReplyConnectionIdLoaderFactory from './articleByReplyConnectionIdLoaderFactory';
 import articleRepliesByReplyIdLoaderFactory from './articleRepliesByReplyIdLoaderFactory';
 import searchResultLoaderFactory from './searchResultLoaderFactory';
 
@@ -8,12 +7,6 @@ export default class DataLoaders {
   //
   get docLoader() {
     return this._checkOrSetLoader('docLoader', docLoaderFactory);
-  }
-  get articleByReplyConnectionIdLoader() {
-    return this._checkOrSetLoader(
-      'articleByReplyConnectionIdLoader',
-      articleByReplyConnectionIdLoaderFactory
-    );
   }
   get articleRepliesByReplyIdLoader() {
     return this._checkOrSetLoader(
