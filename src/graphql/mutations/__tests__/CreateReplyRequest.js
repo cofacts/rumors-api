@@ -33,12 +33,12 @@ describe('CreateReplyRequest', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const conn = await client.get({
+    const request = await client.get({
       index: 'replyrequests',
       type: 'doc',
       id,
     });
-    expect(conn._source).toMatchSnapshot();
+    expect(request._source).toMatchSnapshot();
 
     const article = await client.get({
       index: 'articles',
