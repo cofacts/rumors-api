@@ -12,12 +12,6 @@ import Reply from './Reply';
 import ArticleReplyFeedback from './ArticleReplyFeedback';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 
-export const auth = {
-  canUpdateStatus(currentUserId, articleReplyUserId) {
-    return articleReplyUserId === currentUserId;
-  },
-};
-
 export default new GraphQLObjectType({
   name: 'ArticleReply',
   description: 'The linkage between an Article and a Reply',
@@ -46,8 +40,12 @@ export default new GraphQLObjectType({
 
     canUpdateStatus: {
       type: GraphQLBoolean,
-      resolve: ({ userId }, args, { userId: currentUserId }) => {
-        return auth.canUpdateStatus(currentUserId, userId);
+      resolve: (
+        { userId, appId },
+        args,
+        { userId: currentUserId, appId: currentAppId }
+      ) => {
+        return userId === currentUserId && appId === currentAppId;
       },
     },
 

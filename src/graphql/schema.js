@@ -13,7 +13,7 @@ import CreateReply from './mutations/CreateReply';
 import CreateArticleReply from './mutations/CreateArticleReply';
 import CreateOrUpdateReplyConnectionFeedback from './mutations/CreateOrUpdateReplyConnectionFeedback';
 import CreateReplyRequest from './mutations/CreateReplyRequest';
-import UpdateReplyConnectionStatus from './mutations/UpdateReplyConnectionStatus';
+import UpdateArticleReplyStatus from './mutations/UpdateArticleReplyStatus';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -34,7 +34,7 @@ export default new GraphQLSchema({
       CreateArticleReply,
       CreateReplyRequest,
       CreateOrUpdateReplyConnectionFeedback,
-      UpdateReplyConnectionStatus,
+      UpdateArticleReplyStatus,
     },
   }),
 });
