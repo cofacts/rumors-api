@@ -2,25 +2,30 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
-import fixtures from '../__fixtures__/CreateReplyConnectionFeedback';
+import fixtures from '../__fixtures__/CreateOrUpdateArticleReplyFeedback';
 
-describe('CreateOrUpdateReplyConnectionFeedback', () => {
+describe('CreateOrUpdateArticleReplyFeedback', () => {
   beforeAll(() => loadFixtures(fixtures));
 
   it('creates feedback on given reply connection', async () => {
     MockDate.set(1485593157011);
+    const userId = 'test';
+    const appId = 'test';
+
     const { data, errors } = await gql`
-      mutation( $id: String! ) {
-        CreateOrUpdateReplyConnectionFeedback(
+      mutation($id: String!) {
+        CreateOrUpdateArticleReplyFeedback(
           replyConnectionId: $id
           vote: UPVOTE
-        ) { feedbackCount }
+        ) {
+          feedbackCount
+        }
       }
     `(
       {
         id: 'createReplyConnectionFeedback1',
       },
-      { userId: 'test', from: 'test' }
+      { userId, appId }
     );
     MockDate.reset();
 
@@ -56,18 +61,23 @@ describe('CreateOrUpdateReplyConnectionFeedback', () => {
 
   it('updates existing feedback', async () => {
     MockDate.set(1485593157011);
+    const userId = 'testUser';
+    const appId = 'testClient';
+
     const { data, errors } = await gql`
-      mutation( $id: String! ) {
-        CreateOrUpdateReplyConnectionFeedback(
+      mutation($id: String!) {
+        CreateOrUpdateArticleReplyFeedback(
           replyConnectionId: $id
           vote: DOWNVOTE
-        ) { feedbackCount }
+        ) {
+          feedbackCount
+        }
       }
     `(
       {
         id: 'createReplyConnectionFeedback1',
       },
-      { userId: 'testUser', from: 'testClient' }
+      { userId, appId }
     );
     MockDate.reset();
 
