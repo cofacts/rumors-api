@@ -1,6 +1,7 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
+import { getArticleReplyFeedbackId } from '../CreateOrUpdateArticleReplyFeedback';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateOrUpdateArticleReplyFeedback';
 
@@ -11,71 +12,86 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'test';
+    const articleId = 'article1';
+    const replyId = 'reply1';
 
     const { data, errors } = await gql`
-      mutation($id: String!) {
+      mutation($articleId: String!, $replyId: String!) {
         CreateOrUpdateArticleReplyFeedback(
-          replyConnectionId: $id
+          articleId: $articleId
+          replyId: $replyId
           vote: UPVOTE
         ) {
           feedbackCount
+          positiveFeedbackCount
+          negativeFeedbackCount
         }
       }
     `(
       {
-        id: 'createReplyConnectionFeedback1',
+        articleId,
+        replyId,
       },
       { userId, appId }
     );
     MockDate.reset();
 
-    const id = 'createReplyConnectionFeedback1__test__test';
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
+    const id = getArticleReplyFeedbackId({
+      articleId,
+      replyId,
+      userId,
+      appId,
+    });
+
     const conn = await client.get({
       index: 'replyconnectionfeedbacks',
-      type: 'basic',
+      type: 'doc',
       id,
     });
     expect(conn._source).toMatchSnapshot();
 
     const article = await client.get({
-      index: 'replyconnections',
-      type: 'basic',
-      id: 'createReplyConnectionFeedback1',
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
     });
-    expect(article._source.feedbackIds.slice(-1)[0]).toBe(id);
+    expect(article._source.articleReplies).toMatchSnapshot();
 
     // Cleanup
     await client.delete({
       index: 'replyconnectionfeedbacks',
-      type: 'basic',
+      type: 'doc',
       id,
     });
-    await resetFrom(
-      fixtures,
-      '/replyconnections/basic/createReplyConnectionFeedback1'
-    );
+    await resetFrom(fixtures, '/articles/doc/article1');
   });
 
   it('updates existing feedback', async () => {
     MockDate.set(1485593157011);
     const userId = 'testUser';
     const appId = 'testClient';
+    const articleId = 'article1';
+    const replyId = 'reply1';
 
     const { data, errors } = await gql`
-      mutation($id: String!) {
+      mutation($articleId: String!, $replyId: String!) {
         CreateOrUpdateArticleReplyFeedback(
-          replyConnectionId: $id
+          articleId: $articleId
+          replyId: $replyId
           vote: DOWNVOTE
         ) {
           feedbackCount
+          positiveFeedbackCount
+          negativeFeedbackCount
         }
       }
     `(
       {
-        id: 'createReplyConnectionFeedback1',
+        articleId,
+        replyId,
       },
       { userId, appId }
     );
@@ -84,13 +100,19 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const id = 'createReplyConnectionFeedback1__testUser__testClient';
+    const id = getArticleReplyFeedbackId({
+      articleId,
+      replyId,
+      userId,
+      appId,
+    });
+
     expect(
-      await client.get({ index: 'replyconnectionfeedbacks', type: 'basic', id })
+      await client.get({ index: 'replyconnectionfeedbacks', type: 'doc', id })
     ).toMatchSnapshot();
 
     // Cleanup
-    await resetFrom(fixtures, `/replyconnectionfeedbacks/basic/${id}`);
+    await resetFrom(fixtures, `/replyconnectionfeedbacks/doc/${id}`);
   });
 
   afterAll(() => unloadFixtures(fixtures));

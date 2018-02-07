@@ -24,9 +24,9 @@ export default {
   type: new GraphQLObjectType({
     name: 'CreateOrUpdateArticleReplyFeedbackResult',
     fields: {
-      feedbackCount: {
-        type: GraphQLInt,
-      },
+      feedbackCount: { type: GraphQLInt },
+      positiveFeedbackCount: { type: GraphQLInt },
+      negativeFeedbackCount: { type: GraphQLInt },
     },
   }),
   args: {
