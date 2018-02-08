@@ -14,10 +14,11 @@ export default {
     articleId: 'article1',
     replyId: 'reply1',
     userId: 'testUser',
-    clientId: 'testClient',
+    appId: 'testClient',
   })}`]: {
     score: 1,
     appId: 'testClient',
     userId: 'testUser',
+    createdAt: '2017-01-01T00:00:00.000Z',
   },
 };

@@ -8,7 +8,7 @@ import fixtures from '../__fixtures__/CreateOrUpdateArticleReplyFeedback';
 describe('CreateOrUpdateArticleReplyFeedback', () => {
   beforeAll(() => loadFixtures(fixtures));
 
-  it('creates feedback on given reply connection', async () => {
+  it('creates feedback on given article reply', async () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'test';
@@ -47,7 +47,7 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     });
 
     const conn = await client.get({
-      index: 'replyconnectionfeedbacks',
+      index: 'articlereplyfeedbacks',
       type: 'doc',
       id,
     });
@@ -62,7 +62,7 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
 
     // Cleanup
     await client.delete({
-      index: 'replyconnectionfeedbacks',
+      index: 'articlereplyfeedbacks',
       type: 'doc',
       id,
     });
@@ -108,11 +108,11 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     });
 
     expect(
-      await client.get({ index: 'replyconnectionfeedbacks', type: 'doc', id })
+      await client.get({ index: 'articlereplyfeedbacks', type: 'doc', id })
     ).toMatchSnapshot();
 
     // Cleanup
-    await resetFrom(fixtures, `/replyconnectionfeedbacks/doc/${id}`);
+    await resetFrom(fixtures, `/articlereplyfeedbacks/doc/${id}`);
   });
 
   afterAll(() => unloadFixtures(fixtures));
