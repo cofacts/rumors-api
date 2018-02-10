@@ -46,6 +46,7 @@ async function verifyProfile(profile, fieldName) {
   const now = new Date().toISOString();
   const email = profile.emails && profile.emails[0].value;
   const avatar = profile.photos && profile.photos[0].value;
+  const username = profile.displayName ? profile.displayName : profile.username;
 
   // Find user with such email
   //
@@ -89,7 +90,7 @@ async function verifyProfile(profile, fieldName) {
     type: 'basic',
     body: {
       email,
-      name: profile.displayName,
+      name: username,
       avatarUrl: avatar,
       [fieldName]: profile.id,
       createdAt: now,
