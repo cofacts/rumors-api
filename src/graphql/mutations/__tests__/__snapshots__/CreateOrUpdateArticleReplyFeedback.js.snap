@@ -3,9 +3,9 @@
 exports[`CreateOrUpdateArticleReplyFeedback creates feedback on given article reply 1`] = `
 Object {
   "CreateOrUpdateArticleReplyFeedback": Object {
-    "feedbackCount": 1,
+    "feedbackCount": 2,
     "negativeFeedbackCount": 0,
-    "positiveFeedbackCount": 1,
+    "positiveFeedbackCount": 2,
   },
 }
 `;
@@ -26,7 +26,7 @@ exports[`CreateOrUpdateArticleReplyFeedback creates feedback on given article re
 Array [
   Object {
     "negativeFeedbackCount": 0,
-    "positiveFeedbackCount": 1,
+    "positiveFeedbackCount": 2,
     "replyId": "reply1",
   },
 ]
@@ -35,8 +35,8 @@ Array [
 exports[`CreateOrUpdateArticleReplyFeedback updates existing feedback 1`] = `
 Object {
   "CreateOrUpdateArticleReplyFeedback": Object {
-    "feedbackCount": 0,
-    "negativeFeedbackCount": 0,
+    "feedbackCount": 1,
+    "negativeFeedbackCount": 1,
     "positiveFeedbackCount": 0,
   },
 }
@@ -48,7 +48,9 @@ Object {
   "_index": "articlereplyfeedbacks_v1_0_0",
   "_source": Object {
     "appId": "testClient",
+    "articleId": "article1",
     "createdAt": "2017-01-01T00:00:00.000Z",
+    "replyId": "reply1",
     "score": -1,
     "updatedAt": "2017-01-28T08:45:57.011Z",
     "userId": "testUser",
