@@ -51,7 +51,7 @@ export default {
 
     const now = new Date().toISOString();
 
-    // (replyConnectionId, userId, from) should be unique
+    // (articleId, replyId, userId, appId) should be unique
     // but user can update
     const id = getArticleReplyFeedbackId({
       articleId,

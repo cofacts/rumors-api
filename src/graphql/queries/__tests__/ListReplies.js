@@ -91,7 +91,7 @@ describe('ListReplies', () => {
         {},
         {
           userId: 'foo',
-          from: 'test',
+          appId: 'test',
         }
       )
     ).toMatchSnapshot();

@@ -42,7 +42,7 @@ export default {
   async resolve(
     rootValue,
     { filter = {}, orderBy = [], ...otherParams },
-    { userId, from }
+    { userId, appId }
   ) {
     const body = {
       sort: getSortArgs(orderBy),
@@ -85,7 +85,7 @@ export default {
 
     if (filter.selfOnly) {
       if (!userId) throw new Error('selfOnly can be set only after log in');
-      body.query.bool.filter.push({ term: { userId } }, { term: { from } });
+      body.query.bool.filter.push({ term: { userId } }, { term: { appId } });
     }
 
     // should return search context for resolveEdges & resolvePageInfo

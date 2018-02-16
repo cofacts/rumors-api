@@ -37,7 +37,7 @@ describe('GetReplyAndGetArticle', () => {
               requestedForReply
             }
           }
-        `({}, { userId: 'fakeUser', from: 'LINE' })
+        `({}, { userId: 'fakeUser', appId: 'LINE' })
       ).toMatchSnapshot();
     });
 
@@ -66,7 +66,7 @@ describe('GetReplyAndGetArticle', () => {
               }
             }
           }
-        `({}, { userId: 'fakeUser', from: 'LINE' })
+        `({}, { userId: 'fakeUser', appId: 'LINE' })
       ).toMatchSnapshot();
     });
 

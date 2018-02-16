@@ -55,6 +55,6 @@ export default {
   '/replyrequests/doc/articleTest1': {
     articleId: 'foo',
     userId: 'fakeUser',
-    from: 'LINE',
+    appId: 'LINE',
   },
 };

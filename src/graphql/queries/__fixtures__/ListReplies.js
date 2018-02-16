@@ -16,7 +16,7 @@ export default {
     reference: 'barbar',
     type: 'NOT_ARTICLE',
     userId: 'foo',
-    from: 'test',
+    appId: 'test',
     createdAt: 4,
   },
   '/replies/doc/rumor': {
