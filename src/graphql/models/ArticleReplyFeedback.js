@@ -13,7 +13,8 @@ export default new GraphQLObjectType({
 
     comment: { type: GraphQLString },
     score: {
-      description: 'One of 1, 0 and -1. Representing upvote, neutral and downvote, respectively',
+      description:
+        'One of 1, 0 and -1. Representing upvote, neutral and downvote, respectively',
       type: GraphQLInt,
     },
   }),
