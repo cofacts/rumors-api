@@ -87,7 +87,7 @@ Object {
 }
 `;
 
-exports[`GetReplyAndGetArticle GetArticle should allow filtering replyConnections 1`] = `
+exports[`GetReplyAndGetArticle GetArticle should allow filtering article replies 1`] = `
 Object {
   "data": Object {
     "GetArticle": Object {
@@ -165,7 +165,7 @@ Object {
 }
 `;
 
-exports[`GetReplyAndGetArticle GetReply should get allow filtering replyConnections 1`] = `
+exports[`GetReplyAndGetArticle GetReply should allow filtering article replies 1`] = `
 Object {
   "data": Object {
     "GetReply": Object {
@@ -208,7 +208,7 @@ exports[`GetReplyAndGetArticle GetReply should get the specified reply & associa
 Object {
   "data": Object {
     "GetReply": Object {
-      "replyConnections": Array [
+      "articleReplies": Array [
         Object {
           "article": Object {
             "text": "Lorum ipsum",
@@ -216,13 +216,9 @@ Object {
           "canUpdateStatus": true,
         },
       ],
-      "versions": Array [
-        Object {
-          "reference": "barbar",
-          "text": "bar",
-          "type": "NOT_ARTICLE",
-        },
-      ],
+      "reference": "barbar",
+      "text": "bar",
+      "type": "NOT_ARTICLE",
     },
   },
 }

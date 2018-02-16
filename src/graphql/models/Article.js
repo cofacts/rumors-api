@@ -33,7 +33,8 @@ const Article = new GraphQLObjectType({
     references: { type: new GraphQLList(ArticleReference) },
     replyCount: {
       type: GraphQLInt,
-      resolve: ({ articleReplies = [] }) => articleReplies.length,
+      description: 'Number of normal article replies',
+      resolve: ({ normalArticleReplyCount }) => normalArticleReplyCount,
     },
     replyConnections: {
       type: new GraphQLList(ArticleReply),

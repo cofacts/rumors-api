@@ -52,13 +52,17 @@ export default {
         'updatedAt',
         'createdAt',
         'replyRequestCount',
+        'replyCount',
+        'lastRequestedAt',
       ]),
     },
     ...pagingArgs,
   },
   async resolve(rootValue, { filter = {}, orderBy = [], ...otherParams }) {
     const body = {
-      sort: getSortArgs(orderBy),
+      sort: getSortArgs(orderBy, {
+        replyCount: o => ({ normalArticleReplyCount: { order: o } }),
+      }),
       track_scores: true, // for _score sorting
     };
 

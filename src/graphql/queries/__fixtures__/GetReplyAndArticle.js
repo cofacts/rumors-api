@@ -6,6 +6,13 @@ export default {
         replyId: 'bar',
         createdAt: '2015-01-01T12:10:30Z',
         updatedAt: '2015-01-02T12:10:30Z',
+        status: 'NORMAL',
+      },
+      {
+        replyId: 'bar3',
+        createdAt: '2015-01-01T12:10:30Z',
+        updatedAt: '2015-01-02T12:10:30Z',
+        status: 'DELETED',
       },
     ],
     normalArticleReplyCount: 1,

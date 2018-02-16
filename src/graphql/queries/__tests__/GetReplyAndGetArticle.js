@@ -16,7 +16,7 @@ describe('GetReplyAndGetArticle', () => {
                 type
               }
               replyCount
-              articleReplies {
+              articleReplies(status: NORMAL) {
                 status
                 canUpdateStatus
                 createdAt
@@ -41,7 +41,7 @@ describe('GetReplyAndGetArticle', () => {
       ).toMatchSnapshot();
     });
 
-    it('should allow filtering replyConnections', async () => {
+    it('should allow filtering article replies', async () => {
       expect(
         await gql`
           {
@@ -142,12 +142,10 @@ describe('GetReplyAndGetArticle', () => {
         await gql`
           {
             GetReply(id: "bar") {
-              versions {
-                text
-                type
-                reference
-              }
-              replyConnections {
+              text
+              type
+              reference
+              articleReplies(status: NORMAL) {
                 canUpdateStatus
                 article {
                   text
@@ -159,7 +157,7 @@ describe('GetReplyAndGetArticle', () => {
       ).toMatchSnapshot();
     });
 
-    it('should get allow filtering replyConnections', async () => {
+    it('should allow filtering article replies', async () => {
       expect(
         await gql`
           {
