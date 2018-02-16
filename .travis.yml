@@ -5,9 +5,7 @@ services:
 
 language: node_js
 
-node_js: '6'
-
-cache: yarn
+node_js: '8'
 
 before_install:
   # Startup test db

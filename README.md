@@ -9,7 +9,6 @@ GraphQL API server for clients like rumors-site and rumors-line-bot
 
 ### Prerequisite
 
-* node 6+ with [yarn](https://yarnpkg.com/en/) available as global command
 * Docker & [docker-compose](https://docs.docker.com/compose/install/)
 
 ### First-time setup
@@ -19,7 +18,7 @@ After cloning this repository & cd into project directory, then install the depe
 ```
 $ git clone --recursive git@github.com:MrOrz/rumors-api.git # --recursive for the submodules
 $ cd rumors-api
-$ yarn
+$ npm i
 ```
 
 If you want to test OAuth2 authentication, you will need to create `config/local-development.js` (already in `.gitignore`) with the following content:
@@ -45,7 +44,6 @@ $ docker-compose up
 
 This will:
 
-* Runs `yarn` and installs stuff to `node_modules` using your user ID.
 * rumors-api server on `http://localhost:5000`. It will be re-started when you update anyfile.
 * Kibana on `http://localhost:6222`.
 * ElasticSearch DB on `http://localhost:62222`.
@@ -72,7 +70,7 @@ $ docker-compose up -d
 Access the logs using:
 
 ```
-$ docker-compose logs api     # `api' can also be `db', `kibana' or `yarn-install'.
+$ docker-compose logs api     # `api' can also be `db', `kibana'.
 $ docker-compose logs -f api  # Tail mode
 ```
 
@@ -126,7 +124,7 @@ The "Rumor samples not in DB" is in `test/evalutation/non-db-samples-xxx.csv`.
 
 ```
 # Please check lint before you pull request
-$ npm run lint 
+$ npm run lint
 # Automatically fixes format error
 $ npm run lint:fix
 ```
