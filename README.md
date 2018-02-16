@@ -125,7 +125,10 @@ The "Rumor samples not in DB" is in `test/evalutation/non-db-samples-xxx.csv`.
 ## Lint
 
 ```
-$ npm run lint # Automatically fixes format error
+# Please check lint before you pull request
+$ npm run lint 
+# Automatically fixes format error
+$ npm run lint:fix
 ```
 
 ## Test
