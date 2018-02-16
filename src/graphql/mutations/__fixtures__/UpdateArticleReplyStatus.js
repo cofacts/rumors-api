@@ -6,8 +6,8 @@ export default {
         status: 'NORMAL',
         userId: 'not you',
         appId: 'not this app',
-      }
-    ]
+      },
+    ],
   },
   '/articles/doc/normal': {
     articleReplies: [
@@ -17,8 +17,8 @@ export default {
         appId: 'test',
         status: 'NORMAL',
         updatedAt: 0,
-      }
-    ]
+      },
+    ],
   },
   '/articles/doc/deleted': {
     articleReplies: [
@@ -28,7 +28,7 @@ export default {
         appId: 'test',
         status: 'DELETED',
         updatedAt: 0,
-      }
-    ]
+      },
+    ],
   },
 };

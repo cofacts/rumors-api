@@ -30,7 +30,7 @@ describe('UpdateArticleReplyStatus', () => {
     expect(errors).toMatchSnapshot();
   });
 
-  it('should set replyconnections fields correctly', async () => {
+  it('should set article reply fields correctly', async () => {
     const userId = 'foo';
     const appId = 'test';
 
@@ -72,8 +72,8 @@ describe('UpdateArticleReplyStatus', () => {
     expect(deleted.articleReplies).toMatchSnapshot();
 
     // Cleanup
-    await resetFrom(fixtures, '/article/doc/normal');
-    await resetFrom(fixtures, '/article/doc/deleted');
+    await resetFrom(fixtures, '/articles/doc/normal');
+    await resetFrom(fixtures, '/articles/doc/deleted');
   });
 
   afterEach(() => {
