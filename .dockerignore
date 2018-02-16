@@ -3,5 +3,5 @@
 !config/*
 !process.json
 !package.json
-!yarn.lock
+!package-lock.json
 !static

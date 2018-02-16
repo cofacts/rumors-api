@@ -163,10 +163,14 @@ $ npm t -- -u
 
 ## Deploy
 
-Build docker image
+Build docker image. The following are basically the same, but with different docker tags.
 
 ```
+# Production build
 $ npm run build
+
+# Staging build
+$ npm run build:staging
 ```
 
 Run the docker image on local machine, then visit `http://localhost:5000`.
@@ -178,5 +182,9 @@ $ docker run --rm -it -p 5000:5000 mrorz/rumors-api
 
 Push to dockerhub
 ```
+# Production
 $ docker push mrorz/rumors-api
+
+# Staging
+$ docker push mrorz/rumors-api:staging
 ```
