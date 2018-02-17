@@ -1,8 +1,8 @@
 {
-  apps: [{
-    name: 'rumors-api',
-    script: 'src/index.js',
-    watch: true,
-    interpreter: './node_modules/.bin/babel-node'
+  "apps": [{
+    "name": "rumors-api",
+    "script": "src/index.js",
+    "watch": ["src", "test", "config"],
+    "interpreter": "./node_modules/.bin/babel-node"
   }]
 }

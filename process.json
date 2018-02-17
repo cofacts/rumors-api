@@ -6,6 +6,6 @@
       "NODE_ENV": "production"
     },
     "instances": 2,
-    "exec_mode": "cluster",
+    "exec_mode": "cluster"
   }]
 }
