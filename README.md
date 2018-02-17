@@ -39,6 +39,7 @@ Please apply for the keys in Facebook, Twitter and Github respectively.
 ### Start development servers
 
 ```
+$ mkdir esdata # For elasticsearch DB
 $ docker-compose up
 ```
 
@@ -50,13 +51,13 @@ This will:
 
 To stop the servers, just `ctrl-c` and all docker containers will be stopped.
 
-### Populate ElasticSearch with seed data
+### Populate ElasticSearch with data
 
-First, make sure the elastic search is working (should be handled by the previous step),
-Then just run:
+Ask a team member to send you `nodes` directory, then put the `nodes` directory right inside the
+`esdata` directory created in the previous step, then restart the database using:
 
 ```
-$ npm run seed
+$ docker-compose restart db
 ```
 
 ### Detached mode & Logs
