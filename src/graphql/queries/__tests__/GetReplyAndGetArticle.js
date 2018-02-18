@@ -21,9 +21,11 @@ describe('GetReplyAndGetArticle', () => {
                 canUpdateStatus
                 createdAt
                 updatedAt
+                articleId
                 article {
                   id
                 }
+                replyId
                 reply {
                   id
                   versions {
@@ -47,18 +49,21 @@ describe('GetReplyAndGetArticle', () => {
           {
             GetArticle(id: "foo3") {
               articleReplies {
+                replyId
                 reply {
                   id
                 }
                 status
               }
               normalReplies: articleReplies(status: NORMAL) {
+                replyId
                 reply {
                   id
                 }
                 status
               }
               deletedReplies: articleReplies(status: DELETED) {
+                replyId
                 reply {
                   id
                 }
@@ -147,6 +152,7 @@ describe('GetReplyAndGetArticle', () => {
               reference
               articleReplies(status: NORMAL) {
                 canUpdateStatus
+                articleId
                 article {
                   text
                 }
@@ -163,18 +169,21 @@ describe('GetReplyAndGetArticle', () => {
           {
             GetReply(id: "bar2") {
               articleReplies {
+                articleId
                 article {
                   id
                 }
                 status
               }
               normalReplies: articleReplies(status: NORMAL) {
+                articleId
                 article {
                   id
                 }
                 status
               }
               deletedReplies: articleReplies(status: DELETED) {
+                articleId
                 article {
                   id
                 }

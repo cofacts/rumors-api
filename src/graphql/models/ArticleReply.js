@@ -16,11 +16,16 @@ export default new GraphQLObjectType({
   name: 'ArticleReply',
   description: 'The linkage between an Article and a Reply',
   fields: () => ({
+    replyId: { type: GraphQLString },
+
     reply: {
       type: Reply,
       resolve: ({ replyId }, args, { loaders }) =>
         loaders.docLoader.load({ index: 'replies', id: replyId }),
     },
+
+    articleId: { type: GraphQLString },
+
     article: {
       type: Article,
       resolve: ({ articleId }, args, { loaders }) =>
@@ -29,7 +34,7 @@ export default new GraphQLObjectType({
 
     id: {
       type: GraphQLString,
-      deprecationReason: 'Use article.id and reply.id instead',
+      deprecationReason: 'Use articleId and replyId instead',
     },
 
     user: {
