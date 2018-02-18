@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`UpdateArticleReplyStatus should not allow users to delete other's replyconnections 1`] = `
+exports[`UpdateArticleReplyStatus should not allow users to delete other's article replies 1`] = `
 Array [
   [GraphQLError: Cannot change status for articleReply(articleId=others, replyId=others)],
 ]
@@ -10,7 +10,7 @@ exports[`UpdateArticleReplyStatus should set article reply fields correctly 1`] 
 Object {
   "deleted": Array [
     Object {
-      "status": "DELETED",
+      "status": "NORMAL",
       "updatedAt": "2017-01-28T08:45:57.011Z",
     },
   ],
@@ -40,7 +40,7 @@ Array [
   Object {
     "appId": "test",
     "replyId": "reply",
-    "status": "DELETED",
+    "status": "NORMAL",
     "updatedAt": "2017-01-28T08:45:57.011Z",
     "userId": "foo",
   },

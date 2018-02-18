@@ -10,7 +10,7 @@ describe('UpdateArticleReplyStatus', () => {
     return loadFixtures(fixtures);
   });
 
-  it("should not allow users to delete other's replyconnections", async () => {
+  it("should not allow users to delete other's article replies", async () => {
     const userId = 'foo';
     const appId = 'test';
 
@@ -47,7 +47,7 @@ describe('UpdateArticleReplyStatus', () => {
         deleted: UpdateArticleReplyStatus(
           articleId: "deleted"
           replyId: "reply"
-          status: DELETED
+          status: NORMAL
         ) {
           status
           updatedAt
