@@ -39,6 +39,9 @@ export default {
             } else {
               ctx._source.articleReplies.get(idx).put('status', params.status);
               ctx._source.articleReplies.get(idx).put('updatedAt', params.updatedAt);
+              ctx._source.normalArticleReplyCount = ctx._source.articleReplies.stream().filter(
+                ar -> ar.get('status').equals('NORMAL')
+              ).count();
             }
           `,
           params: {

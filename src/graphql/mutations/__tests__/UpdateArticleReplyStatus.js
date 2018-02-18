@@ -63,6 +63,7 @@ describe('UpdateArticleReplyStatus', () => {
       id: 'normal',
     });
     expect(normal.articleReplies).toMatchSnapshot();
+    expect(normal.normalArticleReplyCount).toBe(0);
 
     const { _source: deleted } = await client.get({
       index: 'articles',
@@ -70,6 +71,7 @@ describe('UpdateArticleReplyStatus', () => {
       id: 'deleted',
     });
     expect(deleted.articleReplies).toMatchSnapshot();
+    expect(deleted.normalArticleReplyCount).toBe(1);
 
     // Cleanup
     await resetFrom(fixtures, '/articles/doc/normal');
