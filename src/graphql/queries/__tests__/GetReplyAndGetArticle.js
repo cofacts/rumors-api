@@ -139,6 +139,25 @@ describe('GetReplyAndGetArticle', () => {
         `()
       ).toMatchSnapshot('relatedArticle sorting test');
     });
+
+    it('feedbacks should work', async () => {
+      expect(
+        await gql`
+          {
+            GetArticle(id: "foo") {
+              articleReplies {
+                feedbacks {
+                  score
+                }
+                positiveFeedbackCount
+                negativeFeedbackCount
+                feedbackCount
+              }
+            }
+          }
+        `()
+      ).toMatchSnapshot('feedback loading test');
+    });
   });
 
   describe('GetReply', () => {

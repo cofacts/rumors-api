@@ -1,3 +1,5 @@
+import { getArticleReplyFeedbackId } from 'graphql/mutations/CreateOrUpdateArticleReplyFeedback';
+
 export default {
   '/articles/doc/foo': {
     text: 'Lorum ipsum',
@@ -7,12 +9,16 @@ export default {
         createdAt: '2015-01-01T12:10:30Z',
         updatedAt: '2015-01-02T12:10:30Z',
         status: 'NORMAL',
+        positiveFeedbackCount: 1,
+        negativeFeedbackCount: 0,
       },
       {
         replyId: 'bar3',
         createdAt: '2015-01-01T12:10:30Z',
         updatedAt: '2015-01-02T12:10:30Z',
         status: 'DELETED',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 0,
       },
     ],
     normalArticleReplyCount: 1,
@@ -63,5 +69,17 @@ export default {
     articleId: 'foo',
     userId: 'fakeUser',
     appId: 'LINE',
+  },
+  [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId(
+    'foo',
+    'bar',
+    'test-user',
+    'test-app'
+  )}`]: {
+    articleId: 'foo',
+    replyId: 'bar',
+    userId: 'test-user',
+    appId: 'test-app',
+    score: 1,
   },
 };

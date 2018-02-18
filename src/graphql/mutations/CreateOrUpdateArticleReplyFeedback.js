@@ -9,7 +9,6 @@ import {
 import { assertUser } from 'graphql/util';
 
 import client from 'util/client';
-import getIn from 'util/getInFactory';
 
 export function getArticleReplyFeedbackId({
   articleId,
@@ -46,7 +45,11 @@ export default {
       ),
     },
   },
-  async resolve(rootValue, { articleId, replyId, vote }, { appId, userId }) {
+  async resolve(
+    rootValue,
+    { articleId, replyId, vote },
+    { appId, userId, loaders }
+  ) {
     assertUser({ appId, userId });
 
     const now = new Date().toISOString();
@@ -82,23 +85,13 @@ export default {
       refresh: true, // We are searching for articlereplyfeedbacks immediately
     });
 
-    const feedbacks = getIn(
-      await client.search({
-        index: 'articlereplyfeedbacks',
-        type: 'doc',
-        body: {
-          query: {
-            bool: {
-              must: [{ term: { articleId } }, { term: { replyId } }],
-            },
-          },
-        },
-        _source: ['score'],
-      })
-    )(['hits', 'hits'], []);
+    const feedbacks = await loaders.articleReplyFeedbacksLoader.load({
+      articleId,
+      replyId,
+    });
 
     const [positiveFeedbackCount, negativeFeedbackCount] = feedbacks.reduce(
-      (agg, { _source: { score } }) => {
+      (agg, { score }) => {
         if (score === 1) {
           agg[0] += 1;
         } else if (score === -1) {

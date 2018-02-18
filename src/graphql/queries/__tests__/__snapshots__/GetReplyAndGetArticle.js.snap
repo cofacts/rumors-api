@@ -1,5 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GetReplyAndGetArticle GetArticle feedbacks should work: feedback loading test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "articleReplies": Array [
+        Object {
+          "feedbackCount": 1,
+          "feedbacks": Array [
+            Object {
+              "score": 1,
+            },
+          ],
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 1,
+        },
+        Object {
+          "feedbackCount": 0,
+          "feedbacks": Array [],
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 0,
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`GetReplyAndGetArticle GetArticle relatedArticles should work: relatedArticle filter test 1`] = `
 Object {
   "data": Object {
