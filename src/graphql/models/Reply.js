@@ -33,23 +33,6 @@ const Reply = new GraphQLObjectType({
       type: new GraphQLList(ReplyVersion),
       resolve: reply => [reply],
     },
-    replyConnections: {
-      type: new GraphQLList(ArticleReply),
-      deprecationReason: 'Use articleReplies instead',
-      args: {
-        status: {
-          type: ArticleReplyStatusEnum,
-          description:
-            'When specified, returns only reply connections with the specified status',
-        },
-      },
-      resolve: async ({ id }, { status }, { loaders }) => {
-        const articleReplies = await loaders.articleRepliesByReplyIdLoader.load(
-          id
-        );
-        return filterArticleRepliesByStatus(articleReplies, status);
-      },
-    },
     articleReplies: {
       type: new GraphQLList(ArticleReply),
       args: {

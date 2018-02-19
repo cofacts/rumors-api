@@ -36,25 +36,6 @@ const Article = new GraphQLObjectType({
       description: 'Number of normal article replies',
       resolve: ({ normalArticleReplyCount }) => normalArticleReplyCount,
     },
-    replyConnections: {
-      type: new GraphQLList(ArticleReply),
-      deprecationReason: 'Use articleReplies instead',
-      args: {
-        status: {
-          type: ArticleReplyStatusEnum,
-          description:
-            'When specified, returns only article replies with the specified status',
-        },
-      },
-      resolve: async ({ id, articleReplies = [] }, { status }) =>
-        filterArticleRepliesByStatus(
-          articleReplies.map(articleReply => {
-            articleReply.articleId = id;
-            return articleReply;
-          }),
-          status
-        ),
-    },
     articleReplies: {
       type: new GraphQLList(ArticleReply),
       args: {

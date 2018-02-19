@@ -32,11 +32,6 @@ export default new GraphQLObjectType({
         loaders.docLoader.load({ index: 'articles', id: articleId }),
     },
 
-    id: {
-      type: GraphQLString,
-      deprecationReason: 'Use articleId and replyId instead',
-    },
-
     user: {
       type: User,
       description: 'The user who conencted this reply and this article.',
