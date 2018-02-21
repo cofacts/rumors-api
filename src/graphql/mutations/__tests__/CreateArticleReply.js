@@ -58,7 +58,7 @@ describe('CreateArticleReply', () => {
     await gql`
       mutation($articleId: String!, $replyId: String!) {
         CreateArticleReply(articleId: $articleId, replyId: $replyId) {
-          id
+          replyId
         }
       }
     `({ articleId, replyId }, { userId: 'test', appId: 'test' });
@@ -66,7 +66,7 @@ describe('CreateArticleReply', () => {
     const { errors } = await gql`
       mutation($articleId: String!, $replyId: String!) {
         CreateArticleReply(articleId: $articleId, replyId: $replyId) {
-          id
+          replyId
         }
       }
     `({ articleId, replyId }, { userId: 'anotherUser', appId: 'test' });
