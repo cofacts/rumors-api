@@ -1,7 +1,7 @@
 export default {
-  '/articles/basic/createReplyRequestTest1': {
+  '/articles/doc/createReplyRequestTest1': {
     text: 'foofoo',
-    replyRequestIds: [],
-    references: [{ type: 'LINE' }],
+    replyRequestCount: 1,
+    lastRequestedAt: new Date(0).toISOString(),
   },
 };

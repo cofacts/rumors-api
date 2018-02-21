@@ -3,58 +3,88 @@ import {
   GraphQLNonNull,
   GraphQLInt,
   GraphQLObjectType,
+  GraphQLEnumType,
 } from 'graphql';
 import { assertUser } from 'graphql/util';
 
 import client, { processMeta } from 'util/client';
 
-export async function createReplyRequest({ articleId, userId, from }) {
-  assertUser({ from, userId });
+/**
+ * @typedef {Object} ReplyRequestParam
+ * @property {string} opt.articleId - The article to add reply request to
+ * @property {string} opt.userId - The user that submits this request
+ * @property {string} opt.appId - The app that the user logged in to
+ */
+
+/**
+ * @param {ReplyRequestParam} params
+ * @returns {string} the reply request ID for the givne params
+ */
+export function getReplyRequestId({ articleId, userId, appId }) {
+  return `${articleId}__${userId}__${appId}`;
+}
+
+/**
+ * @typedef {Object} CreateReplyRequestResult
+ * @property {Object} article - The update article instance
+ * @property {boolean} isCreated - If the reply request is created
+ */
+
+/**
+ * Indexes a reply request and increments the replyRequestCount for article
+ *
+ * @param {ReplyRequestParam} param
+ * @returns {CreateReplyRequstResult}
+ */
+export async function createReplyRequest({ articleId, userId, appId }) {
+  assertUser({ appId, userId });
 
   const now = new Date().toISOString();
+  const id = getReplyRequestId({ articleId, userId, appId });
 
-  const replyRequest = {
-    // (articleId, userId, from) should be unique
-    id: `${articleId}__${userId}__${from}`,
-    from,
-    userId,
-    createdAt: now,
-    updatedAt: now,
-  };
-  const { id, ...body } = replyRequest;
-
-  const { created } = await client.index({
+  const { result } = await client.update({
     index: 'replyrequests',
-    type: 'basic',
+    type: 'doc',
     id,
-    body,
-    opType: 'create',
+    body: {
+      doc: {
+        updatedAt: now,
+      },
+      upsert: {
+        articleId,
+        userId,
+        appId,
+        createdAt: now,
+        updatedAt: now,
+      },
+    },
   });
 
-  if (!created) {
-    throw new Error(`Cannot create reply request ${id}`);
-  }
+  const isCreated = result === 'created';
 
   const articleUpdateResult = await client.update({
     index: 'articles',
-    type: 'basic',
+    type: 'doc',
     id: articleId,
     body: {
       script: {
-        inline: 'if(!ctx._source.replyRequestIds.contains(params.id)) {ctx._source.replyRequestIds.add(params.id)}',
-        params: { id },
+        source: `
+          ${isCreated ? 'ctx._source.replyRequestCount += 1;' : ''}
+          ctx._source.lastRequestedAt = params.now;
+        `,
+        params: { now },
       },
     },
     _source: true,
   });
 
   if (articleUpdateResult.result !== 'updated') {
-    throw new Error(`Cannot append replyRequest ${id} to article ${articleId}`);
+    throw new Error(`Cannot update article ${articleId}`);
   }
 
   return {
-    replyRequest,
     article: processMeta({ ...articleUpdateResult.get, _id: id }),
+    isCreated,
   };
 }
 
@@ -65,15 +95,39 @@ export default {
     fields: {
       replyRequestCount: {
         type: GraphQLInt,
+        description:
+          'Reply request count for the given article after creating the reply request',
+      },
+      status: {
+        type: new GraphQLEnumType({
+          name: 'CreateReplyRequstResultStatus',
+          values: {
+            SUCCESS: {
+              value: 'SUCCESS',
+              description: 'Successfully inserted a new reply request',
+            },
+            DUPLICATE: {
+              value: 'DUPLICATE',
+              description:
+                'The user has already requested reply for this article',
+            },
+          },
+        }),
       },
     },
   }),
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
   },
-  async resolve(rootValue, { articleId }, { from, userId }) {
-    const { article } = await createReplyRequest({ articleId, from, userId });
-
-    return { replyRequestCount: article.replyRequestIds.length };
+  async resolve(rootValue, { articleId }, { appId, userId }) {
+    const { article, isCreated } = await createReplyRequest({
+      articleId,
+      appId,
+      userId,
+    });
+    return {
+      replyRequestCount: article.replyRequestCount,
+      status: isCreated ? 'SUCCESS' : 'DUPLICATE',
+    };
   },
 };

@@ -1,7 +1,7 @@
 import { GraphQLEnumType } from 'graphql';
 
 export default new GraphQLEnumType({
-  name: 'ReplyConnectionStatusEnum',
+  name: 'ArticleReplyStatusEnum',
   values: {
     NORMAL: {
       value: 'NORMAL',

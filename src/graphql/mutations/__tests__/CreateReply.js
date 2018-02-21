@@ -9,6 +9,8 @@ describe('CreateReply', () => {
 
   it('creates replies and associates itself with specified article', async () => {
     MockDate.set(1485593157011);
+    const articleId = 'setReplyTest1';
+
     const { data, errors } = await gql`
       mutation(
         $articleId: String!
@@ -27,12 +29,12 @@ describe('CreateReply', () => {
       }
     `(
       {
-        articleId: 'setReplyTest1',
+        articleId,
         text: 'FOO FOO',
         type: 'RUMOR',
         reference: 'http://google.com',
       },
-      { userId: 'test', from: 'test' }
+      { userId: 'test', appId: 'test' }
     );
     MockDate.reset();
 
@@ -41,27 +43,21 @@ describe('CreateReply', () => {
     const replyId = data.CreateReply.id;
     const reply = await client.get({
       index: 'replies',
-      type: 'basic',
+      type: 'doc',
       id: replyId,
     });
     expect(reply._source).toMatchSnapshot();
 
     const article = await client.get({
       index: 'articles',
-      type: 'basic',
-      id: 'setReplyTest1',
+      type: 'doc',
+      id: articleId,
     });
-    const connId = `${article._id}__${replyId}`;
-    expect(article._source.replyConnectionIds[0]).toBe(connId);
+    expect(article._source.articleReplies[0].replyId).toBe(replyId);
 
     // Cleanup
-    await client.delete({ index: 'replies', type: 'basic', id: replyId });
-    await client.delete({
-      index: 'replyconnections',
-      type: 'basic',
-      id: connId,
-    });
-    await resetFrom(fixtures, '/articles/basic/setReplyTest1');
+    await client.delete({ index: 'replies', type: 'doc', id: replyId });
+    await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
 
   afterAll(() => unloadFixtures(fixtures));

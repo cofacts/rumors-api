@@ -1,7 +1,7 @@
 export default {
-  '/articles/basic/setReplyTest1': {
+  '/articles/doc/setReplyTest1': {
     text: 'foofoo',
-    replyConnectionIds: [],
+    articleReplies: [],
     references: [{ type: 'LINE' }],
   },
 };

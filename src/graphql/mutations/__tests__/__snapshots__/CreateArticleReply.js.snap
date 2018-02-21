@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateArticleReply connects article and reply together 1`] = `
+Array [
+  Object {
+    "article": Object {
+      "id": "createArticleReply1",
+    },
+    "negativeFeedbackCount": 0,
+    "positiveFeedbackCount": 0,
+    "reply": Object {
+      "id": "createArticleReply2",
+    },
+    "status": "NORMAL",
+    "user": Object {
+      "id": "test",
+    },
+  },
+]
+`;
+
+exports[`CreateArticleReply connects article and reply together 2`] = `
+Object {
+  "articleReplies": Array [
+    Object {
+      "appId": "test",
+      "createdAt": "2017-01-28T08:45:57.011Z",
+      "negativeFeedbackCount": 0,
+      "positiveFeedbackCount": 0,
+      "replyId": "createArticleReply2",
+      "replyType": "RUMOR",
+      "status": "NORMAL",
+      "updatedAt": "2017-01-28T08:45:57.011Z",
+      "userId": "test",
+    },
+  ],
+  "normalArticleReplyCount": 1,
+  "references": Array [
+    Object {
+      "type": "LINE",
+    },
+  ],
+  "text": "foofoo",
+}
+`;

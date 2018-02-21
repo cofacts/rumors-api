@@ -12,11 +12,13 @@ const ArticleReferenceTypeEnum = new GraphQLEnumType({
   values: {
     URL: {
       value: 'URL',
-      description: 'The article is collected from the Internet, with a link to the article available.',
+      description:
+        'The article is collected from the Internet, with a link to the article available.',
     },
     LINE: {
       value: 'LINE',
-      description: 'The article is collected from conversations in LINE messengers.',
+      description:
+        'The article is collected from conversations in LINE messengers.',
     },
   },
 });

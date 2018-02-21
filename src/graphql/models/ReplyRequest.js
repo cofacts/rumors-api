@@ -5,7 +5,7 @@ export default new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLString },
     userId: { type: GraphQLString },
-    from: { type: GraphQLString },
+    appId: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
   }),

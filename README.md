@@ -9,7 +9,6 @@ GraphQL API server for clients like rumors-site and rumors-line-bot
 
 ### Prerequisite
 
-* node 6+ with [yarn](https://yarnpkg.com/en/) available as global command
 * Docker & [docker-compose](https://docs.docker.com/compose/install/)
 
 ### First-time setup
@@ -19,7 +18,7 @@ After cloning this repository & cd into project directory, then install the depe
 ```
 $ git clone --recursive git@github.com:MrOrz/rumors-api.git # --recursive for the submodules
 $ cd rumors-api
-$ yarn
+$ npm i
 ```
 
 If you want to test OAuth2 authentication, you will need to create `config/local-development.js` (already in `.gitignore`) with the following content:
@@ -40,25 +39,25 @@ Please apply for the keys in Facebook, Twitter and Github respectively.
 ### Start development servers
 
 ```
+$ mkdir esdata # For elasticsearch DB
 $ docker-compose up
 ```
 
 This will:
 
-* Runs `yarn` and installs stuff to `node_modules` using your user ID.
 * rumors-api server on `http://localhost:5000`. It will be re-started when you update anyfile.
 * Kibana on `http://localhost:6222`.
 * ElasticSearch DB on `http://localhost:62222`.
 
 To stop the servers, just `ctrl-c` and all docker containers will be stopped.
 
-### Populate ElasticSearch with seed data
+### Populate ElasticSearch with data
 
-First, make sure the elastic search is working (should be handled by the previous step),
-Then just run:
+Ask a team member to send you `nodes` directory, then put the `nodes` directory right inside the
+`esdata` directory created in the previous step, then restart the database using:
 
 ```
-$ npm run seed
+$ docker-compose restart db
 ```
 
 ### Detached mode & Logs
@@ -72,7 +71,7 @@ $ docker-compose up -d
 Access the logs using:
 
 ```
-$ docker-compose logs api     # `api' can also be `db', `kibana' or `yarn-install'.
+$ docker-compose logs api     # `api' can also be `db', `kibana'.
 $ docker-compose logs -f api  # Tail mode
 ```
 
@@ -126,7 +125,7 @@ The "Rumor samples not in DB" is in `test/evalutation/non-db-samples-xxx.csv`.
 
 ```
 # Please check lint before you pull request
-$ npm run lint 
+$ npm run lint
 # Automatically fixes format error
 $ npm run lint:fix
 ```
@@ -136,7 +135,7 @@ $ npm run lint:fix
 To prepare test DB, first start an elastic search server on port 62223:
 
 ```
-$ docker run -d -p "62223:9200" --name "rumors-test-db" elasticsearch
+$ docker run -d -p "62223:9200" --name "rumors-test-db" docker.elastic.co/elasticsearch/elasticsearch:6.1.0
 # If it says 'The name "rumors-test-db" is already in use',
 # Just run:
 $ docker start rumors-test-db
@@ -150,18 +149,29 @@ $ npm t
 
 If you get "Elasticsearch ERROR : DELETE http://localhost:62223/replies => socket hang up", please check if test database is running. It takes some time for elasticsearch to boot.
 
+If you want to run test on a specific file (ex: `src/xxx/__tests__/ooo.js`), run:
+
+```
+$ npm t -- src/xxx/__tests__/ooo.js
+```
+
+
 When you want to update jest snapshot, run:
 
 ```
-$ npm run test:update
+$ npm t -- -u
 ```
 
 ## Deploy
 
-Build docker image
+Build docker image. The following are basically the same, but with different docker tags.
 
 ```
+# Production build
 $ npm run build
+
+# Staging build
+$ npm run build:staging
 ```
 
 Run the docker image on local machine, then visit `http://localhost:5000`.
@@ -173,5 +183,9 @@ $ docker run --rm -it -p 5000:5000 mrorz/rumors-api
 
 Push to dockerhub
 ```
+# Production
 $ docker push mrorz/rumors-api
+
+# Staging
+$ docker push mrorz/rumors-api:staging
 ```

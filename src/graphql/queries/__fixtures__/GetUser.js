@@ -1,9 +1,9 @@
 export default {
-  '/users/basic/test-user': {
+  '/users/doc/test-user': {
     name: 'test user',
     email: 'secret@secret.com',
   },
-  '/users/basic/current-user': {
+  '/users/doc/current-user': {
     name: 'current user',
     email: 'hi@me.com',
   },

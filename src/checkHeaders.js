@@ -5,13 +5,13 @@ async function checkSecret(ctx, next) {
   const secret = ctx.get(config.get('HTTP_HEADER_APP_SECRET'));
   if (secret === config.get('RUMORS_LINE_BOT_SECRET')) {
     // Shortcut for official rumors-line-bot -- no DB queries
-    ctx.from = 'RUMORS_LINE_BOT';
+    ctx.appId = 'RUMORS_LINE_BOT';
 
     // else if(secret) { ...
-    // TODO: Fill up ctx.from with app id after looking up DB with secret
+    // TODO: Fill up ctx.appId with app id after looking up DB with secret
   } else {
     // secret do not match anything
-    ctx.from = 'DEVELOPMENT_BACKEND'; // FIXME: Remove this after developer key function rolls out.
+    ctx.appId = 'DEVELOPMENT_BACKEND'; // FIXME: Remove this after developer key function rolls out.
   }
 
   return next();
@@ -27,20 +27,20 @@ async function checkAppId(ctx, next) {
   } else if (appId === 'RUMORS_SITE') {
     // Shortcut for official rumors-site -- no DB queries
     origin = config.get('RUMORS_SITE_CORS_ORIGIN');
-    ctx.from = 'WEBSITE';
+    ctx.appId = 'WEBSITE';
 
     // else if(appId) { ...
-    // ctx.from = 'WEBSITE'; // other apps share the same "from"
+    // ctx.appId = 'WEBSITE'; // other apps share the same "from"
     // // because ctx.user set by passport as well
     //
     // TODO: Fill up origin from DB according to appId
   } else {
     // No header is given. Allow localhost access only.
     // FIXME: After developer key function rolls out, these kind of request
-    // (have no secret nor appid) should be blocked, instead of given ctx.from.
+    // (have no secret nor appid) should be blocked, instead of given ctx.appId.
     //
     origin = 'http://localhost:3000';
-    ctx.from = 'DEVELOPMENT_FRONTEND';
+    ctx.appId = 'DEVELOPMENT_FRONTEND';
   }
 
   return cors({

@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`ListReplies filters 1`] = `
 Object {
   "data": Object {
@@ -15,8 +17,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMyIl0=",
-        "lastCursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMxIl0=",
+        "firstCursor": "WyJkb2MjbW9yZUxpa2VUaGlzMiJd",
+        "lastCursor": "WyJkb2MjbW9yZUxpa2VUaGlzMSJd",
       },
       "totalCount": 2,
     },
@@ -36,8 +38,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
-        "lastCursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
+        "firstCursor": "WyJkb2MjdXNlckZvbyJd",
+        "lastCursor": "WyJkb2MjdXNlckZvbyJd",
       },
       "totalCount": 1,
     },
@@ -57,8 +59,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyNydW1vciJd",
-        "lastCursor": "WyJiYXNpYyNydW1vciJd",
+        "firstCursor": "WyJkb2MjcnVtb3IiXQ==",
+        "lastCursor": "WyJkb2MjcnVtb3IiXQ==",
       },
       "totalCount": 1,
     },
@@ -83,33 +85,33 @@ Object {
     "ListReplies": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
+          "cursor": "WyJkb2MjdXNlckZvbyJd",
           "node": Object {
             "id": "userFoo",
           },
         },
         Object {
-          "cursor": "WyJiYXNpYyNydW1vciJd",
+          "cursor": "WyJkb2MjcnVtb3IiXQ==",
           "node": Object {
             "id": "rumor",
           },
         },
         Object {
-          "cursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMyIl0=",
+          "cursor": "WyJkb2MjbW9yZUxpa2VUaGlzMiJd",
           "node": Object {
             "id": "moreLikeThis2",
           },
         },
         Object {
-          "cursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMxIl0=",
+          "cursor": "WyJkb2MjbW9yZUxpa2VUaGlzMSJd",
           "node": Object {
             "id": "moreLikeThis1",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
-        "lastCursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMxIl0=",
+        "firstCursor": "WyJkb2MjdXNlckZvbyJd",
+        "lastCursor": "WyJkb2MjbW9yZUxpa2VUaGlzMSJd",
       },
       "totalCount": 4,
     },
@@ -144,8 +146,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzQsImJhc2ljI3VzZXJGb28iXQ==",
-        "lastCursor": "WzEsImJhc2ljI3J1bW9yIl0=",
+        "firstCursor": "WzQsImRvYyN1c2VyRm9vIl0=",
+        "lastCursor": "WzEsImRvYyNydW1vciJd",
       },
       "totalCount": 4,
     },
@@ -165,8 +167,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
-        "lastCursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMxIl0=",
+        "firstCursor": "WyJkb2MjdXNlckZvbyJd",
+        "lastCursor": "WyJkb2MjbW9yZUxpa2VUaGlzMSJd",
       },
       "totalCount": 4,
     },
@@ -196,8 +198,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJiYXNpYyN1c2VyRm9vIl0=",
-        "lastCursor": "WyJiYXNpYyNtb3JlTGlrZVRoaXMxIl0=",
+        "firstCursor": "WyJkb2MjdXNlckZvbyJd",
+        "lastCursor": "WyJkb2MjbW9yZUxpa2VUaGlzMSJd",
       },
       "totalCount": 4,
     },

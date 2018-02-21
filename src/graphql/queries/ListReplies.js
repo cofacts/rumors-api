@@ -35,31 +35,17 @@ export default {
       }),
     },
     orderBy: {
-      type: createSortType('ListReplyOrderBy', [
-        '_score',
-        'createdAt',
-        'versionCount',
-      ]),
+      type: createSortType('ListReplyOrderBy', ['_score', 'createdAt']),
     },
     ...pagingArgs,
   },
   async resolve(
     rootValue,
     { filter = {}, orderBy = [], ...otherParams },
-    { userId, from }
+    { userId, appId }
   ) {
     const body = {
-      sort: getSortArgs(orderBy, {
-        versionCount(order) {
-          return {
-            _script: {
-              type: 'number',
-              script: { inline: "doc['versions'].values.size()" },
-              order,
-            },
-          };
-        },
-      }),
+      sort: getSortArgs(orderBy),
       track_scores: true, // for _score sorting
       query: {
         bool: {
@@ -73,12 +59,12 @@ export default {
         // Ref: http://stackoverflow.com/a/8831494/1582110
         //
         more_like_this: {
-          fields: ['versions.text', 'versions.reference'],
+          fields: ['text', 'reference'],
           like: filter.moreLikeThis.like,
           min_term_freq: 1,
           min_doc_freq: 1,
-          minimum_should_match: filter.moreLikeThis.minimumShouldMatch ||
-            '10<70%',
+          minimum_should_match:
+            filter.moreLikeThis.minimumShouldMatch || '10<70%',
         },
       };
     } else {
@@ -92,23 +78,20 @@ export default {
     if (filter.type) {
       body.query.bool.filter.push({
         term: {
-          'versions.type': filter.type,
+          type: filter.type,
         },
       });
     }
 
     if (filter.selfOnly) {
       if (!userId) throw new Error('selfOnly can be set only after log in');
-      body.query.bool.filter.push(
-        { term: { 'versions.userId': userId } },
-        { term: { 'versions.from': from } }
-      );
+      body.query.bool.filter.push({ term: { userId } }, { term: { appId } });
     }
 
     // should return search context for resolveEdges & resolvePageInfo
     return {
       index: 'replies',
-      type: 'basic',
+      type: 'doc',
       body,
       ...otherParams,
     };

@@ -5,6 +5,7 @@ import User, { userFieldResolver } from './User';
 
 export default new GraphQLObjectType({
   name: 'ReplyVersion',
+  description: 'Deprecated. Should remove in the future.',
   fields: () => ({
     user: {
       type: User,

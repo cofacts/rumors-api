@@ -66,7 +66,8 @@ export function createSortType(typeName, filterableFieldNames = []) {
   return new GraphQLList(
     new GraphQLInputObjectType({
       name: typeName,
-      description: 'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
+      description:
+        'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
       fields: filterableFieldNames.reduce(
         (fields, fieldName) => ({
           ...fields,
@@ -86,11 +87,13 @@ export const pagingArgs = {
   },
   after: {
     type: GraphQLString,
-    description: 'Specify a cursor, returns results after this cursor. cannot be used with "before".',
+    description:
+      'Specify a cursor, returns results after this cursor. cannot be used with "before".',
   },
   before: {
     type: GraphQLString,
-    description: 'Specify a cursor, returns results before this cursor. cannot be used with "after".',
+    description:
+      'Specify a cursor, returns results before this cursor. cannot be used with "after".',
   },
 };
 
@@ -134,6 +137,89 @@ export function getSearchAfterFromCursor(cursor) {
   return JSON.parse(Buffer.from(cursor, 'base64').toString('utf8'));
 }
 
+async function defaultResolveTotalCount({
+  first, // eslint-disable-line no-unused-vars
+  before, // eslint-disable-line no-unused-vars
+  after, // eslint-disable-line no-unused-vars
+  ...searchContext
+}) {
+  return (await client.count({
+    ...searchContext,
+    body: {
+      ...searchContext.body,
+
+      // totalCount cannot support these
+      sort: undefined,
+      track_scores: undefined,
+    },
+  })).count;
+}
+
+async function defaultResolveEdges(
+  { first, before, after, ...searchContext },
+  args,
+  { loaders }
+) {
+  if (before && after) {
+    throw new Error('Use of before & after is prohibited.');
+  }
+
+  const nodes = await loaders.searchResultLoader.load({
+    ...searchContext,
+    body: {
+      ...searchContext.body,
+      size: first,
+      search_after: getSearchAfterFromCursor(before || after),
+
+      // if "before" is given, reverse the sort order and later reverse back
+      //
+      sort: before
+        ? reverseSortArgs(searchContext.body.sort)
+        : searchContext.body.sort,
+    },
+  });
+
+  if (before) {
+    nodes.reverse();
+  }
+
+  return nodes.map(({ _score: score, _cursor, ...node }) => ({
+    node,
+    cursor: getCursor(_cursor),
+    score,
+  }));
+}
+
+async function defaultResolveLastCursor(
+  { first, before, after, ...searchContext },
+  args,
+  { loaders }
+) {
+  const lastNode = (await loaders.searchResultLoader.load({
+    ...searchContext,
+    body: {
+      ...searchContext.body,
+      sort: reverseSortArgs(searchContext.body.sort),
+    },
+    size: 1,
+  }))[0];
+
+  return lastNode && getCursor(lastNode._cursor);
+}
+
+async function defaultResolveFirstCursor(
+  { first, before, after, ...searchContext },
+  args,
+  { loaders }
+) {
+  const firstNode = (await loaders.searchResultLoader.load({
+    ...searchContext,
+    size: 1,
+  }))[0];
+
+  return firstNode && getCursor(firstNode._cursor);
+}
+
 // All search
 //
 export function createConnectionType(
@@ -141,87 +227,10 @@ export function createConnectionType(
   nodeType,
   {
     // Default resolvers
-    //
-    // eslint-disable-next-line no-unused-vars
-    resolveTotalCount = async ({ first, before, after, ...searchContext }) =>
-      // .count() does not accept sort & size
-      (await client.count({
-        ...searchContext,
-        body: {
-          ...searchContext.body,
-
-          // totalCount cannot support these
-          sort: undefined,
-          track_scores: undefined,
-        },
-      })).count,
-
-    resolveEdges = async (
-      { first, before, after, ...searchContext },
-      args,
-      { loaders }
-    ) => {
-      if (before && after) {
-        throw new Error('Use of before & after is prohibited.');
-      }
-
-      const nodes = await loaders.searchResultLoader.load({
-        ...searchContext,
-        body: {
-          ...searchContext.body,
-          size: first,
-          search_after: getSearchAfterFromCursor(before || after),
-
-          // if "before" is given, reverse the sort order and later reverse back
-          //
-          sort: before
-            ? reverseSortArgs(searchContext.body.sort)
-            : searchContext.body.sort,
-        },
-      });
-
-      if (before) {
-        nodes.reverse();
-      }
-
-      return nodes.map(({ _score: score, _cursor, ...node }) => ({
-        node,
-        cursor: getCursor(_cursor),
-        score,
-      }));
-    },
-
-    // eslint-disable-next-line no-unused-vars
-    resolveLastCursor = async (
-      { first, before, after, ...searchContext },
-      args,
-      { loaders }
-    ) => {
-      const lastNode = (await loaders.searchResultLoader.load({
-        ...searchContext,
-        body: {
-          ...searchContext.body,
-          sort: reverseSortArgs(searchContext.body.sort),
-        },
-        size: 1,
-      }))[0];
-
-      return lastNode && getCursor(lastNode._cursor);
-    },
-
-    // eslint-disable-next-line no-unused-vars
-    resolveFirstCursor = async (
-      { first, before, after, ...searchContext },
-      args,
-      { loaders }
-    ) => {
-      const firstNode = (await loaders.searchResultLoader.load({
-        ...searchContext,
-        size: 1,
-      }))[0];
-
-      return firstNode && getCursor(firstNode._cursor);
-    },
+    resolveTotalCount = defaultResolveTotalCount,
+    resolveEdges = defaultResolveEdges,
+    resolveLastCursor = defaultResolveLastCursor,
+    resolveFirstCursor = defaultResolveFirstCursor,
   } = {}
 ) {
   return new GraphQLObjectType({
@@ -229,7 +238,8 @@ export function createConnectionType(
     fields: {
       totalCount: {
         type: GraphQLInt,
-        description: 'The total count of the entire collection, regardless of "before", "after".',
+        description:
+          'The total count of the entire collection, regardless of "before", "after".',
         resolve: resolveTotalCount,
       },
       edges: {
@@ -251,12 +261,14 @@ export function createConnectionType(
           fields: {
             lastCursor: {
               type: GraphQLString,
-              description: 'The cursor pointing to the last node of the entire collection, regardless of "before" and "after". Can be used to determine if is in the last page.',
+              description:
+                'The cursor pointing to the last node of the entire collection, regardless of "before" and "after". Can be used to determine if is in the last page.',
               resolve: resolveLastCursor,
             },
             firstCursor: {
               type: GraphQLString,
-              description: 'The cursor pointing to the first node of the entire collection, regardless of "before" and "after". Can be used to determine if is in first page.',
+              description:
+                'The cursor pointing to the first node of the entire collection, regardless of "before" and "after". Can be used to determine if is in first page.',
               resolve: resolveFirstCursor,
             },
           },
@@ -269,26 +281,28 @@ export function createConnectionType(
 
 export const AUTH_ERROR_MSG = 'userId is not set via query string.';
 
-export function assertUser({ userId, from }) {
+export function assertUser({ userId, appId }) {
   if (!userId) {
     throw new Error(AUTH_ERROR_MSG);
   }
 
-  if (userId && !from) {
+  if (userId && !appId) {
     throw new Error(
       'userId is set, but x-app-id or x-app-secret is not set accordingly.'
     );
   }
 }
 
-export function filterReplyConnectionsByStatus(replyConnections, status) {
-  if (!status) return replyConnections;
+export function filterArticleRepliesByStatus(articleReplies, status) {
+  if (!status) return articleReplies;
 
   // If a replyConnection does not have status, it is considered "NORMAL".
   //
-  return replyConnections.filter(conn => {
-    if (status !== 'NORMAL') return conn.status === status;
+  return articleReplies.filter(articleReply => {
+    if (status !== 'NORMAL') return articleReply.status === status;
 
-    return conn.status === undefined || conn.status === 'NORMAL';
+    return (
+      articleReply.status === undefined || articleReply.status === 'NORMAL'
+    );
   });
 }

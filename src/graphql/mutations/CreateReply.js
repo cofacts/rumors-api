@@ -6,12 +6,11 @@ import client from 'util/client';
 
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 import MutationResult from 'graphql/models/MutationResult';
-import { createReplyConnection } from './CreateReplyConnection';
+import { createArticleReply } from './CreateArticleReply';
 
 export default {
   type: MutationResult,
-  description: 'Create a reply that replies to the specified article.' +
-    '`ReplyConnections` and `ReplyVersions` are created automatically.',
+  description: 'Create a reply that replies to the specified article.',
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
     text: { type: new GraphQLNonNull(GraphQLString) },
@@ -21,37 +20,42 @@ export default {
   async resolve(
     rootValue,
     { articleId, text, type, reference },
-    { userId, from }
+    { userId, appId, loaders }
   ) {
-    assertUser({ userId, from });
+    assertUser({ userId, appId });
 
     if (type !== 'NOT_ARTICLE' && !reference) {
       throw new Error('reference is required for type !== NOT_ARTICLE');
     }
 
-    const { created, _id: replyId, result } = await client.index({
+    const replyBody = {
+      userId,
+      appId,
+      type,
+      text,
+      reference,
+      createdAt: new Date(),
+    };
+
+    const { _id: replyId, result } = await client.index({
       index: 'replies',
-      type: 'basic',
-      body: {
-        versions: [
-          {
-            userId,
-            from,
-            type,
-            text,
-            reference,
-            createdAt: new Date(),
-          },
-        ],
-        createdAt: new Date(),
-      },
+      type: 'doc',
+      body: replyBody,
     });
 
-    if (!created) {
+    if (result !== 'created') {
       throw new Error(`Cannot create reply: ${result}`);
     }
 
-    await createReplyConnection({ articleId, replyId, userId, from });
+    await createArticleReply({
+      article: await loaders.docLoader.load({
+        index: 'articles',
+        id: articleId,
+      }),
+      reply: { ...replyBody, id: replyId },
+      userId,
+      appId,
+    });
 
     return { id: replyId };
   },
