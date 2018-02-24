@@ -1,4 +1,5 @@
 import { GraphQLInt, GraphQLString, GraphQLInputObjectType } from 'graphql';
+import client from 'util/client';
 
 import {
   createFilterType,
@@ -44,6 +45,23 @@ export default {
           description:
             'List only the articles whose number of replies matches the criteria.',
         },
+        appId: {
+          type: GraphQLString,
+          description:
+            'Use with userId to show only articles from a specific user.',
+        },
+        userId: {
+          type: GraphQLString,
+          description:
+            'Use with appId to show only articles from a specific user.',
+        },
+        fromUserOfArticleId: {
+          type: GraphQLString,
+          description: `
+            Specify an articleId here to show only articles from the sender of that specified article.
+            When specified, it overrides the settings of appId and userId.
+          `,
+        },
       }),
     },
     orderBy: {
@@ -69,6 +87,41 @@ export default {
     // Collecting queries that will be used in bool queries later
     const mustQueries = []; // Affects scores
     const filterQueries = []; // Not affects scores
+
+    if (filter.fromUserOfArticleId) {
+      let specifiedArticle;
+      try {
+        specifiedArticle = (await client.get({
+          index: 'articles',
+          type: 'doc',
+          id: filter.fromUserOfArticleId,
+          _source: ['userId', 'appId'],
+        }))._source;
+      } catch (e) {
+        if (e.statusCode && e.statusCode === 404) {
+          throw new Error(
+            'fromUserOfArticleId does not match any existing articles'
+          );
+        }
+
+        // Re-throw unknown error
+        throw e;
+      }
+
+      // Overriding filter's userId and appId, as indicated in the description
+      //
+      filter.userId = specifiedArticle.userId;
+      filter.appId = specifiedArticle.appId;
+    }
+
+    if (filter.appId && filter.userId) {
+      filterQueries.push(
+        { term: { appId: filter.appId } },
+        { term: { userId: filter.userId } }
+      );
+    } else if (filter.appId || filter.userId) {
+      throw new Error('Both appId and userId must be specified at once');
+    }
 
     if (filter.moreLikeThis) {
       mustQueries.push({

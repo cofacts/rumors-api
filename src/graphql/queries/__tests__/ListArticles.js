@@ -137,6 +137,70 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
+  it('filters by userId, appId and fromUserOfArticleId', async () => {
+    // Lists only articles by userId & appId
+    expect(
+      await gql`
+        {
+          ListArticles(filter: { userId: "user1", appId: "app1" }) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+
+    // Lists only articles by fromUserOfArticleId
+    expect(
+      await gql`
+        {
+          ListArticles(filter: { fromUserOfArticleId: "listArticleTest1" }) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
+  it('throws error when author filter is not set correctly', async () => {
+    const { errors: noUserIdError } = await gql`
+      {
+        ListArticles(filter: { appId: "specified-but-no-user-id" }) {
+          edges {
+            node {
+              id
+            }
+          }
+          totalCount
+        }
+      }
+    `();
+    expect(noUserIdError).toMatchSnapshot();
+
+    const { errors: notExistError } = await gql`
+      {
+        ListArticles(filter: { fromUserOfArticleId: "not-exist" }) {
+          edges {
+            node {
+              id
+            }
+          }
+          totalCount
+        }
+      }
+    `();
+    expect(notExistError).toMatchSnapshot();
+  });
+
   it('supports after', async () => {
     expect(
       await gql`
