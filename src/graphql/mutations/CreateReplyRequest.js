@@ -11,9 +11,10 @@ import client, { processMeta } from 'util/client';
 
 /**
  * @typedef {Object} ReplyRequestParam
- * @property {string} opt.articleId - The article to add reply request to
- * @property {string} opt.userId - The user that submits this request
- * @property {string} opt.appId - The app that the user logged in to
+ * @property {string} articleId - The article to add reply request to
+ * @property {string} userId - The user that submits this request
+ * @property {string} appId - The app that the user logged in to
+ * @property {string} reason - The reason why the user want to submit this article
  */
 
 /**
@@ -36,7 +37,12 @@ export function getReplyRequestId({ articleId, userId, appId }) {
  * @param {ReplyRequestParam} param
  * @returns {CreateReplyRequstResult}
  */
-export async function createReplyRequest({ articleId, userId, appId }) {
+export async function createReplyRequest({
+  articleId,
+  userId,
+  appId,
+  reason = '',
+}) {
   assertUser({ appId, userId });
 
   const now = new Date().toISOString();
@@ -54,6 +60,10 @@ export async function createReplyRequest({ articleId, userId, appId }) {
         articleId,
         userId,
         appId,
+        reason,
+        feedbacks: [],
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 0,
         createdAt: now,
         updatedAt: now,
       },
@@ -118,12 +128,17 @@ export default {
   }),
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
+    reason: {
+      type: GraphQLString,
+      description: 'The reason why the user want to submit this article',
+    },
   },
-  async resolve(rootValue, { articleId }, { appId, userId }) {
+  async resolve(rootValue, { articleId, reason }, { appId, userId }) {
     const { article, isCreated } = await createReplyRequest({
       articleId,
       appId,
       userId,
+      reason,
     });
     return {
       replyRequestCount: article.replyRequestCount,
