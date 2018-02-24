@@ -68,7 +68,7 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
-  it('filters', async () => {
+  it('filters by replyCount', async () => {
     // Lists only articles with more than one reply.
     expect(
       await gql`
@@ -88,7 +88,9 @@ describe('ListArticles', () => {
         }
       `()
     ).toMatchSnapshot();
+  });
 
+  it('filters by moreLikeThis', async () => {
     // moreLikeThis query
     expect(
       await gql`
@@ -115,7 +117,9 @@ describe('ListArticles', () => {
         }
       `()
     ).toMatchSnapshot();
+  });
 
+  it('filters by replyRequestCount', async () => {
     // Lists only articles with more than 1 reply requests
     expect(
       await gql`
