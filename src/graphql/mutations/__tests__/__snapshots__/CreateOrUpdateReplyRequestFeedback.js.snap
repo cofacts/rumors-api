@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateOrUpdateReplyRequestFeedback creates new feedback 1`] = `
+Object {
+  "CreateOrUpdateReplyRequestFeedback": Object {
+    "feedbackCount": 2,
+    "negativeFeedbackCount": 0,
+    "positiveFeedbackCount": 2,
+  },
+}
+`;
+
+exports[`CreateOrUpdateReplyRequestFeedback creates new feedback 2`] = `
+Object {
+  "appId": "app",
+  "articleId": "foo-article",
+  "createdAt": "2017-01-01T00:00:00.000Z",
+  "feedbacks": Array [
+    Object {
+      "appId": "app",
+      "createdAt": "2017-01-01T00:00:00.000Z",
+      "score": 1,
+      "updatedAt": "2017-01-01T00:00:00.000Z",
+      "userId": "fb-user-1",
+    },
+    Object {
+      "appId": "app",
+      "createdAt": "2017-01-28T08:45:57.011Z",
+      "score": 1,
+      "updatedAt": "2017-01-28T08:45:57.011Z",
+      "userId": "fb-user-2",
+    },
+  ],
+  "negativeFeedbackCount": 0,
+  "positiveFeedbackCount": 2,
+  "reason": "foo-reason",
+  "updatedAt": "2017-01-01T00:00:00.000Z",
+  "userId": "user",
+}
+`;
+
+exports[`CreateOrUpdateReplyRequestFeedback updates existing feedback 1`] = `
+Object {
+  "CreateOrUpdateReplyRequestFeedback": Object {
+    "feedbackCount": 1,
+    "negativeFeedbackCount": 1,
+    "positiveFeedbackCount": 0,
+  },
+}
+`;
+
+exports[`CreateOrUpdateReplyRequestFeedback updates existing feedback 2`] = `
+Object {
+  "appId": "app",
+  "articleId": "foo-article",
+  "createdAt": "2017-01-01T00:00:00.000Z",
+  "feedbacks": Array [
+    Object {
+      "appId": "app",
+      "createdAt": "2017-01-01T00:00:00.000Z",
+      "score": -1,
+      "updatedAt": "2017-01-28T08:45:57.011Z",
+      "userId": "fb-user-1",
+    },
+  ],
+  "negativeFeedbackCount": 1,
+  "positiveFeedbackCount": 0,
+  "reason": "foo-reason",
+  "updatedAt": "2017-01-01T00:00:00.000Z",
+  "userId": "user",
+}
+`;
