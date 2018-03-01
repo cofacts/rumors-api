@@ -34,6 +34,12 @@ describe('GetReplyAndGetArticle', () => {
                 }
               }
               replyRequestCount
+              replyRequests {
+                reason
+                feedbackCount
+                positiveFeedbackCount
+                negativeFeedbackCount
+              }
               requestedForReply
             }
           }

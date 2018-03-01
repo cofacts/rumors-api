@@ -69,13 +69,15 @@ export default {
     articleId: 'foo',
     userId: 'fakeUser',
     appId: 'LINE',
+    reason: 'Reason foo',
+    feedbacks: [{ score: 1 }, { score: -1 }],
   },
-  [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId(
-    'foo',
-    'bar',
-    'test-user',
-    'test-app'
-  )}`]: {
+  [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId({
+    articleId: 'foo',
+    replyId: 'bar',
+    userId: 'test-user',
+    appId: 'test-app',
+  })}`]: {
     articleId: 'foo',
     replyId: 'bar',
     userId: 'test-user',
