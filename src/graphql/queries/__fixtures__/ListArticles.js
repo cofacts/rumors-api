@@ -1,5 +1,7 @@
 export default {
   '/articles/doc/listArticleTest1': {
+    userId: 'user1',
+    appId: 'app1',
     replyRequestCount: 2,
     normalArticleReplyCount: 2,
     updatedAt: 1,
@@ -10,6 +12,8 @@ export default {
     `,
   },
   '/articles/doc/listArticleTest2': {
+    userId: 'user1',
+    appId: 'app1',
     replyRequestCount: 1,
     normalArticleReplyCount: 1,
     updatedAt: 2,
@@ -17,6 +21,8 @@ export default {
       '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',
   },
   '/articles/doc/listArticleTest3': {
+    userId: 'user2',
+    appId: 'app1',
     replyRequestCount: 0,
     normalArticleReplyCount: 0,
     updatedAt: 3,
