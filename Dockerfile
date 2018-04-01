@@ -1,7 +1,7 @@
 # Builds production image for rumors-api.
 # Environments not included, should be composed in https://github.com/MrOrz/rumors-deploy.
 #
-FROM node:carbon
+FROM node:carbon@sha256:c55f3e9a7a2b9194e8c8c6b68b182caac02d0f6a77aacba1ebd73f6001a1c381
 WORKDIR /srv/www
 
 # make node_modules cached.
