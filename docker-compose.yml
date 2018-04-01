@@ -22,7 +22,7 @@ services:
       - "6222:5601"
 
   api:
-    image: kkarczmarczyk/node-yarn:6.9
+    image: kkarczmarczyk/node-yarn:6.9@sha256:c6a5e8623886262fe8a3aed488ecf8aa2c0b43c99ec438c9c4d66d3ea7849494
     container_name: rumors-api
     depends_on:
       - db
