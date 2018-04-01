@@ -4,8 +4,8 @@ import config from 'config';
 import path from 'path';
 import pug from 'pug';
 import { printSchema } from 'graphql/utilities';
-import { graphqlKoa, graphiqlKoa } from 'graphql-server-koa';
-import rollbar from 'rollbar';
+import { graphqlKoa, graphiqlKoa } from 'apollo-server-koa';
+import Rollbar from 'rollbar';
 import koaStatic from 'koa-static';
 import koaBody from 'koa-bodyparser';
 import session from 'koa-session2';
@@ -22,11 +22,12 @@ import { loginRouter, authRouter } from './auth';
 const app = new Koa();
 const router = Router();
 
-rollbar.init(config.get('ROLLBAR_TOKEN'), {
+const rollbar = new Rollbar({
+  accessToken: config.get('ROLLBAR_TOKEN'),
+  captureUncaught: true,
+  captureUnhandledRejections: true,
   environment: config.get('ROLLBAR_ENV'),
 });
-
-rollbar.handleUncaughtExceptionsAndRejections();
 
 app.use(async (ctx, next) => {
   try {
