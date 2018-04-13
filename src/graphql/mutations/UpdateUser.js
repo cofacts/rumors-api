@@ -9,7 +9,7 @@ export default {
     userId: { type: new GraphQLNonNull(GraphQLString) },
     name: { type: new GraphQLNonNull(GraphQLString) },
   },
-  async resolve(rootValue, { userId, name }) {
+  async resolve(rootValue, { name }, { userId, appId }) {
     const { result, get: { _source } } = await client.update({
       index: 'users',
       type: 'doc',
@@ -24,7 +24,7 @@ export default {
 
     if (result === 'noop') {
       throw new Error(
-        `Cannot change name for user(userId=${userId})`
+        `Cannot change name for user`
       );
     }
 
