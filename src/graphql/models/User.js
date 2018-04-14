@@ -21,6 +21,7 @@ const User = new GraphQLObjectType({
     twitterId: currentUserOnlyField('twitterId', GraphQLString),
 
     createdAt: { type: GraphQLString },
+    updatedAt: { type: GraphQLString },
   }),
 });
 

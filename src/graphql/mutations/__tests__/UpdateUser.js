@@ -16,9 +16,7 @@ describe('UpdateUser', () => {
 
     const { errors } = await gql`
       mutation {
-        updatedUser: UpdateUser(
-          name: "Bill"
-        ) {
+        updatedUser: UpdateUser(name: "Bill") {
           name
           updatedAt
         }
@@ -34,9 +32,7 @@ describe('UpdateUser', () => {
 
     const { data } = await gql`
       mutation {
-        updatedUser: UpdateUser(
-          name: "Mark"
-        ) {
+        updatedUser: UpdateUser(name: "Mark") {
           name
           updatedAt
         }
