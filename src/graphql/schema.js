@@ -14,6 +14,7 @@ import CreateArticleReply from './mutations/CreateArticleReply';
 import CreateOrUpdateArticleReplyFeedback from './mutations/CreateOrUpdateArticleReplyFeedback';
 import CreateReplyRequest from './mutations/CreateReplyRequest';
 import UpdateArticleReplyStatus from './mutations/UpdateArticleReplyStatus';
+import UpdateUser from './mutations/UpdateUser';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -35,6 +36,7 @@ export default new GraphQLSchema({
       CreateReplyRequest,
       CreateOrUpdateArticleReplyFeedback,
       UpdateArticleReplyStatus,
+      UpdateUser,
     },
   }),
 });

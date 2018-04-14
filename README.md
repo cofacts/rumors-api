@@ -184,7 +184,7 @@ $ docker run --rm -it -p 5000:5000 mrorz/rumors-api
 Push to dockerhub
 ```
 # Production
-$ docker push mrorz/rumors-api
+$ docker push mrorz/rumors-api:latest
 
 # Staging
 $ docker push mrorz/rumors-api:staging

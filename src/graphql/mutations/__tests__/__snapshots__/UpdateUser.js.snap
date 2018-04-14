@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UpdateUser should set user name field correctly 1`] = `
+Object {
+  "updatedUser": Object {
+    "name": "Mark",
+    "updatedAt": "2017-01-28T08:45:57.011Z",
+  },
+}
+`;
+
+exports[`UpdateUser should set user name field correctly 2`] = `
+Object {
+  "name": "Mark",
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "users": Array [
+    Object {
+      "name": "Bill",
+      "updatedAt": 0,
+    },
+  ],
+}
+`;
