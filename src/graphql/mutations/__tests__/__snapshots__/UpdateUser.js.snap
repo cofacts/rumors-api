@@ -21,5 +21,3 @@ Object {
   ],
 }
 `;
-
-exports[`UpdateUser should throw exception when trying to set the original name 1`] = `undefined`;

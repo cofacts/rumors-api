@@ -10,22 +10,6 @@ describe('UpdateUser', () => {
     return loadFixtures(fixtures);
   });
 
-  it('should throw exception when trying to set the original name', async () => {
-    const userId = 'error';
-    const appId = 'test';
-
-    const { errors } = await gql`
-      mutation {
-        updatedUser: UpdateUser(name: "Bill") {
-          name
-          updatedAt
-        }
-      }
-    `({}, { userId, appId });
-
-    expect(errors).toMatchSnapshot();
-  });
-
   it('should set user name field correctly', async () => {
     const userId = 'normal';
     const appId = 'test';
