@@ -2,6 +2,7 @@ import docLoaderFactory from './docLoaderFactory';
 import articleRepliesByReplyIdLoaderFactory from './articleRepliesByReplyIdLoaderFactory';
 import articleReplyFeedbacksLoaderFactory from './articleReplyFeedbacksLoaderFactory';
 import searchResultLoaderFactory from './searchResultLoaderFactory';
+import urlLoaderFactory from './urlLoaderFactory';
 
 export default class DataLoaders {
   // List of data loaders
@@ -28,6 +29,10 @@ export default class DataLoaders {
     );
   }
 
+  get urlLoader() {
+    return this._checkOrSetLoader('urlLoader', urlLoaderFactory);
+  }
+
   // inner-workings
   //
   constructor() {
@@ -37,7 +42,7 @@ export default class DataLoaders {
   _checkOrSetLoader(name, factoryFn) {
     if (this._loaders[name]) return this._loaders[name];
 
-    this._loaders[name] = factoryFn();
+    this._loaders[name] = factoryFn(this);
     return this._loaders[name];
   }
 }
