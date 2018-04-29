@@ -9,10 +9,12 @@ const readabilityJsStr = fs.readFileSync(
   { encoding: 'utf-8' }
 );
 
-/* eslint-disable no-undef */
 /**
- * Executed in puppeteer browser
+ * Executed in puppeteer browser.
+ * Don't instrument page.evaluate callbacks, or instrumented vars cov_xxxx will cause error!
  */
+/* eslint-disable no-undef */
+/* istanbul ignore next */
 function executor() {
   return new Readability({}, document).parse();
 }
@@ -46,6 +48,8 @@ async function scrap(browser, url) {
 
   const html = await page.content();
 
+  // Don't instrument page.evaluate callbacks, or instrumented vars cov_xxxx will cause error!
+  /* istanbul ignore next */
   const canonical = await page.evaluate(() => {
     const canonicalLink = document.querySelector('link[rel=canonical]');
     if (canonicalLink) return canonicalLink.href;
@@ -67,6 +71,8 @@ async function scrap(browser, url) {
   // If the whole page is empty due to any error, just return null
   if (!resultArticle) return null;
 
+  // Don't instrument page.evaluate callbacks, or instrumented vars cov_xxxx will cause error!
+  /* istanbul ignore next */
   const topImageUrl = await page.evaluate(contentHTML => {
     const ogImageMeta = document.querySelector(
       'meta[property="og:image"], meta[property="og:image:url"]'
