@@ -1,15 +1,9 @@
-import {
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLList,
-  GraphQLInt,
-} from 'graphql';
+import { GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql';
 
 import { filterArticleRepliesByStatus } from 'graphql/util';
 import ReplyTypeEnum from './ReplyTypeEnum';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
-import ReplyVersion from './ReplyVersion';
 import User, { userFieldResolver } from './User';
 
 const Reply = new GraphQLObjectType({
