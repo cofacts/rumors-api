@@ -3,18 +3,22 @@
 exports[`caching fetches latest fetch from urls 1`] = `
 Array [
   Object {
-    "_cursor": undefined,
-    "_score": 0.18232156,
+    "_cursor": Array [
+      1485907200000,
+    ],
+    "_score": null,
     "canonical": "http://example.com/article/1111",
-    "fetchedAt": "2017-01-01T00:00:00.000Z",
-    "id": "someUrl",
-    "summary": "Extracted summary",
-    "title": "Example title",
+    "fetchedAt": "2017-02-01T00:00:00.000Z",
+    "id": "someUrl-2nd-fetch",
+    "summary": "Changed summary",
+    "title": "Changed title",
     "url": "http://example.com/article/1111-aaaaa-bbb-ccc",
   },
   Object {
-    "_cursor": undefined,
-    "_score": 0.18232156,
+    "_cursor": Array [
+      1485907200000,
+    ],
+    "_score": null,
     "canonical": "http://example.com/article/1111",
     "fetchedAt": "2017-02-01T00:00:00.000Z",
     "id": "someUrl-2nd-fetch",

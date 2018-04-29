@@ -6,7 +6,7 @@ import DataLoader from 'dataloader';
 export default dataLoaders =>
   new DataLoader(
     async urls => {
-      const result = await dataLoaders.searchResultLoader.loadMany(
+      const data = await dataLoaders.searchResultLoader.loadMany(
         urls.map(url => ({
           index: 'urls',
           type: 'doc',
@@ -16,14 +16,15 @@ export default dataLoaders =>
                 should: [{ term: { url } }, { term: { canonical: url } }],
               },
             },
-          },
-          sort: {
-            fetchedAt: 'desc',
+            sort: {
+              fetchedAt: 'desc',
+            },
+            size: 1,
           },
         }))
       );
 
-      return result && result.length ? result[0] : null;
+      return data.map(result => (result && result.length ? result[0] : null));
     },
     {
       cacheKeyFn: JSON.stringify,
