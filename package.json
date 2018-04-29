@@ -21,13 +21,9 @@
     "build": "docker build -t mrorz/rumors-api:latest .",
     "build:staging": "npm run prebuild && docker build -t mrorz/rumors-api:staging .",
     "validate:sameDoc": "echo Please run 'npm run evaluate' instead. See README.md for setting up test db.",
-    "evaluate": "npm run rumors-db:evaluate && npm run evaluate:fn && npm run evaluate:fp",
-    "evaluate:fn": "NODE_ENV=test babel-node test/evaluation/falseNegative.js",
-    "evaluate:fp": "NODE_ENV=test babel-node test/evaluation/falsePositive.js",
     "clean": "rm -rf build",
     "rumors-db:pull": "cd test/rumors-db && git pull",
-    "rumors-db:test": "cd test/rumors-db && npm t",
-    "rumors-db:evaluate": "cd test/rumors-db && npm run evaluate"
+    "rumors-db:test": "cd test/rumors-db && npm t"
   },
   "dependencies": {
     "babel-runtime": "^6.20.0",
