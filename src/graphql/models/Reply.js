@@ -25,14 +25,6 @@ const Reply = new GraphQLObjectType({
     text: { type: GraphQLString },
     type: { type: ReplyTypeEnum },
     reference: { type: GraphQLString },
-    versions: {
-      deprecationReason: "Don't need 'versions' wrapper now.",
-      args: {
-        limit: { type: GraphQLInt },
-      },
-      type: new GraphQLList(ReplyVersion),
-      resolve: reply => [reply],
-    },
     articleReplies: {
       type: new GraphQLList(ArticleReply),
       args: {
