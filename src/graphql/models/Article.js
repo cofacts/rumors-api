@@ -22,6 +22,7 @@ import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
+import Hyperlink from './Hyperlink';
 
 const Article = new GraphQLObjectType({
   name: 'Article',
@@ -142,6 +143,10 @@ const Article = new GraphQLObjectType({
 
       // eslint-disable-next-line no-use-before-define
       type: ArticleConnection,
+    },
+    hyperlinks: {
+      type: new GraphQLList(Hyperlink),
+      description: 'Hyperlinks in article text',
     },
   }),
 });
