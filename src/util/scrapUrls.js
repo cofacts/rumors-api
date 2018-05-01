@@ -16,7 +16,7 @@ const readabilityJsStr = fs.readFileSync(
 /* eslint-disable no-undef */
 /* istanbul ignore next */
 function executor() {
-  return new Readability({}, document).parse();
+  return new Readability(document).parse();
 }
 /* eslint-enable no-undef */
 
