@@ -9,6 +9,7 @@ Array [
     "_score": null,
     "canonical": "http://example.com/article/1111",
     "fetchedAt": "2017-02-01T00:00:00.000Z",
+    "fromUrlsCache": true,
     "id": "someUrl-2nd-fetch",
     "summary": "Changed summary",
     "title": "Changed title",
@@ -21,6 +22,7 @@ Array [
     "_score": null,
     "canonical": "http://example.com/article/1111",
     "fetchedAt": "2017-02-01T00:00:00.000Z",
+    "fromUrlsCache": true,
     "id": "someUrl-2nd-fetch",
     "summary": "Changed summary",
     "title": "Changed title",
@@ -32,6 +34,7 @@ Array [
 exports[`scrapping scraps from Internet and handles error: foundResult 1`] = `
 Object {
   "canonical": "http://localhost:57319/index.html",
+  "fromUrlsCache": false,
   "summary": "2018-02-09 16:46中央社 台北9日電大同公司今天聲明，近期大同公司或大同3C並無贈送LINE貼圖或對外募款活動，相關詐騙訊息皆非由大同或其子公司官方發出，建議消費者查證並提高警覺。大同發布聲明指出，近期LINE出現盜用大同公司官方名義與大同寶寶圖像進行假訊息散布，並發送花蓮地震救災捐款訊息，且以優惠活動、贈送貼圖等手段，騙取加入好友、分享貼圖，藉此竊取個資。針對上述冒用詐騙情事，大同表示，大同3C日前已於其官網張貼警示昭告，大同公司也嚴正聲明，近期大同公司或大同3C並無贈送LINE貼圖或對外募款的活動。大同強調，上述詐騙訊息皆非由大同或其子公司官方發出，消費者若接獲活動訊息，請先至大同公司或大同3C官方平台查詢，包含官方網站、臉書粉絲頁、LINE官方帳號等，或洽大同官方免付費服務專線0800-052-666進一步求證。大同籲請社會大眾對社群媒體資訊提高警覺，並直接將詐騙訊息刪除，切勿點擊或轉發，以保障個人資料安全並避免損失。對於冒用大同公司、大同3C官方名義以及大同寶寶圖像者，大同公司表示必將追究，絕不寬貸。大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受騙。圖／擷自大同3C官網。分享",
   "title": "Test document",
   "topImageUrl": "https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&x=0&y=0&sw=0&sh=0&sl=W&fw=1050&exp=3600",
@@ -47,6 +50,7 @@ exports[`scrapping scraps from Internet and handles error: foundResult html 1`] 
 exports[`scrapping scraps from Internet and handles error: notFoundResult 1`] = `
 Object {
   "canonical": "http://localhost:57319/not-found",
+  "fromUrlsCache": false,
   "html": "<html><head></head><body><pre style=\\"word-wrap: break-word; white-space: pre-wrap;\\">Not Found</pre></body></html>",
   "summary": "Not Found",
   "title": "",

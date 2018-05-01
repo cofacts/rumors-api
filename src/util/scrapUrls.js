@@ -28,6 +28,7 @@ function executor() {
  * @property {string} summary
  * @property {string} html
  * @property {string} topImageUrl
+ * @property {boolean} fromUrlsCache If the result comes from elasticsearch "urls" index
  */
 
 /**
@@ -100,6 +101,7 @@ async function scrap(browser, url) {
     summary: resultArticle.textContent.trim(),
     topImageUrl,
     html,
+    fromUrlsCache: false,
   };
 }
 
@@ -120,7 +122,7 @@ async function scrapUrls(urls, { cacheLoader, noFetch = false } = {}) {
     urls.map(async url => {
       if (cacheLoader) {
         const result = await cacheLoader.load(url);
-        if (result) return result;
+        if (result) return { ...result, fromUrlsCache: true };
       }
 
       if (noFetch) return null;
