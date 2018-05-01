@@ -191,7 +191,12 @@ async function defaultResolveEdges(
 }
 
 async function defaultResolveLastCursor(
-  { first, before, after, ...searchContext },
+  {
+    first, // eslint-disable-line no-unused-vars
+    before, // eslint-disable-line no-unused-vars
+    after, // eslint-disable-line no-unused-vars
+    ...searchContext
+  },
   args,
   { loaders }
 ) {
@@ -208,7 +213,12 @@ async function defaultResolveLastCursor(
 }
 
 async function defaultResolveFirstCursor(
-  { first, before, after, ...searchContext },
+  {
+    first, // eslint-disable-line no-unused-vars
+    before, // eslint-disable-line no-unused-vars
+    after, // eslint-disable-line no-unused-vars
+    ...searchContext
+  },
   args,
   { loaders }
 ) {
