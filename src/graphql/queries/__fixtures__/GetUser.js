@@ -11,6 +11,7 @@ export default {
   },
   '/articles/doc/some-doc': {
     articleReplies: [
+      // replies to the same doc only count as 1 for repliedArticleCount
       { status: 'NORMAL', appId: 'WEBSITE', userId: 'current-user' },
       { status: 'NORMAL', appId: 'WEBSITE', userId: 'current-user' },
     ],
