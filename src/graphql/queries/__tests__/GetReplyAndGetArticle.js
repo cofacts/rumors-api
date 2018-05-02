@@ -28,11 +28,9 @@ describe('GetReplyAndGetArticle', () => {
                 replyId
                 reply {
                   id
-                  versions {
-                    text
-                    type
-                    reference
-                  }
+                  text
+                  type
+                  reference
                 }
               }
               replyRequestCount

@@ -83,44 +83,6 @@ This directory is managed by git submodule. Use the following command to update:
 $ npm run rumors-db:pull
 ```
 
-## Evaluate search performance
-
-> 知之為知之，不知為不知，是知也。
-
-|                            | Found          | Not Found      |
-|----------------------------|----------------|----------------|
-| DB has such rumor          | True positive  | False negative |
-| DB doesn't have such rumor | False positive | True negative  |
-
-We use a static set of articles to test false positives and false negatives inside test DB.
-
-To prepare test DB, first start an elastic search server on port 62223:
-
-```
-$ docker run -d -p "62223:9200" --name "rumors-test-db" elasticsearch
-# If it says 'The name "rumors-test-db" is already in use',
-# Just run:
-$ docker start rumors-test-db
-```
-
-Then run:
-
-```
-$ npm run evaluate
-```
-
-### 知之為知之：False-negative test (previously: same-doc validation)
-
-Tests if the DB can find the correct document when we query against any existing document in DB.
-
-
-### 不知為不知：False-positive test
-
-From all documents that is not in DB but reported by the user in ["Is This Useful"](https://airtable.com/shr23o1yosGdfd3Xy) reports, tests if `Search` erroneously match an article in DB.
-
-The "Rumor samples not in DB" is in `test/evalutation/non-db-samples-xxx.csv`.
-
-
 ## Lint
 
 ```

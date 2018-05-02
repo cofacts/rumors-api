@@ -171,13 +171,9 @@ Object {
           "createdAt": "2015-01-01T12:10:30Z",
           "reply": Object {
             "id": "bar",
-            "versions": Array [
-              Object {
-                "reference": "barbar",
-                "text": "bar",
-                "type": "NOT_ARTICLE",
-              },
-            ],
+            "reference": "barbar",
+            "text": "bar",
+            "type": "NOT_ARTICLE",
           },
           "replyId": "bar",
           "status": "NORMAL",
