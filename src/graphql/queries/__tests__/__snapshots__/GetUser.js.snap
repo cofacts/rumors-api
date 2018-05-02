@@ -6,6 +6,7 @@ Object {
     "GetUser": Object {
       "email": "hi@me.com",
       "name": "current user",
+      "repliedArticleCount": 2,
     },
   },
 }
