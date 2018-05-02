@@ -29,42 +29,11 @@ const User = new GraphQLObjectType({
     facebookId: currentUserOnlyField(GraphQLString),
     githubId: currentUserOnlyField(GraphQLString),
     twitterId: currentUserOnlyField(GraphQLString),
-    repliedArticleCount: currentUserOnlyField(GraphQLInt, async user => {
-      const { count } = await client.count({
-        index: 'articles',
-        type: 'doc',
-        body: {
-          query: {
-            nested: {
-              path: 'articleReplies',
-              query: {
-                bool: {
-                  must: [
-                    {
-                      term: {
-                        'articleReplies.userId': user.id,
-                      },
-                    },
-                    {
-                      term: {
-                        'articleReplies.appId': 'WEBSITE',
-                      },
-                    },
-                    {
-                      term: {
-                        'articleReplies.status': 'NORMAL',
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        },
-      });
-
-      return count;
-    }),
+    repliedArticleCount: currentUserOnlyField(
+      GraphQLInt,
+      (user, args, context) =>
+        context.loaders.repliedArticleCountLoader.load(user.id)
+    ),
 
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },

@@ -2,6 +2,7 @@ import docLoaderFactory from './docLoaderFactory';
 import articleRepliesByReplyIdLoaderFactory from './articleRepliesByReplyIdLoaderFactory';
 import articleReplyFeedbacksLoaderFactory from './articleReplyFeedbacksLoaderFactory';
 import searchResultLoaderFactory from './searchResultLoaderFactory';
+import repliedArticleCountLoaderFactory from './repliedArticleCountLoaderFactory';
 
 export default class DataLoaders {
   // List of data loaders
@@ -25,6 +26,13 @@ export default class DataLoaders {
     return this._checkOrSetLoader(
       'searchResultLoader',
       searchResultLoaderFactory
+    );
+  }
+
+  get repliedArticleCountLoader() {
+    return this._checkOrSetLoader(
+      'repliedArticleCountLoader',
+      repliedArticleCountLoaderFactory
     );
   }
 
