@@ -1,5 +1,4 @@
 import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
-import client from 'util/client';
 
 /**
  * Field config helper for current user only field.
