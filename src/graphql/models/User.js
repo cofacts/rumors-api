@@ -33,7 +33,48 @@ const User = new GraphQLObjectType({
       (user, args, context) =>
         context.loaders.repliedArticleCountLoader.load(user.id)
     ),
+    level: {
+      type: GraphQLInt,
+      async resolve(user, arg, context) {
+        const { level } = await context.loaders.userLevelLoader.load(user.id);
+        return level;
+      },
+    },
+    points: currentUserOnlyField(
+      new GraphQLObjectType({
+        name: 'PointInfo',
+        description:
+          "Information of a user's point. Only available for current user.",
+        fields: {
+          total: {
+            type: GraphQLInt,
+            description: 'Points earned by the current user',
+          },
+          currentLevel: {
+            type: GraphQLInt,
+            description: 'Points required for current level',
+          },
+          nextLevel: {
+            type: GraphQLInt,
+            description:
+              'Points required for next level. null when there is no next level.',
+          },
+        },
+      }),
+      async (user, arg, context) => {
+        const {
+          totalPoints,
+          currentLevelPoints,
+          nextLevelPoints,
+        } = await context.loaders.userLevelLoader.load(user.id);
 
+        return {
+          total: totalPoints,
+          currentLevel: currentLevelPoints,
+          nextLevel: nextLevelPoints,
+        };
+      }
+    ),
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
   }),

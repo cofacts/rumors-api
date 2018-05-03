@@ -3,6 +3,7 @@ import articleRepliesByReplyIdLoaderFactory from './articleRepliesByReplyIdLoade
 import articleReplyFeedbacksLoaderFactory from './articleReplyFeedbacksLoaderFactory';
 import searchResultLoaderFactory from './searchResultLoaderFactory';
 import repliedArticleCountLoaderFactory from './repliedArticleCountLoaderFactory';
+import userLevelLoaderFactory from './userLevelLoaderFactory';
 
 export default class DataLoaders {
   // List of data loaders
@@ -34,6 +35,10 @@ export default class DataLoaders {
       'repliedArticleCountLoader',
       repliedArticleCountLoaderFactory
     );
+  }
+
+  get userLevelLoader() {
+    return this._checkOrSetLoader('userLevelLoader', userLevelLoaderFactory);
   }
 
   // inner-workings

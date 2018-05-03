@@ -5,7 +5,13 @@ Object {
   "data": Object {
     "GetUser": Object {
       "email": "hi@me.com",
+      "level": 3,
       "name": "current user",
+      "points": Object {
+        "currentLevel": 3,
+        "nextLevel": 5,
+        "total": 3,
+      },
       "repliedArticleCount": 2,
     },
   },
@@ -17,6 +23,7 @@ Object {
   "data": Object {
     "GetUser": Object {
       "email": null,
+      "level": 0,
       "name": "test user",
     },
   },

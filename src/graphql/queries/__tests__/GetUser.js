@@ -14,6 +14,12 @@ describe('GetUser', () => {
             name
             email
             repliedArticleCount
+            level
+            points {
+              total
+              currentLevel
+              nextLevel
+            }
           }
         }
       `({}, { user: currentUser })
@@ -27,6 +33,7 @@ describe('GetUser', () => {
           GetUser(id: "test-user") {
             name
             email
+            level
           }
         }
       `({}, { user: currentUser })
