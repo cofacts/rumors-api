@@ -13,6 +13,7 @@ describe('GetUser', () => {
           GetUser {
             name
             email
+            repliedArticleCount
           }
         }
       `({}, { user: currentUser })
