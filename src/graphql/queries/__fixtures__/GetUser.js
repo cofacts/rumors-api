@@ -14,16 +14,19 @@ export default {
       // replies to the same doc only count as 1 for repliedArticleCount
       { status: 'NORMAL', appId: 'WEBSITE', userId: 'current-user' },
       { status: 'NORMAL', appId: 'WEBSITE', userId: 'current-user' },
+      { status: 'NORMAL', appId: 'WEBSITE', userId: 'other-user' },
     ],
   },
   '/articles/doc/another-doc': {
     articleReplies: [
       { status: 'NORMAL', appId: 'WEBSITE', userId: 'current-user' },
+      { status: 'NORMAL', appId: 'WEBSITE', userId: 'other-user' },
     ],
   },
   '/articles/doc/not-this-doc': {
     articleReplies: [
       { status: 'DELETED', appId: 'WEBSITE', userId: 'current-user' },
+      { status: 'NORMAL', appId: 'WEBSITE', userId: 'other-user' },
     ],
   },
 };
