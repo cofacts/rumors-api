@@ -194,6 +194,12 @@ Object {
           "positiveFeedbackCount": 1,
           "reason": "Reason foo",
         },
+        Object {
+          "feedbackCount": 0,
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 0,
+          "reason": null,
+        },
       ],
       "requestedForReply": true,
       "text": "Lorum ipsum",

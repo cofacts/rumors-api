@@ -72,6 +72,11 @@ export default {
     reason: 'Reason foo',
     feedbacks: [{ score: 1 }, { score: -1 }],
   },
+  '/replyrequests/doc/articleTest2': { // Legacy reply request that has no feedbacks[] nor reason.
+    articleId: 'foo',
+    userId: 'fakeUser',
+    appId: 'LINE',
+  },
   [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId({
     articleId: 'foo',
     replyId: 'bar',
