@@ -95,7 +95,9 @@ export default {
     text: { type: new GraphQLNonNull(GraphQLString) },
     reference: { type: new GraphQLNonNull(ArticleReferenceInput) },
     reason: {
-      type: new GraphQLNonNull(GraphQLString),
+      // FIXME: Change to required field after LINE bot is implemented
+      // type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
       description:
         'The reason why the user want to submit this article. Mandatory for 1st sender',
     },
