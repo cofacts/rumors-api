@@ -69,13 +69,21 @@ export default {
     articleId: 'foo',
     userId: 'fakeUser',
     appId: 'LINE',
+    reason: 'Reason foo',
+    feedbacks: [{ score: 1 }, { score: -1 }],
   },
-  [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId(
-    'foo',
-    'bar',
-    'test-user',
-    'test-app'
-  )}`]: {
+  '/replyrequests/doc/articleTest2': {
+    // Legacy reply request that has no feedbacks[] nor reason.
+    articleId: 'foo',
+    userId: 'fakeUser',
+    appId: 'LINE',
+  },
+  [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId({
+    articleId: 'foo',
+    replyId: 'bar',
+    userId: 'test-user',
+    appId: 'test-app',
+  })}`]: {
     articleId: 'foo',
     replyId: 'bar',
     userId: 'test-user',

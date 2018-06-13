@@ -13,7 +13,11 @@ it('creates articles and a reply request', async () => {
 
   const { data, errors } = await gql`
     mutation($text: String!, $reference: ArticleReferenceInput!) {
-      CreateArticle(text: $text, reference: $reference) {
+      CreateArticle(
+        text: $text
+        reference: $reference
+        reason: "気になります"
+      ) {
         id
       }
     }
@@ -75,7 +79,11 @@ it('avoids creating duplicated articles and adds replyRequests automatically', a
 
   const { data, errors } = await gql`
     mutation($text: String!, $reference: ArticleReferenceInput!) {
-      CreateArticle(text: $text, reference: $reference) {
+      CreateArticle(
+        text: $text
+        reference: $reference
+        reason: "気になります"
+      ) {
         id
       }
     }

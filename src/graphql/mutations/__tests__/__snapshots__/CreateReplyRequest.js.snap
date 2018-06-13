@@ -14,6 +14,10 @@ Object {
   "appId": "test",
   "articleId": "createReplyRequestTest1",
   "createdAt": "2017-01-28T08:45:57.011Z",
+  "feedbacks": Array [],
+  "negativeFeedbackCount": 0,
+  "positiveFeedbackCount": 0,
+  "reason": "気になります",
   "updatedAt": "2017-01-28T08:45:57.011Z",
   "userId": "test",
 }
@@ -41,6 +45,10 @@ Object {
   "appId": "test",
   "articleId": "createReplyRequestTest1",
   "createdAt": "2017-01-28T08:45:57.011Z",
+  "feedbacks": Array [],
+  "negativeFeedbackCount": 0,
+  "positiveFeedbackCount": 0,
+  "reason": "",
   "updatedAt": "2017-01-28T08:47:37.011Z",
   "userId": "test",
 }

@@ -16,7 +16,7 @@ describe('CreateReplyRequest', () => {
 
     const { data, errors } = await gql`
       mutation($articleId: String!) {
-        CreateReplyRequest(articleId: $articleId) {
+        CreateReplyRequest(articleId: $articleId, reason: "気になります") {
           replyRequestCount
           status
         }
