@@ -68,7 +68,9 @@ export default () =>
       return (await client.msearch({ body })).responses.map(
         ({
           aggregations: {
-            articleReplies: { authored: { doc_count: totalPoints } },
+            articleReplies: {
+              authored: { doc_count: totalPoints },
+            },
           },
         }) => {
           const level = getLevel(totalPoints);
