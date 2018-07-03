@@ -35,7 +35,10 @@ export async function createArticleReply({ article, reply, userId, appId }) {
     updatedAt: now,
   };
 
-  const { result: articleResult, get: { _source } } = await client.update({
+  const {
+    result: articleResult,
+    get: { _source },
+  } = await client.update({
     index: 'articles',
     type: 'doc',
     id: article.id,

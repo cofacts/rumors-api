@@ -9,7 +9,10 @@ export default {
     name: { type: new GraphQLNonNull(GraphQLString) },
   },
   async resolve(rootValue, { name }, { userId }) {
-    const { result, get: { _source } } = await client.update({
+    const {
+      result,
+      get: { _source },
+    } = await client.update({
       index: 'users',
       type: 'doc',
       id: userId,

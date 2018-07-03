@@ -14,7 +14,10 @@ export default {
     },
   },
   async resolve(rootValue, { articleId, replyId, status }, { userId, appId }) {
-    const { result, get: { _source } } = await client.update({
+    const {
+      result,
+      get: { _source },
+    } = await client.update({
       index: 'articles',
       type: 'doc',
       id: articleId,
