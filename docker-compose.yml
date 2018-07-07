@@ -3,7 +3,7 @@
 version: '2'
 services:
   db:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.0
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.0
     ports:
       - "62222:9200"
     volumes:
@@ -13,7 +13,7 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Prevent elasticsearch eating up too much memory
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.1.0
+    image: docker.elastic.co/kibana/kibana-oss:6.3.0
     depends_on:
       - db
     environment:
