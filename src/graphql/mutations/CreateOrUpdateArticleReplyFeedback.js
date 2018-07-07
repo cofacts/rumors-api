@@ -33,10 +33,11 @@ export default {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
     replyId: { type: new GraphQLNonNull(GraphQLString) },
     vote: { type: new GraphQLNonNull(FeedbackVote) },
+    comment: { type: GraphQLString },
   },
   async resolve(
     rootValue,
-    { articleId, replyId, vote },
+    { articleId, replyId, vote, comment },
     { appId, userId, loaders }
   ) {
     assertUser({ appId, userId });
@@ -59,6 +60,7 @@ export default {
       body: {
         doc: {
           score: vote,
+          comment: comment,
           updatedAt: now,
         },
         upsert: {
@@ -69,6 +71,7 @@ export default {
           score: vote,
           createdAt: now,
           updatedAt: now,
+          comment: comment,
         },
       },
       refresh: true, // We are searching for articlereplyfeedbacks immediately
