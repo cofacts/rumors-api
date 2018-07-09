@@ -3,7 +3,7 @@
 version: '2'
 services:
   db:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.0
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.0
     ports:
       - "62222:9200"
     volumes:
@@ -13,7 +13,7 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Prevent elasticsearch eating up too much memory
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.1.0
+    image: docker.elastic.co/kibana/kibana-oss:6.3.0
     depends_on:
       - db
     environment:
@@ -22,7 +22,7 @@ services:
       - "6222:5601"
 
   api:
-    image: node:carbon@sha256:4fe84bf04ebb3da3ff5e6524db3dd5085eb3c61a85928b594924aae8529f376f
+    image: node:carbon@sha256:625d0b446f63b2d051c7b2a468f6cee63536dec716f09afcf9ae1c575d9b953a
     container_name: rumors-api
     depends_on:
       - db

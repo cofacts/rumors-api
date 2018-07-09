@@ -3,10 +3,10 @@ import {
   GraphQLNonNull,
   GraphQLInt,
   GraphQLObjectType,
-  GraphQLEnumType,
 } from 'graphql';
 
 import { assertUser } from 'graphql/util';
+import FeedbackVote from 'graphql/models/FeedbackVote';
 
 import client from 'util/client';
 
@@ -32,22 +32,12 @@ export default {
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
     replyId: { type: new GraphQLNonNull(GraphQLString) },
-    vote: {
-      type: new GraphQLNonNull(
-        new GraphQLEnumType({
-          name: 'FeedbackVote',
-          values: {
-            UPVOTE: { value: 1 },
-            NEUTRAL: { value: 0 },
-            DOWNVOTE: { value: -1 },
-          },
-        })
-      ),
-    },
+    vote: { type: new GraphQLNonNull(FeedbackVote) },
+    comment: { type: GraphQLString },
   },
   async resolve(
     rootValue,
-    { articleId, replyId, vote },
+    { articleId, replyId, vote, comment },
     { appId, userId, loaders }
   ) {
     assertUser({ appId, userId });
@@ -70,6 +60,7 @@ export default {
       body: {
         doc: {
           score: vote,
+          comment: comment,
           updatedAt: now,
         },
         upsert: {
@@ -80,6 +71,7 @@ export default {
           score: vote,
           createdAt: now,
           updatedAt: now,
+          comment: comment,
         },
       },
       refresh: true, // We are searching for articlereplyfeedbacks immediately

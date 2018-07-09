@@ -14,13 +14,15 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     const appId = 'test';
     const articleId = 'article1';
     const replyId = 'reply1';
+    const comment = 'comment1';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $replyId: String!) {
+      mutation($articleId: String!, $replyId: String!, $comment: String!) {
         CreateOrUpdateArticleReplyFeedback(
           articleId: $articleId
           replyId: $replyId
           vote: UPVOTE
+          comment: $comment
         ) {
           feedbackCount
           positiveFeedbackCount
@@ -31,8 +33,9 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
       {
         articleId,
         replyId,
+        comment,
       },
-      { userId, appId }
+      { userId, appId, comment }
     );
     MockDate.reset();
 

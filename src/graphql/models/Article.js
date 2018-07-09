@@ -23,6 +23,7 @@ import User, { userFieldResolver } from 'graphql/models/User';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
 import Hyperlink from './Hyperlink';
+import ReplyRequest from './ReplyRequest';
 
 const Article = new GraphQLObjectType({
   name: 'Article',
@@ -56,22 +57,35 @@ const Article = new GraphQLObjectType({
           status
         ),
     },
+    replyRequests: {
+      type: new GraphQLList(ReplyRequest),
+      resolve: async ({ id }, args, { loaders }) =>
+        loaders.searchResultLoader.load({
+          index: 'replyrequests',
+          body: { query: { term: { articleId: id } } },
+        }),
+    },
     replyRequestCount: { type: GraphQLInt },
     lastRequestedAt: { type: GraphQLString },
     requestedForReply: {
       type: GraphQLBoolean,
       description:
         'If the current user has requested for reply for this article',
-      resolve: async (
-        { replyRequestIds = [] },
-        args,
-        { loaders, userId, appId }
-      ) => {
+      resolve: async ({ id }, args, { userId, appId, loaders }) => {
         assertUser({ userId, appId });
-        const requests = await loaders.docLoader.loadMany(
-          replyRequestIds.map(id => ({ index: 'replyrequests', id }))
-        );
-        return !!requests.find(r => r.userId === userId && r.appId === appId);
+
+        const userReplyRequests = await loaders.searchResultLoader.load({
+          index: 'replyrequests',
+          body: {
+            query: {
+              bool: {
+                must: [{ term: { userId } }, { term: { articleId: id } }],
+              },
+            },
+          },
+        });
+
+        return userReplyRequests && userReplyRequests.length > 0;
       },
     },
     user: {

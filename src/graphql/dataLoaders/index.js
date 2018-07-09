@@ -3,6 +3,8 @@ import articleRepliesByReplyIdLoaderFactory from './articleRepliesByReplyIdLoade
 import articleReplyFeedbacksLoaderFactory from './articleReplyFeedbacksLoaderFactory';
 import searchResultLoaderFactory from './searchResultLoaderFactory';
 import urlLoaderFactory from './urlLoaderFactory';
+import repliedArticleCountLoaderFactory from './repliedArticleCountLoaderFactory';
+import userLevelLoaderFactory from './userLevelLoaderFactory';
 
 export default class DataLoaders {
   // List of data loaders
@@ -31,6 +33,17 @@ export default class DataLoaders {
 
   get urlLoader() {
     return this._checkOrSetLoader('urlLoader', urlLoaderFactory);
+  }
+
+  get repliedArticleCountLoader() {
+    return this._checkOrSetLoader(
+      'repliedArticleCountLoader',
+      repliedArticleCountLoaderFactory
+    );
+  }
+
+  get userLevelLoader() {
+    return this._checkOrSetLoader('userLevelLoader', userLevelLoaderFactory);
   }
 
   // inner-workings

@@ -9,33 +9,35 @@ const PORT = 57319;
 
 describe('scrapping', () => {
   let server;
-  beforeAll(
-    async () =>
-      new Promise(resolve => {
-        const app = new Koa();
-        app.use(koaStatic(path.join(__dirname, '../__fixtures__/server/')));
-        server = app.listen(PORT, resolve);
-      })
-  );
+  beforeAll(async () =>
+    new Promise(resolve => {
+      const app = new Koa();
+      app.use(koaStatic(path.join(__dirname, '../__fixtures__/server/')));
+      server = app.listen(PORT, resolve);
+    }));
 
   afterAll(() => server.close());
 
-  it('scraps from Internet and handles error', async () => {
-    const [
-      { html, ...foundResult },
-      notFoundResult,
-      invalidUrlResult,
-    ] = await scrapUrls([
-      `http://localhost:${PORT}/index.html`,
-      `http://localhost:${PORT}/not-found`,
-      'this is invalid URL',
-    ]);
+  it(
+    'scraps from Internet and handles error',
+    async () => {
+      const [
+        { html, ...foundResult },
+        notFoundResult,
+        invalidUrlResult,
+      ] = await scrapUrls([
+        `http://localhost:${PORT}/index.html`,
+        `http://localhost:${PORT}/not-found`,
+        'this is invalid URL',
+      ]);
 
-    expect(html.slice(0, 100)).toMatchSnapshot('foundResult html'); // Too long, just sample first 100 chars
-    expect(foundResult).toMatchSnapshot('foundResult');
-    expect(notFoundResult).toMatchSnapshot('notFoundResult');
-    expect(invalidUrlResult).toBeNull();
-  });
+      expect(html.slice(0, 100)).toMatchSnapshot('foundResult html'); // Too long, just sample first 100 chars
+      expect(foundResult).toMatchSnapshot('foundResult');
+      expect(notFoundResult).toMatchSnapshot('notFoundResult');
+      expect(invalidUrlResult).toBeNull();
+    },
+    30000
+  );
 });
 
 describe('caching', () => {

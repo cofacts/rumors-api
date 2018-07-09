@@ -28,14 +28,18 @@ describe('GetReplyAndGetArticle', () => {
                 replyId
                 reply {
                   id
-                  versions {
-                    text
-                    type
-                    reference
-                  }
+                  text
+                  type
+                  reference
                 }
               }
               replyRequestCount
+              replyRequests {
+                reason
+                feedbackCount
+                positiveFeedbackCount
+                negativeFeedbackCount
+              }
               requestedForReply
             }
           }

@@ -94,8 +94,15 @@ export default {
   args: {
     text: { type: new GraphQLNonNull(GraphQLString) },
     reference: { type: new GraphQLNonNull(ArticleReferenceInput) },
+    reason: {
+      // FIXME: Change to required field after LINE bot is implemented
+      // type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
+      description:
+        'The reason why the user want to submit this article. Mandatory for 1st sender',
+    },
   },
-  async resolve(rootValue, { text, reference }, { appId, userId }) {
+  async resolve(rootValue, { text, reference, reason }, { appId, userId }) {
     assertUser({ appId, userId });
 
     const articleId = await createNewArticle({
@@ -105,7 +112,7 @@ export default {
       appId,
     });
 
-    await createReplyRequest({ articleId, userId, appId });
+    await createReplyRequest({ articleId, userId, appId, reason });
 
     return { id: articleId };
   },

@@ -171,13 +171,9 @@ Object {
           "createdAt": "2015-01-01T12:10:30Z",
           "reply": Object {
             "id": "bar",
-            "versions": Array [
-              Object {
-                "reference": "barbar",
-                "text": "bar",
-                "type": "NOT_ARTICLE",
-              },
-            ],
+            "reference": "barbar",
+            "text": "bar",
+            "type": "NOT_ARTICLE",
           },
           "replyId": "bar",
           "status": "NORMAL",
@@ -191,7 +187,21 @@ Object {
       ],
       "replyCount": 1,
       "replyRequestCount": 1,
-      "requestedForReply": false,
+      "replyRequests": Array [
+        Object {
+          "feedbackCount": 2,
+          "negativeFeedbackCount": 1,
+          "positiveFeedbackCount": 1,
+          "reason": "Reason foo",
+        },
+        Object {
+          "feedbackCount": 0,
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 0,
+          "reason": null,
+        },
+      ],
+      "requestedForReply": true,
       "text": "Lorum ipsum",
     },
   },
