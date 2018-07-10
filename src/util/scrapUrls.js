@@ -24,6 +24,7 @@ function executor() {
 /**
  * Return type for scrapUrls
  * @typedef {Object} ScrapResult
+ * @property {string} url The original URL from text
  * @property {string} canonical Canonical URL
  * @property {string} title
  * @property {string} summary
@@ -97,6 +98,7 @@ async function scrap(browser, url) {
   }, resultArticle.content);
 
   return {
+    url,
     canonical,
     title: resultArticle.title,
     summary: resultArticle.textContent.trim(),
@@ -147,12 +149,12 @@ async function scrapUrls(urls, { cacheLoader, client, noFetch = false } = {}) {
     const fetchedAt = new Date();
 
     // Filter out null, write to "urls" index
-    const urlsBody = result.reduce((body, r, idx) => {
+    const urlsBody = result.reduce((body, r) => {
       if (!r || r.fromUrlsCache) {
         return body;
       }
 
-      const { canonical, title, summary, topImageUrl, html } = r;
+      const { url, canonical, title, summary, topImageUrl, html } = r;
 
       return body.concat([
         { index: { _index: 'urls', _type: 'doc' } },
@@ -162,7 +164,7 @@ async function scrapUrls(urls, { cacheLoader, client, noFetch = false } = {}) {
           summary,
           topImageUrl,
           html,
-          url: urls[idx],
+          url,
           fetchedAt,
         },
       ]);
