@@ -35,7 +35,7 @@ function executor() {
  * Fetches the given url
  * @param {browser} browser - Puppeteer browser instance
  * @param {string} url - The URL to scrap
- * @return {Promise<ScrapResult>}
+ * @return {Promise<ScrapResult | null>}
  */
 async function scrap(browser, url) {
   const page = await browser.newPage();
@@ -106,16 +106,19 @@ async function scrap(browser, url) {
 }
 
 /**
- * Fetches the specified url data from cache or through scrapping
+ * Fetches the specified url data from cache or through scrapping.
+ * Optionally writes the scrapped result to database.
  *
  * @param {string[]} urls
  * @param {object} options
- * @param {boolean} options.cacheLoader - The dataloader that loads result from `urls`, given a URL.
- *                                        If not given, scrapUrls don't read `urls` cache.
+ * @param {object} options.cacheLoader - The dataloader that loads result from `urls`, given a URL.
+ *                                       If not given, scrapUrls don't read `urls` cache.
  * @param {boolean} options.noFetch - If true, return null when cache does not hit. Default: false.
+ * @param {object} options.client - ElasticSearch.js client instance used to write new results to
+ *                                  `urls` index. If not given, scrapUrl don't write `urls` cache.
  * @return {Promise<ScrapResult[]>} - If cannot scrap, resolves to null
  */
-async function scrapUrls(urls, { cacheLoader, noFetch = false } = {}) {
+async function scrapUrls(urls, { cacheLoader, client, noFetch = false } = {}) {
   let browserPromise;
 
   const result = await Promise.all(
@@ -137,6 +140,38 @@ async function scrapUrls(urls, { cacheLoader, noFetch = false } = {}) {
   // Cleanup browser if opened
   if (browserPromise) {
     (await browserPromise).close();
+  }
+
+  if (client) {
+    const fetchedAt = new Date();
+
+    // Filter out null, write to "urls" index
+    const urlsBody = result.reduce((body, r, idx) => {
+      if (!r || r.fromUrlsCache) {
+        return body;
+      }
+
+      const { canonical, title, summary, topImageUrl, html } = r;
+
+      return body.concat([
+        { index: { _index: 'urls', _type: 'doc' } },
+        {
+          canonical,
+          title,
+          summary,
+          topImageUrl,
+          html,
+          url: urls[idx],
+          fetchedAt,
+        },
+      ]);
+    }, []);
+
+    const insertResult = await client.bulk({
+      body: urlsBody
+    });
+
+    console.log('INSERTRESULT', JSON.stringify(insertResult, null, '  '));
   }
 
   return result;
