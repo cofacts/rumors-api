@@ -1,6 +1,7 @@
 import Koa from 'koa';
 import path from 'path';
 import koaStatic from 'koa-static';
+import MockDate from 'mockdate';
 
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/scrapUrls';
@@ -34,6 +35,8 @@ describe('scrapping & storage', () => {
   it(
     'scraps from Internet and handles error',
     async () => {
+      MockDate.set(1485593157011);
+
       const [
         { html, ...foundResult },
         notFoundResult,
@@ -46,6 +49,8 @@ describe('scrapping & storage', () => {
         ],
         { client }
       );
+
+      MockDate.reset();
 
       expect(html.slice(0, 100)).toMatchSnapshot('foundResult html'); // Too long, just sample first 100 chars
       expect(foundResult).toMatchSnapshot('foundResult');
@@ -66,7 +71,9 @@ describe('scrapping & storage', () => {
         },
       });
 
-      expect(urls).toMatchSnapshot('Docs stored to urls index');
+      expect(urls.map(({ _source }) => _source)).toMatchSnapshot(
+        'Docs stored to urls index'
+      );
     },
     30000
   );

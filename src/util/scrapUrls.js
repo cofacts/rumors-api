@@ -3,6 +3,7 @@
 import puppeteer from 'puppeteer';
 import path from 'path';
 import fs from 'fs';
+import rollbar from 'rollbarInstance';
 
 const readabilityJsStr = fs.readFileSync(
   path.join(__dirname, '../../node_modules/readability/Readability.js'),
@@ -168,10 +169,12 @@ async function scrapUrls(urls, { cacheLoader, client, noFetch = false } = {}) {
     }, []);
 
     const insertResult = await client.bulk({
-      body: urlsBody
+      body: urlsBody,
     });
 
-    console.log('INSERTRESULT', JSON.stringify(insertResult, null, '  '));
+    if (insertResult.errors) {
+      rollbar.error('Urls insert error', insertResult);
+    }
   }
 
   return result;
