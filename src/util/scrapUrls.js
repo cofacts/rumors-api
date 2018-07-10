@@ -31,6 +31,7 @@ function executor() {
  * @property {string} html
  * @property {string} topImageUrl
  * @property {boolean} fromUrlsCache If the result comes from elasticsearch "urls" index
+ * @property {integer} status fetch status. 0 if no response.
  */
 
 /**
@@ -43,8 +44,9 @@ async function scrap(browser, url) {
   const page = await browser.newPage();
 
   page.setDefaultNavigationTimeout(5000);
+  let response;
   try {
-    await page.goto(url);
+    response = await page.goto(url);
   } catch (e) {
     // Something like timeout. Do nothing.
   }
@@ -105,6 +107,7 @@ async function scrap(browser, url) {
     topImageUrl,
     html,
     fromUrlsCache: false,
+    status: response ? response.status() : 0,
   };
 }
 
@@ -154,7 +157,7 @@ async function scrapUrls(urls, { cacheLoader, client, noFetch = false } = {}) {
         return body;
       }
 
-      const { url, canonical, title, summary, topImageUrl, html } = r;
+      const { url, canonical, title, summary, topImageUrl, html, status } = r;
 
       return body.concat([
         { index: { _index: 'urls', _type: 'doc' } },
@@ -166,6 +169,7 @@ async function scrapUrls(urls, { cacheLoader, client, noFetch = false } = {}) {
           html,
           url,
           fetchedAt,
+          status,
         },
       ]);
     }, []);
