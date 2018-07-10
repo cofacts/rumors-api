@@ -46,7 +46,7 @@ Object {
 exports[`CreateOrUpdateArticleReplyFeedback updates existing feedback 2`] = `
 Object {
   "_id": "article1__reply1__testUser__testClient",
-  "_index": "articlereplyfeedbacks_v1_0_0",
+  "_index": "articlereplyfeedbacks_v1_0_1",
   "_source": Object {
     "appId": "testClient",
     "articleId": "article1",
