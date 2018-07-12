@@ -4,6 +4,7 @@ import puppeteer from 'puppeteer';
 import path from 'path';
 import fs from 'fs';
 import rollbar from 'rollbarInstance';
+import urlRegex from 'url-regex';
 
 const readabilityJsStr = fs.readFileSync(
   path.join(__dirname, '../../node_modules/readability/Readability.js'),
@@ -112,10 +113,11 @@ async function scrap(browser, url) {
 }
 
 /**
+ * Extracts urls from a string.
  * Fetches the specified url data from cache or through scrapping.
  * Optionally writes the scrapped result to database.
  *
- * @param {string[]} urls
+ * @param {string} text
  * @param {object} options
  * @param {object} options.cacheLoader - The dataloader that loads result from `urls`, given a URL.
  *                                       If not given, scrapUrls don't read `urls` cache.
@@ -124,7 +126,10 @@ async function scrap(browser, url) {
  *                                  `urls` index. If not given, scrapUrl don't write `urls` cache.
  * @return {Promise<ScrapResult[]>} - If cannot scrap, resolves to null
  */
-async function scrapUrls(urls, { cacheLoader, client, noFetch = false } = {}) {
+async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
+  const urls = text.match(urlRegex()) || [];
+  if (urls.length === 0) return [];
+
   let browserPromise;
 
   const result = await Promise.all(

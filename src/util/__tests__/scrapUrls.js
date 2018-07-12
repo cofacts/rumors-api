@@ -37,16 +37,12 @@ describe('scrapping & storage', () => {
     async () => {
       MockDate.set(1485593157011);
 
-      const [
-        { html, ...foundResult },
-        notFoundResult,
-        invalidUrlResult,
-      ] = await scrapUrls(
-        [
-          `http://localhost:${PORT}/index.html`,
-          `http://localhost:${PORT}/not-found`,
-          'this is invalid URL',
-        ],
+      const [{ html, ...foundResult }, notFoundResult] = await scrapUrls(
+        `
+          This should work: http://localhost:${PORT}/index.html
+          This should be not found: http://localhost:${PORT}/not-found
+          This should not match: http://malformedUrl:100000
+        `,
         { client }
       );
 
@@ -55,7 +51,6 @@ describe('scrapping & storage', () => {
       expect(html.slice(0, 100)).toMatchSnapshot('foundResult html'); // Too long, just sample first 100 chars
       expect(foundResult).toMatchSnapshot('foundResult');
       expect(notFoundResult).toMatchSnapshot('notFoundResult');
-      expect(invalidUrlResult).toBeNull();
 
       // scrapUrls() don't wait until refresh, thus refresh on our own
       await client.indices.refresh({ index: 'urls' });
@@ -87,10 +82,10 @@ describe('caching', () => {
     const loaders = new DataLoaders();
     expect(
       await scrapUrls(
-        [
-          'http://example.com/article/1111-aaaaa-bbb-ccc', // full URL
-          'http://example.com/article/1111', // canonical URL
-        ],
+        `
+          http://example.com/article/1111-aaaaa-bbb-ccc // full URL
+          http://example.com/article/1111 // canonical URL
+        `,
         {
           cacheLoader: loaders.urlLoader,
           noFetch: true,

@@ -318,36 +318,3 @@ export function filterArticleRepliesByStatus(articleReplies, status) {
     );
   });
 }
-
-/**
- * Return type for getHyperlinks. Matches hyperlinks fields and Hyperlink object type.
- *
- * @typedef {Object} Hyperlink
- * @property {string} url - matched URL string in text
- * @property {string} title
- * @property {string} summary
- */
-
-/**
- * Extract hyperlinks from text chunks
- *
- * @param {string[]} texts - Source texts to extract hyperlinks from
- * @param {object} context - GraphQL context object
- * @return {Hyperlink[]} extracted hyperlinks from all texts
- */
-export async function getHyperlinks(texts, context) {
-  const dedupedUrls = Object.keys(
-    texts.reduce((urlMap, text) => {
-      const urls = text.match(urlRegex) || [];
-      urls.forEach(url => {
-        urls[url] = true;
-      });
-    }, {})
-  );
-
-  const scrapResults = await scrapUrls(dedupedUrls, context.loaders.urlLoader);
-  return dedupedUrls.map((url, idx) => {
-    const { title, summary } = scrapResults[idx];
-    return { url, title, summary };
-  });
-}
