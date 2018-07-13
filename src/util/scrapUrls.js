@@ -153,39 +153,47 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
     (await browserPromise).close();
   }
 
-  if (client) {
-    const fetchedAt = new Date();
+  if (!client) {
+    // client not specified, don't to write to urls
+    return result;
+  }
 
-    // Filter out null, write to "urls" index
-    const urlsBody = result.reduce((body, r) => {
-      if (!r || r.fromUrlsCache) {
-        return body;
-      }
+  const fetchedAt = new Date();
 
-      const { url, canonical, title, summary, topImageUrl, html, status } = r;
-
-      return body.concat([
-        { index: { _index: 'urls', _type: 'doc' } },
-        {
-          canonical,
-          title,
-          summary,
-          topImageUrl,
-          html,
-          url,
-          fetchedAt,
-          status,
-        },
-      ]);
-    }, []);
-
-    const insertResult = await client.bulk({
-      body: urlsBody,
-    });
-
-    if (insertResult.errors) {
-      rollbar.error('Urls insert error', insertResult);
+  // Filter out null, write to "urls" index
+  const urlsBody = result.reduce((body, r) => {
+    if (!r || r.fromUrlsCache) {
+      return body;
     }
+
+    const { url, canonical, title, summary, topImageUrl, html, status } = r;
+
+    return body.concat([
+      { index: { _index: 'urls', _type: 'doc' } },
+      {
+        canonical,
+        title,
+        summary,
+        topImageUrl,
+        html,
+        url,
+        fetchedAt,
+        status,
+      },
+    ]);
+  }, []);
+
+  if (urlsBody.length === 0) {
+    // Nothing to write to urls
+    return result;
+  }
+
+  const insertResult = await client.bulk({
+    body: urlsBody,
+  });
+
+  if (insertResult.errors) {
+    rollbar.error('Urls insert error', insertResult);
   }
 
   return result;
