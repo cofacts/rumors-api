@@ -218,7 +218,7 @@ describe('ListArticles', () => {
             }
           }
         }
-      `({ cursor: getCursor(['doc#listArticleTest2']) })
+      `({ cursor: getCursor(['listArticleTest2']) })
     ).toMatchSnapshot();
   });
 
@@ -239,7 +239,7 @@ describe('ListArticles', () => {
             }
           }
         }
-      `({ cursor: getCursor(['doc#listArticleTest2']) })
+      `({ cursor: getCursor(['listArticleTest2']) })
     ).toMatchSnapshot();
   });
 

@@ -34,7 +34,7 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WyJkb2MjZm9vMyJd",
+            "cursor": "WyJmb28zIl0=",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
@@ -42,7 +42,7 @@ Object {
             "score": 0.37905684,
           },
           Object {
-            "cursor": "WyJkb2MjZm9vMiJd",
+            "cursor": "WyJmb28yIl0=",
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
@@ -63,7 +63,7 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WyJkb2MjZm9vMyJd",
+            "cursor": "WyJmb28zIl0=",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
@@ -71,7 +71,7 @@ Object {
             "score": 0.37905684,
           },
           Object {
-            "cursor": "WyJkb2MjZm9vMiJd",
+            "cursor": "WyJmb28yIl0=",
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
@@ -92,7 +92,7 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuMzY3MjExMywiZG9jI2ZvbzIiXQ==",
+            "cursor": "WzAuMzY3MjExMywiZm9vMiJd",
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
@@ -100,7 +100,7 @@ Object {
             "score": 0.3672113,
           },
           Object {
-            "cursor": "WzAuMzc5MDU2ODQsImRvYyNmb28zIl0=",
+            "cursor": "WzAuMzc5MDU2ODQsImZvbzMiXQ==",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",

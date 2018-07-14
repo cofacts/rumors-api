@@ -32,8 +32,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
-        "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
       "totalCount": 2,
     },
@@ -53,8 +53,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
-        "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
+        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
       "totalCount": 1,
     },
@@ -129,27 +129,27 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
+          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
           "node": Object {
             "id": "listArticleTest3",
           },
         },
         Object {
-          "cursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MiJd",
+          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
           "node": Object {
             "id": "listArticleTest2",
           },
         },
         Object {
-          "cursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
+          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
           "node": Object {
             "id": "listArticleTest1",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
-        "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
       "totalCount": 3,
     },
@@ -179,8 +179,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzMsImRvYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
-        "lastCursor": "WzEsImRvYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
+        "firstCursor": "WzMsImxpc3RBcnRpY2xlVGVzdDMiXQ==",
+        "lastCursor": "WzEsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
       },
       "totalCount": 3,
     },
@@ -210,8 +210,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzIsImRvYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
-        "lastCursor": "WzAsImRvYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "firstCursor": "WzIsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
+        "lastCursor": "WzAsImxpc3RBcnRpY2xlVGVzdDMiXQ==",
       },
       "totalCount": 3,
     },
@@ -231,8 +231,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
-        "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
       "totalCount": 3,
     },
@@ -252,8 +252,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
-        "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
       "totalCount": 3,
     },

@@ -17,8 +17,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjbW9yZUxpa2VUaGlzMiJd",
-        "lastCursor": "WyJkb2MjbW9yZUxpa2VUaGlzMSJd",
+        "firstCursor": "WyJtb3JlTGlrZVRoaXMyIl0=",
+        "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
       },
       "totalCount": 2,
     },
@@ -38,8 +38,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjdXNlckZvbyJd",
-        "lastCursor": "WyJkb2MjdXNlckZvbyJd",
+        "firstCursor": "WyJ1c2VyRm9vIl0=",
+        "lastCursor": "WyJ1c2VyRm9vIl0=",
       },
       "totalCount": 1,
     },
@@ -59,8 +59,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjcnVtb3IiXQ==",
-        "lastCursor": "WyJkb2MjcnVtb3IiXQ==",
+        "firstCursor": "WyJydW1vciJd",
+        "lastCursor": "WyJydW1vciJd",
       },
       "totalCount": 1,
     },
@@ -85,33 +85,33 @@ Object {
     "ListReplies": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJkb2MjdXNlckZvbyJd",
+          "cursor": "WyJ1c2VyRm9vIl0=",
           "node": Object {
             "id": "userFoo",
           },
         },
         Object {
-          "cursor": "WyJkb2MjcnVtb3IiXQ==",
+          "cursor": "WyJydW1vciJd",
           "node": Object {
             "id": "rumor",
           },
         },
         Object {
-          "cursor": "WyJkb2MjbW9yZUxpa2VUaGlzMiJd",
+          "cursor": "WyJtb3JlTGlrZVRoaXMyIl0=",
           "node": Object {
             "id": "moreLikeThis2",
           },
         },
         Object {
-          "cursor": "WyJkb2MjbW9yZUxpa2VUaGlzMSJd",
+          "cursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
           "node": Object {
             "id": "moreLikeThis1",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjdXNlckZvbyJd",
-        "lastCursor": "WyJkb2MjbW9yZUxpa2VUaGlzMSJd",
+        "firstCursor": "WyJ1c2VyRm9vIl0=",
+        "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
       },
       "totalCount": 4,
     },
@@ -146,8 +146,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzQsImRvYyN1c2VyRm9vIl0=",
-        "lastCursor": "WzEsImRvYyNydW1vciJd",
+        "firstCursor": "WzQsInVzZXJGb28iXQ==",
+        "lastCursor": "WzEsInJ1bW9yIl0=",
       },
       "totalCount": 4,
     },
@@ -167,8 +167,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjdXNlckZvbyJd",
-        "lastCursor": "WyJkb2MjbW9yZUxpa2VUaGlzMSJd",
+        "firstCursor": "WyJ1c2VyRm9vIl0=",
+        "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
       },
       "totalCount": 4,
     },
@@ -198,8 +198,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjdXNlckZvbyJd",
-        "lastCursor": "WyJkb2MjbW9yZUxpa2VUaGlzMSJd",
+        "firstCursor": "WyJ1c2VyRm9vIl0=",
+        "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
       },
       "totalCount": 4,
     },
