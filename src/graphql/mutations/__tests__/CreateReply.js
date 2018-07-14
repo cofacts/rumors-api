@@ -36,7 +36,6 @@ describe('CreateReply', () => {
       },
       { userId: 'test', appId: 'test' }
     );
-    MockDate.reset();
 
     expect(errors).toBeUndefined();
 
@@ -55,8 +54,35 @@ describe('CreateReply', () => {
     });
     expect(article._source.articleReplies[0].replyId).toBe(replyId);
 
+    MockDate.reset();
     // Cleanup
     await client.delete({ index: 'replies', type: 'doc', id: replyId });
+    await resetFrom(fixtures, `/articles/doc/${articleId}`);
+  });
+
+  it('should throw error since a reference is required for type !== NOT_ARTICLE', async () => {
+    MockDate.set(1485593157011);
+    const articleId = 'setReplyTest1';
+
+    const { errors } = await gql`
+      mutation($articleId: String!, $text: String!, $type: ReplyTypeEnum!) {
+        CreateReply(articleId: $articleId, text: $text, type: $type) {
+          id
+        }
+      }
+    `(
+      {
+        articleId,
+        text: 'FOO FOO',
+        type: 'RUMOR',
+      },
+      { userId: 'test', appId: 'test' }
+    );
+    MockDate.reset();
+
+    expect(errors).toMatchSnapshot();
+
+    // Cleanup
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
 
