@@ -36,6 +36,7 @@ describe('CreateReply', () => {
       },
       { userId: 'test', appId: 'test' }
     );
+    MockDate.reset();
 
     expect(errors).toBeUndefined();
 
@@ -54,7 +55,6 @@ describe('CreateReply', () => {
     });
     expect(article._source.articleReplies[0].replyId).toBe(replyId);
 
-    MockDate.reset();
     // Cleanup
     await client.delete({ index: 'replies', type: 'doc', id: replyId });
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
