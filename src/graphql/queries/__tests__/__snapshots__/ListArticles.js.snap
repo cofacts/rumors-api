@@ -15,6 +15,14 @@ Object {
 }
 `;
 
+exports[`ListArticles filters by invalid operator 1`] = `
+Object {
+  "errors": Array [
+    [GraphQLError: Field "INVALID" is not defined by type ListArticleReplyCountExpr.],
+  ],
+}
+`;
+
 exports[`ListArticles filters by moreLikeThis 1`] = `
 Object {
   "data": Object {
@@ -41,7 +49,39 @@ Object {
 }
 `;
 
-exports[`ListArticles filters by replyCount 1`] = `
+exports[`ListArticles filters by null operator 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": null,
+  },
+  "errors": Array [
+    [GraphQLError: Invalid Expression!],
+  ],
+}
+`;
+
+exports[`ListArticles filters by replyCount EQ 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
+        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
+      },
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by replyCount GT 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
@@ -55,6 +95,27 @@ Object {
       "pageInfo": Object {
         "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
         "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
+      },
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by replyCount LT 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest3",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
       },
       "totalCount": 1,
     },
@@ -154,6 +215,24 @@ Object {
       "totalCount": 3,
     },
   },
+}
+`;
+
+exports[`ListArticles should fail if before and after both exist 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": null,
+      "pageInfo": Object {
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
+      },
+      "totalCount": 3,
+    },
+  },
+  "errors": Array [
+    [GraphQLError: Use of before & after is prohibited.],
+  ],
 }
 `;
 

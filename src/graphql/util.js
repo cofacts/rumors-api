@@ -34,7 +34,7 @@ export function getOperatorAndOperand(expression) {
   } else if (typeof expression.GT !== 'undefined') {
     return { operator: '>', operand: expression.GT };
   }
-  return {};
+  throw new Error('Invalid Expression!');
 }
 
 export function createFilterType(typeName, args) {
