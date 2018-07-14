@@ -150,6 +150,12 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
+          "cursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0NCJd",
+          "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
           "cursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
           "node": Object {
             "id": "listArticleTest3",
@@ -169,10 +175,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
+        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0NCJd",
         "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
 }
@@ -183,6 +189,11 @@ Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
         Object {
           "node": Object {
             "id": "listArticleTest3",
@@ -200,10 +211,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzMsImRvYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "firstCursor": "WzQsImRvYyNsaXN0QXJ0aWNsZVRlc3Q0Il0=",
         "lastCursor": "WzEsImRvYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
 }
@@ -226,6 +237,11 @@ Object {
         },
         Object {
           "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest3",
           },
         },
@@ -234,7 +250,7 @@ Object {
         "firstCursor": "WzIsImRvYyNsaXN0QXJ0aWNsZVRlc3QxIl0=",
         "lastCursor": "WzAsImRvYyNsaXN0QXJ0aWNsZVRlc3QzIl0=",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
 }
@@ -252,10 +268,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
+        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0NCJd",
         "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
 }
@@ -268,15 +284,20 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest3",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MyJd",
+        "firstCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0NCJd",
         "lastCursor": "WyJkb2MjbGlzdEFydGljbGVUZXN0MSJd",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
 }
