@@ -143,7 +143,7 @@ export default {
       filterQueries.push({
         script: {
           script: {
-            inline: `doc['normalArticleReplyCount'].value ${operator} params.operand`,
+            source: `doc['normalArticleReplyCount'].value ${operator} params.operand`,
             params: {
               operand,
             },
@@ -159,7 +159,7 @@ export default {
       filterQueries.push({
         script: {
           script: {
-            inline: `doc['replyRequestCount'].value ${operator} params.operand`,
+            source: `doc['replyRequestCount'].value ${operator} params.operand`,
             params: {
               operand,
             },

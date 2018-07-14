@@ -34,7 +34,7 @@ export function getOperatorAndOperand(expression) {
   } else if (typeof expression.GT !== 'undefined') {
     return { operator: '>', operand: expression.GT };
   }
-  return {};
+  throw new Error('Invalid Expression!');
 }
 
 export function createFilterType(typeName, args) {
@@ -106,7 +106,7 @@ export function getSortArgs(orderBy, fieldFnMap = {}) {
 
       return (fieldFnMap[field] || defaultFieldFn)(order);
     })
-    .concat({ _uid: { order: 'desc' } }); // enforce at least 1 sort order for pagination
+    .concat({ _id: { order: 'desc' } }); // enforce at least 1 sort order for pagination
 }
 
 // sort: [{fieldName: {order: 'desc'}}, {fieldName2: {order: 'desc'}}, ...]

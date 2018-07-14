@@ -10,3 +10,9 @@ Object {
   "userId": "test",
 }
 `;
+
+exports[`CreateReply should throw error since a reference is required for type !== NOT_ARTICLE 1`] = `
+Array [
+  [GraphQLError: reference is required for type !== NOT_ARTICLE],
+]
+`;
