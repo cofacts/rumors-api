@@ -136,7 +136,7 @@ const Article = new GraphQLObjectType({
               filter: {
                 script: {
                   script: {
-                    inline: `doc['normalArticleReplyCount'].value ${operator} params.operand`,
+                    source: `doc['normalArticleReplyCount'].value ${operator} params.operand`,
                     params: {
                       operand,
                     },

@@ -133,7 +133,7 @@ describe('ListReplies', () => {
             }
           }
         }
-      `({ cursor: getCursor(['doc#moreLikeThis2']) })
+      `({ cursor: getCursor(['moreLikeThis2']) })
     ).toMatchSnapshot();
   });
 
@@ -154,7 +154,7 @@ describe('ListReplies', () => {
             }
           }
         }
-      `({ cursor: getCursor(['doc#moreLikeThis1']) })
+      `({ cursor: getCursor(['moreLikeThis1']) })
     ).toMatchSnapshot();
   });
 

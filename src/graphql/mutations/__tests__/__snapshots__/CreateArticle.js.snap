@@ -70,3 +70,15 @@ Object {
   "userId": "test",
 }
 `;
+
+exports[`fails with an invalid app id 1`] = `
+Array [
+  [GraphQLError: userId is set, but x-app-id or x-app-secret is not set accordingly.],
+]
+`;
+
+exports[`fails with an invalid user id 1`] = `
+Array [
+  [GraphQLError: userId is not set via query string.],
+]
+`;

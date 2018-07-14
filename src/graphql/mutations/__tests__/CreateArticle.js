@@ -129,3 +129,29 @@ it('avoids creating duplicated articles and adds replyRequests automatically', a
 
   await unloadFixtures(fixtures);
 });
+
+const testId = async (userId, appId) => {
+  MockDate.set(1485593157011);
+  const { errors } = await gql`
+    mutation($text: String!, $reference: ArticleReferenceInput!) {
+      CreateArticle(
+        text: $text
+        reference: $reference
+        reason: "気になります"
+      ) {
+        id
+      }
+    }
+  `(
+    {
+      text: 'FOO FOO',
+      reference: { type: 'LINE' },
+    },
+    { userId, appId }
+  );
+  MockDate.reset();
+  expect(errors).toMatchSnapshot();
+};
+
+it('fails with an invalid user id', () => testId('', ''));
+it('fails with an invalid app id', () => testId('test', ''));

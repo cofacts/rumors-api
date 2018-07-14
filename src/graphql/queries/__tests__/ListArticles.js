@@ -68,12 +68,13 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
-  it('filters by replyCount', async () => {
+  const testReplyCount = async expression => {
     // Lists only articles with more than one reply.
+    const pair = expression ? `${expression}: 1` : expression;
     expect(
       await gql`
         {
-          ListArticles(filter: { replyCount: { GT: 1 } }) {
+          ListArticles(filter: { replyCount: {${pair}} }) {
             edges {
               node {
                 id
@@ -88,7 +89,13 @@ describe('ListArticles', () => {
         }
       `()
     ).toMatchSnapshot();
-  });
+  };
+
+  it('filters by replyCount EQ', () => testReplyCount('EQ'));
+  it('filters by replyCount LT', () => testReplyCount('LT'));
+  it('filters by replyCount GT', () => testReplyCount('GT'));
+  it('filters by invalid operator', () => testReplyCount('INVALID'));
+  it('filters by null operator', () => testReplyCount(''));
 
   it('filters by moreLikeThis', async () => {
     // moreLikeThis query
@@ -248,7 +255,7 @@ describe('ListArticles', () => {
             }
           }
         }
-      `({ cursor: getCursor(['doc#listArticleTest2']) })
+      `({ cursor: getCursor(['listArticleTest2']) })
     ).toMatchSnapshot();
   });
 
@@ -269,7 +276,28 @@ describe('ListArticles', () => {
             }
           }
         }
-      `({ cursor: getCursor(['doc#listArticleTest2']) })
+      `({ cursor: getCursor(['listArticleTest2']) })
+    ).toMatchSnapshot();
+  });
+
+  it('should fail if before and after both exist', async () => {
+    expect(
+      await gql`
+        query($cursor: String) {
+          ListArticles(before: $cursor, after: $cursor) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
+            }
+          }
+        }
+      `({ cursor: getCursor(['listArticleTest2']) })
     ).toMatchSnapshot();
   });
 
