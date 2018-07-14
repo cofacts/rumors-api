@@ -9,6 +9,7 @@ import {
   getArithmeticExpressionType,
   getOperatorAndOperand,
 } from 'graphql/util';
+import scrapUrls from 'util/scrapUrls';
 
 import { ArticleConnection } from 'graphql/models/Article';
 
@@ -76,7 +77,11 @@ export default {
     },
     ...pagingArgs,
   },
-  async resolve(rootValue, { filter = {}, orderBy = [], ...otherParams }) {
+  async resolve(
+    rootValue,
+    { filter = {}, orderBy = [], ...otherParams },
+    { loaders }
+  ) {
     const body = {
       sort: getSortArgs(orderBy, {
         replyCount: o => ({ normalArticleReplyCount: { order: o } }),
@@ -85,7 +90,7 @@ export default {
     };
 
     // Collecting queries that will be used in bool queries later
-    const mustQueries = []; // Affects scores
+    const shouldQueries = []; // Affects scores
     const filterQueries = []; // Not affects scores
 
     if (filter.fromUserOfArticleId) {
@@ -124,18 +129,45 @@ export default {
     }
 
     if (filter.moreLikeThis) {
-      mustQueries.push({
-        // Ref: http://stackoverflow.com/a/8831494/1582110
-        //
+      const scrapResults = await scrapUrls(filter.moreLikeThis.like, {
+        client,
+        cacheLoader: loaders.urlLoader,
+      });
+
+      const likeQuery = [
+        filter.moreLikeThis.like,
+        ...scrapResults.map(({ title, summary }) => `${title} ${summary}`),
+      ];
+
+      shouldQueries.push({
         more_like_this: {
           fields: ['text'],
-          like: filter.moreLikeThis.like,
+          like: likeQuery,
           min_term_freq: 1,
           min_doc_freq: 1,
           minimum_should_match:
             filter.moreLikeThis.minimumShouldMatch || '10<70%',
         },
       });
+
+      if (scrapResults.length > 0) {
+        shouldQueries.push({
+          nested: {
+            path: 'hyperlinks',
+            score_mode: 'sum',
+            query: {
+              more_like_this: {
+                fields: ['hyperlinks.title', 'hyperlinks.summary'],
+                like: likeQuery,
+                min_term_freq: 1,
+                min_doc_freq: 1,
+                minimum_should_match:
+                  filter.moreLikeThis.minimumShouldMatch || '10<70%',
+              },
+            },
+          },
+        });
+      }
     }
 
     if (filter.replyCount) {
@@ -170,7 +202,8 @@ export default {
 
     body.query = {
       bool: {
-        must: mustQueries.length === 0 ? { match_all: {} } : mustQueries,
+        should:
+          shouldQueries.length === 0 ? [{ match_all: {} }] : shouldQueries,
         filter: filterQueries,
       },
     };

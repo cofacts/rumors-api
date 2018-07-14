@@ -41,6 +41,27 @@ Object {
 }
 `;
 
+exports[`ListArticles filters by moreLikeThis and handles URLs 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`ListArticles filters by replyCount 1`] = `
 Object {
   "data": Object {

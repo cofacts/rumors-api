@@ -9,8 +9,6 @@ import {
 } from 'graphql';
 
 import client from 'util/client';
-import urlRegex from 'url-regex';
-import scrapUrls from 'util/scrapUrls';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //

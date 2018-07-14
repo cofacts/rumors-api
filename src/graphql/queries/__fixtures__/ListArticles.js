@@ -29,4 +29,32 @@ export default {
     text:
       '人生幾何，離闊如此！況以膠漆之心，置於胡越之身，進不得相合，退不能相忘，牽攣乖隔，各欲白首。',
   },
+  '/articles/doc/listArticleTest4': {
+    userId: 'user2',
+    appId: 'app1',
+    replyRequestCount: 0,
+    normalArticleReplyCount: 0,
+    updatedAt: 4,
+    text: '我好餓 http://gohome.com',
+    hyperlinks: [
+      {
+        url: 'http://gohome.com',
+        title: '馮諼很餓',
+        summary:
+          '居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚。」左右以告。孟嘗君曰：「食之，比門下之客。」',
+      },
+    ],
+  },
+  '/urls/doc/gohome': {
+    url: 'http://gohome.com',
+    title: '馮諼很餓',
+    summary:
+      '居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚。」左右以告。孟嘗君曰：「食之，比門下之客。」',
+  },
+  '/urls/doc/biau': {
+    url: 'http://出師表.com',
+    title: '出師表',
+    summary:
+      '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',
+  },
 };
