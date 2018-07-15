@@ -3,6 +3,7 @@ import { h64 } from 'xxhashjs';
 
 import { assertUser } from 'graphql/util';
 import client from 'util/client';
+import scrapUrls from 'util/scrapUrls';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
@@ -80,12 +81,36 @@ async function createNewArticle({
         normalArticleReplycount: 0,
         replyRequestCount: 0,
         tags: [],
+        hyperlinks: [],
       },
     },
     refresh: true, // Make sure the data is indexed when we create ReplyRequest
   });
 
   return articleId;
+}
+
+/**
+ * @param {string} articleId
+ * @param {ScrapResult[]} hyperlinks
+ */
+async function updateArticleHyperlinks(articleId, scrapResults) {
+  if (!scrapResults || scrapResults.length === 0) return;
+
+  await client.update({
+    index: 'articles',
+    type: 'doc',
+    id: articleId,
+    body: {
+      doc: {
+        hyperlinks: scrapResults.map(({ url, title, summary }) => ({
+          url,
+          title,
+          summary,
+        })),
+      },
+    },
+  });
 }
 
 export default {
@@ -102,17 +127,27 @@ export default {
         'The reason why the user want to submit this article. Mandatory for 1st sender',
     },
   },
-  async resolve(rootValue, { text, reference, reason }, { appId, userId }) {
+  async resolve(
+    rootValue,
+    { text, reference, reason },
+    { appId, userId, loaders }
+  ) {
     assertUser({ appId, userId });
 
-    const articleId = await createNewArticle({
-      text,
-      reference,
-      userId,
-      appId,
-    });
+    const [articleId, scrapResults] = await Promise.all([
+      createNewArticle({
+        text,
+        reference,
+        userId,
+        appId,
+      }),
+      scrapUrls(text, { cacheLoader: loaders.urlLoader, client }),
+    ]);
 
-    await createReplyRequest({ articleId, userId, appId, reason });
+    await Promise.all([
+      createReplyRequest({ articleId, userId, appId, reason }),
+      updateArticleHyperlinks(articleId, scrapResults),
+    ]);
 
     return { id: articleId };
   },

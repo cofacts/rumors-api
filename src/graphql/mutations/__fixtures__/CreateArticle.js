@@ -14,4 +14,10 @@ export default {
     replyRequestCount: 1,
     references: [{ type: 'LINE' }],
   },
+  '/urls/doc/hyperlink1': {
+    canonical: 'http://foo.com/article/1',
+    title: 'FOO title',
+    summary: 'FOO article content',
+    url: 'http://foo.com/article/1-super-long-url-for-SEO',
+  },
 };
