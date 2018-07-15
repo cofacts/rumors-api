@@ -145,10 +145,14 @@ export default {
 
     // Dependencies
     //
-    // newArticlePromise --> createReplyRequest -------.
-    //                  \                               >-> done
-    // scrapPromise -----`-> updateArticleHyperlinks  -'
+    // newArticlePromise --> replyRequestPromise -.
+    //                  \                          >-> done
+    // scrapPromise -----`-> hyperlinkPromise ----'
     //
+
+    const replyRequestPromise = newArticlePromise.then(articleId =>
+      createReplyRequest({ articleId, userId, appId, reason })
+    );
 
     const hyperlinkPromise = Promise.all([
       newArticlePromise,
@@ -156,10 +160,6 @@ export default {
     ]).then(([articleId, scrapResults]) => {
       return updateArticleHyperlinks(articleId, scrapResults);
     });
-
-    const replyRequestPromise = newArticlePromise.then(articleId =>
-      createReplyRequest({ articleId, userId, appId, reason })
-    );
 
     // Wait for all promises
     return Promise.all([
