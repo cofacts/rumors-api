@@ -93,10 +93,10 @@ async function createNewArticle({
 /**
  * @param {string} articleId
  * @param {ScrapResult[]} hyperlinks
- * @return {Promise} update result
+ * @return {Promise | null} update result
  */
 function updateArticleHyperlinks(articleId, scrapResults) {
-  if (!scrapResults || scrapResults.length === 0) return;
+  if (!scrapResults || scrapResults.length === 0) return Promise.resolve(null);
 
   return client.update({
     index: 'articles',
