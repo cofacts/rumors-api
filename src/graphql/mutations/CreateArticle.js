@@ -130,7 +130,7 @@ export default {
   resolve(rootValue, { text, reference, reason }, { appId, userId, loaders }) {
     assertUser({ appId, userId });
 
-    const createNewArticlePromise = createNewArticle({
+    const newArticlePromise = createNewArticle({
       text,
       reference,
       userId,
@@ -150,19 +150,19 @@ export default {
     //
 
     const hyperlinkPromise = Promise.all([
-      createNewArticlePromise,
+      newArticlePromise,
       scrapPromise,
     ]).then(([articleId, scrapResults]) => {
       return updateArticleHyperlinks(articleId, scrapResults);
     });
 
-    const replyRequestPromise = createNewArticlePromise.then(articleId =>
+    const replyRequestPromise = newArticlePromise.then(articleId =>
       createReplyRequest({ articleId, userId, appId, reason })
     );
 
     // Wait for all promises
     return Promise.all([
-      createNewArticlePromise, // for fetching articleId
+      newArticlePromise, // for fetching articleId
       hyperlinkPromise,
       replyRequestPromise,
     ]).then(([id]) => ({ id }));
