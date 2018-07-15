@@ -26,7 +26,7 @@ Array [
     "id": "someUrl-2nd-fetch",
     "summary": "Changed summary",
     "title": "Changed title",
-    "url": "http://example.com/article/1111-aaaaa-bbb-ccc",
+    "url": "http://example.com/article/1111",
   },
 ]
 `;
