@@ -127,11 +127,7 @@ export default {
         'The reason why the user want to submit this article. Mandatory for 1st sender',
     },
   },
-  async resolve(
-    rootValue,
-    { text, reference, reason },
-    { appId, userId, loaders }
-  ) {
+  resolve(rootValue, { text, reference, reason }, { appId, userId, loaders }) {
     assertUser({ appId, userId });
 
     const createNewArticlePromise = createNewArticle({
@@ -164,12 +160,11 @@ export default {
       createReplyRequest({ articleId, userId, appId, reason })
     );
 
-    // Wait all before done
-    await hyperlinkPromise;
-    await replyRequestPromise;
-
-    // Return article id
-    const id = await createNewArticlePromise;
-    return { id };
+    // Wait for all promises
+    return Promise.all([
+      createNewArticlePromise, // for fetching articleId
+      hyperlinkPromise,
+      replyRequestPromise,
+    ]).then(([id]) => ({ id }));
   },
 };
