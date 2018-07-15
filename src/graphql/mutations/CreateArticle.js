@@ -134,21 +134,42 @@ export default {
   ) {
     assertUser({ appId, userId });
 
-    const [articleId, scrapResults] = await Promise.all([
-      createNewArticle({
-        text,
-        reference,
-        userId,
-        appId,
-      }),
-      scrapUrls(text, { cacheLoader: loaders.urlLoader, client }),
-    ]);
+    const createNewArticlePromise = createNewArticle({
+      text,
+      reference,
+      userId,
+      appId,
+    });
 
-    await Promise.all([
-      createReplyRequest({ articleId, userId, appId, reason }),
-      updateArticleHyperlinks(articleId, scrapResults),
-    ]);
+    const scrapPromise = scrapUrls(text, {
+      cacheLoader: loaders.urlLoader,
+      client,
+    });
 
-    return { id: articleId };
+    // Dependencies
+    //
+    // createNewArticlePromise --> createReplyRequest -------.
+    //                        \                               >-> done
+    // scrapPromise -----------`-> updateArticleHyperlinks  -'
+    //
+
+    const hyperlinkPromise = Promise.all([
+      createNewArticlePromise,
+      scrapPromise,
+    ]).then(([articleId, scrapResults]) => {
+      return updateArticleHyperlinks(articleId, scrapResults);
+    });
+
+    const replyRequestPromise = createNewArticlePromise.then(articleId =>
+      createReplyRequest({ articleId, userId, appId, reason })
+    );
+
+    // Wait all before done
+    await hyperlinkPromise;
+    await replyRequestPromise;
+
+    // Return article id
+    const id = await createNewArticlePromise;
+    return { id };
   },
 };
