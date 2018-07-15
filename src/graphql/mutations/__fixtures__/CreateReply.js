@@ -4,4 +4,10 @@ export default {
     articleReplies: [],
     references: [{ type: 'LINE' }],
   },
+  '/urls/doc/hyperlink1': {
+    canonical: 'http://google.com',
+    title: 'Google google',
+    summary: 'Gooooooogle',
+    url: 'http://google.com',
+  },
 };
