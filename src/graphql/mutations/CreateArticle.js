@@ -144,9 +144,9 @@ export default {
 
     // Dependencies
     //
-    // createNewArticlePromise --> createReplyRequest -------.
-    //                        \                               >-> done
-    // scrapPromise -----------`-> updateArticleHyperlinks  -'
+    // newArticlePromise --> createReplyRequest -------.
+    //                  \                               >-> done
+    // scrapPromise -----`-> updateArticleHyperlinks  -'
     //
 
     const hyperlinkPromise = Promise.all([
