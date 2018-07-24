@@ -3,10 +3,35 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { assertUser } from 'graphql/util';
 
 import client from 'util/client';
+import scrapUrls from 'util/scrapUrls';
 
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 import MutationResult from 'graphql/models/MutationResult';
 import { createArticleReply } from './CreateArticleReply';
+
+/**
+ * @param {string} replyId
+ * @param {ScrapResult[]} hyperlinks
+ * @return {Promise | null} update result
+ */
+function updateReplyHyperlinks(replyId, scrapResults) {
+  if (!scrapResults || scrapResults.length === 0) return Promise.resolve();
+
+  return client.update({
+    index: 'replies',
+    type: 'doc',
+    id: replyId,
+    body: {
+      doc: {
+        hyperlinks: scrapResults.map(({ url, title, summary }) => ({
+          url,
+          title,
+          summary,
+        })),
+      },
+    },
+  });
+}
 
 export default {
   type: MutationResult,
@@ -28,6 +53,11 @@ export default {
       throw new Error('reference is required for type !== NOT_ARTICLE');
     }
 
+    const articlePromise = loaders.docLoader.load({
+      index: 'articles',
+      id: articleId,
+    });
+
     const replyBody = {
       userId,
       appId,
@@ -37,26 +67,54 @@ export default {
       createdAt: new Date(),
     };
 
-    const { _id: replyId, result } = await client.index({
-      index: 'replies',
-      type: 'doc',
-      body: replyBody,
+    const newReplyPromise = client
+      .index({
+        index: 'replies',
+        type: 'doc',
+        body: replyBody,
+      })
+      .then(({ result, _id }) => {
+        if (result !== 'created') {
+          throw new Error(`Cannot create reply: ${result}`);
+        }
+
+        return _id;
+      });
+
+    const scrapPromise = scrapUrls(`${text} ${reference}`, {
+      cacheLoader: loaders.urlLoader,
+      client,
     });
 
-    if (result !== 'created') {
-      throw new Error(`Cannot create reply: ${result}`);
-    }
+    // Dependencies
+    //
+    // articlePromise -.
+    // newReplyPromise -`-> articleReplyPromise -.
+    //                \                           >-> done
+    // scrapPromise ---`--> hyperlinkPromise ----'
+    //
 
-    await createArticleReply({
-      article: await loaders.docLoader.load({
-        index: 'articles',
-        id: articleId,
-      }),
-      reply: { ...replyBody, id: replyId },
-      userId,
-      appId,
-    });
+    const articleReplyPromise = Promise.all([
+      articlePromise,
+      newReplyPromise,
+    ]).then(([article, id]) =>
+      createArticleReply({
+        article,
+        reply: { ...replyBody, id },
+        userId,
+        appId,
+      })
+    );
 
-    return { id: replyId };
+    const hyperlinkPromise = Promise.all([newReplyPromise, scrapPromise]).then(
+      ([replyId, scrapResults]) => updateReplyHyperlinks(replyId, scrapResults)
+    );
+
+    // Wait for all promises
+    return Promise.all([
+      newReplyPromise, // for fetching articleId
+      articleReplyPromise,
+      hyperlinkPromise,
+    ]).then(([id]) => ({ id }));
   },
 };

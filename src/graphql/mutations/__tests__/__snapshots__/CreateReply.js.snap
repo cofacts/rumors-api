@@ -4,6 +4,13 @@ exports[`CreateReply creates replies and associates itself with specified articl
 Object {
   "appId": "test",
   "createdAt": "2017-01-28T08:45:57.011Z",
+  "hyperlinks": Array [
+    Object {
+      "summary": "Gooooooogle",
+      "title": "Google google",
+      "url": "http://google.com",
+    },
+  ],
   "reference": "http://google.com",
   "text": "FOO FOO",
   "type": "RUMOR",
