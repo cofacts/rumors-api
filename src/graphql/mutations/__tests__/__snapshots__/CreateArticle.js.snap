@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`avoids creating duplicated articles and adds replyRequests automatically 1`] = `
+exports[`creation avoids creating duplicated articles and adds replyRequests automatically 1`] = `
 Object {
   "lastRequestedAt": "2017-01-28T08:45:57.011Z",
   "references": Array [
@@ -20,7 +20,7 @@ Object {
 }
 `;
 
-exports[`avoids creating duplicated articles and adds replyRequests automatically 2`] = `
+exports[`creation avoids creating duplicated articles and adds replyRequests automatically 2`] = `
 Object {
   "appId": "foo",
   "articleId": "20xz7y20qzyt6",
@@ -34,11 +34,18 @@ Object {
 }
 `;
 
-exports[`creates articles and a reply request 1`] = `
+exports[`creation creates articles and a reply request and fills in URLs 1`] = `
 Object {
   "appId": "foo",
   "articleReplies": Array [],
   "createdAt": "2017-01-28T08:45:57.011Z",
+  "hyperlinks": Array [
+    Object {
+      "summary": "FOO article content",
+      "title": "FOO title",
+      "url": "http://foo.com/article/1",
+    },
+  ],
   "lastRequestedAt": "2017-01-28T08:45:57.011Z",
   "normalArticleReplycount": 0,
   "references": Array [
@@ -51,16 +58,16 @@ Object {
   ],
   "replyRequestCount": 1,
   "tags": Array [],
-  "text": "FOO FOO",
+  "text": "FOO FOO http://foo.com/article/1",
   "updatedAt": "2017-01-28T08:45:57.011Z",
   "userId": "test",
 }
 `;
 
-exports[`creates articles and a reply request 2`] = `
+exports[`creation creates articles and a reply request and fills in URLs 2`] = `
 Object {
   "appId": "foo",
-  "articleId": "mdw91a2ngnnt",
+  "articleId": "y0iq3fr2pqgi",
   "createdAt": "2017-01-28T08:45:57.011Z",
   "feedbacks": Array [],
   "negativeFeedbackCount": 0,

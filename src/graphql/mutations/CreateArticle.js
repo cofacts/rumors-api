@@ -3,6 +3,7 @@ import { h64 } from 'xxhashjs';
 
 import { assertUser } from 'graphql/util';
 import client from 'util/client';
+import scrapUrls from 'util/scrapUrls';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
@@ -80,12 +81,37 @@ async function createNewArticle({
         normalArticleReplycount: 0,
         replyRequestCount: 0,
         tags: [],
+        hyperlinks: [],
       },
     },
     refresh: true, // Make sure the data is indexed when we create ReplyRequest
   });
 
   return articleId;
+}
+
+/**
+ * @param {string} articleId
+ * @param {ScrapResult[]} hyperlinks
+ * @return {Promise | null} update result
+ */
+function updateArticleHyperlinks(articleId, scrapResults) {
+  if (!scrapResults || scrapResults.length === 0) return Promise.resolve(null);
+
+  return client.update({
+    index: 'articles',
+    type: 'doc',
+    id: articleId,
+    body: {
+      doc: {
+        hyperlinks: scrapResults.map(({ url, title, summary }) => ({
+          url,
+          title,
+          summary,
+        })),
+      },
+    },
+  });
 }
 
 export default {
@@ -102,18 +128,44 @@ export default {
         'The reason why the user want to submit this article. Mandatory for 1st sender',
     },
   },
-  async resolve(rootValue, { text, reference, reason }, { appId, userId }) {
+  resolve(rootValue, { text, reference, reason }, { appId, userId, loaders }) {
     assertUser({ appId, userId });
 
-    const articleId = await createNewArticle({
+    const newArticlePromise = createNewArticle({
       text,
       reference,
       userId,
       appId,
     });
 
-    await createReplyRequest({ articleId, userId, appId, reason });
+    const scrapPromise = scrapUrls(text, {
+      cacheLoader: loaders.urlLoader,
+      client,
+    });
 
-    return { id: articleId };
+    // Dependencies
+    //
+    // newArticlePromise --> replyRequestPromise -.
+    //                  \                          >-> done
+    // scrapPromise -----`-> hyperlinkPromise ----'
+    //
+
+    const replyRequestPromise = newArticlePromise.then(articleId =>
+      createReplyRequest({ articleId, userId, appId, reason })
+    );
+
+    const hyperlinkPromise = Promise.all([
+      newArticlePromise,
+      scrapPromise,
+    ]).then(([articleId, scrapResults]) => {
+      return updateArticleHyperlinks(articleId, scrapResults);
+    });
+
+    // Wait for all promises
+    return Promise.all([
+      newArticlePromise, // for fetching articleId
+      hyperlinkPromise,
+      replyRequestPromise,
+    ]).then(([id]) => ({ id }));
   },
 };

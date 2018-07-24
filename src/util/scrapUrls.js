@@ -136,7 +136,13 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
     urls.map(async url => {
       if (cacheLoader) {
         const result = await cacheLoader.load(url);
-        if (result) return { ...result, fromUrlsCache: true };
+
+        if (result)
+          return {
+            ...result,
+            url, // Overwrite the URL from cache with the actual url in text, because cacheLoader may match canonical URLs
+            fromUrlsCache: true,
+          };
       }
 
       if (noFetch) return null;
