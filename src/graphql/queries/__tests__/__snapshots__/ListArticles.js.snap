@@ -49,6 +49,27 @@ Object {
 }
 `;
 
+exports[`ListArticles filters by moreLikeThis and handles URLs 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`ListArticles filters by null operator 1`] = `
 Object {
   "data": Object {
@@ -109,15 +130,20 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest3",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
         "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
       },
-      "totalCount": 1,
+      "totalCount": 2,
     },
   },
 }
@@ -190,6 +216,12 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
+          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
+          "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
           "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
           "node": Object {
             "id": "listArticleTest3",
@@ -209,10 +241,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
         "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
 }
@@ -224,10 +256,10 @@ Object {
     "ListArticles": Object {
       "edges": null,
       "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
         "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
   "errors": Array [
@@ -241,6 +273,11 @@ Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
         Object {
           "node": Object {
             "id": "listArticleTest3",
@@ -258,10 +295,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzMsImxpc3RBcnRpY2xlVGVzdDMiXQ==",
+        "firstCursor": "WzQsImxpc3RBcnRpY2xlVGVzdDQiXQ==",
         "lastCursor": "WzEsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
 }
@@ -284,6 +321,11 @@ Object {
         },
         Object {
           "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest3",
           },
         },
@@ -292,7 +334,7 @@ Object {
         "firstCursor": "WzIsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
         "lastCursor": "WzAsImxpc3RBcnRpY2xlVGVzdDMiXQ==",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
 }
@@ -310,10 +352,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
         "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
 }
@@ -326,15 +368,20 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest3",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
         "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
-      "totalCount": 3,
+      "totalCount": 4,
     },
   },
 }

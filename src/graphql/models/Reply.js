@@ -5,6 +5,7 @@ import ReplyTypeEnum from './ReplyTypeEnum';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
 import User, { userFieldResolver } from './User';
+import Hyperlink from './Hyperlink';
 
 const Reply = new GraphQLObjectType({
   name: 'Reply',
@@ -34,6 +35,10 @@ const Reply = new GraphQLObjectType({
         );
         return filterArticleRepliesByStatus(articleReplies, status);
       },
+    },
+    hyperlinks: {
+      type: new GraphQLList(Hyperlink),
+      description: 'Hyperlinks in reply text or reference',
     },
   }),
 });

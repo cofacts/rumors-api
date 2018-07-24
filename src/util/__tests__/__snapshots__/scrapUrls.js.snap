@@ -1,0 +1,875 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`caching fetches latest fetch from urls 1`] = `
+Array [
+  Object {
+    "_cursor": Array [
+      1485907200000,
+    ],
+    "_score": null,
+    "canonical": "http://example.com/article/1111",
+    "fetchedAt": "2017-02-01T00:00:00.000Z",
+    "fromUrlsCache": true,
+    "id": "someUrl-2nd-fetch",
+    "summary": "Changed summary",
+    "title": "Changed title",
+    "url": "http://example.com/article/1111-aaaaa-bbb-ccc",
+  },
+  Object {
+    "_cursor": Array [
+      1485907200000,
+    ],
+    "_score": null,
+    "canonical": "http://example.com/article/1111",
+    "fetchedAt": "2017-02-01T00:00:00.000Z",
+    "fromUrlsCache": true,
+    "id": "someUrl-2nd-fetch",
+    "summary": "Changed summary",
+    "title": "Changed title",
+    "url": "http://example.com/article/1111-aaaaa-bbb-ccc",
+  },
+]
+`;
+
+exports[`scrapping & storage scraps from Internet and handles error: Docs stored to urls index 1`] = `
+Array [
+  Object {
+    "canonical": "http://localhost:57319/index.html",
+    "fetchedAt": "2017-01-28T08:45:57.011Z",
+    "html": "<!DOCTYPE html><html lang=\\"en\\"><head>
+  <meta charset=\\"UTF-8\\">
+  <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\">
+  <meta http-equiv=\\"X-UA-Compatible\\" content=\\"ie=edge\\">
+  <title>Test document</title>
+  <script src=\\"https://unpkg.com/react@16/umd/react.production.min.js\\"></script>
+  <script src=\\"https://unpkg.com/react-dom@16/umd/react-dom.production.min.js\\"></script>
+  <script src=\\"https://unpkg.com/babel-standalone@6.15.0/babel.min.js\\"></script>
+<script>\\"use strict\\";
+
+ReactDOM.render(React.createElement(
+  \\"div\\",
+  { className: \\"content\\" },
+  React.createElement(
+    \\"div\\",
+    { className: \\"menu\\" },
+    React.createElement(
+      \\"div\\",
+      { id: \\"menu\\" },
+      React.createElement(
+        \\"div\\",
+        { id: \\"scroller\\" },
+        React.createElement(
+          \\"dl\\",
+          null,
+          React.createElement(
+            \\"dt\\",
+            null,
+            \\" \\",
+            React.createElement(
+              \\"a\\",
+              { href: \\"/news/index?from=indexhouse\\", id: \\"home\\", title: \\"回聯合新聞網首頁\\" },
+              React.createElement(\\"i\\", { className: \\"i-home\\" })
+            ),
+            \\" \\"
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { href: \\"/news/breaknews/1\\", rel: \\"/news/breaks_main_menu/1\\" },
+              \\"即時\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"only_mobile\\", href: \\"/rank/pv/2\\", id: \\"m2\\", title: \\"熱門\\" },
+              React.createElement(\\"b\\", null),
+              \\"熱門\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/6638\\", rel: \\"/news/main_menu/2/6638\\" },
+              \\"要聞\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            null,
+            React.createElement(
+              \\"a\\",
+              { href: \\"https://stars.udn.com\\", rel: \\"/news/ch_main_menu/1022\\", target: \\"_blank\\", id: \\"m14\\" },
+              \\"娛樂\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/7227\\", rel: \\"/news/main_menu/2/7227\\" },
+              \\"運動\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/7225\\", rel: \\"/news/main_menu/2/7225\\" },
+              \\"全球\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"active\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/6639\\", rel: \\"/news/main_menu/2/6639\\" },
+              \\"社會\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/6644\\", rel: \\"/news/main_menu/2/6644\\" },
+              \\"產經\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/6645\\", rel: \\"/news/main_menu/2/6645\\" },
+              \\"股市\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            null,
+            React.createElement(
+              \\"a\\",
+              { href: \\"http://house.udn.com/house/index\\", rel: \\"/news/ch_main_menu/1009\\", target: \\"_blank\\", id: \\"m14\\" },
+              \\"房市\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            null,
+            React.createElement(
+              \\"a\\",
+              { href: \\"https://health.udn.com\\", rel: \\"/news/ch_main_menu/1005\\", target: \\"_blank\\", id: \\"m14\\" },
+              \\"健康\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/6649\\", rel: \\"/news/main_menu/2/6649\\" },
+              \\"生活\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/11195\\", rel: \\"/news/main_menu/2/11195\\" },
+              \\"文教\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/6643\\", rel: \\"/news/main_menu/2/6643\\" },
+              \\"評論\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/6641\\", rel: \\"/news/main_menu/2/6641\\" },
+              \\"地方\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/6640\\", rel: \\"/news/main_menu/2/6640\\" },
+              \\"兩岸\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { className: \\"\\", href: \\"/news/cate/2/7226\\", rel: \\"/news/main_menu/2/7226\\" },
+              \\"數位\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { href: \\"/news/cindex/1013\\", rel: \\"/news/ch_main_menu/1013\\" },
+              \\"旅遊\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            null,
+            React.createElement(
+              \\"a\\",
+              { href: \\"https://reader.udn.com/reader/index\\", rel: \\"/news/ch_main_menu/1014\\", target: \\"_blank\\", id: \\"m14\\" },
+              \\"閱讀\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            { className: \\"\\" },
+            React.createElement(
+              \\"a\\",
+              { href: \\"/news/cindex/1015\\", rel: \\"/news/ch_main_menu/1015\\" },
+              \\"雜誌\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            null,
+            React.createElement(
+              \\"a\\",
+              { className: \\"clearing only_mobile\\", href: \\"//style.udn.com\\", id: \\"m16\\", target: \\"_blank\\" },
+              \\"時尚\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            null,
+            React.createElement(
+              \\"a\\",
+              { className: \\"clearing only_mobile\\", href: \\"//autos.udn.com\\", id: \\"m16\\", target: \\"_blank\\" },
+              \\"汽車\\"
+            )
+          ),
+          React.createElement(
+            \\"dt\\",
+            null,
+            React.createElement(
+              \\"a\\",
+              { href: \\"//shopping.udn.com/mall/Cc1a00.do?sid=94_udn&utm_source=udn.com&utm_medium=referral_navi_udn&utm_term=navibar_udn&utm_campaign=20150103_UDN\\", rel: \\"/static/pulldownmenu/shopping/index.html\\", target: \\"_blank\\", id: \\"m16\\" },
+              \\"購物\\"
+            )
+          )
+        )
+      )
+    ),
+    React.createElement(\\"div\\", { id: \\"menu_sub\\", className: \\"menu_sub\\" })
+  ),
+  React.createElement(
+    \\"main\\",
+    null,
+    React.createElement(
+      \\"div\\",
+      { id: \\"story_body_content\\" },
+      React.createElement(
+        \\"h1\\",
+        { className: \\"story_art_title\\", id: \\"story_art_title\\" },
+        \\"大同寶寶圖像遭冒用 大同：提防詐騙\\"
+      ),
+      React.createElement(
+        \\"div\\",
+        { id: \\"story_bar\\", className: \\"story_bar_new\\" },
+        React.createElement(
+          \\"div\\",
+          { className: \\"social_bar\\" },
+          React.createElement(
+            \\"ul\\",
+            null,
+            React.createElement(
+              \\"li\\",
+              { className: \\"fb\\" },
+              React.createElement(
+                \\"a\\",
+                { href: \\"#\\", title: \\"分享\\" },
+                \\"分享\\"
+              )
+            ),
+            React.createElement(
+              \\"li\\",
+              { className: \\"line only_mobile\\" },
+              React.createElement(
+                \\"a\\",
+                { href: \\"http://line.me/R/msg/text/?%E5%A4%A7%E5%90%8C%E5%AF%B6%E5%AF%B6%E5%9C%96%E5%83%8F%E9%81%AD%E5%86%92%E7%94%A8+%E5%A4%A7%E5%90%8C%EF%BC%9A%E6%8F%90%E9%98%B2%E8%A9%90%E9%A8%99+%7C+%E6%B3%95%E5%BE%8B%E5%89%8D%E7%B7%9A+%7C+%E7%A4%BE%E6%9C%83+%7C+%E8%81%AF%E5%90%88%E6%96%B0%E8%81%9E%E7%B6%B2:https://udn.com/news/story/7321/2978347\\", title: \\"分享\\" },
+                \\"分享\\"
+              )
+            ),
+            React.createElement(
+              \\"li\\",
+              { className: \\"discuss\\" },
+              React.createElement(
+                \\"a\\",
+                { href: \\"#comments\\", title: \\"留言\\" },
+                \\"留言\\"
+              )
+            ),
+            React.createElement(
+              \\"li\\",
+              { className: \\"print\\" },
+              React.createElement(
+                \\"a\\",
+                { href: \\"#\\", title: \\"列印\\" },
+                \\"列印\\"
+              )
+            ),
+            React.createElement(
+              \\"li\\",
+              { className: \\"save\\" },
+              React.createElement(\\"iframe\\", { height: \\"40\\", scrolling: \\"no\\", src: \\"/sfclient/mySave.html\\", width: \\"112\\" })
+            )
+          )
+        ),
+        React.createElement(
+          \\"div\\",
+          { className: \\"social_bar\\" },
+          React.createElement(
+            \\"dl\\",
+            { className: \\"social_default only_mobile\\" },
+            React.createElement(
+              \\"dt\\",
+              { className: \\"fbsend\\" },
+              React.createElement(
+                \\"div\\",
+                { id: \\"fb-root\\", className: \\" fb_reset\\" },
+                React.createElement(
+                  \\"div\\",
+                  null,
+                  React.createElement(
+                    \\"div\\",
+                    null,
+                    React.createElement(\\"iframe\\", { name: \\"fb_xdm_frame_https\\", allowtransparency: \\"true\\", scrolling: \\"no\\",
+                      allow: \\"encrypted-media\\", id: \\"fb_xdm_frame_https\\", \\"aria-hidden\\": \\"true\\", title: \\"Facebook Cross Domain Communication Frame\\",
+                      src: \\"https://staticxx.facebook.com/connect/xd_arbiter/r/FdM1l_dpErI.js?version=42#channel=f1a434c877a6ac&origin=https%3A%2F%2Fudn.com\\"
+                    })
+                  )
+                ),
+                React.createElement(
+                  \\"div\\",
+                  null,
+                  React.createElement(\\"div\\", null)
+                )
+              ),
+              React.createElement(\\"div\\", { className: \\"fb-send facebook-holder\\", \\"data-href\\": \\"https://udn.com/news/story/7321/2978347\\" })
+            ),
+            React.createElement(
+              \\"dt\\",
+              { className: \\"fblike\\" },
+              React.createElement(\\"div\\", { id: \\"fb-root\\" }),
+              React.createElement(
+                \\"div\\",
+                { className: \\"fb-like facebook-holder fb_iframe_widget\\", \\"data-href\\": \\"https://udn.com/news/story/7321/2978347\\", \\"data-width\\": \\"100\\",
+                  \\"data-layout\\": \\"button_count\\", \\"data-action\\": \\"like\\", \\"data-show-faces\\": \\"false\\", \\"data-share\\": \\"true\\", \\"fb-xfbml-state\\": \\"rendered\\", \\"fb-iframe-plugin-query\\": \\"action=like&app_id=350231215126101&container_width=0&href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&layout=button_count&locale=zh_TW&sdk=joey&share=true&show_faces=false&width=100\\" },
+                React.createElement(
+                  \\"span\\",
+                  null,
+                  React.createElement(\\"iframe\\", { name: \\"f12ea163378db44\\", width: \\"100px\\", height: \\"1000px\\", allowtransparency: \\"true\\",
+                    scrolling: \\"no\\", allow: \\"encrypted-media\\", title: \\"fb:like Facebook Social Plugin\\", src: \\"https://www.facebook.com/v2.8/plugins/like.php?action=like&app_id=350231215126101&channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2FFdM1l_dpErI.js%3Fversion%3D42%23cb%3Df37d52517ae4f0c%26domain%3Dudn.com%26origin%3Dhttps%253A%252F%252Fudn.com%252Ff1a434c877a6ac%26relation%3Dparent.parent&container_width=0&href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&layout=button_count&locale=zh_TW&sdk=joey&share=true&show_faces=false&width=100\\",
+                    className: \\"\\" })
+                )
+              )
+            ),
+            React.createElement(
+              \\"dt\\",
+              { className: \\"linesend\\" },
+              React.createElement(
+                \\"div\\",
+                { className: \\"btnWrap shareEl\\", title: \\"可將此頁面的資訊分享至LINE。\\" },
+                React.createElement(
+                  \\"a\\",
+                  { href: \\"http://line.me/R/msg/text/?%E5%A4%A7%E5%90%8C%E5%AF%B6%E5%AF%B6%E5%9C%96%E5%83%8F%E9%81%AD%E5%86%92%E7%94%A8+%E5%A4%A7%E5%90%8C%EF%BC%9A%E6%8F%90%E9%98%B2%E8%A9%90%E9%A8%99+%7C+%E6%B3%95%E5%BE%8B%E5%89%8D%E7%B7%9A+%7C+%E7%A4%BE%E6%9C%83+%7C+%E8%81%AF%E5%90%88%E6%96%B0%E8%81%9E%E7%B6%B2:https://udn.com/news/story/7321/2978347\\",
+                    title: \\"分享\\" },
+                  React.createElement(
+                    \\"button\\",
+                    { className: \\"btn\\" },
+                    React.createElement(\\"i\\", null),
+                    React.createElement(
+                      \\"span\\",
+                      { className: \\"label\\" },
+                      React.createElement(
+                        \\"span\\",
+                        { className: \\"lang\\" },
+                        \\"用LINE傳送\\"
+                      )
+                    )
+                  )
+                )
+              )
+            ),
+            React.createElement(
+              \\"dt\\",
+              null,
+              React.createElement(
+                \\"a\\",
+                { href: \\"####\\", className: \\"open_story_bar\\" },
+                \\"+\\"
+              )
+            )
+          ),
+          React.createElement(
+            \\"div\\",
+            { className: \\"social_more\\" },
+            React.createElement(
+              \\"ul\\",
+              null,
+              React.createElement(
+                \\"li\\",
+                { className: \\"line only_mobile\\" },
+                React.createElement(
+                  \\"a\\",
+                  { href: \\"http://line.me/R/msg/text/?%E5%A4%A7%E5%90%8C%E5%AF%B6%E5%AF%B6%E5%9C%96%E5%83%8F%E9%81%AD%E5%86%92%E7%94%A8+%E5%A4%A7%E5%90%8C%EF%BC%9A%E6%8F%90%E9%98%B2%E8%A9%90%E9%A8%99+%7C+%E6%B3%95%E5%BE%8B%E5%89%8D%E7%B7%9A+%7C+%E7%A4%BE%E6%9C%83+%7C+%E8%81%AF%E5%90%88%E6%96%B0%E8%81%9E%E7%B6%B2:https://udn.com/news/story/7321/2978347\\",
+                    title: \\"分享\\" },
+                  \\"分享\\"
+                )
+              ),
+              React.createElement(
+                \\"li\\",
+                { className: \\"only_mobile\\" },
+                React.createElement(\\"a\\", { className: \\"whatsapp-link\\",
+                  href: \\"####\\", \\"data-action\\": \\"share/whatsapp/share\\" })
+              ),
+              React.createElement(
+                \\"li\\",
+                { className: \\"fb\\" },
+                React.createElement(
+                  \\"a\\",
+                  { href: \\"#\\", title: \\"分享\\" },
+                  \\"分享\\"
+                )
+              ),
+              React.createElement(
+                \\"li\\",
+                { className: \\"discuss\\" },
+                React.createElement(
+                  \\"a\\",
+                  { href: \\"#comments\\", title: \\"留言\\" },
+                  \\"留言\\"
+                )
+              ),
+              React.createElement(
+                \\"li\\",
+                { className: \\"print\\" },
+                React.createElement(
+                  \\"a\\",
+                  { href: \\"#\\", title: \\"列印\\" },
+                  \\"列印\\"
+                )
+              ),
+              React.createElement(
+                \\"li\\",
+                { className: \\"save\\" },
+                React.createElement(\\"iframe\\", { height: \\"40\\", scrolling: \\"no\\", src: \\"/sfclient/mySave.html\\", width: \\"112\\" })
+              ),
+              React.createElement(
+                \\"li\\",
+                { className: \\"only_mobile\\" },
+                React.createElement(\\"a\\", { href: \\"####\\", className: \\"close_story_bar\\" })
+              )
+            )
+          )
+        ),
+        React.createElement(
+          \\"div\\",
+          { className: \\"only_web\\", id: \\"set_font_size\\" },
+          React.createElement(
+            \\"a\\",
+            { href: \\"#\\", \\"data-attr\\": \\"-\\" },
+            \\"A-\\"
+          ),
+          React.createElement(
+            \\"a\\",
+            { href: \\"#\\", \\"data-attr\\": \\"+\\" },
+            \\"A+\\"
+          )
+        )
+      ),
+      React.createElement(
+        \\"div\\",
+        { id: \\"story_bady_info\\" },
+        React.createElement(
+          \\"div\\",
+          { className: \\"story_bady_info_author\\" },
+          React.createElement(
+            \\"span\\",
+            null,
+            \\"2018-02-09 16:46\\"
+          ),
+          \\"中央社 台北9日電\\"
+        ),
+        React.createElement(
+          \\"ul\\",
+          { className: \\"only_web\\" },
+          React.createElement(
+            \\"li\\",
+            { className: \\"like\\" },
+            React.createElement(\\"div\\", { id: \\"fb-root\\" }),
+            React.createElement(
+              \\"div\\",
+              { className: \\"fb-like facebook-holder fb_iframe_widget\\", \\"data-href\\": \\"https://udn.com/news/story/7321/2978347\\", \\"data-width\\": \\"100\\",
+                \\"data-layout\\": \\"button_count\\", \\"data-action\\": \\"like\\", \\"data-show-faces\\": \\"false\\", \\"data-share\\": \\"true\\", \\"fb-xfbml-state\\": \\"rendered\\", \\"fb-iframe-plugin-query\\": \\"action=like&app_id=350231215126101&container_width=0&href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&layout=button_count&locale=zh_TW&sdk=joey&share=true&show_faces=false&width=100\\" },
+              React.createElement(
+                \\"span\\",
+                null,
+                React.createElement(\\"iframe\\", { name: \\"f7b2b356d49e9c\\", width: \\"100px\\", height: \\"1000px\\", allowtransparency: \\"true\\",
+                  scrolling: \\"no\\", allow: \\"encrypted-media\\", title: \\"fb:like Facebook Social Plugin\\", src: \\"https://www.facebook.com/v2.8/plugins/like.php?action=like&app_id=350231215126101&channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2FFdM1l_dpErI.js%3Fversion%3D42%23cb%3Df16bf477713705%26domain%3Dudn.com%26origin%3Dhttps%253A%252F%252Fudn.com%252Ff1a434c877a6ac%26relation%3Dparent.parent&container_width=0&href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&layout=button_count&locale=zh_TW&sdk=joey&share=true&show_faces=false&width=100\\",
+                  className: \\"\\" })
+              )
+            )
+          ),
+          React.createElement(
+            \\"li\\",
+            null,
+            React.createElement(\\"div\\", { id: \\"fb-root\\" }),
+            React.createElement(\\"div\\", { className: \\"fb-send facebook-holder\\", \\"data-href\\": \\"https://udn.com/news/story/7321/2978347\\" })
+          )
+        ),
+        React.createElement(
+          \\"p\\",
+          null,
+          \\"大同公司今天聲明，近期大同公司或大同\\",
+          React.createElement(
+            \\"a\\",
+            { href: \\"/search/tagging/2/3C\\", rel: \\"112026\\" },
+            React.createElement(
+              \\"strong\\",
+              null,
+              \\"3C\\"
+            )
+          ),
+          \\"並無贈送LINE\\",
+          React.createElement(
+            \\"a\\",
+            { href: \\"/search/tagging/2/貼圖\\", rel: \\"112252\\" },
+            React.createElement(
+              \\"strong\\",
+              null,
+              \\"貼圖\\"
+            )
+          ),
+          \\"或對外募款活動，相關\\",
+          React.createElement(
+            \\"a\\",
+            { href: \\"/search/tagging/2/詐騙\\", rel: \\"109479\\" },
+            React.createElement(
+              \\"strong\\",
+              null,
+              \\"詐騙\\"
+            )
+          ),
+          \\"訊息皆非由大同或其子公司官方發出，建議消費者查證並提高警覺。\\"
+        ),
+        React.createElement(
+          \\"p\\",
+          null,
+          \\"大同發布聲明指出，近期LINE出現盜用大同公司官方名義與大同寶寶圖像進行假訊息散布，並發送花蓮地震救災捐款訊息，且以優惠活動、贈送貼圖等手段，騙取加入好友、分享貼圖，藉此竊取個資。\\"
+        ),
+        React.createElement(
+          \\"div\\",
+          { className: \\"only_mobile\\" },
+          React.createElement(
+            \\"div\\",
+            { className: \\"inline-ad\\" },
+            React.createElement(\\"div\\", { id: \\"div-gpt-ad-1503996040247-0\\" }),
+            React.createElement(\\"span\\", { id: \\"innity-in-post\\" })
+          )
+        ),
+        React.createElement(
+          \\"p\\",
+          null,
+          \\"針對上述冒用詐騙情事，大同表示，大同3C日前已於其官網張貼警示昭告，大同公司也嚴正聲明，近期大同公司或大同3C並無贈送LINE貼圖或對外募款的活動。\\"
+        ),
+        React.createElement(
+          \\"p\\",
+          null,
+          \\"大同強調，上述詐騙訊息皆非由大同或其子公司官方發出，消費者若接獲活動訊息，請先至大同公司或大同3C官方平台查詢，包含官方網站、臉書粉絲頁、LINE官方帳號等，或洽大同官方免付費服務專線0800-052-666進一步求證。\\"
+        ),
+        React.createElement(
+          \\"p\\",
+          null,
+          \\"大同籲請社會大眾對社群媒體資訊提高警覺，並直接將詐騙訊息刪除，切勿點擊或轉發，以保障個人資料安全並避免損失。\\"
+        ),
+        React.createElement(
+          \\"p\\",
+          null,
+          \\"對於冒用大同公司、大同3C官方名義以及大同寶寶圖像者，大同公司表示必將追究，絕不寬貸。\\"
+        ),
+        React.createElement(\\"p\\", null),
+        React.createElement(
+          \\"figure\\",
+          { className: \\"photo_center photo-story\\" },
+          React.createElement(
+            \\"a\\",
+            { href: \\"https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&x=0&y=0&sw=0&sh=0&sl=W&fw=1050&exp=3600\\",
+              rel: \\"prettyPhoto[pp_gal]\\" },
+            React.createElement(\\"img\\", { className: \\" lazyloaded\\", \\"data-src\\": \\"https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&x=0&y=0&sw=0&sh=0&sl=W&fw=1050&exp=3600\\",
+              src: \\"https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&x=0&y=0&sw=0&sh=0&sl=W&fw=1050&exp=3600\\",
+              alt: \\"大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受...\\", title: \\"大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受...\\" })
+          ),
+          React.createElement(
+            \\"figcaption\\",
+            null,
+            \\"大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受騙。圖／擷自大同3C官網。\\"
+          ),
+          React.createElement(
+            \\"a\\",
+            { href: \\"####\\", className: \\"photo_pop_icon\\" },
+            \\"分享\\"
+          ),
+          React.createElement(
+            \\"div\\",
+            { className: \\"photo_pop\\" },
+            React.createElement(
+              \\"ul\\",
+              null,
+              React.createElement(
+                \\"li\\",
+                { className: \\"facebook\\" },
+                React.createElement(
+                  \\"a\\",
+                  { title: \\"facebook\\", href: \\"#\\" },
+                  \\"facebook\\"
+                )
+              )
+            )
+          )
+        ),
+        React.createElement(\\"p\\", null)
+      )
+    )
+  )
+), document.getElementById('root'));
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIklubGluZSBCYWJlbCBzY3JpcHQiXSwibmFtZXMiOlsiUmVhY3RET00iLCJyZW5kZXIiLCJkb2N1bWVudCIsImdldEVsZW1lbnRCeUlkIl0sIm1hcHBpbmdzIjoiOztBQUNJQSxTQUFTQyxNQUFULENBQ0U7QUFBQTtBQUFBLElBQUssV0FBVSxTQUFmO0FBQ0U7QUFBQTtBQUFBLE1BQUssV0FBVSxNQUFmO0FBQXNCO0FBQUE7QUFBQSxRQUFLLElBQUcsTUFBUjtBQUFlO0FBQUE7QUFBQSxVQUFLLElBQUcsVUFBUjtBQUFvQjtBQUFBO0FBQUE7QUFBSTtBQUFBO0FBQUE7QUFBQTtBQUFLO0FBQUE7QUFBQSxnQkFBRyxNQUFLLDZCQUFSLEVBQXNDLElBQUcsTUFBekMsRUFBZ0QsT0FBTSxVQUF0RDtBQUFpRSx5Q0FBRyxXQUFVLFFBQWI7QUFBakUsYUFBTDtBQUFBO0FBQUEsV0FBSjtBQUE4RztBQUFBO0FBQUEsY0FBSSxXQUFVLEVBQWQ7QUFBaUI7QUFBQTtBQUFBLGdCQUFHLE1BQUssbUJBQVIsRUFBNEIsS0FBSSwwQkFBaEM7QUFBQTtBQUFBO0FBQWpCLFdBQTlHO0FBQXFNO0FBQUE7QUFBQSxjQUFJLFdBQVUsRUFBZDtBQUFpQjtBQUFBO0FBQUEsZ0JBQUcsV0FBVSxhQUFiLEVBQTJCLE1BQUssWUFBaEMsRUFBNkMsSUFBRyxJQUFoRCxFQUFxRCxPQUFNLElBQTNEO0FBQWdFLDRDQUFoRTtBQUFBO0FBQUE7QUFBakIsV0FBck07QUFBd1M7QUFBQTtBQUFBLGNBQUksV0FBVSxFQUFkO0FBQWlCO0FBQUE7QUFBQSxnQkFBRyxXQUFVLEVBQWIsRUFBZ0IsTUFBSyxtQkFBckIsRUFBeUMsS0FBSSx3QkFBN0M7QUFBQTtBQUFBO0FBQWpCLFdBQXhTO0FBQTBZO0FBQUE7QUFBQTtBQUFJO0FBQUE7QUFBQSxnQkFBRyxNQUFLLHVCQUFSLEVBQWdDLEtBQUkseUJBQXBDLEVBQThELFFBQU8sUUFBckUsRUFBOEUsSUFBRyxLQUFqRjtBQUFBO0FBQUE7QUFBSixXQUEx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O0FBQUEsY0FBSyxXQUFVLFdBQWY7QUFDRSx5Q0FBSyxJQUFHLDRCQUFSLEdBREY7QUFFRSwwQ0FBTSxJQUFHLGdCQUFUO0FBRkY7QUFERixTQS9CRjtBQXFDRTtBQUFBO0FBQUE7QUFBQTtBQUFBLFNBckNGO0FBc0NFO0FBQUE7QUFBQTtBQUFBO0FBQUEsU0F0Q0Y7QUF1Q0U7QUFBQTtBQUFBO0FBQUE7QUFBQSxTQXZDRjtBQXdDRTtBQUFBO0FBQUE7QUFBQTtBQUFBLFNBeENGO0FBeUNFLHNDQXpDRjtBQTBDRTtBQUFBO0FBQUEsWUFBUSxXQUFVLDBCQUFsQjtBQUNFO0FBQUE7QUFBQSxjQUFHLE1BQUsscUlBQVI7QUFDRSxtQkFBSSxxQkFETjtBQUVFLHlDQUFLLFdBQVUsYUFBZixFQUE2QixZQUFTLHFJQUF0QztBQUNFLG1CQUFJLHFJQUROO0FBRUUsbUJBQUksNkNBRk4sRUFFb0QsT0FBTSw2Q0FGMUQ7QUFGRixXQURGO0FBT0U7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQVBGO0FBUUU7QUFBQTtBQUFBLGNBQUcsTUFBSyxNQUFSLEVBQWUsV0FBVSxnQkFBekI7QUFBQTtBQUFBLFdBUkY7QUFTRTtBQUFBO0FBQUEsY0FBSyxXQUFVLFdBQWY7QUFDRTtBQUFBO0FBQUE7QUFDRTtBQUFBO0FBQUEsa0JBQUksV0FBVSxVQUFkO0FBQ0U7QUFBQTtBQUFBLG9CQUFHLE9BQU0sVUFBVCxFQUFvQixNQUFLLEdBQXpCO0FBQUE7QUFBQTtBQURGO0FBREY7QUFERjtBQVRGLFNBMUNGO0FBMkRFO0FBM0RGO0FBakZBO0FBREY7QUFGRixDQURGLEVBcUpFQyxTQUFTQyxjQUFULENBQXdCLE1BQXhCLENBckpGIiwiZmlsZSI6IklubGluZSBCYWJlbCBzY3JpcHQiLCJzb3VyY2VzQ29udGVudCI6WyJcbiAgICBSZWFjdERPTS5yZW5kZXIoXG4gICAgICA8ZGl2IGNsYXNzTmFtZT1cImNvbnRlbnRcIj5cbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtZW51XCI+PGRpdiBpZD1cIm1lbnVcIj48ZGl2IGlkPVwic2Nyb2xsZXJcIiA+PGRsPjxkdD4gPGEgaHJlZj1cIi9uZXdzL2luZGV4P2Zyb209aW5kZXhob3VzZVwiIGlkPVwiaG9tZVwiIHRpdGxlPVwi5Zue6IGv5ZCI5paw6IGe57ay6aaW6aCBXCI+PGkgY2xhc3NOYW1lPVwiaS1ob21lXCI+PC9pPjwvYT4gPC9kdD48ZHQgY2xhc3NOYW1lPVwiXCI+PGEgaHJlZj1cIi9uZXdzL2JyZWFrbmV3cy8xXCIgcmVsPVwiL25ld3MvYnJlYWtzX21haW5fbWVudS8xXCI+5Y2z5pmCPC9hPjwvZHQ+PGR0IGNsYXNzTmFtZT1cIlwiPjxhIGNsYXNzTmFtZT1cIm9ubHlfbW9iaWxlXCIgaHJlZj1cIi9yYW5rL3B2LzJcIiBpZD1cIm0yXCIgdGl0bGU9XCLnhrHploBcIj48Yj48L2I+54ax6ZaAPC9hPjwvZHQ+PGR0IGNsYXNzTmFtZT1cIlwiPjxhIGNsYXNzTmFtZT1cIlwiIGhyZWY9XCIvbmV3cy9jYXRlLzIvNjYzOFwiIHJlbD1cIi9uZXdzL21haW5fbWVudS8yLzY2MzhcIj7opoHogZ48L2E+PC9kdD48ZHQ+PGEgaHJlZj1cImh0dHBzOi8vc3RhcnMudWRuLmNvbVwiIHJlbD1cIi9uZXdzL2NoX21haW5fbWVudS8xMDIyXCIgdGFyZ2V0PVwiX2JsYW5rXCIgaWQ9XCJtMTRcIj7lqJvmqII8L2E+PC9kdD48ZHQgY2xhc3NOYW1lPVwiXCI+PGEgY2xhc3NOYW1lPVwiXCIgaHJlZj1cIi9uZXdzL2NhdGUvMi83MjI3XCIgcmVsPVwiL25ld3MvbWFpbl9tZW51LzIvNzIyN1wiPumBi+WLlTwvYT48L2R0PjxkdCBjbGFzc05hbWU9XCJcIj48YSBjbGFzc05hbWU9XCJcIiBocmVmPVwiL25ld3MvY2F0ZS8yLzcyMjVcIiByZWw9XCIvbmV3cy9tYWluX21lbnUvMi83MjI1XCI+5YWo55CDPC9hPjwvZHQ+PGR0IGNsYXNzTmFtZT1cImFjdGl2ZVwiPjxhIGNsYXNzTmFtZT1cIlwiIGhyZWY9XCIvbmV3cy9jYXRlLzIvNjYzOVwiIHJlbD1cIi9uZXdzL21haW5fbWVudS8yLzY2MzlcIj7npL7mnIM8L2E+PC9kdD48ZHQgY2xhc3NOYW1lPVwiXCI+PGEgY2xhc3NOYW1lPVwiXCIgaHJlZj1cIi9uZXdzL2NhdGUvMi82NjQ0XCIgcmVsPVwiL25ld3MvbWFpbl9tZW51LzIvNjY0NFwiPueUoue2kzwvYT48L2R0PjxkdCBjbGFzc05hbWU9XCJcIj48YSBjbGFzc05hbWU9XCJcIiBocmVmPVwiL25ld3MvY2F0ZS8yLzY2NDVcIiByZWw9XCIvbmV3cy9tYWluX21lbnUvMi82NjQ1XCI+6IKh5biCPC9hPjwvZHQ+PGR0PjxhIGhyZWY9XCJodHRwOi8vaG91c2UudWRuLmNvbS9ob3VzZS9pbmRleFwiIHJlbD1cIi9uZXdzL2NoX21haW5fbWVudS8xMDA5XCIgdGFyZ2V0PVwiX2JsYW5rXCIgaWQ9XCJtMTRcIj7miL/luII8L2E+PC9kdD48ZHQ+PGEgaHJlZj1cImh0dHBzOi8vaGVhbHRoLnVkbi5jb21cIiByZWw9XCIvbmV3cy9jaF9tYWluX21lbnUvMTAwNVwiIHRhcmdldD1cIl9ibGFua1wiIGlkPVwibTE0XCI+5YGl5bq3PC9hPjwvZHQ+PGR0IGNsYXNzTmFtZT1cIlwiPjxhIGNsYXNzTmFtZT1cIlwiIGhyZWY9XCIvbmV3cy9jYXRlLzIvNjY0OVwiIHJlbD1cIi9uZXdzL21haW5fbWVudS8yLzY2NDlcIj7nlJ/mtLs8L2E+PC9kdD48ZHQgY2xhc3NOYW1lPVwiXCI+PGEgY2xhc3NOYW1lPVwiXCIgaHJlZj1cIi9uZXdzL2NhdGUvMi8xMTE5NVwiIHJlbD1cIi9uZXdzL21haW5fbWVudS8yLzExMTk1XCI+5paH5pWZPC9hPjwvZHQ+PGR0IGNsYXNzTmFtZT1cIlwiPjxhIGNsYXNzTmFtZT1cIlwiIGhyZWY9XCIvbmV3cy9jYXRlLzIvNjY0M1wiIHJlbD1cIi9uZXdzL21haW5fbWVudS8yLzY2NDNcIj7oqZXoq5Y8L2E+PC9kdD48ZHQgY2xhc3NOYW1lPVwiXCI+PGEgY2xhc3NOYW1lPVwiXCIgaHJlZj1cIi9uZXdzL2NhdGUvMi82NjQxXCIgcmVsPVwiL25ld3MvbWFpbl9tZW51LzIvNjY0MVwiPuWcsOaWuTwvYT48L2R0PjxkdCBjbGFzc05hbWU9XCJcIj48YSBjbGFzc05hbWU9XCJcIiBocmVmPVwiL25ld3MvY2F0ZS8yLzY2NDBcIiByZWw9XCIvbmV3cy9tYWluX21lbnUvMi82NjQwXCI+5YWp5bK4PC9hPjwvZHQ+PGR0IGNsYXNzTmFtZT1cIlwiPjxhIGNsYXNzTmFtZT1cIlwiIGhyZWY9XCIvbmV3cy9jYXRlLzIvNzIyNlwiIHJlbD1cIi9uZXdzL21haW5fbWVudS8yLzcyMjZcIj7mlbjkvY08L2E+PC9kdD48ZHQgY2xhc3NOYW1lPVwiXCI+PGEgaHJlZj1cIi9uZXdzL2NpbmRleC8xMDEzXCIgcmVsPVwiL25ld3MvY2hfbWFpbl9tZW51LzEwMTNcIj7ml4XpgYo8L2E+PC9kdD48ZHQ+PGEgaHJlZj1cImh0dHBzOi8vcmVhZGVyLnVkbi5jb20vcmVhZGVyL2luZGV4XCIgcmVsPVwiL25ld3MvY2hfbWFpbl9tZW51LzEwMTRcIiB0YXJnZXQ9XCJfYmxhbmtcIiBpZD1cIm0xNFwiPumWseiugDwvYT48L2R0PjxkdCBjbGFzc05hbWU9XCJcIj48YSBocmVmPVwiL25ld3MvY2luZGV4LzEwMTVcIiByZWw9XCIvbmV3cy9jaF9tYWluX21lbnUvMTAxNVwiPumbnOiqjDwvYT48L2R0PjxkdD48YSBjbGFzc05hbWU9XCJjbGVhcmluZyBvbmx5X21vYmlsZVwiIGhyZWY9XCIvL3N0eWxlLnVkbi5jb21cIiBpZD1cIm0xNlwiIHRhcmdldD1cIl9ibGFua1wiPuaZguWwmjwvYT48L2R0PjxkdD48YSBjbGFzc05hbWU9XCJjbGVhcmluZyBvbmx5X21vYmlsZVwiIGhyZWY9XCIvL2F1dG9zLnVkbi5jb21cIiBpZD1cIm0xNlwiIHRhcmdldD1cIl9ibGFua1wiPuaxvei7ijwvYT48L2R0PjxkdD48YSBocmVmPVwiLy9zaG9wcGluZy51ZG4uY29tL21hbGwvQ2MxYTAwLmRvP3NpZD05NF91ZG4mYW1wO3V0bV9zb3VyY2U9dWRuLmNvbSZhbXA7dXRtX21lZGl1bT1yZWZlcnJhbF9uYXZpX3VkbiZhbXA7dXRtX3Rlcm09bmF2aWJhcl91ZG4mYW1wO3V0bV9jYW1wYWlnbj0yMDE1MDEwM19VRE5cIiByZWw9XCIvc3RhdGljL3B1bGxkb3dubWVudS9zaG9wcGluZy9pbmRleC5odG1sXCIgdGFyZ2V0PVwiX2JsYW5rXCIgaWQ9XCJtMTZcIj7os7zniak8L2E+PC9kdD48L2RsPjwvZGl2PjwvZGl2PjxkaXYgaWQ9XCJtZW51X3N1YlwiIGNsYXNzTmFtZT1cIm1lbnVfc3ViXCIgPjwvZGl2PjwvZGl2PlxuICAgICAgICA8bWFpbj5cbiAgICAgICAgICA8ZGl2IGlkPVwic3RvcnlfYm9keV9jb250ZW50XCI+PGgxIGNsYXNzTmFtZT1cInN0b3J5X2FydF90aXRsZVwiIGlkPVwic3RvcnlfYXJ0X3RpdGxlXCI+5aSn5ZCM5a+25a+25ZyW5YOP6YGt5YaS55SoIOWkp+WQjO+8muaPkOmYsuipkOmomTwvaDE+PGRpdiBpZD1cInN0b3J5X2JhclwiIGNsYXNzTmFtZT1cInN0b3J5X2Jhcl9uZXdcIj5cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInNvY2lhbF9iYXJcIj48dWw+PGxpIGNsYXNzTmFtZT1cImZiXCI+PGEgaHJlZj1cIiNcIiB0aXRsZT1cIuWIhuS6q1wiPuWIhuS6qzwvYT48L2xpPjxsaSBjbGFzc05hbWU9XCJsaW5lIG9ubHlfbW9iaWxlXCI+PGEgaHJlZj1cImh0dHA6Ly9saW5lLm1lL1IvbXNnL3RleHQvPyVFNSVBNCVBNyVFNSU5MCU4QyVFNSVBRiVCNiVFNSVBRiVCNiVFNSU5QyU5NiVFNSU4MyU4RiVFOSU4MSVBRCVFNSU4NiU5MiVFNyU5NCVBOCslRTUlQTQlQTclRTUlOTAlOEMlRUYlQkMlOUElRTYlOEYlOTAlRTklOTglQjIlRTglQTklOTAlRTklQTglOTkrJTdDKyVFNiVCMyU5NSVFNSVCRSU4QiVFNSU4OSU4RCVFNyVCNyU5QSslN0MrJUU3JUE0JUJFJUU2JTlDJTgzKyU3QyslRTglODElQUYlRTUlOTAlODglRTYlOTYlQjAlRTglODElOUUlRTclQjYlQjI6aHR0cHM6Ly91ZG4uY29tL25ld3Mvc3RvcnkvNzMyMS8yOTc4MzQ3XCIgdGl0bGU9XCLliIbkuqtcIj7liIbkuqs8L2E+PC9saT48bGkgY2xhc3NOYW1lPVwiZGlzY3Vzc1wiPjxhIGhyZWY9XCIjY29tbWVudHNcIiB0aXRsZT1cIueVmeiogFwiPueVmeiogDwvYT48L2xpPjxsaSBjbGFzc05hbWU9XCJwcmludFwiPjxhIGhyZWY9XCIjXCIgdGl0bGU9XCLliJfljbBcIj7liJfljbA8L2E+PC9saT48bGkgY2xhc3NOYW1lPVwic2F2ZVwiPjxpZnJhbWUgIGhlaWdodD1cIjQwXCIgc2Nyb2xsaW5nPVwibm9cIiBzcmM9XCIvc2ZjbGllbnQvbXlTYXZlLmh0bWxcIiB3aWR0aD1cIjExMlwiPjwvaWZyYW1lPjwvbGk+PC91bD48L2Rpdj5cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInNvY2lhbF9iYXJcIj5cbiAgICAgICAgICAgIDxkbCBjbGFzc05hbWU9XCJzb2NpYWxfZGVmYXVsdCBvbmx5X21vYmlsZVwiID5cbiAgICAgICAgICAgICAgPGR0IGNsYXNzTmFtZT1cImZic2VuZFwiPlxuICAgICAgICAgICAgICAgIDxkaXYgaWQ9XCJmYi1yb290XCIgY2xhc3NOYW1lPVwiIGZiX3Jlc2V0XCI+XG4gICAgICAgICAgICAgICAgICA8ZGl2ID5cbiAgICAgICAgICAgICAgICAgICAgPGRpdj5cbiAgICAgICAgICAgICAgICAgICAgICA8aWZyYW1lIG5hbWU9XCJmYl94ZG1fZnJhbWVfaHR0cHNcIiAgYWxsb3d0cmFuc3BhcmVuY3k9XCJ0cnVlXCIgc2Nyb2xsaW5nPVwibm9cIlxuICAgICAgICAgICAgICAgICAgICAgICAgYWxsb3c9XCJlbmNyeXB0ZWQtbWVkaWFcIiBpZD1cImZiX3hkbV9mcmFtZV9odHRwc1wiIGFyaWEtaGlkZGVuPVwidHJ1ZVwiIHRpdGxlPVwiRmFjZWJvb2sgQ3Jvc3MgRG9tYWluIENvbW11bmljYXRpb24gRnJhbWVcIlxuICAgICAgICAgICAgICAgICAgICAgICAgc3JjPVwiaHR0cHM6Ly9zdGF0aWN4eC5mYWNlYm9vay5jb20vY29ubmVjdC94ZF9hcmJpdGVyL3IvRmRNMWxfZHBFckkuanM/dmVyc2lvbj00MiNjaGFubmVsPWYxYTQzNGM4NzdhNmFjJmFtcDtvcmlnaW49aHR0cHMlM0ElMkYlMkZ1ZG4uY29tXCJcbiAgICAgICAgICAgICAgICAgICAgICAgID48L2lmcmFtZT5cbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgIDxkaXYgPlxuICAgICAgICAgICAgICAgICAgICA8ZGl2PjwvZGl2PlxuICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmYi1zZW5kIGZhY2Vib29rLWhvbGRlclwiIGRhdGEtaHJlZj1cImh0dHBzOi8vdWRuLmNvbS9uZXdzL3N0b3J5LzczMjEvMjk3ODM0N1wiPjwvZGl2PlxuICAgICAgICAgICAgICA8L2R0PlxuICAgICAgICAgICAgICA8ZHQgY2xhc3NOYW1lPVwiZmJsaWtlXCI+XG4gICAgICAgICAgICAgICAgPGRpdiBpZD1cImZiLXJvb3RcIj48L2Rpdj5cbiAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZiLWxpa2UgZmFjZWJvb2staG9sZGVyIGZiX2lmcmFtZV93aWRnZXRcIiBkYXRhLWhyZWY9XCJodHRwczovL3Vkbi5jb20vbmV3cy9zdG9yeS83MzIxLzI5NzgzNDdcIiBkYXRhLXdpZHRoPVwiMTAwXCJcbiAgICAgICAgICAgICAgICAgIGRhdGEtbGF5b3V0PVwiYnV0dG9uX2NvdW50XCIgZGF0YS1hY3Rpb249XCJsaWtlXCIgZGF0YS1zaG93LWZhY2VzPVwiZmFsc2VcIiBkYXRhLXNoYXJlPVwidHJ1ZVwiIGZiLXhmYm1sLXN0YXRlPVwicmVuZGVyZWRcIiBmYi1pZnJhbWUtcGx1Z2luLXF1ZXJ5PVwiYWN0aW9uPWxpa2UmYW1wO2FwcF9pZD0zNTAyMzEyMTUxMjYxMDEmYW1wO2NvbnRhaW5lcl93aWR0aD0wJmFtcDtocmVmPWh0dHBzJTNBJTJGJTJGdWRuLmNvbSUyRm5ld3MlMkZzdG9yeSUyRjczMjElMkYyOTc4MzQ3JmFtcDtsYXlvdXQ9YnV0dG9uX2NvdW50JmFtcDtsb2NhbGU9emhfVFcmYW1wO3Nkaz1qb2V5JmFtcDtzaGFyZT10cnVlJmFtcDtzaG93X2ZhY2VzPWZhbHNlJmFtcDt3aWR0aD0xMDBcIj5cbiAgICAgICAgICAgICAgICAgIDxzcGFuID5cbiAgICAgICAgICAgICAgICAgICAgPGlmcmFtZSBuYW1lPVwiZjEyZWExNjMzNzhkYjQ0XCIgd2lkdGg9XCIxMDBweFwiIGhlaWdodD1cIjEwMDBweFwiICBhbGxvd3RyYW5zcGFyZW5jeT1cInRydWVcIlxuICAgICAgICAgICAgICAgICAgICAgIHNjcm9sbGluZz1cIm5vXCIgYWxsb3c9XCJlbmNyeXB0ZWQtbWVkaWFcIiB0aXRsZT1cImZiOmxpa2UgRmFjZWJvb2sgU29jaWFsIFBsdWdpblwiIHNyYz1cImh0dHBzOi8vd3d3LmZhY2Vib29rLmNvbS92Mi44L3BsdWdpbnMvbGlrZS5waHA/YWN0aW9uPWxpa2UmYW1wO2FwcF9pZD0zNTAyMzEyMTUxMjYxMDEmYW1wO2NoYW5uZWw9aHR0cHMlM0ElMkYlMkZzdGF0aWN4eC5mYWNlYm9vay5jb20lMkZjb25uZWN0JTJGeGRfYXJiaXRlciUyRnIlMkZGZE0xbF9kcEVySS5qcyUzRnZlcnNpb24lM0Q0MiUyM2NiJTNEZjM3ZDUyNTE3YWU0ZjBjJTI2ZG9tYWluJTNEdWRuLmNvbSUyNm9yaWdpbiUzRGh0dHBzJTI1M0ElMjUyRiUyNTJGdWRuLmNvbSUyNTJGZjFhNDM0Yzg3N2E2YWMlMjZyZWxhdGlvbiUzRHBhcmVudC5wYXJlbnQmYW1wO2NvbnRhaW5lcl93aWR0aD0wJmFtcDtocmVmPWh0dHBzJTNBJTJGJTJGdWRuLmNvbSUyRm5ld3MlMkZzdG9yeSUyRjczMjElMkYyOTc4MzQ3JmFtcDtsYXlvdXQ9YnV0dG9uX2NvdW50JmFtcDtsb2NhbGU9emhfVFcmYW1wO3Nkaz1qb2V5JmFtcDtzaGFyZT10cnVlJmFtcDtzaG93X2ZhY2VzPWZhbHNlJmFtcDt3aWR0aD0xMDBcIlxuICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJcIj48L2lmcmFtZT5cbiAgICAgICAgICAgICAgICAgIDwvc3Bhbj5cbiAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgPC9kdD5cbiAgICAgICAgICAgICAgPGR0IGNsYXNzTmFtZT1cImxpbmVzZW5kXCI+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJidG5XcmFwIHNoYXJlRWxcIiB0aXRsZT1cIuWPr+Wwh+atpOmggemdoueahOizh+ioiuWIhuS6q+iHs0xJTkXjgIJcIj5cbiAgICAgICAgICAgICAgICAgIDxhIGhyZWY9XCJodHRwOi8vbGluZS5tZS9SL21zZy90ZXh0Lz8lRTUlQTQlQTclRTUlOTAlOEMlRTUlQUYlQjYlRTUlQUYlQjYlRTUlOUMlOTYlRTUlODMlOEYlRTklODElQUQlRTUlODYlOTIlRTclOTQlQTgrJUU1JUE0JUE3JUU1JTkwJThDJUVGJUJDJTlBJUU2JThGJTkwJUU5JTk4JUIyJUU4JUE5JTkwJUU5JUE4JTk5KyU3QyslRTYlQjMlOTUlRTUlQkUlOEIlRTUlODklOEQlRTclQjclOUErJTdDKyVFNyVBNCVCRSVFNiU5QyU4MyslN0MrJUU4JTgxJUFGJUU1JTkwJTg4JUU2JTk2JUIwJUU4JTgxJTlFJUU3JUI2JUIyOmh0dHBzOi8vdWRuLmNvbS9uZXdzL3N0b3J5LzczMjEvMjk3ODM0N1wiXG4gICAgICAgICAgICAgICAgICAgIHRpdGxlPVwi5YiG5LqrXCI+XG4gICAgICAgICAgICAgICAgICAgIDxidXR0b24gY2xhc3NOYW1lPVwiYnRuXCI+XG4gICAgICAgICAgICAgICAgICAgICAgPGk+PC9pPlxuICAgICAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImxhYmVsXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJsYW5nXCI+55SoTElOReWCs+mAgTwvc3Bhbj5cbiAgICAgICAgICAgICAgICAgICAgICA8L3NwYW4+XG4gICAgICAgICAgICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICAgICAgICAgICAgPC9hPlxuICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICA8L2R0PlxuICAgICAgICAgICAgICA8ZHQ+XG4gICAgICAgICAgICAgICAgPGEgaHJlZj1cIiMjIyNcIiBjbGFzc05hbWU9XCJvcGVuX3N0b3J5X2JhclwiPis8L2E+XG4gICAgICAgICAgICAgIDwvZHQ+XG4gICAgICAgICAgICA8L2RsPlxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJzb2NpYWxfbW9yZVwiID5cbiAgICAgICAgICAgICAgPHVsPlxuICAgICAgICAgICAgICAgIDxsaSBjbGFzc05hbWU9XCJsaW5lIG9ubHlfbW9iaWxlXCI+XG4gICAgICAgICAgICAgICAgICA8YSBocmVmPVwiaHR0cDovL2xpbmUubWUvUi9tc2cvdGV4dC8/JUU1JUE0JUE3JUU1JTkwJThDJUU1JUFGJUI2JUU1JUFGJUI2JUU1JTlDJTk2JUU1JTgzJThGJUU5JTgxJUFEJUU1JTg2JTkyJUU3JTk0JUE4KyVFNSVBNCVBNyVFNSU5MCU4QyVFRiVCQyU5QSVFNiU4RiU5MCVFOSU5OCVCMiVFOCVBOSU5MCVFOSVBOCU5OSslN0MrJUU2JUIzJTk1JUU1JUJFJThCJUU1JTg5JThEJUU3JUI3JTlBKyU3QyslRTclQTQlQkUlRTYlOUMlODMrJTdDKyVFOCU4MSVBRiVFNSU5MCU4OCVFNiU5NiVCMCVFOCU4MSU5RSVFNyVCNiVCMjpodHRwczovL3Vkbi5jb20vbmV3cy9zdG9yeS83MzIxLzI5NzgzNDdcIlxuICAgICAgICAgICAgICAgICAgICB0aXRsZT1cIuWIhuS6q1wiPuWIhuS6qzwvYT5cbiAgICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgICAgIDxsaSBjbGFzc05hbWU9XCJvbmx5X21vYmlsZVwiPlxuICAgICAgICAgICAgICAgICAgPGEgY2xhc3NOYW1lPVwid2hhdHNhcHAtbGlua1wiXG4gICAgICAgICAgICAgICAgICAgIGhyZWY9XCIjIyMjXCIgZGF0YS1hY3Rpb249XCJzaGFyZS93aGF0c2FwcC9zaGFyZVwiPjwvYT5cbiAgICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgICAgIDxsaSBjbGFzc05hbWU9XCJmYlwiPlxuICAgICAgICAgICAgICAgICAgPGEgaHJlZj1cIiNcIiB0aXRsZT1cIuWIhuS6q1wiPuWIhuS6qzwvYT5cbiAgICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgICAgIDxsaSBjbGFzc05hbWU9XCJkaXNjdXNzXCI+XG4gICAgICAgICAgICAgICAgICA8YSBocmVmPVwiI2NvbW1lbnRzXCIgdGl0bGU9XCLnlZnoqIBcIj7nlZnoqIA8L2E+XG4gICAgICAgICAgICAgICAgPC9saT5cbiAgICAgICAgICAgICAgICA8bGkgY2xhc3NOYW1lPVwicHJpbnRcIj5cbiAgICAgICAgICAgICAgICAgIDxhIGhyZWY9XCIjXCIgdGl0bGU9XCLliJfljbBcIj7liJfljbA8L2E+XG4gICAgICAgICAgICAgICAgPC9saT5cbiAgICAgICAgICAgICAgICA8bGkgY2xhc3NOYW1lPVwic2F2ZVwiPlxuICAgICAgICAgICAgICAgICAgPGlmcmFtZSAgaGVpZ2h0PVwiNDBcIiBzY3JvbGxpbmc9XCJub1wiIHNyYz1cIi9zZmNsaWVudC9teVNhdmUuaHRtbFwiIHdpZHRoPVwiMTEyXCI+PC9pZnJhbWU+XG4gICAgICAgICAgICAgICAgPC9saT5cbiAgICAgICAgICAgICAgICA8bGkgY2xhc3NOYW1lPVwib25seV9tb2JpbGVcIj5cbiAgICAgICAgICAgICAgICAgIDxhIGhyZWY9XCIjIyMjXCIgY2xhc3NOYW1lPVwiY2xvc2Vfc3RvcnlfYmFyXCI+PC9hPlxuICAgICAgICAgICAgICAgIDwvbGk+XG4gICAgICAgICAgICAgIDwvdWw+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cIm9ubHlfd2ViXCIgaWQ9XCJzZXRfZm9udF9zaXplXCI+XG4gICAgICAgICAgICA8YSBocmVmPVwiI1wiIGRhdGEtYXR0cj1cIi1cIj5BLTwvYT5cbiAgICAgICAgICAgIDxhIGhyZWY9XCIjXCIgZGF0YS1hdHRyPVwiK1wiPkErPC9hPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDxkaXYgaWQ9XCJzdG9yeV9iYWR5X2luZm9cIj5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwic3RvcnlfYmFkeV9pbmZvX2F1dGhvclwiPlxuICAgICAgICAgICAgICA8c3Bhbj4yMDE4LTAyLTA5IDE2OjQ2PC9zcGFuPuS4reWkruekviDlj7DljJc55pel6Zu7PC9kaXY+XG4gICAgICAgICAgICA8dWwgY2xhc3NOYW1lPVwib25seV93ZWJcIj5cbiAgICAgICAgICAgICAgPGxpIGNsYXNzTmFtZT1cImxpa2VcIj5cbiAgICAgICAgICAgICAgICA8ZGl2IGlkPVwiZmItcm9vdFwiPjwvZGl2PlxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmItbGlrZSBmYWNlYm9vay1ob2xkZXIgZmJfaWZyYW1lX3dpZGdldFwiIGRhdGEtaHJlZj1cImh0dHBzOi8vdWRuLmNvbS9uZXdzL3N0b3J5LzczMjEvMjk3ODM0N1wiIGRhdGEtd2lkdGg9XCIxMDBcIlxuICAgICAgICAgICAgICAgICAgZGF0YS1sYXlvdXQ9XCJidXR0b25fY291bnRcIiBkYXRhLWFjdGlvbj1cImxpa2VcIiBkYXRhLXNob3ctZmFjZXM9XCJmYWxzZVwiIGRhdGEtc2hhcmU9XCJ0cnVlXCIgZmIteGZibWwtc3RhdGU9XCJyZW5kZXJlZFwiIGZiLWlmcmFtZS1wbHVnaW4tcXVlcnk9XCJhY3Rpb249bGlrZSZhbXA7YXBwX2lkPTM1MDIzMTIxNTEyNjEwMSZhbXA7Y29udGFpbmVyX3dpZHRoPTAmYW1wO2hyZWY9aHR0cHMlM0ElMkYlMkZ1ZG4uY29tJTJGbmV3cyUyRnN0b3J5JTJGNzMyMSUyRjI5NzgzNDcmYW1wO2xheW91dD1idXR0b25fY291bnQmYW1wO2xvY2FsZT16aF9UVyZhbXA7c2RrPWpvZXkmYW1wO3NoYXJlPXRydWUmYW1wO3Nob3dfZmFjZXM9ZmFsc2UmYW1wO3dpZHRoPTEwMFwiPlxuICAgICAgICAgICAgICAgICAgPHNwYW4gPlxuICAgICAgICAgICAgICAgICAgICA8aWZyYW1lIG5hbWU9XCJmN2IyYjM1NmQ0OWU5Y1wiIHdpZHRoPVwiMTAwcHhcIiBoZWlnaHQ9XCIxMDAwcHhcIiAgYWxsb3d0cmFuc3BhcmVuY3k9XCJ0cnVlXCJcbiAgICAgICAgICAgICAgICAgICAgICBzY3JvbGxpbmc9XCJub1wiIGFsbG93PVwiZW5jcnlwdGVkLW1lZGlhXCIgdGl0bGU9XCJmYjpsaWtlIEZhY2Vib29rIFNvY2lhbCBQbHVnaW5cIiBzcmM9XCJodHRwczovL3d3dy5mYWNlYm9vay5jb20vdjIuOC9wbHVnaW5zL2xpa2UucGhwP2FjdGlvbj1saWtlJmFtcDthcHBfaWQ9MzUwMjMxMjE1MTI2MTAxJmFtcDtjaGFubmVsPWh0dHBzJTNBJTJGJTJGc3RhdGljeHguZmFjZWJvb2suY29tJTJGY29ubmVjdCUyRnhkX2FyYml0ZXIlMkZyJTJGRmRNMWxfZHBFckkuanMlM0Z2ZXJzaW9uJTNENDIlMjNjYiUzRGYxNmJmNDc3NzEzNzA1JTI2ZG9tYWluJTNEdWRuLmNvbSUyNm9yaWdpbiUzRGh0dHBzJTI1M0ElMjUyRiUyNTJGdWRuLmNvbSUyNTJGZjFhNDM0Yzg3N2E2YWMlMjZyZWxhdGlvbiUzRHBhcmVudC5wYXJlbnQmYW1wO2NvbnRhaW5lcl93aWR0aD0wJmFtcDtocmVmPWh0dHBzJTNBJTJGJTJGdWRuLmNvbSUyRm5ld3MlMkZzdG9yeSUyRjczMjElMkYyOTc4MzQ3JmFtcDtsYXlvdXQ9YnV0dG9uX2NvdW50JmFtcDtsb2NhbGU9emhfVFcmYW1wO3Nkaz1qb2V5JmFtcDtzaGFyZT10cnVlJmFtcDtzaG93X2ZhY2VzPWZhbHNlJmFtcDt3aWR0aD0xMDBcIlxuICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT1cIlwiID48L2lmcmFtZT5cbiAgICAgICAgICAgICAgICAgIDwvc3Bhbj5cbiAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgPC9saT5cbiAgICAgICAgICAgICAgPGxpPlxuICAgICAgICAgICAgICAgIDxkaXYgaWQ9XCJmYi1yb290XCI+PC9kaXY+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJmYi1zZW5kIGZhY2Vib29rLWhvbGRlclwiIGRhdGEtaHJlZj1cImh0dHBzOi8vdWRuLmNvbS9uZXdzL3N0b3J5LzczMjEvMjk3ODM0N1wiPjwvZGl2PlxuICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgPC91bD5cbiAgICAgICAgICAgIDxwPuWkp+WQjOWFrOWPuOS7iuWkqeiBsuaYju+8jOi/keacn+Wkp+WQjOWFrOWPuOaIluWkp+WQjFxuICAgICAgICAgICAgICA8YSBocmVmPVwiL3NlYXJjaC90YWdnaW5nLzIvM0NcIiByZWw9XCIxMTIwMjZcIj5cbiAgICAgICAgICAgICAgICA8c3Ryb25nPjNDPC9zdHJvbmc+XG4gICAgICAgICAgICAgIDwvYT7kuKbnhKHotIjpgIFMSU5FXG4gICAgICAgICAgICAgIDxhIGhyZWY9XCIvc2VhcmNoL3RhZ2dpbmcvMi/osrzlnJZcIiByZWw9XCIxMTIyNTJcIj5cbiAgICAgICAgICAgICAgICA8c3Ryb25nPuiyvOWcljwvc3Ryb25nPlxuICAgICAgICAgICAgICA8L2E+5oiW5bCN5aSW5Yuf5qy+5rS75YuV77yM55u46ZecXG4gICAgICAgICAgICAgIDxhIGhyZWY9XCIvc2VhcmNoL3RhZ2dpbmcvMi/oqZDpqJlcIiByZWw9XCIxMDk0NzlcIj5cbiAgICAgICAgICAgICAgICA8c3Ryb25nPuipkOmomTwvc3Ryb25nPlxuICAgICAgICAgICAgICA8L2E+6KiK5oGv55qG6Z2e55Sx5aSn5ZCM5oiW5YW25a2Q5YWs5Y+45a6Y5pa555m85Ye677yM5bu66K2w5raI6LK76ICF5p+l6K2J5Lim5o+Q6auY6K2m6Ka644CCPC9wPlxuICAgICAgICAgICAgPHA+5aSn5ZCM55m85biD6IGy5piO5oyH5Ye677yM6L+R5pyfTElOReWHuuePvuebnOeUqOWkp+WQjOWFrOWPuOWumOaWueWQjee+qeiIh+Wkp+WQjOWvtuWvtuWcluWDj+mAsuihjOWBh+ioiuaBr+aVo+W4g++8jOS4pueZvOmAgeiKseiTruWcsOmch+aVkeeBveaNkOasvuioiuaBr++8jOS4lOS7peWEquaDoOa0u+WLleOAgei0iOmAgeiyvOWcluetieaJi+aute+8jOmomeWPluWKoOWFpeWlveWPi+OAgeWIhuS6q+iyvOWclu+8jOiXieatpOeriuWPluWAi+izh+OAgjwvcD5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwib25seV9tb2JpbGVcIj5cbiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJpbmxpbmUtYWRcIj5cbiAgICAgICAgICAgICAgICA8ZGl2IGlkPVwiZGl2LWdwdC1hZC0xNTAzOTk2MDQwMjQ3LTBcIiA+PC9kaXY+XG4gICAgICAgICAgICAgICAgPHNwYW4gaWQ9XCJpbm5pdHktaW4tcG9zdFwiPjwvc3Bhbj5cbiAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDxwPumHneWwjeS4iui/sOWGkueUqOipkOmomeaDheS6i++8jOWkp+WQjOihqOekuu+8jOWkp+WQjDND5pel5YmN5bey5pa85YW25a6Y57ay5by16LK86K2m56S65pit5ZGK77yM5aSn5ZCM5YWs5Y+45Lmf5Zq05q2j6IGy5piO77yM6L+R5pyf5aSn5ZCM5YWs5Y+45oiW5aSn5ZCMM0PkuKbnhKHotIjpgIFMSU5F6LK85ZyW5oiW5bCN5aSW5Yuf5qy+55qE5rS75YuV44CCPC9wPlxuICAgICAgICAgICAgPHA+5aSn5ZCM5by36Kq/77yM5LiK6L+w6KmQ6aiZ6KiK5oGv55qG6Z2e55Sx5aSn5ZCM5oiW5YW25a2Q5YWs5Y+45a6Y5pa555m85Ye677yM5raI6LK76ICF6Iul5o6l542y5rS75YuV6KiK5oGv77yM6KuL5YWI6Iez5aSn5ZCM5YWs5Y+45oiW5aSn5ZCMM0PlrpjmlrnlubPlj7Dmn6XoqaLvvIzljIXlkKvlrpjmlrnntrLnq5njgIHoh4nmm7jnsonntbLpoIHjgIFMSU5F5a6Y5pa55biz6Jmf562J77yM5oiW5rS95aSn5ZCM5a6Y5pa55YWN5LuY6LK75pyN5YuZ5bCI57eaMDgwMC0wNTItNjY26YCy5LiA5q2l5rGC6K2J44CCPC9wPlxuICAgICAgICAgICAgPHA+5aSn5ZCM57Gy6KuL56S+5pyD5aSn55y+5bCN56S+576k5aqS6auU6LOH6KiK5o+Q6auY6K2m6Ka677yM5Lim55u05o6l5bCH6KmQ6aiZ6KiK5oGv5Yiq6Zmk77yM5YiH5Yu/6bue5pOK5oiW6L2J55m877yM5Lul5L+d6Zqc5YCL5Lq66LOH5paZ5a6J5YWo5Lim6YG/5YWN5pCN5aSx44CCPC9wPlxuICAgICAgICAgICAgPHA+5bCN5pa85YaS55So5aSn5ZCM5YWs5Y+444CB5aSn5ZCMM0PlrpjmlrnlkI3nvqnku6Xlj4rlpKflkIzlr7blr7blnJblg4/ogIXvvIzlpKflkIzlhazlj7jooajnpLrlv4XlsIfov73nqbbvvIzntZXkuI3lr6zosrjjgII8L3A+XG4gICAgICAgICAgICA8cD48L3A+XG4gICAgICAgICAgICA8ZmlndXJlIGNsYXNzTmFtZT1cInBob3RvX2NlbnRlciBwaG90by1zdG9yeVwiID5cbiAgICAgICAgICAgICAgPGEgaHJlZj1cImh0dHBzOi8vcGd3LnVkbi5jb20udHcvZ3cvcGhvdG8ucGhwP3U9aHR0cHM6Ly91Yy51ZG4uY29tLnR3L3Bob3RvLzIwMTgvMDIvMDkvOTgvNDQ5MDI2Ni5qcGcmYW1wO3g9MCZhbXA7eT0wJmFtcDtzdz0wJmFtcDtzaD0wJmFtcDtzbD1XJmFtcDtmdz0xMDUwJmFtcDtleHA9MzYwMFwiXG4gICAgICAgICAgICAgICAgcmVsPVwicHJldHR5UGhvdG9bcHBfZ2FsXVwiPlxuICAgICAgICAgICAgICAgIDxpbWcgY2xhc3NOYW1lPVwiIGxhenlsb2FkZWRcIiBkYXRhLXNyYz1cImh0dHBzOi8vcGd3LnVkbi5jb20udHcvZ3cvcGhvdG8ucGhwP3U9aHR0cHM6Ly91Yy51ZG4uY29tLnR3L3Bob3RvLzIwMTgvMDIvMDkvOTgvNDQ5MDI2Ni5qcGcmYW1wO3g9MCZhbXA7eT0wJmFtcDtzdz0wJmFtcDtzaD0wJmFtcDtzbD1XJmFtcDtmdz0xMDUwJmFtcDtleHA9MzYwMFwiXG4gICAgICAgICAgICAgICAgICBzcmM9XCJodHRwczovL3Bndy51ZG4uY29tLnR3L2d3L3Bob3RvLnBocD91PWh0dHBzOi8vdWMudWRuLmNvbS50dy9waG90by8yMDE4LzAyLzA5Lzk4LzQ0OTAyNjYuanBnJmFtcDt4PTAmYW1wO3k9MCZhbXA7c3c9MCZhbXA7c2g9MCZhbXA7c2w9VyZhbXA7Znc9MTA1MCZhbXA7ZXhwPTM2MDBcIlxuICAgICAgICAgICAgICAgICAgYWx0PVwi5aSn5ZCM5YWs5Y+46KGo56S677yM6L+R5pyfTElOReWHuuePvuebnOeUqOWkp+WQjOWumOaWueW4s+iZn+mAsuihjOWBh+ioiuaBr+aVo+S9iO+8jOiri+WkmuWKoOazqOaEj++8jOS7peWFjeWPly4uLlwiIHRpdGxlPVwi5aSn5ZCM5YWs5Y+46KGo56S677yM6L+R5pyfTElOReWHuuePvuebnOeUqOWkp+WQjOWumOaWueW4s+iZn+mAsuihjOWBh+ioiuaBr+aVo+S9iO+8jOiri+WkmuWKoOazqOaEj++8jOS7peWFjeWPly4uLlwiPjwvaW1nPlxuICAgICAgICAgICAgICA8L2E+XG4gICAgICAgICAgICAgIDxmaWdjYXB0aW9uPuWkp+WQjOWFrOWPuOihqOekuu+8jOi/keacn0xJTkXlh7rnj77nm5znlKjlpKflkIzlrpjmlrnluLPomZ/pgLLooYzlgYfoqIrmga/mlaPkvYjvvIzoq4vlpJrliqDms6jmhI/vvIzku6XlhY3lj5fpqJnjgILlnJbvvI/mk7foh6rlpKflkIwzQ+WumOe2suOAgjwvZmlnY2FwdGlvbj5cbiAgICAgICAgICAgICAgPGEgaHJlZj1cIiMjIyNcIiBjbGFzc05hbWU9XCJwaG90b19wb3BfaWNvblwiPuWIhuS6qzwvYT5cbiAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJwaG90b19wb3BcIj5cbiAgICAgICAgICAgICAgICA8dWw+XG4gICAgICAgICAgICAgICAgICA8bGkgY2xhc3NOYW1lPVwiZmFjZWJvb2tcIj5cbiAgICAgICAgICAgICAgICAgICAgPGEgdGl0bGU9XCJmYWNlYm9va1wiIGhyZWY9XCIjXCI+ZmFjZWJvb2s8L2E+XG4gICAgICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgICAgIDwvdWw+XG4gICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgPC9maWd1cmU+XG4gICAgICAgICAgICA8cD48L3A+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgPC9tYWluPlxuICAgICAgPC9kaXY+LFxuICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKVxuICAgICk7XG4gICJdfQ==</script></head>
+<body>
+  <div id=\\"root\\"><div class=\\"content\\"><div class=\\"menu\\"><div id=\\"menu\\"><div id=\\"scroller\\"><dl><dt> <a href=\\"/news/index?from=indexhouse\\" id=\\"home\\" title=\\"回聯合新聞網首頁\\"><i class=\\"i-home\\"></i></a> </dt><dt class=\\"\\"><a href=\\"/news/breaknews/1\\" rel=\\"/news/breaks_main_menu/1\\">即時</a></dt><dt class=\\"\\"><a class=\\"only_mobile\\" href=\\"/rank/pv/2\\" id=\\"m2\\" title=\\"熱門\\"><b></b>熱門</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/6638\\" rel=\\"/news/main_menu/2/6638\\">要聞</a></dt><dt><a href=\\"https://stars.udn.com\\" rel=\\"/news/ch_main_menu/1022\\" target=\\"_blank\\" id=\\"m14\\">娛樂</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/7227\\" rel=\\"/news/main_menu/2/7227\\">運動</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/7225\\" rel=\\"/news/main_menu/2/7225\\">全球</a></dt><dt class=\\"active\\"><a class=\\"\\" href=\\"/news/cate/2/6639\\" rel=\\"/news/main_menu/2/6639\\">社會</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/6644\\" rel=\\"/news/main_menu/2/6644\\">產經</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/6645\\" rel=\\"/news/main_menu/2/6645\\">股市</a></dt><dt><a href=\\"http://house.udn.com/house/index\\" rel=\\"/news/ch_main_menu/1009\\" target=\\"_blank\\" id=\\"m14\\">房市</a></dt><dt><a href=\\"https://health.udn.com\\" rel=\\"/news/ch_main_menu/1005\\" target=\\"_blank\\" id=\\"m14\\">健康</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/6649\\" rel=\\"/news/main_menu/2/6649\\">生活</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/11195\\" rel=\\"/news/main_menu/2/11195\\">文教</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/6643\\" rel=\\"/news/main_menu/2/6643\\">評論</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/6641\\" rel=\\"/news/main_menu/2/6641\\">地方</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/6640\\" rel=\\"/news/main_menu/2/6640\\">兩岸</a></dt><dt class=\\"\\"><a class=\\"\\" href=\\"/news/cate/2/7226\\" rel=\\"/news/main_menu/2/7226\\">數位</a></dt><dt class=\\"\\"><a href=\\"/news/cindex/1013\\" rel=\\"/news/ch_main_menu/1013\\">旅遊</a></dt><dt><a href=\\"https://reader.udn.com/reader/index\\" rel=\\"/news/ch_main_menu/1014\\" target=\\"_blank\\" id=\\"m14\\">閱讀</a></dt><dt class=\\"\\"><a href=\\"/news/cindex/1015\\" rel=\\"/news/ch_main_menu/1015\\">雜誌</a></dt><dt><a class=\\"clearing only_mobile\\" href=\\"//style.udn.com\\" id=\\"m16\\" target=\\"_blank\\">時尚</a></dt><dt><a class=\\"clearing only_mobile\\" href=\\"//autos.udn.com\\" id=\\"m16\\" target=\\"_blank\\">汽車</a></dt><dt><a href=\\"//shopping.udn.com/mall/Cc1a00.do?sid=94_udn&amp;utm_source=udn.com&amp;utm_medium=referral_navi_udn&amp;utm_term=navibar_udn&amp;utm_campaign=20150103_UDN\\" rel=\\"/static/pulldownmenu/shopping/index.html\\" target=\\"_blank\\" id=\\"m16\\">購物</a></dt></dl></div></div><div id=\\"menu_sub\\" class=\\"menu_sub\\"></div></div><main><div id=\\"story_body_content\\"><h1 class=\\"story_art_title\\" id=\\"story_art_title\\">大同寶寶圖像遭冒用 大同：提防詐騙</h1><div id=\\"story_bar\\" class=\\"story_bar_new\\"><div class=\\"social_bar\\"><ul><li class=\\"fb\\"><a href=\\"#\\" title=\\"分享\\">分享</a></li><li class=\\"line only_mobile\\"><a href=\\"http://line.me/R/msg/text/?%E5%A4%A7%E5%90%8C%E5%AF%B6%E5%AF%B6%E5%9C%96%E5%83%8F%E9%81%AD%E5%86%92%E7%94%A8+%E5%A4%A7%E5%90%8C%EF%BC%9A%E6%8F%90%E9%98%B2%E8%A9%90%E9%A8%99+%7C+%E6%B3%95%E5%BE%8B%E5%89%8D%E7%B7%9A+%7C+%E7%A4%BE%E6%9C%83+%7C+%E8%81%AF%E5%90%88%E6%96%B0%E8%81%9E%E7%B6%B2:https://udn.com/news/story/7321/2978347\\" title=\\"分享\\">分享</a></li><li class=\\"discuss\\"><a href=\\"#comments\\" title=\\"留言\\">留言</a></li><li class=\\"print\\"><a href=\\"#\\" title=\\"列印\\">列印</a></li><li class=\\"save\\"><iframe height=\\"40\\" scrolling=\\"no\\" src=\\"/sfclient/mySave.html\\" width=\\"112\\"></iframe></li></ul></div><div class=\\"social_bar\\"><dl class=\\"social_default only_mobile\\"><dt class=\\"fbsend\\"><div id=\\"fb-root\\" class=\\" fb_reset\\"><div><div><iframe name=\\"fb_xdm_frame_https\\" allowtransparency=\\"true\\" scrolling=\\"no\\" allow=\\"encrypted-media\\" id=\\"fb_xdm_frame_https\\" aria-hidden=\\"true\\" title=\\"Facebook Cross Domain Communication Frame\\" src=\\"https://staticxx.facebook.com/connect/xd_arbiter/r/FdM1l_dpErI.js?version=42#channel=f1a434c877a6ac&amp;origin=https%3A%2F%2Fudn.com\\"></iframe></div></div><div><div></div></div></div><div class=\\"fb-send facebook-holder\\" data-href=\\"https://udn.com/news/story/7321/2978347\\"></div></dt><dt class=\\"fblike\\"><div id=\\"fb-root\\"></div><div class=\\"fb-like facebook-holder fb_iframe_widget\\" data-href=\\"https://udn.com/news/story/7321/2978347\\" data-width=\\"100\\" data-layout=\\"button_count\\" data-action=\\"like\\" data-show-faces=\\"false\\" data-share=\\"true\\" fb-xfbml-state=\\"rendered\\" fb-iframe-plugin-query=\\"action=like&amp;app_id=350231215126101&amp;container_width=0&amp;href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&amp;layout=button_count&amp;locale=zh_TW&amp;sdk=joey&amp;share=true&amp;show_faces=false&amp;width=100\\"><span><iframe name=\\"f12ea163378db44\\" width=\\"100px\\" height=\\"1000px\\" allowtransparency=\\"true\\" scrolling=\\"no\\" allow=\\"encrypted-media\\" title=\\"fb:like Facebook Social Plugin\\" src=\\"https://www.facebook.com/v2.8/plugins/like.php?action=like&amp;app_id=350231215126101&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2FFdM1l_dpErI.js%3Fversion%3D42%23cb%3Df37d52517ae4f0c%26domain%3Dudn.com%26origin%3Dhttps%253A%252F%252Fudn.com%252Ff1a434c877a6ac%26relation%3Dparent.parent&amp;container_width=0&amp;href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&amp;layout=button_count&amp;locale=zh_TW&amp;sdk=joey&amp;share=true&amp;show_faces=false&amp;width=100\\" class=\\"\\"></iframe></span></div></dt><dt class=\\"linesend\\"><div class=\\"btnWrap shareEl\\" title=\\"可將此頁面的資訊分享至LINE。\\"><a href=\\"http://line.me/R/msg/text/?%E5%A4%A7%E5%90%8C%E5%AF%B6%E5%AF%B6%E5%9C%96%E5%83%8F%E9%81%AD%E5%86%92%E7%94%A8+%E5%A4%A7%E5%90%8C%EF%BC%9A%E6%8F%90%E9%98%B2%E8%A9%90%E9%A8%99+%7C+%E6%B3%95%E5%BE%8B%E5%89%8D%E7%B7%9A+%7C+%E7%A4%BE%E6%9C%83+%7C+%E8%81%AF%E5%90%88%E6%96%B0%E8%81%9E%E7%B6%B2:https://udn.com/news/story/7321/2978347\\" title=\\"分享\\"><button class=\\"btn\\"><i></i><span class=\\"label\\"><span class=\\"lang\\">用LINE傳送</span></span></button></a></div></dt><dt><a href=\\"####\\" class=\\"open_story_bar\\">+</a></dt></dl><div class=\\"social_more\\"><ul><li class=\\"line only_mobile\\"><a href=\\"http://line.me/R/msg/text/?%E5%A4%A7%E5%90%8C%E5%AF%B6%E5%AF%B6%E5%9C%96%E5%83%8F%E9%81%AD%E5%86%92%E7%94%A8+%E5%A4%A7%E5%90%8C%EF%BC%9A%E6%8F%90%E9%98%B2%E8%A9%90%E9%A8%99+%7C+%E6%B3%95%E5%BE%8B%E5%89%8D%E7%B7%9A+%7C+%E7%A4%BE%E6%9C%83+%7C+%E8%81%AF%E5%90%88%E6%96%B0%E8%81%9E%E7%B6%B2:https://udn.com/news/story/7321/2978347\\" title=\\"分享\\">分享</a></li><li class=\\"only_mobile\\"><a class=\\"whatsapp-link\\" href=\\"####\\" data-action=\\"share/whatsapp/share\\"></a></li><li class=\\"fb\\"><a href=\\"#\\" title=\\"分享\\">分享</a></li><li class=\\"discuss\\"><a href=\\"#comments\\" title=\\"留言\\">留言</a></li><li class=\\"print\\"><a href=\\"#\\" title=\\"列印\\">列印</a></li><li class=\\"save\\"><iframe height=\\"40\\" scrolling=\\"no\\" src=\\"/sfclient/mySave.html\\" width=\\"112\\"></iframe></li><li class=\\"only_mobile\\"><a href=\\"####\\" class=\\"close_story_bar\\"></a></li></ul></div></div><div class=\\"only_web\\" id=\\"set_font_size\\"><a href=\\"#\\" data-attr=\\"-\\">A-</a><a href=\\"#\\" data-attr=\\"+\\">A+</a></div></div><div id=\\"story_bady_info\\"><div class=\\"story_bady_info_author\\"><span>2018-02-09 16:46</span>中央社 台北9日電</div><ul class=\\"only_web\\"><li class=\\"like\\"><div id=\\"fb-root\\"></div><div class=\\"fb-like facebook-holder fb_iframe_widget\\" data-href=\\"https://udn.com/news/story/7321/2978347\\" data-width=\\"100\\" data-layout=\\"button_count\\" data-action=\\"like\\" data-show-faces=\\"false\\" data-share=\\"true\\" fb-xfbml-state=\\"rendered\\" fb-iframe-plugin-query=\\"action=like&amp;app_id=350231215126101&amp;container_width=0&amp;href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&amp;layout=button_count&amp;locale=zh_TW&amp;sdk=joey&amp;share=true&amp;show_faces=false&amp;width=100\\"><span><iframe name=\\"f7b2b356d49e9c\\" width=\\"100px\\" height=\\"1000px\\" allowtransparency=\\"true\\" scrolling=\\"no\\" allow=\\"encrypted-media\\" title=\\"fb:like Facebook Social Plugin\\" src=\\"https://www.facebook.com/v2.8/plugins/like.php?action=like&amp;app_id=350231215126101&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2FFdM1l_dpErI.js%3Fversion%3D42%23cb%3Df16bf477713705%26domain%3Dudn.com%26origin%3Dhttps%253A%252F%252Fudn.com%252Ff1a434c877a6ac%26relation%3Dparent.parent&amp;container_width=0&amp;href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&amp;layout=button_count&amp;locale=zh_TW&amp;sdk=joey&amp;share=true&amp;show_faces=false&amp;width=100\\" class=\\"\\"></iframe></span></div></li><li><div id=\\"fb-root\\"></div><div class=\\"fb-send facebook-holder\\" data-href=\\"https://udn.com/news/story/7321/2978347\\"></div></li></ul><p>大同公司今天聲明，近期大同公司或大同<a href=\\"/search/tagging/2/3C\\" rel=\\"112026\\"><strong>3C</strong></a>並無贈送LINE<a href=\\"/search/tagging/2/貼圖\\" rel=\\"112252\\"><strong>貼圖</strong></a>或對外募款活動，相關<a href=\\"/search/tagging/2/詐騙\\" rel=\\"109479\\"><strong>詐騙</strong></a>訊息皆非由大同或其子公司官方發出，建議消費者查證並提高警覺。</p><p>大同發布聲明指出，近期LINE出現盜用大同公司官方名義與大同寶寶圖像進行假訊息散布，並發送花蓮地震救災捐款訊息，且以優惠活動、贈送貼圖等手段，騙取加入好友、分享貼圖，藉此竊取個資。</p><div class=\\"only_mobile\\"><div class=\\"inline-ad\\"><div id=\\"div-gpt-ad-1503996040247-0\\"></div><span id=\\"innity-in-post\\"></span></div></div><p>針對上述冒用詐騙情事，大同表示，大同3C日前已於其官網張貼警示昭告，大同公司也嚴正聲明，近期大同公司或大同3C並無贈送LINE貼圖或對外募款的活動。</p><p>大同強調，上述詐騙訊息皆非由大同或其子公司官方發出，消費者若接獲活動訊息，請先至大同公司或大同3C官方平台查詢，包含官方網站、臉書粉絲頁、LINE官方帳號等，或洽大同官方免付費服務專線0800-052-666進一步求證。</p><p>大同籲請社會大眾對社群媒體資訊提高警覺，並直接將詐騙訊息刪除，切勿點擊或轉發，以保障個人資料安全並避免損失。</p><p>對於冒用大同公司、大同3C官方名義以及大同寶寶圖像者，大同公司表示必將追究，絕不寬貸。</p><p></p><figure class=\\"photo_center photo-story\\"><a href=\\"https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&amp;x=0&amp;y=0&amp;sw=0&amp;sh=0&amp;sl=W&amp;fw=1050&amp;exp=3600\\" rel=\\"prettyPhoto[pp_gal]\\"><img class=\\" lazyloaded\\" data-src=\\"https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&amp;x=0&amp;y=0&amp;sw=0&amp;sh=0&amp;sl=W&amp;fw=1050&amp;exp=3600\\" src=\\"https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&amp;x=0&amp;y=0&amp;sw=0&amp;sh=0&amp;sl=W&amp;fw=1050&amp;exp=3600\\" alt=\\"大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受...\\" title=\\"大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受...\\"></a><figcaption>大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受騙。圖／擷自大同3C官網。</figcaption><a href=\\"####\\" class=\\"photo_pop_icon\\">分享</a><div class=\\"photo_pop\\"><ul><li class=\\"facebook\\"><a title=\\"facebook\\" href=\\"#\\">facebook</a></li></ul></div></figure><p></p></div></div></main></div></div>
+  <script type=\\"text/babel\\">
+    ReactDOM.render(
+      <div className=\\"content\\">
+        <div className=\\"menu\\"><div id=\\"menu\\"><div id=\\"scroller\\" ><dl><dt> <a href=\\"/news/index?from=indexhouse\\" id=\\"home\\" title=\\"回聯合新聞網首頁\\"><i className=\\"i-home\\"></i></a> </dt><dt className=\\"\\"><a href=\\"/news/breaknews/1\\" rel=\\"/news/breaks_main_menu/1\\">即時</a></dt><dt className=\\"\\"><a className=\\"only_mobile\\" href=\\"/rank/pv/2\\" id=\\"m2\\" title=\\"熱門\\"><b></b>熱門</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/6638\\" rel=\\"/news/main_menu/2/6638\\">要聞</a></dt><dt><a href=\\"https://stars.udn.com\\" rel=\\"/news/ch_main_menu/1022\\" target=\\"_blank\\" id=\\"m14\\">娛樂</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/7227\\" rel=\\"/news/main_menu/2/7227\\">運動</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/7225\\" rel=\\"/news/main_menu/2/7225\\">全球</a></dt><dt className=\\"active\\"><a className=\\"\\" href=\\"/news/cate/2/6639\\" rel=\\"/news/main_menu/2/6639\\">社會</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/6644\\" rel=\\"/news/main_menu/2/6644\\">產經</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/6645\\" rel=\\"/news/main_menu/2/6645\\">股市</a></dt><dt><a href=\\"http://house.udn.com/house/index\\" rel=\\"/news/ch_main_menu/1009\\" target=\\"_blank\\" id=\\"m14\\">房市</a></dt><dt><a href=\\"https://health.udn.com\\" rel=\\"/news/ch_main_menu/1005\\" target=\\"_blank\\" id=\\"m14\\">健康</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/6649\\" rel=\\"/news/main_menu/2/6649\\">生活</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/11195\\" rel=\\"/news/main_menu/2/11195\\">文教</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/6643\\" rel=\\"/news/main_menu/2/6643\\">評論</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/6641\\" rel=\\"/news/main_menu/2/6641\\">地方</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/6640\\" rel=\\"/news/main_menu/2/6640\\">兩岸</a></dt><dt className=\\"\\"><a className=\\"\\" href=\\"/news/cate/2/7226\\" rel=\\"/news/main_menu/2/7226\\">數位</a></dt><dt className=\\"\\"><a href=\\"/news/cindex/1013\\" rel=\\"/news/ch_main_menu/1013\\">旅遊</a></dt><dt><a href=\\"https://reader.udn.com/reader/index\\" rel=\\"/news/ch_main_menu/1014\\" target=\\"_blank\\" id=\\"m14\\">閱讀</a></dt><dt className=\\"\\"><a href=\\"/news/cindex/1015\\" rel=\\"/news/ch_main_menu/1015\\">雜誌</a></dt><dt><a className=\\"clearing only_mobile\\" href=\\"//style.udn.com\\" id=\\"m16\\" target=\\"_blank\\">時尚</a></dt><dt><a className=\\"clearing only_mobile\\" href=\\"//autos.udn.com\\" id=\\"m16\\" target=\\"_blank\\">汽車</a></dt><dt><a href=\\"//shopping.udn.com/mall/Cc1a00.do?sid=94_udn&amp;utm_source=udn.com&amp;utm_medium=referral_navi_udn&amp;utm_term=navibar_udn&amp;utm_campaign=20150103_UDN\\" rel=\\"/static/pulldownmenu/shopping/index.html\\" target=\\"_blank\\" id=\\"m16\\">購物</a></dt></dl></div></div><div id=\\"menu_sub\\" className=\\"menu_sub\\" ></div></div>
+        <main>
+          <div id=\\"story_body_content\\"><h1 className=\\"story_art_title\\" id=\\"story_art_title\\">大同寶寶圖像遭冒用 大同：提防詐騙</h1><div id=\\"story_bar\\" className=\\"story_bar_new\\">
+          <div className=\\"social_bar\\"><ul><li className=\\"fb\\"><a href=\\"#\\" title=\\"分享\\">分享</a></li><li className=\\"line only_mobile\\"><a href=\\"http://line.me/R/msg/text/?%E5%A4%A7%E5%90%8C%E5%AF%B6%E5%AF%B6%E5%9C%96%E5%83%8F%E9%81%AD%E5%86%92%E7%94%A8+%E5%A4%A7%E5%90%8C%EF%BC%9A%E6%8F%90%E9%98%B2%E8%A9%90%E9%A8%99+%7C+%E6%B3%95%E5%BE%8B%E5%89%8D%E7%B7%9A+%7C+%E7%A4%BE%E6%9C%83+%7C+%E8%81%AF%E5%90%88%E6%96%B0%E8%81%9E%E7%B6%B2:https://udn.com/news/story/7321/2978347\\" title=\\"分享\\">分享</a></li><li className=\\"discuss\\"><a href=\\"#comments\\" title=\\"留言\\">留言</a></li><li className=\\"print\\"><a href=\\"#\\" title=\\"列印\\">列印</a></li><li className=\\"save\\"><iframe  height=\\"40\\" scrolling=\\"no\\" src=\\"/sfclient/mySave.html\\" width=\\"112\\"></iframe></li></ul></div>
+          <div className=\\"social_bar\\">
+            <dl className=\\"social_default only_mobile\\" >
+              <dt className=\\"fbsend\\">
+                <div id=\\"fb-root\\" className=\\" fb_reset\\">
+                  <div >
+                    <div>
+                      <iframe name=\\"fb_xdm_frame_https\\"  allowtransparency=\\"true\\" scrolling=\\"no\\"
+                        allow=\\"encrypted-media\\" id=\\"fb_xdm_frame_https\\" aria-hidden=\\"true\\" title=\\"Facebook Cross Domain Communication Frame\\"
+                        src=\\"https://staticxx.facebook.com/connect/xd_arbiter/r/FdM1l_dpErI.js?version=42#channel=f1a434c877a6ac&amp;origin=https%3A%2F%2Fudn.com\\"
+                        ></iframe>
+                    </div>
+                  </div>
+                  <div >
+                    <div></div>
+                  </div>
+                </div>
+                <div className=\\"fb-send facebook-holder\\" data-href=\\"https://udn.com/news/story/7321/2978347\\"></div>
+              </dt>
+              <dt className=\\"fblike\\">
+                <div id=\\"fb-root\\"></div>
+                <div className=\\"fb-like facebook-holder fb_iframe_widget\\" data-href=\\"https://udn.com/news/story/7321/2978347\\" data-width=\\"100\\"
+                  data-layout=\\"button_count\\" data-action=\\"like\\" data-show-faces=\\"false\\" data-share=\\"true\\" fb-xfbml-state=\\"rendered\\" fb-iframe-plugin-query=\\"action=like&amp;app_id=350231215126101&amp;container_width=0&amp;href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&amp;layout=button_count&amp;locale=zh_TW&amp;sdk=joey&amp;share=true&amp;show_faces=false&amp;width=100\\">
+                  <span >
+                    <iframe name=\\"f12ea163378db44\\" width=\\"100px\\" height=\\"1000px\\"  allowtransparency=\\"true\\"
+                      scrolling=\\"no\\" allow=\\"encrypted-media\\" title=\\"fb:like Facebook Social Plugin\\" src=\\"https://www.facebook.com/v2.8/plugins/like.php?action=like&amp;app_id=350231215126101&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2FFdM1l_dpErI.js%3Fversion%3D42%23cb%3Df37d52517ae4f0c%26domain%3Dudn.com%26origin%3Dhttps%253A%252F%252Fudn.com%252Ff1a434c877a6ac%26relation%3Dparent.parent&amp;container_width=0&amp;href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&amp;layout=button_count&amp;locale=zh_TW&amp;sdk=joey&amp;share=true&amp;show_faces=false&amp;width=100\\"
+                       className=\\"\\"></iframe>
+                  </span>
+                </div>
+              </dt>
+              <dt className=\\"linesend\\">
+                <div className=\\"btnWrap shareEl\\" title=\\"可將此頁面的資訊分享至LINE。\\">
+                  <a href=\\"http://line.me/R/msg/text/?%E5%A4%A7%E5%90%8C%E5%AF%B6%E5%AF%B6%E5%9C%96%E5%83%8F%E9%81%AD%E5%86%92%E7%94%A8+%E5%A4%A7%E5%90%8C%EF%BC%9A%E6%8F%90%E9%98%B2%E8%A9%90%E9%A8%99+%7C+%E6%B3%95%E5%BE%8B%E5%89%8D%E7%B7%9A+%7C+%E7%A4%BE%E6%9C%83+%7C+%E8%81%AF%E5%90%88%E6%96%B0%E8%81%9E%E7%B6%B2:https://udn.com/news/story/7321/2978347\\"
+                    title=\\"分享\\">
+                    <button className=\\"btn\\">
+                      <i></i>
+                      <span className=\\"label\\">
+                        <span className=\\"lang\\">用LINE傳送</span>
+                      </span>
+                    </button>
+                  </a>
+                </div>
+              </dt>
+              <dt>
+                <a href=\\"####\\" className=\\"open_story_bar\\">+</a>
+              </dt>
+            </dl>
+            <div className=\\"social_more\\" >
+              <ul>
+                <li className=\\"line only_mobile\\">
+                  <a href=\\"http://line.me/R/msg/text/?%E5%A4%A7%E5%90%8C%E5%AF%B6%E5%AF%B6%E5%9C%96%E5%83%8F%E9%81%AD%E5%86%92%E7%94%A8+%E5%A4%A7%E5%90%8C%EF%BC%9A%E6%8F%90%E9%98%B2%E8%A9%90%E9%A8%99+%7C+%E6%B3%95%E5%BE%8B%E5%89%8D%E7%B7%9A+%7C+%E7%A4%BE%E6%9C%83+%7C+%E8%81%AF%E5%90%88%E6%96%B0%E8%81%9E%E7%B6%B2:https://udn.com/news/story/7321/2978347\\"
+                    title=\\"分享\\">分享</a>
+                </li>
+                <li className=\\"only_mobile\\">
+                  <a className=\\"whatsapp-link\\"
+                    href=\\"####\\" data-action=\\"share/whatsapp/share\\"></a>
+                </li>
+                <li className=\\"fb\\">
+                  <a href=\\"#\\" title=\\"分享\\">分享</a>
+                </li>
+                <li className=\\"discuss\\">
+                  <a href=\\"#comments\\" title=\\"留言\\">留言</a>
+                </li>
+                <li className=\\"print\\">
+                  <a href=\\"#\\" title=\\"列印\\">列印</a>
+                </li>
+                <li className=\\"save\\">
+                  <iframe  height=\\"40\\" scrolling=\\"no\\" src=\\"/sfclient/mySave.html\\" width=\\"112\\"></iframe>
+                </li>
+                <li className=\\"only_mobile\\">
+                  <a href=\\"####\\" className=\\"close_story_bar\\"></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className=\\"only_web\\" id=\\"set_font_size\\">
+            <a href=\\"#\\" data-attr=\\"-\\">A-</a>
+            <a href=\\"#\\" data-attr=\\"+\\">A+</a>
+          </div>
+          </div>
+          <div id=\\"story_bady_info\\">
+            <div className=\\"story_bady_info_author\\">
+              <span>2018-02-09 16:46</span>中央社 台北9日電</div>
+            <ul className=\\"only_web\\">
+              <li className=\\"like\\">
+                <div id=\\"fb-root\\"></div>
+                <div className=\\"fb-like facebook-holder fb_iframe_widget\\" data-href=\\"https://udn.com/news/story/7321/2978347\\" data-width=\\"100\\"
+                  data-layout=\\"button_count\\" data-action=\\"like\\" data-show-faces=\\"false\\" data-share=\\"true\\" fb-xfbml-state=\\"rendered\\" fb-iframe-plugin-query=\\"action=like&amp;app_id=350231215126101&amp;container_width=0&amp;href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&amp;layout=button_count&amp;locale=zh_TW&amp;sdk=joey&amp;share=true&amp;show_faces=false&amp;width=100\\">
+                  <span >
+                    <iframe name=\\"f7b2b356d49e9c\\" width=\\"100px\\" height=\\"1000px\\"  allowtransparency=\\"true\\"
+                      scrolling=\\"no\\" allow=\\"encrypted-media\\" title=\\"fb:like Facebook Social Plugin\\" src=\\"https://www.facebook.com/v2.8/plugins/like.php?action=like&amp;app_id=350231215126101&amp;channel=https%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2FFdM1l_dpErI.js%3Fversion%3D42%23cb%3Df16bf477713705%26domain%3Dudn.com%26origin%3Dhttps%253A%252F%252Fudn.com%252Ff1a434c877a6ac%26relation%3Dparent.parent&amp;container_width=0&amp;href=https%3A%2F%2Fudn.com%2Fnews%2Fstory%2F7321%2F2978347&amp;layout=button_count&amp;locale=zh_TW&amp;sdk=joey&amp;share=true&amp;show_faces=false&amp;width=100\\"
+                      className=\\"\\" ></iframe>
+                  </span>
+                </div>
+              </li>
+              <li>
+                <div id=\\"fb-root\\"></div>
+                <div className=\\"fb-send facebook-holder\\" data-href=\\"https://udn.com/news/story/7321/2978347\\"></div>
+              </li>
+            </ul>
+            <p>大同公司今天聲明，近期大同公司或大同
+              <a href=\\"/search/tagging/2/3C\\" rel=\\"112026\\">
+                <strong>3C</strong>
+              </a>並無贈送LINE
+              <a href=\\"/search/tagging/2/貼圖\\" rel=\\"112252\\">
+                <strong>貼圖</strong>
+              </a>或對外募款活動，相關
+              <a href=\\"/search/tagging/2/詐騙\\" rel=\\"109479\\">
+                <strong>詐騙</strong>
+              </a>訊息皆非由大同或其子公司官方發出，建議消費者查證並提高警覺。</p>
+            <p>大同發布聲明指出，近期LINE出現盜用大同公司官方名義與大同寶寶圖像進行假訊息散布，並發送花蓮地震救災捐款訊息，且以優惠活動、贈送貼圖等手段，騙取加入好友、分享貼圖，藉此竊取個資。</p>
+            <div className=\\"only_mobile\\">
+              <div className=\\"inline-ad\\">
+                <div id=\\"div-gpt-ad-1503996040247-0\\" ></div>
+                <span id=\\"innity-in-post\\"></span>
+              </div>
+            </div>
+            <p>針對上述冒用詐騙情事，大同表示，大同3C日前已於其官網張貼警示昭告，大同公司也嚴正聲明，近期大同公司或大同3C並無贈送LINE貼圖或對外募款的活動。</p>
+            <p>大同強調，上述詐騙訊息皆非由大同或其子公司官方發出，消費者若接獲活動訊息，請先至大同公司或大同3C官方平台查詢，包含官方網站、臉書粉絲頁、LINE官方帳號等，或洽大同官方免付費服務專線0800-052-666進一步求證。</p>
+            <p>大同籲請社會大眾對社群媒體資訊提高警覺，並直接將詐騙訊息刪除，切勿點擊或轉發，以保障個人資料安全並避免損失。</p>
+            <p>對於冒用大同公司、大同3C官方名義以及大同寶寶圖像者，大同公司表示必將追究，絕不寬貸。</p>
+            <p></p>
+            <figure className=\\"photo_center photo-story\\" >
+              <a href=\\"https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&amp;x=0&amp;y=0&amp;sw=0&amp;sh=0&amp;sl=W&amp;fw=1050&amp;exp=3600\\"
+                rel=\\"prettyPhoto[pp_gal]\\">
+                <img className=\\" lazyloaded\\" data-src=\\"https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&amp;x=0&amp;y=0&amp;sw=0&amp;sh=0&amp;sl=W&amp;fw=1050&amp;exp=3600\\"
+                  src=\\"https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&amp;x=0&amp;y=0&amp;sw=0&amp;sh=0&amp;sl=W&amp;fw=1050&amp;exp=3600\\"
+                  alt=\\"大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受...\\" title=\\"大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受...\\"></img>
+              </a>
+              <figcaption>大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受騙。圖／擷自大同3C官網。</figcaption>
+              <a href=\\"####\\" className=\\"photo_pop_icon\\">分享</a>
+              <div className=\\"photo_pop\\">
+                <ul>
+                  <li className=\\"facebook\\">
+                    <a title=\\"facebook\\" href=\\"#\\">facebook</a>
+                  </li>
+                </ul>
+              </div>
+            </figure>
+            <p></p>
+            </div>
+          </div>
+        </main>
+      </div>,
+      document.getElementById('root')
+    );
+  </script>
+
+</body></html>",
+    "status": 200,
+    "summary": "2018-02-09 16:46中央社 台北9日電大同公司今天聲明，近期大同公司或大同3C並無贈送LINE貼圖或對外募款活動，相關詐騙訊息皆非由大同或其子公司官方發出，建議消費者查證並提高警覺。大同發布聲明指出，近期LINE出現盜用大同公司官方名義與大同寶寶圖像進行假訊息散布，並發送花蓮地震救災捐款訊息，且以優惠活動、贈送貼圖等手段，騙取加入好友、分享貼圖，藉此竊取個資。針對上述冒用詐騙情事，大同表示，大同3C日前已於其官網張貼警示昭告，大同公司也嚴正聲明，近期大同公司或大同3C並無贈送LINE貼圖或對外募款的活動。大同強調，上述詐騙訊息皆非由大同或其子公司官方發出，消費者若接獲活動訊息，請先至大同公司或大同3C官方平台查詢，包含官方網站、臉書粉絲頁、LINE官方帳號等，或洽大同官方免付費服務專線0800-052-666進一步求證。大同籲請社會大眾對社群媒體資訊提高警覺，並直接將詐騙訊息刪除，切勿點擊或轉發，以保障個人資料安全並避免損失。對於冒用大同公司、大同3C官方名義以及大同寶寶圖像者，大同公司表示必將追究，絕不寬貸。大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受騙。圖／擷自大同3C官網。分享",
+    "title": "Test document",
+    "topImageUrl": "https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&x=0&y=0&sw=0&sh=0&sl=W&fw=1050&exp=3600",
+    "url": "http://localhost:57319/index.html",
+  },
+  Object {
+    "canonical": "http://localhost:57319/not-found",
+    "fetchedAt": "2017-01-28T08:45:57.011Z",
+    "html": "<html><head></head><body><pre style=\\"word-wrap: break-word; white-space: pre-wrap;\\">Not Found</pre></body></html>",
+    "status": 404,
+    "summary": "Not Found",
+    "title": "",
+    "topImageUrl": "",
+    "url": "http://localhost:57319/not-found",
+  },
+]
+`;
+
+exports[`scrapping & storage scraps from Internet and handles error: foundResult 1`] = `
+Object {
+  "canonical": "http://localhost:57319/index.html",
+  "fromUrlsCache": false,
+  "status": 200,
+  "summary": "2018-02-09 16:46中央社 台北9日電大同公司今天聲明，近期大同公司或大同3C並無贈送LINE貼圖或對外募款活動，相關詐騙訊息皆非由大同或其子公司官方發出，建議消費者查證並提高警覺。大同發布聲明指出，近期LINE出現盜用大同公司官方名義與大同寶寶圖像進行假訊息散布，並發送花蓮地震救災捐款訊息，且以優惠活動、贈送貼圖等手段，騙取加入好友、分享貼圖，藉此竊取個資。針對上述冒用詐騙情事，大同表示，大同3C日前已於其官網張貼警示昭告，大同公司也嚴正聲明，近期大同公司或大同3C並無贈送LINE貼圖或對外募款的活動。大同強調，上述詐騙訊息皆非由大同或其子公司官方發出，消費者若接獲活動訊息，請先至大同公司或大同3C官方平台查詢，包含官方網站、臉書粉絲頁、LINE官方帳號等，或洽大同官方免付費服務專線0800-052-666進一步求證。大同籲請社會大眾對社群媒體資訊提高警覺，並直接將詐騙訊息刪除，切勿點擊或轉發，以保障個人資料安全並避免損失。對於冒用大同公司、大同3C官方名義以及大同寶寶圖像者，大同公司表示必將追究，絕不寬貸。大同公司表示，近期LINE出現盜用大同官方帳號進行假訊息散佈，請多加注意，以免受騙。圖／擷自大同3C官網。分享",
+  "title": "Test document",
+  "topImageUrl": "https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2018/02/09/98/4490266.jpg&x=0&y=0&sw=0&sh=0&sl=W&fw=1050&exp=3600",
+  "url": "http://localhost:57319/index.html",
+}
+`;
+
+exports[`scrapping & storage scraps from Internet and handles error: foundResult html 1`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <meta charset=\\"UTF-8\\">
+  <meta name=\\"viewport\\" content=\\"widt"
+`;
+
+exports[`scrapping & storage scraps from Internet and handles error: notFoundResult 1`] = `
+Object {
+  "canonical": "http://localhost:57319/not-found",
+  "fromUrlsCache": false,
+  "html": "<html><head></head><body><pre style=\\"word-wrap: break-word; white-space: pre-wrap;\\">Not Found</pre></body></html>",
+  "status": 404,
+  "summary": "Not Found",
+  "title": "",
+  "topImageUrl": "",
+  "url": "http://localhost:57319/not-found",
+}
+`;

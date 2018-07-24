@@ -126,6 +126,36 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
+  it('filters by moreLikeThis and handles URLs', async () => {
+    // moreLikeThis query
+    // 1, given text, find articles containing hyperlinks with the said text
+    // 2. given URL, find articles with content the said URL's content
+    expect(
+      await gql`
+        query($like: String) {
+          ListArticles(
+            filter: { moreLikeThis: { like: $like, minimumShouldMatch: "5%" } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+        }
+      `({
+        like: `
+          1. text -> ariticles linked to the content
+          居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚！」左右以告。孟嘗君曰：「食之
+          ，比門下之客。」居有頃，復彈其鋏，歌曰：「長鋏歸來乎！出無車！」
+
+          2. URL -> article with given URL's content
+          http://出師表.com
+        `,
+      })
+    ).toMatchSnapshot();
+  });
+
   it('filters by replyRequestCount', async () => {
     // Lists only articles with more than 1 reply requests
     expect(

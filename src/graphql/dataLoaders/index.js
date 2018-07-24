@@ -2,6 +2,7 @@ import docLoaderFactory from './docLoaderFactory';
 import articleRepliesByReplyIdLoaderFactory from './articleRepliesByReplyIdLoaderFactory';
 import articleReplyFeedbacksLoaderFactory from './articleReplyFeedbacksLoaderFactory';
 import searchResultLoaderFactory from './searchResultLoaderFactory';
+import urlLoaderFactory from './urlLoaderFactory';
 import repliedArticleCountLoaderFactory from './repliedArticleCountLoaderFactory';
 import userLevelLoaderFactory from './userLevelLoaderFactory';
 
@@ -30,6 +31,10 @@ export default class DataLoaders {
     );
   }
 
+  get urlLoader() {
+    return this._checkOrSetLoader('urlLoader', urlLoaderFactory);
+  }
+
   get repliedArticleCountLoader() {
     return this._checkOrSetLoader(
       'repliedArticleCountLoader',
@@ -50,7 +55,7 @@ export default class DataLoaders {
   _checkOrSetLoader(name, factoryFn) {
     if (this._loaders[name]) return this._loaders[name];
 
-    this._loaders[name] = factoryFn();
+    this._loaders[name] = factoryFn(this);
     return this._loaders[name];
   }
 }
