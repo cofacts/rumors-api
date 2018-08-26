@@ -1,6 +1,5 @@
-import Koa from 'koa';
-import path from 'path';
-import koaStatic from 'koa-static';
+jest.mock('../gql');
+
 import MockDate from 'mockdate';
 
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
@@ -8,17 +7,10 @@ import fixtures from '../__fixtures__/scrapUrls';
 import scrapUrls from '../scrapUrls';
 import DataLoaders from 'graphql/dataLoaders';
 import client from 'util/client';
-
-const PORT = 57319;
+import gql from '../gql';
 
 describe('scrapping & storage', () => {
   let server;
-  beforeAll(async () =>
-    new Promise(resolve => {
-      const app = new Koa();
-      app.use(koaStatic(path.join(__dirname, '../__fixtures__/server/')));
-      server = app.listen(PORT, resolve);
-    }));
 
   afterAll(async () => {
     await client.deleteByQuery({
@@ -37,18 +29,44 @@ describe('scrapping & storage', () => {
     async () => {
       MockDate.set(1485593157011);
 
-      const [{ html, ...foundResult }, notFoundResult] = await scrapUrls(
+      gql.__addMockResponse({
+        data: {
+          resolvedUrls: [
+            {
+              url: 'http://example.com/index.html',
+              canonical: 'http://example.com/index.html',
+              title: 'Some title',
+              summary: 'Some text as summary',
+              topImageUrl: '',
+              html: '<html><head></head><body>Hello world</body></html>',
+              status: 200,
+            },
+            {
+              url: 'http://example.com/not-found',
+              canonical: 'http://example.com/not-found',
+              title: '',
+              summary: 'Not Found',
+              topImageUrl: '',
+              html: '<html><head></head><body>Not Found</body></html>',
+              status: 404,
+            },
+          ],
+        },
+      });
+
+      const [foundResult, notFoundResult] = await scrapUrls(
         `
-          This should work: http://localhost:${PORT}/index.html
-          This should be not found: http://localhost:${PORT}/not-found
+          This should work: http://example.com/index.html
+          This should be not found: http://example.com/not-found
           This should not match: http://malformedUrl:100000
         `,
         { client }
       );
-
       MockDate.reset();
 
-      expect(html.slice(0, 100)).toMatchSnapshot('foundResult html'); // Too long, just sample first 100 chars
+      expect(gql.__getRequests()).toMatchSnapshot('GraphQL requests');
+      gql.__reset();
+
       expect(foundResult).toMatchSnapshot('foundResult');
       expect(notFoundResult).toMatchSnapshot('notFoundResult');
 
