@@ -48,6 +48,7 @@ This will:
 * rumors-api server on `http://localhost:5000`. It will be re-started when you update anyfile.
 * Kibana on `http://localhost:6222`.
 * ElasticSearch DB on `http://localhost:62222`.
+* [URL resolver](https://github.com/cofacts/url-resolver) on `http://localhost:4000`
 
 To stop the servers, just `ctrl-c` and all docker containers will be stopped.
 

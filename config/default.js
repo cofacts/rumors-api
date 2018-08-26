@@ -21,4 +21,6 @@ module.exports = {
   GITHUB_CLIENT_ID: 'YOUR_GITHUB_CLIENT_ID',
   GITHUB_SECRET: 'YOUR_GITHUB_CLIENT_SECRET',
   GITHUB_CALLBACK_URL: 'http://localhost:5000/callback/github',
+
+  URL_RESOLVER_URL: 'http://localhost:4000',
 };
