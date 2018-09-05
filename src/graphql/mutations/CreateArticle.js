@@ -95,7 +95,7 @@ async function createNewArticle({
  * @param {ScrapResult[]} hyperlinks
  * @return {Promise | null} update result
  */
-function updateArticleHyperlinks(articleId, scrapResults) {
+export function updateArticleHyperlinks(articleId, scrapResults) {
   if (!scrapResults || scrapResults.length === 0) return Promise.resolve(null);
 
   return client.update({
