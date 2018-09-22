@@ -21,6 +21,11 @@ services:
     ports:
       - "6222:5601"
 
+  url-resolver:
+    image: johnsonliang/cofacts-url-resolver
+    ports:
+      - "4000:4000"
+
   api:
     image: node:carbon@sha256:625d0b446f63b2d051c7b2a468f6cee63536dec716f09afcf9ae1c575d9b953a
     container_name: rumors-api
@@ -31,6 +36,6 @@ services:
     volumes:
       - ".:/srv/www"
     environment:
-      NODE_CONFIG: '{"ELASTICSEARCH_URL": "http://db:9200"}'
+      NODE_CONFIG: '{"ELASTICSEARCH_URL": "http://db:9200", "URL_RESOLVER_URL": "http://url-resolver:4000"}'
     ports:
       - "5000:5000"
