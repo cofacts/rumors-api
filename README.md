@@ -152,3 +152,17 @@ $ docker push mrorz/rumors-api:latest
 # Staging
 $ docker push mrorz/rumors-api:staging
 ```
+
+## Other scripts
+
+### Fill in `urls` index and `hyperlinks` field for all articles & replies
+
+First, make sure `config/` is configured so that the correct DB is specified.
+Then at project root, run:
+```
+$ node_modules/.bin/babel-node src/scripts/fillAllHyperlinks.js
+```
+
+This script would scan for all articles & replies to fill in their `hyperlinks` field, also populates
+`urls` index. The `urls` index is used as cache. If an URL already exists in `urls`, it will not trigger
+HTTP request.
