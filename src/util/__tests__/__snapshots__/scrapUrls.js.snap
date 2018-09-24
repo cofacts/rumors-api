@@ -69,6 +69,7 @@ Array [
           topImageUrl
           html
           status
+          error
         }
       }
     ",
