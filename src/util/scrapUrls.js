@@ -4,6 +4,8 @@ import DataLoader from 'dataloader';
 
 import gql from './gql';
 
+const SCRAP_LIMIT = 5; // At most scrap 5 URLs in the same time
+
 /**
  * Extracts urls from a string.
  * Fetches the specified url data from cache or through scrapping.
@@ -57,6 +59,8 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
     })
   ).then(results => {
     // 2nd pass: scrap when needed
+    let scrappingCount = 0;
+
     return Promise.all(
       results.map(async result => {
         if (typeof result !== 'string') {
@@ -65,8 +69,8 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
 
         // result is an URL here
 
-        if (noFetch) return null;
-
+        if (noFetch || scrappingCount >= SCRAP_LIMIT) return null;
+        scrappingCount += 1;
         return scrapLoader.load(result);
       })
     );
