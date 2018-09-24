@@ -33,6 +33,7 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
           topImageUrl
           html
           status
+          error
         }
       }
     `({ urls }).then(({ data }) => data.resolvedUrls)
@@ -84,7 +85,16 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
       return body;
     }
 
-    const { url, canonical, title, summary, topImageUrl, html, status } = r;
+    const {
+      url,
+      canonical,
+      title,
+      summary,
+      topImageUrl,
+      html,
+      status,
+      error,
+    } = r;
 
     return body.concat([
       { index: { _index: 'urls', _type: 'doc' } },
@@ -95,8 +105,9 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
         topImageUrl,
         html,
         url,
-        fetchedAt,
         status,
+        error,
+        fetchedAt,
       },
     ]);
   }, []);

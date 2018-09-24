@@ -72,7 +72,10 @@ async function fillAllHyperlinks() {
       console.error(_id, e);
     }
     if (scrapResults.length) {
-      await updateArticleHyperlinks(_id, scrapResults);
+      await updateArticleHyperlinks(
+        _id,
+        scrapResults.filter(result => !!result) /* filter out errors */
+      );
       // eslint-disable-next-line no-console
       console.log(`  ...${scrapResults.length} URL(s)`);
     }
