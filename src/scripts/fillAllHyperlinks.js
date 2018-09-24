@@ -47,18 +47,17 @@ async function fetchAllDocs(indexName) {
 }
 
 /**
- * This script first updates hyperlinks field for all articles and replies.
+ * This script scans through hyperlinks for all articles.
  *
- * Then for each hyperlink, perform scrapping and update their
+ * For each hyperlink, perform scrapping and update their
  * scraps the result from web, and fill in `hyerplinks` fields and the `urls` index.
  */
-
-async function fillAllHyperlinks() {
+async function fillAllArticleHyperlinks() {
   const articles = await fetchAllDocs('articles');
   let counter = 0;
   for (const { _id, _source } of articles) {
     // eslint-disable-next-line no-console
-    console.log(`[${++counter}/${articles.length}] ${_id}`);
+    console.log(`[${++counter}/${articles.length}] Article ${_id}`);
 
     let scrapResults = [];
 
@@ -82,4 +81,41 @@ async function fillAllHyperlinks() {
   }
 }
 
-fillAllHyperlinks();
+/**
+ * This script scans through hyperlinks for all replies.
+ *
+ * For each hyperlink, perform scrapping and update their
+ * scraps the result from web, and fill in `hyerplinks` fields and the `urls` index.
+ */
+async function fillAllReplyHyperlinks() {
+  const replies = await fetchAllDocs('replies');
+  let counter = 0;
+  for (const { _id, _source } of replies) {
+    // eslint-disable-next-line no-console
+    console.log(`[${++counter}/${replies.length}] Reply ${_id}`);
+
+    let scrapResults = [];
+
+    try {
+      scrapResults = await scrapUrls(`${_source.text} ${_source.reference}`, {
+        cacheLoader: loader.urlLoader,
+        client,
+      });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(_id, e);
+    }
+    if (scrapResults.length) {
+      await updateReplyHyperlinks(
+        _id,
+        scrapResults.filter(result => !!result) /* filter out errors */
+      );
+      // eslint-disable-next-line no-console
+      console.log(`  ...${scrapResults.length} URL(s)`);
+    }
+  }
+}
+
+Promise.resolve()
+  .then(fillAllArticleHyperlinks)
+  .then(fillAllReplyHyperlinks);
