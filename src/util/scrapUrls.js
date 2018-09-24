@@ -4,8 +4,6 @@ import DataLoader from 'dataloader';
 
 import gql from './gql';
 
-const SCRAP_LIMIT = 5; // At most scrap 5 URLs in the same time
-
 /**
  * Extracts urls from a string.
  * Fetches the specified url data from cache or through scrapping.
@@ -18,9 +16,14 @@ const SCRAP_LIMIT = 5; // At most scrap 5 URLs in the same time
  * @param {boolean} options.noFetch - If true, return null when cache does not hit. Default: false.
  * @param {object} options.client - ElasticSearch.js client instance used to write new results to
  *                                  `urls` index. If not given, scrapUrl don't write `urls` cache.
+ * @param {number} options.scrapLimit - Limit the number of the new URLs scrapped from the text.
+ *                                 Cached entries are not counted in limit.
  * @return {Promise<ScrapResult[]>} - If cannot scrap, resolves to null
  */
-async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
+async function scrapUrls(
+  text,
+  { cacheLoader, client, noFetch = false, scrapLimit = 5 } = {}
+) {
   const urls = text.match(urlRegex()) || [];
   if (urls.length === 0) return [];
 
@@ -69,7 +72,7 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
 
         // result is an URL here
 
-        if (noFetch || scrappingCount >= SCRAP_LIMIT) return null;
+        if (noFetch || scrappingCount >= scrapLimit) return null;
         scrappingCount += 1;
         return scrapLoader.load(result);
       })
