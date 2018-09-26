@@ -8,6 +8,7 @@ import scrapUrls from 'util/scrapUrls';
 import DataLoaders from 'graphql/dataLoaders';
 
 const loader = new DataLoaders();
+const DUMP_DATA_LOADER_COUNT = 1000; // Dump data loader avoid heap overflow
 
 /**
  * Fetches all docs in the specified index.
@@ -27,6 +28,10 @@ async function fetchAllDocs(indexName) {
     body: {
       query: {
         match_all: {},
+      },
+      _source: {
+        // Don't query for hyperlinks to save space
+        excludes: ['hyperlinks.*'],
       },
     },
   });
@@ -56,6 +61,11 @@ async function fillAllArticleHyperlinks() {
   const articles = await fetchAllDocs('articles');
   let counter = 0;
   for (const { _id, _source } of articles) {
+    if (counter % DUMP_DATA_LOADER_COUNT === 0) {
+      loader.urlLoader.clearAll();
+      loader.searchResultLoader.clearAll();
+    }
+
     // eslint-disable-next-line no-console
     console.log(`[${++counter}/${articles.length}] Article ${_id}`);
 
@@ -91,6 +101,11 @@ async function fillAllReplyHyperlinks() {
   const replies = await fetchAllDocs('replies');
   let counter = 0;
   for (const { _id, _source } of replies) {
+    if (counter % DUMP_DATA_LOADER_COUNT === 0) {
+      loader.urlLoader.clearAll();
+      loader.searchResultLoader.clearAll();
+    }
+
     // eslint-disable-next-line no-console
     console.log(`[${++counter}/${replies.length}] Reply ${_id}`);
 
