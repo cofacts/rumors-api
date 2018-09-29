@@ -16,9 +16,14 @@ import gql from './gql';
  * @param {boolean} options.noFetch - If true, return null when cache does not hit. Default: false.
  * @param {object} options.client - ElasticSearch.js client instance used to write new results to
  *                                  `urls` index. If not given, scrapUrl don't write `urls` cache.
+ * @param {number} options.scrapLimit - Limit the number of the new URLs scrapped from the text.
+ *                                 Cached entries are not counted in limit.
  * @return {Promise<ScrapResult[]>} - If cannot scrap, resolves to null
  */
-async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
+async function scrapUrls(
+  text,
+  { cacheLoader, client, noFetch = false, scrapLimit = 5 } = {}
+) {
   const urls = text.match(urlRegex()) || [];
   if (urls.length === 0) return [];
 
@@ -33,6 +38,7 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
           topImageUrl
           html
           status
+          error
         }
       }
     `({ urls }).then(({ data }) => data.resolvedUrls)
@@ -56,6 +62,8 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
     })
   ).then(results => {
     // 2nd pass: scrap when needed
+    let scrappingCount = 0;
+
     return Promise.all(
       results.map(async result => {
         if (typeof result !== 'string') {
@@ -64,8 +72,8 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
 
         // result is an URL here
 
-        if (noFetch) return null;
-
+        if (noFetch || scrappingCount >= scrapLimit) return null;
+        scrappingCount += 1;
         return scrapLoader.load(result);
       })
     );
@@ -84,7 +92,16 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
       return body;
     }
 
-    const { url, canonical, title, summary, topImageUrl, html, status } = r;
+    const {
+      url,
+      canonical,
+      title,
+      summary,
+      topImageUrl,
+      html,
+      status,
+      error,
+    } = r;
 
     return body.concat([
       { index: { _index: 'urls', _type: 'doc' } },
@@ -95,8 +112,9 @@ async function scrapUrls(text, { cacheLoader, client, noFetch = false } = {}) {
         topImageUrl,
         html,
         url,
-        fetchedAt,
         status,
+        error,
+        fetchedAt,
       },
     ]);
   }, []);

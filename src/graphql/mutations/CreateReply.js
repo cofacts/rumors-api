@@ -14,7 +14,7 @@ import { createArticleReply } from './CreateArticleReply';
  * @param {ScrapResult[]} hyperlinks
  * @return {Promise | null} update result
  */
-function updateReplyHyperlinks(replyId, scrapResults) {
+export function updateReplyHyperlinks(replyId, scrapResults) {
   if (!scrapResults || scrapResults.length === 0) return Promise.resolve();
 
   return client.update({
