@@ -111,7 +111,8 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     });
 
     expect(
-      await client.get({ index: 'articlereplyfeedbacks', type: 'doc', id })
+      (await client.get({ index: 'articlereplyfeedbacks', type: 'doc', id }))
+        ._source
     ).toMatchSnapshot();
 
     // Cleanup
