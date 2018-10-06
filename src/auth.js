@@ -1,5 +1,4 @@
 import passport from 'koa-passport';
-import config from 'config';
 import client, { processMeta } from 'util/client';
 import FacebookStrategy from 'passport-facebook';
 import TwitterStrategy from 'passport-twitter';
@@ -123,9 +122,9 @@ async function verifyProfile(profile, fieldName) {
 passport.use(
   new FacebookStrategy(
     {
-      clientID: config.get('FACEBOOK_APP_ID'),
-      clientSecret: config.get('FACEBOOK_SECRET'),
-      callbackURL: config.get('FACEBOOK_CALLBACK_URL'),
+      clientID: process.env.FACEBOOK_APP_ID,
+      clientSecret: process.env.FACEBOOK_SECRET,
+      callbackURL: process.env.FACEBOOK_CALLBACK_URL,
       profileFields: ['id', 'displayName', 'photos', 'email'],
     },
     (token, tokenSecret, profile, done) =>
@@ -138,9 +137,9 @@ passport.use(
 passport.use(
   new TwitterStrategy(
     {
-      consumerKey: config.get('TWITTER_CONSUMER_KEY'),
-      consumerSecret: config.get('TWITTER_CONSUMER_SECRET'),
-      callbackURL: config.get('TWITTER_CALLBACK_URL'),
+      consumerKey: process.env.TWITTER_CONSUMER_KEY,
+      consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+      callbackURL: process.env.TWITTER_CALLBACK_URL,
 
       // https://github.com/jaredhanson/passport-twitter/issues/67#issuecomment-275288663
       userProfileURL:
@@ -156,9 +155,9 @@ passport.use(
 passport.use(
   new GithubStrategy(
     {
-      clientID: config.get('GITHUB_CLIENT_ID'),
-      clientSecret: config.get('GITHUB_SECRET'),
-      callbackURL: config.get('GITHUB_CALLBACK_URL'),
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+      callbackURL: process.env.GITHUB_CALLBACK_URL,
     },
     (token, tokenSecret, profile, done) =>
       verifyProfile(profile, 'githubId')
@@ -218,7 +217,7 @@ export const authRouter = Router()
 
     let basePath = '';
     if (ctx.session.appId === 'RUMORS_SITE') {
-      basePath = config.get('RUMORS_SITE_CORS_ORIGIN');
+      basePath = process.env.RUMORS_SITE_CORS_ORIGIN;
     }
 
     // TODO: Get basePath from DB for other client apps

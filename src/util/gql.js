@@ -1,9 +1,8 @@
 import fetch from 'node-fetch';
 import rollbar from '../rollbarInstance';
 import url from 'url';
-import config from 'config';
 
-const API_URL = config.get('URL_RESOLVER_URL') || 'http://localhost:4000/';
+const API_URL = process.env.URL_RESOLVER_URL || 'http://localhost:4000/';
 
 // Usage:
 //

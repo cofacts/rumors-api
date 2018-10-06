@@ -1,9 +1,8 @@
-import config from 'config';
 import elasticsearch from 'elasticsearch';
 
 export default new elasticsearch.Client({
-  host: config.get('ELASTICSEARCH_URL'),
-  log: config.get('ELASTIC_LOG_LEVEL'),
+  host: process.env.ELASTICSEARCH_URL,
+  log: process.env.ELASTIC_LOG_LEVEL,
 });
 
 // Processes {_id, _version, found, _source: {...}} to

@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 expect.extend({
   toBeNaN(received) {
     const pass = isNaN(received);
