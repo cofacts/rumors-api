@@ -39,7 +39,7 @@ app.use(
   })
 );
 
-app.keys = process.env.COOKIE_SECRETS.split(',');
+app.keys = (process.env.COOKIE_SECRETS || '').split(',');
 
 app.use(
   session({
