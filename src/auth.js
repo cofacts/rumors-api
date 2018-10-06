@@ -119,52 +119,58 @@ async function verifyProfile(profile, fieldName) {
   throw new Error(createUserResult.result);
 }
 
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: process.env.FACEBOOK_APP_ID,
-      clientSecret: process.env.FACEBOOK_SECRET,
-      callbackURL: process.env.FACEBOOK_CALLBACK_URL,
-      profileFields: ['id', 'displayName', 'photos', 'email'],
-    },
-    (token, tokenSecret, profile, done) =>
-      verifyProfile(profile, 'facebookId')
-        .then(user => done(null, user))
-        .catch(done)
-  )
-);
+if (process.env.FACEBOOK_APP_ID) {
+  passport.use(
+    new FacebookStrategy(
+      {
+        clientID: process.env.FACEBOOK_APP_ID,
+        clientSecret: process.env.FACEBOOK_SECRET,
+        callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+        profileFields: ['id', 'displayName', 'photos', 'email'],
+      },
+      (token, tokenSecret, profile, done) =>
+        verifyProfile(profile, 'facebookId')
+          .then(user => done(null, user))
+          .catch(done)
+    )
+  );
+}
 
-passport.use(
-  new TwitterStrategy(
-    {
-      consumerKey: process.env.TWITTER_CONSUMER_KEY,
-      consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-      callbackURL: process.env.TWITTER_CALLBACK_URL,
+if (process.env.TWITTER_CONSUMER_KEY) {
+  passport.use(
+    new TwitterStrategy(
+      {
+        consumerKey: process.env.TWITTER_CONSUMER_KEY,
+        consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+        callbackURL: process.env.TWITTER_CALLBACK_URL,
 
-      // https://github.com/jaredhanson/passport-twitter/issues/67#issuecomment-275288663
-      userProfileURL:
-        'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
-    },
-    (token, tokenSecret, profile, done) =>
-      verifyProfile(profile, 'twitterId')
-        .then(user => done(null, user))
-        .catch(done)
-  )
-);
+        // https://github.com/jaredhanson/passport-twitter/issues/67#issuecomment-275288663
+        userProfileURL:
+          'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
+      },
+      (token, tokenSecret, profile, done) =>
+        verifyProfile(profile, 'twitterId')
+          .then(user => done(null, user))
+          .catch(done)
+    )
+  );
+}
 
-passport.use(
-  new GithubStrategy(
-    {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL,
-    },
-    (token, tokenSecret, profile, done) =>
-      verifyProfile(profile, 'githubId')
-        .then(user => done(null, user))
-        .catch(done)
-  )
-);
+if (process.env.GITHUB_CLIENT_ID) {
+  passport.use(
+    new GithubStrategy(
+      {
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_SECRET,
+        callbackURL: process.env.GITHUB_CALLBACK_URL,
+      },
+      (token, tokenSecret, profile, done) =>
+        verifyProfile(profile, 'githubId')
+          .then(user => done(null, user))
+          .catch(done)
+    )
+  );
+}
 
 // Exports route handlers
 //
