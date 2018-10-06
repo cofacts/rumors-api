@@ -1,9 +1,8 @@
-import config from 'config';
 import cors from 'kcors';
 
 async function checkSecret(ctx, next) {
-  const secret = ctx.get(config.get('HTTP_HEADER_APP_SECRET'));
-  if (secret === config.get('RUMORS_LINE_BOT_SECRET')) {
+  const secret = ctx.get(process.env.HTTP_HEADER_APP_SECRET);
+  if (secret === process.env.RUMORS_LINE_BOT_SECRET) {
     // Shortcut for official rumors-line-bot -- no DB queries
     ctx.appId = 'RUMORS_LINE_BOT';
 
@@ -18,7 +17,7 @@ async function checkSecret(ctx, next) {
 }
 
 async function checkAppId(ctx, next) {
-  const appId = ctx.get(config.get('HTTP_HEADER_APP_ID'));
+  const appId = ctx.get(process.env.HTTP_HEADER_APP_ID);
   let origin;
 
   if (ctx.method === 'OPTIONS') {
@@ -26,7 +25,7 @@ async function checkAppId(ctx, next) {
     origin = ctx.get('Origin');
   } else if (appId === 'RUMORS_SITE') {
     // Shortcut for official rumors-site -- no DB queries
-    origin = config.get('RUMORS_SITE_CORS_ORIGIN');
+    origin = process.env.RUMORS_SITE_CORS_ORIGIN;
     ctx.appId = 'WEBSITE';
 
     // else if(appId) { ...
@@ -52,7 +51,7 @@ async function checkAppId(ctx, next) {
 }
 
 export default () => (ctx, next) => {
-  if (ctx.get(config.get('HTTP_HEADER_APP_SECRET'))) {
+  if (ctx.get(process.env.HTTP_HEADER_APP_SECRET)) {
     return checkSecret(ctx, next);
   }
 

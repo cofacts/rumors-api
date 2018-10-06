@@ -21,20 +21,7 @@ $ cd rumors-api
 $ npm i
 ```
 
-If you want to test OAuth2 authentication, you will need to create `config/local-development.js` (already in `.gitignore`) with the following content:
-
-```
-module.exports = {
-  FACEBOOK_APP_ID: '⋯⋯',
-  FACEBOOK_SECRET: '⋯⋯',
-  TWITTER_CONSUMER_KEY: '⋯⋯',
-  TWITTER_CONSUMER_SECRET: '⋯⋯',
-  GITHUB_CLIENT_ID: '⋯⋯',
-  GITHUB_SECRET: '⋯⋯',
-};
-```
-
-Please apply for the keys in Facebook, Twitter and Github respectively.
+If you want to test OAuth2 authentication, you will need to fill in login credentials in `.env`. Please apply for the keys in Facebook, Twitter and Github respectively.
 
 ### Start development servers
 

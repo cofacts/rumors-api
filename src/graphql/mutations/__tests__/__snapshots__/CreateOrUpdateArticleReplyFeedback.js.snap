@@ -45,19 +45,12 @@ Object {
 
 exports[`CreateOrUpdateArticleReplyFeedback updates existing feedback 2`] = `
 Object {
-  "_id": "article1__reply1__testUser__testClient",
-  "_index": "articlereplyfeedbacks_v1_0_1",
-  "_source": Object {
-    "appId": "testClient",
-    "articleId": "article1",
-    "createdAt": "2017-01-01T00:00:00.000Z",
-    "replyId": "reply1",
-    "score": -1,
-    "updatedAt": "2017-01-28T08:45:57.011Z",
-    "userId": "testUser",
-  },
-  "_type": "doc",
-  "_version": 2,
-  "found": true,
+  "appId": "testClient",
+  "articleId": "article1",
+  "createdAt": "2017-01-01T00:00:00.000Z",
+  "replyId": "reply1",
+  "score": -1,
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "testUser",
 }
 `;

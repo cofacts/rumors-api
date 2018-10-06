@@ -1,6 +1,6 @@
+import 'dotenv/config';
 import Koa from 'koa';
 import Router from 'koa-router';
-import config from 'config';
 import path from 'path';
 import pug from 'pug';
 import { printSchema } from 'graphql/utilities';
@@ -39,13 +39,13 @@ app.use(
   })
 );
 
-app.keys = config.get('COOKIE_SECRETS');
+app.keys = (process.env.COOKIE_SECRETS || '').split(',');
 
 app.use(
   session({
     store: new CookieStore({ password: app.keys[0] }),
     signed: true,
-    maxAge: config.get('COOKIE_MAXAGE'),
+    maxAge: process.env.COOKIE_MAXAGE,
   })
 );
 app.use(passport.initialize());
@@ -99,6 +99,6 @@ router.get('/', ctx => {
 app.use(koaStatic(path.join(__dirname, '../static/')));
 app.use(router.routes(), router.allowedMethods());
 
-app.listen(config.get('PORT'), () => {
-  console.log('Listening port', config.get('PORT')); // eslint-disable-line no-console
+app.listen(process.env.PORT, () => {
+  console.log('Listening port', process.env.PORT); // eslint-disable-line no-console
 });
