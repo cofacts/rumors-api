@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import 'util/catchUnhandledRejection';
 
 import client from 'util/client';
