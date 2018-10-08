@@ -4,6 +4,11 @@
 
 GraphQL API server for clients like rumors-site and rumors-line-bot
 
+## Configuration
+
+For development, copy `.env.sample` to `.env` and make necessary changes.
+
+For production via [rumors-deploy](http://github.com/cofacts/rumors-deploy), do setups in `docker-compose.yml`.
 
 ## Development
 
@@ -125,7 +130,7 @@ $ npm run build:staging
 ```
 
 Run the docker image on local machine, then visit `http://localhost:5000`.
-(To test functions involving DB, ElasticSearch DB must work as `config/default.js` specified.)
+(To test functions involving DB, ElasticSearch DB must work as `.env` specified.)
 
 ```
 $ docker run --rm -it -p 5000:5000 mrorz/rumors-api
@@ -144,7 +149,7 @@ $ docker push mrorz/rumors-api:staging
 
 ### Fill in `urls` index and `hyperlinks` field for all articles & replies
 
-First, make sure `config/` is configured so that the correct DB is specified.
+First, make sure `.env` is configured so that the correct DB is specified.
 Then at project root, run:
 ```
 $ node_modules/.bin/babel-node src/scripts/fillAllHyperlinks.js
