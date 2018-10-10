@@ -17,6 +17,7 @@ const Hyperlink = new GraphQLObjectType({
     topImageUrl: { type: GraphQLString, resolve: resolveUrl('topImageUrl') },
     fetchedAt: { type: GraphQLString, resolve: resolveUrl('fetchedAt') },
     status: { type: GraphQLString, resolve: resolveUrl('status') },
+    error: { type: GraphQLString, resolve: resolveUrl('error') },
   },
 });
 
