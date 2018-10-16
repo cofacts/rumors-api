@@ -56,11 +56,18 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "hyperlinks": Array [
+              Object {
+                "summary": "居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚。」左右以告。孟嘗君曰：「食之，比門下之客。」",
+                "topImageUrl": "http://gohome.com/image.jpg",
+              },
+            ],
             "id": "listArticleTest4",
           },
         },
         Object {
           "node": Object {
+            "hyperlinks": null,
             "id": "listArticleTest2",
           },
         },

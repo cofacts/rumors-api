@@ -139,6 +139,10 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                hyperlinks {
+                  summary
+                  topImageUrl
+                }
               }
             }
           }
