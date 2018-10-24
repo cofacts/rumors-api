@@ -106,7 +106,7 @@ async function verifyProfile(profile, fieldName) {
     },
   });
 
-  if (createUserResult.created) {
+  if (createUserResult.result === 'created') {
     return processMeta(
       await client.get({
         index: 'users',
