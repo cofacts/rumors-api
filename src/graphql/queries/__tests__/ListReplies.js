@@ -116,6 +116,47 @@ describe('ListReplies', () => {
     ).toMatchSnapshot();
   });
 
+  it('filters by moreLikeThis and given text, find replies containing hyperlinks with the said text', async () => {
+    expect(
+      await gql`
+        {
+          ListReplies(
+            filter: { moreLikeThis: { like: "「長鋏歸來乎！食無魚。」" } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
+  it("filters by moreLikeThis and given text, find replies with the said URL's content", async () => {
+    expect(
+      await gql`
+        {
+          ListReplies(
+            filter: {
+              moreLikeThis: {
+                like: "請看 http://foo.com"
+                minimumShouldMatch: "5%"
+              }
+            }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
   it('supports after', async () => {
     expect(
       await gql`

@@ -1,4 +1,5 @@
 import { GraphQLString, GraphQLInputObjectType, GraphQLBoolean } from 'graphql';
+import client from 'util/client';
 
 import {
   createFilterType,
@@ -7,6 +8,7 @@ import {
   getSortArgs,
   pagingArgs,
 } from 'graphql/util';
+import scrapUrls from 'util/scrapUrls';
 
 import Reply from 'graphql/models/Reply';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
@@ -42,41 +44,60 @@ export default {
   async resolve(
     rootValue,
     { filter = {}, orderBy = [], ...otherParams },
-    { userId, appId }
+    { userId, appId, loaders }
   ) {
     const body = {
       sort: getSortArgs(orderBy),
       track_scores: true, // for _score sorting
-      query: {
-        bool: {
-          filter: [],
-        },
-      },
     };
 
+    // Collecting queries that will be used in bool queries later
+    const shouldQueries = []; // Affects scores
+    const filterQueries = []; // Not affects scores
+
     if (filter.moreLikeThis) {
-      body.query.bool.must = {
-        // Ref: http://stackoverflow.com/a/8831494/1582110
-        //
-        more_like_this: {
-          fields: ['text', 'reference'],
-          like: filter.moreLikeThis.like,
-          min_term_freq: 1,
-          min_doc_freq: 1,
-          minimum_should_match:
-            filter.moreLikeThis.minimumShouldMatch || '10<70%',
+      const scrapResults = await scrapUrls(filter.moreLikeThis.like, {
+        client,
+        cacheLoader: loaders.urlLoader,
+      });
+
+      const likeQuery = [
+        filter.moreLikeThis.like,
+        ...scrapResults.map(({ title, summary }) => `${title} ${summary}`),
+      ];
+
+      shouldQueries.push(
+        {
+          more_like_this: {
+            fields: ['text', 'reference'],
+            like: likeQuery,
+            min_term_freq: 1,
+            min_doc_freq: 1,
+            minimum_should_match:
+              filter.moreLikeThis.minimumShouldMatch || '10<70%',
+          },
         },
-      };
-    } else {
-      body.query.bool.must = {
-        // Ref: http://stackoverflow.com/a/8831494/1582110
-        //
-        match_all: {},
-      };
+        {
+          nested: {
+            path: 'hyperlinks',
+            score_mode: 'sum',
+            query: {
+              more_like_this: {
+                fields: ['hyperlinks.title', 'hyperlinks.summary'],
+                like: likeQuery,
+                min_term_freq: 1,
+                min_doc_freq: 1,
+                minimum_should_match:
+                  filter.moreLikeThis.minimumShouldMatch || '10<70%',
+              },
+            },
+          },
+        }
+      );
     }
 
     if (filter.type) {
-      body.query.bool.filter.push({
+      filterQueries.push({
         term: {
           type: filter.type,
         },
@@ -85,8 +106,16 @@ export default {
 
     if (filter.selfOnly) {
       if (!userId) throw new Error('selfOnly can be set only after log in');
-      body.query.bool.filter.push({ term: { userId } }, { term: { appId } });
+      filterQueries.push({ term: { userId } }, { term: { appId } });
     }
+
+    body.query = {
+      bool: {
+        should:
+          shouldQueries.length === 0 ? [{ match_all: {} }] : shouldQueries,
+        filter: filterQueries,
+      },
+    };
 
     // should return search context for resolveEdges & resolvePageInfo
     return {
