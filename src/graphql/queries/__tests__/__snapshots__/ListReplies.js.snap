@@ -68,6 +68,28 @@ Object {
 }
 `;
 
+exports[`ListReplies filters by mixed query 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "moreLikeThis2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "moreLikeThis1",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
 exports[`ListReplies filters by moreLikeThis and given text, find replies containing hyperlinks with the said text 1`] = `
 Object {
   "data": Object {
