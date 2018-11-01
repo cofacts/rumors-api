@@ -49,7 +49,7 @@ Object {
 }
 `;
 
-exports[`ListArticles filters by moreLikeThis and given URL, find articles with content the said URL's content 1`] = `
+exports[`ListArticles filters by moreLikeThis and given URL, find articles with the said URL's content 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {

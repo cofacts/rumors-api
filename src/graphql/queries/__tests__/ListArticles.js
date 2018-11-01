@@ -98,7 +98,6 @@ describe('ListArticles', () => {
   it('filters by null operator', () => testReplyCount(''));
 
   it('filters by moreLikeThis', async () => {
-    // moreLikeThis query
     expect(
       await gql`
         {
@@ -127,9 +126,6 @@ describe('ListArticles', () => {
   });
 
   it('filters by moreLikeThis and given text, find articles containing hyperlinks with the said text', async () => {
-    // moreLikeThis query
-    // 1,
-    // 2.
     expect(
       await gql`
         query($like: String) {
@@ -157,10 +153,7 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
-  it("filters by moreLikeThis and given URL, find articles with content the said URL's content", async () => {
-    // moreLikeThis query
-    // 1, given text, find articles containing hyperlinks with the said text
-    // 2. given URL, find articles with content the said URL's content
+  it("filters by moreLikeThis and given URL, find articles with the said URL's content", async () => {
     expect(
       await gql`
         query($like: String) {
