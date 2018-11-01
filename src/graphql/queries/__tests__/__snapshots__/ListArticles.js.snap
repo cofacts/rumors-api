@@ -49,7 +49,24 @@ Object {
 }
 `;
 
-exports[`ListArticles filters by moreLikeThis and handles URLs 1`] = `
+exports[`ListArticles filters by moreLikeThis and given URL, find articles with content the said URL's content 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "hyperlinks": null,
+            "id": "listArticleTest2",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by moreLikeThis and given text, find articles containing hyperlinks with the said text 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
@@ -63,12 +80,6 @@ Object {
               },
             ],
             "id": "listArticleTest4",
-          },
-        },
-        Object {
-          "node": Object {
-            "hyperlinks": null,
-            "id": "listArticleTest2",
           },
         },
       ],
