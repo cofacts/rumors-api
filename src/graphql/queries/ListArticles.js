@@ -139,19 +139,18 @@ export default {
         ...scrapResults.map(({ title, summary }) => `${title} ${summary}`),
       ];
 
-      shouldQueries.push({
-        more_like_this: {
-          fields: ['text'],
-          like: likeQuery,
-          min_term_freq: 1,
-          min_doc_freq: 1,
-          minimum_should_match:
-            filter.moreLikeThis.minimumShouldMatch || '10<70%',
+      shouldQueries.push(
+        {
+          more_like_this: {
+            fields: ['text'],
+            like: likeQuery,
+            min_term_freq: 1,
+            min_doc_freq: 1,
+            minimum_should_match:
+              filter.moreLikeThis.minimumShouldMatch || '10<70%',
+          },
         },
-      });
-
-      if (scrapResults.length > 0) {
-        shouldQueries.push({
+        {
           nested: {
             path: 'hyperlinks',
             score_mode: 'sum',
@@ -166,8 +165,8 @@ export default {
               },
             },
           },
-        });
-      }
+        }
+      );
     }
 
     if (filter.replyCount) {

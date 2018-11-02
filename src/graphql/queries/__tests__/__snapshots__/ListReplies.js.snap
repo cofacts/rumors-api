@@ -68,6 +68,43 @@ Object {
 }
 `;
 
+exports[`ListReplies filters by moreLikeThis and given text, find replies containing hyperlinks with the said text 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "referenceUrl",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListReplies filters by moreLikeThis and given text, find replies with the said URL's content 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "userFoo",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "rumor",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`ListReplies handles selfOnly filter properly if not logged in 1`] = `
 Object {
   "data": Object {
@@ -97,6 +134,12 @@ Object {
           },
         },
         Object {
+          "cursor": "WyJyZWZlcmVuY2VVcmwiXQ==",
+          "node": Object {
+            "id": "referenceUrl",
+          },
+        },
+        Object {
           "cursor": "WyJtb3JlTGlrZVRoaXMyIl0=",
           "node": Object {
             "id": "moreLikeThis2",
@@ -113,7 +156,7 @@ Object {
         "firstCursor": "WyJ1c2VyRm9vIl0=",
         "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
       },
-      "totalCount": 4,
+      "totalCount": 5,
     },
   },
 }
@@ -144,12 +187,17 @@ Object {
             "id": "rumor",
           },
         },
+        Object {
+          "node": Object {
+            "id": "referenceUrl",
+          },
+        },
       ],
       "pageInfo": Object {
         "firstCursor": "WzQsInVzZXJGb28iXQ==",
-        "lastCursor": "WzEsInJ1bW9yIl0=",
+        "lastCursor": "WzEsInJlZmVyZW5jZVVybCJd",
       },
-      "totalCount": 4,
+      "totalCount": 5,
     },
   },
 }
@@ -170,7 +218,7 @@ Object {
         "firstCursor": "WyJ1c2VyRm9vIl0=",
         "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
       },
-      "totalCount": 4,
+      "totalCount": 5,
     },
   },
 }
@@ -193,6 +241,11 @@ Object {
         },
         Object {
           "node": Object {
+            "id": "referenceUrl",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "moreLikeThis2",
           },
         },
@@ -201,7 +254,7 @@ Object {
         "firstCursor": "WyJ1c2VyRm9vIl0=",
         "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
       },
-      "totalCount": 4,
+      "totalCount": 5,
     },
   },
 }
