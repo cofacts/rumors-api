@@ -23,6 +23,23 @@ Object {
 }
 `;
 
+exports[`ListArticles filters by mixed query 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
 exports[`ListArticles filters by moreLikeThis 1`] = `
 Object {
   "data": Object {

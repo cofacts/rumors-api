@@ -232,6 +232,32 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
+  it('filters by mixed query', async () => {
+    // Mixes 'should' and 'filter' query. At least 1 'should' must match.
+    // Therefore, this query should only match 1 result instead of all that satisfies replyRequestCount: { GT: 0 }
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: {
+              moreLikeThis: {
+                like: "憶昔封書與君夜，金鑾殿後欲明天。今夜封書在何處？廬山庵裏曉燈前。籠鳥檻猿俱未死，人間相見是何年？"
+              }
+              replyRequestCount: { GT: 0 }
+            }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
   it('throws error when author filter is not set correctly', async () => {
     const { errors: noUserIdError } = await gql`
       {

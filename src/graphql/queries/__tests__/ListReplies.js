@@ -157,6 +157,28 @@ describe('ListReplies', () => {
     ).toMatchSnapshot();
   });
 
+  it('filters by mixed query', async () => {
+    // Mixes 'should' and 'filter' query. At least 1 'should' must match.
+    // Therefore, this query should only match 2 results instead of all that satisfies type = NOT_ARTICLE
+
+    expect(
+      await gql`
+        {
+          ListReplies(
+            filter: { type: NOT_ARTICLE, moreLikeThis: { like: "foo" } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
   it('supports after', async () => {
     expect(
       await gql`
