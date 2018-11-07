@@ -167,6 +167,30 @@ export default {
           },
         }
       );
+
+      // Additionally, match the scrapped URLs with other article's scrapped urls
+      //
+      const urls = scrapResults.reduce((urls, result) => {
+        if (!result) return urls;
+
+        if (result.url) urls.push(result.url);
+        if (result.canonical) urls.push(result.canonical);
+        return urls;
+      }, []);
+
+      if (urls.length > 0) {
+        shouldQueries.push({
+          nested: {
+            path: 'hyperlinks',
+            score_mode: 'sum',
+            query: {
+              terms: {
+                'hyperlinks.url': urls,
+              },
+            },
+          },
+        });
+      }
     }
 
     if (filter.replyCount) {
