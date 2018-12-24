@@ -4,7 +4,7 @@ import Router from 'koa-router';
 import path from 'path';
 import pug from 'pug';
 import { printSchema } from 'graphql/utilities';
-import { graphqlKoa, graphiqlKoa } from 'apollo-server-koa';
+import { ApolloServer } from 'apollo-server-koa';
 import koaStatic from 'koa-static';
 import koaBody from 'koa-bodyparser';
 import session from 'koa-session2';
@@ -61,34 +61,7 @@ router.post('/logout', checkHeaders(), ctx => {
 });
 
 router.options('/graphql', checkHeaders());
-router.post(
-  '/graphql',
-  checkHeaders(),
-  graphqlKoa(ctx => ({
-    schema,
-    context: {
-      loaders: new DataLoaders(), // new loaders per request
-      user: ctx.state.user,
-
-      // userId-appId pair
-      //
-      userId:
-        ctx.appId === 'WEBSITE' || ctx.appId === 'DEVELOPMENT_FRONTEND'
-          ? (ctx.state.user || {}).id
-          : ctx.query.userId,
-      appId: ctx.appId,
-    },
-    formatError(err) {
-      // make web clients know they should login
-      //
-      const formattedError = formatError(err);
-      formattedError.authError = err.message === AUTH_ERROR_MSG;
-      return formattedError;
-    },
-  }))
-);
-
-router.get('/graphql', graphiqlKoa({ endpointURL: '/graphql' }));
+router.post('/graphql', checkHeaders());
 
 const indexFn = pug.compileFile(path.join(__dirname, 'jade/index.jade'));
 const schemaStr = printSchema(schema);
@@ -98,6 +71,32 @@ router.get('/', ctx => {
 
 app.use(koaStatic(path.join(__dirname, '../static/')));
 app.use(router.routes(), router.allowedMethods());
+
+const apolloServer = new ApolloServer({
+  schema,
+  introspection: true, // Allow introspection in production as well
+  context: ({ ctx }) => ({
+    loaders: new DataLoaders(), // new loaders per request
+    user: ctx.state.user,
+
+    // userId-appId pair
+    //
+    userId:
+      ctx.appId === 'WEBSITE' || ctx.appId === 'DEVELOPMENT_FRONTEND'
+        ? (ctx.state.user || {}).id
+        : ctx.query.userId,
+    appId: ctx.appId,
+  }),
+  formatError(err) {
+    // make web clients know they should login
+    //
+    const formattedError = formatError(err);
+    formattedError.authError = err.message === AUTH_ERROR_MSG;
+    return formattedError;
+  },
+});
+
+apolloServer.applyMiddleware({ app });
 
 app.listen(process.env.PORT, () => {
   console.log('Listening port', process.env.PORT); // eslint-disable-line no-console
