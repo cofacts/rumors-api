@@ -75,6 +75,7 @@ app.use(router.routes(), router.allowedMethods());
 const apolloServer = new ApolloServer({
   schema,
   introspection: true, // Allow introspection in production as well
+  playground: true,
   context: ({ ctx }) => ({
     loaders: new DataLoaders(), // new loaders per request
     user: ctx.state.user,
