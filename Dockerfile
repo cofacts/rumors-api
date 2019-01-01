@@ -1,5 +1,5 @@
 # Builds production image for rumors-api.
-# Environments not included, should be composed in https://github.com/MrOrz/rumors-deploy.
+# Environments not included, should be composed in https://github.com/cofacts/rumors-deploy.
 #
 FROM node:carbon@sha256:625d0b446f63b2d051c7b2a468f6cee63536dec716f09afcf9ae1c575d9b953a
 WORKDIR /srv/www
