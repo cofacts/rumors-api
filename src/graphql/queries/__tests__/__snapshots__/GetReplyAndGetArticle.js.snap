@@ -24,6 +24,13 @@ Object {
           "positiveFeedbackCount": 1,
         },
         Object {
+          "createdAt": "2015-01-01T12:10:32Z",
+          "feedbackCount": 0,
+          "feedbacks": Array [],
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 0,
+        },
+        Object {
           "createdAt": "2015-01-01T12:10:31Z",
           "feedbackCount": 0,
           "feedbacks": Array [],

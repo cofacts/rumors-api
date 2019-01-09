@@ -50,6 +50,8 @@ const Article = new GraphQLObjectType({
         },
       },
       resolve: async ({ id, articleReplies = [] }, { status }) => {
+        // Sort by usefulness (= positive - negative feedbacks)
+        // then use latest first
         const sortedArticleReplies = filterArticleRepliesByStatus(
           // Inject articleId to each articleReply
           articleReplies.map(articleReply => {
@@ -57,12 +59,16 @@ const Article = new GraphQLObjectType({
             return articleReply;
           }),
           status
-        ).sort(
-          (a, b) =>
+        ).sort((a, b) => {
+          const usefulnessDiff =
             b.positiveFeedbackCount -
             b.negativeFeedbackCount -
-            (a.positiveFeedbackCount - a.negativeFeedbackCount)
-        );
+            (a.positiveFeedbackCount - a.negativeFeedbackCount);
+
+          if (usefulnessDiff !== 0) return usefulnessDiff;
+
+          return +new Date(b.createdAt) - +new Date(a.createdAt);
+        });
 
         if (articleReplies.length === 0) return [];
 
