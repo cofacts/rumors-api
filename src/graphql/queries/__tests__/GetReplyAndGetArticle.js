@@ -156,6 +156,7 @@ describe('GetReplyAndGetArticle', () => {
                 positiveFeedbackCount
                 negativeFeedbackCount
                 feedbackCount
+                createdAt
               }
             }
           }

@@ -40,6 +40,8 @@ const Article = new GraphQLObjectType({
     },
     articleReplies: {
       type: new GraphQLList(ArticleReply),
+      description:
+        'Connections between this article and replies. Sorted by the logic described in https://github.com/cofacts/rumors-line-bot/issues/78.',
       args: {
         status: {
           type: ArticleReplyStatusEnum,
@@ -47,15 +49,36 @@ const Article = new GraphQLObjectType({
             'When specified, returns only article replies with the specified status',
         },
       },
-      resolve: async ({ id, articleReplies = [] }, { status }) =>
-        filterArticleRepliesByStatus(
+      resolve: async ({ id, articleReplies = [] }, { status }) => {
+        const sortedArticleReplies = filterArticleRepliesByStatus(
           // Inject articleId to each articleReply
           articleReplies.map(articleReply => {
             articleReply.articleId = id;
             return articleReply;
           }),
           status
-        ),
+        ).sort(
+          (a, b) =>
+            b.positiveFeedbackCount -
+            b.negativeFeedbackCount -
+            (a.positiveFeedbackCount - a.negativeFeedbackCount)
+        );
+
+        if (articleReplies.length === 0) return [];
+
+        let latestIdx;
+        let latestCreatedAt = ''; // Any iso timestring should be larger than ''
+        sortedArticleReplies.forEach(({ createdAt }, idx) => {
+          if (createdAt > latestCreatedAt) {
+            latestIdx = idx;
+            latestCreatedAt = createdAt;
+          }
+        });
+
+        const [latestArticleReply] = sortedArticleReplies.splice(latestIdx, 1);
+
+        return [latestArticleReply, ...sortedArticleReplies];
+      },
     },
     replyRequests: {
       type: new GraphQLList(ReplyRequest),

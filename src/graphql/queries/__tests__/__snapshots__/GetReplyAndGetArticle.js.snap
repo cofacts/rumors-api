@@ -6,6 +6,14 @@ Object {
     "GetArticle": Object {
       "articleReplies": Array [
         Object {
+          "createdAt": "2015-01-01T12:10:33Z",
+          "feedbackCount": 1,
+          "feedbacks": Array [],
+          "negativeFeedbackCount": 1,
+          "positiveFeedbackCount": 0,
+        },
+        Object {
+          "createdAt": "2015-01-01T12:10:30Z",
           "feedbackCount": 1,
           "feedbacks": Array [
             Object {
@@ -16,6 +24,7 @@ Object {
           "positiveFeedbackCount": 1,
         },
         Object {
+          "createdAt": "2015-01-01T12:10:31Z",
           "feedbackCount": 0,
           "feedbacks": Array [],
           "negativeFeedbackCount": 0,
@@ -215,6 +224,13 @@ Object {
       "articleReplies": Array [
         Object {
           "article": Object {
+            "id": "foo",
+          },
+          "articleId": "foo",
+          "status": "DELETED",
+        },
+        Object {
+          "article": Object {
             "id": "foo2",
           },
           "articleId": "foo2",
@@ -229,6 +245,13 @@ Object {
         },
       ],
       "deletedReplies": Array [
+        Object {
+          "article": Object {
+            "id": "foo",
+          },
+          "articleId": "foo",
+          "status": "DELETED",
+        },
         Object {
           "article": Object {
             "id": "foo3",
