@@ -1,7 +1,7 @@
 # Builds production image for rumors-api.
 # Environments not included, should be composed in https://github.com/cofacts/rumors-deploy.
 #
-FROM node:carbon@sha256:5aebe186c00da3308c8fde5b3a246d1927a56947a1b51f5c4308b7318adf74f4
+FROM node:10
 WORKDIR /srv/www
 
 # make node_modules cached.
