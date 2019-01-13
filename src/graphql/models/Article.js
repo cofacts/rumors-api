@@ -70,7 +70,7 @@ const Article = new GraphQLObjectType({
           return +new Date(b.createdAt) - +new Date(a.createdAt);
         });
 
-        if (articleReplies.length === 0) return [];
+        if (sortedArticleReplies.length === 0) return [];
 
         let latestIdx;
         let latestCreatedAt = ''; // Any iso timestring should be larger than ''

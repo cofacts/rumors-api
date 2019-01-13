@@ -224,6 +224,16 @@ Object {
 }
 `;
 
+exports[`GetReplyAndGetArticle GetArticle should return empty articleReply when there is none 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "articleReplies": Array [],
+    },
+  },
+}
+`;
+
 exports[`GetReplyAndGetArticle GetReply should allow filtering article replies 1`] = `
 Object {
   "data": Object {

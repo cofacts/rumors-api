@@ -46,6 +46,7 @@ export default {
     articleReplies: [
       {
         replyId: 'bar2',
+        status: 'NORMAL',
       },
     ],
     normalArticleReplyCount: 1,
