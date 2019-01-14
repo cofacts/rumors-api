@@ -158,3 +158,12 @@ $ node_modules/.bin/babel-node src/scripts/fillAllHyperlinks.js
 This script would scan for all articles & replies to fill in their `hyperlinks` field, also populates
 `urls` index. The `urls` index is used as cache. If an URL already exists in `urls`, it will not trigger
 HTTP request.
+
+### Clean up old `urls` entries that are not referenced by any article & reply
+
+The `urls` index serves as a cache of URL scrapper and will enlarge as `ListArticle` is invoked with
+URLs. The following script cleans up those `urls` that no article & reply currently uses.
+
+```
+$ docker-compose exec api node_modules/.bin/babel-node src/scripts/cleanupUrls.js
+```
