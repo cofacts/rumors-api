@@ -44,6 +44,9 @@ async function processUrls(processFn) {
   total = hits.total;
   scrollId = _scroll_id;
 
+  // eslint-disable-next-line no-console
+  console.info(`${processedCount} / ${total} Processed`);
+
   while (processedCount < total) {
     const { hits, _scroll_id } = await client.scroll({
       scroll: '30s',
@@ -52,6 +55,9 @@ async function processUrls(processFn) {
     await processFn(hits.hits);
     processedCount += hits.hits.length;
     scrollId = _scroll_id;
+
+    // eslint-disable-next-line no-console
+    console.info(`${processedCount} / ${total} Processed`);
   }
 }
 
@@ -99,7 +105,14 @@ async function processFn(docs) {
     }
   });
 
-  await client.bulk({ body: bulkBody, refresh: 'true' });
+  const bulkResult = await client.bulk({ body: bulkBody, refresh: 'true' });
+  const deleteCount = bulkResult.items.reduce(
+    (sum, obj) => (obj.delete && obj.delete.status === 200 ? sum + 1 : sum),
+    0
+  );
+
+  // eslint-disable-next-line no-console
+  console.info(`... ${deleteCount} urls successfully deleted`);
 }
 
 async function main() {
