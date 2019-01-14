@@ -5,6 +5,11 @@ Array [
   Object {
     "_cursor": undefined,
     "_score": 1,
+    "id": "new-url",
+  },
+  Object {
+    "_cursor": undefined,
+    "_score": 1,
     "id": "url-processed",
     "isReferenced": true,
   },

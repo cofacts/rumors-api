@@ -27,6 +27,13 @@ async function processUrls(processFn) {
               field: FLAG_FIELD,
             },
           },
+          must: {
+            range: {
+              fetchedAt: {
+                lte: new Date(Date.now() - 86400 * 1000).toISOString(), // yesterday
+              },
+            },
+          },
         },
       },
       _source: ['url', 'canonical'],
