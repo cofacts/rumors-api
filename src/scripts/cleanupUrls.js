@@ -3,55 +3,49 @@ import 'util/catchUnhandledRejection';
 
 import client from 'util/client';
 
-const FLAG_FIELD = 'isReferenced';
+export const FLAG_FIELD = 'isReferenced';
 
 /**
  * Scrolls through urls to process and invoke processFn on them.
  *
  * @param {function} processFn (urlDocs) => Promise that resolves after process
  */
-function processUrls(processFn) {
-  return async () => {
-    let scrollId,
-      processedCount = 0,
-      total = Infinity;
+async function processUrls(processFn) {
+  let scrollId,
+    processedCount = 0,
+    total = Infinity;
 
-    const { hits, _scroll_id } = await client.search({
-      index: 'urls',
-      scroll: '30s',
-      size: 100,
-      body: {
-        query: {
-          bool: {
-            must_not: {
-              exists: {
-                field: FLAG_FIELD,
-              },
+  const { hits, _scroll_id } = await client.search({
+    index: 'urls',
+    scroll: '30s',
+    size: 100,
+    body: {
+      query: {
+        bool: {
+          must_not: {
+            exists: {
+              field: FLAG_FIELD,
             },
           },
         },
-        _source: ['url', 'canonical'],
       },
+      _source: ['url', 'canonical'],
+    },
+  });
+  await processFn(hits.hits);
+  processedCount += hits.hits.length;
+  total = hits.total;
+  scrollId = _scroll_id;
+
+  while (processedCount < total) {
+    const { hits, _scroll_id } = await client.scroll({
+      scroll: '30s',
+      scrollId,
     });
     await processFn(hits.hits);
     processedCount += hits.hits.length;
-    total = hits.total;
     scrollId = _scroll_id;
-
-    while (processedCount < total) {
-      const { hits, _scroll_id } = await client.scroll({
-        scroll: '30s',
-        scrollId,
-      });
-      await processFn(hits.hits);
-      processedCount += hits.hits.length;
-      scrollId = _scroll_id;
-    }
-  };
-}
-
-function removeUnused() {
-  return async () => {};
+  }
 }
 
 /**
@@ -101,6 +95,12 @@ async function processFn(docs) {
   await client.bulk({ body: bulkBody, refresh: 'true' });
 }
 
-Promise.resolve()
-  .then(processUrls(processFn))
-  .then(removeUnused());
+async function main() {
+  await processUrls(processFn);
+}
+
+export default main;
+
+if (require.main === module) {
+  main();
+}
