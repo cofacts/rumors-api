@@ -65,6 +65,12 @@ async function processUrls(processFn) {
  * @param {Doc[]} docs - [{ _id, _source: {canonical, url} }]
  */
 async function processFn(docs) {
+  if (docs.length === 0) {
+    // eslint-disable-next-line no-console
+    console.info('No urls to process.');
+    return;
+  }
+
   //
   // First of all, figure out each "doc" if any of them are referred
   //
