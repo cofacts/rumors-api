@@ -15,6 +15,7 @@ export default () =>
               must: [{ term: { articleId } }, { term: { replyId } }],
             },
           },
+          size: 10000,
         });
       });
 
