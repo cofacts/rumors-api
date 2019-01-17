@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should clean up urls 1`] = `
+Array [
+  Object {
+    "_cursor": undefined,
+    "_score": 1,
+    "id": "new-url",
+  },
+  Object {
+    "_cursor": undefined,
+    "_score": 1,
+    "id": "url-processed",
+    "isReferenced": true,
+  },
+  Object {
+    "_cursor": undefined,
+    "_score": 1,
+    "id": "url-foo",
+    "isReferenced": true,
+  },
+  Object {
+    "_cursor": undefined,
+    "_score": 1,
+    "id": "curl-foo",
+    "isReferenced": true,
+  },
+  Object {
+    "_cursor": undefined,
+    "_score": 1,
+    "id": "url-bar",
+    "isReferenced": true,
+  },
+  Object {
+    "_cursor": undefined,
+    "_score": 1,
+    "id": "curl-bar",
+    "isReferenced": true,
+  },
+]
+`;
