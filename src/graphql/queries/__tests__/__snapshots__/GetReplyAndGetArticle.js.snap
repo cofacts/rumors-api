@@ -6,6 +6,14 @@ Object {
     "GetArticle": Object {
       "articleReplies": Array [
         Object {
+          "createdAt": "2015-01-01T12:10:33Z",
+          "feedbackCount": 1,
+          "feedbacks": Array [],
+          "negativeFeedbackCount": 1,
+          "positiveFeedbackCount": 0,
+        },
+        Object {
+          "createdAt": "2015-01-01T12:10:30Z",
           "feedbackCount": 1,
           "feedbacks": Array [
             Object {
@@ -16,6 +24,14 @@ Object {
           "positiveFeedbackCount": 1,
         },
         Object {
+          "createdAt": "2015-01-01T12:10:32Z",
+          "feedbackCount": 0,
+          "feedbacks": Array [],
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 0,
+        },
+        Object {
+          "createdAt": "2015-01-01T12:10:31Z",
           "feedbackCount": 0,
           "feedbacks": Array [],
           "negativeFeedbackCount": 0,
@@ -208,11 +224,28 @@ Object {
 }
 `;
 
+exports[`GetReplyAndGetArticle GetArticle should return empty articleReply when there is none 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "articleReplies": Array [],
+    },
+  },
+}
+`;
+
 exports[`GetReplyAndGetArticle GetReply should allow filtering article replies 1`] = `
 Object {
   "data": Object {
     "GetReply": Object {
       "articleReplies": Array [
+        Object {
+          "article": Object {
+            "id": "foo",
+          },
+          "articleId": "foo",
+          "status": "DELETED",
+        },
         Object {
           "article": Object {
             "id": "foo2",
@@ -229,6 +262,13 @@ Object {
         },
       ],
       "deletedReplies": Array [
+        Object {
+          "article": Object {
+            "id": "foo",
+          },
+          "articleId": "foo",
+          "status": "DELETED",
+        },
         Object {
           "article": Object {
             "id": "foo3",

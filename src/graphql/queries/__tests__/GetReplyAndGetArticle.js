@@ -79,6 +79,21 @@ describe('GetReplyAndGetArticle', () => {
       ).toMatchSnapshot();
     });
 
+    it('should return empty articleReply when there is none', async () => {
+      expect(
+        await gql`
+          {
+            GetArticle(id: "foo2") {
+              articleReplies(status: DELETED) {
+                replyId
+                status
+              }
+            }
+          }
+        `({}, { userId: 'fakeUser', appId: 'LINE' })
+      ).toMatchSnapshot();
+    });
+
     it('relatedArticles should work', async () => {
       // No param
       //
@@ -156,6 +171,7 @@ describe('GetReplyAndGetArticle', () => {
                 positiveFeedbackCount
                 negativeFeedbackCount
                 feedbackCount
+                createdAt
               }
             }
           }

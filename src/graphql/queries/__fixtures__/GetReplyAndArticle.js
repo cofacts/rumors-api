@@ -13,12 +13,28 @@ export default {
         negativeFeedbackCount: 0,
       },
       {
-        replyId: 'bar3',
-        createdAt: '2015-01-01T12:10:30Z',
+        replyId: 'bar2',
+        createdAt: '2015-01-01T12:10:31Z',
         updatedAt: '2015-01-02T12:10:30Z',
         status: 'DELETED',
         positiveFeedbackCount: 0,
         negativeFeedbackCount: 0,
+      },
+      {
+        replyId: 'bar4',
+        createdAt: '2015-01-01T12:10:32Z',
+        updatedAt: '2015-01-02T12:10:30Z',
+        status: 'DELETED',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 0,
+      },
+      {
+        replyId: 'bar3',
+        createdAt: '2015-01-01T12:10:33Z',
+        updatedAt: '2015-01-02T12:10:30Z',
+        status: 'DELETED',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 1,
       },
     ],
     normalArticleReplyCount: 1,
@@ -30,6 +46,7 @@ export default {
     articleReplies: [
       {
         replyId: 'bar2',
+        status: 'NORMAL',
       },
     ],
     normalArticleReplyCount: 1,
