@@ -82,8 +82,5 @@ export default () =>
           };
         }
       );
-    },
-    {
-      cacheKeyFn: ({ index, id }) => `/${index}/${id}`,
     }
   );
