@@ -129,10 +129,10 @@ export default {
     }
 
     if (filter.moreLikeThis) {
-      const scrapResults = await scrapUrls(filter.moreLikeThis.like, {
+      const scrapResults = (await scrapUrls(filter.moreLikeThis.like, {
         client,
         cacheLoader: loaders.urlLoader,
-      });
+      })).filter(r => r);
 
       const likeQuery = [
         filter.moreLikeThis.like,
