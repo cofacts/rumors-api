@@ -31,6 +31,18 @@ Array [
 ]
 `;
 
+exports[`remove fbclid keep origin url if fbclid is not existed: https://www.youtube.com/playlist?list=PLdwQWxpS513DrHuUQ356zK6pLoJ8NcVP2 1`] = `
+Array [
+  "https://www.youtube.com/playlist?list=PLdwQWxpS513DrHuUQ356zK6pLoJ8NcVP2",
+]
+`;
+
+exports[`remove fbclid removeFBCLID: https://www.youtube.com/playlist?list=PLdwQWxpS513DrHuUQ356zK6pLoJ8NcVP2 1`] = `
+Array [
+  "https://www.youtube.com/playlist?list=PLdwQWxpS513DrHuUQ356zK6pLoJ8NcVP2",
+]
+`;
+
 exports[`scrapping & storage scraps from Internet and handles error: Docs stored to urls index 1`] = `
 Array [
   Object {

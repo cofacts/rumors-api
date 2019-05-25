@@ -24,8 +24,10 @@ async function scrapUrls(
   text,
   { cacheLoader, client, noFetch = false, scrapLimit = 5 } = {}
 ) {
-  const urls = text.match(urlRegex()) || [];
+  let urls = text.match(urlRegex()) || [];
   if (urls.length === 0) return [];
+
+  urls = removeFBCLIDIfExist(urls);
 
   const scrapLoader = new DataLoader(urls =>
     gql`
@@ -133,6 +135,20 @@ async function scrapUrls(
   }
 
   return result;
+}
+
+/**
+ * Remove fbclid if it exist, handling the url comes from FB
+ *
+ * @param {string[]} inputTexts - raw urls
+ * @return {string[]} - urls without fbclid query parameter
+ */
+export function removeFBCLIDIfExist(inputTexts) {
+  return inputTexts.map(text => {
+    const myURL = new URL(text);
+    myURL.searchParams.delete('fbclid');
+    return myURL.toString();
+  });
 }
 
 export default scrapUrls;
