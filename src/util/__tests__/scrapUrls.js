@@ -118,15 +118,15 @@ describe('remove fbclid', () => {
     const url =
       'https://www.youtube.com/playlist?list=PLdwQWxpS513DrHuUQ356zK6pLoJ8NcVP2&fbclid=IwAR2Yiso_SArcTCmCEKKnUuIpTS-y_fyPbl_X19OG0eaAhVxdJxGh8AMicwE';
 
-    expect(removeFBCLIDIfExist([url])).toMatchSnapshot(
-      'https://www.youtube.com/playlist?list=PLdwQWxpS513DrHuUQ356zK6pLoJ8NcVP2'
-    );
+    expect(removeFBCLIDIfExist([url])).toEqual([
+      'https://www.youtube.com/playlist?list=PLdwQWxpS513DrHuUQ356zK6pLoJ8NcVP2',
+    ]);
   });
   it('keep origin url if fbclid is not existed', async () => {
     const url =
       'https://www.youtube.com/playlist?list=PLdwQWxpS513DrHuUQ356zK6pLoJ8NcVP2';
-    expect(removeFBCLIDIfExist([url])).toMatchSnapshot(
-      'https://www.youtube.com/playlist?list=PLdwQWxpS513DrHuUQ356zK6pLoJ8NcVP2'
-    );
+    expect(removeFBCLIDIfExist([url])).toEqual([
+      'https://www.youtube.com/playlist?list=PLdwQWxpS513DrHuUQ356zK6pLoJ8NcVP2',
+    ]);
   });
 });
