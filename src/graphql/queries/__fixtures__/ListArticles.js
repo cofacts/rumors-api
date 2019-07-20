@@ -39,6 +39,7 @@ export default {
     hyperlinks: [
       {
         url: 'http://gohome.com',
+        normalizedUrl: 'http://gohome.com/',
         title: '馮諼很餓',
         summary:
           '居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚。」左右以告。孟嘗君曰：「食之，比門下之客。」',
@@ -46,14 +47,14 @@ export default {
     ],
   },
   '/urls/doc/gohome': {
-    url: 'http://gohome.com',
+    url: 'http://gohome.com/',
     title: '馮諼很餓',
     summary:
       '居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚。」左右以告。孟嘗君曰：「食之，比門下之客。」',
     topImageUrl: 'http://gohome.com/image.jpg',
   },
   '/urls/doc/biau': {
-    url: 'http://出師表.com',
+    url: 'http://出師表.com/',
     title: '出師表',
     summary:
       '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',

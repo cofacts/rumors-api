@@ -23,11 +23,14 @@ export function updateReplyHyperlinks(replyId, scrapResults) {
     id: replyId,
     body: {
       doc: {
-        hyperlinks: scrapResults.map(({ url, title, summary }) => ({
-          url,
-          title,
-          summary,
-        })),
+        hyperlinks: scrapResults.map(
+          ({ url, normalizedUrl, title, summary }) => ({
+            url,
+            normalizedUrl,
+            title,
+            summary,
+          })
+        ),
       },
     },
   });

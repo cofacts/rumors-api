@@ -41,6 +41,7 @@ Object {
   "createdAt": "2017-01-28T08:45:57.011Z",
   "hyperlinks": Array [
     Object {
+      "normalizedUrl": "http://foo.com/article/1",
       "summary": "FOO article content",
       "title": "FOO title",
       "url": "http://foo.com/article/1",

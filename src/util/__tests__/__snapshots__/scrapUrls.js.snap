@@ -11,6 +11,7 @@ Array [
     "fetchedAt": "2017-02-01T00:00:00.000Z",
     "fromUrlsCache": true,
     "id": "someUrl-2nd-fetch",
+    "normalizedUrl": "http://example.com/article/1111-aaaaa-bbb-ccc",
     "summary": "Changed summary",
     "title": "Changed title",
     "url": "http://example.com/article/1111-aaaaa-bbb-ccc",
@@ -24,6 +25,7 @@ Array [
     "fetchedAt": "2017-02-01T00:00:00.000Z",
     "fromUrlsCache": true,
     "id": "someUrl-2nd-fetch",
+    "normalizedUrl": "http://example.com/article/1111",
     "summary": "Changed summary",
     "title": "Changed title",
     "url": "http://example.com/article/1111",
@@ -87,6 +89,7 @@ exports[`scrapping & storage scraps from Internet and handles error: foundResult
 Object {
   "canonical": "http://example.com/index.html",
   "html": "<html><head></head><body>Hello world</body></html>",
+  "normalizedUrl": "http://example.com/index.html",
   "status": 200,
   "summary": "Some text as summary",
   "title": "Some title",
@@ -99,6 +102,7 @@ exports[`scrapping & storage scraps from Internet and handles error: notFoundRes
 Object {
   "canonical": "http://example.com/not-found",
   "html": "<html><head></head><body>Not Found</body></html>",
+  "normalizedUrl": "http://example.com/not-found",
   "status": 404,
   "summary": "Not Found",
   "title": "",

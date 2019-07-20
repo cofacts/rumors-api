@@ -31,6 +31,7 @@ export default {
     hyperlinks: [
       {
         url: 'http://gohome.com',
+        normalizedUrl: 'http://gohome.com/',
         title: '馮諼很餓',
         summary:
           '居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚。」左右以告。孟嘗君曰：「食之，比門下之客。」',
@@ -40,14 +41,14 @@ export default {
     createdAt: 1,
   },
   '/urls/doc/gohome': {
-    url: 'http://gohome.com',
+    url: 'http://gohome.com/',
     title: '馮諼很餓',
     summary:
       '居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚。」左右以告。孟嘗君曰：「食之，比門下之客。」',
     topImageUrl: 'http://gohome.com/image.jpg',
   },
   '/urls/doc/foobar': {
-    url: 'http://foo.com',
+    url: 'http://foo.com/',
     title: 'bar',
     summary: 'bar',
     topImageUrl: 'http://foo.com/image.jpg',
