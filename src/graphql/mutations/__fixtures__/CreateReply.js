@@ -5,9 +5,9 @@ export default {
     references: [{ type: 'LINE' }],
   },
   '/urls/doc/hyperlink1': {
-    canonical: 'http://google.com',
+    canonical: 'http://google.com/',
     title: 'Google google',
     summary: 'Gooooooogle',
-    url: 'http://google.com',
+    url: 'http://google.com/',
   },
 };

@@ -104,11 +104,14 @@ export function updateArticleHyperlinks(articleId, scrapResults) {
     id: articleId,
     body: {
       doc: {
-        hyperlinks: scrapResults.map(({ url, title, summary }) => ({
-          url,
-          title,
-          summary,
-        })),
+        hyperlinks: scrapResults.map(
+          ({ url, normalizedUrl, title, summary }) => ({
+            url,
+            normalizedUrl,
+            title,
+            summary,
+          })
+        ),
       },
     },
   });
@@ -130,7 +133,6 @@ export default {
   },
   resolve(rootValue, { text, reference, reason }, { appId, userId, loaders }) {
     assertUser({ appId, userId });
-
     const newArticlePromise = createNewArticle({
       text,
       reference,
@@ -145,9 +147,11 @@ export default {
 
     // Dependencies
     //
-    // newArticlePromise --> replyRequestPromise -.
-    //                  \                          >-> done
-    // scrapPromise -----`-> hyperlinkPromise ----'
+    // newArticlePromise* --> replyRequestPromise* -.
+    //                  \                            \ (ensure no parallel update to article)
+    // scrapPromise -----`----------------------------`--> hyperlinkPromise* --> done
+    //
+    // *: Updates article. Will trigger version_conflict_engine_exception if run in parallel.
     //
 
     const replyRequestPromise = newArticlePromise.then(articleId =>
@@ -157,6 +161,7 @@ export default {
     const hyperlinkPromise = Promise.all([
       newArticlePromise,
       scrapPromise,
+      replyRequestPromise, // Not used, just to avoid parallel update to article
     ]).then(([articleId, scrapResults]) => {
       return updateArticleHyperlinks(articleId, scrapResults);
     });

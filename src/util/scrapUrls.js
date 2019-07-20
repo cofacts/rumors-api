@@ -1,8 +1,16 @@
 import rollbar from 'rollbarInstance';
 import urlRegex from 'url-regex';
 import DataLoader from 'dataloader';
+import url from 'url';
 
 import gql from './gql';
+/**
+ * ScrapResult:
+ * Refer to https://github.com/cofacts/url-resolver/blob/master/src/typeDefs/UrlResolveResult.graphql
+ * with new fields:
+ * @param {string} normalizedUrl - URL normalized in scrapUrl process
+ * @param {boolean} fromUrlsCache - If the entry is from cacheLoader
+ */
 
 /**
  * Extracts urls from a string.
@@ -24,8 +32,12 @@ async function scrapUrls(
   text,
   { cacheLoader, client, noFetch = false, scrapLimit = 5 } = {}
 ) {
-  const urls = text.match(urlRegex()) || [];
-  if (urls.length === 0) return [];
+  const originalUrls = text.match(urlRegex()) || [];
+  if (originalUrls.length === 0) return [];
+
+  // Normalize URLs before sending to cache or scrapper to increase cache hit
+  //
+  const normalizedUrls = removeFBCLIDIfExist(originalUrls);
 
   const scrapLoader = new DataLoader(urls =>
     gql`
@@ -44,28 +56,32 @@ async function scrapUrls(
     `({ urls }).then(({ data }) => data.resolvedUrls)
   );
 
+  // result: list of ScrapResult, with its `url` being the url in text,
+  // but canonical url may be normalized
+  //
   const result = await Promise.all(
     // 1st pass: resolve cache
-    urls.map(async url => {
+    normalizedUrls.map(async (normalizedUrl, i) => {
       if (cacheLoader) {
-        const result = await cacheLoader.load(url);
+        const result = await cacheLoader.load(normalizedUrl);
 
         if (result)
           return {
             ...result,
-            url, // Overwrite the URL from cache with the actual url in text, because cacheLoader may match canonical URLs
+            url: originalUrls[i],
+            normalizedUrl,
             fromUrlsCache: true,
           };
       }
 
-      return url;
+      return normalizedUrl;
     })
   ).then(results => {
     // 2nd pass: scrap when needed
     let scrappingCount = 0;
 
     return Promise.all(
-      results.map(async result => {
+      results.map(async (result, i) => {
         if (typeof result !== 'string') {
           return result;
         }
@@ -74,7 +90,11 @@ async function scrapUrls(
 
         if (noFetch || scrappingCount >= scrapLimit) return null;
         scrappingCount += 1;
-        return scrapLoader.load(result);
+        return scrapLoader.load(result).then(scrapped => ({
+          ...scrapped,
+          url: originalUrls[i],
+          normalizedUrl: scrapped.url,
+        }));
       })
     );
   });
@@ -133,6 +153,27 @@ async function scrapUrls(
   }
 
   return result;
+}
+
+/**
+ * Remove fbclid if it exist, handling the url comes from FB
+ *
+ * @param {string[]} inputTexts - raw urls
+ * @return {string[]} - urls without fbclid query parameter
+ */
+export function removeFBCLIDIfExist(inputTexts) {
+  return inputTexts.map(text => {
+    try {
+      const myURL = new URL(text);
+      myURL.searchParams.delete('fbclid');
+      return url.format(myURL, { unicode: true }); // keep unicode URLs as-is
+    } catch (e) {
+      console.error('[scrapUrls][removeFBCLIDIfExist]', e); // eslint-disable-line no-console
+
+      // URL patterns not recognized by URL constructor, just skip
+      return text;
+    }
+  });
 }
 
 export default scrapUrls;

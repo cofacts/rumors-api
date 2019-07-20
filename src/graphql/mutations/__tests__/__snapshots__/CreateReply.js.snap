@@ -6,6 +6,7 @@ Object {
   "createdAt": "2017-01-28T08:45:57.011Z",
   "hyperlinks": Array [
     Object {
+      "normalizedUrl": "http://google.com/",
       "summary": "Gooooooogle",
       "title": "Google google",
       "url": "http://google.com",

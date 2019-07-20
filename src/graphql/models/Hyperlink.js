@@ -1,9 +1,19 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql';
 
+/**
+ *
+ * @param {string} field
+ * @returns {resolveFn} Resolves URL entry using url or normalizedUrl
+ */
 function resolveUrl(field) {
-  return async function({ url }, args, { loaders }) {
-    const urlEntry = await loaders.urlLoader.load(url);
-    return urlEntry[field];
+  return async function({ url, normalizedUrl }, args, { loaders }) {
+    const urls = [url];
+    if (normalizedUrl) {
+      urls.push(normalizedUrl);
+    }
+    const urlEnties = await loaders.urlLoader.loadMany(urls);
+    const firstEntry = urlEnties.find(urlEntry => urlEntry) || {};
+    return firstEntry[field];
   };
 }
 
