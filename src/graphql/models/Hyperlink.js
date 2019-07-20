@@ -22,7 +22,11 @@ const Hyperlink = new GraphQLObjectType({
   name: 'Hyperlink',
   description: 'Data behind a hyperlink',
   fields: {
-    url: { type: GraphQLString },
+    url: { type: GraphQLString, description: 'URL in text' },
+    normalizedUrl: {
+      type: GraphQLString,
+      description: 'URL normalized by scrapUrl',
+    },
     title: { type: GraphQLString },
     summary: { type: GraphQLString },
     topImageUrl: { type: GraphQLString, resolve: resolveUrl('topImageUrl') },
