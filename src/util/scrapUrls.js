@@ -113,7 +113,7 @@ async function scrapUrls(
     }
 
     const {
-      url,
+      normalizedUrl: url, // Store normalized url in urls index to maximize caching capability
       canonical,
       title,
       summary,

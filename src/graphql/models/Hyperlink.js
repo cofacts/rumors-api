@@ -9,6 +9,7 @@ function resolveUrl(field) {
   return async function({ url, normalizedUrl }, args, { loaders }) {
     const urls = [url];
     if (normalizedUrl) {
+      // Only consider normalizedUrl when there is one
       urls.push(normalizedUrl);
     }
     const urlEnties = await loaders.urlLoader.loadMany(urls);
