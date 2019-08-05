@@ -3,14 +3,7 @@ import urlRegex from 'url-regex';
 import DataLoader from 'dataloader';
 import url from 'url';
 
-import gql from './gql';
-/**
- * ScrapResult:
- * Refer to https://github.com/cofacts/url-resolver/blob/master/src/typeDefs/UrlResolveResult.graphql
- * with new fields:
- * @param {string} normalizedUrl - URL normalized in scrapUrl process
- * @param {boolean} fromUrlsCache - If the entry is from cacheLoader
- */
+import resolveUrl from './grpc';
 
 /**
  * Extracts urls from a string.
@@ -39,22 +32,7 @@ async function scrapUrls(
   //
   const normalizedUrls = removeFBCLIDIfExist(originalUrls);
 
-  const scrapLoader = new DataLoader(urls =>
-    gql`
-      query($urls: [String]!) {
-        resolvedUrls(urls: $urls) {
-          url
-          canonical
-          title
-          summary
-          topImageUrl
-          html
-          status
-          error
-        }
-      }
-    `({ urls }).then(({ data }) => data.resolvedUrls)
-  );
+  const scrapLoader = new DataLoader(urls => resolveUrl(urls));
 
   // result: list of ScrapResult, with its `url` being the url in text,
   // but canonical url may be normalized
@@ -164,7 +142,7 @@ async function scrapUrls(
 export function removeFBCLIDIfExist(inputTexts) {
   return inputTexts.map(text => {
     try {
-      const myURL = new URL(text);
+      const myURL = new url.URL(text);
       myURL.searchParams.delete('fbclid');
       return url.format(myURL, { unicode: true }); // keep unicode URLs as-is
     } catch (e) {

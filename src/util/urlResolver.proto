@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package urlResolver;
+
+service UrlResolver {
+  rpc ResolveUrl (UrlsRequest) returns (stream UrlReply) {}
+}
+
+message UrlsRequest {
+  repeated string urls = 1;
+}
+
+message UrlReply {
+  string url = 1;
+  string canonical = 2;
+  string title = 3;
+  string summary = 4;
+  string topImageUrl = 5;
+  string html = 6;
+  string status = 7;
+  string error = 8;
+}
