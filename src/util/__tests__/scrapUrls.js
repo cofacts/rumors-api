@@ -1,4 +1,4 @@
-jest.mock('../gql');
+jest.mock('../grpc');
 
 import MockDate from 'mockdate';
 
@@ -7,7 +7,7 @@ import fixtures from '../__fixtures__/scrapUrls';
 import scrapUrls, { removeFBCLIDIfExist } from '../scrapUrls';
 import DataLoaders from 'graphql/dataLoaders';
 import client from 'util/client';
-import gql from '../gql';
+import resolveUrl from '../grpc';
 
 describe('scrapping & storage', () => {
   let server;
@@ -29,30 +29,26 @@ describe('scrapping & storage', () => {
     async () => {
       MockDate.set(1485593157011);
 
-      gql.__addMockResponse({
-        data: {
-          resolvedUrls: [
-            {
-              url: 'http://example.com/index.html',
-              canonical: 'http://example.com/index.html',
-              title: 'Some title',
-              summary: 'Some text as summary',
-              topImageUrl: '',
-              html: '<html><head></head><body>Hello world</body></html>',
-              status: 200,
-            },
-            {
-              url: 'http://example.com/not-found',
-              canonical: 'http://example.com/not-found',
-              title: '',
-              summary: 'Not Found',
-              topImageUrl: '',
-              html: '<html><head></head><body>Not Found</body></html>',
-              status: 404,
-            },
-          ],
+      resolveUrl.__addMockResponse([
+        {
+          url: 'http://example.com/index.html',
+          canonical: 'http://example.com/index.html',
+          title: 'Some title',
+          summary: 'Some text as summary',
+          topImageUrl: '',
+          html: '<html><head></head><body>Hello world</body></html>',
+          status: 200,
         },
-      });
+        {
+          url: 'http://example.com/not-found',
+          canonical: 'http://example.com/not-found',
+          title: '',
+          summary: 'Not Found',
+          topImageUrl: '',
+          html: '<html><head></head><body>Not Found</body></html>',
+          status: 404,
+        },
+      ]);
 
       const [foundResult, notFoundResult] = await scrapUrls(
         `
@@ -64,8 +60,8 @@ describe('scrapping & storage', () => {
       );
       MockDate.reset();
 
-      expect(gql.__getRequests()).toMatchSnapshot('GraphQL requests');
-      gql.__reset();
+      expect(resolveUrl.__getRequests()).toMatchSnapshot('GraphQL requests');
+      resolveUrl.__reset();
 
       expect(foundResult).toMatchSnapshot('foundResult');
       expect(notFoundResult).toMatchSnapshot('notFoundResult');
