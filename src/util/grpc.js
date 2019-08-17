@@ -2,7 +2,7 @@ import rollbar from '../rollbarInstance';
 import grpc from 'grpc';
 const protoLoader = require('@grpc/proto-loader');
 
-const PROTO_PATH = __dirname + '/urlResolver.proto';
+const PROTO_PATH = __dirname + '/protobuf/url_resolver.proto';
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -12,7 +12,7 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 });
 
 const urlResolverProto = grpc.loadPackageDefinition(packageDefinition)
-  .urlResolver;
+  .url_resolver;
 
 const URL_RESOLVER_URL = process.env.URL_RESOLVER_URL || 'localhost:4000';
 const client = new urlResolverProto.UrlResolver(
@@ -20,7 +20,7 @@ const client = new urlResolverProto.UrlResolver(
   grpc.credentials.createInsecure()
 );
 
-// Receiving stream response from resolver using GRPC
+// Receiving stream response from resolver using gRPC
 export default urls =>
   new Promise((resolve, reject) => {
     const call = client.ResolveUrl({ urls });
@@ -30,9 +30,9 @@ export default urls =>
     });
     call.on('error', err => {
       // eslint-disable-next-line no-console
-      console.error('GraphQL operation contains error:', err);
+      console.error('gRPC operation contains error:', err);
       rollbar.error(
-        'GraphQL error',
+        'gRPC error',
         {
           body: JSON.stringify({ urls }),
           url: URL_RESOLVER_URL,
