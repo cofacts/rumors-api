@@ -229,7 +229,9 @@ export const authRouter = Router()
     // TODO: Get basePath from DB for other client apps
 
     ctx.redirect(url.resolve(basePath, ctx.session.redirect));
+    // eslint-disable-next-line require-atomic-updates
     ctx.session.appId = undefined;
+    // eslint-disable-next-line require-atomic-updates
     ctx.session.redirect = undefined;
   })
   .get('/facebook', handlePassportCallback('facebook'))
