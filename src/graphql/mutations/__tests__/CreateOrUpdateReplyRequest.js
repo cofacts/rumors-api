@@ -55,7 +55,7 @@ describe('CreateOrUpdateReplyRequest', () => {
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
 
-  it('cannot update reason of previously submitted reply request', async () => {
+  it('can update reason of a previously submitted reply request', async () => {
     MockDate.set(1485593157011);
     const articleId = 'createReplyRequestTest1';
     const userId = 'test';

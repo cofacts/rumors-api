@@ -31,7 +31,7 @@ Object {
 }
 `;
 
-exports[`CreateOrUpdateReplyRequest cannot update reason of previously submitted reply request 1`] = `
+exports[`CreateOrUpdateReplyRequest can update reason of a previously submitted reply request 1`] = `
 Object {
   "CreateOrUpdateReplyRequest": Object {
     "replyRequestCount": 2,
@@ -40,7 +40,7 @@ Object {
 }
 `;
 
-exports[`CreateOrUpdateReplyRequest cannot update reason of previously submitted reply request 2`] = `
+exports[`CreateOrUpdateReplyRequest can update reason of a previously submitted reply request 2`] = `
 Object {
   "appId": "test",
   "articleId": "createReplyRequestTest1",
@@ -54,7 +54,7 @@ Object {
 }
 `;
 
-exports[`CreateOrUpdateReplyRequest cannot update reason of previously submitted reply request 3`] = `
+exports[`CreateOrUpdateReplyRequest can update reason of a previously submitted reply request 3`] = `
 Object {
   "lastRequestedAt": "2017-01-28T08:47:37.011Z",
   "replyRequestCount": 2,
