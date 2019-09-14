@@ -1,15 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CreateReplyRequest attaches a reply request to an article 1`] = `
+exports[`CreateOrUpdateReplyRequest attaches a reply request to an article 1`] = `
 Object {
-  "CreateReplyRequest": Object {
+  "CreateOrUpdateReplyRequest": Object {
     "replyRequestCount": 2,
     "status": "SUCCESS",
   },
 }
 `;
 
-exports[`CreateReplyRequest attaches a reply request to an article 2`] = `
+exports[`CreateOrUpdateReplyRequest attaches a reply request to an article 2`] = `
 Object {
   "appId": "test",
   "articleId": "createReplyRequestTest1",
@@ -23,7 +23,7 @@ Object {
 }
 `;
 
-exports[`CreateReplyRequest attaches a reply request to an article 3`] = `
+exports[`CreateOrUpdateReplyRequest attaches a reply request to an article 3`] = `
 Object {
   "lastRequestedAt": "2017-01-28T08:45:57.011Z",
   "replyRequestCount": 2,
@@ -31,16 +31,16 @@ Object {
 }
 `;
 
-exports[`CreateReplyRequest cannot attach a reply request to an article twice 1`] = `
+exports[`CreateOrUpdateReplyRequest cannot update reason of previously submitted reply request 1`] = `
 Object {
-  "CreateReplyRequest": Object {
+  "CreateOrUpdateReplyRequest": Object {
     "replyRequestCount": 2,
     "status": "DUPLICATE",
   },
 }
 `;
 
-exports[`CreateReplyRequest cannot attach a reply request to an article twice 2`] = `
+exports[`CreateOrUpdateReplyRequest cannot update reason of previously submitted reply request 2`] = `
 Object {
   "appId": "test",
   "articleId": "createReplyRequestTest1",
@@ -48,13 +48,13 @@ Object {
   "feedbacks": Array [],
   "negativeFeedbackCount": 0,
   "positiveFeedbackCount": 0,
-  "reason": "",
+  "reason": "New reason",
   "updatedAt": "2017-01-28T08:47:37.011Z",
   "userId": "test",
 }
 `;
 
-exports[`CreateReplyRequest cannot attach a reply request to an article twice 3`] = `
+exports[`CreateOrUpdateReplyRequest cannot update reason of previously submitted reply request 3`] = `
 Object {
   "lastRequestedAt": "2017-01-28T08:47:37.011Z",
   "replyRequestCount": 2,

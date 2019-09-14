@@ -7,7 +7,7 @@ import scrapUrls from 'util/scrapUrls';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
-import { createReplyRequest } from './CreateReplyRequest';
+import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 
 /* Instantiate hash function */
 const xxhash64 = h64();
@@ -155,7 +155,7 @@ export default {
     //
 
     const replyRequestPromise = newArticlePromise.then(articleId =>
-      createReplyRequest({ articleId, userId, appId, reason })
+      createOrUpdateReplyRequest({ articleId, userId, appId, reason })
     );
 
     const hyperlinkPromise = Promise.all([

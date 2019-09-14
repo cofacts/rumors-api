@@ -3,7 +3,7 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures, { fixture1Text } from '../__fixtures__/CreateArticle';
-import { getReplyRequestId } from '../CreateReplyRequest';
+import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
 import { getArticleId } from 'graphql/mutations/CreateArticle';
 
 describe('creation', () => {

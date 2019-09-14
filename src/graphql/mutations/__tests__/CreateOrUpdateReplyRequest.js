@@ -2,10 +2,10 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
-import { getReplyRequestId } from '../CreateReplyRequest';
-import fixtures from '../__fixtures__/CreateReplyRequest';
+import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
+import fixtures from '../__fixtures__/CreateOrUpdateReplyRequest';
 
-describe('CreateReplyRequest', () => {
+describe('CreateOrUpdateReplyRequest', () => {
   beforeAll(() => loadFixtures(fixtures));
 
   it('attaches a reply request to an article', async () => {
@@ -16,7 +16,10 @@ describe('CreateReplyRequest', () => {
 
     const { data, errors } = await gql`
       mutation($articleId: String!) {
-        CreateReplyRequest(articleId: $articleId, reason: "気になります") {
+        CreateOrUpdateReplyRequest(
+          articleId: $articleId
+          reason: "気になります"
+        ) {
           replyRequestCount
           status
         }
@@ -52,7 +55,7 @@ describe('CreateReplyRequest', () => {
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
 
-  it('cannot attach a reply request to an article twice', async () => {
+  it('cannot update reason of previously submitted reply request', async () => {
     MockDate.set(1485593157011);
     const articleId = 'createReplyRequestTest1';
     const userId = 'test';
@@ -60,7 +63,7 @@ describe('CreateReplyRequest', () => {
 
     await gql`
       mutation($articleId: String!) {
-        CreateReplyRequest(articleId: $articleId) {
+        CreateOrUpdateReplyRequest(articleId: $articleId) {
           replyRequestCount
         }
       }
@@ -70,7 +73,10 @@ describe('CreateReplyRequest', () => {
 
     const { data, errors } = await gql`
       mutation($articleId: String!) {
-        CreateReplyRequest(articleId: $articleId) {
+        CreateOrUpdateReplyRequest(
+          articleId: $articleId
+          reason: "New reason"
+        ) {
           replyRequestCount
           status
         }

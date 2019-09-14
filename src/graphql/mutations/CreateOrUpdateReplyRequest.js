@@ -26,7 +26,7 @@ export function getReplyRequestId({ articleId, userId, appId }) {
 }
 
 /**
- * @typedef {Object} CreateReplyRequestResult
+ * @typedef {Object} CreateOrUpdateReplyRequestResult
  * @property {Object} article - The update article instance
  * @property {boolean} isCreated - If the reply request is created
  */
@@ -37,7 +37,7 @@ export function getReplyRequestId({ articleId, userId, appId }) {
  * @param {ReplyRequestParam} param
  * @returns {CreateReplyRequstResult}
  */
-export async function createReplyRequest({
+export async function createOrUpdateReplyRequest({
   articleId,
   userId,
   appId,
@@ -47,15 +47,21 @@ export async function createReplyRequest({
 
   const now = new Date().toISOString();
   const id = getReplyRequestId({ articleId, userId, appId });
+  const updatedDoc = {
+    updatedAt: now,
+  };
+
+  // Update reason if there is new one
+  if (reason) {
+    updatedDoc.reason = reason;
+  }
 
   const { result } = await client.update({
     index: 'replyrequests',
     type: 'doc',
     id,
     body: {
-      doc: {
-        updatedAt: now,
-      },
+      doc: updatedDoc,
       upsert: {
         articleId,
         userId,
@@ -99,9 +105,9 @@ export async function createReplyRequest({
 }
 
 export default {
-  description: 'Create a reply request for the given article',
+  description: 'Create or update a reply request for the given article',
   type: new GraphQLObjectType({
-    name: 'CreateReplyRequestResult',
+    name: 'CreateOrUpdateReplyRequestResult',
     fields: {
       replyRequestCount: {
         type: GraphQLInt,
@@ -110,7 +116,7 @@ export default {
       },
       status: {
         type: new GraphQLEnumType({
-          name: 'CreateReplyRequstResultStatus',
+          name: 'CreateOrUpdateReplyRequstResultStatus',
           values: {
             SUCCESS: {
               value: 'SUCCESS',
@@ -119,7 +125,7 @@ export default {
             DUPLICATE: {
               value: 'DUPLICATE',
               description:
-                'The user has already requested reply for this article',
+                'The user has already requested reply for this article; the reason has been updated',
             },
           },
         }),
@@ -134,7 +140,7 @@ export default {
     },
   },
   async resolve(rootValue, { articleId, reason }, { appId, userId }) {
-    const { article, isCreated } = await createReplyRequest({
+    const { article, isCreated } = await createOrUpdateReplyRequest({
       articleId,
       appId,
       userId,
