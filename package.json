@@ -53,18 +53,18 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.3",
-    "babel-jest": "^24.0.0",
+    "babel-jest": "^23.6.0",
     "babel-plugin-module-resolver": "^3.0.0",
     "babel-polyfill": "^6.20.0",
-    "babel-preset-env": "^1.1.8",
-    "babel-preset-stage-3": "^6.17.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.0",
     "coveralls": "^3.0.0",
     "eslint": "^6.0.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-import-resolver-babel-module": "^5.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.0.0",
-    "jest": "^24.0.0",
+    "jest": "^23.6.0",
     "mockdate": "^2.0.1",
     "prettier": "=1.13.7"
   },
@@ -73,8 +73,6 @@
     "roots": [
       "src"
     ],
-    "setupFilesAfterEnv": [
-      "./test/setup.js"
-    ]
+    "setupTestFrameworkScriptFile": "./test/setup.js"
   }
 }

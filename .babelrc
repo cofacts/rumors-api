@@ -4,7 +4,8 @@
       "targets": {
         "node": "current"
       }
-    }]
+    }],
+    "stage-3",
   ],
   "plugins": [
     ["module-resolver", {
