@@ -61,7 +61,7 @@
     "coveralls": "^3.0.0",
     "eslint": "^6.0.0",
     "eslint-config-prettier": "^6.0.0",
-    "eslint-import-resolver-babel-module": "^5.0.0",
+    "eslint-import-resolver-babel-module": "^4.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.0.0",
     "jest": "^23.6.0",
