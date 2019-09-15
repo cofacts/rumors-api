@@ -3,6 +3,7 @@
 exports[`UpdateUser should set user name field correctly 1`] = `
 Object {
   "updatedUser": Object {
+    "id": "normal",
     "name": "Mark",
     "updatedAt": "2017-01-28T08:45:57.011Z",
   },

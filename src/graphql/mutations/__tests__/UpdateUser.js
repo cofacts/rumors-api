@@ -17,6 +17,7 @@ describe('UpdateUser', () => {
     const { data } = await gql`
       mutation {
         updatedUser: UpdateUser(name: "Mark") {
+          id
           name
           updatedAt
         }
