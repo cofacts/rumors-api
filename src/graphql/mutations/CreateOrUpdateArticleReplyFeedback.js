@@ -1,12 +1,8 @@
-import {
-  GraphQLString,
-  GraphQLNonNull,
-  GraphQLInt,
-  GraphQLObjectType,
-} from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 import { assertUser } from 'graphql/util';
 import FeedbackVote from 'graphql/models/FeedbackVote';
+import ArticleReply from 'graphql/models/ArticleReply';
 
 import client from 'util/client';
 
@@ -21,14 +17,7 @@ export function getArticleReplyFeedbackId({
 
 export default {
   description: 'Create or update a feedback on an article-reply connection',
-  type: new GraphQLObjectType({
-    name: 'CreateOrUpdateArticleReplyFeedbackResult',
-    fields: {
-      feedbackCount: { type: GraphQLInt },
-      positiveFeedbackCount: { type: GraphQLInt },
-      negativeFeedbackCount: { type: GraphQLInt },
-    },
-  }),
+  type: ArticleReply,
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
     replyId: { type: new GraphQLNonNull(GraphQLString) },
@@ -134,10 +123,8 @@ export default {
       );
     }
 
-    return {
-      feedbackCount: feedbacks.length,
-      negativeFeedbackCount,
-      positiveFeedbackCount,
-    };
+    return articleReplyUpdateResult.get._source.articleReplies.find(
+      articleReply => articleReply.replyId === replyId
+    );
   },
 };
