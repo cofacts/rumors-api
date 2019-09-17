@@ -4,8 +4,13 @@ exports[`CreateOrUpdateReplyRequest attaches a reply request to an article 1`] =
 Object {
   "CreateOrUpdateReplyRequest": Object {
     "replyRequestCount": 2,
-    "replyRequests": Array [],
-    "requestedForReply": false,
+    "replyRequests": Array [
+      Object {
+        "reason": "気になります",
+        "userId": "test",
+      },
+    ],
+    "requestedForReply": true,
   },
 }
 `;
@@ -36,8 +41,13 @@ exports[`CreateOrUpdateReplyRequest can update reason of a previously submitted 
 Object {
   "CreateOrUpdateReplyRequest": Object {
     "replyRequestCount": 2,
-    "replyRequests": Array [],
-    "requestedForReply": false,
+    "replyRequests": Array [
+      Object {
+        "reason": "New reason",
+        "userId": "test",
+      },
+    ],
+    "requestedForReply": true,
   },
 }
 `;

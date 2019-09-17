@@ -95,7 +95,7 @@ export async function createOrUpdateReplyRequest({
   }
 
   return {
-    article: processMeta({ ...articleUpdateResult.get, _id: id }),
+    article: processMeta({ ...articleUpdateResult.get, _id: articleId }),
     isCreated,
   };
 }
