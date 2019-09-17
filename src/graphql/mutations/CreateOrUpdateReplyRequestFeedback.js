@@ -1,25 +1,14 @@
-import {
-  GraphQLString,
-  GraphQLNonNull,
-  GraphQLInt,
-  GraphQLObjectType,
-} from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 import { assertUser } from 'graphql/util';
 import FeedbackVote from 'graphql/models/FeedbackVote';
+import ReplyRequest from 'graphql/models/ReplyRequest';
 
 import client from 'util/client';
 
 export default {
   description: 'Create or update a feedback on a reply request reason',
-  type: new GraphQLObjectType({
-    name: 'CreateOrUpdateReplyRequestFeedbackResult',
-    fields: {
-      feedbackCount: { type: GraphQLInt },
-      positiveFeedbackCount: { type: GraphQLInt },
-      negativeFeedbackCount: { type: GraphQLInt },
-    },
-  }),
+  type: ReplyRequest,
   args: {
     replyRequestId: { type: new GraphQLNonNull(GraphQLString) },
     vote: { type: new GraphQLNonNull(FeedbackVote) },
@@ -30,9 +19,7 @@ export default {
     const now = new Date().toISOString();
 
     const {
-      get: {
-        _source: { positiveFeedbackCount, negativeFeedbackCount, feedbacks },
-      },
+      get: { _source },
     } = await client.update({
       index: 'replyrequests',
       type: 'doc',
@@ -86,10 +73,6 @@ export default {
       _source: true,
     });
 
-    return {
-      feedbackCount: feedbacks.length,
-      negativeFeedbackCount,
-      positiveFeedbackCount,
-    };
+    return _source;
   },
 };
