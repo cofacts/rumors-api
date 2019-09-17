@@ -11,6 +11,7 @@ import User, { userFieldResolver } from './User';
 import Reply from './Reply';
 import ArticleReplyFeedback from './ArticleReplyFeedback';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
+import FeedbackVote from './FeedbackVote';
 
 export default new GraphQLObjectType({
   name: 'ArticleReply',
@@ -62,6 +63,29 @@ export default new GraphQLObjectType({
       type: new GraphQLList(ArticleReplyFeedback),
       resolve: ({ articleId, replyId }, args, { loaders }) =>
         loaders.articleReplyFeedbacksLoader.load({ articleId, replyId }),
+    },
+
+    ownVote: {
+      type: FeedbackVote,
+      description:
+        'The feedback of current user. null when not logged in or not voted yet.',
+      resolve: async (
+        { articleId, replyId },
+        args,
+        { userId, appId, loaders }
+      ) => {
+        if (!userId || !appId) return null;
+        const feedbacks = await loaders.articleReplyFeedbacksLoader.load({
+          articleId,
+          replyId,
+        });
+
+        const ownFeedback = feedbacks.find(
+          feedback => feedback.userId === userId && feedback.appId === appId
+        );
+        if (!ownFeedback) return null;
+        return ownFeedback.score;
+      },
     },
 
     status: {

@@ -123,8 +123,16 @@ export default {
       );
     }
 
-    return articleReplyUpdateResult.get._source.articleReplies.find(
+    const updatedArticleReply = articleReplyUpdateResult.get._source.articleReplies.find(
       articleReply => articleReply.replyId === replyId
     );
+
+    if (!updatedArticleReply) {
+      throw new Error(
+        `Cannot get updated article reply with article ID = ${articleId} and reply ID = ${replyId}`
+      );
+    }
+
+    return { articleId, ...updatedArticleReply };
   },
 };

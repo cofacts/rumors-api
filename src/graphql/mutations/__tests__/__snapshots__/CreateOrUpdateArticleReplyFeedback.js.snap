@@ -5,6 +5,7 @@ Object {
   "CreateOrUpdateArticleReplyFeedback": Object {
     "feedbackCount": 12,
     "negativeFeedbackCount": 0,
+    "ownVote": "UPVOTE",
     "positiveFeedbackCount": 12,
   },
 }
@@ -38,6 +39,7 @@ Object {
   "CreateOrUpdateArticleReplyFeedback": Object {
     "feedbackCount": 11,
     "negativeFeedbackCount": 1,
+    "ownVote": "DOWNVOTE",
     "positiveFeedbackCount": 10,
   },
 }
