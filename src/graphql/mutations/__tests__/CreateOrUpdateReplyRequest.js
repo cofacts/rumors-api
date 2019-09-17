@@ -21,7 +21,11 @@ describe('CreateOrUpdateReplyRequest', () => {
           reason: "気になります"
         ) {
           replyRequestCount
-          status
+          replyRequests {
+            userId
+            reason
+          }
+          requestedForReply
         }
       }
     `(
@@ -78,7 +82,11 @@ describe('CreateOrUpdateReplyRequest', () => {
           reason: "New reason"
         ) {
           replyRequestCount
-          status
+          replyRequests {
+            userId
+            reason
+          }
+          requestedForReply
         }
       }
     `({ articleId }, { userId, appId });

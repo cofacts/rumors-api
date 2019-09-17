@@ -1,11 +1,6 @@
-import {
-  GraphQLString,
-  GraphQLNonNull,
-  GraphQLInt,
-  GraphQLObjectType,
-  GraphQLEnumType,
-} from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { assertUser } from 'graphql/util';
+import Article from '../models/Article';
 
 import client, { processMeta } from 'util/client';
 
@@ -74,6 +69,7 @@ export async function createOrUpdateReplyRequest({
         updatedAt: now,
       },
     },
+    refresh: 'true',
   });
 
   const isCreated = result === 'created';
@@ -106,32 +102,7 @@ export async function createOrUpdateReplyRequest({
 
 export default {
   description: 'Create or update a reply request for the given article',
-  type: new GraphQLObjectType({
-    name: 'CreateOrUpdateReplyRequestResult',
-    fields: {
-      replyRequestCount: {
-        type: GraphQLInt,
-        description:
-          'Reply request count for the given article after creating the reply request',
-      },
-      status: {
-        type: new GraphQLEnumType({
-          name: 'CreateOrUpdateReplyRequstResultStatus',
-          values: {
-            SUCCESS: {
-              value: 'SUCCESS',
-              description: 'Successfully inserted a new reply request',
-            },
-            DUPLICATE: {
-              value: 'DUPLICATE',
-              description:
-                'The user has already requested reply for this article; the reason has been updated',
-            },
-          },
-        }),
-      },
-    },
-  }),
+  type: Article,
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
     reason: {
@@ -140,15 +111,12 @@ export default {
     },
   },
   async resolve(rootValue, { articleId, reason }, { appId, userId }) {
-    const { article, isCreated } = await createOrUpdateReplyRequest({
+    const { article } = await createOrUpdateReplyRequest({
       articleId,
       appId,
       userId,
       reason,
     });
-    return {
-      replyRequestCount: article.replyRequestCount,
-      status: isCreated ? 'SUCCESS' : 'DUPLICATE',
-    };
+    return article;
   },
 };
