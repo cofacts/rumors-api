@@ -1,11 +1,6 @@
-import {
-  GraphQLString,
-  GraphQLNonNull,
-  GraphQLInt,
-  GraphQLObjectType,
-  GraphQLEnumType,
-} from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { assertUser } from 'graphql/util';
+import Article from '../models/Article';
 
 import client, { processMeta } from 'util/client';
 
@@ -26,7 +21,7 @@ export function getReplyRequestId({ articleId, userId, appId }) {
 }
 
 /**
- * @typedef {Object} CreateReplyRequestResult
+ * @typedef {Object} CreateOrUpdateReplyRequestResult
  * @property {Object} article - The update article instance
  * @property {boolean} isCreated - If the reply request is created
  */
@@ -37,7 +32,7 @@ export function getReplyRequestId({ articleId, userId, appId }) {
  * @param {ReplyRequestParam} param
  * @returns {CreateReplyRequstResult}
  */
-export async function createReplyRequest({
+export async function createOrUpdateReplyRequest({
   articleId,
   userId,
   appId,
@@ -47,15 +42,21 @@ export async function createReplyRequest({
 
   const now = new Date().toISOString();
   const id = getReplyRequestId({ articleId, userId, appId });
+  const updatedDoc = {
+    updatedAt: now,
+  };
+
+  // Update reason if there is new one
+  if (reason) {
+    updatedDoc.reason = reason;
+  }
 
   const { result } = await client.update({
     index: 'replyrequests',
     type: 'doc',
     id,
     body: {
-      doc: {
-        updatedAt: now,
-      },
+      doc: updatedDoc,
       upsert: {
         articleId,
         userId,
@@ -68,6 +69,7 @@ export async function createReplyRequest({
         updatedAt: now,
       },
     },
+    refresh: 'true',
   });
 
   const isCreated = result === 'created';
@@ -93,39 +95,14 @@ export async function createReplyRequest({
   }
 
   return {
-    article: processMeta({ ...articleUpdateResult.get, _id: id }),
+    article: processMeta({ ...articleUpdateResult.get, _id: articleId }),
     isCreated,
   };
 }
 
 export default {
-  description: 'Create a reply request for the given article',
-  type: new GraphQLObjectType({
-    name: 'CreateReplyRequestResult',
-    fields: {
-      replyRequestCount: {
-        type: GraphQLInt,
-        description:
-          'Reply request count for the given article after creating the reply request',
-      },
-      status: {
-        type: new GraphQLEnumType({
-          name: 'CreateReplyRequstResultStatus',
-          values: {
-            SUCCESS: {
-              value: 'SUCCESS',
-              description: 'Successfully inserted a new reply request',
-            },
-            DUPLICATE: {
-              value: 'DUPLICATE',
-              description:
-                'The user has already requested reply for this article',
-            },
-          },
-        }),
-      },
-    },
-  }),
+  description: 'Create or update a reply request for the given article',
+  type: Article,
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
     reason: {
@@ -134,15 +111,12 @@ export default {
     },
   },
   async resolve(rootValue, { articleId, reason }, { appId, userId }) {
-    const { article, isCreated } = await createReplyRequest({
+    const { article } = await createOrUpdateReplyRequest({
       articleId,
       appId,
       userId,
       reason,
     });
-    return {
-      replyRequestCount: article.replyRequestCount,
-      status: isCreated ? 'SUCCESS' : 'DUPLICATE',
-    };
+    return article;
   },
 };

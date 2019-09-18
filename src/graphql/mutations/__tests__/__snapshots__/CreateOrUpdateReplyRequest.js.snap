@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateOrUpdateReplyRequest attaches a reply request to an article 1`] = `
+Object {
+  "CreateOrUpdateReplyRequest": Object {
+    "replyRequestCount": 2,
+    "replyRequests": Array [
+      Object {
+        "reason": "気になります",
+        "userId": "test",
+      },
+    ],
+    "requestedForReply": true,
+  },
+}
+`;
+
+exports[`CreateOrUpdateReplyRequest attaches a reply request to an article 2`] = `
+Object {
+  "appId": "test",
+  "articleId": "createReplyRequestTest1",
+  "createdAt": "2017-01-28T08:45:57.011Z",
+  "feedbacks": Array [],
+  "negativeFeedbackCount": 0,
+  "positiveFeedbackCount": 0,
+  "reason": "気になります",
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "test",
+}
+`;
+
+exports[`CreateOrUpdateReplyRequest attaches a reply request to an article 3`] = `
+Object {
+  "lastRequestedAt": "2017-01-28T08:45:57.011Z",
+  "replyRequestCount": 2,
+  "text": "foofoo",
+}
+`;
+
+exports[`CreateOrUpdateReplyRequest can update reason of a previously submitted reply request 1`] = `
+Object {
+  "CreateOrUpdateReplyRequest": Object {
+    "replyRequestCount": 2,
+    "replyRequests": Array [
+      Object {
+        "reason": "New reason",
+        "userId": "test",
+      },
+    ],
+    "requestedForReply": true,
+  },
+}
+`;
+
+exports[`CreateOrUpdateReplyRequest can update reason of a previously submitted reply request 2`] = `
+Object {
+  "appId": "test",
+  "articleId": "createReplyRequestTest1",
+  "createdAt": "2017-01-28T08:45:57.011Z",
+  "feedbacks": Array [],
+  "negativeFeedbackCount": 0,
+  "positiveFeedbackCount": 0,
+  "reason": "New reason",
+  "updatedAt": "2017-01-28T08:47:37.011Z",
+  "userId": "test",
+}
+`;
+
+exports[`CreateOrUpdateReplyRequest can update reason of a previously submitted reply request 3`] = `
+Object {
+  "lastRequestedAt": "2017-01-28T08:47:37.011Z",
+  "replyRequestCount": 2,
+  "text": "foofoo",
+}
+`;
