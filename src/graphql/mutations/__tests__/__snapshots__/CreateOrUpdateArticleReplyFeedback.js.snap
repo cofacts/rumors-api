@@ -4,7 +4,58 @@ exports[`CreateOrUpdateArticleReplyFeedback creates feedback on given article re
 Object {
   "CreateOrUpdateArticleReplyFeedback": Object {
     "feedbackCount": 12,
+    "feedbacks": Array [
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": "comment1",
+        "score": 1,
+      },
+    ],
     "negativeFeedbackCount": 0,
+    "ownVote": "UPVOTE",
     "positiveFeedbackCount": 12,
   },
 }
@@ -37,7 +88,54 @@ exports[`CreateOrUpdateArticleReplyFeedback updates existing feedback 1`] = `
 Object {
   "CreateOrUpdateArticleReplyFeedback": Object {
     "feedbackCount": 11,
+    "feedbacks": Array [
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": 1,
+      },
+      Object {
+        "comment": null,
+        "score": -1,
+      },
+    ],
     "negativeFeedbackCount": 1,
+    "ownVote": "DOWNVOTE",
     "positiveFeedbackCount": 10,
   },
 }
