@@ -117,6 +117,8 @@ export default {
       },
       _source: true,
     });
+
+    /* istanbul ignore if */
     if (articleReplyUpdateResult.result !== 'updated') {
       throw new Error(
         `Cannot article ${articleId}'s feedback count for feedback ID = ${id}`
@@ -127,6 +129,7 @@ export default {
       articleReply => articleReply.replyId === replyId
     );
 
+    /* istanbul ignore if */
     if (!updatedArticleReply) {
       throw new Error(
         `Cannot get updated article reply with article ID = ${articleId} and reply ID = ${replyId}`
