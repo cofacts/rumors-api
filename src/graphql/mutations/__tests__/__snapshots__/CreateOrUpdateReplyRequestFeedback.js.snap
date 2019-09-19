@@ -4,6 +4,7 @@ exports[`CreateOrUpdateReplyRequestFeedback creates new feedback 1`] = `
 Object {
   "CreateOrUpdateReplyRequestFeedback": Object {
     "feedbackCount": 2,
+    "id": "foo",
     "negativeFeedbackCount": 0,
     "ownVote": "UPVOTE",
     "positiveFeedbackCount": 2,
@@ -44,6 +45,7 @@ exports[`CreateOrUpdateReplyRequestFeedback updates existing feedback 1`] = `
 Object {
   "CreateOrUpdateReplyRequestFeedback": Object {
     "feedbackCount": 1,
+    "id": "foo",
     "negativeFeedbackCount": 1,
     "ownVote": "DOWNVOTE",
     "positiveFeedbackCount": 0,

@@ -3,6 +3,7 @@
 exports[`CreateOrUpdateReplyRequest attaches a reply request to an article 1`] = `
 Object {
   "CreateOrUpdateReplyRequest": Object {
+    "id": "createReplyRequestTest1",
     "replyRequestCount": 2,
     "replyRequests": Array [
       Object {
@@ -40,6 +41,7 @@ Object {
 exports[`CreateOrUpdateReplyRequest can update reason of a previously submitted reply request 1`] = `
 Object {
   "CreateOrUpdateReplyRequest": Object {
+    "id": "createReplyRequestTest1",
     "replyRequestCount": 2,
     "replyRequests": Array [
       Object {

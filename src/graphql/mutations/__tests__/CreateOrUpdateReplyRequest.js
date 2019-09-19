@@ -20,6 +20,7 @@ describe('CreateOrUpdateReplyRequest', () => {
           articleId: $articleId
           reason: "気になります"
         ) {
+          id
           replyRequestCount
           replyRequests {
             userId
@@ -81,6 +82,7 @@ describe('CreateOrUpdateReplyRequest', () => {
           articleId: $articleId
           reason: "New reason"
         ) {
+          id
           replyRequestCount
           replyRequests {
             userId
