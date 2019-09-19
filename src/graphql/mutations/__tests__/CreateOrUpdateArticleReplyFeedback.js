@@ -24,6 +24,8 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
           vote: UPVOTE
           comment: $comment
         ) {
+          articleId
+          replyId
           feedbackCount
           positiveFeedbackCount
           negativeFeedbackCount
@@ -91,6 +93,8 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
           replyId: $replyId
           vote: DOWNVOTE
         ) {
+          articleId
+          replyId
           feedbackCount
           positiveFeedbackCount
           negativeFeedbackCount

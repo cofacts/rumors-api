@@ -73,6 +73,6 @@ export default {
       _source: true,
     });
 
-    return _source;
+    return { ..._source, id: replyRequestId };
   },
 };
