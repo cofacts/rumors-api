@@ -10,12 +10,16 @@ exports[`UpdateArticleReplyStatus should set article reply fields correctly 1`] 
 Object {
   "deleted": Array [
     Object {
+      "articleId": "deleted",
+      "replyId": "reply",
       "status": "NORMAL",
       "updatedAt": "2017-01-28T08:45:57.011Z",
     },
   ],
   "normal": Array [
     Object {
+      "articleId": "normal",
+      "replyId": "reply",
       "status": "DELETED",
       "updatedAt": "2017-01-28T08:45:57.011Z",
     },
