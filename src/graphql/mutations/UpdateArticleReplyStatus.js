@@ -66,6 +66,7 @@ export default {
       );
     }
 
-    return _source.articleReplies;
+    // When returning, insert articleId so that ArticleReply object type can resolve article.
+    return _source.articleReplies.map(ar => ({ ...ar, articleId }));
   },
 };

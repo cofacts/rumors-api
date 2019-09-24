@@ -34,13 +34,15 @@ describe('UpdateArticleReplyStatus', () => {
     const userId = 'foo';
     const appId = 'test';
 
-    const { data } = await gql`
+    const { data, errors } = await gql`
       mutation {
         normal: UpdateArticleReplyStatus(
           articleId: "normal"
           replyId: "reply"
           status: DELETED
         ) {
+          articleId
+          replyId
           status
           updatedAt
         }
@@ -49,12 +51,15 @@ describe('UpdateArticleReplyStatus', () => {
           replyId: "reply"
           status: NORMAL
         ) {
+          articleId
+          replyId
           status
           updatedAt
         }
       }
     `({}, { userId, appId });
 
+    expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
     const { _source: normal } = await client.get({
