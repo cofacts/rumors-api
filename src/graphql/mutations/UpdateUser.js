@@ -29,6 +29,6 @@ export default {
       throw new Error(`Cannot change name for user`);
     }
 
-    return _source;
+    return { id: userId, ..._source };
   },
 };

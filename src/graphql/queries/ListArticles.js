@@ -115,7 +115,9 @@ export default {
 
       // Overriding filter's userId and appId, as indicated in the description
       //
+      // eslint-disable-next-line require-atomic-updates
       filter.userId = specifiedArticle.userId;
+      // eslint-disable-next-line require-atomic-updates
       filter.appId = specifiedArticle.appId;
     }
 

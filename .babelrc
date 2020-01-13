@@ -5,7 +5,7 @@
         "node": "current"
       }
     }],
-    "stage-3"
+    "stage-3",
   ],
   "plugins": [
     ["module-resolver", {

@@ -19,9 +19,11 @@ describe('CreateOrUpdateReplyRequestFeedback', () => {
           replyRequestId: $replyRequestId
           vote: UPVOTE
         ) {
+          id
           feedbackCount
           positiveFeedbackCount
           negativeFeedbackCount
+          ownVote
         }
       }
     `(
@@ -58,9 +60,11 @@ describe('CreateOrUpdateReplyRequestFeedback', () => {
           replyRequestId: $replyRequestId
           vote: DOWNVOTE
         ) {
+          id
           feedbackCount
           positiveFeedbackCount
           negativeFeedbackCount
+          ownVote
         }
       }
     `(

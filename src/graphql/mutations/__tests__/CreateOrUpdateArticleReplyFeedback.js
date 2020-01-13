@@ -24,9 +24,16 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
           vote: UPVOTE
           comment: $comment
         ) {
+          articleId
+          replyId
           feedbackCount
           positiveFeedbackCount
           negativeFeedbackCount
+          ownVote
+          feedbacks {
+            score
+            comment
+          }
         }
       }
     `(
@@ -86,9 +93,16 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
           replyId: $replyId
           vote: DOWNVOTE
         ) {
+          articleId
+          replyId
           feedbackCount
           positiveFeedbackCount
           negativeFeedbackCount
+          ownVote
+          feedbacks {
+            score
+            comment
+          }
         }
       }
     `(

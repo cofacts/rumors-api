@@ -166,6 +166,7 @@ describe('GetReplyAndGetArticle', () => {
             GetArticle(id: "foo") {
               articleReplies {
                 feedbacks {
+                  id
                   score
                 }
                 positiveFeedbackCount

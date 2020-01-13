@@ -6,6 +6,8 @@ export default new GraphQLObjectType({
   name: 'ArticleReplyFeedback',
   description: 'User feedback to an ArticleReply',
   fields: () => ({
+    id: { type: GraphQLString },
+
     user: {
       type: User,
       resolve: userFieldResolver,
