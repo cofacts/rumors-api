@@ -37,6 +37,6 @@ services:
       - ".:/srv/www"
     environment:
       ELASTICSEARCH_URL: "http://db:9200"
-      URL_RESOLVER_URL: "http://url-resolver:4000"
+      URL_RESOLVER_URL: "url-resolver:4000"
     ports:
       - "5000:5000"

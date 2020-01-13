@@ -1,4 +1,5 @@
 import 'dotenv/config';
+jest.mock(__dirname + '../../src/util/grpc');
 
 expect.extend({
   toBeNaN(received) {

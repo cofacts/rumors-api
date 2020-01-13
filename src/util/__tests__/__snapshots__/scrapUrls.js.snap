@@ -60,28 +60,10 @@ Array [
 
 exports[`scrapping & storage scraps from Internet and handles error: GraphQL requests 1`] = `
 Array [
-  Object {
-    "query": "
-      query($urls: [String]!) {
-        resolvedUrls(urls: $urls) {
-          url
-          canonical
-          title
-          summary
-          topImageUrl
-          html
-          status
-          error
-        }
-      }
-    ",
-    "variables": Object {
-      "urls": Array [
-        "http://example.com/index.html",
-        "http://example.com/not-found",
-      ],
-    },
-  },
+  Array [
+    "http://example.com/index.html",
+    "http://example.com/not-found",
+  ],
 ]
 `;
 

@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "resolve_error.proto";
+
+package url_resolver;
+
+service UrlResolver {
+  rpc ResolveUrl (UrlsRequest) returns (stream UrlReply) {}
+}
+
+message UrlsRequest {
+  repeated string urls = 1;
+}
+
+message UrlsReply {
+  repeated UrlReply reply = 1;
+}
+
+message UrlReply {
+  string url = 1;
+  string canonical = 2;
+  string title = 3;
+  string summary = 4;
+  string top_image_url = 5;
+  string html = 6;
+  int32 status = 7;
+  oneof result {
+    ResolveError error = 8;
+    bool successfully_resolved = 9;
+  }
+}
