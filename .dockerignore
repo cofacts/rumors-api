@@ -1,6 +1,7 @@
 *
-!build/*
+!.babelrc
 !process.json
 !package.json
 !package-lock.json
 !static
+!src

@@ -123,26 +123,17 @@ Build docker image. The following are basically the same, but with different doc
 
 ```
 # Production build
-$ npm run build
+$ docker build -t cofacts/rumors-api:latest .
 
 # Staging build
-$ npm run build:staging
+$ docker build -t cofacts/rumors-api:staging .
 ```
 
 Run the docker image on local machine, then visit `http://localhost:5000`.
 (To test functions involving DB, ElasticSearch DB must work as `.env` specified.)
 
 ```
-$ docker run --rm -it -p 5000:5000 mrorz/rumors-api
-```
-
-Push to dockerhub
-```
-# Production
-$ docker push mrorz/rumors-api:latest
-
-# Staging
-$ docker push mrorz/rumors-api:staging
+$ docker run --rm -it -p 5000:5000 --env-file .env cofacts/rumors-api
 ```
 
 ## Other scripts
