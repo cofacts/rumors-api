@@ -122,11 +122,7 @@ $ npm t -- -u
 Build docker image. The following are basically the same, but with different docker tags.
 
 ```
-# Production build
 $ docker build -t cofacts/rumors-api:latest .
-
-# Staging build
-$ docker build -t cofacts/rumors-api:staging .
 ```
 
 Run the docker image on local machine, then visit `http://localhost:5000`.
