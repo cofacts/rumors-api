@@ -32,7 +32,19 @@ async function scrapUrls(
   //
   const normalizedUrls = removeFBCLIDIfExist(originalUrls);
 
-  const scrapLoader = new DataLoader(urls => resolveUrl(urls));
+  const scrapLoader = new DataLoader(async urls => {
+    const urlToIndex = urls.reduce((map, url, i) => {
+      map[url] = i;
+      return map;
+    }, {});
+    const unorderedFetchResults = await resolveUrl(urls);
+    const orderedFetchResults = [];
+    unorderedFetchResults.forEach(
+      fetchResult =>
+        (orderedFetchResults[urlToIndex[fetchResult.url]] = fetchResult)
+    );
+    return orderedFetchResults;
+  });
 
   // result: list of ScrapResult, with its `url` being the url in text,
   // but canonical url may be normalized
