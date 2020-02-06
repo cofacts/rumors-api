@@ -40,6 +40,10 @@ $ docker-compose up
 This will:
 
 * rumors-api server on `http://localhost:5000`. It will be re-started when you update anyfile.
+* rumors-site on `http://localhost:3000`. You can populate session cookie by "logging-in" using the site
+  (when credentials are in-place in `.env`).
+  However, it cannot do server-side rendering properly because rumors-site container cannot access
+  localhost URLs.
 * Kibana on `http://localhost:6222`.
 * ElasticSearch DB on `http://localhost:62222`.
 * [URL resolver](https://github.com/cofacts/url-resolver) on `http://localhost:4000`
