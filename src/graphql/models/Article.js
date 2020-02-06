@@ -22,6 +22,7 @@ import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
+import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
 
@@ -86,6 +87,45 @@ const Article = new GraphQLObjectType({
         return [latestArticleReply, ...sortedArticleReplies];
       },
     },
+
+    articleCategories: {
+      type: new GraphQLList(ArticleCategory),
+
+      // TODO: Mock data, needs implementation
+      resolve: (source, args, { userId, appId }) => {
+        return [
+          {
+            aiModel: 'Model1',
+            aiConfidence: 0.8,
+            positiveFeedbackCount: 2,
+            negativeFeedbackCount: 1,
+            categoryId: 'c2',
+            status: 'NORMAL',
+            createdAt: '2020-02-06T05:34:45.862Z',
+            updatedAt: '2020-02-06T05:34:46.862Z',
+          },
+          {
+            // Simulate category that is added by current user
+            userId,
+            appId,
+            positiveFeedbackCount: 2,
+            negativeFeedbackCount: 1,
+            categoryId: 'c3',
+            status: 'NORMAL',
+            createdAt: '2020-02-06T05:34:45.862Z',
+            updatedAt: '2020-02-06T05:34:46.862Z',
+          },
+        ];
+      },
+    },
+
+    categoryCount: {
+      type: GraphQLInt,
+      description: 'Number of normal article categories',
+      // TODO: Mock data, needs implementation
+      resolve: () => 2,
+    },
+
     replyRequests: {
       type: new GraphQLList(ReplyRequest),
       resolve: async ({ id }, args, { loaders }) =>
