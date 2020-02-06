@@ -8,51 +8,51 @@ Object {
     "feedbacks": Array [
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": "comment1",
-        "score": 1,
+        "vote": "UPVOTE",
       },
     ],
     "negativeFeedbackCount": 0,
@@ -94,47 +94,47 @@ Object {
     "feedbacks": Array [
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": 1,
+        "vote": "UPVOTE",
       },
       Object {
         "comment": null,
-        "score": -1,
+        "vote": "DOWNVOTE",
       },
     ],
     "negativeFeedbackCount": 1,

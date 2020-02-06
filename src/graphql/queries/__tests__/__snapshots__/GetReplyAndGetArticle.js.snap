@@ -18,7 +18,7 @@ Object {
           "feedbacks": Array [
             Object {
               "id": "foo__bar__test-user__test-app",
-              "score": 1,
+              "vote": "UPVOTE",
             },
           ],
           "negativeFeedbackCount": 0,

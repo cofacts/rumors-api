@@ -31,7 +31,7 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
           negativeFeedbackCount
           ownVote
           feedbacks {
-            score
+            vote
             comment
           }
         }
@@ -100,7 +100,7 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
           negativeFeedbackCount
           ownVote
           feedbacks {
-            score
+            vote
             comment
           }
         }
