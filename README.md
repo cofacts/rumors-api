@@ -23,7 +23,9 @@ After cloning this repository & cd into project directory, then install the depe
 ```
 $ git clone --recursive git@github.com:MrOrz/rumors-api.git # --recursive for the submodules
 $ cd rumors-api
-$ npm i
+
+# This ensures gRPC binary package are installed under correct platform during development
+$ docker-compose run --rm --entrypoint="npm i" api
 ```
 
 If you want to test OAuth2 authentication, you will need to fill in login credentials in `.env`. Please apply for the keys in Facebook, Twitter and Github respectively.
