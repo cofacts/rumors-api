@@ -23,7 +23,9 @@ After cloning this repository & cd into project directory, then install the depe
 ```
 $ git clone --recursive git@github.com:MrOrz/rumors-api.git # --recursive for the submodules
 $ cd rumors-api
-$ npm i
+
+# This ensures gRPC binary package are installed under correct platform during development
+$ docker-compose run --rm --entrypoint="npm i" api
 ```
 
 If you want to test OAuth2 authentication, you will need to fill in login credentials in `.env`. Please apply for the keys in Facebook, Twitter and Github respectively.
@@ -38,6 +40,10 @@ $ docker-compose up
 This will:
 
 * rumors-api server on `http://localhost:5000`. It will be re-started when you update anyfile.
+* rumors-site on `http://localhost:3000`. You can populate session cookie by "logging-in" using the site
+  (when credentials are in-place in `.env`).
+  However, it cannot do server-side rendering properly because rumors-site container cannot access
+  localhost URLs.
 * Kibana on `http://localhost:6222`.
 * ElasticSearch DB on `http://localhost:62222`.
 * [URL resolver](https://github.com/cofacts/url-resolver) on `http://localhost:4000`

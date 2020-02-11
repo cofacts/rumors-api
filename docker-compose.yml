@@ -22,7 +22,7 @@ services:
       - "6222:5601"
 
   url-resolver:
-    image: johnsonliang/cofacts-url-resolver
+    image: cofacts/url-resolver
     ports:
       - "4000:4000"
 
@@ -40,3 +40,10 @@ services:
       URL_RESOLVER_URL: "url-resolver:4000"
     ports:
       - "5000:5000"
+
+  site:
+    image: cofacts/rumors-site:latest-en
+    ports:
+      - "3000:3000"
+    environment:
+      PUBLIC_API_URL: http://localhost:5000
