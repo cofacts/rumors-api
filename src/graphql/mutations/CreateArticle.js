@@ -78,7 +78,7 @@ async function createNewArticle({
         appId,
         references: [reference],
         articleReplies: [],
-        normalArticleReplycount: 0,
+        normalArticleReplyCount: 0,
         replyRequestCount: 0,
         tags: [],
         hyperlinks: [],

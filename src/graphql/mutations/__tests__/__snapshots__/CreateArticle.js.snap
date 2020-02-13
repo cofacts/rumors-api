@@ -48,7 +48,7 @@ Object {
     },
   ],
   "lastRequestedAt": "2017-01-28T08:45:57.011Z",
-  "normalArticleReplycount": 0,
+  "normalArticleReplyCount": 0,
   "references": Array [
     Object {
       "appId": "foo",
