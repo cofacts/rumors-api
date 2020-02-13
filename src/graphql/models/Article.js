@@ -22,6 +22,7 @@ import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
+import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
@@ -90,6 +91,14 @@ const Article = new GraphQLObjectType({
 
     articleCategories: {
       type: new GraphQLList(ArticleCategory),
+
+      args: {
+        status: {
+          type: ArticleCategoryStatusEnum,
+          description:
+            'When specified, returns only article categories with the specified status',
+        },
+      },
 
       // TODO: Mock data, needs implementation
       resolve: (source, args, { userId, appId }) => {
