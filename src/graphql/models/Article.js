@@ -100,10 +100,12 @@ const Article = new GraphQLObjectType({
         },
       },
 
-      // TODO: Mock data, needs implementation
-      resolve: (source, args, { userId, appId }) => {
+      // TODO: Mock data, needs implementation.
+      // Refer to the implementation of articleReplies field
+      resolve: ({ id }, args, { userId, appId }) => {
         return [
           {
+            articleId: id,
             aiModel: 'Model1',
             aiConfidence: 0.8,
             positiveFeedbackCount: 2,
@@ -115,6 +117,7 @@ const Article = new GraphQLObjectType({
           },
           {
             // Simulate category that is added by current user
+            articleId: id,
             userId,
             appId,
             positiveFeedbackCount: 2,

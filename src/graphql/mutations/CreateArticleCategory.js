@@ -38,7 +38,9 @@ export async function createArticleCategory({
     updatedAt: now,
   };
 
-  // TODO: Insert articleCategory to articles in Elasticsearch, and return insertion results from DB
+  // TODO: Insert articleCategory to articles in Elasticsearch, and return insertion results from DB.
+  // Implementation can refer to createArticleReply() in CreateArticleReply.js
+  //
   return (article.articleCategories || []).concat(articleCategory); // MOCK
 }
 
