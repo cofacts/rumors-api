@@ -245,7 +245,7 @@ export function createConnectionType(
 ) {
   return new GraphQLObjectType({
     name: typeName,
-    fields: {
+    fields: () => ({
       totalCount: {
         type: GraphQLInt,
         description:
@@ -285,7 +285,7 @@ export function createConnectionType(
         }),
         resolve: params => params,
       },
-    },
+    }),
   });
 }
 

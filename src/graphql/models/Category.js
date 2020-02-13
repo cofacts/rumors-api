@@ -1,5 +1,6 @@
-import { GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql';
-import ArticleCategory from './ArticleCategory';
+import { GraphQLObjectType, GraphQLString } from 'graphql';
+import { createSortType, createFilterType, pagingArgs } from 'graphql/util';
+import { ArticleCategoryConnnection } from './ArticleCategory';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 
 const Category = new GraphQLObjectType({
@@ -13,13 +14,23 @@ const Category = new GraphQLObjectType({
     updatedAt: { type: GraphQLString },
 
     articleCategories: {
-      type: new GraphQLList(ArticleCategory),
+      type: ArticleCategoryConnnection,
       args: {
-        status: {
-          type: ArticleCategoryStatusEnum,
-          description:
-            'When specified, returns only article categories with the specified status',
+        filter: {
+          type: createFilterType('CategoryArticleCategoriesFilter', {
+            status: {
+              type: ArticleCategoryStatusEnum,
+              description:
+                'When specified, returns only article categories with the specified status',
+            },
+          }),
         },
+        orderBy: {
+          type: createSortType('CategoryArticleCategoriesOrderBy', [
+            'createdAt',
+          ]),
+        },
+        ...pagingArgs,
       },
       resolve({ id }, args, { userId, appId }) {
         // TODO: Mock data, needs implementation

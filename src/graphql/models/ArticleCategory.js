@@ -12,10 +12,11 @@ import Category from './Category';
 import ArticleCategoryFeedback from './ArticleCategoryFeedback';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 import FeedbackVote from './FeedbackVote';
+import { createConnectionType } from 'graphql/util';
 
 import MOCK_CATEGORY_DATA from '../mockCategories';
 
-export default new GraphQLObjectType({
+const ArticleCategory = new GraphQLObjectType({
   name: 'ArticleCategory',
   description: 'The linkage between an Article and a Category',
   fields: () => ({
@@ -117,3 +118,34 @@ export default new GraphQLObjectType({
     updatedAt: { type: GraphQLString },
   }),
 });
+
+function getMockCursor(articleCategory) {
+  return `${articleCategory.articleId}_${articleCategory.categoryId}`;
+}
+
+export const ArticleCategoryConnnection = createConnectionType(
+  'ArticleCategoryConnnection',
+  ArticleCategory,
+  {
+    // TODO: When we fetch data from Elasticsearch, createConnectionType()'s default resolvers should
+    // do its job, and we won't need any of the following mock resolvers below.
+    //
+    resolveEdges: function mockResolveEdges(mockData) {
+      return mockData.map(articleCategory => ({
+        node: articleCategory,
+        cursor: getMockCursor(articleCategory),
+      }));
+    },
+    resolveTotalCount: function mockResolveTotalCount() {
+      return MOCK_CATEGORY_DATA.length;
+    },
+    resolveLastCursor: function mockResolveLastCursor() {
+      return getMockCursor(MOCK_CATEGORY_DATA[MOCK_CATEGORY_DATA.length - 1]);
+    },
+    resolveFirstCursor: function mockResolveFirstCursor() {
+      return getMockCursor(MOCK_CATEGORY_DATA[0]);
+    },
+  }
+);
+
+export default ArticleCategory;
