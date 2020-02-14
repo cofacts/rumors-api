@@ -1,15 +1,27 @@
+jest.mock('util/grpc');
+
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateReply';
+import resolveUrl from 'util/grpc';
+import delayForMs from 'util/delayForMs';
 
 describe('CreateReply', () => {
   beforeAll(() => loadFixtures(fixtures));
 
   it('creates replies and associates itself with specified article', async () => {
     MockDate.set(1485593157011);
+    const REF_URL = 'http://shouldscrap.com';
     const articleId = 'setReplyTest1';
+    resolveUrl.__setDelay(500); // Scrap result delay for 500ms
+    resolveUrl.__addMockResponse([
+      {
+        url: REF_URL,
+        title: 'scrapped title',
+      },
+    ]);
 
     const { data, errors } = await gql`
       mutation(
@@ -32,11 +44,12 @@ describe('CreateReply', () => {
         articleId,
         text: 'FOO FOO',
         type: 'RUMOR',
-        reference: 'http://google.com',
+        reference: REF_URL,
       },
       { userId: 'test', appId: 'test' }
     );
     MockDate.reset();
+    resolveUrl.__reset();
 
     expect(errors).toBeUndefined();
 
@@ -54,6 +67,19 @@ describe('CreateReply', () => {
       id: articleId,
     });
     expect(article._source.articleReplies[0].replyId).toBe(replyId);
+
+    // Wait until urls are resolved
+    await delayForMs(1000);
+
+    // Check replies and hyperlinks
+    const replyAfterFetch = await client.get({
+      index: 'replies',
+      type: 'doc',
+      id: replyId,
+    });
+    expect(replyAfterFetch._source.hyperlinks).toMatchSnapshot(
+      'hyperlinks after fetch'
+    );
 
     // Cleanup
     await client.delete({ index: 'replies', type: 'doc', id: replyId });

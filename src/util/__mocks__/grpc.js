@@ -1,10 +1,11 @@
 /**
  * Usage:
  *
- * jest.mock('path-to-resolveUrl/resolveUrl');
+ * jest.mock('path-to-grpc/grpc');
+ * import resolveUrl from 'path-to-grpc/grpc';
  *
  * it('some test', async () => {
- *   resolveUrl.__addMockResponse({data: {queryName: result})
+ *   resolveUrl.__addMockResponse([{url, ...}, ...])
  *
  *   const result = await functionUnderTestThatInvokesresolveUrl();
  *
@@ -15,9 +16,12 @@
  * })
  */
 
+import delayForMs from 'util/delayForMs';
+
 let seq = 0;
 let mockResponses = [];
 let requests = [];
+let delayMs = 0; // milliseconds
 
 function resolveUrl(url) {
   if (!mockResponses[seq]) {
@@ -26,15 +30,17 @@ function resolveUrl(url) {
     );
   }
   requests.push(url);
-  return Promise.resolve(mockResponses[seq++]);
+  return delayForMs(delayMs).then(() => mockResponses[seq++]);
 }
 
 resolveUrl.__addMockResponse = resp => mockResponses.push(resp);
+resolveUrl.__setDelay = delay => (delayMs = delay);
 resolveUrl.__getRequests = () => requests;
 resolveUrl.__reset = () => {
   seq = 0;
   mockResponses = [];
   requests = [];
+  delayMs = 0;
 };
 
 export default resolveUrl;
