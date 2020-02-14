@@ -4,6 +4,17 @@ exports[`CreateReply creates replies and associates itself with specified articl
 Object {
   "appId": "test",
   "createdAt": "2017-01-28T08:45:57.011Z",
+  "reference": "http://google.com",
+  "text": "FOO FOO",
+  "type": "RUMOR",
+  "userId": "test",
+}
+`;
+
+exports[`CreateReply should support waitForHyperlinks 1`] = `
+Object {
+  "appId": "test",
+  "createdAt": "2017-01-28T08:45:57.011Z",
   "hyperlinks": Array [
     Object {
       "normalizedUrl": "http://google.com/",
@@ -13,7 +24,7 @@ Object {
     },
   ],
   "reference": "http://google.com",
-  "text": "FOO FOO",
+  "text": "Bar Bar",
   "type": "RUMOR",
   "userId": "test",
 }

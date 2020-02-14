@@ -38,7 +38,8 @@ const Reply = new GraphQLObjectType({
     },
     hyperlinks: {
       type: new GraphQLList(Hyperlink),
-      description: 'Hyperlinks in reply text or reference',
+      description:
+        'Hyperlinks in reply text or reference. May be empty array if no URLs are included. `null` when hyperlinks are still fetching.',
     },
   }),
 });

@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLNonNull } from 'graphql';
+import { GraphQLString, GraphQLNonNull, GraphQLBoolean } from 'graphql';
 
 import { assertUser } from 'graphql/util';
 
@@ -12,10 +12,10 @@ import { createArticleReply } from './CreateArticleReply';
 /**
  * @param {string} replyId
  * @param {ScrapResult[]} hyperlinks
- * @return {Promise | null} update result
+ * @return {Promise} update result
  */
 export function updateReplyHyperlinks(replyId, scrapResults) {
-  if (!scrapResults || scrapResults.length === 0) return Promise.resolve();
+  if (!scrapResults) scrapResults = [];
 
   return client.update({
     index: 'replies',
@@ -44,10 +44,16 @@ export default {
     text: { type: new GraphQLNonNull(GraphQLString) },
     type: { type: new GraphQLNonNull(ReplyTypeEnum) },
     reference: { type: GraphQLString },
+    waitForHyperlinks: {
+      type: GraphQLBoolean,
+      description:
+        'If CreateReplh should resolve after hyperlinks are resolved.',
+      defaultValue: false,
+    },
   },
   async resolve(
     rootValue,
-    { articleId, text, type, reference },
+    { articleId, text, type, reference, waitForHyperlinks = false },
     { userId, appId, loaders }
   ) {
     assertUser({ userId, appId });
@@ -117,7 +123,7 @@ export default {
     return Promise.all([
       newReplyPromise, // for fetching articleId
       articleReplyPromise,
-      hyperlinkPromise,
+      waitForHyperlinks ? hyperlinkPromise : Promise.resolve(),
     ]).then(([id]) => ({ id }));
   },
 };
