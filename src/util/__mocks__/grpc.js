@@ -23,13 +23,13 @@ let mockResponses = [];
 let requests = [];
 let delayMs = 0; // milliseconds
 
-function resolveUrl(url) {
+function resolveUrl(urls) {
   if (!mockResponses[seq]) {
     throw Error(
       `resolveUrl Mock error: No response found for request #${seq}. Please add mock response first.`
     );
   }
-  requests.push(url);
+  requests.push(urls);
   return delayForMs(delayMs).then(() => mockResponses[seq++]);
 }
 

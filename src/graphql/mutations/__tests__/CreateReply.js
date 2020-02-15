@@ -13,7 +13,7 @@ describe('CreateReply', () => {
 
   it('creates replies and associates itself with specified article', async () => {
     MockDate.set(1485593157011);
-    const REF_URL = 'http://shouldscrap.com';
+    const REF_URL = 'http://shouldscrap.com/';
     const articleId = 'setReplyTest1';
     resolveUrl.__setDelay(500); // Scrap result delay for 500ms
     resolveUrl.__addMockResponse([
@@ -48,8 +48,6 @@ describe('CreateReply', () => {
       },
       { userId: 'test', appId: 'test' }
     );
-    MockDate.reset();
-    resolveUrl.__reset();
 
     expect(errors).toBeUndefined();
 
@@ -59,7 +57,7 @@ describe('CreateReply', () => {
       type: 'doc',
       id: replyId,
     });
-    expect(reply._source).toMatchSnapshot();
+    expect(reply._source).toMatchSnapshot('reply without hyperlinks');
 
     const article = await client.get({
       index: 'articles',
@@ -70,6 +68,8 @@ describe('CreateReply', () => {
 
     // Wait until urls are resolved
     await delayForMs(1000);
+    MockDate.reset();
+    resolveUrl.__reset();
 
     // Check replies and hyperlinks
     const replyAfterFetch = await client.get({
