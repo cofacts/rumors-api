@@ -83,6 +83,11 @@ describe('CreateReply', () => {
 
     // Cleanup
     await client.delete({ index: 'replies', type: 'doc', id: replyId });
+    await client.deleteByQuery({
+      index: 'urls',
+      type: 'doc',
+      body: { query: { term: { url: REF_URL } } },
+    });
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
 
