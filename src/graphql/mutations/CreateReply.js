@@ -47,7 +47,7 @@ export default {
     waitForHyperlinks: {
       type: GraphQLBoolean,
       description:
-        'If CreateReplh should resolve after hyperlinks are resolved.',
+        'If CreateReply should resolve after hyperlinks are resolved.',
       defaultValue: false,
     },
   },
