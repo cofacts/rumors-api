@@ -1,4 +1,9 @@
-import { GraphQLInt, GraphQLString, GraphQLInputObjectType } from 'graphql';
+import {
+  GraphQLInt,
+  GraphQLString,
+  GraphQLInputObjectType,
+  GraphQLList,
+} from 'graphql';
 import client from 'util/client';
 
 import {
@@ -24,6 +29,19 @@ export default {
           ),
           description:
             'List only the articles whose number of replies matches the criteria.',
+        },
+        categoryCount: {
+          type: getArithmeticExpressionType(
+            'ListArticleCategoryCountExpr',
+            GraphQLInt
+          ),
+          description:
+            'List only the articles whose number of categories match the criteria.',
+        },
+        categoryIds: {
+          type: new GraphQLList(GraphQLString),
+          description:
+            'Articles with more matching categories will come to front',
         },
         moreLikeThis: {
           type: new GraphQLInputObjectType({
