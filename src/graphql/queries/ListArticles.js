@@ -91,6 +91,7 @@ export default {
         'replyRequestCount',
         'replyCount',
         'lastRequestedAt',
+        'lastRepliedAt',
       ]),
     },
     ...pagingArgs,
@@ -103,6 +104,20 @@ export default {
     const body = {
       sort: getSortArgs(orderBy, {
         replyCount: o => ({ normalArticleReplyCount: { order: o } }),
+        lastRepliedAt: o => ({
+          'articleReplies.createdAt': {
+            order: o,
+            mode: 'max',
+            nested: {
+              path: 'articleReplies',
+              filter: {
+                term: {
+                  'articleReplies.status': 'NORMAL',
+                },
+              },
+            },
+          },
+        }),
       }),
       track_scores: true, // for _score sorting
     };
