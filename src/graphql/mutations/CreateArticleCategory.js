@@ -1,5 +1,6 @@
 import { GraphQLString, GraphQLNonNull, GraphQLList } from 'graphql';
 
+import client from 'util/client';
 import { assertUser } from 'graphql/util';
 import ArticleCategory from 'graphql/models/ArticleCategory';
 
@@ -38,10 +39,50 @@ export async function createArticleCategory({
     updatedAt: now,
   };
 
-  // TODO: Insert articleCategory to articles in Elasticsearch, and return insertion results from DB.
-  // Implementation can refer to createArticleReply() in CreateArticleReply.js
-  //
-  return (article.articleCategories || []).concat(articleCategory); // MOCK
+  const {
+    result: articleResult,
+    get: { _source },
+  } = await client.update({
+    index: 'articles',
+    type: 'doc',
+    id: article.id,
+    body: {
+      script: {
+        /**
+         * Check if the category is already connected in the article.
+         * If so, do nothing;
+         * otherwise, do update.
+         */
+        source: `
+          if(
+            ctx._source.articleCategories.stream().anyMatch(
+              ar -> ar.get('categoryId').equals(params.articleCategory.get('categoryId'))
+            )
+          ) {
+            ctx.op = 'none';
+          } else {
+            ctx._source.articleCategories.add(params.articleCategory);
+            ctx._source.normalArticleCategoryCount = ctx._source.articleCategories.stream().filter(
+              ar -> ar.get('status').equals('NORMAL')
+            ).count();
+          }
+        `,
+        lang: 'painless',
+        params: { articleCategory },
+      },
+      _source: ['articleCategories.*'],
+    },
+  });
+
+  if (articleResult === 'noop') {
+    throw new Error(
+      `Cannot add articleCategory ${JSON.stringify(
+        articleCategory
+      )} to article ${article.id}`
+    );
+  }
+
+  return _source.articleCategories;
 }
 
 export default {
