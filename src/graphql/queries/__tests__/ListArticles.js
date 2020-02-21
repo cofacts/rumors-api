@@ -66,6 +66,25 @@ describe('ListArticles', () => {
         }
       `()
     ).toMatchSnapshot();
+
+    expect(
+      await gql`
+        {
+          ListArticles(orderBy: [{ lastRepliedAt: DESC }]) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot();
   });
 
   const testReplyCount = async expression => {

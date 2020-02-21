@@ -10,6 +10,18 @@ export default {
 
       微之，微之！此夕此心，君知之乎！
     `,
+    articleReplies: [
+      {
+        status: 'NORMAL',
+        createdAt: '2020-02-08T15:11:04.472Z',
+        updatedAt: '2020-02-08T15:11:04.472Z',
+      },
+      {
+        status: 'NORMAL',
+        createdAt: '2020-02-05T14:41:19.044Z',
+        updatedAt: '2020-02-05T14:41:19.044Z',
+      },
+    ],
   },
   '/articles/doc/listArticleTest2': {
     userId: 'user1',
@@ -19,6 +31,13 @@ export default {
     updatedAt: 2,
     text:
       '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',
+    articleReplies: [
+      {
+        status: 'NORMAL',
+        createdAt: '2020-02-09T15:11:04.472Z',
+        updatedAt: '2020-02-09T15:11:04.472Z',
+      },
+    ],
   },
   '/articles/doc/listArticleTest3': {
     userId: 'user2',
@@ -28,6 +47,13 @@ export default {
     updatedAt: 3,
     text:
       '人生幾何，離闊如此！況以膠漆之心，置於胡越之身，進不得相合，退不能相忘，牽攣乖隔，各欲白首。',
+    articleReplies: [
+      {
+        status: 'NORMAL',
+        createdAt: '2020-02-05T15:11:04.472Z',
+        updatedAt: '2020-02-05T15:11:04.472Z',
+      },
+    ],
   },
   '/articles/doc/listArticleTest4': {
     userId: 'user2',
@@ -43,6 +69,23 @@ export default {
         title: '馮諼很餓',
         summary:
           '居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚。」左右以告。孟嘗君曰：「食之，比門下之客。」',
+      },
+    ],
+    articleReplies: [
+      {
+        status: 'NORMAL',
+        createdAt: '2020-02-11T15:11:04.472Z',
+        updatedAt: '2020-02-11T15:11:04.472Z',
+      },
+      {
+        status: 'NORMAL',
+        createdAt: '2020-02-10T15:11:04.472Z',
+        updatedAt: '2020-02-10T15:11:04.472Z',
+      },
+      {
+        status: 'NORMAL',
+        createdAt: '2020-02-09T15:11:04.472Z',
+        updatedAt: '2020-02-09T15:11:04.472Z',
       },
     ],
   },
