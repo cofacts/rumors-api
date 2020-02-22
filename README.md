@@ -52,11 +52,16 @@ To stop the servers, just `ctrl-c` and all docker containers will be stopped.
 
 ### Populate ElasticSearch with data
 
-Ask a team member to send you `nodes` directory, then put the `nodes` directory right inside the
-`esdata` directory created in the previous step, then restart the database using:
+Ask a team member to send you `nodes` directory, then run:
+```
+$ docker-compose stop db
+```
+to stop db instance.
+
+put the `nodes` directory right inside the `esdata` directory created in the previous step, then restart the database using:
 
 ```
-$ docker-compose restart db
+$ docker-compose start db
 ```
 
 ### Detached mode & Logs
