@@ -37,6 +37,7 @@ Object {
 exports[`creation creates articles and a reply request and fills in URLs 1`] = `
 Object {
   "appId": "foo",
+  "articleCategories": Array [],
   "articleReplies": Array [],
   "createdAt": "2017-01-28T08:45:57.011Z",
   "hyperlinks": Array [
@@ -48,6 +49,7 @@ Object {
     },
   ],
   "lastRequestedAt": "2017-01-28T08:45:57.011Z",
+  "normalArticleCategoryCount": 0,
   "normalArticleReplyCount": 0,
   "references": Array [
     Object {
