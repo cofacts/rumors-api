@@ -1,6 +1,13 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql';
-import { createSortType, createFilterType, pagingArgs } from 'graphql/util';
-import { ArticleCategoryConnnection } from './ArticleCategory';
+
+import {
+  filterArticleCategoriesByStatus,
+  createSortType,
+  createFilterType,
+  pagingArgs,
+} from 'graphql/util';
+
+import { ArticleCategoryConnection } from './ArticleCategory';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 
 const Category = new GraphQLObjectType({
@@ -14,7 +21,7 @@ const Category = new GraphQLObjectType({
     updatedAt: { type: GraphQLString },
 
     articleCategories: {
-      type: ArticleCategoryConnnection,
+      type: ArticleCategoryConnection,
       args: {
         filter: {
           type: createFilterType('CategoryArticleCategoriesFilter', {
@@ -32,33 +39,11 @@ const Category = new GraphQLObjectType({
         },
         ...pagingArgs,
       },
-      resolve({ id }, args, { userId, appId }) {
-        // TODO: Mock data, needs implementation
-        return [
-          {
-            aiModel: 'Model1',
-            aiConfidence: 0.8,
-            positiveFeedbackCount: 2,
-            negativeFeedbackCount: 1,
-            categoryId: id,
-            articleId: 'AVrwb4-OtKp96s659CvV',
-            status: 'NORMAL',
-            createdAt: '2020-02-06T05:34:45.862Z',
-            updatedAt: '2020-02-06T05:34:46.862Z',
-          },
-          {
-            // Simulate category that is added by current user
-            userId,
-            appId,
-            positiveFeedbackCount: 2,
-            negativeFeedbackCount: 1,
-            categoryId: id,
-            articleId: 'AWDuGBU6yCdS-nWhum2u',
-            status: 'NORMAL',
-            createdAt: '2020-02-06T05:34:45.862Z',
-            updatedAt: '2020-02-06T05:34:46.862Z',
-          },
-        ];
+      resolve: async ({ id }, { status }, { loaders }) => {
+        const articleCategories = await loaders.articleCategoriesByCategoryIdLoader.load(
+          id
+        );
+        return filterArticleCategoriesByStatus(articleCategories, status);
       },
     },
   }),

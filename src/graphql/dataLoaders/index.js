@@ -1,5 +1,6 @@
 import docLoaderFactory from './docLoaderFactory';
 import articleRepliesByReplyIdLoaderFactory from './articleRepliesByReplyIdLoaderFactory';
+import articleCategoriesByCategoryIdLoaderFactory from './articleCategoriesByCategoryIdLoaderFactory';
 import articleReplyFeedbacksLoaderFactory from './articleReplyFeedbacksLoaderFactory';
 import searchResultLoaderFactory from './searchResultLoaderFactory';
 import urlLoaderFactory from './urlLoaderFactory';
@@ -16,6 +17,12 @@ export default class DataLoaders {
     return this._checkOrSetLoader(
       'articleRepliesByReplyIdLoader',
       articleRepliesByReplyIdLoaderFactory
+    );
+  }
+  get articleCategoriesByCategoryIdLoader() {
+    return this._checkOrSetLoader(
+      'articleCategoriesByCategoryIdLoader',
+      articleCategoriesByCategoryIdLoaderFactory
     );
   }
   get articleReplyFeedbacksLoader() {

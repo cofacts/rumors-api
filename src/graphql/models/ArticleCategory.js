@@ -38,7 +38,7 @@ const ArticleCategory = new GraphQLObjectType({
 
     user: {
       type: User,
-      description: 'The user who conencted this reply and this article.',
+      description: 'The user who updated this category with this article.',
       resolve: userFieldResolver,
     },
 
@@ -64,48 +64,30 @@ const ArticleCategory = new GraphQLObjectType({
 
     feedbacks: {
       type: new GraphQLList(ArticleCategoryFeedback),
-      resolve: ({ articleId, categoryId }) => {
-        // TODO: Mock
-        return [
-          {
-            articleId,
-            categoryId,
-            userId: '1',
-            appId: 'test',
-            score: 1,
-            createdAt: '2020-02-06T09:08:45.775Z',
-            updatedAt: '2020-02-06T09:08:45.775Z',
-          },
-          {
-            articleId,
-            categoryId,
-            userId: '2',
-            appId: 'test',
-            score: -1,
-            comment: 'Test comment',
-            createdAt: '2020-02-06T09:09:45.775Z',
-            updatedAt: '2020-02-06T09:09:45.775Z',
-          },
-          {
-            articleId,
-            categoryId,
-            userId: '3',
-            appId: 'test',
-            score: 1,
-            createdAt: '2020-02-06T09:10:45.775Z',
-            updatedAt: '2020-02-06T09:10:45.775Z',
-          },
-        ];
-      },
+      resolve: ({ articleId, categoryId }, args, { loaders }) =>
+        loaders.articleCategoryFeedbacksLoader.load({ articleId, categoryId }),
     },
 
     ownVote: {
       type: FeedbackVote,
       description:
         'The feedback of current user. null when not logged in or not voted yet.',
-      resolve: () => {
-        // TODO: implement this
-        return null;
+      resolve: async (
+        { articleId, categoryId },
+        args,
+        { userId, appId, loaders }
+      ) => {
+        if (!userId || !appId) return null;
+        const feedbacks = await loaders.articleCategoryFeedbacksLoader.load({
+          articleId,
+          categoryId,
+        });
+
+        const ownFeedback = feedbacks.find(
+          feedback => feedback.userId === userId && feedback.appId === appId
+        );
+        if (!ownFeedback) return null;
+        return ownFeedback.score;
       },
     },
 
@@ -123,8 +105,8 @@ function getMockCursor(articleCategory) {
   return `${articleCategory.articleId}_${articleCategory.categoryId}`;
 }
 
-export const ArticleCategoryConnnection = createConnectionType(
-  'ArticleCategoryConnnection',
+export const ArticleCategoryConnection = createConnectionType(
+  'ArticleCategoryConnection',
   ArticleCategory,
   {
     // TODO: When we fetch data from Elasticsearch, createConnectionType()'s default resolvers should

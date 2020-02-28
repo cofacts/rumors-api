@@ -316,3 +316,18 @@ export function filterArticleRepliesByStatus(articleReplies, status) {
     );
   });
 }
+
+export function filterArticleCategoriesByStatus(articleCategories, status) {
+  if (!status) return articleCategories;
+
+  // If a articleCategory does not have status, it is considered "NORMAL".
+  //
+  return articleCategories.filter(articleCategory => {
+    if (status !== 'NORMAL') return articleCategory.status === status;
+
+    return (
+      articleCategory.status === undefined ||
+      articleCategory.status === 'NORMAL'
+    );
+  });
+}
