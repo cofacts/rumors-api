@@ -12,6 +12,7 @@ import ListCategories from './queries/ListCategories';
 import CreateArticle from './mutations/CreateArticle';
 import CreateReply from './mutations/CreateReply';
 import CreateArticleReply from './mutations/CreateArticleReply';
+import CreateCategory from './mutations/CreateCategory';
 import CreateArticleCategory from './mutations/CreateArticleCategory';
 import CreateOrUpdateArticleReplyFeedback from './mutations/CreateOrUpdateArticleReplyFeedback';
 import CreateOrUpdateReplyRequestFeedback from './mutations/CreateOrUpdateReplyRequestFeedback';
@@ -39,6 +40,7 @@ export default new GraphQLSchema({
       CreateArticle,
       CreateReply,
       CreateArticleReply,
+      CreateCategory,
       CreateArticleCategory,
       CreateReplyRequest: {
         ...CreateOrUpdateReplyRequest,
