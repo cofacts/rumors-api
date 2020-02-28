@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateArticleCategory connects article and category together 1`] = `
+Array [
+  Object {
+    "article": Object {
+      "id": "createArticleCategory1",
+    },
+    "category": null,
+    "negativeFeedbackCount": 0,
+    "positiveFeedbackCount": 0,
+    "status": "NORMAL",
+    "user": Object {
+      "id": "test",
+    },
+  },
+]
+`;
+
+exports[`CreateArticleCategory connects article and category together 2`] = `
+Object {
+  "articleCategories": Array [
+    Object {
+      "appId": "test",
+      "categoryId": "createArticleCategory2",
+      "createdAt": "2017-01-28T08:45:57.011Z",
+      "negativeFeedbackCount": 0,
+      "positiveFeedbackCount": 0,
+      "status": "NORMAL",
+      "updatedAt": "2017-01-28T08:45:57.011Z",
+      "userId": "test",
+    },
+  ],
+  "normalArticleCategoryCount": 1,
+  "references": Array [
+    Object {
+      "type": "LINE",
+    },
+  ],
+  "text": "foofoo",
+}
+`;

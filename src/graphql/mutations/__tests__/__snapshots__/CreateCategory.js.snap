@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateCategory creates a category: created category 1`] = `
+Object {
+  "appId": "test",
+  "createdAt": "2017-01-28T08:45:57.011Z",
+  "description": "各種宣稱會抗癌、高血壓、糖尿病等等的偏方秘笈、十大恐怖美食、不要吃海帶、美粒果",
+  "title": "保健秘訣、食品安全",
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "test",
+}
+`;
