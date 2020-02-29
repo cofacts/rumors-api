@@ -1,4 +1,5 @@
 import { GraphQLString, GraphQLNonNull, GraphQLList } from 'graphql';
+import client from 'util/client';
 import ArticleCategory from 'graphql/models/ArticleCategory';
 import ArticleCategoryStatusEnum from 'graphql/models/ArticleCategoryStatusEnum';
 
@@ -17,32 +18,60 @@ export default {
     { articleId, categoryId, status },
     { userId, appId }
   ) {
-    // TODO: refer to UpdateArticleReplyStatus for real implementation
 
-    return [
-      {
-        articleId,
-        aiModel: 'Model1',
-        aiConfidence: 0.8,
-        positiveFeedbackCount: 2,
-        negativeFeedbackCount: 1,
-        categoryId: 'c2',
-        status: 'NORMAL',
-        createdAt: '2020-02-06T05:34:45.862Z',
-        updatedAt: '2020-02-06T05:34:46.862Z',
+    const {
+      result,
+      get: { _source },
+    } = await client.update({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+      body: {
+        script: {
+          source: `
+            int idx = 0;
+            int categoryCount = ctx._source.articleCategories.size();
+            for(; idx < categoryCount; idx += 1) {
+              HashMap articleCategory = ctx._source.articleCategories.get(idx);
+              if(
+                articleCategory.get('categoryId').equals(params.categoryId) &&
+                articleCategory.get('userId').equals(params.userId) &&
+                articleCategory.get('appId').equals(params.appId)
+              ) {
+                break;
+              }
+            }
+
+            if( idx === categoryCount ) {
+              ctx.op = 'none';
+            } else {
+              ctx._source.articleCategories.get(idx).put('status', params.status);
+              ctx._source.articleCategories.get(idx).put('updatedAt', params.updatedAt);
+              ctx._source.normalArticleCategoryCount = ctx._source.articleCategories.stream().filter(
+                ar -> ar.get('status').equals('NORMAL')
+              ).count();
+            }
+          `,
+          params: {
+            categoryId,
+            userId,
+            appId,
+            status,
+            updatedAt: new Date().toISOString(),
+          },
+          lang: 'painless',
+        },
+        _source: ['articleCategories.*'],
       },
-      {
-        // Simulate category that is added by current user
-        articleId,
-        userId,
-        appId,
-        positiveFeedbackCount: 2,
-        negativeFeedbackCount: 1,
-        categoryId,
-        status,
-        createdAt: '2020-02-06T05:34:45.862Z',
-        updatedAt: '2020-02-06T05:34:46.862Z',
-      },
-    ];
+    });
+
+    if (result === 'noop') {
+      throw new Error(
+        `Cannot change status for articleCategory(articleId=${articleId}, categoryId=${categoryId})`
+      );
+    }
+
+    // When returning, insert articleId so that ArticleCategory object type can resolve article.
+    return _source.articleCategories.map(ar => ({ ...ar, articleId }));
   },
 };
