@@ -2,6 +2,7 @@ import docLoaderFactory from './docLoaderFactory';
 import articleRepliesByReplyIdLoaderFactory from './articleRepliesByReplyIdLoaderFactory';
 import articleCategoriesByCategoryIdLoaderFactory from './articleCategoriesByCategoryIdLoaderFactory';
 import articleReplyFeedbacksLoaderFactory from './articleReplyFeedbacksLoaderFactory';
+import articleCategoryFeedbacksLoaderFactory from './articleCategoryFeedbacksLoaderFactory';
 import searchResultLoaderFactory from './searchResultLoaderFactory';
 import urlLoaderFactory from './urlLoaderFactory';
 import repliedArticleCountLoaderFactory from './repliedArticleCountLoaderFactory';
@@ -29,6 +30,12 @@ export default class DataLoaders {
     return this._checkOrSetLoader(
       'articleReplyFeedbacksLoader',
       articleReplyFeedbacksLoaderFactory
+    );
+  }
+  get articleCategoryFeedbacksLoader() {
+    return this._checkOrSetLoader(
+      'articleCategoryFeedbacksLoader',
+      articleCategoryFeedbacksLoaderFactory
     );
   }
   get searchResultLoader() {

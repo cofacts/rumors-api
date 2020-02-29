@@ -18,7 +18,6 @@ export default {
     { articleId, categoryId, status },
     { userId, appId }
   ) {
-
     const {
       result,
       get: { _source },
