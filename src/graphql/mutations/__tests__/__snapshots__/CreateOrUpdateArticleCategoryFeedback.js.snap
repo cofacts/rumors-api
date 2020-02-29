@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateOrUpdateArticleCategoryFeedback creates feedback on given article category 1`] = `
+Object {
+  "CreateOrUpdateArticleCategoryFeedback": Object {
+    "articleId": "article1",
+    "categoryId": "category1",
+    "feedbackCount": 12,
+    "feedbacks": Array [
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": "comment1",
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+    ],
+    "negativeFeedbackCount": 0,
+    "ownVote": "UPVOTE",
+    "positiveFeedbackCount": 12,
+  },
+}
+`;
+
+exports[`CreateOrUpdateArticleCategoryFeedback creates feedback on given article category 2`] = `
+Object {
+  "appId": "test",
+  "articleId": "article1",
+  "categoryId": "category1",
+  "comment": "comment1",
+  "createdAt": "2017-01-28T08:45:57.011Z",
+  "score": 1,
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "test",
+}
+`;
+
+exports[`CreateOrUpdateArticleCategoryFeedback creates feedback on given article category 3`] = `
+Array [
+  Object {
+    "categoryId": "category1",
+    "negativeFeedbackCount": 0,
+    "positiveFeedbackCount": 12,
+  },
+]
+`;
+
+exports[`CreateOrUpdateArticleCategoryFeedback updates existing feedback 1`] = `
+Object {
+  "CreateOrUpdateArticleCategoryFeedback": Object {
+    "articleId": "article1",
+    "categoryId": "category1",
+    "feedbackCount": 12,
+    "feedbacks": Array [
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": "comment1",
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "DOWNVOTE",
+      },
+    ],
+    "negativeFeedbackCount": 1,
+    "ownVote": "DOWNVOTE",
+    "positiveFeedbackCount": 11,
+  },
+}
+`;
+
+exports[`CreateOrUpdateArticleCategoryFeedback updates existing feedback 2`] = `
+Object {
+  "appId": "testClient",
+  "articleId": "article1",
+  "categoryId": "category1",
+  "createdAt": "2017-01-01T00:00:00.000Z",
+  "score": -1,
+  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "userId": "testUser",
+}
+`;
