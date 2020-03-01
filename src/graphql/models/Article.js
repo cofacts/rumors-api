@@ -16,6 +16,7 @@ import {
   createConnectionType,
   assertUser,
   filterArticleRepliesByStatus,
+  filterArticleCategoriesByStatus,
 } from 'graphql/util';
 
 import ArticleReference from 'graphql/models/ArticleReference';
@@ -100,42 +101,28 @@ const Article = new GraphQLObjectType({
         },
       },
 
-      // TODO: Mock data, needs implementation.
-      // Refer to the implementation of articleReplies field
-      resolve: ({ id }, args, { userId, appId }) => {
-        return [
-          {
-            articleId: id,
-            aiModel: 'Model1',
-            aiConfidence: 0.8,
-            positiveFeedbackCount: 2,
-            negativeFeedbackCount: 1,
-            categoryId: 'c2',
-            status: 'NORMAL',
-            createdAt: '2020-02-06T05:34:45.862Z',
-            updatedAt: '2020-02-06T05:34:46.862Z',
-          },
-          {
-            // Simulate category that is added by current user
-            articleId: id,
-            userId,
-            appId,
-            positiveFeedbackCount: 2,
-            negativeFeedbackCount: 1,
-            categoryId: 'c3',
-            status: 'NORMAL',
-            createdAt: '2020-02-06T05:34:45.862Z',
-            updatedAt: '2020-02-06T05:34:46.862Z',
-          },
-        ];
+      resolve: async ({ id, articleCategories = [] }, { status }) => {
+        // sort by created
+        const sortedArticleCategories = filterArticleCategoriesByStatus(
+          // Inject articleId to each articleCategory
+          articleCategories.map(articleCategory => {
+            articleCategory.articleId = id;
+            return articleCategory;
+          }),
+          status
+        ).sort((a, b) => {
+          return +new Date(b.createdAt) - +new Date(a.createdAt);
+        });
+
+        if (sortedArticleCategories.length === 0) return [];
+        return sortedArticleCategories;
       },
     },
 
     categoryCount: {
       type: GraphQLInt,
       description: 'Number of normal article categories',
-      // TODO: Mock data, needs implementation
-      resolve: () => 2,
+      resolve: ({ normalArticleCategoryCount }) => normalArticleCategoryCount,
     },
 
     replyRequests: {
