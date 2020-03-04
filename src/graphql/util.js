@@ -20,7 +20,9 @@ export function getArithmeticExpressionType(typeName, argType) {
     name: typeName,
     fields: {
       LT: { type: argType },
+      LTE: { type: argType },
       GT: { type: argType },
+      GTE: { type: argType },
       EQ: { type: argType },
     },
   });
