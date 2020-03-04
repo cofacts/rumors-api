@@ -7,6 +7,7 @@ import {
   createConnectionType,
   getSortArgs,
   pagingArgs,
+  getArithmeticExpressionType,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 
@@ -33,6 +34,16 @@ export default {
         type: {
           type: ReplyTypeEnum,
           description: 'List the replies of certain types',
+        },
+        createdAt: {
+          type: getArithmeticExpressionType(
+            'ListRepliesCreatedAtExpr',
+            GraphQLString
+          ),
+          description: `
+            List only the replies that were created between the specific time range.
+            The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)
+          `,
         },
       }),
     },
@@ -131,6 +142,20 @@ export default {
     if (filter.selfOnly) {
       if (!userId) throw new Error('selfOnly can be set only after log in');
       filterQueries.push({ term: { userId } }, { term: { appId } });
+    }
+
+    if (filter.createdAt) {
+      // @todo: handle invalid type error?
+      // @todo: extract repetitive logic
+      const q = Object.fromEntries(
+        Object.entries(filter.createdAt)
+          .filter(([key]) => ['GT', 'GTE', 'LT', 'LTE'].includes(key))
+          .map(([key, value]) => [key.toLowerCase(), value])
+      );
+
+      filterQueries.push({
+        range: { createdAt: q },
+      });
     }
 
     body.query = {
