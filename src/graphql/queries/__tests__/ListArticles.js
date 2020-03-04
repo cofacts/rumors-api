@@ -251,6 +251,118 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
+  it('filters by time range', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { createdAt: { GT: "2020-02-06T00:00:00.000Z" } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { createdAt: { LTE: "2020-02-06T00:00:00.000Z" } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: {
+              createdAt: {
+                GTE: "2020-02-04T00:00:00.000Z"
+                LTE: "2020-02-06T00:00:00.000Z"
+              }
+            }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
+  it('filters by replies time range', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { repliedAt: { GT: "2020-02-06T00:00:00.000Z" } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { repliedAt: { LTE: "2020-02-06T00:00:00.000Z" } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: {
+              repliedAt: {
+                GTE: "2020-02-04T00:00:00.000Z"
+                LTE: "2020-02-06T00:00:00.000Z"
+              }
+            }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
   it('filters by mixed query', async () => {
     // Mixes 'should' and 'filter' query. At least 1 'should' must match.
     // Therefore, this query should only match 1 result instead of all that satisfies replyRequestCount: { GT: 0 }
