@@ -127,6 +127,87 @@ Object {
 }
 `;
 
+exports[`ListReplies filters by time range 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "userFoo",
+          },
+        },
+      ],
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListReplies filters by time range 2`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "rumor",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "referenceUrl",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "moreLikeThis2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "moreLikeThis1",
+          },
+        },
+      ],
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListReplies filters by time range 3`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "rumor",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "referenceUrl",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "moreLikeThis2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "moreLikeThis1",
+          },
+        },
+      ],
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
 exports[`ListReplies handles selfOnly filter properly if not logged in 1`] = `
 Object {
   "data": Object {
@@ -216,8 +297,8 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzQsInVzZXJGb28iXQ==",
-        "lastCursor": "WzEsInJlZmVyZW5jZVVybCJd",
+        "firstCursor": "WzE1ODEwMzM2MDAwMDAsInVzZXJGb28iXQ==",
+        "lastCursor": "WzE1ODA3NzQ0MDAwMDAsInJlZmVyZW5jZVVybCJd",
       },
       "totalCount": 5,
     },
