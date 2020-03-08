@@ -2,6 +2,7 @@ import {
   GraphQLObjectType,
   GraphQLList,
   GraphQLInt,
+  GraphQLFloat,
   GraphQLString,
   GraphQLBoolean,
 } from 'graphql';
@@ -95,6 +96,9 @@ const ArticleCategory = new GraphQLObjectType({
       type: ArticleCategoryStatusEnum,
       resolve: ({ status }) => (status === undefined ? 'NORMAL' : status),
     },
+
+    aiModel: { type: GraphQLString },
+    aiConfidence: { type: GraphQLFloat },
 
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },

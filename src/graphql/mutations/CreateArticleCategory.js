@@ -1,4 +1,9 @@
-import { GraphQLString, GraphQLNonNull, GraphQLList } from 'graphql';
+import {
+  GraphQLString,
+  GraphQLNonNull,
+  GraphQLList,
+  GraphQLFloat,
+} from 'graphql';
 
 import client from 'util/client';
 import { assertUser } from 'graphql/util';
@@ -18,6 +23,8 @@ export async function createArticleCategory({
   categoryId,
   userId,
   appId,
+  aiModel,
+  aiConfidence,
 }) {
   assertUser({ userId, appId });
   if (!article || !categoryId) {
@@ -31,6 +38,8 @@ export async function createArticleCategory({
   const articleCategory = {
     userId,
     appId,
+    aiModel,
+    aiConfidence,
     positiveFeedbackCount: 0,
     negativeFeedbackCount: 0,
     categoryId,
@@ -91,10 +100,12 @@ export default {
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
     categoryId: { type: new GraphQLNonNull(GraphQLString) },
+    aiModel: { type: GraphQLString },
+    aiConfidence: { type: GraphQLFloat },
   },
   async resolve(
     rootValue,
-    { articleId, categoryId },
+    { articleId, categoryId, aiModel, aiConfidence },
     { userId, appId, loaders }
   ) {
     const article = await loaders.docLoader.load({
@@ -107,6 +118,8 @@ export default {
       categoryId,
       userId,
       appId,
+      aiModel,
+      aiConfidence,
     });
 
     // When returning, insert articleId so that ArticleReply object type can resolve article.
