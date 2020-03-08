@@ -24,8 +24,8 @@ const ArticleCategory = new GraphQLObjectType({
 
     category: {
       type: Category,
-      resolve: ({ categoryId }) =>
-        MOCK_CATEGORY_DATA.find(({ id }) => id === categoryId),
+      resolve: ({ categoryId }, args, { loaders }) =>
+        loaders.docLoader.load({ index: 'categories', id: categoryId }),
     },
 
     articleId: { type: GraphQLString },
