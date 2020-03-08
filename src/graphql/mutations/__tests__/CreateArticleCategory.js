@@ -51,6 +51,64 @@ describe('CreateArticleCategory', () => {
     await resetFrom(fixtures, '/articles/doc/createArticleCategory1');
   });
 
+  it('connects article and category together by AI model', async () => {
+    MockDate.set(1485593157011);
+    const articleId = 'createArticleCategory1';
+    const categoryId = 'createArticleCategory2';
+    const aiModel = 'aiModel1';
+    const aiConfidence = 0.99;
+
+    const { data, errors } = await gql`
+      mutation(
+        $articleId: String!
+        $categoryId: String!
+        $aiModel: String!
+        $aiConfidence: Float!
+      ) {
+        CreateArticleCategory(
+          articleId: $articleId
+          categoryId: $categoryId
+          aiModel: $aiModel
+          aiConfidence: $aiConfidence
+        ) {
+          positiveFeedbackCount
+          negativeFeedbackCount
+          user {
+            id
+          }
+          status
+          article {
+            id
+          }
+          category {
+            id
+          }
+        }
+      }
+    `(
+      {
+        articleId,
+        categoryId,
+        aiModel,
+        aiConfidence,
+      },
+      { userId: 'test', appId: 'test' }
+    );
+    MockDate.reset();
+
+    expect(errors).toBeUndefined();
+    expect(data.CreateArticleCategory).toMatchSnapshot();
+
+    const { _source } = await client.get({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+    });
+    expect(_source).toMatchSnapshot();
+
+    await resetFrom(fixtures, '/articles/doc/createArticleCategory1');
+  });
+
   it('cannot connect the same article and category twice', async () => {
     const articleId = 'createArticleCategory1';
     const categoryId = 'createArticleCategory2';
