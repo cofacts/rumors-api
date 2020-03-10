@@ -157,6 +157,62 @@ describe('ListReplies', () => {
     ).toMatchSnapshot();
   });
 
+  it('filters by time range', async () => {
+    expect(
+      await gql`
+        {
+          ListReplies(
+            filter: { createdAt: { GT: "2020-02-06T00:00:00.000Z" } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+    expect(
+      await gql`
+        {
+          ListReplies(
+            filter: { createdAt: { LTE: "2020-02-06T00:00:00.000Z" } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+    expect(
+      await gql`
+        {
+          ListReplies(
+            filter: {
+              createdAt: {
+                GTE: "2020-02-04T00:00:00.000Z"
+                LTE: "2020-02-06T00:00:00.000Z"
+              }
+            }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
   it('filters by mixed query', async () => {
     // Mixes 'should' and 'filter' query. At least 1 'should' must match.
     // Therefore, this query should only match 2 results instead of all that satisfies type = NOT_ARTICLE

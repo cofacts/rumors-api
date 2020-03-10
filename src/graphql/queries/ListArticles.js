@@ -64,6 +64,26 @@ export default {
           description:
             'List only the articles whose number of replies matches the criteria.',
         },
+        createdAt: {
+          type: getArithmeticExpressionType(
+            'ListArticleCreatedAtExpr',
+            GraphQLString
+          ),
+          description: `
+            List only the articles that were created between the specific time range.
+            The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)
+          `,
+        },
+        repliedAt: {
+          type: getArithmeticExpressionType(
+            'ListArticleRepliedAtExpr',
+            GraphQLString
+          ),
+          description: `
+            List only the articles that were replied between the specific time range.
+            The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)
+          `,
+        },
         appId: {
           type: GraphQLString,
           description:
@@ -252,6 +272,43 @@ export default {
             source: `doc['replyRequestCount'].value ${operator} params.operand`,
             params: {
               operand,
+            },
+          },
+        },
+      });
+    }
+
+    if (filter.createdAt) {
+      // @todo: handle invalid type error?
+      const q = Object.fromEntries(
+        Object.entries(filter.createdAt)
+          .filter(([key]) => ['GT', 'GTE', 'LT', 'LTE'].includes(key))
+          .map(([key, value]) => [key.toLowerCase(), value])
+      );
+
+      filterQueries.push({
+        range: { createdAt: q },
+      });
+    }
+
+    if (filter.repliedAt) {
+      // @todo: handle invalid type error?
+      // @todo: extract repetitive logic
+      const q = Object.fromEntries(
+        Object.entries(filter.repliedAt)
+          .filter(([key]) => ['GT', 'GTE', 'LT', 'LTE'].includes(key))
+          .map(([key, value]) => [key.toLowerCase(), value])
+      );
+
+      filterQueries.push({
+        nested: {
+          path: 'articleReplies',
+          query: {
+            bool: {
+              must: [
+                { match: { 'articleReplies.status': 'NORMAL' } },
+                { range: { 'articleReplies.createdAt': q } },
+              ],
             },
           },
         },

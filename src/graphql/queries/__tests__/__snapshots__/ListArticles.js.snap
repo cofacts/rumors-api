@@ -116,6 +116,77 @@ Object {
 }
 `;
 
+exports[`ListArticles filters by replies time range 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by replies time range 2`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by replies time range 3`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
 exports[`ListArticles filters by replyCount EQ 1`] = `
 Object {
   "data": Object {
@@ -196,6 +267,72 @@ Object {
         },
       ],
       "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by time range 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest4",
+          },
+        },
+      ],
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by time range 2`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by time range 3`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+          },
+        },
+      ],
+      "totalCount": 2,
     },
   },
 }

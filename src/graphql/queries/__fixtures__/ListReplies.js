@@ -3,13 +3,13 @@ export default {
     text: 'foo foo',
     reference: 'bar bar',
     type: 'NOT_ARTICLE',
-    createdAt: 3,
+    createdAt: '2020-02-06T00:00:00.000Z',
   },
   '/replies/doc/moreLikeThis2': {
     text: 'foo foo foo',
     reference: 'barbar',
     type: 'NOT_ARTICLE',
-    createdAt: 2,
+    createdAt: '2020-02-05T00:00:00.000Z',
   },
   '/replies/doc/userFoo': {
     text: 'bar',
@@ -17,13 +17,13 @@ export default {
     type: 'NOT_ARTICLE',
     userId: 'foo',
     appId: 'test',
-    createdAt: 4,
+    createdAt: '2020-02-07T00:00:00.000Z',
   },
   '/replies/doc/rumor': {
     text: 'bar',
     reference: 'barbar',
     type: 'RUMOR',
-    createdAt: 1,
+    createdAt: '2020-02-04T00:00:00.000Z',
   },
   '/replies/doc/referenceUrl': {
     text: '國文課本',
@@ -38,7 +38,7 @@ export default {
       },
     ],
     type: 'NOT_RUMOR',
-    createdAt: 1,
+    createdAt: '2020-02-04T00:00:00.000Z',
   },
   '/urls/doc/gohome': {
     url: 'http://gohome.com/',
