@@ -304,7 +304,12 @@ export default {
         nested: {
           path: 'articleReplies',
           query: {
-            range: { 'articleReplies.createdAt': q },
+            bool: {
+              must: [
+                { match: { 'articleReplies.status': 'NORMAL' } },
+                { range: { 'articleReplies.createdAt': q } },
+              ],
+            },
           },
         },
       });
