@@ -505,5 +505,53 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
+  it('use filter categoryIds with AND to lists articles', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { categoryIds: { AND: ["category1", "category-author-1"] } }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
+  it('use filter categoryIds with OR to lists articles', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: {
+              categoryIds: { OR: ["category-author-1", "category-author-2"] }
+            }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });
