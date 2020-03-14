@@ -39,7 +39,14 @@ export default {
             'List only the articles whose number of categories match the criteria.',
         },
         categoryIds: {
-          type: new GraphQLList(GraphQLString),
+          type: createFilterType('CategoryIdFilter', {
+            AND: {
+              type: new GraphQLList(GraphQLString),
+            },
+            OR: {
+              type: new GraphQLList(GraphQLString),
+            },
+          }),
           description:
             'Articles with more matching categories will come to front',
         },
@@ -311,6 +318,32 @@ export default {
               ],
             },
           },
+        },
+      });
+    }
+
+    if (filter.categoryIds && filter.categoryIds.length !== 0) {
+      const { AND, OR } = filter.categoryIds;
+
+      if (AND && OR) {
+        throw new Error('categoryIds can not set both AND and OR query');
+      }
+
+      const ids = AND || OR;
+      const operator = AND ? 'must' : 'should';
+
+      filterQueries.push({
+        bool: {
+          [operator]: ids.map(categoryId => ({
+            nested: {
+              path: 'articleCategories',
+              query: {
+                term: {
+                  'articleCategories.categoryId': categoryId,
+                },
+              },
+            },
+          })),
         },
       });
     }
