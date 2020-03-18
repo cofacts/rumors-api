@@ -4,6 +4,7 @@ import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 import GetArticle from './queries/GetArticle';
 import GetReply from './queries/GetReply';
 import GetUser from './queries/GetUser';
+import GetCategory from './queries/GetCategory';
 import ListArticles from './queries/ListArticles';
 import ListReplies from './queries/ListReplies';
 import ListCategories from './queries/ListCategories';
@@ -29,6 +30,7 @@ export default new GraphQLSchema({
       GetArticle,
       GetReply,
       GetUser,
+      GetCategory,
       ListArticles,
       ListReplies,
       ListCategories,
