@@ -87,3 +87,44 @@ Object {
   "text": "foofoo",
 }
 `;
+
+exports[`CreateArticleCategory update userId and appId when connecting with DELETED ArticleCategory 1`] = `
+Array [
+  Object {
+    "article": Object {
+      "id": "articleHasDeletedArticleCategory",
+    },
+    "category": Object {
+      "id": "createArticleCategory2",
+    },
+    "negativeFeedbackCount": 0,
+    "positiveFeedbackCount": 0,
+    "status": "NORMAL",
+    "user": Object {
+      "id": "test2",
+    },
+  },
+]
+`;
+
+exports[`CreateArticleCategory update userId and appId when connecting with DELETED ArticleCategory 2`] = `
+Object {
+  "articleCategories": Array [
+    Object {
+      "appId": "test2",
+      "categoryId": "createArticleCategory2",
+      "negativeFeedbackCount": 0,
+      "positiveFeedbackCount": 0,
+      "status": "NORMAL",
+      "updatedAt": "2017-01-28T08:45:57.011Z",
+      "userId": "test2",
+    },
+  ],
+  "references": Array [
+    Object {
+      "type": "LINE",
+    },
+  ],
+  "text": "foofoo",
+}
+`;

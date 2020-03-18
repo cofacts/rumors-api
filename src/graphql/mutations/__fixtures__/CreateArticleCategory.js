@@ -8,4 +8,18 @@ export default {
     title: 'bar',
     description: 'RUMOR',
   },
+  '/articles/doc/articleHasDeletedArticleCategory': {
+    text: 'foofoo',
+    articleCategories: [
+      {
+        appId: 'test',
+        userId: 'test',
+        categoryId: 'createArticleCategory2',
+        negativeFeedbackCount: 0,
+        positiveFeedbackCount: 0,
+        status: 'DELETED',
+      },
+    ],
+    references: [{ type: 'LINE' }],
+  },
 };

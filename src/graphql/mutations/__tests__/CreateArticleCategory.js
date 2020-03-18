@@ -135,5 +135,49 @@ describe('CreateArticleCategory', () => {
     await resetFrom(fixtures, '/articles/doc/createArticleCategory1');
   });
 
+  it('update userId and appId when connecting with DELETED ArticleCategory', async () => {
+    MockDate.set(1485593157011);
+    const articleId = 'articleHasDeletedArticleCategory';
+    const categoryId = 'createArticleCategory2';
+
+    const { data, errors } = await gql`
+      mutation($articleId: String!, $categoryId: String!) {
+        CreateArticleCategory(articleId: $articleId, categoryId: $categoryId) {
+          positiveFeedbackCount
+          negativeFeedbackCount
+          user {
+            id
+          }
+          status
+          article {
+            id
+          }
+          category {
+            id
+          }
+        }
+      }
+    `(
+      {
+        articleId,
+        categoryId,
+      },
+      { userId: 'test2', appId: 'test2' }
+    );
+    MockDate.reset();
+
+    expect(errors).toBeUndefined();
+    expect(data.CreateArticleCategory).toMatchSnapshot();
+
+    const { _source } = await client.get({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+    });
+    expect(_source).toMatchSnapshot();
+
+    await resetFrom(fixtures, '/articles/doc/articleHasDeletedArticleCategory');
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });
