@@ -13,9 +13,7 @@ import Category from './Category';
 import ArticleCategoryFeedback from './ArticleCategoryFeedback';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 import FeedbackVote from './FeedbackVote';
-import { createConnectionType } from 'graphql/util';
-
-import MOCK_CATEGORY_DATA from '../mockCategories';
+import { createConnectionType, defaultResolveEdges } from 'graphql/util';
 
 const ArticleCategory = new GraphQLObjectType({
   name: 'ArticleCategory',
@@ -105,33 +103,29 @@ const ArticleCategory = new GraphQLObjectType({
   }),
 });
 
-function getMockCursor(articleCategory) {
-  return `${articleCategory.articleId}_${articleCategory.categoryId}`;
+function getCategoryIdFromParams(params) {
+  return params[0].body.query.nested.query[0].term[
+    'articleCategories.categoryId'
+  ];
+}
+
+async function articleCategoryResolveEdges(...params) {
+  const categoryId = getCategoryIdFromParams(params);
+  const edges = await defaultResolveEdges(...params);
+  return edges.map(({ node: { articleCategories, id }, ...rest }) => {
+    const articleCategory = articleCategories.find(
+      articleCategory => articleCategory.categoryId === categoryId
+    );
+    articleCategory.articleId = id;
+
+    return { ...rest, node: articleCategory };
+  });
 }
 
 export const ArticleCategoryConnection = createConnectionType(
   'ArticleCategoryConnection',
   ArticleCategory,
-  {
-    // TODO: When we fetch data from Elasticsearch, createConnectionType()'s default resolvers should
-    // do its job, and we won't need any of the following mock resolvers below.
-    //
-    resolveEdges: function mockResolveEdges(mockData) {
-      return mockData.map(articleCategory => ({
-        node: articleCategory,
-        cursor: getMockCursor(articleCategory),
-      }));
-    },
-    resolveTotalCount: function mockResolveTotalCount() {
-      return MOCK_CATEGORY_DATA.length;
-    },
-    resolveLastCursor: function mockResolveLastCursor() {
-      return getMockCursor(MOCK_CATEGORY_DATA[MOCK_CATEGORY_DATA.length - 1]);
-    },
-    resolveFirstCursor: function mockResolveFirstCursor() {
-      return getMockCursor(MOCK_CATEGORY_DATA[0]);
-    },
-  }
+  { resolveEdges: articleCategoryResolveEdges }
 );
 
 export default ArticleCategory;

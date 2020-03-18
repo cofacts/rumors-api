@@ -1,11 +1,6 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql';
 
-import {
-  filterArticleCategoriesByStatus,
-  createSortType,
-  createFilterType,
-  pagingArgs,
-} from 'graphql/util';
+import { createSortType, pagingArgs, getSortArgs } from 'graphql/util';
 
 import { ArticleCategoryConnection } from './ArticleCategory';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
@@ -23,14 +18,10 @@ const Category = new GraphQLObjectType({
     articleCategories: {
       type: ArticleCategoryConnection,
       args: {
-        filter: {
-          type: createFilterType('CategoryArticleCategoriesFilter', {
-            status: {
-              type: ArticleCategoryStatusEnum,
-              description:
-                'When specified, returns only article categories with the specified status',
-            },
-          }),
+        status: {
+          type: ArticleCategoryStatusEnum,
+          description:
+            'When specified, returns only article categories with the specified status',
         },
         orderBy: {
           type: createSortType('CategoryArticleCategoriesOrderBy', [
@@ -39,11 +30,33 @@ const Category = new GraphQLObjectType({
         },
         ...pagingArgs,
       },
-      resolve: async ({ id }, { status }, { loaders }) => {
-        const articleCategories = await loaders.articleCategoriesByCategoryIdLoader.load(
-          id
-        );
-        return filterArticleCategoriesByStatus(articleCategories, status);
+      resolve: async (
+        { id },
+        { status = 'NORMAL', orderBy = [], ...otherParams }
+      ) => {
+        const body = {
+          sort: getSortArgs(orderBy),
+          query: {
+            nested: {
+              path: 'articleCategories',
+              query: [
+                {
+                  term: { 'articleCategories.categoryId': id },
+                },
+                {
+                  term: { 'articleCategories.status': status },
+                },
+              ],
+            },
+          },
+        };
+
+        return {
+          index: 'articles',
+          type: 'doc',
+          body,
+          ...otherParams,
+        };
       },
     },
   }),

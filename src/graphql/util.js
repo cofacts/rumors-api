@@ -155,7 +155,7 @@ async function defaultResolveTotalCount({
   })).count;
 }
 
-async function defaultResolveEdges(
+export async function defaultResolveEdges(
   { first, before, after, ...searchContext },
   args,
   { loaders }
