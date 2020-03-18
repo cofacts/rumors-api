@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GetUser Get specified category and articleCategories with DELETED status 1`] = `
+Object {
+  "data": Object {
+    "GetCategory": Object {
+      "articleCategories": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WyJHZXRDYXRlZ29yeTIiXQ==",
+            "node": Object {
+              "articleId": "GetCategory2",
+              "category": Object {
+                "id": "c1",
+                "title": "性少數與愛滋病",
+              },
+              "status": "DELETED",
+            },
+            "score": null,
+          },
+        ],
+        "pageInfo": Object {
+          "firstCursor": "WyJHZXRDYXRlZ29yeTIiXQ==",
+          "lastCursor": "WyJHZXRDYXRlZ29yeTIiXQ==",
+        },
+        "totalCount": 1,
+      },
+      "title": "性少數與愛滋病",
+    },
+  },
+}
+`;
+
+exports[`GetUser Get specified category and articleCategories with NORMAL status 1`] = `
+Object {
+  "data": Object {
+    "GetCategory": Object {
+      "articleCategories": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WyJHZXRDYXRlZ29yeTEiXQ==",
+            "node": Object {
+              "articleId": "GetCategory1",
+              "category": Object {
+                "id": "c1",
+                "title": "性少數與愛滋病",
+              },
+              "status": "NORMAL",
+            },
+            "score": null,
+          },
+        ],
+        "pageInfo": Object {
+          "firstCursor": "WyJHZXRDYXRlZ29yeTEiXQ==",
+          "lastCursor": "WyJHZXRDYXRlZ29yeTEiXQ==",
+        },
+        "totalCount": 1,
+      },
+      "title": "性少數與愛滋病",
+    },
+  },
+}
+`;
