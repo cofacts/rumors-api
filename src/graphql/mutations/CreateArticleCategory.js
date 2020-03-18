@@ -63,12 +63,20 @@ export async function createArticleCategory({
          * otherwise, do update.
          */
         source: `
-          if(
-            ctx._source.articleCategories.stream().anyMatch(
-              ar -> ar.get('categoryId').equals(params.articleCategory.get('categoryId'))
-            )
-          ) {
-            ctx.op = 'none';
+          def found = ctx._source.articleCategories.stream()
+            .filter(ar -> ar.get('categoryId').equals(params.articleCategory.get('categoryId')))
+            .findFirst();
+
+          if (found.isPresent()) {
+            HashMap ar = found.get();
+            if (ar.get('status').equals('DELETED')) {
+              ar.put('status', 'NORMAL');
+              ar.put('userId', '${userId}');
+              ar.put('appId', '${appId}');
+              ar.put('updatedAt', '${now}');
+            } else {
+              ctx.op = 'none';
+            }
           } else {
             ctx._source.articleCategories.add(params.articleCategory);
             ctx._source.normalArticleCategoryCount = ctx._source.articleCategories.stream().filter(
