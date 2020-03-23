@@ -59,8 +59,9 @@ export async function createArticleCategory({
       script: {
         /**
          * Check if the category is already connected in the article.
-         * If so, do nothing;
-         * otherwise, do update.
+         * If connected with DELETED status, then set to NORMAL.
+         * If connected with NORMAL status, then do nothing.
+         * Otherwise, do update.
          */
         source: `
           def found = ctx._source.articleCategories.stream()
