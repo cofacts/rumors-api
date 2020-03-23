@@ -39,14 +39,18 @@ const Category = new GraphQLObjectType({
           query: {
             nested: {
               path: 'articleCategories',
-              query: [
-                {
-                  term: { 'articleCategories.categoryId': id },
+              query: {
+                bool: {
+                  must: [
+                    {
+                      term: { 'articleCategories.categoryId': id },
+                    },
+                    {
+                      term: { 'articleCategories.status': status },
+                    },
+                  ],
                 },
-                {
-                  term: { 'articleCategories.status': status },
-                },
-              ],
+              },
             },
           },
         };

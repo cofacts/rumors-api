@@ -104,7 +104,7 @@ const ArticleCategory = new GraphQLObjectType({
 });
 
 function getCategoryIdFromParams(params) {
-  return params[0].body.query.nested.query[0].term[
+  return params[0].body.query.nested.query.bool.must[0].term[
     'articleCategories.categoryId'
   ];
 }
