@@ -2,7 +2,7 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/GetCategory';
 
-describe('GetUser', () => {
+describe('GetCategory', () => {
   beforeAll(() => loadFixtures(fixtures));
 
   it('Get specified category and articleCategories with NORMAL status', async () => {
