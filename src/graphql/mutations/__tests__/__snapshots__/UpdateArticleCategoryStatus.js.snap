@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UpdateArticleCategoryStatus should not allow users to delete other's article categories 1`] = `
+Array [
+  [GraphQLError: Cannot change status for articleCategory(articleId=others, categoryId=others)],
+]
+`;
+
+exports[`UpdateArticleCategoryStatus should set article category fields correctly 1`] = `
+Object {
+  "deleted": Array [
+    Object {
+      "articleId": "deleted",
+      "categoryId": "category",
+      "status": "NORMAL",
+      "updatedAt": "2017-01-28T08:45:57.011Z",
+    },
+  ],
+  "normal": Array [
+    Object {
+      "articleId": "normal",
+      "categoryId": "category",
+      "status": "DELETED",
+      "updatedAt": "2017-01-28T08:45:57.011Z",
+    },
+  ],
+}
+`;
+
+exports[`UpdateArticleCategoryStatus should set article category fields correctly 2`] = `
+Array [
+  Object {
+    "appId": "test",
+    "categoryId": "category",
+    "status": "DELETED",
+    "updatedAt": "2017-01-28T08:45:57.011Z",
+    "userId": "foo",
+  },
+]
+`;
+
+exports[`UpdateArticleCategoryStatus should set article category fields correctly 3`] = `
+Array [
+  Object {
+    "appId": "test",
+    "categoryId": "category",
+    "status": "NORMAL",
+    "updatedAt": "2017-01-28T08:45:57.011Z",
+    "userId": "foo",
+  },
+]
+`;

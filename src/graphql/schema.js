@@ -4,6 +4,7 @@ import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 import GetArticle from './queries/GetArticle';
 import GetReply from './queries/GetReply';
 import GetUser from './queries/GetUser';
+import GetCategory from './queries/GetCategory';
 import ListArticles from './queries/ListArticles';
 import ListReplies from './queries/ListReplies';
 import ListCategories from './queries/ListCategories';
@@ -12,6 +13,7 @@ import ListCategories from './queries/ListCategories';
 import CreateArticle from './mutations/CreateArticle';
 import CreateReply from './mutations/CreateReply';
 import CreateArticleReply from './mutations/CreateArticleReply';
+import CreateCategory from './mutations/CreateCategory';
 import CreateArticleCategory from './mutations/CreateArticleCategory';
 import CreateOrUpdateArticleReplyFeedback from './mutations/CreateOrUpdateArticleReplyFeedback';
 import CreateOrUpdateReplyRequestFeedback from './mutations/CreateOrUpdateReplyRequestFeedback';
@@ -28,6 +30,7 @@ export default new GraphQLSchema({
       GetArticle,
       GetReply,
       GetUser,
+      GetCategory,
       ListArticles,
       ListReplies,
       ListCategories,
@@ -39,6 +42,7 @@ export default new GraphQLSchema({
       CreateArticle,
       CreateReply,
       CreateArticleReply,
+      CreateCategory,
       CreateArticleCategory,
       CreateReplyRequest: {
         ...CreateOrUpdateReplyRequest,

@@ -99,6 +99,8 @@ const apolloServer = new ApolloServer({
 
 apolloServer.applyMiddleware({ app });
 
-app.listen(process.env.PORT, () => {
-  console.log('Listening port', process.env.PORT); // eslint-disable-line no-console
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+  console.log('Listening port', port); // eslint-disable-line no-console
 });

@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListCategories lists all Categories 1`] = `
+Object {
+  "data": Object {
+    "ListCategories": Object {
+      "edges": Array [
+        Object {
+          "cursor": "WyJjMyJd",
+          "node": Object {
+            "id": "c3",
+          },
+        },
+        Object {
+          "cursor": "WyJjMiJd",
+          "node": Object {
+            "id": "c2",
+          },
+        },
+        Object {
+          "cursor": "WyJjMSJd",
+          "node": Object {
+            "id": "c1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJjMyJd",
+        "lastCursor": "WyJjMSJd",
+      },
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListCategories sorts 1`] = `
+Object {
+  "data": Object {
+    "ListCategories": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "c2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "c1",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "c3",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WzE1ODA5NjcyODY4NjIsImMyIl0=",
+        "lastCursor": "WzE1ODA5NjcyODM4NjIsImMzIl0=",
+      },
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListCategories supports after 1`] = `
+Object {
+  "data": Object {
+    "ListCategories": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "c1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJjMyJd",
+        "lastCursor": "WyJjMSJd",
+      },
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListCategories supports before 1`] = `
+Object {
+  "data": Object {
+    "ListCategories": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "c3",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJjMyJd",
+        "lastCursor": "WyJjMSJd",
+      },
+      "totalCount": 3,
+    },
+  },
+}
+`;

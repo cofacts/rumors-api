@@ -2,6 +2,7 @@ import {
   GraphQLObjectType,
   GraphQLList,
   GraphQLInt,
+  GraphQLFloat,
   GraphQLString,
   GraphQLBoolean,
 } from 'graphql';
@@ -12,9 +13,7 @@ import Category from './Category';
 import ArticleCategoryFeedback from './ArticleCategoryFeedback';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 import FeedbackVote from './FeedbackVote';
-import { createConnectionType } from 'graphql/util';
-
-import MOCK_CATEGORY_DATA from '../mockCategories';
+import { createConnectionType, defaultResolveEdges } from 'graphql/util';
 
 const ArticleCategory = new GraphQLObjectType({
   name: 'ArticleCategory',
@@ -24,8 +23,8 @@ const ArticleCategory = new GraphQLObjectType({
 
     category: {
       type: Category,
-      resolve: ({ categoryId }) =>
-        MOCK_CATEGORY_DATA.find(({ id }) => id === categoryId),
+      resolve: ({ categoryId }, args, { loaders }) =>
+        loaders.docLoader.load({ index: 'categories', id: categoryId }),
     },
 
     articleId: { type: GraphQLString },
@@ -38,7 +37,7 @@ const ArticleCategory = new GraphQLObjectType({
 
     user: {
       type: User,
-      description: 'The user who conencted this reply and this article.',
+      description: 'The user who updated this category with this article.',
       resolve: userFieldResolver,
     },
 
@@ -64,48 +63,30 @@ const ArticleCategory = new GraphQLObjectType({
 
     feedbacks: {
       type: new GraphQLList(ArticleCategoryFeedback),
-      resolve: ({ articleId, categoryId }) => {
-        // TODO: Mock
-        return [
-          {
-            articleId,
-            categoryId,
-            userId: '1',
-            appId: 'test',
-            score: 1,
-            createdAt: '2020-02-06T09:08:45.775Z',
-            updatedAt: '2020-02-06T09:08:45.775Z',
-          },
-          {
-            articleId,
-            categoryId,
-            userId: '2',
-            appId: 'test',
-            score: -1,
-            comment: 'Test comment',
-            createdAt: '2020-02-06T09:09:45.775Z',
-            updatedAt: '2020-02-06T09:09:45.775Z',
-          },
-          {
-            articleId,
-            categoryId,
-            userId: '3',
-            appId: 'test',
-            score: 1,
-            createdAt: '2020-02-06T09:10:45.775Z',
-            updatedAt: '2020-02-06T09:10:45.775Z',
-          },
-        ];
-      },
+      resolve: ({ articleId, categoryId }, args, { loaders }) =>
+        loaders.articleCategoryFeedbacksLoader.load({ articleId, categoryId }),
     },
 
     ownVote: {
       type: FeedbackVote,
       description:
         'The feedback of current user. null when not logged in or not voted yet.',
-      resolve: () => {
-        // TODO: implement this
-        return null;
+      resolve: async (
+        { articleId, categoryId },
+        args,
+        { userId, appId, loaders }
+      ) => {
+        if (!userId || !appId) return null;
+        const feedbacks = await loaders.articleCategoryFeedbacksLoader.load({
+          articleId,
+          categoryId,
+        });
+
+        const ownFeedback = feedbacks.find(
+          feedback => feedback.userId === userId && feedback.appId === appId
+        );
+        if (!ownFeedback) return null;
+        return ownFeedback.score;
       },
     },
 
@@ -114,38 +95,37 @@ const ArticleCategory = new GraphQLObjectType({
       resolve: ({ status }) => (status === undefined ? 'NORMAL' : status),
     },
 
+    aiModel: { type: GraphQLString },
+    aiConfidence: { type: GraphQLFloat },
+
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
   }),
 });
 
-function getMockCursor(articleCategory) {
-  return `${articleCategory.articleId}_${articleCategory.categoryId}`;
+function getCategoryIdFromParams(params) {
+  return params[0].body.query.nested.query.bool.must[0].term[
+    'articleCategories.categoryId'
+  ];
 }
 
-export const ArticleCategoryConnnection = createConnectionType(
-  'ArticleCategoryConnnection',
+async function articleCategoryResolveEdges(...params) {
+  const categoryId = getCategoryIdFromParams(params);
+  const edges = await defaultResolveEdges(...params);
+  return edges.map(({ node: { articleCategories, id }, ...rest }) => {
+    const articleCategory = articleCategories.find(
+      articleCategory => articleCategory.categoryId === categoryId
+    );
+    articleCategory.articleId = id;
+
+    return { ...rest, node: articleCategory };
+  });
+}
+
+export const ArticleCategoryConnection = createConnectionType(
+  'ArticleCategoryConnection',
   ArticleCategory,
-  {
-    // TODO: When we fetch data from Elasticsearch, createConnectionType()'s default resolvers should
-    // do its job, and we won't need any of the following mock resolvers below.
-    //
-    resolveEdges: function mockResolveEdges(mockData) {
-      return mockData.map(articleCategory => ({
-        node: articleCategory,
-        cursor: getMockCursor(articleCategory),
-      }));
-    },
-    resolveTotalCount: function mockResolveTotalCount() {
-      return MOCK_CATEGORY_DATA.length;
-    },
-    resolveLastCursor: function mockResolveLastCursor() {
-      return getMockCursor(MOCK_CATEGORY_DATA[MOCK_CATEGORY_DATA.length - 1]);
-    },
-    resolveFirstCursor: function mockResolveFirstCursor() {
-      return getMockCursor(MOCK_CATEGORY_DATA[0]);
-    },
-  }
+  { resolveEdges: articleCategoryResolveEdges }
 );
 
 export default ArticleCategory;
