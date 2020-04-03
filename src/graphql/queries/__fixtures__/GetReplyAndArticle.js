@@ -40,6 +40,23 @@ export default {
     normalArticleReplyCount: 1,
     references: [{ type: 'LINE' }],
     replyRequestCount: 1,
+
+    /**
+     * Added for tests:
+     * 'get specified article and articleCategories with NORMAL status'
+     * 'get specified article and articleCategories with DELETED status'
+     */
+    articleCategories: [
+      {
+        categoryId: 'c1',
+        status: 'NORMAL',
+      },
+      {
+        categoryId: 'c2',
+        status: 'DELETED',
+      },
+    ],
+    normalArticleCategoryCount: 1,
   },
   '/articles/doc/foo2': {
     text: 'Lorum ipsum Lorum ipsum',
@@ -106,5 +123,13 @@ export default {
     userId: 'test-user',
     appId: 'test-app',
     score: 1,
+  },
+  '/categories/doc/c1': {
+    title: '性少數與愛滋病',
+    description: '對同性婚姻的恐懼、愛滋病的誤解與的防疫相關釋疑。',
+  },
+  '/categories/doc/c2': {
+    title: '免費訊息詐騙',
+    description: '詐騙貼圖、假行銷手法。',
   },
 };
