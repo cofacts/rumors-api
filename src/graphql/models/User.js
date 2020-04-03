@@ -1,5 +1,5 @@
 import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
-import md5 from 'md5';
+import crypto from 'crypto';
 
 /**
  * Field config helper for current user only field.
@@ -21,14 +21,15 @@ const currentUserOnlyField = (type, resolver) => ({
 /**
  * Use Gravatar as avatar provider.
  */
-const avatarResolver = (s = 80, d = 'mp', r = 'g') => ({
+const avatarResolver = (s = 80, d = 'identicon', r = 'g') => ({
   type: GraphQLString,
   description: 'return hash based on user email for gravatar url',
   resolve(user) {
     const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
-    const hash = md5(
-      (user.email || 'anonymous@cofacts.g0v.tw').trim().toLocaleLowerCase()
-    );
+    const hash = crypto
+      .createHash('md5')
+      .update((user.email || user.id).trim().toLocaleLowerCase())
+      .digest('hex');
     const params = `?s=${s}&d=${d}&r=${r}`;
     return `${GRAVATAR_URL}${hash}${params}`;
   },

@@ -34,7 +34,7 @@ exports[`GetUser Get user avatar url from gravatar 1`] = `
 Object {
   "data": Object {
     "GetUser": Object {
-      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=80&d=mp&r=g",
+      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=80&d=identicon&r=g",
       "name": "test email user",
     },
   },
@@ -45,7 +45,7 @@ exports[`GetUser Get user avatar url from gravatar 2`] = `
 Object {
   "data": Object {
     "GetUser": Object {
-      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=80&d=mp&r=g",
+      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=80&d=identicon&r=g",
       "name": "test email user",
     },
   },
