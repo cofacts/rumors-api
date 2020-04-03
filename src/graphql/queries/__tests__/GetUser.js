@@ -3,6 +3,7 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/GetUser';
 
 const currentUser = fixtures['/users/doc/current-user'];
+const testEmailUser = fixtures['/users/doc/test-email-user'];
 describe('GetUser', () => {
   beforeAll(() => loadFixtures(fixtures));
 
@@ -37,6 +38,33 @@ describe('GetUser', () => {
           }
         }
       `({}, { user: currentUser })
+    ).toMatchSnapshot();
+  });
+
+  it('Get user avatar url from gravatar', async () => {
+    expect(
+      await gql`
+        {
+          GetUser(id: "test-email-user") {
+            name
+            avatarUrl
+          }
+        }
+      `({}, { user: testEmailUser })
+    ).toMatchSnapshot();
+
+    // extra padding & capital letter case
+    testEmailUser.email = ' COfacts.tw@gmail.coM    ';
+
+    expect(
+      await gql`
+        {
+          GetUser(id: "test-email-user") {
+            name
+            avatarUrl
+          }
+        }
+      `({}, { user: testEmailUser })
     ).toMatchSnapshot();
   });
 

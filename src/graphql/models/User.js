@@ -1,4 +1,5 @@
 import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
+import crypto from 'crypto';
 
 /**
  * Field config helper for current user only field.
@@ -17,13 +18,30 @@ const currentUserOnlyField = (type, resolver) => ({
   },
 });
 
+/**
+ * Use Gravatar as avatar provider.
+ */
+const avatarResolver = (s = 80, d = 'identicon', r = 'g') => ({
+  type: GraphQLString,
+  description: 'return hash based on user email for gravatar url',
+  resolve(user) {
+    const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
+    const hash = crypto
+      .createHash('md5')
+      .update((user.email || user.id).trim().toLocaleLowerCase())
+      .digest('hex');
+    const params = `?s=${s}&d=${d}&r=${r}`;
+    return `${GRAVATAR_URL}${hash}${params}`;
+  },
+});
+
 const User = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: { type: GraphQLString },
     email: currentUserOnlyField(GraphQLString),
     name: { type: GraphQLString },
-    avatarUrl: { type: GraphQLString },
+    avatarUrl: avatarResolver(),
 
     facebookId: currentUserOnlyField(GraphQLString),
     githubId: currentUserOnlyField(GraphQLString),
