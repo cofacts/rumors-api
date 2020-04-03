@@ -607,28 +607,7 @@ Array [
 ]
 `;
 
-exports[`ListArticles use filter categoryIds with AND to lists articles 1`] = `
-Object {
-  "data": Object {
-    "ListArticles": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "id": "listArticleTest1",
-          },
-        },
-      ],
-      "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
-      },
-      "totalCount": 1,
-    },
-  },
-}
-`;
-
-exports[`ListArticles use filter categoryIds with OR to lists articles 1`] = `
+exports[`ListArticles use filter categoryIds to list articles 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
