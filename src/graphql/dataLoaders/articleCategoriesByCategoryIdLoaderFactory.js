@@ -2,10 +2,15 @@ import DataLoader from 'dataloader';
 import client from 'util/client';
 
 export default () =>
-  new DataLoader(async categoryIds => {
+  new DataLoader(async categoryQueries => {
     const body = [];
 
-    categoryIds.forEach(id => {
+    categoryQueries.forEach(({ id, first, before, after }) => {
+      // TODO error independently?
+      if (before && after) {
+        throw new Error('Use of before & after is prohibited.');
+      }
+
       body.push({ index: 'articles', type: 'doc' });
 
       body.push({
@@ -19,6 +24,9 @@ export default () =>
             },
           },
         },
+        size: first ? first : 10,
+        sort: before ? [{ updatedAt: 'desc' }] : [{ updatedAt: 'asc' }],
+        search_after: before || after ? before || after : undefined,
       });
     });
 
@@ -27,7 +35,7 @@ export default () =>
     })).responses.map(({ hits }, idx) => {
       if (!hits || !hits.hits) return [];
 
-      const categoryId = categoryIds[idx];
+      const categoryId = categoryQueries[idx].id;
       return hits.hits.map(({ _id, _source: { articleCategories } }) => {
         // Find corresponding articleCategory and insert articleId
         //
