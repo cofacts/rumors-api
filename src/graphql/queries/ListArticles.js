@@ -316,7 +316,7 @@ export default {
     }
 
     if (filter.categoryIds && filter.categoryIds.length) {
-      filterQueries.push({
+      shouldQueries.push({
         bool: {
           should: filter.categoryIds.map(categoryId => ({
             nested: {

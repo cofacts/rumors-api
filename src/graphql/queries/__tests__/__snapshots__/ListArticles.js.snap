@@ -614,18 +614,18 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
-            "id": "listArticleTest2",
+            "id": "listArticleTest1",
           },
         },
         Object {
           "node": Object {
-            "id": "listArticleTest1",
+            "id": "listArticleTest2",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
+        "firstCursor": "WzEuODk3MTIsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
+        "lastCursor": "WzAuNjkzMTQ3MiwibGlzdEFydGljbGVUZXN0MiJd",
       },
       "totalCount": 2,
     },

@@ -510,6 +510,7 @@ describe('ListArticles', () => {
       await gql`
         {
           ListArticles(
+            orderBy: [{ _score: DESC }]
             filter: { categoryIds: ["category1", "category-author-1"] }
           ) {
             edges {
