@@ -505,5 +505,29 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
+  it('use filter categoryIds to list articles', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(
+            orderBy: [{ _score: DESC }]
+            filter: { categoryIds: ["category1", "category-author-1"] }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });

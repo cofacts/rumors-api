@@ -4,6 +4,7 @@ export default {
     appId: 'app1',
     replyRequestCount: 2,
     normalArticleReplyCount: 2,
+    normalArticleCategoryCount: 2,
     updatedAt: 1,
     createdAt: '2020-02-03T00:00:00.000Z',
     text: `
@@ -23,12 +24,21 @@ export default {
         updatedAt: '2020-02-05T14:41:19.044Z',
       },
     ],
+    articleCategories: [
+      {
+        categoryId: 'category1',
+      },
+      {
+        categoryId: 'category-author-1',
+      },
+    ],
   },
   '/articles/doc/listArticleTest2': {
     userId: 'user1',
     appId: 'app1',
     replyRequestCount: 1,
     normalArticleReplyCount: 1,
+    normalArticleCategoryCount: 2,
     updatedAt: 2,
     createdAt: '2020-02-05T00:00:00.000Z',
     text:
@@ -38,6 +48,14 @@ export default {
         status: 'NORMAL',
         createdAt: '2020-02-09T15:11:04.472Z',
         updatedAt: '2020-02-09T15:11:04.472Z',
+      },
+    ],
+    articleCategories: [
+      {
+        categoryId: 'category1',
+      },
+      {
+        categoryId: 'category-author-2',
       },
     ],
   },
@@ -92,6 +110,18 @@ export default {
         updatedAt: '2020-02-09T15:11:04.472Z',
       },
     ],
+  },
+  '/categories/doc/category1': {
+    title: '文言文',
+    description: '就是文言文',
+  },
+  '/categories/doc/category-author-1': {
+    title: '白居易',
+    description: '白居易，字樂天',
+  },
+  '/categories/doc/category-author-2': {
+    title: '諸葛亮',
+    description: '諸葛亮，字孔明',
   },
   '/urls/doc/gohome': {
     url: 'http://gohome.com/',

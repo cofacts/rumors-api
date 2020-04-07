@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`articleCategoriesByCategoryIdLoaderFactory load id 1`] = `
+Array [
+  Object {
+    "articleId": "a1",
+    "categoryId": "c1",
+    "status": "NORMAL",
+  },
+  Object {
+    "articleId": "a2",
+    "categoryId": "c1",
+    "status": "NORMAL",
+  },
+  Object {
+    "articleId": "a3",
+    "categoryId": "c1",
+    "status": "NORMAL",
+  },
+]
+`;
+
+exports[`articleCategoriesByCategoryIdLoaderFactory load id with after 1`] = `
+Array [
+  Object {
+    "articleId": "a3",
+    "categoryId": "c1",
+    "status": "NORMAL",
+  },
+]
+`;
+
+exports[`articleCategoriesByCategoryIdLoaderFactory load id with before 1`] = `
+Array [
+  Object {
+    "articleId": "a1",
+    "categoryId": "c1",
+    "status": "NORMAL",
+  },
+]
+`;
+
+exports[`articleCategoriesByCategoryIdLoaderFactory load id with first 1`] = `
+Array [
+  Object {
+    "articleId": "a1",
+    "categoryId": "c1",
+    "status": "NORMAL",
+  },
+  Object {
+    "articleId": "a2",
+    "categoryId": "c1",
+    "status": "NORMAL",
+  },
+]
+`;
+
+exports[`articleCategoriesByCategoryIdLoaderFactory should fail if before and after both exist 1`] = `[Error: Use of before & after is prohibited.]`;

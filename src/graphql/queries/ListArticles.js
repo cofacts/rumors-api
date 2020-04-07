@@ -315,6 +315,23 @@ export default {
       });
     }
 
+    if (filter.categoryIds && filter.categoryIds.length) {
+      shouldQueries.push({
+        bool: {
+          should: filter.categoryIds.map(categoryId => ({
+            nested: {
+              path: 'articleCategories',
+              query: {
+                term: {
+                  'articleCategories.categoryId': categoryId,
+                },
+              },
+            },
+          })),
+        },
+      });
+    }
+
     body.query = {
       bool: {
         should:

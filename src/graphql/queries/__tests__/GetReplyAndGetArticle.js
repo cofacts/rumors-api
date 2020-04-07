@@ -179,6 +179,46 @@ describe('GetReplyAndGetArticle', () => {
         `()
       ).toMatchSnapshot('feedback loading test');
     });
+
+    it('get specified article and articleCategories with NORMAL status', async () => {
+      expect(
+        await gql`
+          {
+            GetArticle(id: "foo") {
+              text
+              articleCategories(status: NORMAL) {
+                categoryId
+                category {
+                  id
+                  title
+                  description
+                }
+              }
+            }
+          }
+        `()
+      ).toMatchSnapshot();
+    });
+
+    it('get specified article and articleCategories with DELETED status', async () => {
+      expect(
+        await gql`
+          {
+            GetArticle(id: "foo") {
+              text
+              articleCategories(status: DELETED) {
+                categoryId
+                category {
+                  id
+                  title
+                  description
+                }
+              }
+            }
+          }
+        `()
+      ).toMatchSnapshot();
+    });
   });
 
   describe('GetReply', () => {
