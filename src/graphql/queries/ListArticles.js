@@ -12,7 +12,7 @@ import {
   getSortArgs,
   pagingArgs,
   getArithmeticExpressionType,
-  getOperatorAndOperand,
+  getRangeFieldParamFromArithmeticExpression,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 
@@ -249,57 +249,36 @@ export default {
     }
 
     if (filter.replyCount) {
-      const { operator, operand } = getOperatorAndOperand(filter.replyCount);
       filterQueries.push({
-        script: {
-          script: {
-            source: `doc['normalArticleReplyCount'].value ${operator} params.operand`,
-            params: {
-              operand,
-            },
-          },
+        range: {
+          normalArticleReplyCount: getRangeFieldParamFromArithmeticExpression(
+            filter.replyCount
+          ),
         },
       });
     }
 
     if (filter.replyRequestCount) {
-      const { operator, operand } = getOperatorAndOperand(
-        filter.replyRequestCount
-      );
       filterQueries.push({
-        script: {
-          script: {
-            source: `doc['replyRequestCount'].value ${operator} params.operand`,
-            params: {
-              operand,
-            },
-          },
+        range: {
+          replyRequestCount: getRangeFieldParamFromArithmeticExpression(
+            filter.replyRequestCount
+          ),
         },
       });
     }
 
     if (filter.createdAt) {
-      // @todo: handle invalid type error?
-      const q = Object.fromEntries(
-        Object.entries(filter.createdAt)
-          .filter(([key]) => ['GT', 'GTE', 'LT', 'LTE'].includes(key))
-          .map(([key, value]) => [key.toLowerCase(), value])
-      );
-
       filterQueries.push({
-        range: { createdAt: q },
+        range: {
+          createdAt: getRangeFieldParamFromArithmeticExpression(
+            filter.createdAt
+          ),
+        },
       });
     }
 
     if (filter.repliedAt) {
-      // @todo: handle invalid type error?
-      // @todo: extract repetitive logic
-      const q = Object.fromEntries(
-        Object.entries(filter.repliedAt)
-          .filter(([key]) => ['GT', 'GTE', 'LT', 'LTE'].includes(key))
-          .map(([key, value]) => [key.toLowerCase(), value])
-      );
-
       filterQueries.push({
         nested: {
           path: 'articleReplies',
@@ -307,7 +286,13 @@ export default {
             bool: {
               must: [
                 { match: { 'articleReplies.status': 'NORMAL' } },
-                { range: { 'articleReplies.createdAt': q } },
+                {
+                  range: {
+                    'articleReplies.createdAt': getRangeFieldParamFromArithmeticExpression(
+                      filter.repliedAt
+                    ),
+                  },
+                },
               ],
             },
           },

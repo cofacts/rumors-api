@@ -10,7 +10,7 @@ import {
   pagingArgs,
   getArithmeticExpressionType,
   getSortArgs,
-  getOperatorAndOperand,
+  getRangeFieldParamFromArithmeticExpression,
   createFilterType,
   createSortType,
   createConnectionType,
@@ -195,20 +195,14 @@ const Article = new GraphQLObjectType({
         if (filter.replyCount) {
           // Switch to bool query so that we can filter more_like_this results
           //
-          const { operator, operand } = getOperatorAndOperand(
-            filter.replyCount
-          );
           body.query = {
             bool: {
               must: body.query,
               filter: {
-                script: {
-                  script: {
-                    source: `doc['normalArticleReplyCount'].value ${operator} params.operand`,
-                    params: {
-                      operand,
-                    },
-                  },
+                range: {
+                  normalArticleReplyCount: getRangeFieldParamFromArithmeticExpression(
+                    filter.replyCount
+                  ),
                 },
               },
             },

@@ -15,6 +15,11 @@ import client from 'util/client';
 // Filtering args definition & parsing
 //
 
+/**
+ * @param {string} typeName
+ * @param {GraphQLScalarType} argType
+ * @returns {GraphQLInputObjectType}
+ */
 export function getArithmeticExpressionType(typeName, argType) {
   return new GraphQLInputObjectType({
     name: typeName,
@@ -28,15 +33,29 @@ export function getArithmeticExpressionType(typeName, argType) {
   });
 }
 
-export function getOperatorAndOperand(expression) {
-  if (typeof expression.EQ !== 'undefined') {
-    return { operator: '==', operand: expression.EQ };
-  } else if (typeof expression.LT !== 'undefined') {
-    return { operator: '<', operand: expression.LT };
-  } else if (typeof expression.GT !== 'undefined') {
-    return { operator: '>', operand: expression.GT };
+/**
+ * @param {object} arithmeticFilterObj - {LT, LTE, GT, GTE, EQ}, the structure returned by getArithmeticExpressionType
+ * @returns {object} Elasticsearch range filter param
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-range-query.html#range-query-field-params
+ */
+export function getRangeFieldParamFromArithmeticExpression(
+  arithmeticFilterObj
+) {
+  // EQ overrides all other operators
+  if (arithmeticFilterObj.EQ) {
+    return {
+      gte: arithmeticFilterObj.EQ,
+      lte: arithmeticFilterObj.EQ,
+    };
   }
-  throw new Error('Invalid Expression!');
+
+  const conditionEntries = Object.entries(arithmeticFilterObj);
+
+  if (conditionEntries.length === 0) throw new Error('Invalid Expression!');
+
+  return Object.fromEntries(
+    conditionEntries.map(([key, value]) => [key.toLowerCase(), value])
+  );
 }
 
 export function createFilterType(typeName, args) {

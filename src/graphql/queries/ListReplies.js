@@ -8,6 +8,7 @@ import {
   getSortArgs,
   pagingArgs,
   getArithmeticExpressionType,
+  getRangeFieldParamFromArithmeticExpression,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 
@@ -145,16 +146,12 @@ export default {
     }
 
     if (filter.createdAt) {
-      // @todo: handle invalid type error?
-      // @todo: extract repetitive logic
-      const q = Object.fromEntries(
-        Object.entries(filter.createdAt)
-          .filter(([key]) => ['GT', 'GTE', 'LT', 'LTE'].includes(key))
-          .map(([key, value]) => [key.toLowerCase(), value])
-      );
-
       filterQueries.push({
-        range: { createdAt: q },
+        range: {
+          createdAt: getRangeFieldParamFromArithmeticExpression(
+            filter.createdAt
+          ),
+        },
       });
     }
 
