@@ -42,7 +42,7 @@ export function getRangeFieldParamFromArithmeticExpression(
   arithmeticFilterObj
 ) {
   // EQ overrides all other operators
-  if (arithmeticFilterObj.EQ) {
+  if (typeof arithmeticFilterObj.EQ !== 'undefined') {
     return {
       gte: arithmeticFilterObj.EQ,
       lte: arithmeticFilterObj.EQ,
