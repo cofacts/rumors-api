@@ -17,11 +17,15 @@ export default {
         status: 'NORMAL',
         createdAt: '2020-02-08T15:11:04.472Z',
         updatedAt: '2020-02-08T15:11:04.472Z',
+        positiveFeedbackCount: 1,
+        negativeFeedbackCount: 0,
       },
       {
         status: 'NORMAL',
         createdAt: '2020-02-05T14:41:19.044Z',
         updatedAt: '2020-02-05T14:41:19.044Z',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 1,
       },
     ],
     articleCategories: [
@@ -48,6 +52,24 @@ export default {
         status: 'NORMAL',
         createdAt: '2020-02-09T15:11:04.472Z',
         updatedAt: '2020-02-09T15:11:04.472Z',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 0,
+      },
+      {
+        // Deleted article replies are not taken into account for createdAt and feedbacks
+        status: 'DELETED',
+        createdAt: '2020-02-15T15:11:04.472Z',
+        updatedAt: '2020-02-16T15:11:04.472Z',
+        positiveFeedbackCount: 3,
+        negativeFeedbackCount: 0,
+      },
+      {
+        // Deleted article replies are not taken into account for createdAt and feedbacks
+        status: 'DELETED',
+        createdAt: '2020-02-04T15:11:04.472Z',
+        updatedAt: '2020-02-04T15:11:04.472Z',
+        positiveFeedbackCount: 3,
+        negativeFeedbackCount: 0,
       },
     ],
     articleCategories: [
@@ -68,19 +90,13 @@ export default {
     createdAt: '2020-02-06T00:00:00.000Z',
     text:
       '人生幾何，離闊如此！況以膠漆之心，置於胡越之身，進不得相合，退不能相忘，牽攣乖隔，各欲白首。',
-    articleReplies: [
-      {
-        status: 'NORMAL',
-        createdAt: '2020-02-05T15:11:04.472Z',
-        updatedAt: '2020-02-05T15:11:04.472Z',
-      },
-    ],
+    articleReplies: [],
   },
   '/articles/doc/listArticleTest4': {
     userId: 'user2',
     appId: 'app1',
     replyRequestCount: 0,
-    normalArticleReplyCount: 0,
+    normalArticleReplyCount: 3,
     updatedAt: 4,
     createdAt: '2020-02-07T00:00:00.000Z',
     text: '我好餓 http://gohome.com',
@@ -98,16 +114,22 @@ export default {
         status: 'NORMAL',
         createdAt: '2020-02-11T15:11:04.472Z',
         updatedAt: '2020-02-11T15:11:04.472Z',
+        positiveFeedbackCount: 10,
+        negativeFeedbackCount: 11,
       },
       {
         status: 'NORMAL',
         createdAt: '2020-02-10T15:11:04.472Z',
         updatedAt: '2020-02-10T15:11:04.472Z',
+        positiveFeedbackCount: 5,
+        negativeFeedbackCount: 7,
       },
       {
         status: 'NORMAL',
         createdAt: '2020-02-09T15:11:04.472Z',
         updatedAt: '2020-02-09T15:11:04.472Z',
+        positiveFeedbackCount: 3,
+        negativeFeedbackCount: 4,
       },
     ],
   },

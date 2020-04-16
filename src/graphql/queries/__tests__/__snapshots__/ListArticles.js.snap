@@ -116,72 +116,102 @@ Object {
 }
 `;
 
-exports[`ListArticles filters by replies time range 1`] = `
+exports[`ListArticles filters by replies time range: between 2020-02-04 and 2020-02-06 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
           "node": Object {
+            "articleReplies": Array [
+              Object {
+                "createdAt": "2020-02-08T15:11:04.472Z",
+              },
+              Object {
+                "createdAt": "2020-02-05T14:41:19.044Z",
+              },
+            ],
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by replies time range: earlier or equal to 2020-02-06 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "createdAt": "2020-02-08T15:11:04.472Z",
+              },
+              Object {
+                "createdAt": "2020-02-05T14:41:19.044Z",
+              },
+            ],
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by replies time range: later than 2020-02-06 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "createdAt": "2020-02-11T15:11:04.472Z",
+              },
+              Object {
+                "createdAt": "2020-02-09T15:11:04.472Z",
+              },
+              Object {
+                "createdAt": "2020-02-10T15:11:04.472Z",
+              },
+            ],
             "id": "listArticleTest4",
           },
         },
         Object {
           "node": Object {
+            "articleReplies": Array [
+              Object {
+                "createdAt": "2020-02-09T15:11:04.472Z",
+              },
+            ],
             "id": "listArticleTest2",
           },
         },
         Object {
           "node": Object {
+            "articleReplies": Array [
+              Object {
+                "createdAt": "2020-02-08T15:11:04.472Z",
+              },
+              Object {
+                "createdAt": "2020-02-05T14:41:19.044Z",
+              },
+            ],
             "id": "listArticleTest1",
           },
         },
       ],
       "totalCount": 3,
-    },
-  },
-}
-`;
-
-exports[`ListArticles filters by replies time range 2`] = `
-Object {
-  "data": Object {
-    "ListArticles": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "id": "listArticleTest3",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "listArticleTest1",
-          },
-        },
-      ],
-      "totalCount": 2,
-    },
-  },
-}
-`;
-
-exports[`ListArticles filters by replies time range 3`] = `
-Object {
-  "data": Object {
-    "ListArticles": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "id": "listArticleTest3",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "listArticleTest1",
-          },
-        },
-      ],
-      "totalCount": 2,
     },
   },
 }
@@ -195,14 +225,10 @@ Object {
         Object {
           "node": Object {
             "id": "listArticleTest2",
+            "replyCount": 1,
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
-      },
-      "totalCount": 1,
     },
   },
 }
@@ -215,15 +241,17 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest4",
+            "replyCount": 3,
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest1",
+            "replyCount": 2,
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
-      },
-      "totalCount": 1,
     },
   },
 }
@@ -236,20 +264,11 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
-            "id": "listArticleTest4",
-          },
-        },
-        Object {
-          "node": Object {
             "id": "listArticleTest3",
+            "replyCount": 0,
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
-      },
-      "totalCount": 2,
     },
   },
 }
@@ -272,40 +291,50 @@ Object {
 }
 `;
 
-exports[`ListArticles filters by time range 1`] = `
+exports[`ListArticles filters by time range: between 2020-02-04 and 2020-02-06 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
           "node": Object {
-            "id": "listArticleTest4",
-          },
-        },
-      ],
-      "totalCount": 1,
-    },
-  },
-}
-`;
-
-exports[`ListArticles filters by time range 2`] = `
-Object {
-  "data": Object {
-    "ListArticles": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
+            "createdAt": "2020-02-06T00:00:00.000Z",
             "id": "listArticleTest3",
           },
         },
         Object {
           "node": Object {
+            "createdAt": "2020-02-05T00:00:00.000Z",
+            "id": "listArticleTest2",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by time range: earlier or equal to 2020-02-06 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-06T00:00:00.000Z",
+            "id": "listArticleTest3",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-05T00:00:00.000Z",
             "id": "listArticleTest2",
           },
         },
         Object {
           "node": Object {
+            "createdAt": "2020-02-03T00:00:00.000Z",
             "id": "listArticleTest1",
           },
         },
@@ -316,67 +345,136 @@ Object {
 }
 `;
 
-exports[`ListArticles filters by time range 3`] = `
+exports[`ListArticles filters by time range: later than 2020-02-06 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
           "node": Object {
+            "createdAt": "2020-02-07T00:00:00.000Z",
+            "id": "listArticleTest4",
+          },
+        },
+      ],
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by userId, appId and fromUserOfArticleId: author of listArticleTest1 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by userId, appId and fromUserOfArticleId: userId = user1, appId = app1 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters via article reply feedback count: hasArticleReplyWithMorePositiveFeedback = false 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "negativeFeedbackCount": 11,
+                "positiveFeedbackCount": 10,
+              },
+              Object {
+                "negativeFeedbackCount": 4,
+                "positiveFeedbackCount": 3,
+              },
+              Object {
+                "negativeFeedbackCount": 7,
+                "positiveFeedbackCount": 5,
+              },
+            ],
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
             "id": "listArticleTest3",
           },
         },
         Object {
           "node": Object {
+            "articleReplies": Array [
+              Object {
+                "negativeFeedbackCount": 0,
+                "positiveFeedbackCount": 0,
+              },
+            ],
             "id": "listArticleTest2",
           },
         },
       ],
-      "totalCount": 2,
     },
   },
 }
 `;
 
-exports[`ListArticles filters by userId, appId and fromUserOfArticleId 1`] = `
+exports[`ListArticles filters via article reply feedback count: hasArticleReplyWithMorePositiveFeedback = true 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
           "node": Object {
-            "id": "listArticleTest2",
-          },
-        },
-        Object {
-          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "negativeFeedbackCount": 0,
+                "positiveFeedbackCount": 1,
+              },
+              Object {
+                "negativeFeedbackCount": 1,
+                "positiveFeedbackCount": 0,
+              },
+            ],
             "id": "listArticleTest1",
           },
         },
       ],
-      "totalCount": 2,
-    },
-  },
-}
-`;
-
-exports[`ListArticles filters by userId, appId and fromUserOfArticleId 2`] = `
-Object {
-  "data": Object {
-    "ListArticles": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "id": "listArticleTest2",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "listArticleTest1",
-          },
-        },
-      ],
-      "totalCount": 2,
     },
   },
 }
@@ -440,43 +538,63 @@ Object {
 }
 `;
 
-exports[`ListArticles sorts 1`] = `
+exports[`ListArticles sorts: by lastRepliedAt DESC 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
           "node": Object {
+            "articleReplies": Array [
+              Object {
+                "createdAt": "2020-02-11T15:11:04.472Z",
+              },
+              Object {
+                "createdAt": "2020-02-09T15:11:04.472Z",
+              },
+              Object {
+                "createdAt": "2020-02-10T15:11:04.472Z",
+              },
+            ],
             "id": "listArticleTest4",
           },
         },
         Object {
           "node": Object {
-            "id": "listArticleTest3",
-          },
-        },
-        Object {
-          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "createdAt": "2020-02-09T15:11:04.472Z",
+              },
+            ],
             "id": "listArticleTest2",
           },
         },
         Object {
           "node": Object {
+            "articleReplies": Array [
+              Object {
+                "createdAt": "2020-02-08T15:11:04.472Z",
+              },
+              Object {
+                "createdAt": "2020-02-05T14:41:19.044Z",
+              },
+            ],
             "id": "listArticleTest1",
           },
         },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest3",
+          },
+        },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WzQsImxpc3RBcnRpY2xlVGVzdDQiXQ==",
-        "lastCursor": "WzEsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
-      },
-      "totalCount": 4,
     },
   },
 }
 `;
 
-exports[`ListArticles sorts 2`] = `
+exports[`ListArticles sorts: by replyRequestCount DESC 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
@@ -484,21 +602,25 @@ Object {
         Object {
           "node": Object {
             "id": "listArticleTest1",
+            "replyRequestCount": 2,
           },
         },
         Object {
           "node": Object {
             "id": "listArticleTest2",
+            "replyRequestCount": 1,
           },
         },
         Object {
           "node": Object {
             "id": "listArticleTest4",
+            "replyRequestCount": 0,
           },
         },
         Object {
           "node": Object {
             "id": "listArticleTest3",
+            "replyRequestCount": 0,
           },
         },
       ],
@@ -512,7 +634,7 @@ Object {
 }
 `;
 
-exports[`ListArticles sorts 3`] = `
+exports[`ListArticles sorts: by updatedAt DESC 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
@@ -520,27 +642,31 @@ Object {
         Object {
           "node": Object {
             "id": "listArticleTest4",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "listArticleTest2",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "listArticleTest1",
+            "updatedAt": "4",
           },
         },
         Object {
           "node": Object {
             "id": "listArticleTest3",
+            "updatedAt": "3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+            "updatedAt": "2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+            "updatedAt": "1",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzE1ODE0MzM4NjQ0NzIsImxpc3RBcnRpY2xlVGVzdDQiXQ==",
-        "lastCursor": "WzE1ODA5MTU0NjQ0NzIsImxpc3RBcnRpY2xlVGVzdDMiXQ==",
+        "firstCursor": "WzQsImxpc3RBcnRpY2xlVGVzdDQiXQ==",
+        "lastCursor": "WzEsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
       },
       "totalCount": 4,
     },
