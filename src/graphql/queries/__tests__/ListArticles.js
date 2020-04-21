@@ -36,6 +36,7 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                updatedAt
               }
             }
             totalCount
@@ -46,7 +47,7 @@ describe('ListArticles', () => {
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('by updatedAt DESC');
 
     expect(
       await gql`
@@ -55,6 +56,7 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                replyRequestCount
               }
             }
             totalCount
@@ -65,7 +67,7 @@ describe('ListArticles', () => {
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('by replyRequestCount DESC');
 
     expect(
       await gql`
@@ -74,17 +76,15 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                articleReplies(status: NORMAL) {
+                  createdAt
+                }
               }
-            }
-            totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('by lastRepliedAt DESC');
   });
 
   const testReplyCount = async expression => {
@@ -97,12 +97,8 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                replyCount
               }
-            }
-            totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -232,7 +228,7 @@ describe('ListArticles', () => {
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('userId = user1, appId = app1');
 
     // Lists only articles by fromUserOfArticleId
     expect(
@@ -248,7 +244,7 @@ describe('ListArticles', () => {
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('author of listArticleTest1');
   });
 
   it('filters by time range', async () => {
@@ -261,13 +257,14 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                createdAt
               }
             }
             totalCount
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('later than 2020-02-06');
     expect(
       await gql`
         {
@@ -277,13 +274,14 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                createdAt
               }
             }
             totalCount
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('earlier or equal to 2020-02-06');
     expect(
       await gql`
         {
@@ -298,13 +296,14 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                createdAt
               }
             }
             totalCount
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('between 2020-02-04 and 2020-02-06');
   });
 
   it('filters by replies time range', async () => {
@@ -317,13 +316,16 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                articleReplies(status: NORMAL) {
+                  createdAt
+                }
               }
             }
             totalCount
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('later than 2020-02-06');
     expect(
       await gql`
         {
@@ -333,13 +335,16 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                articleReplies(status: NORMAL) {
+                  createdAt
+                }
               }
             }
             totalCount
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('earlier or equal to 2020-02-06');
     expect(
       await gql`
         {
@@ -354,13 +359,16 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+                articleReplies(status: NORMAL) {
+                  createdAt
+                }
               }
             }
             totalCount
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('between 2020-02-04 and 2020-02-06');
   });
 
   it('filters by mixed query', async () => {
@@ -527,6 +535,48 @@ describe('ListArticles', () => {
         }
       `()
     ).toMatchSnapshot();
+  });
+
+  it('filters via article reply feedback count', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { hasArticleReplyWithMorePositiveFeedback: true }
+          ) {
+            edges {
+              node {
+                id
+                articleReplies(status: NORMAL) {
+                  positiveFeedbackCount
+                  negativeFeedbackCount
+                }
+              }
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot('hasArticleReplyWithMorePositiveFeedback = true');
+
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { hasArticleReplyWithMorePositiveFeedback: false }
+          ) {
+            edges {
+              node {
+                id
+                articleReplies(status: NORMAL) {
+                  positiveFeedbackCount
+                  negativeFeedbackCount
+                }
+              }
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot('hasArticleReplyWithMorePositiveFeedback = false');
   });
 
   afterAll(() => unloadFixtures(fixtures));

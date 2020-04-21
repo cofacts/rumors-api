@@ -3,6 +3,7 @@ import {
   GraphQLString,
   GraphQLInputObjectType,
   GraphQLList,
+  GraphQLBoolean,
 } from 'graphql';
 import client from 'util/client';
 
@@ -101,6 +102,14 @@ export default {
             When specified, it overrides the settings of appId and userId.
           `,
         },
+        hasArticleReplyWithMorePositiveFeedback: {
+          type: GraphQLBoolean,
+          description: `
+            When true, return only articles with any article replies that has more positive feedback than negative.
+            When false, return articles with none of its article replies that has more positive feedback, including those with no replies yet.
+            In both scenario, deleted article replies are not taken into account.
+          `,
+        },
       }),
     },
     orderBy: {
@@ -145,6 +154,7 @@ export default {
     // Collecting queries that will be used in bool queries later
     const shouldQueries = []; // Affects scores
     const filterQueries = []; // Not affects scores
+    const mustNotQueries = [];
 
     if (filter.fromUserOfArticleId) {
       let specifiedArticle;
@@ -317,11 +327,43 @@ export default {
       });
     }
 
+    if (typeof filter.hasArticleReplyWithMorePositiveFeedback === 'boolean') {
+      (filter.hasArticleReplyWithMorePositiveFeedback
+        ? shouldQueries
+        : mustNotQueries
+      ).push({
+        nested: {
+          path: 'articleReplies',
+          query: {
+            bool: {
+              must: [
+                {
+                  term: {
+                    'articleReplies.status': 'NORMAL',
+                  },
+                },
+                {
+                  script: {
+                    script: {
+                      source:
+                        "doc['articleReplies.positiveFeedbackCount'].value > doc['articleReplies.negativeFeedbackCount'].value",
+                      lang: 'painless',
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+    }
+
     body.query = {
       bool: {
         should:
           shouldQueries.length === 0 ? [{ match_all: {} }] : shouldQueries,
         filter: filterQueries,
+        must_not: mustNotQueries,
         minimum_should_match: 1, // At least 1 "should" query should present
       },
     };
