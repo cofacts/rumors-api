@@ -18,7 +18,7 @@ passport.serializeUser((user, done) => {
  */
 passport.deserializeUser(async (userId, done) => {
   try {
-    const user = await client.get({
+    const { body: user } = await client.get({
       index: 'users',
       type: 'doc',
       id: userId,
@@ -38,10 +38,10 @@ passport.deserializeUser(async (userId, done) => {
  * @param {object} profile - passport profile object
  * @param {'facebookId'|'githubId'|'twitterId'} fieldName - The elasticsearch ID field name in user document
  */
-async function verifyProfile(profile, fieldName) {
+export async function verifyProfile(profile, fieldName) {
   // Find user with such user id
   //
-  const users = await client.search({
+  const { body: users } = await client.search({
     index: 'users',
     type: 'doc',
     q: `${fieldName}:${profile.id}`,
@@ -59,7 +59,7 @@ async function verifyProfile(profile, fieldName) {
   // Find user with such email
   //
   if (email) {
-    const usersWithEmail = await client.search({
+    const { body: usersWithEmail } = await client.search({
       index: 'users',
       type: 'doc',
       q: `email:${email}`,
@@ -70,7 +70,7 @@ async function verifyProfile(profile, fieldName) {
       // Fill in fieldName with profile.id so that it does not matter if user's
       // email gets changed in the future.
       //
-      const updateUserResult = await client.update({
+      const { body: updateUserResult } = await client.update({
         index: 'users',
         type: 'doc',
         id,
@@ -93,7 +93,7 @@ async function verifyProfile(profile, fieldName) {
 
   // No user in DB, create one
   //
-  const createUserResult = await client.index({
+  const { body: createUserResult } = await client.index({
     index: 'users',
     type: 'doc',
     body: {
@@ -108,11 +108,11 @@ async function verifyProfile(profile, fieldName) {
 
   if (createUserResult.result === 'created') {
     return processMeta(
-      await client.get({
+      (await client.get({
         index: 'users',
         type: 'doc',
         id: createUserResult._id,
-      })
+      })).body
     );
   }
 
