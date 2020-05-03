@@ -21,6 +21,8 @@ export async function loadFixtures(fixtureMap) {
   //      https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html
   //
   const { body: result } = await client.bulk({ body, refresh: 'true' });
+
+  /* istanbul ignore if */
   if (result.errors) {
     throw new Error(
       `Fixture load failed : ${JSON.stringify(result, null, '  ')}`
@@ -35,6 +37,8 @@ export async function unloadFixtures(fixtureMap) {
   });
 
   const { body: result } = await client.bulk({ body, refresh: 'true' });
+
+  /* istanbul ignore if */
   if (result.errors) {
     throw new Error(
       `Fixture unload failed : ${JSON.stringify(result, null, '  ')}`
