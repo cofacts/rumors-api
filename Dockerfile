@@ -21,7 +21,7 @@ FROM node:12-alpine
 
 WORKDIR /srv/www
 EXPOSE 5000
-ENTRYPOINT NODE_ENV=production ELASTIC_LOG_LEVEL=info npm start
+ENTRYPOINT NODE_ENV=production npm start
 
 COPY --from=builder /srv/www/node_modules ./node_modules
 COPY --from=builder /srv/www/build ./build

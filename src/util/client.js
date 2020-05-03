@@ -1,8 +1,7 @@
-import elasticsearch from 'elasticsearch';
+import elasticsearch from '@elastic/elasticsearch';
 
 export default new elasticsearch.Client({
-  host: process.env.ELASTICSEARCH_URL,
-  log: process.env.ELASTIC_LOG_LEVEL,
+  node: process.env.ELASTICSEARCH_URL,
 });
 
 // Processes {_id, _version, found, _source: {...}} to

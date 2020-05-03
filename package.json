@@ -14,14 +14,14 @@
     "dev": "pm2-dev start --timestamp process-dev.json",
     "seed": "cd test/rumors-db && npm run seed",
     "pretest": "npm run rumors-db:test",
-    "test": "NODE_ENV=test ELASTICSEARCH_URL=localhost:62223 jest --runInBand",
+    "test": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 jest --runInBand",
     "start": "pm2 startOrRestart process.json --env production --log-date-format=\"YYYY-MM-DD HH:mm Z\" --no-daemon",
     "lint": "eslint src/.",
     "lint:fix": "eslint --fix src/.",
     "validate:sameDoc": "echo Please run 'npm run evaluate' instead. See README.md for setting up test db.",
     "clean": "rm -rf build",
     "rumors-db:pull": "cd test/rumors-db && git pull",
-    "rumors-db:test": "cd test/rumors-db && npm t"
+    "rumors-db:test": "cd test/rumors-db && DOTENV_CONFIG_PATH=../../.env npm t"
   },
   "dependencies": {
     "@babel/runtime-corejs2": "^7.8.0",
@@ -30,7 +30,7 @@
     "babel-runtime": "^6.20.0",
     "dataloader": "^2.0.0",
     "dotenv": "^8.0.0",
-    "elasticsearch": "^16.0.0",
+    "@elastic/elasticsearch": "^6.8.6",
     "form-data": "^3.0.0",
     "google-protobuf": "^3.0.0",
     "graphql": "^15.0.0",
