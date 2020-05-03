@@ -36,7 +36,9 @@ describe('creation', () => {
 
     expect(errors).toBeUndefined();
 
-    const { _source: article } = await client.get({
+    const {
+      body: { _source: article },
+    } = await client.get({
       index: 'articles',
       type: 'doc',
       id: data.CreateArticle.id,
@@ -51,7 +53,9 @@ describe('creation', () => {
       appId,
     });
 
-    const { _source: replyRequest } = await client.get({
+    const {
+      body: { _source: replyRequest },
+    } = await client.get({
       index: 'replyrequests',
       type: 'doc',
       id: replyRequestId,
@@ -103,7 +107,9 @@ describe('creation', () => {
     // and it returns the existing ID
     expect(data.CreateArticle.id).toBe(articleId);
 
-    const { _source: article } = await client.get({
+    const {
+      body: { _source: article },
+    } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,
@@ -114,7 +120,9 @@ describe('creation', () => {
 
     // Expects new replyRequest is generated
     const replyRequestId = getReplyRequestId({ articleId, appId, userId });
-    const { _source: replyRequest } = await client.get({
+    const {
+      body: { _source: replyRequest },
+    } = await client.get({
       index: 'replyrequests',
       type: 'doc',
       id: replyRequestId,

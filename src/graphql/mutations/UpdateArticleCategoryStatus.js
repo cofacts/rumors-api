@@ -19,8 +19,10 @@ export default {
     { userId, appId }
   ) {
     const {
-      result,
-      get: { _source },
+      body: {
+        result,
+        get: { _source },
+      },
     } = await client.update({
       index: 'articles',
       type: 'doc',

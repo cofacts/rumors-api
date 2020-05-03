@@ -41,7 +41,9 @@ describe('CreateArticleCategory', () => {
     expect(errors).toBeUndefined();
     expect(data.CreateArticleCategory).toMatchSnapshot();
 
-    const { _source } = await client.get({
+    const {
+      body: { _source },
+    } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,
@@ -99,7 +101,9 @@ describe('CreateArticleCategory', () => {
     expect(errors).toBeUndefined();
     expect(data.CreateArticleCategory).toMatchSnapshot();
 
-    const { _source } = await client.get({
+    const {
+      body: { _source },
+    } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,
@@ -169,7 +173,9 @@ describe('CreateArticleCategory', () => {
     expect(errors).toBeUndefined();
     expect(data.CreateArticleCategory).toMatchSnapshot();
 
-    const { _source } = await client.get({
+    const {
+      body: { _source },
+    } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,

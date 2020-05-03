@@ -21,7 +21,7 @@ export default () =>
 
       return (await client.msearch({
         body,
-      })).responses.map(({ hits }) => {
+      })).body.responses.map(({ hits }) => {
         if (!hits || !hits.hits) return [];
 
         return hits.hits.map(processMeta);

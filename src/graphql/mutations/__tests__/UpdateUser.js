@@ -26,7 +26,9 @@ describe('UpdateUser', () => {
 
     expect(data).toMatchSnapshot();
 
-    const { _source: normal } = await client.get({
+    const {
+      body: { _source: normal },
+    } = await client.get({
       index: 'users',
       type: 'doc',
       id: userId,

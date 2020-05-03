@@ -56,14 +56,14 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
       appId,
     });
 
-    const conn = await client.get({
+    const { body: conn } = await client.get({
       index: 'articlecategoryfeedbacks',
       type: 'doc',
       id,
     });
     expect(conn._source).toMatchSnapshot();
 
-    const article = await client.get({
+    const { body: article } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,
@@ -126,7 +126,7 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
 
     expect(
       (await client.get({ index: 'articlecategoryfeedbacks', type: 'doc', id }))
-        ._source
+        .body._source
     ).toMatchSnapshot();
 
     // Cleanup

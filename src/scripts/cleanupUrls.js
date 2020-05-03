@@ -15,7 +15,9 @@ async function processUrls(processFn) {
     processedCount = 0,
     total = Infinity;
 
-  const { hits, _scroll_id } = await client.search({
+  const {
+    body: { hits, _scroll_id },
+  } = await client.search({
     index: 'urls',
     scroll: '30s',
     size: 100,
@@ -95,7 +97,8 @@ async function processFn(docs) {
   /**
    * mSearchResult: [{hits: {total: count}}, ...]
    */
-  const mSearchResult = (await client.msearch({ body: mSearchBody })).responses;
+  const mSearchResult = (await client.msearch({ body: mSearchBody })).body
+    .responses;
 
   //
   // Then perform update / delete on each doc
@@ -111,7 +114,10 @@ async function processFn(docs) {
     }
   });
 
-  const bulkResult = await client.bulk({ body: bulkBody, refresh: 'true' });
+  const { body: bulkResult } = await client.bulk({
+    body: bulkBody,
+    refresh: 'true',
+  });
   const deleteCount = bulkResult.items.reduce(
     (sum, obj) => (obj.delete && obj.delete.status === 200 ? sum + 1 : sum),
     0

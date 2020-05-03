@@ -23,7 +23,9 @@ async function fetchAllDocs(indexName) {
     docs = [],
     total = Infinity;
 
-  const { hits, _scroll_id } = await client.search({
+  const {
+    body: { hits, _scroll_id },
+  } = await client.search({
     index: indexName,
     scroll: '5s',
     size: 1000,

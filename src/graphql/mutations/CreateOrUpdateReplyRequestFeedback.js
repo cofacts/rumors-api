@@ -19,7 +19,9 @@ export default {
     const now = new Date().toISOString();
 
     const {
-      get: { _source },
+      body: {
+        get: { _source },
+      },
     } = await client.update({
       index: 'replyrequests',
       type: 'doc',

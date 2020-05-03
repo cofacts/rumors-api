@@ -37,7 +37,7 @@ describe('CreateOrUpdateReplyRequestFeedback', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const replyrequest = await client.get({
+    const { body: replyrequest } = await client.get({
       index: 'replyrequests',
       type: 'doc',
       id: replyRequestId,
@@ -78,7 +78,7 @@ describe('CreateOrUpdateReplyRequestFeedback', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const replyrequest = await client.get({
+    const { body: replyrequest } = await client.get({
       index: 'replyrequests',
       type: 'doc',
       id: replyRequestId,

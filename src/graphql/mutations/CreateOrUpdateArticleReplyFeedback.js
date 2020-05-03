@@ -83,7 +83,7 @@ export default {
       [0, 0]
     );
 
-    const articleReplyUpdateResult = await client.update({
+    const { body: articleReplyUpdateResult } = await client.update({
       index: 'articles',
       type: 'doc',
       id: articleId,
