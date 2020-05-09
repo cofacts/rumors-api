@@ -64,11 +64,11 @@ export async function createArticleCategory({
          * Otherwise, do update.
          */
         source: `
-          def found = ctx._source.articleCategories.stream()
+          def found = ctx._source.articleCategories?.stream()
             .filter(ar -> ar.get('categoryId').equals(params.articleCategory.get('categoryId')))
             .findFirst();
 
-          if (found.isPresent()) {
+          if (found?.isPresent()) {
             HashMap ar = found.get();
             if (ar.get('status').equals('DELETED')) {
               ar.put('status', 'NORMAL');
