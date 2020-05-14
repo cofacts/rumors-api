@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GetReplyAndGetArticle GetArticle authenticated fields returns null for non-logged users 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "requestedForReply": null,
+    },
+  },
+}
+`;
+
 exports[`GetReplyAndGetArticle GetArticle feedbacks should work: feedback loading test 1`] = `
 Object {
   "data": Object {
