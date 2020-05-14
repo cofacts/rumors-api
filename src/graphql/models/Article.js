@@ -14,7 +14,6 @@ import {
   createFilterType,
   createSortType,
   createConnectionType,
-  assertUser,
   filterArticleRepliesByStatus,
   filterArticleCategoriesByStatus,
 } from 'graphql/util';
@@ -138,9 +137,9 @@ const Article = new GraphQLObjectType({
     requestedForReply: {
       type: GraphQLBoolean,
       description:
-        'If the current user has requested for reply for this article',
+        'If the current user has requested for reply for this article. Null if not logged in.',
       resolve: async ({ id }, args, { userId, appId, loaders }) => {
-        assertUser({ userId, appId });
+        if (!userId || !appId) return null;
 
         const userReplyRequests = await loaders.searchResultLoader.load({
           index: 'replyrequests',

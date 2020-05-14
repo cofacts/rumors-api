@@ -219,6 +219,18 @@ describe('GetReplyAndGetArticle', () => {
         `()
       ).toMatchSnapshot();
     });
+
+    it('authenticated fields returns null for non-logged users', async () => {
+      expect(
+        await gql`
+          {
+            GetArticle(id: "foo") {
+              requestedForReply
+            }
+          }
+        `({}, { appId: 'LINE' })
+      ).toMatchSnapshot();
+    });
   });
 
   describe('GetReply', () => {
