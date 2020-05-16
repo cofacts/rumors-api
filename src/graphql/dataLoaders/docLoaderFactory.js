@@ -15,7 +15,7 @@ export default () =>
 
       return (await client.mget({
         body: { docs },
-      })).docs.map(processMeta);
+      })).body.docs.map(processMeta);
     },
     {
       cacheKeyFn: ({ index, id }) => `/${index}/${id}`,

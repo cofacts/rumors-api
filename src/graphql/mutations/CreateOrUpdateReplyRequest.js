@@ -51,7 +51,9 @@ export async function createOrUpdateReplyRequest({
     updatedDoc.reason = reason;
   }
 
-  const { result } = await client.update({
+  const {
+    body: { result },
+  } = await client.update({
     index: 'replyrequests',
     type: 'doc',
     id,
@@ -74,7 +76,7 @@ export async function createOrUpdateReplyRequest({
 
   const isCreated = result === 'created';
 
-  const articleUpdateResult = await client.update({
+  const { body: articleUpdateResult } = await client.update({
     index: 'articles',
     type: 'doc',
     id: articleId,

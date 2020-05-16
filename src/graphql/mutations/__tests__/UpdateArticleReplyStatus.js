@@ -62,7 +62,9 @@ describe('UpdateArticleReplyStatus', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const { _source: normal } = await client.get({
+    const {
+      body: { _source: normal },
+    } = await client.get({
       index: 'articles',
       type: 'doc',
       id: 'normal',
@@ -70,7 +72,9 @@ describe('UpdateArticleReplyStatus', () => {
     expect(normal.articleReplies).toMatchSnapshot();
     expect(normal.normalArticleReplyCount).toBe(0);
 
-    const { _source: deleted } = await client.get({
+    const {
+      body: { _source: deleted },
+    } = await client.get({
       index: 'articles',
       type: 'doc',
       id: 'deleted',

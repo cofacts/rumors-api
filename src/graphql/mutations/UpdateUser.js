@@ -10,8 +10,10 @@ export default {
   },
   async resolve(rootValue, { name }, { userId }) {
     const {
-      result,
-      get: { _source },
+      body: {
+        result,
+        get: { _source },
+      },
     } = await client.update({
       index: 'users',
       type: 'doc',

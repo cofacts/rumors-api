@@ -52,14 +52,14 @@ describe('CreateReply', () => {
     expect(errors).toBeUndefined();
 
     const replyId = data.CreateReply.id;
-    const reply = await client.get({
+    const { body: reply } = await client.get({
       index: 'replies',
       type: 'doc',
       id: replyId,
     });
     expect(reply._source).toMatchSnapshot('reply without hyperlinks');
 
-    const article = await client.get({
+    const { body: article } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,
@@ -72,7 +72,7 @@ describe('CreateReply', () => {
     resolveUrl.__reset();
 
     // Check replies and hyperlinks
-    const replyAfterFetch = await client.get({
+    const { body: replyAfterFetch } = await client.get({
       index: 'replies',
       type: 'doc',
       id: replyId,
@@ -127,7 +127,7 @@ describe('CreateReply', () => {
     expect(errors).toBeUndefined();
 
     const replyId = data.CreateReply.id;
-    const reply = await client.get({
+    const { body: reply } = await client.get({
       index: 'replies',
       type: 'doc',
       id: replyId,

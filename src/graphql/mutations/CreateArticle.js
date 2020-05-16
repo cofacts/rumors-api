@@ -37,7 +37,7 @@ export function getArticleId(text) {
  * @param {ArticleReferenceInput} param.reference
  * @param {string} param.userId
  * @param {string} param.appId
- * @returns {string} the new article's ID
+ * @returns {Promise<string>} the new article's ID
  */
 async function createNewArticle({
   text,

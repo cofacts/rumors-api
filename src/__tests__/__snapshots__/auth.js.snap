@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`verifyProfile authenticates user via profile ID 1`] = `
+Object {
+  "_cursor": undefined,
+  "_score": 0.2876821,
+  "email": "secret@secret.com",
+  "facebookId": "secret-fb-id",
+  "id": "test-user",
+  "name": "test user",
+}
+`;
+
+exports[`verifyProfile authenticates user via same email of existing user; also updates profile ID 1`] = `
+Object {
+  "_cursor": undefined,
+  "_score": undefined,
+  "email": "secret@secret.com",
+  "facebookId": "secret-fb-id",
+  "id": "test-user",
+  "name": "test user",
+  "twitterId": "secret-twitter-id",
+  "updatedAt": "1989-06-04T00:00:00.000Z",
+}
+`;
+
+exports[`verifyProfile creates new user if user does not exist 1`] = `
+Object {
+  "_cursor": undefined,
+  "_score": undefined,
+  "avatarUrl": "url-to-photo",
+  "createdAt": "1989-06-04T00:00:00.000Z",
+  "email": "another@user.com",
+  "facebookId": "another-fb-id",
+  "name": "New user",
+  "updatedAt": "1989-06-04T00:00:00.000Z",
+}
+`;

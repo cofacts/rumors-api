@@ -16,7 +16,7 @@ it('should clean up urls', async () => {
       },
       _source: [FLAG_FIELD],
     },
-  })).hits.hits.map(processMeta);
+  })).body.hits.hits.map(processMeta);
 
   expect(urlsResult).toMatchSnapshot();
 

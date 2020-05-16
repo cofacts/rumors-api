@@ -23,7 +23,7 @@ describe('CreateCategory', () => {
     );
 
     const categoryId = data.CreateCategory.id;
-    const category = await client.get({
+    const { body: category } = await client.get({
       index: 'categories',
       type: 'doc',
       id: categoryId,

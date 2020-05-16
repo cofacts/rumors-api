@@ -33,7 +33,7 @@ export default () =>
 
       return (await client.msearch({
         body,
-      })).responses.map(({ hits }, idx) => {
+      })).body.responses.map(({ hits }, idx) => {
         if (!hits || !hits.hits) return [];
 
         const categoryId = categoryQueries[idx].id;

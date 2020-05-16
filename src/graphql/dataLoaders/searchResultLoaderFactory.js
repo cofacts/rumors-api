@@ -11,7 +11,7 @@ export default () =>
         mSearchBody.push(body);
       });
 
-      return (await client.msearch({ body: mSearchBody })).responses.map(
+      return (await client.msearch({ body: mSearchBody })).body.responses.map(
         resp => {
           if (resp.error) throw new Error(JSON.stringify(resp.error));
           return getIn(resp)(['hits', 'hits'], []).map(processMeta);

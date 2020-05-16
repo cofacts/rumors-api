@@ -82,7 +82,7 @@ export default {
         type: 'doc',
         body: replyBody,
       })
-      .then(({ result, _id }) => {
+      .then(({ body: { result, _id } }) => {
         if (result !== 'created') {
           throw new Error(`Cannot create reply: ${result}`);
         }

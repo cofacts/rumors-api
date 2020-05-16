@@ -36,7 +36,7 @@ export default () =>
         []
       );
 
-      return (await client.msearch({ body })).responses.map(
+      return (await client.msearch({ body })).body.responses.map(
         ({ hits: { total } }) => total
       );
     }

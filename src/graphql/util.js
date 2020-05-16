@@ -173,7 +173,7 @@ async function defaultResolveTotalCount({
       sort: undefined,
       track_scores: undefined,
     },
-  })).count;
+  })).body.count;
 }
 
 export async function defaultResolveEdges(

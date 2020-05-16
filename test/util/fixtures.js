@@ -9,12 +9,10 @@ import client from 'util/client';
 
 export async function loadFixtures(fixtureMap) {
   const body = [];
-  const indexes = new Set();
   Object.keys(fixtureMap).forEach(key => {
     const [, _index, _type, _id] = key.split('/');
     body.push({ index: { _index, _type, _id } });
     body.push(fixtureMap[key]);
-    indexes.add(_index);
   });
 
   // refresh() should be invoked after bulk insert, or re-index happens every 1 seconds
@@ -22,7 +20,9 @@ export async function loadFixtures(fixtureMap) {
   // ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html#bulk
   //      https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html
   //
-  const result = await client.bulk({ body, refresh: 'true' });
+  const { body: result } = await client.bulk({ body, refresh: 'true' });
+
+  /* istanbul ignore if */
   if (result.errors) {
     throw new Error(
       `Fixture load failed : ${JSON.stringify(result, null, '  ')}`
@@ -31,14 +31,19 @@ export async function loadFixtures(fixtureMap) {
 }
 
 export async function unloadFixtures(fixtureMap) {
-  const indexes = new Set();
   const body = Object.keys(fixtureMap).map(key => {
     const [, _index, _type, _id] = key.split('/');
-    indexes.add(_index);
     return { delete: { _index, _type, _id } };
   });
 
-  await client.bulk({ body, refresh: 'true' });
+  const { body: result } = await client.bulk({ body, refresh: 'true' });
+
+  /* istanbul ignore if */
+  if (result.errors) {
+    throw new Error(
+      `Fixture unload failed : ${JSON.stringify(result, null, '  ')}`
+    );
+  }
 }
 
 // Reset a document to fixture

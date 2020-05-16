@@ -41,14 +41,14 @@ describe('CreateOrUpdateReplyRequest', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const request = await client.get({
+    const { body: request } = await client.get({
       index: 'replyrequests',
       type: 'doc',
       id,
     });
     expect(request._source).toMatchSnapshot();
 
-    const article = await client.get({
+    const { body: article } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,
@@ -99,14 +99,14 @@ describe('CreateOrUpdateReplyRequest', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const conn = await client.get({
+    const { body: conn } = await client.get({
       index: 'replyrequests',
       type: 'doc',
       id,
     });
     expect(conn._source).toMatchSnapshot();
 
-    const article = await client.get({
+    const { body: article } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,

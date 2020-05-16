@@ -18,7 +18,7 @@ Object {
 exports[`ListArticles filters by invalid operator 1`] = `
 Object {
   "errors": Array [
-    [GraphQLError: Field "INVALID" is not defined by type ListArticleReplyCountExpr.],
+    [GraphQLError: Field "INVALID" is not defined by type "ListArticleReplyCountExpr".],
   ],
 }
 `;

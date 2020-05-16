@@ -25,7 +25,9 @@ export default {
       createdAt: new Date(),
     };
 
-    const { result, _id: id } = await client.index({
+    const {
+      body: { result, _id: id },
+    } = await client.index({
       index: 'categories',
       type: 'doc',
       body: categoryBody,

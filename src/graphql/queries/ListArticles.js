@@ -164,7 +164,7 @@ export default {
           type: 'doc',
           id: filter.fromUserOfArticleId,
           _source: ['userId', 'appId'],
-        }))._source;
+        })).body._source;
       } catch (e) {
         if (e.statusCode && e.statusCode === 404) {
           throw new Error(
