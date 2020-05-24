@@ -7,7 +7,7 @@ import {
   createConnectionType,
   getSortArgs,
   pagingArgs,
-  getArithmeticExpressionType,
+  timeRangeInput,
   getRangeFieldParamFromArithmeticExpression,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
@@ -37,14 +37,9 @@ export default {
           description: 'List the replies of certain types',
         },
         createdAt: {
-          type: getArithmeticExpressionType(
-            'ListRepliesCreatedAtExpr',
-            GraphQLString
-          ),
-          description: `
-            List only the replies that were created between the specific time range.
-            The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)
-          `,
+          type: timeRangeInput,
+          description:
+            'List only the replies that were created between the specific time range.',
         },
       }),
     },

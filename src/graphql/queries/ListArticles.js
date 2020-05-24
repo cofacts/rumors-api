@@ -1,5 +1,4 @@
 import {
-  GraphQLInt,
   GraphQLString,
   GraphQLInputObjectType,
   GraphQLList,
@@ -12,7 +11,8 @@ import {
   createSortType,
   getSortArgs,
   pagingArgs,
-  getArithmeticExpressionType,
+  intRangeInput,
+  timeRangeInput,
   getRangeFieldParamFromArithmeticExpression,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
@@ -24,18 +24,12 @@ export default {
     filter: {
       type: createFilterType('ListArticleFilter', {
         replyCount: {
-          type: getArithmeticExpressionType(
-            'ListArticleReplyCountExpr',
-            GraphQLInt
-          ),
+          type: intRangeInput,
           description:
             'List only the articles whose number of replies matches the criteria.',
         },
         categoryCount: {
-          type: getArithmeticExpressionType(
-            'ListArticleCategoryCountExpr',
-            GraphQLInt
-          ),
+          type: intRangeInput,
           description:
             'List only the articles whose number of categories match the criteria.',
         },
@@ -58,32 +52,19 @@ export default {
           description: 'List all articles related to a given string.',
         },
         replyRequestCount: {
-          type: getArithmeticExpressionType(
-            'ListArticleReplyRequestCountExpr',
-            GraphQLInt
-          ),
+          type: intRangeInput,
           description:
             'List only the articles whose number of replies matches the criteria.',
         },
         createdAt: {
-          type: getArithmeticExpressionType(
-            'ListArticleCreatedAtExpr',
-            GraphQLString
-          ),
-          description: `
-            List only the articles that were created between the specific time range.
-            The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)
-          `,
+          type: timeRangeInput,
+          description:
+            'List only the articles that were created between the specific time range.',
         },
         repliedAt: {
-          type: getArithmeticExpressionType(
-            'ListArticleRepliedAtExpr',
-            GraphQLString
-          ),
-          description: `
-            List only the articles that were replied between the specific time range.
-            The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)
-          `,
+          type: timeRangeInput,
+          description:
+            'List only the articles that were replied between the specific time range.',
         },
         appId: {
           type: GraphQLString,
