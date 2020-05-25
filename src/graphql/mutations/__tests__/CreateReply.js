@@ -83,6 +83,9 @@ describe('CreateReply', () => {
 
     // Cleanup
     await client.delete({ index: 'replies', type: 'doc', id: replyId });
+
+    // refresh must be invoked before deleteByQuery, or the query may find nothing and delete nothing
+    await client.indices.refresh({ index: 'urls' });
     await client.deleteByQuery({
       index: 'urls',
       type: 'doc',
