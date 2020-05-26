@@ -116,19 +116,27 @@ const SortOrderEnum = new GraphQLEnumType({
   },
 });
 
-export function createSortType(typeName, filterableFieldNames = []) {
+/**
+ * @param {string} typeName
+ * @param {Array<string|{name: string, description: string}>} filterableFields
+ * @returns {GraphQLList<GarphQLInputObjectType>} sort input type for an field input argument.
+ */
+export function createSortType(typeName, filterableFields = []) {
   return new GraphQLList(
     new GraphQLInputObjectType({
       name: typeName,
       description:
         'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
-      fields: filterableFieldNames.reduce(
-        (fields, fieldName) => ({
-          ...fields,
-          [fieldName]: { type: SortOrderEnum },
-        }),
-        {}
-      ),
+      fields: filterableFields.reduce((fields, field) => {
+        const fieldName = typeof field === 'string' ? field : field.name;
+        const description =
+          typeof field === 'string'
+            ? undefined
+            : field.description({
+                ...fields,
+                [fieldName]: { type: SortOrderEnum, description },
+              });
+      }, {}),
     })
   );
 }
@@ -151,6 +159,11 @@ export const pagingArgs = {
   },
 };
 
+/**
+ * @param {object[]} orderBy - sort input object type
+ * @param {{[string]: (order: object) => object}} fieldFnMap - Defines one elasticsearch sort argument entry for a field
+ * @returns {Array<{[string]: {order: string}}>} Elasticsearch sort argument in query body
+ */
 export function getSortArgs(orderBy, fieldFnMap = {}) {
   return orderBy
     .map(item => {
