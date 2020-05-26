@@ -1,9 +1,4 @@
-import {
-  GraphQLString,
-  GraphQLInputObjectType,
-  GraphQLList,
-  GraphQLBoolean,
-} from 'graphql';
+import { GraphQLString, GraphQLList, GraphQLBoolean } from 'graphql';
 import client from 'util/client';
 
 import {
@@ -13,6 +8,7 @@ import {
   pagingArgs,
   intRangeInput,
   timeRangeInput,
+  moreLikeThisInput,
   getRangeFieldParamFromArithmeticExpression,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
@@ -39,16 +35,7 @@ export default {
             'Articles with more matching categories will come to front',
         },
         moreLikeThis: {
-          type: new GraphQLInputObjectType({
-            name: 'ListArticleMoreLikeThisInput',
-            fields: {
-              like: {
-                type: GraphQLString,
-                description: 'The text string to query.',
-              },
-              minimumShouldMatch: { type: GraphQLString },
-            },
-          }),
+          type: moreLikeThisInput,
           description: 'List all articles related to a given string.',
         },
         replyRequestCount: {

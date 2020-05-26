@@ -72,6 +72,25 @@ export function getRangeFieldParamFromArithmeticExpression(
   );
 }
 
+export const moreLikeThisInput = new GraphQLInputObjectType({
+  name: 'MoreLikeThisInput',
+  description:
+    'Parameters for Elasticsearch more_like_this query.\n' +
+    'See: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-mlt-query.html',
+  fields: {
+    like: {
+      type: GraphQLString,
+      description: 'The text string to search for.',
+    },
+    minimumShouldMatch: {
+      type: GraphQLString,
+      description:
+        'more_like_this query\'s "minimum_should_match" query param.\n' +
+        'See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html for possible values.',
+    },
+  },
+});
+
 export function createFilterType(typeName, args) {
   const filterType = new GraphQLInputObjectType({
     name: typeName,
