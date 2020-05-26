@@ -1,38 +1,53 @@
+import { GraphQLString, GraphQLList } from 'graphql';
 import {
   createFilterType,
   createSortType,
   createConnectionType,
+  timeRangeInput,
+  moreLikeThisInput,
   pagingArgs,
   getSortArgs,
 } from 'graphql/util';
 import ArticleReplyFeedback from 'graphql/models/ArticleReplyFeedback';
+import FeedbackVote from 'graphql/models/FeedbackVote';
 
 export default {
   args: {
     filter: {
       type: createFilterType('ListArticleReplyFeedbackFilter', {
-        replyCount: {
-          type: getArithmeticExpressionType(
-            'ListArticleReplyCountExpr',
-            GraphQLInt
-          ),
+        userId: {
+          type: GraphQLString,
+        },
+        appId: {
+          type: GraphQLString,
+        },
+        moreLikeThis: {
+          type: moreLikeThisInput,
+          description: 'Search for comment using more_like_this query',
+        },
+        score: {
+          type: new GraphQLList(FeedbackVote),
           description:
-            'List only the articles whose number of replies matches the criteria.',
+            'When specified, list only article reply feedbacks with specified score',
         },
         createdAt: {
-          type: getArithmeticExpressionType(
-            'ListArticleCreatedAtExpr',
-            GraphQLString
-          ),
-          description: `
-            List only the articles reply feedbacks that were created between the specific time range.
-            The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)
-          `,
+          type: timeRangeInput,
+          description:
+            'List only the article reply feedbacks that were created within the specific time range.',
         },
-      }
+        updatedAt: {
+          type: timeRangeInput,
+          description:
+            'List only the article reply feedbacks that were last updated within the specific time range.',
+        },
+      }),
     },
     orderBy: {
-      type: createSortType('ListArticleReplyFeedbackOrderBy', ['createdAt', 'updatedAt', 'score']),
+      type: createSortType('ListArticleReplyFeedbackOrderBy', [
+        'createdAt',
+        'updatedAt',
+        'score',
+      ]),
     },
     ...pagingArgs,
   },
@@ -43,11 +58,14 @@ export default {
 
     // should return search context for resolveEdges & resolvePageInfo
     return {
-      index: 'categories',
+      index: 'articlereplyfeedbacks',
       type: 'doc',
       body,
       ...otherParams,
     };
   },
-  type: createConnectionType('ListCategoryConnection', Category),
+  type: createConnectionType(
+    'ListArticleReplyFeedbackConnection',
+    ArticleReplyFeedback
+  ),
 };
