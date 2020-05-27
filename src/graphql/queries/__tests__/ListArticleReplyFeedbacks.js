@@ -14,6 +14,10 @@ describe('ListArticleReplyFeedbacks', () => {
             edges {
               node {
                 id
+                articleReply {
+                  articleId
+                  replyId
+                }
               }
             }
             totalCount

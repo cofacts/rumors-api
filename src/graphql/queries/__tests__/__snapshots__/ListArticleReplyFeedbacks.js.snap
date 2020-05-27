@@ -205,16 +205,28 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "articleReply": Object {
+              "articleId": "a2",
+              "replyId": "r2",
+            },
             "id": "f3",
           },
         },
         Object {
           "node": Object {
+            "articleReply": Object {
+              "articleId": "a1",
+              "replyId": "r2",
+            },
             "id": "f2",
           },
         },
         Object {
           "node": Object {
+            "articleReply": Object {
+              "articleId": "a1",
+              "replyId": "r1",
+            },
             "id": "f1",
           },
         },
