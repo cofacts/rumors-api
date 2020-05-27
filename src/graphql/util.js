@@ -18,11 +18,13 @@ import client from 'util/client';
 /**
  * @param {string} typeName
  * @param {GraphQLScalarType} argType
+ * @param {string} description
  * @returns {GraphQLInputObjectType}
  */
-export function getArithmeticExpressionType(typeName, argType) {
+function getArithmeticExpressionType(typeName, argType, description) {
   return new GraphQLInputObjectType({
     name: typeName,
+    description,
     fields: {
       LT: { type: argType },
       LTE: { type: argType },
@@ -32,6 +34,18 @@ export function getArithmeticExpressionType(typeName, argType) {
     },
   });
 }
+
+export const timeRangeInput = getArithmeticExpressionType(
+  'TimeRangeInput',
+  GraphQLString,
+  'List only the entries that were created between the specific time range. ' +
+    'The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)'
+);
+export const intRangeInput = getArithmeticExpressionType(
+  'RangeInput',
+  GraphQLInt,
+  'List only the entries whose field match the criteria.'
+);
 
 /**
  * @param {object} arithmeticFilterObj - {LT, LTE, GT, GTE, EQ}, the structure returned by getArithmeticExpressionType

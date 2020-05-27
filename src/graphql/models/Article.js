@@ -8,7 +8,7 @@ import {
 
 import {
   pagingArgs,
-  getArithmeticExpressionType,
+  intRangeInput,
   getSortArgs,
   getRangeFieldParamFromArithmeticExpression,
   createFilterType,
@@ -164,9 +164,7 @@ const Article = new GraphQLObjectType({
       args: {
         filter: {
           type: createFilterType('RelatedArticleFilter', {
-            replyCount: {
-              type: getArithmeticExpressionType('ReplyCountExpr', GraphQLInt),
-            },
+            replyCount: { type: intRangeInput },
           }),
         },
         orderBy: {
