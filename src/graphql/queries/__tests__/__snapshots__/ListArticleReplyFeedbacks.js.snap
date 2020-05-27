@@ -108,6 +108,96 @@ Object {
 }
 `;
 
+exports[`ListArticleReplyFeedbacks filters by dates: created before 2020-03-15 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-06T00:00:00.000Z",
+            "id": "f2",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-03-06T00:00:00.000Z",
+            "id": "f1",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks filters by dates: updated after 2020-04-15 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "f3",
+            "updatedAt": "2020-06-06T00:00:00.000Z",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f2",
+            "updatedAt": "2020-05-06T00:00:00.000Z",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks filters by moreLikeThis: search for: COVID19 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "comment": "Thank you for info regarding COVID19.",
+            "id": "f3",
+          },
+        },
+      ],
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks filters by vote: UPVOTE only 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "f3",
+            "vote": "UPVOTE",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f1",
+            "vote": "UPVOTE",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
 exports[`ListArticleReplyFeedbacks lists all articleReplyFeedbacks 1`] = `
 Object {
   "data": Object {

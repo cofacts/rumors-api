@@ -128,4 +128,79 @@ describe('ListArticleReplyFeedbacks', () => {
       `()
     ).toMatchSnapshot('by replyId: r2');
   });
+
+  it('filters by moreLikeThis', async () => {
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(
+            filter: { moreLikeThis: { like: "COVID19" } }
+          ) {
+            edges {
+              node {
+                id
+                comment
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('search for: COVID19');
+  });
+
+  it('filters by vote', async () => {
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(filter: { vote: [UPVOTE] }) {
+            edges {
+              node {
+                id
+                vote
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('UPVOTE only');
+  });
+
+  it('filters by dates', async () => {
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(
+            filter: { createdAt: { LT: "2020-03-15T00:00:00Z" } }
+          ) {
+            edges {
+              node {
+                id
+                createdAt
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('created before 2020-03-15');
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(
+            filter: { updatedAt: { GT: "2020-04-15T00:00:00Z" } }
+          ) {
+            edges {
+              node {
+                id
+                updatedAt
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('updated after 2020-04-15');
+  });
 });
