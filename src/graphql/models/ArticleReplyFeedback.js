@@ -17,6 +17,9 @@ export default new GraphQLObjectType({
       resolve: userFieldResolver,
     },
 
+    userId: { type: GraphQLString },
+    appId: { type: GraphQLString },
+
     comment: { type: GraphQLString },
 
     vote: {

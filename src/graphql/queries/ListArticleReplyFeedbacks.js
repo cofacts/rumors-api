@@ -7,6 +7,7 @@ import {
   moreLikeThisInput,
   pagingArgs,
   getSortArgs,
+  getRangeFieldParamFromArithmeticExpression,
 } from 'graphql/util';
 import ArticleReplyFeedback from 'graphql/models/ArticleReplyFeedback';
 import FeedbackVote from 'graphql/models/FeedbackVote';
@@ -71,6 +72,41 @@ export default {
 
     const shouldQueries = []; // Affects scores
     const filterQueries = []; // Not affects scores
+
+    ['userId', 'appId', 'articleId', 'replyId'].forEach(field => {
+      if (!filter[field]) return;
+      shouldQueries.push({ term: { [field]: filter[field] } });
+    });
+
+    if (filter.moreLikeThis) {
+      shouldQueries.push({
+        more_like_this: {
+          fields: ['comment'],
+          like: filter.moreLikeThis.like,
+          min_term_freq: 1,
+          min_doc_freq: 1,
+          minimum_should_match:
+            filter.moreLikeThis.minimumShouldMatch || '10<70%',
+        },
+      });
+    }
+
+    if (filter.vote) {
+      shouldQueries.push({
+        terms: {
+          score: filter.vote,
+        },
+      });
+    }
+
+    ['createdAt', 'updatedAt'].forEach(field => {
+      if (!filter[field]) return;
+      shouldQueries.push({
+        range: {
+          [field]: getRangeFieldParamFromArithmeticExpression(filter[field]),
+        },
+      });
+    });
 
     body.query = {
       bool: {

@@ -13,6 +13,12 @@ export default {
   '/replies/doc/r2': {
     text: 'Reply 2',
   },
+  '/users/doc/user1': {
+    name: 'User 1',
+  },
+  '/users/doc/user2': {
+    name: 'User 2',
+  },
   '/articlereplyfeedbacks/doc/f1': {
     userId: 'user1',
     appId: 'app1',

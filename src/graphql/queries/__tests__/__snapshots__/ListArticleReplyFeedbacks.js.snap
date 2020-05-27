@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListArticleReplyFeedbacks filters by DB fields xxId: by appId: app2 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "appId": "app2",
+            "id": "f3",
+          },
+        },
+        Object {
+          "node": Object {
+            "appId": "app2",
+            "id": "f2",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks filters by DB fields xxId: by articleId: a1 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "article": Object {
+              "id": "a1",
+              "text": "Article 1",
+            },
+            "id": "f2",
+          },
+        },
+        Object {
+          "node": Object {
+            "article": Object {
+              "id": "a1",
+              "text": "Article 1",
+            },
+            "id": "f1",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks filters by DB fields xxId: by replyId: r2 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "f3",
+            "reply": Object {
+              "id": "r2",
+              "text": "Reply 2",
+            },
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f2",
+            "reply": Object {
+              "id": "r2",
+              "text": "Reply 2",
+            },
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks filters by DB fields xxId: by userId: user1 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "f2",
+            "userId": "user1",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f1",
+            "userId": "user1",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks lists all articleReplyFeedbacks 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "f3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f1",
+          },
+        },
+      ],
+      "totalCount": 3,
+    },
+  },
+}
+`;

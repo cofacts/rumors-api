@@ -130,12 +130,12 @@ export function createSortType(typeName, filterableFields = []) {
       fields: filterableFields.reduce((fields, field) => {
         const fieldName = typeof field === 'string' ? field : field.name;
         const description =
-          typeof field === 'string'
-            ? undefined
-            : field.description({
-                ...fields,
-                [fieldName]: { type: SortOrderEnum, description },
-              });
+          typeof field === 'string' ? undefined : field.description;
+
+        return {
+          ...fields,
+          [fieldName]: { type: SortOrderEnum, description },
+        };
       }, {}),
     })
   );
