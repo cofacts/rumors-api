@@ -134,3 +134,66 @@ Object {
   },
 }
 `;
+
+exports[`ListArticleReplyFeedbacks sorts all articleReplyFeedbacks: by createdAt DESC 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "createdAt": "2020-04-06T00:00:00.000Z",
+            "id": "f3",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-03-06T00:00:00.000Z",
+            "id": "f1",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-06T00:00:00.000Z",
+            "id": "f2",
+          },
+        },
+      ],
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks sorts all articleReplyFeedbacks: by score ASC, then updatedAt DESC 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "f2",
+            "score": -1,
+            "updatedAt": "2020-05-06T00:00:00.000Z",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f3",
+            "score": 1,
+            "updatedAt": "2020-06-06T00:00:00.000Z",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f1",
+            "score": 1,
+            "updatedAt": "2020-04-06T00:00:00.000Z",
+          },
+        },
+      ],
+      "totalCount": 3,
+    },
+  },
+}
+`;

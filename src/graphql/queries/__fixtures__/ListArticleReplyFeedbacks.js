@@ -25,6 +25,8 @@ export default {
     articleId: 'a1',
     replyId: 'r1',
     score: 1,
+    createdAt: '2020-03-06T00:00:00.000Z',
+    updatedAt: '2020-04-06T00:00:00.000Z',
   },
   '/articlereplyfeedbacks/doc/f2': {
     userId: 'user1',
@@ -33,6 +35,8 @@ export default {
     replyId: 'r2',
     score: -1,
     comment: '',
+    createdAt: '2020-02-06T00:00:00.000Z',
+    updatedAt: '2020-05-06T00:00:00.000Z',
   },
   '/articlereplyfeedbacks/doc/f3': {
     userId: 'user2',
@@ -40,5 +44,7 @@ export default {
     articleId: 'a2',
     replyId: 'r2',
     score: 1,
+    createdAt: '2020-04-06T00:00:00.000Z',
+    updatedAt: '2020-06-06T00:00:00.000Z',
   },
 };

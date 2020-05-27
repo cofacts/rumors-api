@@ -22,6 +22,9 @@ export default new GraphQLObjectType({
 
     comment: { type: GraphQLString },
 
+    createdAt: { type: GraphQLString },
+    updatedAt: { type: GraphQLString },
+
     vote: {
       description: "User's vote on the articleReply",
       type: FeedbackVote,

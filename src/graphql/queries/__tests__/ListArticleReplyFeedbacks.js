@@ -23,6 +23,43 @@ describe('ListArticleReplyFeedbacks', () => {
     ).toMatchSnapshot();
   });
 
+  it('sorts all articleReplyFeedbacks', async () => {
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(orderBy: [{ createdAt: DESC }]) {
+            edges {
+              node {
+                id
+                createdAt
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('by createdAt DESC');
+
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(
+            orderBy: [{ vote: ASC }, { updatedAt: DESC }]
+          ) {
+            edges {
+              node {
+                id
+                score
+                updatedAt
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('by score ASC, then updatedAt DESC');
+  });
+
   it('filters by DB fields xxId', async () => {
     expect(
       await gql`
