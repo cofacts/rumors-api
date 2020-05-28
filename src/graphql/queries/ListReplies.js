@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLInputObjectType, GraphQLBoolean } from 'graphql';
+import { GraphQLBoolean } from 'graphql';
 import client from 'util/client';
 
 import {
@@ -8,6 +8,7 @@ import {
   getSortArgs,
   pagingArgs,
   timeRangeInput,
+  moreLikeThisInput,
   getRangeFieldParamFromArithmeticExpression,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
@@ -20,13 +21,7 @@ export default {
     filter: {
       type: createFilterType('ListReplyFilter', {
         moreLikeThis: {
-          type: new GraphQLInputObjectType({
-            name: 'ListReplyMoreLikeThisInput',
-            fields: {
-              like: { type: GraphQLString },
-              minimumShouldMatch: { type: GraphQLString },
-            },
-          }),
+          type: moreLikeThisInput,
         },
         selfOnly: {
           type: GraphQLBoolean,

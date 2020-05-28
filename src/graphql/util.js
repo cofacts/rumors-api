@@ -72,6 +72,25 @@ export function getRangeFieldParamFromArithmeticExpression(
   );
 }
 
+export const moreLikeThisInput = new GraphQLInputObjectType({
+  name: 'MoreLikeThisInput',
+  description:
+    'Parameters for Elasticsearch more_like_this query.\n' +
+    'See: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-mlt-query.html',
+  fields: {
+    like: {
+      type: GraphQLString,
+      description: 'The text string to search for.',
+    },
+    minimumShouldMatch: {
+      type: GraphQLString,
+      description:
+        'more_like_this query\'s "minimum_should_match" query param.\n' +
+        'See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html for possible values.',
+    },
+  },
+});
+
 export function createFilterType(typeName, args) {
   const filterType = new GraphQLInputObjectType({
     name: typeName,
@@ -97,19 +116,27 @@ const SortOrderEnum = new GraphQLEnumType({
   },
 });
 
-export function createSortType(typeName, filterableFieldNames = []) {
+/**
+ * @param {string} typeName
+ * @param {Array<string|{name: string, description: string}>} filterableFields
+ * @returns {GraphQLList<GarphQLInputObjectType>} sort input type for an field input argument.
+ */
+export function createSortType(typeName, filterableFields = []) {
   return new GraphQLList(
     new GraphQLInputObjectType({
       name: typeName,
       description:
         'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
-      fields: filterableFieldNames.reduce(
-        (fields, fieldName) => ({
+      fields: filterableFields.reduce((fields, field) => {
+        const fieldName = typeof field === 'string' ? field : field.name;
+        const description =
+          typeof field === 'string' ? undefined : field.description;
+
+        return {
           ...fields,
-          [fieldName]: { type: SortOrderEnum },
-        }),
-        {}
-      ),
+          [fieldName]: { type: SortOrderEnum, description },
+        };
+      }, {}),
     })
   );
 }
@@ -132,6 +159,11 @@ export const pagingArgs = {
   },
 };
 
+/**
+ * @param {object[]} orderBy - sort input object type
+ * @param {{[string]: (order: object) => object}} fieldFnMap - Defines one elasticsearch sort argument entry for a field
+ * @returns {Array<{[string]: {order: string}}>} Elasticsearch sort argument in query body
+ */
 export function getSortArgs(orderBy, fieldFnMap = {}) {
   return orderBy
     .map(item => {
