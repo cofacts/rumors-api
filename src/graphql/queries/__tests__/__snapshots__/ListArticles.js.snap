@@ -480,6 +480,75 @@ Object {
 }
 `;
 
+exports[`ListArticles filters via articleRepliesFrom: do not have articleReply from user1 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "user": null,
+              },
+              Object {
+                "user": null,
+              },
+              Object {
+                "user": null,
+              },
+            ],
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest3",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "user": null,
+              },
+            ],
+            "id": "listArticleTest2",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters via articleRepliesFrom: has articleReply from user1 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "user": Object {
+                  "id": "user1",
+                },
+              },
+              Object {
+                "user": null,
+              },
+            ],
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`ListArticles lists all articles 1`] = `
 Object {
   "data": Object {
@@ -734,18 +803,18 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
-            "id": "listArticleTest1",
+            "id": "listArticleTest2",
           },
         },
         Object {
           "node": Object {
-            "id": "listArticleTest2",
+            "id": "listArticleTest1",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzEuODk3MTIsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
-        "lastCursor": "WzAuNjkzMTQ3MiwibGlzdEFydGljbGVUZXN0MiJd",
+        "firstCursor": "WzEsImxpc3RBcnRpY2xlVGVzdDIiXQ==",
+        "lastCursor": "WzEsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
       },
       "totalCount": 2,
     },
