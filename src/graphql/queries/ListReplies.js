@@ -37,7 +37,7 @@ export default {
           type: ReplyTypeEnum,
           // FIXME: No deprecationReason for input object types yet
           // https://github.com/graphql/graphql-spec/pull/525
-          description: '[Deprecated] use types instead',
+          description: '[Deprecated] use types instead.',
         },
         types: {
           type: new GraphQLList(ReplyTypeEnum),
