@@ -1,73 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ListReplies filters 1`] = `
-Object {
-  "data": Object {
-    "ListReplies": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "id": "moreLikeThis2",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "moreLikeThis1",
-          },
-        },
-      ],
-      "pageInfo": Object {
-        "firstCursor": "WyJtb3JlTGlrZVRoaXMyIl0=",
-        "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
-      },
-      "totalCount": 2,
-    },
-  },
-}
-`;
-
-exports[`ListReplies filters 2`] = `
-Object {
-  "data": Object {
-    "ListReplies": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "id": "userFoo",
-          },
-        },
-      ],
-      "pageInfo": Object {
-        "firstCursor": "WyJ1c2VyRm9vIl0=",
-        "lastCursor": "WyJ1c2VyRm9vIl0=",
-      },
-      "totalCount": 1,
-    },
-  },
-}
-`;
-
-exports[`ListReplies filters 3`] = `
-Object {
-  "data": Object {
-    "ListReplies": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "id": "rumor",
-          },
-        },
-      ],
-      "pageInfo": Object {
-        "firstCursor": "WyJydW1vciJd",
-        "lastCursor": "WyJydW1vciJd",
-      },
-      "totalCount": 1,
-    },
-  },
-}
-`;
-
 exports[`ListReplies filters by mixed query 1`] = `
 Object {
   "data": Object {
@@ -127,13 +59,86 @@ Object {
 }
 `;
 
-exports[`ListReplies filters by time range 1`] = `
+exports[`ListReplies filters by time range: 2020/2/4 <= createdAt <= 2020/2/6 1`] = `
 Object {
   "data": Object {
     "ListReplies": Object {
       "edges": Array [
         Object {
           "node": Object {
+            "createdAt": "2020-02-04T00:00:00.000Z",
+            "id": "rumor",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-04T00:00:00.000Z",
+            "id": "referenceUrl",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-05T00:00:00.000Z",
+            "id": "moreLikeThis2",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-06T00:00:00.000Z",
+            "id": "moreLikeThis1",
+          },
+        },
+      ],
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListReplies filters by time range: createdAt <= 2020/2/6 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-04T00:00:00.000Z",
+            "id": "rumor",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-04T00:00:00.000Z",
+            "id": "referenceUrl",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-05T00:00:00.000Z",
+            "id": "moreLikeThis2",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-06T00:00:00.000Z",
+            "id": "moreLikeThis1",
+          },
+        },
+      ],
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListReplies filters by time range: createdAt > 2020/2/6 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-07T00:00:00.000Z",
             "id": "userFoo",
           },
         },
@@ -144,39 +149,59 @@ Object {
 }
 `;
 
-exports[`ListReplies filters by time range 2`] = `
+exports[`ListReplies filters: moreLikeThis = foo 1`] = `
 Object {
   "data": Object {
     "ListReplies": Object {
       "edges": Array [
         Object {
           "node": Object {
-            "id": "rumor",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "referenceUrl",
-          },
-        },
-        Object {
-          "node": Object {
             "id": "moreLikeThis2",
+            "text": "foo foo foo",
           },
         },
         Object {
           "node": Object {
             "id": "moreLikeThis1",
+            "text": "foo foo",
           },
         },
       ],
-      "totalCount": 4,
+      "pageInfo": Object {
+        "firstCursor": "WyJtb3JlTGlrZVRoaXMyIl0=",
+        "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
+      },
+      "totalCount": 2,
     },
   },
 }
 `;
 
-exports[`ListReplies filters by time range 3`] = `
+exports[`ListReplies filters: selfOnly (userId = foo) 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "userFoo",
+            "user": Object {
+              "id": "foo",
+            },
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJ1c2VyRm9vIl0=",
+        "lastCursor": "WyJ1c2VyRm9vIl0=",
+      },
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListReplies filters: type = RUMOR 1`] = `
 Object {
   "data": Object {
     "ListReplies": Object {
@@ -184,25 +209,39 @@ Object {
         Object {
           "node": Object {
             "id": "rumor",
+            "type": "RUMOR",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJydW1vciJd",
+        "lastCursor": "WyJydW1vciJd",
+      },
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
+exports[`ListReplies filters: types = RUMOR, NOT_RUMOR 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "rumor",
+            "type": "RUMOR",
           },
         },
         Object {
           "node": Object {
             "id": "referenceUrl",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "moreLikeThis2",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "moreLikeThis1",
+            "type": "NOT_RUMOR",
           },
         },
       ],
-      "totalCount": 4,
+      "totalCount": 2,
     },
   },
 }

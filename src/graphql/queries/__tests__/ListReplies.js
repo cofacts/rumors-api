@@ -59,6 +59,7 @@ describe('ListReplies', () => {
             edges {
               node {
                 id
+                text
               }
             }
             totalCount
@@ -69,7 +70,7 @@ describe('ListReplies', () => {
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('moreLikeThis = foo');
 
     expect(
       await gql`
@@ -78,6 +79,9 @@ describe('ListReplies', () => {
             edges {
               node {
                 id
+                user {
+                  id
+                }
               }
             }
             totalCount
@@ -94,8 +98,9 @@ describe('ListReplies', () => {
           appId: 'test',
         }
       )
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('selfOnly (userId = foo)');
 
+    // Deprecated
     expect(
       await gql`
         {
@@ -103,6 +108,7 @@ describe('ListReplies', () => {
             edges {
               node {
                 id
+                type
               }
             }
             totalCount
@@ -113,7 +119,23 @@ describe('ListReplies', () => {
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('type = RUMOR');
+
+    expect(
+      await gql`
+        {
+          ListReplies(filter: { types: [RUMOR, NOT_RUMOR] }) {
+            edges {
+              node {
+                id
+                type
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('types = RUMOR, NOT_RUMOR');
   });
 
   it('filters by moreLikeThis and given text, find replies containing hyperlinks with the said text', async () => {
@@ -167,13 +189,14 @@ describe('ListReplies', () => {
             edges {
               node {
                 id
+                createdAt
               }
             }
             totalCount
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('createdAt > 2020/2/6');
     expect(
       await gql`
         {
@@ -183,13 +206,14 @@ describe('ListReplies', () => {
             edges {
               node {
                 id
+                createdAt
               }
             }
             totalCount
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('createdAt <= 2020/2/6');
     expect(
       await gql`
         {
@@ -204,13 +228,14 @@ describe('ListReplies', () => {
             edges {
               node {
                 id
+                createdAt
               }
             }
             totalCount
           }
         }
       `()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('2020/2/4 <= createdAt <= 2020/2/6');
   });
 
   it('filters by mixed query', async () => {

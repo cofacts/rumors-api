@@ -1,4 +1,4 @@
-import { GraphQLBoolean } from 'graphql';
+import { GraphQLBoolean, GraphQLList } from 'graphql';
 import client from 'util/client';
 
 import {
@@ -29,6 +29,12 @@ export default {
         },
         type: {
           type: ReplyTypeEnum,
+          // FIXME: No deprecationReason for input object types yet
+          // https://github.com/graphql/graphql-spec/pull/525
+          description: '[Deprecated] use types instead.',
+        },
+        types: {
+          type: new GraphQLList(ReplyTypeEnum),
           description: 'List the replies of certain types',
         },
         createdAt: {
@@ -126,6 +132,14 @@ export default {
       filterQueries.push({
         term: {
           type: filter.type,
+        },
+      });
+    }
+
+    if (filter.types && filter.types.length > 0) {
+      filterQueries.push({
+        terms: {
+          type: filter.types,
         },
       });
     }
