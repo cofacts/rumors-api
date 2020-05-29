@@ -232,7 +232,7 @@ describe('ListArticleReplyFeedbacks', () => {
             totalCount
           }
         }
-      `()
+      `({}, { appId: 'WEBSITE' })
     ).toMatchSnapshot('updated by user2 after 2020/4/15, UPVOTE');
 
     // Empty

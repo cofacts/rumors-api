@@ -75,7 +75,7 @@ export default {
 
     ['userId', 'appId', 'articleId', 'replyId'].forEach(field => {
       if (!filter[field]) return;
-      shouldQueries.push({ term: { [field]: filter[field] } });
+      filterQueries.push({ term: { [field]: filter[field] } });
     });
 
     if (filter.moreLikeThis) {
@@ -92,7 +92,7 @@ export default {
     }
 
     if (filter.vote) {
-      shouldQueries.push({
+      filterQueries.push({
         terms: {
           score: filter.vote,
         },
@@ -101,7 +101,7 @@ export default {
 
     ['createdAt', 'updatedAt'].forEach(field => {
       if (!filter[field]) return;
-      shouldQueries.push({
+      filterQueries.push({
         range: {
           [field]: getRangeFieldParamFromArithmeticExpression(filter[field]),
         },

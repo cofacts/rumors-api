@@ -112,24 +112,8 @@ exports[`ListArticleReplyFeedbacks filters by date, vote and userId alltogether:
 Object {
   "data": Object {
     "ListArticleReplyFeedbacks": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "id": "f3",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "f2",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "f1",
-          },
-        },
-      ],
-      "totalCount": 3,
+      "edges": Array [],
+      "totalCount": 0,
     },
   },
 }
@@ -148,24 +132,8 @@ Object {
             "vote": "UPVOTE",
           },
         },
-        Object {
-          "node": Object {
-            "id": "f2",
-            "updatedAt": "2020-05-06T00:00:00.000Z",
-            "user": null,
-            "vote": "DOWNVOTE",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "f1",
-            "updatedAt": "2020-04-06T00:00:00.000Z",
-            "user": null,
-            "vote": "UPVOTE",
-          },
-        },
       ],
-      "totalCount": 3,
+      "totalCount": 1,
     },
   },
 }
