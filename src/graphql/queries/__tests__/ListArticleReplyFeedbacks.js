@@ -207,4 +207,54 @@ describe('ListArticleReplyFeedbacks', () => {
       `()
     ).toMatchSnapshot('updated after 2020-04-15');
   });
+
+  it('filters by date, vote and userId alltogether', async () => {
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(
+            filter: {
+              updatedAt: { GT: "2020-04-15T00:00:00Z" }
+              vote: UPVOTE
+              userId: "user2"
+            }
+          ) {
+            edges {
+              node {
+                id
+                updatedAt
+                vote
+                user {
+                  id
+                }
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('updated by user2 after 2020/4/15, UPVOTE');
+
+    // Empty
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(
+            filter: {
+              updatedAt: { GT: "2020-04-15T00:00:00Z" }
+              vote: UPVOTE
+              userId: "user1"
+            }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('should be empty');
+  });
 });

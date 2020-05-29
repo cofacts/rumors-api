@@ -108,6 +108,69 @@ Object {
 }
 `;
 
+exports[`ListArticleReplyFeedbacks filters by date, vote and userId alltogether: should be empty 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "f3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f1",
+          },
+        },
+      ],
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks filters by date, vote and userId alltogether: updated by user2 after 2020/4/15, UPVOTE 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "f3",
+            "updatedAt": "2020-06-06T00:00:00.000Z",
+            "user": null,
+            "vote": "UPVOTE",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f2",
+            "updatedAt": "2020-05-06T00:00:00.000Z",
+            "user": null,
+            "vote": "DOWNVOTE",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "f1",
+            "updatedAt": "2020-04-06T00:00:00.000Z",
+            "user": null,
+            "vote": "UPVOTE",
+          },
+        },
+      ],
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
 exports[`ListArticleReplyFeedbacks filters by dates: created before 2020-03-15 1`] = `
 Object {
   "data": Object {
