@@ -55,13 +55,11 @@ export default {
         },
         appId: {
           type: GraphQLString,
-          description:
-            'Use with userId to show only articles from a specific user.',
+          description: 'Show only articles from a specific user.',
         },
         userId: {
           type: GraphQLString,
-          description:
-            'Use with appId to show only articles from a specific user.',
+          description: 'Show only articles from a specific user.',
         },
         fromUserOfArticleId: {
           type: GraphQLString,
@@ -152,14 +150,10 @@ export default {
       filter.appId = specifiedArticle.appId;
     }
 
-    if (filter.appId && filter.userId) {
-      filterQueries.push(
-        { term: { appId: filter.appId } },
-        { term: { userId: filter.userId } }
-      );
-    } else if (filter.appId || filter.userId) {
-      throw new Error('Both appId and userId must be specified at once');
-    }
+    ['userId', 'appId'].forEach(field => {
+      if (!filter[field]) return;
+      filterQueries.push({ term: { [field]: filter[field] } });
+    });
 
     if (filter.moreLikeThis) {
       const scrapResults = (await scrapUrls(filter.moreLikeThis.like, {

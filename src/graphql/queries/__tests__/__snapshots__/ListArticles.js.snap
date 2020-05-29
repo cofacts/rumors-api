@@ -723,12 +723,6 @@ Object {
 
 exports[`ListArticles throws error when author filter is not set correctly 1`] = `
 Array [
-  [GraphQLError: Both appId and userId must be specified at once],
-]
-`;
-
-exports[`ListArticles throws error when author filter is not set correctly 2`] = `
-Array [
   [GraphQLError: fromUserOfArticleId does not match any existing articles],
 ]
 `;

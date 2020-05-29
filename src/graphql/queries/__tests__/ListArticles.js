@@ -398,20 +398,6 @@ describe('ListArticles', () => {
   });
 
   it('throws error when author filter is not set correctly', async () => {
-    const { errors: noUserIdError } = await gql`
-      {
-        ListArticles(filter: { appId: "specified-but-no-user-id" }) {
-          edges {
-            node {
-              id
-            }
-          }
-          totalCount
-        }
-      }
-    `();
-    expect(noUserIdError).toMatchSnapshot();
-
     const { errors: notExistError } = await gql`
       {
         ListArticles(filter: { fromUserOfArticleId: "not-exist" }) {
