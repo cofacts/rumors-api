@@ -224,9 +224,7 @@ describe('ListArticleReplyFeedbacks', () => {
                 id
                 updatedAt
                 vote
-                user {
-                  id
-                }
+                userId
               }
             }
             totalCount
