@@ -100,6 +100,14 @@ const User = new GraphQLObjectType({
 
 export default User;
 
+/**
+ * Given userId (in users db), resolve to user object.
+ *
+ * @param {object} source - The return value of parent resolver
+ * @param {object} args - Not used, ignore
+ * @param {object} context - GraphQL context
+ * @returns {object} User object in `users` index
+ */
 export const userFieldResolver = (
   { userId, appId },
   args,
