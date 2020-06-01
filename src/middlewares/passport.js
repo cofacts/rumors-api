@@ -211,7 +211,7 @@ const handlePassportCallback = strategy => (ctx, next) =>
     ctx.login(user);
   })(ctx, next);
 
-export const authRouter = Router()
+export const loginCallbackRouter = Router()
   .use(async (ctx, next) => {
     // Perform redirect after login
     //

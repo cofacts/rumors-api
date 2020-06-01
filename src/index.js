@@ -10,14 +10,15 @@ import koaBody from 'koa-bodyparser';
 import session from 'koa-session2';
 import passport from 'koa-passport';
 import { formatError } from 'graphql';
-import checkHeaders from './checkHeaders';
 import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
+
 import { AUTH_ERROR_MSG } from './graphql/util';
 import CookieStore from './CookieStore';
-
-import { loginRouter, authRouter } from './auth';
 import rollbar from './rollbarInstance';
+
+import auth from './middlewares/auth';
+import { loginRouter, loginCallbackRouter } from './middlewares/passport';
 
 const app = new Koa();
 const router = Router();
@@ -52,16 +53,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 router.use('/login', loginRouter.routes(), loginRouter.allowedMethods());
-router.use('/callback', authRouter.routes(), authRouter.allowedMethods());
+router.use(
+  '/callback',
+  loginCallbackRouter.routes(),
+  loginCallbackRouter.allowedMethods()
+);
 
-router.options('/logout', checkHeaders());
-router.post('/logout', checkHeaders(), ctx => {
+router.options('/logout', auth());
+router.post('/logout', auth(), ctx => {
   ctx.logout();
   ctx.body = { success: true };
 });
 
-router.options('/graphql', checkHeaders());
-router.post('/graphql', checkHeaders());
+router.options('/graphql', auth());
+router.post('/graphql', auth());
 
 const indexFn = pug.compileFile(path.join(__dirname, 'jade/index.jade'));
 const schemaStr = printSchema(schema);
