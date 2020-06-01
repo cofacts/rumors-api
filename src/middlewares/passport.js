@@ -1,3 +1,8 @@
+/**
+ * Setup ctx.state.user using passport, for users managed by
+ * browser apps.
+ */
+
 import passport from 'koa-passport';
 import client, { processMeta } from 'util/client';
 import FacebookStrategy from 'passport-facebook';

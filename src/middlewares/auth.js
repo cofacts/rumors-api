@@ -1,6 +1,32 @@
-import cors from 'kcors';
+/**
+ * Reads header & URL param to determine currently logged in user & app.
+ * Reads user data from elasticsearch 'users' index.
+ * If user not exist, insert one in `users` index using the specified userId and appId.
+ *
+ * Writes ctx.userId, ctx.appId and ctx.user.
+ */
 
-async function checkSecret(ctx, next) {
+import cors from 'kcors';
+import crypto from 'crypto';
+
+/**
+ * @param {string} appId - app ID
+ * @param {string} rawUserId - raw user ID given by an backend app
+ * @returns {string} the user ID in `users` index if rumors-db
+ */
+function getBackendAppUserIdInDb(appId, rawUserId) {
+  const hash = crypto.createHash('sha256');
+  hash.update(`${appId}|${rawUserId}`);
+  return hash.digest('base64');
+}
+
+/**
+ * Checks backend app secret and resolves backend-app user using ?userId in URL param.
+ *
+ * @param {object} ctx - The koa context
+ * @param {function} next
+ */
+async function handleBackendAppAuth(ctx, next) {
   const secret = ctx.get(process.env.HTTP_HEADER_APP_SECRET);
   if (secret === process.env.RUMORS_LINE_BOT_SECRET) {
     // Shortcut for official rumors-line-bot -- no DB queries
@@ -13,10 +39,16 @@ async function checkSecret(ctx, next) {
     ctx.appId = 'DEVELOPMENT_BACKEND'; // FIXME: Remove this after developer key function rolls out.
   }
 
+  const rawUserId = ctx.query.userId;
+  const userIdInDb = getBackendAppUserIdInDb(ctx.appId, rawUserId);
+
+  // Update lastActiveAt or insert new
+  // const userInDb = await ctx.loaders.docLoader.load()
+
   return next();
 }
 
-async function checkAppId(ctx, next) {
+async function handleBrowserAppAuth(ctx, next) {
   const appId = ctx.get(process.env.HTTP_HEADER_APP_ID);
   let origin;
 
@@ -63,8 +95,8 @@ async function checkAppId(ctx, next) {
 
 export default () => (ctx, next) => {
   if (ctx.get(process.env.HTTP_HEADER_APP_SECRET)) {
-    return checkSecret(ctx, next);
+    return handleBackendAppAuth(ctx, next);
   }
 
-  return checkAppId(ctx, next);
+  return handleBrowserAppAuth(ctx, next);
 };
