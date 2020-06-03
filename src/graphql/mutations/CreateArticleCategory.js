@@ -74,9 +74,9 @@ export async function createArticleCategory({
             HashMap ar = found.get();
             if (ar.get('status').equals('DELETED')) {
               ar.put('status', 'NORMAL');
-              ar.put('userId', '${userId}');
-              ar.put('appId', '${appId}');
-              ar.put('updatedAt', '${now}');
+              ar.put('userId', params.articleCategory.get('userId'));
+              ar.put('appId', params.articleCategory.get('appId'));
+              ar.put('updatedAt', params.articleCategory.get('updatedAt'));
             } else {
               ctx.op = 'none';
             }
