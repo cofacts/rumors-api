@@ -108,6 +108,37 @@ Object {
 }
 `;
 
+exports[`ListArticleReplyFeedbacks filters by date, vote and userId alltogether: should be empty 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [],
+      "totalCount": 0,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks filters by date, vote and userId alltogether: updated by user2 after 2020/4/15, UPVOTE 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "f3",
+            "updatedAt": "2020-06-06T00:00:00.000Z",
+            "userId": "user2",
+            "vote": "UPVOTE",
+          },
+        },
+      ],
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
 exports[`ListArticleReplyFeedbacks filters by dates: created before 2020-03-15 1`] = `
 Object {
   "data": Object {
