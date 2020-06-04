@@ -4,7 +4,6 @@ import FacebookStrategy from 'passport-facebook';
 import TwitterStrategy from 'passport-twitter';
 import GithubStrategy from 'passport-github2';
 import Router from 'koa-router';
-import url from 'url';
 
 /**
  * Serialize to session
@@ -188,6 +187,7 @@ export const loginRouter = Router()
     }
     ctx.session.appId = ctx.query.appId || 'RUMORS_SITE';
     ctx.session.redirect = ctx.query.redirect;
+    ctx.session.origin = new URL(ctx.get('Referer')).origin;
     return next();
   })
   .get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
@@ -223,12 +223,13 @@ export const authRouter = Router()
 
     let basePath = '';
     if (ctx.session.appId === 'RUMORS_SITE') {
-      basePath = process.env.RUMORS_SITE_CORS_ORIGIN;
+      const allowedOrigins = process.env.RUMORS_SITE_CORS_ORIGIN.split(',');
+      basePath = allowedOrigins.find(o => o === ctx.session.origin);
     }
 
     // TODO: Get basePath from DB for other client apps
 
-    ctx.redirect(url.resolve(basePath, ctx.session.redirect));
+    ctx.redirect(new URL(ctx.session.redirect, basePath).href);
     // eslint-disable-next-line require-atomic-updates
     ctx.session.appId = undefined;
     // eslint-disable-next-line require-atomic-updates
