@@ -44,9 +44,16 @@ async function checkAppId(ctx, next) {
 
   return cors({
     credentials: true,
-    // cors can skip processing only when origin is function @@
-    // if we don't pass function here, cors() will stop nothing.
-    origin: () => origin,
+    origin: ctx => {
+      const allowedOrigins = origin.split(',');
+      if (allowedOrigins.includes(ctx.get('Origin'))) return ctx.get('Origin');
+
+      // CORS check fails.
+      // Since returning null is not recommended, we just return one valid origin here.
+      // Ref: https://w3c.github.io/webappsec-cors-for-developers/#avoid-returning-access-control-allow-origin-null
+      //
+      return allowedOrigins[0];
+    },
   })(ctx, next);
 }
 
