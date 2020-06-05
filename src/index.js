@@ -97,7 +97,10 @@ const apolloServer = new ApolloServer({
   },
 });
 
-apolloServer.applyMiddleware({ app });
+apolloServer.applyMiddleware({
+  app,
+  cors: false, // checkHeaders already managed CORS, don't mess up with that
+});
 
 const port = process.env.PORT || 5000;
 
