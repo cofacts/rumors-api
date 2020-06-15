@@ -398,20 +398,6 @@ describe('ListArticles', () => {
   });
 
   it('throws error when author filter is not set correctly', async () => {
-    const { errors: noUserIdError } = await gql`
-      {
-        ListArticles(filter: { appId: "specified-but-no-user-id" }) {
-          edges {
-            node {
-              id
-            }
-          }
-          totalCount
-        }
-      }
-    `();
-    expect(noUserIdError).toMatchSnapshot();
-
     const { errors: notExistError } = await gql`
       {
         ListArticles(filter: { fromUserOfArticleId: "not-exist" }) {
@@ -577,6 +563,48 @@ describe('ListArticles', () => {
         }
       `()
     ).toMatchSnapshot('hasArticleReplyWithMorePositiveFeedback = false');
+  });
+
+  it('filters via articleRepliesFrom', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(filter: { articleRepliesFrom: { userId: "user1" } }) {
+            edges {
+              node {
+                id
+                articleReplies(status: NORMAL) {
+                  user {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchSnapshot('has articleReply from user1');
+
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { articleRepliesFrom: { userId: "user1", exists: false } }
+          ) {
+            edges {
+              node {
+                id
+                articleReplies(status: NORMAL) {
+                  user {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchSnapshot('do not have articleReply from user1');
   });
 
   afterAll(() => unloadFixtures(fixtures));

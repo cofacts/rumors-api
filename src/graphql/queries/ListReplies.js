@@ -1,4 +1,4 @@
-import { GraphQLBoolean, GraphQLList } from 'graphql';
+import { GraphQLBoolean, GraphQLList, GraphQLString } from 'graphql';
 import client from 'util/client';
 
 import {
@@ -20,6 +20,12 @@ export default {
   args: {
     filter: {
       type: createFilterType('ListReplyFilter', {
+        userId: {
+          type: GraphQLString,
+        },
+        appId: {
+          type: GraphQLString,
+        },
         moreLikeThis: {
           type: moreLikeThisInput,
         },
@@ -128,13 +134,10 @@ export default {
       }
     }
 
-    if (filter.type) {
-      filterQueries.push({
-        term: {
-          type: filter.type,
-        },
-      });
-    }
+    ['userId', 'appId', 'type' /* deprecated */].forEach(field => {
+      if (!filter[field]) return;
+      filterQueries.push({ term: { [field]: filter[field] } });
+    });
 
     if (filter.types && filter.types.length > 0) {
       filterQueries.push({

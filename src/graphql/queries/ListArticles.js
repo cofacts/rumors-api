@@ -1,4 +1,10 @@
-import { GraphQLString, GraphQLList, GraphQLBoolean } from 'graphql';
+import {
+  GraphQLString,
+  GraphQLList,
+  GraphQLBoolean,
+  GraphQLInputObjectType,
+  GraphQLNonNull,
+} from 'graphql';
 import client from 'util/client';
 
 import {
@@ -55,13 +61,11 @@ export default {
         },
         appId: {
           type: GraphQLString,
-          description:
-            'Use with userId to show only articles from a specific user.',
+          description: 'Show only articles from a specific user.',
         },
         userId: {
           type: GraphQLString,
-          description:
-            'Use with appId to show only articles from a specific user.',
+          description: 'Show only articles from a specific user.',
         },
         fromUserOfArticleId: {
           type: GraphQLString,
@@ -69,6 +73,26 @@ export default {
             Specify an articleId here to show only articles from the sender of that specified article.
             When specified, it overrides the settings of appId and userId.
           `,
+        },
+        articleRepliesFrom: {
+          description:
+            'Show only articles with(out) article replies created by specified user',
+          type: new GraphQLInputObjectType({
+            name: 'UserAndExistInput',
+            fields: {
+              userId: {
+                type: new GraphQLNonNull(GraphQLString),
+              },
+              exists: {
+                type: GraphQLBoolean,
+                defaultValue: true,
+                description: `
+                  When true (or not specified), return only entries with the specified user's involvement.
+                  When false, return only entries that the specified user did not involve.
+                `,
+              },
+            },
+          }),
         },
         hasArticleReplyWithMorePositiveFeedback: {
           type: GraphQLBoolean,
@@ -152,14 +176,10 @@ export default {
       filter.appId = specifiedArticle.appId;
     }
 
-    if (filter.appId && filter.userId) {
-      filterQueries.push(
-        { term: { appId: filter.appId } },
-        { term: { userId: filter.userId } }
-      );
-    } else if (filter.appId || filter.userId) {
-      throw new Error('Both appId and userId must be specified at once');
-    }
+    ['userId', 'appId'].forEach(field => {
+      if (!filter[field]) return;
+      filterQueries.push({ term: { [field]: filter[field] } });
+    });
 
     if (filter.moreLikeThis) {
       const scrapResults = (await scrapUrls(filter.moreLikeThis.like, {
@@ -279,7 +299,7 @@ export default {
     }
 
     if (filter.categoryIds && filter.categoryIds.length) {
-      shouldQueries.push({
+      filterQueries.push({
         bool: {
           should: filter.categoryIds.map(categoryId => ({
             nested: {
@@ -297,7 +317,7 @@ export default {
 
     if (typeof filter.hasArticleReplyWithMorePositiveFeedback === 'boolean') {
       (filter.hasArticleReplyWithMorePositiveFeedback
-        ? shouldQueries
+        ? filterQueries
         : mustNotQueries
       ).push({
         nested: {
@@ -317,6 +337,33 @@ export default {
                         "doc['articleReplies.positiveFeedbackCount'].value > doc['articleReplies.negativeFeedbackCount'].value",
                       lang: 'painless',
                     },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+    }
+
+    if (filter.articleRepliesFrom) {
+      (filter.articleRepliesFrom.exists === false
+        ? mustNotQueries
+        : filterQueries
+      ).push({
+        nested: {
+          path: 'articleReplies',
+          query: {
+            bool: {
+              must: [
+                {
+                  term: {
+                    'articleReplies.status': 'NORMAL',
+                  },
+                },
+                {
+                  term: {
+                    'articleReplies.userId': filter.articleRepliesFrom.userId,
                   },
                 },
               ],

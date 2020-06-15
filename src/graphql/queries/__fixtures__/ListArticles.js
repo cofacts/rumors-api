@@ -17,6 +17,8 @@ export default {
         status: 'NORMAL',
         createdAt: '2020-02-08T15:11:04.472Z',
         updatedAt: '2020-02-08T15:11:04.472Z',
+        userId: 'user1',
+        appId: 'WEBSITE',
         positiveFeedbackCount: 1,
         negativeFeedbackCount: 0,
       },
@@ -60,6 +62,8 @@ export default {
         status: 'DELETED',
         createdAt: '2020-02-15T15:11:04.472Z',
         updatedAt: '2020-02-16T15:11:04.472Z',
+        userId: 'user1',
+        appId: 'WEBSITE',
         positiveFeedbackCount: 3,
         negativeFeedbackCount: 0,
       },
@@ -158,5 +162,8 @@ export default {
     summary:
       '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',
     topImageUrl: 'http://出師表.com/image.jpg',
+  },
+  '/users/doc/user1': {
+    name: 'user1',
   },
 };
