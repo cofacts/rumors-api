@@ -33,6 +33,10 @@ async function checkAppId(ctx, next) {
     // // because ctx.user set by passport as well
     //
     // TODO: Fill up origin from DB according to appId
+  } else if (appId === 'RUMORS_LINE_BOT') {
+    // Shortcut for official rumors-line-bot LIFF -- no DB queries
+    origin = process.env.RUMORS_LINE_BOT_CORS_ORIGIN;
+    ctx.appId = 'RUMORS_LINE_BOT';
   } else {
     // No header is given. Allow localhost access only.
     // FIXME: After developer key function rolls out, these kind of request
