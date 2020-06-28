@@ -607,5 +607,24 @@ describe('ListArticles', () => {
     ).toMatchSnapshot('do not have articleReply from user1');
   });
 
+  it('filters by reply types', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(filter: { replyTypes: [NOT_RUMOR, OPINIONATED] }) {
+            edges {
+              node {
+                id
+                articleReplies(status: NORMAL) {
+                  replyType
+                }
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchSnapshot('replied with NOT_RUMOR and OPINIONATED');
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });

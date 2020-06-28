@@ -9,6 +9,7 @@ import {
 import Article from './Article';
 import User, { userFieldResolver } from './User';
 import Reply from './Reply';
+import ReplyTypeEnum from './ReplyTypeEnum';
 import ArticleReplyFeedback from './ArticleReplyFeedback';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import FeedbackVote from './FeedbackVote';
@@ -23,6 +24,11 @@ export default new GraphQLObjectType({
       type: Reply,
       resolve: ({ replyId }, args, { loaders }) =>
         loaders.docLoader.load({ index: 'replies', id: replyId }),
+    },
+
+    replyType: {
+      type: ReplyTypeEnum,
+      description: 'Cached reply type value stored in ArticleReply',
     },
 
     articleId: { type: GraphQLString },

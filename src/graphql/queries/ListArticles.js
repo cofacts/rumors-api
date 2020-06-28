@@ -18,6 +18,7 @@ import {
   getRangeFieldParamFromArithmeticExpression,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
+import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 
 import { ArticleConnection } from 'graphql/models/Article';
 
@@ -101,6 +102,10 @@ export default {
             When false, return articles with none of its article replies that has more positive feedback, including those with no replies yet.
             In both scenario, deleted article replies are not taken into account.
           `,
+        },
+        replyTypes: {
+          type: new GraphQLList(ReplyTypeEnum),
+          description: 'List the articles with replies of certain types',
         },
       }),
     },
@@ -364,6 +369,30 @@ export default {
                 {
                   term: {
                     'articleReplies.userId': filter.articleRepliesFrom.userId,
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+    }
+
+    if (filter.replyTypes) {
+      filterQueries.push({
+        nested: {
+          path: 'articleReplies',
+          query: {
+            bool: {
+              must: [
+                {
+                  term: {
+                    'articleReplies.status': 'NORMAL',
+                  },
+                },
+                {
+                  terms: {
+                    'articleReplies.replyType': filter.replyTypes,
                   },
                 },
               ],
