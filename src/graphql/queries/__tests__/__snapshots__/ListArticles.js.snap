@@ -217,6 +217,43 @@ Object {
 }
 `;
 
+exports[`ListArticles filters by reply types: replied with NOT_RUMOR and OPINIONATED 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "replyType": "OPINIONATED",
+              },
+              Object {
+                "replyType": "NOT_ARTICLE",
+              },
+              Object {
+                "replyType": "NOT_ARTICLE",
+              },
+            ],
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "replyType": "NOT_RUMOR",
+              },
+            ],
+            "id": "listArticleTest2",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`ListArticles filters by replyCount EQ 1`] = `
 Object {
   "data": Object {

@@ -14,6 +14,7 @@ export default {
     `,
     articleReplies: [
       {
+        replyType: 'RUMOR',
         status: 'NORMAL',
         createdAt: '2020-02-08T15:11:04.472Z',
         updatedAt: '2020-02-08T15:11:04.472Z',
@@ -23,6 +24,7 @@ export default {
         negativeFeedbackCount: 0,
       },
       {
+        replyType: 'NOT_ARTICLE',
         status: 'NORMAL',
         createdAt: '2020-02-05T14:41:19.044Z',
         updatedAt: '2020-02-05T14:41:19.044Z',
@@ -51,6 +53,7 @@ export default {
       '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',
     articleReplies: [
       {
+        replyType: 'NOT_RUMOR',
         status: 'NORMAL',
         createdAt: '2020-02-09T15:11:04.472Z',
         updatedAt: '2020-02-09T15:11:04.472Z',
@@ -59,6 +62,7 @@ export default {
       },
       {
         // Deleted article replies are not taken into account for createdAt and feedbacks
+        replyType: 'NOT_RUMOR',
         status: 'DELETED',
         createdAt: '2020-02-15T15:11:04.472Z',
         updatedAt: '2020-02-16T15:11:04.472Z',
@@ -69,6 +73,7 @@ export default {
       },
       {
         // Deleted article replies are not taken into account for createdAt and feedbacks
+        replyType: 'OPINIONATED',
         status: 'DELETED',
         createdAt: '2020-02-04T15:11:04.472Z',
         updatedAt: '2020-02-04T15:11:04.472Z',
@@ -115,6 +120,7 @@ export default {
     ],
     articleReplies: [
       {
+        replyType: 'OPINIONATED',
         status: 'NORMAL',
         createdAt: '2020-02-11T15:11:04.472Z',
         updatedAt: '2020-02-11T15:11:04.472Z',
@@ -122,6 +128,7 @@ export default {
         negativeFeedbackCount: 11,
       },
       {
+        replyType: 'NOT_ARTICLE',
         status: 'NORMAL',
         createdAt: '2020-02-10T15:11:04.472Z',
         updatedAt: '2020-02-10T15:11:04.472Z',
@@ -129,6 +136,7 @@ export default {
         negativeFeedbackCount: 7,
       },
       {
+        replyType: 'NOT_ARTICLE',
         status: 'NORMAL',
         createdAt: '2020-02-09T15:11:04.472Z',
         updatedAt: '2020-02-09T15:11:04.472Z',
