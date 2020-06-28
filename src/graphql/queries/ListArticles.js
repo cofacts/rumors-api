@@ -103,7 +103,7 @@ export default {
             In both scenario, deleted article replies are not taken into account.
           `,
         },
-        types: {
+        replyTypes: {
           type: new GraphQLList(ReplyTypeEnum),
           description: 'List the articles with replies of certain types',
         },
@@ -378,7 +378,7 @@ export default {
       });
     }
 
-    if (filter.types) {
+    if (filter.replyTypes) {
       filterQueries.push({
         nested: {
           path: 'articleReplies',
@@ -392,7 +392,7 @@ export default {
                 },
                 {
                   terms: {
-                    'articleReplies.replyType': filter.types,
+                    'articleReplies.replyType': filter.replyTypes,
                   },
                 },
               ],

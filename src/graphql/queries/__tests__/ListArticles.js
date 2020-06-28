@@ -611,7 +611,7 @@ describe('ListArticles', () => {
     expect(
       await gql`
         {
-          ListArticles(filter: { types: [NOT_RUMOR, OPINIONATED] }) {
+          ListArticles(filter: { replyTypes: [NOT_RUMOR, OPINIONATED] }) {
             edges {
               node {
                 id

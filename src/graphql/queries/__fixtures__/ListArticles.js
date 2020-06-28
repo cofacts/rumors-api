@@ -14,7 +14,7 @@ export default {
     `,
     articleReplies: [
       {
-        replyType: 'RUMOR',
+        replyType: 'NOT_RUMOR',
         status: 'NORMAL',
         createdAt: '2020-02-08T15:11:04.472Z',
         updatedAt: '2020-02-08T15:11:04.472Z',
@@ -53,7 +53,7 @@ export default {
       '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',
     articleReplies: [
       {
-        replyType: 'NOT_RUMOR',
+        replyType: 'RUMOR',
         status: 'NORMAL',
         createdAt: '2020-02-09T15:11:04.472Z',
         updatedAt: '2020-02-09T15:11:04.472Z',

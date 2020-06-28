@@ -244,8 +244,11 @@ Object {
               Object {
                 "replyType": "NOT_RUMOR",
               },
+              Object {
+                "replyType": "NOT_ARTICLE",
+              },
             ],
-            "id": "listArticleTest2",
+            "id": "listArticleTest1",
           },
         },
       ],
