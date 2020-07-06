@@ -165,3 +165,16 @@ URLs. The following script cleans up those `urls` that no article & reply curren
 ```
 $ docker-compose exec api node_modules/.bin/babel-node src/scripts/cleanupUrls.js
 ```
+
+## Troubleshooting 
+
+### Failed to load gRPC binary on Mac
+
+If `rumors-api` server fails to start due to the following error:
+```
+Cannot find module '/srv/www/node_modules/grpc/src/node/extension_binary/node-v72-linux-x64-glibc/grpc_node.node'
+```
+try running:
+```
+npm rebuild --target_platform=linux --target_arch=x64 --target_libc=glibc --update-binary
+```
