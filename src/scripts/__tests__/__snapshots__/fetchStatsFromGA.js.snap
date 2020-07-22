@@ -1,0 +1,1077 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_article_isCron=false 1`] = `
+Object {
+  "dateRanges": Array [
+    Object {
+      "endDate": "today",
+      "startDate": "2020-07-10",
+    },
+  ],
+  "dimensions": Array [
+    Object {
+      "name": "ga:eventLabel",
+    },
+    Object {
+      "name": "ga:date",
+    },
+  ],
+  "filtersExpression": "ga:eventCategory==Article;ga:eventAction==Selected",
+  "includeEmptyRows": false,
+  "metrics": Array [
+    Object {
+      "expression": "ga:hits",
+    },
+    Object {
+      "expression": "ga:users",
+    },
+  ],
+  "orderBys": Array [
+    Object {
+      "fieldName": "ga:date",
+    },
+    Object {
+      "fieldName": "ga:eventLabel",
+    },
+  ],
+  "pageSize": "10000",
+  "pageToken": "",
+  "viewId": "987654321",
+}
+`;
+
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_article_isCron=true 1`] = `
+Object {
+  "dateRanges": Array [
+    Object {
+      "endDate": "today",
+      "startDate": "today",
+    },
+  ],
+  "dimensions": Array [
+    Object {
+      "name": "ga:eventLabel",
+    },
+    Object {
+      "name": "ga:date",
+    },
+  ],
+  "filtersExpression": "ga:eventCategory==Article;ga:eventAction==Selected",
+  "includeEmptyRows": false,
+  "metrics": Array [
+    Object {
+      "expression": "ga:hits",
+    },
+    Object {
+      "expression": "ga:users",
+    },
+  ],
+  "orderBys": Array [
+    Object {
+      "fieldName": "ga:date",
+    },
+    Object {
+      "fieldName": "ga:eventLabel",
+    },
+  ],
+  "pageSize": "10000",
+  "pageToken": "",
+  "viewId": "987654321",
+}
+`;
+
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_reply_isCron=false 1`] = `
+Object {
+  "dateRanges": Array [
+    Object {
+      "endDate": "today",
+      "startDate": "2020-07-10",
+    },
+  ],
+  "dimensions": Array [
+    Object {
+      "name": "ga:eventLabel",
+    },
+    Object {
+      "name": "ga:date",
+    },
+  ],
+  "filtersExpression": "ga:eventCategory==Reply;ga:eventAction==Selected",
+  "includeEmptyRows": false,
+  "metrics": Array [
+    Object {
+      "expression": "ga:hits",
+    },
+    Object {
+      "expression": "ga:users",
+    },
+  ],
+  "orderBys": Array [
+    Object {
+      "fieldName": "ga:date",
+    },
+    Object {
+      "fieldName": "ga:eventLabel",
+    },
+  ],
+  "pageSize": "10000",
+  "pageToken": "",
+  "viewId": "987654321",
+}
+`;
+
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_reply_isCron=true 1`] = `
+Object {
+  "dateRanges": Array [
+    Object {
+      "endDate": "today",
+      "startDate": "today",
+    },
+  ],
+  "dimensions": Array [
+    Object {
+      "name": "ga:eventLabel",
+    },
+    Object {
+      "name": "ga:date",
+    },
+  ],
+  "filtersExpression": "ga:eventCategory==Reply;ga:eventAction==Selected",
+  "includeEmptyRows": false,
+  "metrics": Array [
+    Object {
+      "expression": "ga:hits",
+    },
+    Object {
+      "expression": "ga:users",
+    },
+  ],
+  "orderBys": Array [
+    Object {
+      "fieldName": "ga:date",
+    },
+    Object {
+      "fieldName": "ga:eventLabel",
+    },
+  ],
+  "pageSize": "10000",
+  "pageToken": "",
+  "viewId": "987654321",
+}
+`;
+
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_article_isCron=false 1`] = `
+Object {
+  "dateRanges": Array [
+    Object {
+      "endDate": "today",
+      "startDate": "2020-07-10",
+    },
+  ],
+  "dimensions": Array [
+    Object {
+      "name": "ga:pagePathLevel2",
+    },
+    Object {
+      "name": "ga:date",
+    },
+  ],
+  "filtersExpression": "ga:pagePathLevel1==/article/",
+  "includeEmptyRows": false,
+  "metrics": Array [
+    Object {
+      "expression": "ga:pageviews",
+    },
+    Object {
+      "expression": "ga:users",
+    },
+  ],
+  "orderBys": Array [
+    Object {
+      "fieldName": "ga:date",
+    },
+    Object {
+      "fieldName": "ga:pagePathLevel2",
+    },
+  ],
+  "pageSize": "10000",
+  "pageToken": "",
+  "viewId": "123456789",
+}
+`;
+
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_article_isCron=true 1`] = `
+Object {
+  "dateRanges": Array [
+    Object {
+      "endDate": "today",
+      "startDate": "today",
+    },
+  ],
+  "dimensions": Array [
+    Object {
+      "name": "ga:contentGroup1",
+    },
+    Object {
+      "name": "ga:date",
+    },
+  ],
+  "filtersExpression": "ga:pagePathLevel1==/article/",
+  "includeEmptyRows": false,
+  "metrics": Array [
+    Object {
+      "expression": "ga:pageviews",
+    },
+    Object {
+      "expression": "ga:users",
+    },
+  ],
+  "orderBys": Array [
+    Object {
+      "fieldName": "ga:date",
+    },
+    Object {
+      "fieldName": "ga:contentGroup1",
+    },
+  ],
+  "pageSize": "10000",
+  "pageToken": "",
+  "viewId": "123456789",
+}
+`;
+
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_reply_isCron=false 1`] = `
+Object {
+  "dateRanges": Array [
+    Object {
+      "endDate": "today",
+      "startDate": "2020-07-10",
+    },
+  ],
+  "dimensions": Array [
+    Object {
+      "name": "ga:pagePathLevel2",
+    },
+    Object {
+      "name": "ga:date",
+    },
+  ],
+  "filtersExpression": "ga:pagePathLevel1==/reply/",
+  "includeEmptyRows": false,
+  "metrics": Array [
+    Object {
+      "expression": "ga:pageviews",
+    },
+    Object {
+      "expression": "ga:users",
+    },
+  ],
+  "orderBys": Array [
+    Object {
+      "fieldName": "ga:date",
+    },
+    Object {
+      "fieldName": "ga:pagePathLevel2",
+    },
+  ],
+  "pageSize": "10000",
+  "pageToken": "",
+  "viewId": "123456789",
+}
+`;
+
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_reply_isCron=true 1`] = `
+Object {
+  "dateRanges": Array [
+    Object {
+      "endDate": "today",
+      "startDate": "today",
+    },
+  ],
+  "dimensions": Array [
+    Object {
+      "name": "ga:contentGroup1",
+    },
+    Object {
+      "name": "ga:date",
+    },
+  ],
+  "filtersExpression": "ga:pagePathLevel1==/reply/",
+  "includeEmptyRows": false,
+  "metrics": Array [
+    Object {
+      "expression": "ga:pageviews",
+    },
+    Object {
+      "expression": "ga:users",
+    },
+  ],
+  "orderBys": Array [
+    Object {
+      "fieldName": "ga:date",
+    },
+    Object {
+      "fieldName": "ga:contentGroup1",
+    },
+  ],
+  "pageSize": "10000",
+  "pageToken": "",
+  "viewId": "123456789",
+}
+`;
+
+exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggregate rows of data 1`] = `
+Object {
+  "date": "2020-07-15",
+  "docId": "testID5",
+  "docType": "article",
+  "path": "/testID5?total=109_46&fbclid=randomParam3",
+  "sourceType": "WEB",
+  "users": 46,
+  "visits": 109,
+}
+`;
+
+exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggregate rows of data 2`] = `
+Array [
+  "article_testID1_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID1",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 1,
+      "webVisit": 2,
+    },
+    "type": "article",
+  },
+  "article_testID2_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID2",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 2,
+      "webVisit": 40,
+    },
+    "type": "article",
+  },
+  "article_testID3_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID3",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 2,
+      "webVisit": 5,
+    },
+    "type": "article",
+  },
+  "article_testID4_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID4",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 25,
+      "webVisit": 69,
+    },
+    "type": "article",
+  },
+  "article_testID5_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID5",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 46,
+      "webVisit": 109,
+    },
+    "type": "article",
+  },
+]
+`;
+
+exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggregate rows of data cross pages 1`] = `
+Object {
+  "date": "2020-07-15",
+  "docId": "testID5",
+  "docType": "article",
+  "path": "/testID5?total=109_46&fbclid=randomParam3",
+  "sourceType": "WEB",
+  "users": 46,
+  "visits": 109,
+}
+`;
+
+exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggregate rows of data cross pages 2`] = `
+Array [
+  "article_testID1_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID1",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 5,
+      "webVisit": 20,
+    },
+    "type": "article",
+  },
+  "article_testID2_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID2",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 2,
+      "webVisit": 40,
+    },
+    "type": "article",
+  },
+  "article_testID3_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID3",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 2,
+      "webVisit": 5,
+    },
+    "type": "article",
+  },
+  "article_testID4_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID4",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 25,
+      "webVisit": 69,
+    },
+    "type": "article",
+  },
+  "article_testID5_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID5",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 46,
+      "webVisit": 109,
+    },
+    "type": "article",
+  },
+]
+`;
+
+exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggregate rows of data cross pages 3`] = `
+Object {
+  "date": "2020-07-16",
+  "docId": "testID5",
+  "docType": "article",
+  "path": "/testID5?total=10_4",
+  "sourceType": "WEB",
+  "users": 4,
+  "visits": 10,
+}
+`;
+
+exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggregate rows of data cross pages 4`] = `
+Array [
+  "article_testID5_2020-07-15",
+  Object {
+    "date": "2020-07-15",
+    "docId": "testID5",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 49,
+      "webVisit": 115,
+    },
+    "type": "article",
+  },
+  "article_testID1_2020-07-16",
+  Object {
+    "date": "2020-07-16",
+    "docId": "testID1",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 1,
+      "webVisit": 2,
+    },
+    "type": "article",
+  },
+  "article_testID2_2020-07-16",
+  Object {
+    "date": "2020-07-16",
+    "docId": "testID2",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 1,
+      "webVisit": 2,
+    },
+    "type": "article",
+  },
+  "article_testID5_2020-07-16",
+  Object {
+    "date": "2020-07-16",
+    "docId": "testID5",
+    "fetchedAt": 2020-01-01T00:00:00.000Z,
+    "stats": Object {
+      "webUser": 4,
+      "webVisit": 10,
+    },
+    "type": "article",
+  },
+]
+`;
+
+exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should call bulkUpdates with right params 1`] = `
+Array [
+  Object {
+    "update": Object {
+      "_id": "article_testID1_2020-07-15",
+      "_index": "analytics",
+      "_type": "doc",
+    },
+  },
+  Object {
+    "script": Object {
+      "params": Object {
+        "date": "2020-07-15",
+        "docId": "testID1",
+        "fetchedAt": 2020-01-01T00:00:00.000Z,
+        "stats": Object {
+          "webUser": 1,
+          "webVisit": 2,
+        },
+        "type": "article",
+      },
+      "source": "
+  // since web stats and line stats are fetched seperately, need to update each
+  // stats field seperately so existing values won't be overwritten
+  if (ctx._source.size() == 0 || ctx._source.stats.size() == 0) {
+    ctx._source.stats = params.stats;
+  } else {
+    if (params.stats.webUser != null) {
+      ctx._source.stats.put('webUser', params.stats.webUser);
+    } if (params.stats.webVisit != null) {
+      ctx._source.stats.put('webVisit', params.stats.webVisit);
+    } if (params.stats.lineUser != null) {
+      ctx._source.stats.put('lineUser', params.stats.lineUser);
+    } if (params.stats.lineVisit != null) {
+      ctx._source.stats.put('lineVisit', params.stats.lineVisit);
+    }
+  }
+  ctx._source.fetchedAt = params.fetchedAt;
+  ctx._source.date = params.date;
+  ctx._source.docId = params.docId;
+  ctx._source.type = params.type;
+",
+    },
+    "scripted_upsert": true,
+    "upsert": Object {},
+  },
+]
+`;
+
+exports[`fetchStatsFromGA processReport without stubbing calls to client should aggregate rows of data 1`] = `
+Array [
+  Object {
+    "_id": "article_testID1_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID1",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 1,
+        "webVisit": 2,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID2_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID2",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 2,
+        "webVisit": 40,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID3_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID3",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 2,
+        "webVisit": 5,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID4_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID4",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 25,
+        "webVisit": 69,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID5_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID5",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 46,
+        "webVisit": 109,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+]
+`;
+
+exports[`fetchStatsFromGA processReport without stubbing calls to client should aggregate rows of data cross pages 1`] = `
+Array [
+  Object {
+    "_id": "article_testID1_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID1",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 5,
+        "webVisit": 20,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID2_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID2",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 2,
+        "webVisit": 40,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID3_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID3",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 2,
+        "webVisit": 5,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID4_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID4",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 25,
+        "webVisit": 69,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID5_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID5",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 49,
+        "webVisit": 115,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID5_2020-07-16",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-16",
+      "docId": "testID5",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 4,
+        "webVisit": 10,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID1_2020-07-16",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-16",
+      "docId": "testID1",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 1,
+        "webVisit": 2,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID2_2020-07-16",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-16",
+      "docId": "testID2",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 1,
+        "webVisit": 2,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+]
+`;
+
+exports[`fetchStatsFromGA processReport without stubbing calls to client should upserts stats from different sources 1`] = `
+Array [
+  Object {
+    "_id": "article_testID1_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID1",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "lineUser": 5,
+        "lineVisit": 20,
+        "webUser": 1,
+        "webVisit": 2,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
+]
+`;
+
+exports[`fetchStatsFromGA updateStats should call right functions with right params: fetchReports calls 1`] = `
+Array [
+  Array [
+    "WEB",
+    undefined,
+    Object {
+      "isCron": true,
+    },
+  ],
+  Array [
+    "LINE",
+    undefined,
+    Object {
+      "isCron": true,
+    },
+  ],
+]
+`;
+
+exports[`fetchStatsFromGA updateStats should call right functions with right params: fetchReports calls with params 1`] = `
+Array [
+  Array [
+    "WEB",
+    undefined,
+    Object {
+      "endDate": "today",
+      "isCron": false,
+      "startDate": "2020-07-10",
+    },
+  ],
+  Array [
+    "LINE",
+    undefined,
+    Object {
+      "endDate": "today",
+      "isCron": false,
+      "startDate": "2020-07-10",
+    },
+  ],
+]
+`;
+
+exports[`fetchStatsFromGA updateStats should call right functions with right params: processReport calls 1`] = `
+Array [
+  Array [
+    "WEB",
+    "article",
+    Array [
+      "test",
+    ],
+    2020-01-01T00:00:00.000Z,
+    undefined,
+  ],
+  Array [
+    "WEB",
+    "reply",
+    Array [
+      "test",
+    ],
+    2020-01-01T00:00:00.000Z,
+    undefined,
+  ],
+  Array [
+    "LINE",
+    "article",
+    Array [
+      "test",
+    ],
+    2020-01-01T00:00:00.000Z,
+    undefined,
+  ],
+  Array [
+    "LINE",
+    "reply",
+    Array [
+      "test",
+    ],
+    2020-01-01T00:00:00.000Z,
+    undefined,
+  ],
+]
+`;
+
+exports[`fetchStatsFromGA updateStats should keep fetching and processing paginated datas until the end: fetchReports calls 1`] = `
+Array [
+  Array [
+    "WEB",
+    undefined,
+    Object {
+      "isCron": true,
+    },
+  ],
+  Array [
+    "WEB",
+    Object {
+      "article": 100,
+      "reply": 100,
+    },
+    Object {
+      "isCron": true,
+    },
+  ],
+  Array [
+    "WEB",
+    Object {
+      "article": 200,
+      "reply": -1,
+    },
+    Object {
+      "isCron": true,
+    },
+  ],
+  Array [
+    "LINE",
+    undefined,
+    Object {
+      "isCron": true,
+    },
+  ],
+  Array [
+    "LINE",
+    Object {
+      "article": 100,
+      "reply": 100,
+    },
+    Object {
+      "isCron": true,
+    },
+  ],
+  Array [
+    "LINE",
+    Object {
+      "article": -1,
+      "reply": 200,
+    },
+    Object {
+      "isCron": true,
+    },
+  ],
+]
+`;
+
+exports[`fetchStatsFromGA updateStats should keep fetching and processing paginated datas until the end: processReport calls 1`] = `
+Array [
+  Array [
+    "WEB",
+    "article",
+    Array [
+      "test0",
+    ],
+    2020-01-01T00:00:00.000Z,
+    undefined,
+  ],
+  Array [
+    "WEB",
+    "reply",
+    Array [
+      "test0",
+    ],
+    2020-01-01T00:00:00.000Z,
+    undefined,
+  ],
+  Array [
+    "WEB",
+    "article",
+    Array [
+      "test1",
+    ],
+    2020-01-01T00:00:00.000Z,
+    Object {
+      "docType": "article",
+      "path": "test0",
+      "sourceType": "WEB",
+    },
+  ],
+  Array [
+    "WEB",
+    "reply",
+    Array [
+      "test1",
+    ],
+    2020-01-01T00:00:00.000Z,
+    Object {
+      "docType": "reply",
+      "path": "test0",
+      "sourceType": "WEB",
+    },
+  ],
+  Array [
+    "WEB",
+    "article",
+    Array [
+      "test2",
+    ],
+    2020-01-01T00:00:00.000Z,
+    Object {
+      "docType": "article",
+      "path": "test1",
+      "sourceType": "WEB",
+    },
+  ],
+  Array [
+    "LINE",
+    "article",
+    Array [
+      "test0",
+    ],
+    2020-01-01T00:00:00.000Z,
+    undefined,
+  ],
+  Array [
+    "LINE",
+    "reply",
+    Array [
+      "test0",
+    ],
+    2020-01-01T00:00:00.000Z,
+    undefined,
+  ],
+  Array [
+    "LINE",
+    "article",
+    Array [
+      "test1",
+    ],
+    2020-01-01T00:00:00.000Z,
+    Object {
+      "docType": "article",
+      "path": "test0",
+      "sourceType": "LINE",
+    },
+  ],
+  Array [
+    "LINE",
+    "reply",
+    Array [
+      "test1",
+    ],
+    2020-01-01T00:00:00.000Z,
+    Object {
+      "docType": "reply",
+      "path": "test0",
+      "sourceType": "LINE",
+    },
+  ],
+  Array [
+    "LINE",
+    "reply",
+    Array [
+      "test2",
+    ],
+    2020-01-01T00:00:00.000Z,
+    Object {
+      "docType": "reply",
+      "path": "test1",
+      "sourceType": "LINE",
+    },
+  ],
+]
+`;
