@@ -41,11 +41,17 @@ app.use(
 
 app.keys = (process.env.COOKIE_SECRETS || '').split(',');
 
+// See: https://github.com/cofacts/rumors-api/issues/186#issuecomment-644612628
+const samesiteConfig = process.env.COOKIE_SAMESITE_NONE
+  ? { sameSite: 'none', secure: true }
+  : {};
+
 app.use(
   session({
     store: new CookieStore({ password: app.keys[0] }),
     signed: true,
     maxAge: process.env.COOKIE_MAXAGE,
+    ...samesiteConfig,
   })
 );
 app.use(passport.initialize());
