@@ -129,7 +129,7 @@ const Article = new GraphQLObjectType({
       resolve: async ({ id }, args, { loaders }) =>
         loaders.searchResultLoader.load({
           index: 'replyrequests',
-          body: { query: { term: { articleId: id } } },
+          body: { query: { term: { articleId: id } }, size: 1000 },
         }),
     },
     replyRequestCount: { type: GraphQLInt },

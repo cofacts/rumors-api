@@ -39,7 +39,7 @@ export default {
     ],
     normalArticleReplyCount: 1,
     references: [{ type: 'LINE' }],
-    replyRequestCount: 1,
+    replyRequestCount: 2,
 
     /**
      * Added for tests:
@@ -83,6 +83,10 @@ export default {
     ],
     normalArticleReplyCount: 1,
     references: [{ type: 'LINE' }],
+  },
+  '/articles/doc/manyRequests': {
+    text: 'Popular',
+    replyRequestCount: 11,
   },
   '/replies/doc/bar': {
     text: 'bar',
@@ -132,4 +136,13 @@ export default {
     title: '免費訊息詐騙',
     description: '詐騙貼圖、假行銷手法。',
   },
+
+  ...Array.from(new Array(11)).reduce((mockMap, _, i) => {
+    mockMap[`/replyrequests/doc/popular${i}`] = {
+      articleId: 'manyRequests',
+      userId: 'fakeUser',
+      appId: 'LINE',
+    };
+    return mockMap;
+  }, {}),
 };
