@@ -140,8 +140,9 @@ export default {
   ...Array.from(new Array(11)).reduce((mockMap, _, i) => {
     mockMap[`/replyrequests/doc/popular${i}`] = {
       articleId: 'manyRequests',
-      userId: 'fakeUser',
+      userId: `fakeUser ${i}`,
       appId: 'LINE',
+      reason: `Reason ${i}`,
     };
     return mockMap;
   }, {}),

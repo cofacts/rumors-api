@@ -54,6 +54,52 @@ Object {
 }
 `;
 
+exports[`GetReplyAndGetArticle GetArticle fetches more than 10 reply requests 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "replyRequestCount": 11,
+      "replyRequests": Array [
+        Object {
+          "reason": "Reason 0",
+        },
+        Object {
+          "reason": "Reason 1",
+        },
+        Object {
+          "reason": "Reason 2",
+        },
+        Object {
+          "reason": "Reason 3",
+        },
+        Object {
+          "reason": "Reason 4",
+        },
+        Object {
+          "reason": "Reason 5",
+        },
+        Object {
+          "reason": "Reason 6",
+        },
+        Object {
+          "reason": "Reason 7",
+        },
+        Object {
+          "reason": "Reason 8",
+        },
+        Object {
+          "reason": "Reason 9",
+        },
+        Object {
+          "reason": "Reason 10",
+        },
+      ],
+      "text": "Popular",
+    },
+  },
+}
+`;
+
 exports[`GetReplyAndGetArticle GetArticle get specified article and articleCategories with DELETED status 1`] = `
 Object {
   "data": Object {
@@ -106,7 +152,7 @@ Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.37905684,
+            "score": 0.9489213,
           },
           Object {
             "cursor": "WyJmb28yIl0=",
@@ -114,7 +160,7 @@ Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 0.3672113,
+            "score": 0.9210748,
           },
         ],
       },
@@ -135,7 +181,7 @@ Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.37905684,
+            "score": 0.9489213,
           },
           Object {
             "cursor": "WyJmb28yIl0=",
@@ -143,7 +189,7 @@ Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 0.3672113,
+            "score": 0.9210748,
           },
         ],
       },
@@ -159,20 +205,20 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuMzY3MjExMywiZm9vMiJd",
+            "cursor": "WzAuOTIxMDc0OCwiZm9vMiJd",
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 0.3672113,
+            "score": 0.9210748,
           },
           Object {
-            "cursor": "WzAuMzc5MDU2ODQsImZvbzMiXQ==",
+            "cursor": "WzAuOTQ4OTIxMywiZm9vMyJd",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.37905684,
+            "score": 0.9489213,
           },
         ],
       },
@@ -253,7 +299,7 @@ Object {
         },
       ],
       "replyCount": 1,
-      "replyRequestCount": 1,
+      "replyRequestCount": 2,
       "replyRequests": Array [
         Object {
           "feedbackCount": 2,
