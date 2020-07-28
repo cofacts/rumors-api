@@ -1,20 +1,23 @@
 // eslint-disable no-console
-// TODO: add commend line arguments for migrations
 // TODO: consider the edge case when the cron job runs at midnight
 //       the first cron job of the day should also update the value for yesterday
 
 import 'dotenv/config';
-
 import client from 'util/client';
 import { google } from 'googleapis';
+import yargs from 'yargs';
 
 const analyticsreporting = google.analyticsreporting('v4');
+
+const ONEDAY = 1000 * 60 * 60 * 24;
+const maxDuration = 30;
 
 const pageSize = process.env.GA_PAGE_SIZE || '10000';
 const webViewId = process.env.GA_WEB_VIEW_ID;
 const lineViewId = process.env.GA_LINE_VIEW_ID;
 
 const idExtractor = /\/([^?/]+).*/;
+const dateFormat = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 const toTitleCase = str =>
   str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
 const formatDate = date =>
@@ -25,9 +28,9 @@ const docTypes = {
   REPLY: 'reply',
 };
 
-export const allDocTypes = [docTypes.ARTICLE, docTypes.REPLY];
+const allDocTypes = [docTypes.ARTICLE, docTypes.REPLY];
 
-export const statsSources = {
+const statsSources = {
   WEB: {
     filtersExpression: docType => `ga:pagePathLevel1==/${docType}/`,
     name: 'WEB',
@@ -46,7 +49,7 @@ export const statsSources = {
   },
 };
 
-export const allSourceTypes = [statsSources.WEB.name, statsSources.LINE.name];
+const allSourceTypes = [statsSources.WEB.name, statsSources.LINE.name];
 
 const upsertScript = `
   // since web stats and line stats are fetched seperately, need to update each
@@ -70,19 +73,14 @@ const upsertScript = `
   ctx._source.type = params.type;
 `;
 
-export const parseIdFromRow = function(row) {
+const parseIdFromRow = function(row) {
   const id = row.dimensions[0];
   const match = idExtractor.exec(id);
   return match ? match[1] : id;
 };
 
 // Contructs request body for google reporting API.
-export const requestBodyBuilder = function(
-  sourceType,
-  docType,
-  pageToken,
-  params
-) {
+const requestBodyBuilder = function(sourceType, docType, pageToken, params) {
   const { isCron, startDate = 'today', endDate = 'today' } = params;
   let {
     filtersExpression,
@@ -106,6 +104,46 @@ export const requestBodyBuilder = function(
   };
 };
 
+const convertAndValidateDate = (name, dateStr) => {
+  if (!dateStr.match(dateFormat)) {
+    throw new Error(`${name} must be in the format of YYYY-MM-DD`);
+  }
+  try {
+    const date = new Date(dateStr);
+    if (date.toString() !== 'Invalid Date') {
+      return date;
+    } else {
+      throw new Error();
+    }
+  } catch {
+    throw new Error(`${name} must be a valid date in the format of YYYY-MM-DD`);
+  }
+};
+
+const processCommandLineArgs = args => {
+  const { startDate, endDate } = args;
+  if (!startDate && !endDate) {
+    return { isCron: true };
+  } else if (startDate && endDate) {
+    const start = convertAndValidateDate('start date', startDate);
+    const end = convertAndValidateDate('end date', endDate);
+    const duration = end - start;
+    if (duration < 0) {
+      throw new Error('end date cannot be earlier than start date');
+    } else if (duration > maxDuration * ONEDAY) {
+      throw new Error(
+        `start date and end date cannot be more than ${maxDuration} days apart`
+      );
+    }
+    if (end - new Date() > 0) {
+      throw new Error('end date must be no later than today');
+    }
+    return { isCron: false, startDate, endDate };
+  } else {
+    throw new Error('must include both start end and end date');
+  }
+};
+
 /**
  * Given a sourceType, fetch stats for all doc types from startDate to endDate (inclusive).
 
@@ -120,11 +158,7 @@ export const requestBodyBuilder = function(
     hasMore: {bool} whether there's more data to fetch
  }
  */
-export const fetchReports = async function(
-  sourceType,
-  pageTokens = {},
-  params
-) {
+const fetchReports = async function(sourceType, pageTokens = {}, params) {
   let reportRequests = [];
   let nextPageTokens = {};
   // when pageToken is -1, it means there's no more rows to fetch
@@ -172,14 +206,16 @@ export const fetchReports = async function(
   return { results, pageTokens: nextPageTokens, hasMore };
 };
 
-export const upsertDocStats = async function(body) {
+const upsertDocStats = async function(body) {
   try {
     const res = await client.bulk({
       body,
       refresh: 'true',
     });
     if (res.body.errors) {
-      console.log('something went wrong in bulk updates');
+      console.error(
+        `bulk upsert failed : ${JSON.stringify(res.body, null, '  ')}`
+      );
     }
   } catch (err) {
     console.error(err);
@@ -222,7 +258,7 @@ async function fetchReplyUsers(sourceType, rows) {
 
  * @return {object} Return the stats of last processed row, same format as prevLastRow.
  */
-export const processReport = async function(
+const processReport = async function(
   sourceType,
   docType,
   rows,
@@ -310,7 +346,7 @@ export const processReport = async function(
  * @param {object} params        Object of the from:
     {isCron: [bool=true], [startDate: string], [endDate: string]}
  */
-export const updateStats = async function(params = { isCron: true }) {
+const updateStats = async function(params = { isCron: true }) {
   for (const sourceType of allSourceTypes) {
     let results,
       pageTokens,
@@ -343,16 +379,47 @@ export const updateStats = async function(params = { isCron: true }) {
 };
 
 async function main() {
-  const auth = new google.auth.GoogleAuth({
-    keyFile: process.env.GOOGLE_OAUTH_KEY_PATH,
-    scopes: ['https://www.googleapis.com/auth/analytics.readonly'],
-  });
-  google.options({ auth });
-  updateStats();
+  try {
+    const argv = yargs
+      .options('startDate', {
+        alias: 's',
+        description: 'start date in the format of YYYY-MM-DD',
+        type: 'string',
+      })
+      .options('endDate', {
+        alias: 'e',
+        description: 'end date in the format of YYYY-MM-DD',
+        type: 'string',
+      }).argv;
+
+    const params = processCommandLineArgs(argv);
+
+    const auth = new google.auth.GoogleAuth({
+      keyFile: process.env.GOOGLE_OAUTH_KEY_PATH,
+      scopes: ['https://www.googleapis.com/auth/analytics.readonly'],
+    });
+    google.options({ auth });
+
+    updateStats(params);
+  } catch (e) {
+    console.error(e);
+  }
 }
 
-export default main;
-
+export default {
+  allDocTypes,
+  allSourceTypes,
+  convertAndValidateDate,
+  fetchReports,
+  main,
+  parseIdFromRow,
+  processCommandLineArgs,
+  processReport,
+  requestBodyBuilder,
+  statsSources,
+  updateStats,
+  upsertDocStats,
+};
 if (require.main === module) {
   main();
 }

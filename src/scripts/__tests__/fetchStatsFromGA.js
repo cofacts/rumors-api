@@ -1,14 +1,16 @@
 import { google } from 'googleapis';
 import client from 'util/client';
-import * as fetchStatsFromGA from '../fetchStatsFromGA';
-import {
+/* eslint-disable import/named */
+import fetchStatsFromGA, {
   __RewireAPI__ as FetchGAReWireAPI,
-  allDocTypes,
-  allSourceTypes,
 } from '../fetchStatsFromGA';
+/* eslint-enable import/named */
 import fixtures from '../__fixtures__/fetchStatsFromGA';
 import MockDate from 'mockdate';
 
+const allDocTypes = fetchStatsFromGA.allDocTypes;
+const allSourceTypes = fetchStatsFromGA.allSourceTypes;
+jest.setTimeout(30000);
 jest.mock('googleapis', () => {
   const batchGetMock = jest.fn(),
     authMock = jest.fn(),
@@ -29,10 +31,6 @@ jest.mock('googleapis', () => {
 });
 
 describe('fetchStatsFromGA', () => {
-  beforeAll(() => {
-    MockDate.set(1577836800000);
-  });
-
   describe('helper functions', () => {
     it('parseIdFromRow should extract doc id from a row returned by GA', () => {
       const parseIdFromRow = fetchStatsFromGA.parseIdFromRow;
@@ -72,11 +70,59 @@ describe('fetchStatsFromGA', () => {
         )
       );
     });
+
+    it('convertAndValidateDate should raise errors when given invalid date, and return Date object otherwise', () => {
+      const convertDate = fetchStatsFromGA.convertAndValidateDate;
+      expect(() => convertDate('start date', '20200101')).toThrow(
+        'start date must be in the format of YYYY-MM-DD'
+      );
+      expect(() => convertDate('start date', '2020-13-35')).toThrow(
+        'start date must be a valid date in the format of YYYY-MM-DD'
+      );
+
+      expect(convertDate('start date', '2020-01-01')).toStrictEqual(
+        new Date('2020-01-01')
+      );
+    });
+
+    it('processCommandLineArgs should raise errors when given invalid arugments, and return proper params otherwise', () => {
+      const processArgs = fetchStatsFromGA.processCommandLineArgs;
+
+      expect(() => processArgs({ startDate: '2020-01-01' })).toThrow(
+        'must include both start end and end date'
+      );
+      expect(() =>
+        processArgs({ startDate: '2020-01-01', endDate: '2019-01-01' })
+      ).toThrow('end date cannot be earlier than start date');
+      expect(() =>
+        processArgs({ startDate: '2019-01-01', endDate: '2020-01-01' })
+      ).toThrow('start date and end date cannot be more than 30 days apart');
+      expect(() =>
+        processArgs({ startDate: '3000-01-01', endDate: '3000-01-01' })
+      ).toThrow('end date must be no later than today');
+
+      expect(processArgs({})).toStrictEqual({ isCron: true });
+      expect(
+        processArgs({ startDate: '2020-07-01', endDate: '2020-07-15' })
+      ).toStrictEqual({
+        isCron: false,
+        startDate: '2020-07-01',
+        endDate: '2020-07-15',
+      });
+      expect(
+        processArgs({ startDate: '2020-07-01', endDate: '2020-07-01' })
+      ).toStrictEqual({
+        isCron: false,
+        startDate: '2020-07-01',
+        endDate: '2020-07-01',
+      });
+    });
   });
 
   describe('updateStats', () => {
     var fetchReportsMock, processReportMock;
     beforeAll(() => {
+      MockDate.set(1577836800000);
       fetchReportsMock = jest.fn();
       processReportMock = jest.fn();
       FetchGAReWireAPI.__set__('fetchReports', fetchReportsMock);
@@ -166,7 +212,9 @@ describe('fetchStatsFromGA', () => {
     };
 
     beforeAll(() => {
+      MockDate.set(1577836800000);
       FetchGAReWireAPI.__set__('requestBodyBuilder', requestBuilderSpy);
+      requestBuilderSpy.mockClear();
     });
     afterEach(() => {
       batchGetMock.mockReset();
@@ -183,6 +231,7 @@ describe('fetchStatsFromGA', () => {
           batchGetMock.mockResolvedValueOnce(
             batchGetResultsBuilder(pageTokens, nextPageTokens)
           );
+
           const fetchReportsResults = await fetchStatsFromGA.fetchReports(
             sourceType,
             pageTokens,
@@ -231,6 +280,7 @@ describe('fetchStatsFromGA', () => {
         i % 2 === 0 ? row.update._id : row.script.params;
 
       beforeAll(() => {
+        MockDate.set(1577836800000);
         FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsMock);
       });
 
@@ -309,7 +359,7 @@ describe('fetchStatsFromGA', () => {
             prevRow = row.update._id;
           }
         });
-        console.log(JSON.stringify(bulkDeleteBody));
+
         const { body: result } = await client.bulk({
           body: bulkDeleteBody,
           refresh: 'true',
@@ -323,7 +373,9 @@ describe('fetchStatsFromGA', () => {
       };
 
       beforeAll(() => {
+        MockDate.set(1577836800000);
         FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsSpy);
+        upsertDocStatsSpy.mockClear();
       });
 
       afterEach(() => {
