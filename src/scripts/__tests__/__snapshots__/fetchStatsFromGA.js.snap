@@ -338,6 +338,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID1",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 1,
@@ -349,6 +350,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID2",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 2,
@@ -360,6 +362,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID3",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 2,
@@ -371,6 +374,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID4",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 25,
@@ -382,6 +386,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID5",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 46,
@@ -410,6 +415,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID1",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 5,
@@ -421,6 +427,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID2",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 2,
@@ -432,6 +439,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID3",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 2,
@@ -443,6 +451,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID4",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 25,
@@ -454,6 +463,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID5",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 46,
@@ -482,6 +492,7 @@ Array [
   Object {
     "date": "2020-07-15",
     "docId": "testID5",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 49,
@@ -493,6 +504,7 @@ Array [
   Object {
     "date": "2020-07-16",
     "docId": "testID1",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 1,
@@ -504,6 +516,7 @@ Array [
   Object {
     "date": "2020-07-16",
     "docId": "testID2",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 1,
@@ -515,6 +528,7 @@ Array [
   Object {
     "date": "2020-07-16",
     "docId": "testID5",
+    "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
     "stats": Object {
       "webUser": 4,
@@ -539,6 +553,7 @@ Array [
       "params": Object {
         "date": "2020-07-15",
         "docId": "testID1",
+        "docUserId": undefined,
         "fetchedAt": 2020-01-01T00:00:00.000Z,
         "stats": Object {
           "webUser": 1,
@@ -562,10 +577,14 @@ Array [
       ctx._source.stats.put('lineVisit', params.stats.lineVisit);
     }
   }
+  if (params.docUserId != null) {
+    ctx._source.docUserId = params.docUserId;
+  }
   ctx._source.fetchedAt = params.fetchedAt;
   ctx._source.date = params.date;
   ctx._source.docId = params.docId;
   ctx._source.type = params.type;
+
 ",
     },
     "scripted_upsert": true,
@@ -786,6 +805,95 @@ Array [
         "webVisit": 2,
       },
       "type": "article",
+    },
+    "_type": "doc",
+  },
+]
+`;
+
+exports[`fetchStatsFromGA processReport without stubbing calls to client should updates docUserId for reply entries that have one 1`] = `
+Array [
+  Object {
+    "_id": "reply_testID1_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID1",
+      "docUserId": "user1",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 1,
+        "webVisit": 2,
+      },
+      "type": "reply",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "reply_testID2_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID2",
+      "docUserId": "user2",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 2,
+        "webVisit": 40,
+      },
+      "type": "reply",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "reply_testID5_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID5",
+      "docUserId": "user3",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 46,
+        "webVisit": 109,
+      },
+      "type": "reply",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "reply_testID3_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID3",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 2,
+        "webVisit": 5,
+      },
+      "type": "reply",
+    },
+    "_type": "doc",
+  },
+  Object {
+    "_id": "reply_testID4_2020-07-15",
+    "_index": "analytics",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID4",
+      "docUserId": "user1",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 25,
+        "webVisit": 69,
+      },
+      "type": "reply",
     },
     "_type": "doc",
   },

@@ -67,10 +67,14 @@ const upsertScript = `
       ctx._source.stats.put('lineVisit', params.stats.lineVisit);
     }
   }
+  if (params.docUserId != null) {
+    ctx._source.docUserId = params.docUserId;
+  }
   ctx._source.fetchedAt = params.fetchedAt;
   ctx._source.date = params.date;
   ctx._source.docId = params.docId;
   ctx._source.type = params.type;
+
 `;
 
 const parseIdFromRow = function(row) {
@@ -222,26 +226,28 @@ const upsertDocStats = async function(body) {
   }
 };
 
-/*
-async function fetchReplyUsers(sourceType, rows) {
-  const replyIds = rows.map((row) => parseIdFromRow (row))
-  const { hits } = client.search({
+async function fetchReplyUsers(rows) {
+  const replyIds = rows.map(row => parseIdFromRow(row));
+  const {
+    body: {
+      hits: { hits: replies },
+    },
+  } = await client.search({
     index: 'replies',
     size: pageSize,
     body: {
       query: {
-        ids: {values: ids}
+        ids: { values: replyIds },
       },
       _source: {
-        includes: ['userId', '_id'],
+        includes: ['userId'],
       },
-    }
-  })
-  let replyUsers = {}
-  hits.hits.forEach((reply) => replyUsers[reply._id] = reply.userId)
-  return replyUsers
+    },
+  });
+  let replyUsers = {};
+  replies.forEach(reply => (replyUsers[reply._id] = reply._source.userId));
+  return replyUsers;
 }
-*/
 
 /**
  * Given stats report for a sourceType and docType, store them in db
@@ -265,12 +271,11 @@ const processReport = async function(
   fetchedAt,
   prevLastRow
 ) {
-  /* TODO: logics for updating reply docUserId
-  let replyUsers
+  let replyUsers;
   if (docType === docTypes.REPLY) {
-    replyUsers = await fetchReplyUsers(sourceType, report.rows)
+    replyUsers = await fetchReplyUsers(rows);
   }
-  */
+
   let bulkUpdates = [];
   const sourceName = sourceType.toLowerCase();
 
@@ -278,6 +283,7 @@ const processReport = async function(
     const docId = parseIdFromRow(row);
     const date = formatDate(row.dimensions[1]);
     const [visits, users] = row.metrics[0].values;
+    let docUserId;
 
     const prevParams =
       bulkUpdates.length > 0 &&
@@ -286,6 +292,10 @@ const processReport = async function(
       prevParams.stats[`${sourceName}Visit`] += eval(visits);
       prevParams.stats[`${sourceName}User`] += eval(users);
     } else {
+      if (docType === docTypes.REPLY && replyUsers[docId]) {
+        docUserId = replyUsers[docId];
+      }
+
       const stats = {
         [`${sourceName}Visit`]: eval(visits),
         [`${sourceName}User`]: eval(users),
@@ -305,15 +315,17 @@ const processReport = async function(
       }
 
       const id = `${docType}_${docId}_${date}`;
+      let params = { fetchedAt, date, docId, docUserId, stats, type: docType };
+
       bulkUpdates.push({
         update: { _index: 'analytics', _type: 'doc', _id: id },
       });
+
       bulkUpdates.push({
         scripted_upsert: true,
         script: {
           source: upsertScript,
-          // TODO: include replyUserId for replies here
-          params: { fetchedAt, date, docId, stats, type: docType },
+          params,
         },
         upsert: {},
       });

@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 /* eslint-disable import/named */
 import fetchStatsFromGA, {
@@ -10,7 +11,7 @@ import MockDate from 'mockdate';
 
 const allDocTypes = fetchStatsFromGA.allDocTypes;
 const allSourceTypes = fetchStatsFromGA.allSourceTypes;
-jest.setTimeout(30000);
+
 jest.mock('googleapis', () => {
   const batchGetMock = jest.fn(),
     authMock = jest.fn(),
@@ -455,6 +456,28 @@ describe('fetchStatsFromGA', () => {
         expect(res.body.hits.hits).toMatchSnapshot();
 
         await unloadBody(bulkUpdateBody);
+      });
+
+      it('should updates docUserId for reply entries that have one', async () => {
+        await loadFixtures(fixtures.repliesFixtures);
+        await fetchStatsFromGA.processReport(
+          'WEB',
+          'reply',
+          fixtures.processReport.sameDateRows,
+          new Date(),
+          null
+        );
+
+        const bulkUpdateBody = upsertDocStatsSpy.mock.calls[0][0];
+
+        const res = await client.search({
+          index: 'analytics',
+          body: { query: { match_all: {} } },
+        });
+        expect(res.body.hits.hits).toMatchSnapshot();
+
+        await unloadBody(bulkUpdateBody);
+        await unloadFixtures(fixtures.repliesFixtures);
       });
     });
   });

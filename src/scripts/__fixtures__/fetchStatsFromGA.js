@@ -1,4 +1,38 @@
 export default {
+  repliesFixtures: {
+    '/replies/doc/testID1': {
+      text: 'text',
+      reference: 'ref',
+      type: 'NOT_ARTICLE',
+      userId: 'user1',
+      appId: 'test',
+      createdAt: '2020-01-01T00:00:00.000Z',
+    },
+    '/replies/doc/testID2': {
+      text: 'text',
+      reference: 'ref',
+      type: 'NOT_ARTICLE',
+      userId: 'user2',
+      appId: 'test',
+      createdAt: '2020-01-01T00:00:00.000Z',
+    },
+    '/replies/doc/testID4': {
+      text: 'text',
+      reference: 'ref',
+      type: 'NOT_ARTICLE',
+      userId: 'user1',
+      appId: 'test',
+      createdAt: '2020-01-01T00:00:00.000Z',
+    },
+    '/replies/doc/testID5': {
+      text: 'text',
+      reference: 'ref',
+      type: 'NOT_ARTICLE',
+      userId: 'user3',
+      appId: 'test',
+      createdAt: '2020-01-01T00:00:00.000Z',
+    },
+  },
   updateStats: {
     fetchReportsDefalutResolved: {
       results: { article: ['test'], reply: ['test'] },
