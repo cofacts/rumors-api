@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`date utils validateDateRange should raise error upon invalid params 1`] = `"must include both start date and end date"`;
+
+exports[`date utils validateDateRange should raise error upon invalid params 2`] = `"end date cannot be earlier than start date"`;
+
+exports[`date utils validateDateRange should raise error upon invalid params 3`] = `"start date and end date cannot be more than 2592000000 apart"`;
+
+exports[`date utils validateDateRange should raise error upon invalid params 4`] = `"end date must be no later than today"`;
