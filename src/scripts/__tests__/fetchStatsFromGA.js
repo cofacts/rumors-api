@@ -72,36 +72,8 @@ describe('fetchStatsFromGA', () => {
       );
     });
 
-    it('convertAndValidateDate should raise errors when given invalid date, and return Date object otherwise', () => {
-      const convertDate = fetchStatsFromGA.convertAndValidateDate;
-      expect(() => convertDate('start date', '20200101')).toThrow(
-        'start date must be in the format of YYYY-MM-DD'
-      );
-      expect(() => convertDate('start date', '2020-13-35')).toThrow(
-        'start date must be a valid date in the format of YYYY-MM-DD'
-      );
-
-      expect(convertDate('start date', '2020-01-01')).toStrictEqual(
-        new Date('2020-01-01')
-      );
-    });
-
-    it('processCommandLineArgs should raise errors when given invalid arugments, and return proper params otherwise', () => {
+    it('processCommandLineArgs should return proper params', () => {
       const processArgs = fetchStatsFromGA.processCommandLineArgs;
-
-      expect(() => processArgs({ startDate: '2020-01-01' })).toThrow(
-        'must include both start end and end date'
-      );
-      expect(() =>
-        processArgs({ startDate: '2020-01-01', endDate: '2019-01-01' })
-      ).toThrow('end date cannot be earlier than start date');
-      expect(() =>
-        processArgs({ startDate: '2019-01-01', endDate: '2020-01-01' })
-      ).toThrow('start date and end date cannot be more than 30 days apart');
-      expect(() =>
-        processArgs({ startDate: '3000-01-01', endDate: '3000-01-01' })
-      ).toThrow('end date must be no later than today');
-
       expect(processArgs({})).toStrictEqual({ isCron: true });
       expect(
         processArgs({ startDate: '2020-07-01', endDate: '2020-07-15' })
@@ -116,6 +88,19 @@ describe('fetchStatsFromGA', () => {
         isCron: false,
         startDate: '2020-07-01',
         endDate: '2020-07-01',
+      });
+    });
+
+    it('processCommandLineArgs should raise errors when given invalid arugments', () => {
+      [
+        { startDate: '2020-01-01' },
+        { startDate: '2020-01-01', endDate: '2019-01-01' },
+        { startDate: '2019-01-01', endDate: '2020-01-01' },
+        { startDate: '3000-01-01', endDate: '3000-01-01' },
+      ].forEach(dateRange => {
+        expect(() =>
+          fetchStatsFromGA.processCommandLineArgs(dateRange)
+        ).toThrow();
       });
     });
   });
