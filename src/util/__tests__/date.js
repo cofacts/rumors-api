@@ -35,7 +35,7 @@ describe('date utils', () => {
     invalidArgs.forEach(args => {
       const { isValid, error } = validateDateRange(...args);
       expect(isValid).toBe(false);
-      expect(error).toMatchSnapshot()
+      expect(error).toMatchSnapshot();
     });
   });
 });

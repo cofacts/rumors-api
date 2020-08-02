@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`analyticsLoaderFactory should load data for given id 1`] = `
+Array [
+  Object {
+    "date": "2020-01-02",
+    "lineUser": 5,
+    "lineVisit": 7,
+    "webUser": 19,
+    "webVisit": 30,
+  },
+  Object {
+    "date": "2020-01-03",
+    "lineUser": 1,
+    "lineVisit": 7,
+    "webUser": 18,
+    "webVisit": 26,
+  },
+  Object {
+    "date": "2020-01-04",
+    "webUser": 6,
+    "webVisit": 15,
+  },
+  Object {
+    "date": "2020-01-05",
+    "lineUser": 9,
+    "lineVisit": 15,
+    "webUser": 37,
+    "webVisit": 44,
+  },
+]
+`;
+
+exports[`analyticsLoaderFactory should load data for id with date range 1`] = `
+Array [
+  Object {
+    "date": "2020-01-02",
+    "lineUser": 5,
+    "lineVisit": 7,
+    "webUser": 19,
+    "webVisit": 30,
+  },
+  Object {
+    "date": "2020-01-03",
+    "lineUser": 1,
+    "lineVisit": 7,
+    "webUser": 18,
+    "webVisit": 26,
+  },
+  Object {
+    "date": "2020-01-04",
+    "webUser": 6,
+    "webVisit": 15,
+  },
+]
+`;
+
+exports[`analyticsLoaderFactory should throw error if date range is invalid 1`] = `[Error: must include both start date and end date]`;
+
+exports[`analyticsLoaderFactory should throw error if date range is invalid 2`] = `[Error: must include both start date and end date]`;
+
+exports[`analyticsLoaderFactory should throw error if date range is invalid 3`] = `[Error: end date cannot be earlier than start date]`;
+
+exports[`analyticsLoaderFactory should throw error if date range is invalid 4`] = `[Error: end date must be no later than today]`;
+
+exports[`analyticsLoaderFactory should throw error if date range is invalid 5`] = `[Error: end date must be a valid date in the format of YYYY-MM-DD]`;
+
+exports[`analyticsLoaderFactory should throw error if date range is invalid 6`] = `[Error: start date must be in the format of YYYY-MM-DD]`;
