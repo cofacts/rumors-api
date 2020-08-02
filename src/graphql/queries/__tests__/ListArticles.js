@@ -630,21 +630,22 @@ describe('ListArticles', () => {
     expect(
       await gql`
         {
-          ListArticles() {
+          ListArticles {
             edges {
               node {
                 id
                 stats(startDate: "2020-01-03", endDate: "2020-01-05") {
-                  lineUser,
-                  lineVisit,
-                  webUser,
+                  date
+                  webUser
                   webVisit
+                  lineUser
+                  lineVisit
                 }
               }
             }
           }
         }
-      `({}, { appId: 'WEBSITE' })
+      `()
     ).toMatchSnapshot('articles with stats');
   });
 
