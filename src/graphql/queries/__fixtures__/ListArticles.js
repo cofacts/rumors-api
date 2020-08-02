@@ -174,4 +174,52 @@ export default {
   '/users/doc/user1': {
     name: 'user1',
   },
+  '/analytics/doc/article_listArticleTest1_2020-01-02': {
+    date: '2020-01-02',
+    docId: 'listArticleTest1',
+    type: 'article',
+    stats: { webVisit: 30, webUser: 19, lineVisit: 7, lineUser: 5 },
+  },
+  '/analytics/doc/article_listArticleTest1_2020-01-03': {
+    date: '2020-01-03',
+    docId: 'listArticleTest1',
+    type: 'article',
+    stats: { webVisit: 26, webUser: 18, lineVisit: 7, lineUser: 1 },
+  },
+  '/analytics/doc/article_listArticleTest1_2020-01-04': {
+    date: '2020-01-04',
+    docId: 'listArticleTest1',
+    type: 'article',
+    stats: { webVisit: 15, webUser: 6 },
+  },
+  '/analytics/doc/article_listArticleTest1_2020-01-05': {
+    date: '2020-01-05',
+    docId: 'listArticleTest1',
+    type: 'article',
+    stats: { webVisit: 44, webUser: 37, lineVisit: 15, lineUser: 9 },
+  },
+  '/analytics/doc/article_listArticleTest2_2020-01-02': {
+    date: '2020-01-02',
+    docId: 'listArticleTest2',
+    type: 'article',
+    stats: { webVisit: 22, webUser: 5, lineVisit: 5, lineUser: 1 },
+  },
+  '/analytics/doc/article_listArticleTest2_2020-01-03': {
+    date: '2020-01-03',
+    docId: 'listArticleTest2',
+    type: 'article',
+    stats: { webVisit: 21, webUser: 6, lineVisit: 2, lineUser: 1 },
+  },
+  '/analytics/doc/article_listArticleTest2_2020-01-04': {
+    date: '2020-01-04',
+    docId: 'listArticleTest2',
+    type: 'article',
+    stats: { webVisit: 15, webUser: 7, lineVisit: 15, lineUser: 9 },
+  },
+  '/analytics/doc/article_listArticleTest2_2020-01-05': {
+    date: '2020-01-05',
+    docId: 'listArticleTest2',
+    type: 'article',
+    stats: { webVisit: 44, webUser: 37 },
+  },
 };

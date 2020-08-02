@@ -629,6 +629,14 @@ Object {
 }
 `;
 
+exports[`ListArticles returns activities stats: articles with stats 1`] = `
+Object {
+  "errors": Array [
+    [GraphQLError: Syntax Error: Expected Name, found ")".],
+  ],
+}
+`;
+
 exports[`ListArticles should fail if before and after both exist 1`] = `
 Object {
   "data": Object {
