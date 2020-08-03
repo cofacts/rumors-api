@@ -325,10 +325,12 @@ Object {
   "date": "2020-07-15",
   "docId": "testID5",
   "docType": "article",
-  "path": "/testID5?total=109_46&fbclid=randomParam3",
+  "docUserId": undefined,
   "sourceType": "WEB",
-  "users": 46,
-  "visits": 109,
+  "stats": Object {
+    "webUser": 46,
+    "webVisit": 109,
+  },
 }
 `;
 
@@ -402,10 +404,12 @@ Object {
   "date": "2020-07-15",
   "docId": "testID5",
   "docType": "article",
-  "path": "/testID5?total=109_46&fbclid=randomParam3",
+  "docUserId": undefined,
   "sourceType": "WEB",
-  "users": 46,
-  "visits": 109,
+  "stats": Object {
+    "webUser": 46,
+    "webVisit": 109,
+  },
 }
 `;
 
@@ -479,10 +483,12 @@ Object {
   "date": "2020-07-16",
   "docId": "testID5",
   "docType": "article",
-  "path": "/testID5?total=10_4",
+  "docUserId": undefined,
   "sourceType": "WEB",
-  "users": 4,
-  "visits": 10,
+  "stats": Object {
+    "webUser": 4,
+    "webVisit": 10,
+  },
 }
 `;
 
@@ -567,15 +573,7 @@ Array [
   if (ctx._source.size() == 0 || ctx._source.stats.size() == 0) {
     ctx._source.stats = params.stats;
   } else {
-    if (params.stats.webUser != null) {
-      ctx._source.stats.put('webUser', params.stats.webUser);
-    } if (params.stats.webVisit != null) {
-      ctx._source.stats.put('webVisit', params.stats.webVisit);
-    } if (params.stats.lineUser != null) {
-      ctx._source.stats.put('lineUser', params.stats.lineUser);
-    } if (params.stats.lineVisit != null) {
-      ctx._source.stats.put('lineVisit', params.stats.lineVisit);
-    }
+    ctx._source.stats.putAll(params.stats)
   }
   if (params.docUserId != null) {
     ctx._source.docUserId = params.docUserId;
