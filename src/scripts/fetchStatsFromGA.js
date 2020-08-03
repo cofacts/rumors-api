@@ -6,7 +6,7 @@ import 'dotenv/config';
 import client from 'util/client';
 import rollbar from '../rollbarInstance';
 import { google } from 'googleapis';
-import { validateDateRange } from 'util/date';
+import { assertDateRange } from 'util/date';
 import yargs from 'yargs';
 
 const analyticsreporting = google.analyticsreporting('v4');
@@ -105,12 +105,10 @@ const processCommandLineArgs = args => {
   if (!startDate && !endDate) {
     return { isCron: true };
   }
-  const { isValid, error } = validateDateRange(startDate, endDate, maxDuration);
-  if (isValid) {
-    return { isCron: false, startDate, endDate };
-  } else {
-    throw new Error(error);
-  }
+
+  assertDateRange(startDate, endDate, maxDuration);
+
+  return { isCron: false, startDate, endDate };
 };
 
 /**
