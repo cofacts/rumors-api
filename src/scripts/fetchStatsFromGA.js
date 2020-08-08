@@ -285,6 +285,8 @@ const processReport = async function(
     };
 
     if (isSameEntry) {
+      // Since `stats` is a reference to a field that's been pushed to `bulkUpdates`,
+      // the following lines will modify the values of the last entry in `bulkUpdates`.
       stats = lastParams.stats;
       stats[`${sourceName}Visit`] += parseInt(visits, 10);
       stats[`${sourceName}User`] += parseInt(users, 10);

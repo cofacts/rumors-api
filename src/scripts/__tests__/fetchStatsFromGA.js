@@ -136,7 +136,7 @@ describe('fetchStatsFromGA', () => {
 
     it('should call right functions with right params', async () => {
       fetchReportsMock.mockResolvedValue(
-        fixtures.updateStats.fetchReportsDefalutResolved
+        fixtures.updateStats.fetchReportsDefaultResolved
       );
       processReportMock.mockResolvedValue(null);
 
@@ -184,7 +184,7 @@ describe('fetchStatsFromGA', () => {
 
     it('should halt upon error', async () => {
       fetchReportsMock
-        .mockResolvedValueOnce(fixtures.updateStats.fetchReportsDefalutResolved)
+        .mockResolvedValueOnce(fixtures.updateStats.fetchReportsDefaultResolved)
         .mockRejectedValueOnce(new Error('Async error'));
 
       await fetchStatsFromGA.updateStats();
