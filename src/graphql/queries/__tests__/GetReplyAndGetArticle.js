@@ -47,6 +47,22 @@ describe('GetReplyAndGetArticle', () => {
       ).toMatchSnapshot();
     });
 
+    it('fetches more than 10 reply requests', async () => {
+      expect(
+        await gql`
+          {
+            GetArticle(id: "manyRequests") {
+              text
+              replyRequestCount
+              replyRequests {
+                reason
+              }
+            }
+          }
+        `({}, { userId: 'fakeUser', appId: 'LINE' })
+      ).toMatchSnapshot();
+    });
+
     it('should allow filtering article replies', async () => {
       expect(
         await gql`

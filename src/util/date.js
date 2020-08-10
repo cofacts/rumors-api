@@ -1,14 +1,15 @@
 const dateFormat = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
 /**
- * Given a date string, determine if it's a valid date, and return a Date object if it is.
+ * Given a date string, returns a Date object if it is a valid date, raises error otherwise.
 
  * @param {string} dateStr        A string representation of a date in YYYY-MM-DD
  * @param {string} [name='Date']  A string used in error message
 
+ * @throws {Error}                Error thrown if date string is invalid.
  * @return {Date}
  */
-const convertAndValidateDate = (dateStr, name = 'Date') => {
+const assertAndConvertDate = (dateStr, name = 'Date') => {
   if (!dateStr.match(dateFormat)) {
     throw new Error(`${name} must be in the format of YYYY-MM-DD`);
   }
@@ -32,41 +33,35 @@ const convertAndValidateDate = (dateStr, name = 'Date') => {
  * @param {string} endDateStr               A string representation of end date in YYYY-MM-DD.
  * @param {number} [maxDuration]            Optional maximun duration in milliseconds.
    @param {bool}   [allowFutureDate=false]  Whether the date range allows end dates in the future.
- * @return {object}                         Validation result/error
+
+ * @throws {Error}                          Error thrown if date range is invalid.
+ * @return {object}                         Corresponding Date objects for start and end date.
  */
-const validateDateRange = (
+const assertDateRange = (
   startDateStr,
   endDateStr,
   maxDuration,
   allowFutureDate = false
 ) => {
-  let errorMessage, startDate, endDate;
-
   if (!startDateStr || !endDateStr) {
-    errorMessage = 'must include both start date and end date';
-  } else {
-    try {
-      startDate = convertAndValidateDate(startDateStr, 'start date');
-      endDate = convertAndValidateDate(endDateStr, 'end date');
-    } catch (e) {
-      errorMessage = e.message;
-    }
-    const duration = endDate - startDate;
-    if (duration < 0) {
-      errorMessage = 'end date cannot be earlier than start date';
-    } else if (maxDuration && duration > maxDuration) {
-      // TODO: write a formator that uses the most sensible time unit to describe duration.
-      errorMessage = `start date and end date cannot be more than ${maxDuration} apart`;
-    } else if (!allowFutureDate && endDate - new Date() > 0) {
-      errorMessage = 'end date must be no later than today';
-    }
+    throw new Error('must include both start date and end date');
   }
-  return {
-    isValid: !errorMessage,
-    error: errorMessage,
-    startDate,
-    endDate,
-  };
+  const startDate = assertAndConvertDate(startDateStr, 'start date');
+  const endDate = assertAndConvertDate(endDateStr, 'end date');
+  const duration = endDate - startDate;
+  if (duration < 0) {
+    throw new Error('end date cannot be earlier than start date');
+  }
+  if (maxDuration && duration > maxDuration) {
+    // TODO: write a formator that uses the most sensible time unit to describe duration.
+    throw new Error(
+      `start date and end date cannot be more than ${maxDuration} apart`
+    );
+  }
+  if (!allowFutureDate && endDate - new Date() > 0) {
+    throw new Error('end date must be no later than today');
+  }
+  return { startDate, endDate };
 };
 
-export { convertAndValidateDate, validateDateRange };
+export { assertAndConvertDate, assertDateRange };
