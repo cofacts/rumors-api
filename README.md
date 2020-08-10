@@ -166,6 +166,20 @@ URLs. The following script cleans up those `urls` that no article & reply curren
 $ docker-compose exec api node_modules/.bin/babel-node src/scripts/cleanupUrls.js
 ```
 
+### Fetching user activities from Google Analytics
+1. First make sure the following params are set in `.env`:
+  `GOOGLE_OAUTH_KEY_PATH`,  `GA_WEB_VIEW_ID`, `GA_LINE_VIEW_ID`
+
+2. To fetch stats for the current date, run:
+```
+$ node_modules/.bin/babel-node src/scripts/fetchStatsFromGA.js
+```
+
+3. To fetch stats for a certain date range, run:
+```
+$ node_modules/.bin/babel-node src/scripts/fetchStatsFromGA.js --startDate=YYYY-MM-DD --endDate=YYYY-MM-DD
+```
+
 ## Troubleshooting 
 
 ### Failed to load gRPC binary on Mac
