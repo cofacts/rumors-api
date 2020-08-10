@@ -54,15 +54,3 @@ Array [
   },
 ]
 `;
-
-exports[`analyticsLoaderFactory should throw error if date range is invalid 1`] = `[Error: must include both start date and end date]`;
-
-exports[`analyticsLoaderFactory should throw error if date range is invalid 2`] = `[Error: must include both start date and end date]`;
-
-exports[`analyticsLoaderFactory should throw error if date range is invalid 3`] = `[Error: end date cannot be earlier than start date]`;
-
-exports[`analyticsLoaderFactory should throw error if date range is invalid 4`] = `[Error: end date must be no later than today]`;
-
-exports[`analyticsLoaderFactory should throw error if date range is invalid 5`] = `[Error: end date must be a valid date in the format of YYYY-MM-DD]`;
-
-exports[`analyticsLoaderFactory should throw error if date range is invalid 6`] = `[Error: start date must be in the format of YYYY-MM-DD]`;
