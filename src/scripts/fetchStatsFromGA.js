@@ -11,7 +11,7 @@ import yargs from 'yargs';
 
 const analyticsreporting = google.analyticsreporting('v4');
 
-const maxDuration = 30 * 24 * 60 * 60 * 1000;
+const maxDuration = 90 * 24 * 60 * 60 * 1000;
 
 const pageSize = process.env.GA_PAGE_SIZE || '10000';
 const webViewId = process.env.GA_WEB_VIEW_ID;

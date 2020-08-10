@@ -8,6 +8,7 @@ import fetchStatsFromGA, {
 /* eslint-enable import/named */
 import fixtures from '../__fixtures__/fetchStatsFromGA';
 import MockDate from 'mockdate';
+import yargs from 'yargs';
 
 const allDocTypes = fetchStatsFromGA.allDocTypes;
 const allSourceTypes = fetchStatsFromGA.allSourceTypes;
@@ -31,7 +32,75 @@ jest.mock('googleapis', () => {
   };
 });
 
+jest.mock('yargs', () => {
+  const argvMock = jest.fn();
+  const yargsMock = {
+    options: () => yargsMock,
+    help: () => yargsMock,
+    get argv() {
+      return argvMock();
+    },
+    argvMock: argvMock,
+  };
+  return yargsMock;
+});
+
 describe('fetchStatsFromGA', () => {
+  describe('command line arguments', () => {
+    const updateStatsMock = jest.fn(),
+      storeScriptInDBMock = jest.fn();
+
+    beforeAll(() => {
+      FetchGAReWireAPI.__set__('updateStats', updateStatsMock);
+      FetchGAReWireAPI.__set__('storeScriptInDB', storeScriptInDBMock);
+    });
+
+    afterEach(() => {
+      updateStatsMock.mockReset();
+      storeScriptInDBMock.mockReset();
+      yargs.argvMock.mockReset();
+    });
+
+    it('without any arugments', async () => {
+      yargs.argvMock.mockReturnValue({});
+      await fetchStatsFromGA.main();
+      expect(updateStatsMock.mock.calls).toMatchObject([[{ isCron: true }]]);
+      expect(storeScriptInDBMock).not.toHaveBeenCalled();
+    });
+
+    it('with date arugments', async () => {
+      yargs.argvMock.mockReturnValue({
+        startDate: '2020-01-01',
+        endDate: '2020-02-01',
+      });
+      await fetchStatsFromGA.main();
+      expect(updateStatsMock.mock.calls).toMatchObject([
+        [{ isCron: false, startDate: '2020-01-01', endDate: '2020-02-01' }],
+      ]);
+      expect(storeScriptInDBMock).not.toHaveBeenCalled();
+    });
+
+    it('with loadScript arugments', async () => {
+      yargs.argvMock.mockReturnValue({ loadScript: true });
+      await fetchStatsFromGA.main();
+      expect(updateStatsMock.mock.calls).toMatchObject([[{ isCron: true }]]);
+      expect(storeScriptInDBMock).toHaveBeenCalled();
+    });
+
+    it('with loadScript and date arugments', async () => {
+      yargs.argvMock.mockReturnValue({
+        loadScript: true,
+        startDate: '2020-01-01',
+        endDate: '2020-02-01',
+      });
+      await fetchStatsFromGA.main();
+      expect(updateStatsMock.mock.calls).toMatchObject([
+        [{ isCron: false, startDate: '2020-01-01', endDate: '2020-02-01' }],
+      ]);
+      expect(storeScriptInDBMock).toHaveBeenCalled();
+    });
+  });
+
   describe('helper functions', () => {
     it('parseIdFromRow should extract doc id from a row returned by GA', () => {
       const parseIdFromRow = fetchStatsFromGA.parseIdFromRow;
@@ -443,6 +512,7 @@ describe('fetchStatsFromGA', () => {
           new Date(),
           null
         );
+
         const bulkUpdateBody = upsertDocStatsSpy.mock.calls[0][0].concat(
           upsertDocStatsSpy.mock.calls[1][0]
         );
