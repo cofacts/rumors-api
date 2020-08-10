@@ -634,7 +634,7 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
-                stats(startDate: "2020-01-03", endDate: "2020-01-05") {
+                stats(dateRange: { GTE: "2020-01-03", LTE: "2020-01-05" }) {
                   date
                   webUser
                   webVisit

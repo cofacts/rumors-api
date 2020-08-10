@@ -16,6 +16,7 @@ import {
   createConnectionType,
   filterArticleRepliesByStatus,
   filterArticleCategoriesByStatus,
+  timeRangeInput,
 } from 'graphql/util';
 
 import Analytics from 'graphql/models/Analytics';
@@ -223,21 +224,19 @@ const Article = new GraphQLObjectType({
     },
     stats: {
       type: new GraphQLList(Analytics),
-      description: 'Activities analytics for given date range',
+      description: 'Activities analytics for the given article',
       args: {
-        startDate: {
-          type: GraphQLString,
-        },
-        endDate: {
-          type: GraphQLString,
+        dateRange: {
+          type: timeRangeInput,
+          description:
+            'List only the activities between the specific time range.',
         },
       },
-      resolve: async ({ id }, { startDate, endDate }, { loaders }) => {
+      resolve: async ({ id }, { dateRange }, { loaders }) => {
         return await loaders.analyticsLoader.load({
           docId: id,
           docType: 'article',
-          startDate,
-          endDate,
+          dateRange,
         });
       },
     },
