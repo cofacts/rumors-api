@@ -4,8 +4,9 @@
 
 import 'dotenv/config';
 import client from 'util/client';
+import rollbar from '../rollbarInstance';
 import { google } from 'googleapis';
-import { validateDateRange } from 'util/date';
+import { assertDateRange } from 'util/date';
 import yargs from 'yargs';
 
 const analyticsreporting = google.analyticsreporting('v4');
@@ -56,15 +57,7 @@ const upsertScript = `
   if (ctx._source.size() == 0 || ctx._source.stats.size() == 0) {
     ctx._source.stats = params.stats;
   } else {
-    if (params.stats.webUser != null) {
-      ctx._source.stats.put('webUser', params.stats.webUser);
-    } if (params.stats.webVisit != null) {
-      ctx._source.stats.put('webVisit', params.stats.webVisit);
-    } if (params.stats.lineUser != null) {
-      ctx._source.stats.put('lineUser', params.stats.lineUser);
-    } if (params.stats.lineVisit != null) {
-      ctx._source.stats.put('lineVisit', params.stats.lineVisit);
-    }
+    ctx._source.stats.putAll(params.stats)
   }
   if (params.docUserId != null) {
     ctx._source.docUserId = params.docUserId;
@@ -112,12 +105,10 @@ const processCommandLineArgs = args => {
   if (!startDate && !endDate) {
     return { isCron: true };
   }
-  const { isValid, error } = validateDateRange(startDate, endDate, maxDuration);
-  if (isValid) {
-    return { isCron: false, startDate, endDate };
-  } else {
-    throw new Error(error);
-  }
+
+  assertDateRange(startDate, endDate, maxDuration);
+
+  return { isCron: false, startDate, endDate };
 };
 
 /**
@@ -158,7 +149,6 @@ const fetchReports = async function(sourceType, pageTokens = {}, params) {
   const res = await analyticsreporting.reports.batchGet({
     requestBody: {
       reportRequests,
-      // useResourceQuotas: true
     },
   });
   const reports = res.data.reports;
@@ -183,18 +173,14 @@ const fetchReports = async function(sourceType, pageTokens = {}, params) {
 };
 
 const upsertDocStats = async function(body) {
-  try {
-    const res = await client.bulk({
-      body,
-      refresh: 'true',
-    });
-    if (res.body.errors) {
-      console.error(
-        `bulk upsert failed : ${JSON.stringify(res.body, null, '  ')}`
-      );
-    }
-  } catch (err) {
-    console.error(err);
+  const res = await client.bulk({
+    body,
+    refresh: 'true',
+  });
+  if (res.body.errors) {
+    console.error(
+      `bulk upsert failed : ${JSON.stringify(res.body, null, '  ')}`
+    );
   }
 };
 
@@ -229,19 +215,19 @@ async function fetchReplyUsers(rows) {
  * @param {array}  rows          Rows of data to process; each row is an object
     of the form {dimensions: [{field: value}], metrics:[{values:[values]}]}}
  * @param {Date}   fetchedAt     Timestamp of the fetched time
- * @param {object} prevLastRow   Stats for the last processed row from previous
+ * @param {object} lastParams    Stats for the last processed row from previous
     call of the same sourceType and docType; It's an object of the form {
       sourceType: string, docType: string, path: string, date: string,
       docId: string, visits: number, users: number }
 
- * @return {object} Return the stats of last processed row, same format as prevLastRow.
+ * @return {object} Return the stats of last processed row, same format as lastParams.
  */
 const processReport = async function(
   sourceType,
   docType,
   rows,
   fetchedAt,
-  prevLastRow
+  lastParams
 ) {
   let replyUsers;
   if (docType === docTypes.REPLY) {
@@ -254,41 +240,36 @@ const processReport = async function(
   rows.forEach(row => {
     const docId = parseIdFromRow(row);
     const date = formatDate(row.dimensions[1]);
-    const [visits, users] = row.metrics[0].values;
-    let docUserId;
+    const [visits, users] = row.metrics[0].values.map(v => parseInt(v, 10));
+    const isSameEntry =
+      lastParams && lastParams.date === date && lastParams.docId === docId;
+    let docUserId, stats;
 
-    const prevParams =
-      bulkUpdates.length > 0 &&
-      bulkUpdates[bulkUpdates.length - 1].script.params;
-    if (prevParams && prevParams.date === date && prevParams.docId === docId) {
-      prevParams.stats[`${sourceName}Visit`] += eval(visits);
-      prevParams.stats[`${sourceName}User`] += eval(users);
-    } else {
-      if (docType === docTypes.REPLY && replyUsers[docId]) {
-        docUserId = replyUsers[docId];
-      }
+    if (docType === docTypes.REPLY && replyUsers[docId]) {
+      docUserId = replyUsers[docId];
+    }
 
-      const stats = {
-        [`${sourceName}Visit`]: eval(visits),
-        [`${sourceName}User`]: eval(users),
-      };
+    stats = {
+      [`${sourceName}Visit`]: parseInt(visits, 10),
+      [`${sourceName}User`]: parseInt(users, 10),
+    };
 
-      // Page views on the same reply/article could have different `pagePathLevel2`
-      // values due to query parameters in the url.  This is handling the edge case
-      // where the same (document id, date) pair span more than one page
-      if (
-        prevLastRow &&
-        bulkUpdates.length == 0 &&
-        prevLastRow.date == date &&
-        prevLastRow.docId == docId
-      ) {
-        stats[`${sourceName}Visit`] += prevLastRow.visits;
-        stats[`${sourceName}User`] += prevLastRow.users;
-      }
+    if (isSameEntry) {
+      // Since `stats` is a reference to a field that's been pushed to `bulkUpdates`,
+      // the following lines will modify the values of the last entry in `bulkUpdates`.
+      stats = lastParams.stats;
+      stats[`${sourceName}Visit`] += parseInt(visits, 10);
+      stats[`${sourceName}User`] += parseInt(users, 10);
+    }
 
-      const id = `${docType}_${docId}_${date}`;
-      let params = { fetchedAt, date, docId, docUserId, stats, type: docType };
+    const id = `${docType}_${docId}_${date}`;
+    lastParams = { fetchedAt, date, docId, docUserId, stats, type: docType };
 
+    // Page views on the same reply/article could have different `pagePathLevel2`
+    // values due to query parameters in the url.  Checking if bulkUpdates is empty
+    // handles the edge case where the same (document id, date) pair spans more
+    // than one page.
+    if (!isSameEntry || bulkUpdates.length == 0) {
       bulkUpdates.push({
         update: { _index: 'analytics', _type: 'doc', _id: id },
       });
@@ -297,7 +278,7 @@ const processReport = async function(
         scripted_upsert: true,
         script: {
           source: upsertScript,
-          params,
+          params: lastParams,
         },
         upsert: {},
       });
@@ -308,18 +289,17 @@ const processReport = async function(
     await upsertDocStats(bulkUpdates);
   } catch (err) {
     console.error(err);
+    rollbar.error('fetchGA error', err);
   }
 
   if (bulkUpdates.length > 0) {
-    const lastRowParams = bulkUpdates[bulkUpdates.length - 1].script.params;
     return {
       sourceType,
       docType,
-      path: rows[rows.length - 1].dimensions[0],
-      date: lastRowParams.date,
-      docId: lastRowParams.docId,
-      visits: lastRowParams.stats[`${sourceName}Visit`],
-      users: lastRowParams.stats[`${sourceName}User`],
+      date: lastParams.date,
+      docId: lastParams.docId,
+      docUserId: lastParams.docUserId,
+      stats: lastParams.stats,
     };
   }
 };
@@ -357,6 +337,7 @@ const updateStats = async function(params = { isCron: true }) {
       } catch (err) {
         hasMore = false;
         console.error(err);
+        rollbar.error('fetchGA error', err);
       }
     }
   }

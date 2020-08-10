@@ -1,6 +1,6 @@
 import DataLoader from 'dataloader';
 import client from 'util/client';
-import { validateDateRange } from 'util/date';
+import { assertDateRange } from 'util/date';
 
 const defaultDuration = 30 * 24 * 60 * 60 * 1000;
 
@@ -21,11 +21,7 @@ export default () =>
         startDate = defaultStartDate;
         endDate = defaultEndDate;
       } else {
-        const { isValid, error } = validateDateRange(startDate, endDate);
-        if (!isValid) {
-          console.log(error);
-          throw new Error(error);
-        }
+        assertDateRange(startDate, endDate);
       }
 
       body.push({ index: 'analytics', type: 'doc' });

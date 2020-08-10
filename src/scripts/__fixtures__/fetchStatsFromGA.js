@@ -34,7 +34,7 @@ export default {
     },
   },
   updateStats: {
-    fetchReportsDefalutResolved: {
+    fetchReportsDefaultResolved: {
       results: { article: ['test'], reply: ['test'] },
       pageTokens: {},
       hasMore: false,
