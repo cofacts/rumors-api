@@ -103,14 +103,21 @@ describe('fetchStatsFromGA', () => {
         ).toThrow();
       });
     });
+
+    it('storeScriptInDB should store upsert script in db', async () => {
+      await fetchStatsFromGA.storeScriptInDB();
+      expect(
+        (await client.get_script({ id: fetchStatsFromGA.upsertScriptID })).body
+      ).toMatchSnapshot();
+      await client.delete_script({ id: fetchStatsFromGA.upsertScriptID });
+    });
   });
 
   describe('updateStats', () => {
-    var fetchReportsMock, processReportMock;
+    const fetchReportsMock = jest.fn(),
+      processReportMock = jest.fn();
     beforeAll(() => {
       MockDate.set(1577836800000);
-      fetchReportsMock = jest.fn();
-      processReportMock = jest.fn();
       FetchGAReWireAPI.__set__('fetchReports', fetchReportsMock);
       FetchGAReWireAPI.__set__('processReport', processReportMock);
     });
@@ -358,15 +365,19 @@ describe('fetchStatsFromGA', () => {
         }
       };
 
-      beforeAll(() => {
+      beforeAll(async () => {
         MockDate.set(1577836800000);
         FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsSpy);
         upsertDocStatsSpy.mockClear();
+        await fetchStatsFromGA.storeScriptInDB();
       });
 
       afterEach(() => {
         upsertDocStatsSpy.mockClear();
       });
+
+      afterAll(async () =>
+        await client.delete_script({ id: fetchStatsFromGA.upsertScriptID }));
 
       it('should aggregate rows of data', async () => {
         await fetchStatsFromGA.processReport(
@@ -382,6 +393,7 @@ describe('fetchStatsFromGA', () => {
           index: 'analytics',
           body: { query: { match_all: {} } },
         });
+
         expect(res.body.hits.hits).toMatchSnapshot();
 
         await unloadBody(bulkUpdateBody);
@@ -410,6 +422,7 @@ describe('fetchStatsFromGA', () => {
           index: 'analytics',
           body: { query: { match_all: {} } },
         });
+
         expect(res.body.hits.hits).toMatchSnapshot();
 
         await unloadBody(bulkUpdateBody);

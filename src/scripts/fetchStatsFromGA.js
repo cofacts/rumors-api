@@ -50,10 +50,11 @@ const statsSources = {
 };
 
 const allSourceTypes = [statsSources.WEB.name, statsSources.LINE.name];
+const upsertScriptID = 'analyticsUpsertScript';
 
+// since web stats and line stats are fetched seperately, need to do a merge
+// update on `stats` so existing values won't be overwritten.
 const upsertScript = `
-  // since web stats and line stats are fetched seperately, need to update each
-  // stats field seperately so existing values won't be overwritten
   if (ctx._source.size() == 0 || ctx._source.stats.size() == 0) {
     ctx._source.stats = params.stats;
   } else {
@@ -66,8 +67,19 @@ const upsertScript = `
   ctx._source.date = params.date;
   ctx._source.docId = params.docId;
   ctx._source.type = params.type;
-
 `;
+
+const storeScriptInDB = async () => {
+  await client.put_script({
+    id: upsertScriptID,
+    body: {
+      script: {
+        lang: 'painless',
+        source: upsertScript,
+      },
+    },
+  });
+};
 
 const parseIdFromRow = function(row) {
   const id = row.dimensions[0];
@@ -277,7 +289,7 @@ const processReport = async function(
       bulkUpdates.push({
         scripted_upsert: true,
         script: {
-          source: upsertScript,
+          id: upsertScriptID,
           params: lastParams,
         },
         upsert: {},
@@ -346,18 +358,29 @@ const updateStats = async function(params = { isCron: true }) {
 async function main() {
   try {
     const argv = yargs
-      .options('startDate', {
-        alias: 's',
-        description: 'start date in the format of YYYY-MM-DD',
-        type: 'string',
+      .options({
+        startDate: {
+          alias: 's',
+          description: 'start date in the format of YYYY-MM-DD',
+          type: 'string',
+        },
+        endDate: {
+          alias: 'e',
+          description: 'end date in the format of YYYY-MM-DD',
+          type: 'string',
+        },
+        loadScript: {
+          default: false,
+          description: 'whether to store upsert script in db',
+        },
       })
-      .options('endDate', {
-        alias: 'e',
-        description: 'end date in the format of YYYY-MM-DD',
-        type: 'string',
-      }).argv;
+      .help('help').argv;
 
     const params = processCommandLineArgs(argv);
+
+    if (argv.loadScript) {
+      await storeScriptInDB();
+    }
 
     const auth = new google.auth.GoogleAuth({
       keyFile: process.env.GOOGLE_OAUTH_KEY_PATH,
@@ -381,8 +404,10 @@ export default {
   processReport,
   requestBodyBuilder,
   statsSources,
+  storeScriptInDB,
   updateStats,
   upsertDocStats,
+  upsertScriptID,
 };
 if (require.main === module) {
   main();
