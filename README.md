@@ -178,7 +178,7 @@ $ node_modules/.bin/babel-node src/scripts/fetchStatsFromGA.js
 -  To fetch stats for a certain date range, run the above command with 
 ```--startDate=YYYY-MM-DD --endDate=YYYY-MM-DD```
 
--  If the script it ran for the first time, run the above command with
+-  If the script is ran for the first time, run the above command with
 ```--loadScript```
 
 
