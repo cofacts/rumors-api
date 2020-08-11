@@ -320,6 +320,30 @@ Object {
 }
 `;
 
+exports[`fetchStatsFromGA helper functions storeScriptInDB should store upsert script in db 1`] = `
+Object {
+  "_id": "analyticsUpsertScript",
+  "found": true,
+  "script": Object {
+    "lang": "painless",
+    "source": "
+  if (ctx._source.size() == 0 || ctx._source.stats.size() == 0) {
+    ctx._source.stats = params.stats;
+  } else {
+    ctx._source.stats.putAll(params.stats)
+  }
+  if (params.docUserId != null) {
+    ctx._source.docUserId = params.docUserId;
+  }
+  ctx._source.fetchedAt = params.fetchedAt;
+  ctx._source.date = params.date;
+  ctx._source.docId = params.docId;
+  ctx._source.type = params.type;
+",
+  },
+}
+`;
+
 exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggregate rows of data 1`] = `
 Object {
   "date": "2020-07-15",
@@ -556,6 +580,7 @@ Array [
   },
   Object {
     "script": Object {
+      "id": "analyticsUpsertScript",
       "params": Object {
         "date": "2020-07-15",
         "docId": "testID1",
@@ -567,23 +592,6 @@ Array [
         },
         "type": "article",
       },
-      "source": "
-  // since web stats and line stats are fetched seperately, need to update each
-  // stats field seperately so existing values won't be overwritten
-  if (ctx._source.size() == 0 || ctx._source.stats.size() == 0) {
-    ctx._source.stats = params.stats;
-  } else {
-    ctx._source.stats.putAll(params.stats)
-  }
-  if (params.docUserId != null) {
-    ctx._source.docUserId = params.docUserId;
-  }
-  ctx._source.fetchedAt = params.fetchedAt;
-  ctx._source.date = params.date;
-  ctx._source.docId = params.docId;
-  ctx._source.type = params.type;
-
-",
     },
     "scripted_upsert": true,
     "upsert": Object {},
