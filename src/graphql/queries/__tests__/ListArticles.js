@@ -626,5 +626,28 @@ describe('ListArticles', () => {
     ).toMatchSnapshot('replied with NOT_RUMOR and OPINIONATED');
   });
 
+  it('returns activities stats', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles {
+            edges {
+              node {
+                id
+                stats(dateRange: { GTE: "2020-01-03", LTE: "2020-01-05" }) {
+                  date
+                  webUser
+                  webVisit
+                  lineUser
+                  lineVisit
+                }
+              }
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot('articles with stats');
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });

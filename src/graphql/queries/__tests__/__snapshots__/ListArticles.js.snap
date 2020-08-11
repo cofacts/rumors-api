@@ -629,6 +629,85 @@ Object {
 }
 `;
 
+exports[`ListArticles returns activities stats: articles with stats 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest4",
+            "stats": Array [],
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest3",
+            "stats": Array [],
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest2",
+            "stats": Array [
+              Object {
+                "date": "2020-01-03",
+                "lineUser": 1,
+                "lineVisit": 2,
+                "webUser": 6,
+                "webVisit": 21,
+              },
+              Object {
+                "date": "2020-01-04",
+                "lineUser": 9,
+                "lineVisit": 15,
+                "webUser": 7,
+                "webVisit": 15,
+              },
+              Object {
+                "date": "2020-01-05",
+                "lineUser": null,
+                "lineVisit": null,
+                "webUser": 37,
+                "webVisit": 44,
+              },
+            ],
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest1",
+            "stats": Array [
+              Object {
+                "date": "2020-01-03",
+                "lineUser": 1,
+                "lineVisit": 7,
+                "webUser": 18,
+                "webVisit": 26,
+              },
+              Object {
+                "date": "2020-01-04",
+                "lineUser": null,
+                "lineVisit": null,
+                "webUser": 6,
+                "webVisit": 15,
+              },
+              Object {
+                "date": "2020-01-05",
+                "lineUser": 9,
+                "lineVisit": 15,
+                "webUser": 37,
+                "webVisit": 44,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`ListArticles should fail if before and after both exist 1`] = `
 Object {
   "data": Object {

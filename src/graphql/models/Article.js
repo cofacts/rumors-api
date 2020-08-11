@@ -16,8 +16,10 @@ import {
   createConnectionType,
   filterArticleRepliesByStatus,
   filterArticleCategoriesByStatus,
+  timeRangeInput,
 } from 'graphql/util';
 
+import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
@@ -213,13 +215,30 @@ const Article = new GraphQLObjectType({
           ...otherParams,
         };
       },
-
       // eslint-disable-next-line no-use-before-define
       type: ArticleConnection,
     },
     hyperlinks: {
       type: new GraphQLList(Hyperlink),
       description: 'Hyperlinks in article text',
+    },
+    stats: {
+      type: new GraphQLList(Analytics),
+      description: 'Activities analytics for the given article',
+      args: {
+        dateRange: {
+          type: timeRangeInput,
+          description:
+            'List only the activities between the specific time range.',
+        },
+      },
+      resolve: async ({ id }, { dateRange }, { loaders }) => {
+        return await loaders.analyticsLoader.load({
+          docId: id,
+          docType: 'article',
+          dateRange,
+        });
+      },
     },
   }),
 });
