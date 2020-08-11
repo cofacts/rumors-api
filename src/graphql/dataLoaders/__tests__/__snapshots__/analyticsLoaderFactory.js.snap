@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`analyticsLoaderFactory should load data for given id 1`] = `
+Array [
+  Object {
+    "date": "2020-01-02",
+    "lineUser": 5,
+    "lineVisit": 7,
+    "webUser": 19,
+    "webVisit": 30,
+  },
+  Object {
+    "date": "2020-01-03",
+    "lineUser": 1,
+    "lineVisit": 7,
+    "webUser": 18,
+    "webVisit": 26,
+  },
+  Object {
+    "date": "2020-01-04",
+    "webUser": 6,
+    "webVisit": 15,
+  },
+  Object {
+    "date": "2020-01-05",
+    "lineUser": 9,
+    "lineVisit": 15,
+    "webUser": 37,
+    "webVisit": 44,
+  },
+]
+`;
+
+exports[`analyticsLoaderFactory should load data for id with date range 1`] = `
+Array [
+  Object {
+    "date": "2020-01-02",
+    "lineUser": 5,
+    "lineVisit": 7,
+    "webUser": 19,
+    "webVisit": 30,
+  },
+  Object {
+    "date": "2020-01-03",
+    "lineUser": 1,
+    "lineVisit": 7,
+    "webUser": 18,
+    "webVisit": 26,
+  },
+  Object {
+    "date": "2020-01-04",
+    "webUser": 6,
+    "webVisit": 15,
+  },
+]
+`;

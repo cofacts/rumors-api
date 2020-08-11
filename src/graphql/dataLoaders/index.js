@@ -1,4 +1,5 @@
 import docLoaderFactory from './docLoaderFactory';
+import analyticsLoaderFactory from './analyticsLoaderFactory';
 import articleRepliesByReplyIdLoaderFactory from './articleRepliesByReplyIdLoaderFactory';
 import articleCategoriesByCategoryIdLoaderFactory from './articleCategoriesByCategoryIdLoaderFactory';
 import articleReplyFeedbacksLoaderFactory from './articleReplyFeedbacksLoaderFactory';
@@ -58,6 +59,10 @@ export default class DataLoaders {
 
   get userLevelLoader() {
     return this._checkOrSetLoader('userLevelLoader', userLevelLoaderFactory);
+  }
+
+  get analyticsLoader() {
+    return this._checkOrSetLoader('analyticsLoader', analyticsLoaderFactory);
   }
 
   // inner-workings
