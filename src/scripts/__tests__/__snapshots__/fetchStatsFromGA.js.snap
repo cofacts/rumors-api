@@ -603,7 +603,7 @@ exports[`fetchStatsFromGA processReport without stubbing calls to client should 
 Array [
   Object {
     "_id": "article_testID1_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -619,7 +619,7 @@ Array [
   },
   Object {
     "_id": "article_testID2_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -635,7 +635,7 @@ Array [
   },
   Object {
     "_id": "article_testID3_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -651,7 +651,7 @@ Array [
   },
   Object {
     "_id": "article_testID4_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -667,7 +667,7 @@ Array [
   },
   Object {
     "_id": "article_testID5_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -688,7 +688,7 @@ exports[`fetchStatsFromGA processReport without stubbing calls to client should 
 Array [
   Object {
     "_id": "article_testID1_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -704,7 +704,7 @@ Array [
   },
   Object {
     "_id": "article_testID2_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -720,7 +720,7 @@ Array [
   },
   Object {
     "_id": "article_testID3_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -736,7 +736,7 @@ Array [
   },
   Object {
     "_id": "article_testID4_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -752,7 +752,7 @@ Array [
   },
   Object {
     "_id": "article_testID5_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -767,24 +767,8 @@ Array [
     "_type": "doc",
   },
   Object {
-    "_id": "article_testID5_2020-07-16",
-    "_index": "analytics",
-    "_score": 1,
-    "_source": Object {
-      "date": "2020-07-16",
-      "docId": "testID5",
-      "fetchedAt": "2020-01-01T00:00:00.000Z",
-      "stats": Object {
-        "webUser": 4,
-        "webVisit": 10,
-      },
-      "type": "article",
-    },
-    "_type": "doc",
-  },
-  Object {
     "_id": "article_testID1_2020-07-16",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-16",
@@ -800,7 +784,7 @@ Array [
   },
   Object {
     "_id": "article_testID2_2020-07-16",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-16",
@@ -814,6 +798,22 @@ Array [
     },
     "_type": "doc",
   },
+  Object {
+    "_id": "article_testID5_2020-07-16",
+    "_index": "analytics_v1_0_2",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-16",
+      "docId": "testID5",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 4,
+        "webVisit": 10,
+      },
+      "type": "article",
+    },
+    "_type": "doc",
+  },
 ]
 `;
 
@@ -821,7 +821,7 @@ exports[`fetchStatsFromGA processReport without stubbing calls to client should 
 Array [
   Object {
     "_id": "reply_testID1_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -838,7 +838,7 @@ Array [
   },
   Object {
     "_id": "reply_testID2_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -854,25 +854,8 @@ Array [
     "_type": "doc",
   },
   Object {
-    "_id": "reply_testID5_2020-07-15",
-    "_index": "analytics",
-    "_score": 1,
-    "_source": Object {
-      "date": "2020-07-15",
-      "docId": "testID5",
-      "docUserId": "user3",
-      "fetchedAt": "2020-01-01T00:00:00.000Z",
-      "stats": Object {
-        "webUser": 46,
-        "webVisit": 109,
-      },
-      "type": "reply",
-    },
-    "_type": "doc",
-  },
-  Object {
     "_id": "reply_testID3_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -888,7 +871,7 @@ Array [
   },
   Object {
     "_id": "reply_testID4_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
@@ -903,6 +886,23 @@ Array [
     },
     "_type": "doc",
   },
+  Object {
+    "_id": "reply_testID5_2020-07-15",
+    "_index": "analytics_v1_0_2",
+    "_score": 1,
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID5",
+      "docUserId": "user3",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 46,
+        "webVisit": 109,
+      },
+      "type": "reply",
+    },
+    "_type": "doc",
+  },
 ]
 `;
 
@@ -910,7 +910,7 @@ exports[`fetchStatsFromGA processReport without stubbing calls to client should 
 Array [
   Object {
     "_id": "article_testID1_2020-07-15",
-    "_index": "analytics",
+    "_index": "analytics_v1_0_2",
     "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
