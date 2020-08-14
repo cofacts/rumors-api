@@ -415,16 +415,16 @@ describe('fetchStatsFromGA', () => {
       const fetchAllAnalytics = async () =>
         (await client.search({
           index: 'analytics',
-          filterPath:'hits.hits._id,hits.hits._source',
+          filterPath: 'hits.hits._id,hits.hits._source',
           body: {
             query: {
-              query_string : {
-                fields : ['docId'],
-                query : 'testID*'
-              }
+              query_string: {
+                fields: ['docId'],
+                query: 'testID*',
+              },
             },
             size: 10000,
-            sort: [{ _id: 'asc' }]
+            sort: [{ _id: 'asc' }],
           },
         })).body.hits.hits;
 
