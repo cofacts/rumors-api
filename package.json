@@ -34,7 +34,7 @@
     "dotenv": "^8.0.0",
     "form-data": "^3.0.0",
     "google-protobuf": "^3.0.0",
-    "googleapis": "^55.0.0",
+    "googleapis": "^59.0.0",
     "graphql": "^15.0.0",
     "grpc": "^1.11.0",
     "kcors": "^2.2.1",
