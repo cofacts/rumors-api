@@ -13,7 +13,7 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Prevent elasticsearch eating up too much memory
 
   kibana:
-    image: docker.elastic.co/kibana/kibana-oss:6.3.2
+    image: docker.elastic.co/kibana/kibana-oss:6.8.11
     depends_on:
       - db
     environment:
