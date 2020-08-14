@@ -412,6 +412,22 @@ describe('fetchStatsFromGA', () => {
     describe('without stubbing calls to client', () => {
       const upsertDocStatsSpy = jest.spyOn(fetchStatsFromGA, 'upsertDocStats');
 
+      const fetchAllAnalytics = async () =>
+        (await client.search({
+          index: 'analytics',
+          filterPath:'hits.hits._id,hits.hits._source',
+          body: {
+            query: {
+              query_string : {
+                fields : ['docId'],
+                query : 'testID*'
+              }
+            },
+            size: 10000,
+            sort: [{ _id: 'asc' }]
+          },
+        })).body.hits.hits;
+
       const unloadBody = async bulkBody => {
         let bulkDeleteBody = [];
         let prevRow;
@@ -458,12 +474,7 @@ describe('fetchStatsFromGA', () => {
         );
         const bulkUpdateBody = upsertDocStatsSpy.mock.calls[0][0];
 
-        const res = await client.search({
-          index: 'analytics',
-          body: { query: { match_all: {} } },
-        });
-
-        expect(res.body.hits.hits).toMatchSnapshot();
+        expect(await fetchAllAnalytics()).toMatchSnapshot();
 
         await unloadBody(bulkUpdateBody);
       });
@@ -487,12 +498,7 @@ describe('fetchStatsFromGA', () => {
           upsertDocStatsSpy.mock.calls[1][0]
         );
 
-        const res = await client.search({
-          index: 'analytics',
-          body: { query: { match_all: {} } },
-        });
-
-        expect(res.body.hits.hits).toMatchSnapshot();
+        expect(await fetchAllAnalytics()).toMatchSnapshot();
 
         await unloadBody(bulkUpdateBody);
       });
@@ -517,11 +523,7 @@ describe('fetchStatsFromGA', () => {
           upsertDocStatsSpy.mock.calls[1][0]
         );
 
-        const res = await client.search({
-          index: 'analytics',
-          body: { query: { match_all: {} } },
-        });
-        expect(res.body.hits.hits).toMatchSnapshot();
+        expect(await fetchAllAnalytics()).toMatchSnapshot();
 
         await unloadBody(bulkUpdateBody);
       });
@@ -538,11 +540,7 @@ describe('fetchStatsFromGA', () => {
 
         const bulkUpdateBody = upsertDocStatsSpy.mock.calls[0][0];
 
-        const res = await client.search({
-          index: 'analytics',
-          body: { query: { match_all: {} } },
-        });
-        expect(res.body.hits.hits).toMatchSnapshot();
+        expect(await fetchAllAnalytics()).toMatchSnapshot();
 
         await unloadBody(bulkUpdateBody);
         await unloadFixtures(fixtures.repliesFixtures);

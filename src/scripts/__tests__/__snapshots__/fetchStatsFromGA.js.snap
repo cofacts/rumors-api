@@ -603,8 +603,6 @@ exports[`fetchStatsFromGA processReport without stubbing calls to client should 
 Array [
   Object {
     "_id": "article_testID1_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID1",
@@ -615,12 +613,9 @@ Array [
       },
       "type": "article",
     },
-    "_type": "doc",
   },
   Object {
     "_id": "article_testID2_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID2",
@@ -631,12 +626,9 @@ Array [
       },
       "type": "article",
     },
-    "_type": "doc",
   },
   Object {
     "_id": "article_testID3_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID3",
@@ -647,12 +639,9 @@ Array [
       },
       "type": "article",
     },
-    "_type": "doc",
   },
   Object {
     "_id": "article_testID4_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID4",
@@ -663,12 +652,9 @@ Array [
       },
       "type": "article",
     },
-    "_type": "doc",
   },
   Object {
     "_id": "article_testID5_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID5",
@@ -679,7 +665,6 @@ Array [
       },
       "type": "article",
     },
-    "_type": "doc",
   },
 ]
 `;
@@ -688,8 +673,6 @@ exports[`fetchStatsFromGA processReport without stubbing calls to client should 
 Array [
   Object {
     "_id": "article_testID1_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID1",
@@ -700,76 +683,9 @@ Array [
       },
       "type": "article",
     },
-    "_type": "doc",
-  },
-  Object {
-    "_id": "article_testID2_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
-    "_source": Object {
-      "date": "2020-07-15",
-      "docId": "testID2",
-      "fetchedAt": "2020-01-01T00:00:00.000Z",
-      "stats": Object {
-        "webUser": 2,
-        "webVisit": 40,
-      },
-      "type": "article",
-    },
-    "_type": "doc",
-  },
-  Object {
-    "_id": "article_testID3_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
-    "_source": Object {
-      "date": "2020-07-15",
-      "docId": "testID3",
-      "fetchedAt": "2020-01-01T00:00:00.000Z",
-      "stats": Object {
-        "webUser": 2,
-        "webVisit": 5,
-      },
-      "type": "article",
-    },
-    "_type": "doc",
-  },
-  Object {
-    "_id": "article_testID4_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
-    "_source": Object {
-      "date": "2020-07-15",
-      "docId": "testID4",
-      "fetchedAt": "2020-01-01T00:00:00.000Z",
-      "stats": Object {
-        "webUser": 25,
-        "webVisit": 69,
-      },
-      "type": "article",
-    },
-    "_type": "doc",
-  },
-  Object {
-    "_id": "article_testID5_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
-    "_source": Object {
-      "date": "2020-07-15",
-      "docId": "testID5",
-      "fetchedAt": "2020-01-01T00:00:00.000Z",
-      "stats": Object {
-        "webUser": 49,
-        "webVisit": 115,
-      },
-      "type": "article",
-    },
-    "_type": "doc",
   },
   Object {
     "_id": "article_testID1_2020-07-16",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-16",
       "docId": "testID1",
@@ -780,12 +696,22 @@ Array [
       },
       "type": "article",
     },
-    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID2_2020-07-15",
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID2",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 2,
+        "webVisit": 40,
+      },
+      "type": "article",
+    },
   },
   Object {
     "_id": "article_testID2_2020-07-16",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-16",
       "docId": "testID2",
@@ -796,12 +722,48 @@ Array [
       },
       "type": "article",
     },
-    "_type": "doc",
+  },
+  Object {
+    "_id": "article_testID3_2020-07-15",
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID3",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 2,
+        "webVisit": 5,
+      },
+      "type": "article",
+    },
+  },
+  Object {
+    "_id": "article_testID4_2020-07-15",
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID4",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 25,
+        "webVisit": 69,
+      },
+      "type": "article",
+    },
+  },
+  Object {
+    "_id": "article_testID5_2020-07-15",
+    "_source": Object {
+      "date": "2020-07-15",
+      "docId": "testID5",
+      "fetchedAt": "2020-01-01T00:00:00.000Z",
+      "stats": Object {
+        "webUser": 49,
+        "webVisit": 115,
+      },
+      "type": "article",
+    },
   },
   Object {
     "_id": "article_testID5_2020-07-16",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-16",
       "docId": "testID5",
@@ -812,7 +774,6 @@ Array [
       },
       "type": "article",
     },
-    "_type": "doc",
   },
 ]
 `;
@@ -821,8 +782,6 @@ exports[`fetchStatsFromGA processReport without stubbing calls to client should 
 Array [
   Object {
     "_id": "reply_testID1_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID1",
@@ -834,12 +793,9 @@ Array [
       },
       "type": "reply",
     },
-    "_type": "doc",
   },
   Object {
     "_id": "reply_testID2_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID2",
@@ -851,12 +807,9 @@ Array [
       },
       "type": "reply",
     },
-    "_type": "doc",
   },
   Object {
     "_id": "reply_testID3_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID3",
@@ -867,12 +820,9 @@ Array [
       },
       "type": "reply",
     },
-    "_type": "doc",
   },
   Object {
     "_id": "reply_testID4_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID4",
@@ -884,12 +834,9 @@ Array [
       },
       "type": "reply",
     },
-    "_type": "doc",
   },
   Object {
     "_id": "reply_testID5_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID5",
@@ -901,7 +848,6 @@ Array [
       },
       "type": "reply",
     },
-    "_type": "doc",
   },
 ]
 `;
@@ -910,8 +856,6 @@ exports[`fetchStatsFromGA processReport without stubbing calls to client should 
 Array [
   Object {
     "_id": "article_testID1_2020-07-15",
-    "_index": "analytics_v1_0_2",
-    "_score": 1,
     "_source": Object {
       "date": "2020-07-15",
       "docId": "testID1",
@@ -924,7 +868,6 @@ Array [
       },
       "type": "article",
     },
-    "_type": "doc",
   },
 ]
 `;
