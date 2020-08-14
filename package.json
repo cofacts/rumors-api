@@ -41,7 +41,7 @@
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.0.0",
     "koa-passport": "^4.0.1",
-    "koa-router": "^8.0.0",
+    "koa-router": "^9.0.0",
     "koa-session2": "^2.0.0",
     "koa-static": "^5.0.0",
     "node-fetch": "^2.2.0",
