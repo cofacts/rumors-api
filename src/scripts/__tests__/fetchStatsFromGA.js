@@ -280,6 +280,25 @@ describe('fetchStatsFromGA', () => {
     });
     afterEach(() => {
       batchGetMock.mockReset();
+      requestBuilderSpy.mockClear();
+    });
+
+    it('should handle empty results', async () => {
+      const emptyRows = { data: { totals: [{ values: [0, 0] }] } };
+      const res = { data: { reports: [emptyRows, emptyRows] } };
+      batchGetMock.mockResolvedValueOnce(res);
+
+      const fetchReportsResults = await fetchStatsFromGA.fetchReports(
+        'WEB',
+        {},
+        { isCron: true }
+      );
+
+      expect(fetchReportsResults).toStrictEqual({
+        results: { article: undefined, reply: undefined },
+        pageTokens: { article: -1, reply: -1 },
+        hasMore: false,
+      });
     });
 
     it('should send approate batchGet requests and return correct curated results', async () => {

@@ -166,17 +166,26 @@ const fetchReports = async function(sourceType, pageTokens = {}, params) {
   const reports = res.data.reports;
   let results = {};
   let hasMore = false;
+
   requestDocTypes.forEach((docType, i) => {
     let report = reports[i];
-    console.log(
-      `fetched ${report.data.rows.length} starting at ${pageTokens[docType] ||
-        0} ` +
-        `out of total ${
-          report.data.rowCount
-        } rows for ${sourceType} ${docType}` +
-        ` with next pageToken ${report.nextPageToken}`
-    );
-    results[docType] = report.data.rows;
+    const rows = report.data.rows;
+    if (rows) {
+      console.log(
+        `fetched ${rows.length} starting at ${pageTokens[docType] || 0} ` +
+          `out of total ${
+            report.data.rowCount
+          } rows for ${sourceType} ${docType}` +
+          ` ${
+            report.nextPageToken
+              ? `with next pageToken ${report.nextPageToken}`
+              : ''
+          }`
+      );
+    } else {
+      console.log(`no entries for ${sourceType} ${docType}`);
+    }
+    results[docType] = rows;
     nextPageTokens[docType] = report.nextPageToken || -1;
     hasMore = hasMore || report.nextPageToken != null;
   });
