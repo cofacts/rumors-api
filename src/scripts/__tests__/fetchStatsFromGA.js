@@ -62,9 +62,14 @@ describe('fetchStatsFromGA', () => {
     });
 
     it('without any arugments', async () => {
-      yargs.argvMock.mockReturnValue({});
+      yargs.argvMock.mockReturnValue({
+        useContentGroup: true,
+        loadScript: false,
+      });
       await fetchStatsFromGA.main();
-      expect(updateStatsMock.mock.calls).toMatchObject([[{ isCron: true }]]);
+      expect(updateStatsMock.mock.calls).toMatchObject([
+        [{ useContentGroup: true }],
+      ]);
       expect(storeScriptInDBMock).not.toHaveBeenCalled();
     });
 
@@ -72,18 +77,31 @@ describe('fetchStatsFromGA', () => {
       yargs.argvMock.mockReturnValue({
         startDate: '2020-01-01',
         endDate: '2020-02-01',
+        useContentGroup: true,
+        loadScript: false,
       });
       await fetchStatsFromGA.main();
       expect(updateStatsMock.mock.calls).toMatchObject([
-        [{ isCron: false, startDate: '2020-01-01', endDate: '2020-02-01' }],
+        [
+          {
+            useContentGroup: true,
+            startDate: '2020-01-01',
+            endDate: '2020-02-01',
+          },
+        ],
       ]);
       expect(storeScriptInDBMock).not.toHaveBeenCalled();
     });
 
     it('with loadScript arugments', async () => {
-      yargs.argvMock.mockReturnValue({ loadScript: true });
+      yargs.argvMock.mockReturnValue({
+        loadScript: true,
+        useContentGroup: true,
+      });
       await fetchStatsFromGA.main();
-      expect(updateStatsMock.mock.calls).toMatchObject([[{ isCron: true }]]);
+      expect(updateStatsMock.mock.calls).toMatchObject([
+        [{ useContentGroup: true }],
+      ]);
       expect(storeScriptInDBMock).toHaveBeenCalled();
     });
 
@@ -92,10 +110,17 @@ describe('fetchStatsFromGA', () => {
         loadScript: true,
         startDate: '2020-01-01',
         endDate: '2020-02-01',
+        useContentGroup: true,
       });
       await fetchStatsFromGA.main();
       expect(updateStatsMock.mock.calls).toMatchObject([
-        [{ isCron: false, startDate: '2020-01-01', endDate: '2020-02-01' }],
+        [
+          {
+            useContentGroup: true,
+            startDate: '2020-01-01',
+            endDate: '2020-02-01',
+          },
+        ],
       ]);
       expect(storeScriptInDBMock).toHaveBeenCalled();
     });
@@ -122,11 +147,11 @@ describe('fetchStatsFromGA', () => {
 
       allSourceTypes.forEach(sourceType =>
         allDocTypes.forEach(docType =>
-          [true, false].forEach(isCron => {
+          [true, false].forEach(useContentGroup => {
             const params = {
-              isCron,
-              startDate: isCron ? undefined : '2020-07-10',
-              endDate: isCron ? undefined : 'today',
+              useContentGroup,
+              startDate: useContentGroup ? undefined : '2020-07-10',
+              endDate: useContentGroup ? undefined : 'today',
             };
             expect(
               fetchStatsFromGA.requestBodyBuilder(
@@ -135,42 +160,12 @@ describe('fetchStatsFromGA', () => {
                 '',
                 params
               )
-            ).toMatchSnapshot(`${sourceType}_${docType}_isCron=${isCron}`);
+            ).toMatchSnapshot(
+              `${sourceType}_${docType}_useContentGroup=${useContentGroup}`
+            );
           })
         )
       );
-    });
-
-    it('processCommandLineArgs should return proper params', () => {
-      const processArgs = fetchStatsFromGA.processCommandLineArgs;
-      expect(processArgs({})).toStrictEqual({ isCron: true });
-      expect(
-        processArgs({ startDate: '2020-07-01', endDate: '2020-07-15' })
-      ).toStrictEqual({
-        isCron: false,
-        startDate: '2020-07-01',
-        endDate: '2020-07-15',
-      });
-      expect(
-        processArgs({ startDate: '2020-07-01', endDate: '2020-07-01' })
-      ).toStrictEqual({
-        isCron: false,
-        startDate: '2020-07-01',
-        endDate: '2020-07-01',
-      });
-    });
-
-    it('processCommandLineArgs should raise errors when given invalid arugments', () => {
-      [
-        { startDate: '2020-01-01' },
-        { startDate: '2020-01-01', endDate: '2019-01-01' },
-        { startDate: '2019-01-01', endDate: '2020-01-01' },
-        { startDate: '3000-01-01', endDate: '3000-01-01' },
-      ].forEach(dateRange => {
-        expect(() =>
-          fetchStatsFromGA.processCommandLineArgs(dateRange)
-        ).toThrow();
-      });
     });
 
     it('storeScriptInDB should store upsert script in db', async () => {
@@ -215,7 +210,7 @@ describe('fetchStatsFromGA', () => {
 
       fetchReportsMock.mockClear();
       await fetchStatsFromGA.updateStats({
-        isCron: false,
+        useContentGroup: false,
         startDate: '2020-07-10',
         endDate: 'today',
       });
@@ -291,7 +286,7 @@ describe('fetchStatsFromGA', () => {
       const fetchReportsResults = await fetchStatsFromGA.fetchReports(
         'WEB',
         {},
-        { isCron: true }
+        { useContentGroup: true }
       );
 
       expect(fetchReportsResults).toStrictEqual({
@@ -303,7 +298,7 @@ describe('fetchStatsFromGA', () => {
 
     it('should send approate batchGet requests and return correct curated results', async () => {
       const sourceType = 'WEB',
-        params = { isCron: true };
+        params = { useContentGroup: true };
       let requestBuilderCalledTimes = 1;
 
       for (const pageTokens of fixtures.fetchReports.allPossiblePageTokens) {

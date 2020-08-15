@@ -175,12 +175,7 @@ $ docker-compose exec api node_modules/.bin/babel-node src/scripts/cleanupUrls.j
 $ node_modules/.bin/babel-node src/scripts/fetchStatsFromGA.js
 ```
 
--  To fetch stats for a certain date range, run the above command with 
-```--startDate=YYYY-MM-DD --endDate=YYYY-MM-DD```
-
--  If the script is ran for the first time, run the above command with
-```--loadScript```
-
+-  For more options, run the above script with `--help` or see the file level comments.
 
 
 ## Troubleshooting 
