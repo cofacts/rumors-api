@@ -1,17 +1,29 @@
 // eslint-disable no-console
-// TODO: consider the edge case when the cron job runs at midnight
-//       the first cron job of the day should also update the value for yesterday
+/*
+  A script that fetches user activities stats between `startDate` and `endDate` from GA.
+
+  - Default values for `startDate` and `endDate` are the current date (in GMT+8),
+    they can be set by command line arguments.  Date should be in the format of
+    YYYY-MM-DD or see https://developers.google.com/analytics/devguides/reporting/core/v3/reference#startDate
+    for relative date pattern.
+
+  - All update operations in db are handled by the script with id `analyticsUpsertScript`,
+    if `analyticsUpsertScript` is not in db yet, run with `--loadScript`` to save
+    the script to db.
+
+  - A content group that extracts docId from URL should be set by admin in GA
+    as the first content group.  Because content group is not retroactive, to
+    fetch data without content group, run with `--useContentGroup=false`.
+    It would use pagePathLevel2 as primary dimension and extracts docId from there.
+*/
 
 import 'dotenv/config';
 import client from 'util/client';
 import rollbar from '../rollbarInstance';
 import { google } from 'googleapis';
-import { assertDateRange } from 'util/date';
 import yargs from 'yargs';
 
 const analyticsreporting = google.analyticsreporting('v4');
-
-const maxDuration = 90 * 24 * 60 * 60 * 1000;
 
 const pageSize = process.env.GA_PAGE_SIZE || '10000';
 const webViewId = process.env.GA_WEB_VIEW_ID;
@@ -34,8 +46,8 @@ const statsSources = {
   WEB: {
     filtersExpression: docType => `ga:pagePathLevel1==/${docType}/`,
     name: 'WEB',
-    primaryDimension: (isCronjob = true) =>
-      isCronjob ? 'ga:contentGroup1' : 'ga:pagePathLevel2',
+    primaryDimension: (useContentGroup = true) =>
+      useContentGroup ? 'ga:contentGroup1' : 'ga:pagePathLevel2',
     primaryMetric: 'ga:pageviews',
     viewId: webViewId,
   },
@@ -89,7 +101,11 @@ const parseIdFromRow = function(row) {
 
 // Contructs request body for google reporting API.
 const requestBodyBuilder = function(sourceType, docType, pageToken, params) {
-  const { isCron, startDate = 'today', endDate = 'today' } = params;
+  const {
+    useContentGroup = true,
+    startDate = 'today',
+    endDate = 'today',
+  } = params;
   let {
     filtersExpression,
     primaryDimension,
@@ -98,29 +114,21 @@ const requestBodyBuilder = function(sourceType, docType, pageToken, params) {
   } = statsSources[sourceType];
   return {
     dateRanges: [{ startDate, endDate }],
-    dimensions: [{ name: primaryDimension(isCron) }, { name: 'ga:date' }],
+    dimensions: [
+      { name: primaryDimension(useContentGroup) },
+      { name: 'ga:date' },
+    ],
     filtersExpression: filtersExpression(docType),
     includeEmptyRows: false,
     metrics: [{ expression: primaryMetric }, { expression: 'ga:users' }],
     orderBys: [
       { fieldName: 'ga:date' },
-      { fieldName: primaryDimension(isCron) },
+      { fieldName: primaryDimension(useContentGroup) },
     ],
     pageSize,
     pageToken,
     viewId,
   };
-};
-
-const processCommandLineArgs = args => {
-  const { startDate, endDate } = args;
-  if (!startDate && !endDate) {
-    return { isCron: true };
-  }
-
-  assertDateRange(startDate, endDate, maxDuration);
-
-  return { isCron: false, startDate, endDate };
 };
 
 /**
@@ -129,7 +137,7 @@ const processCommandLineArgs = args => {
  * @param {string} sourceType
  * @param {object} [pageTokens={}]   Mapping of each doc type to its page token
  * @param {object} params            Object of the from:
-    {isCron: [bool=true], [startDate: string], [endDate: string]}
+    {useContentGroup: [bool=true], [startDate: string], [endDate: string]}
 
  * @return {
     results: {object} a mapping of doc type to its result,
@@ -329,9 +337,9 @@ const processReport = async function(
  * Fetch GA stats for given time period and store in db.
  *
  * @param {object} params        Object of the from:
-    {isCron: [bool=true], [startDate: string], [endDate: string]}
+    {useContentGroup: [bool=true], [startDate: string], [endDate: string]}
  */
-const updateStats = async function(params = { isCron: true }) {
+const updateStats = async function(params) {
   for (const sourceType of allSourceTypes) {
     let results,
       pageTokens,
@@ -370,22 +378,33 @@ async function main() {
       .options({
         startDate: {
           alias: 's',
-          description: 'start date in the format of YYYY-MM-DD',
+          description:
+            'start date in the format of YYYY-MM-DD or see https://developers.google.com/analytics/devguides/reporting/core/v3/reference#startDate for accepted patterns for relative dates',
           type: 'string',
         },
         endDate: {
           alias: 'e',
-          description: 'end date in the format of YYYY-MM-DD',
+          description:
+            'end date in the format of YYYY-MM-DD or see https://developers.google.com/analytics/devguides/reporting/core/v3/reference#endDate for accepted patterns for relative dates',
           type: 'string',
         },
         loadScript: {
           default: false,
           description: 'whether to store upsert script in db',
         },
+        useContentGroup: {
+          default: true,
+          description:
+            'wheter to use ga:contentGroup1 as a dimension for web stats',
+        },
       })
       .help('help').argv;
 
-    const params = processCommandLineArgs(argv);
+    const params = {
+      startDate: argv.startDate,
+      endDate: argv.endDate,
+      useContentGroup: argv.useContentGroup,
+    };
 
     if (argv.loadScript) {
       await storeScriptInDB();
@@ -409,7 +428,6 @@ export default {
   fetchReports,
   main,
   parseIdFromRow,
-  processCommandLineArgs,
   processReport,
   requestBodyBuilder,
   statsSources,

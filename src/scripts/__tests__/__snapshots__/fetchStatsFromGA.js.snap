@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_article_isCron=false 1`] = `
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_article_useContentGroup=false 1`] = `
 Object {
   "dateRanges": Array [
     Object {
@@ -40,7 +40,7 @@ Object {
 }
 `;
 
-exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_article_isCron=true 1`] = `
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_article_useContentGroup=true 1`] = `
 Object {
   "dateRanges": Array [
     Object {
@@ -80,7 +80,7 @@ Object {
 }
 `;
 
-exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_reply_isCron=false 1`] = `
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_reply_useContentGroup=false 1`] = `
 Object {
   "dateRanges": Array [
     Object {
@@ -120,7 +120,7 @@ Object {
 }
 `;
 
-exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_reply_isCron=true 1`] = `
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: LINE_reply_useContentGroup=true 1`] = `
 Object {
   "dateRanges": Array [
     Object {
@@ -160,7 +160,7 @@ Object {
 }
 `;
 
-exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_article_isCron=false 1`] = `
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_article_useContentGroup=false 1`] = `
 Object {
   "dateRanges": Array [
     Object {
@@ -200,7 +200,7 @@ Object {
 }
 `;
 
-exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_article_isCron=true 1`] = `
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_article_useContentGroup=true 1`] = `
 Object {
   "dateRanges": Array [
     Object {
@@ -240,7 +240,7 @@ Object {
 }
 `;
 
-exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_reply_isCron=false 1`] = `
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_reply_useContentGroup=false 1`] = `
 Object {
   "dateRanges": Array [
     Object {
@@ -280,7 +280,7 @@ Object {
 }
 `;
 
-exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_reply_isCron=true 1`] = `
+exports[`fetchStatsFromGA helper functions requestBodyBuilder should return right request body for different source and doc types: WEB_reply_useContentGroup=true 1`] = `
 Object {
   "dateRanges": Array [
     Object {
@@ -877,16 +877,12 @@ Array [
   Array [
     "WEB",
     undefined,
-    Object {
-      "isCron": true,
-    },
+    undefined,
   ],
   Array [
     "LINE",
     undefined,
-    Object {
-      "isCron": true,
-    },
+    undefined,
   ],
 ]
 `;
@@ -898,8 +894,8 @@ Array [
     undefined,
     Object {
       "endDate": "today",
-      "isCron": false,
       "startDate": "2020-07-10",
+      "useContentGroup": false,
     },
   ],
   Array [
@@ -907,8 +903,8 @@ Array [
     undefined,
     Object {
       "endDate": "today",
-      "isCron": false,
       "startDate": "2020-07-10",
+      "useContentGroup": false,
     },
   ],
 ]
@@ -960,9 +956,7 @@ Array [
   Array [
     "WEB",
     undefined,
-    Object {
-      "isCron": true,
-    },
+    undefined,
   ],
   Array [
     "WEB",
@@ -970,9 +964,7 @@ Array [
       "article": 100,
       "reply": 100,
     },
-    Object {
-      "isCron": true,
-    },
+    undefined,
   ],
   Array [
     "WEB",
@@ -980,16 +972,12 @@ Array [
       "article": 200,
       "reply": -1,
     },
-    Object {
-      "isCron": true,
-    },
+    undefined,
   ],
   Array [
     "LINE",
     undefined,
-    Object {
-      "isCron": true,
-    },
+    undefined,
   ],
   Array [
     "LINE",
@@ -997,9 +985,7 @@ Array [
       "article": 100,
       "reply": 100,
     },
-    Object {
-      "isCron": true,
-    },
+    undefined,
   ],
   Array [
     "LINE",
@@ -1007,9 +993,7 @@ Array [
       "article": -1,
       "reply": 200,
     },
-    Object {
-      "isCron": true,
-    },
+    undefined,
   ],
 ]
 `;
