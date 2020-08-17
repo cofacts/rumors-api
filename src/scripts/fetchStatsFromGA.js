@@ -391,11 +391,13 @@ async function main() {
         loadScript: {
           default: false,
           description: 'whether to store upsert script in db',
+          type: 'boolean',
         },
         useContentGroup: {
           default: true,
           description:
             'wheter to use ga:contentGroup1 as a dimension for web stats',
+          type: 'boolean',
         },
       })
       .help('help').argv;
