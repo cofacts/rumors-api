@@ -40,6 +40,7 @@ app.use(
 );
 
 app.keys = (process.env.COOKIE_SECRETS || '').split(',');
+app.proxy = !!process.env.TRUST_PROXY_HEADERS;
 
 // See: https://github.com/cofacts/rumors-api/issues/186#issuecomment-644612628
 const samesiteConfig = process.env.COOKIE_SAMESITE_NONE
