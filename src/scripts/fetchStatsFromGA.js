@@ -15,6 +15,9 @@
     as the first content group.  Because content group is not retroactive, to
     fetch data without content group, run with `--useContentGroup=false`.
     It would use pagePathLevel2 as primary dimension and extracts docId from there.
+
+  - Make sure `GA_WEB_VIEW_ID`, `GA_LINE_VIEW_ID`, `GA_TIMEZONE` are set with
+    correct settings in .env.
 */
 
 import 'dotenv/config';
@@ -28,6 +31,7 @@ const analyticsreporting = google.analyticsreporting('v4');
 const pageSize = process.env.GA_PAGE_SIZE || '10000';
 const webViewId = process.env.GA_WEB_VIEW_ID;
 const lineViewId = process.env.GA_LINE_VIEW_ID;
+const timezone = process.env.GA_TIMEZONE || '+08:00';
 
 const idExtractor = /\/([^?/]+).*/;
 const toTitleCase = str =>
@@ -269,9 +273,10 @@ const processReport = async function(
   rows.forEach(row => {
     const docId = parseIdFromRow(row);
     const date = formatDate(row.dimensions[1]);
+    const timestamp = `${date}T00:00:00.000${timezone}`;
     const [visits, users] = row.metrics[0].values.map(v => parseInt(v, 10));
     const isSameEntry =
-      lastParams && lastParams.date === date && lastParams.docId === docId;
+      lastParams && lastParams.date === timestamp && lastParams.docId === docId;
     let docUserId, stats;
 
     if (docType === docTypes.REPLY && replyUsers[docId]) {
@@ -292,7 +297,14 @@ const processReport = async function(
     }
 
     const id = `${docType}_${docId}_${date}`;
-    lastParams = { fetchedAt, date, docId, docUserId, stats, type: docType };
+    lastParams = {
+      fetchedAt,
+      date: timestamp,
+      docId,
+      docUserId,
+      stats,
+      type: docType,
+    };
 
     // Page views on the same reply/article could have different `pagePathLevel2`
     // values due to query parameters in the url.  Checking if bulkUpdates is empty
