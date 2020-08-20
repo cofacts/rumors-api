@@ -40,12 +40,18 @@ app.use(
 );
 
 app.keys = (process.env.COOKIE_SECRETS || '').split(',');
+app.proxy = !!process.env.TRUST_PROXY_HEADERS;
+
+const samesiteConfig = process.env.COOKIE_SAMESITE_NONE
+  ? { sameSite: 'none', secure: true }
+  : {};
 
 app.use(
   session({
     store: new CookieStore({ password: app.keys[0] }),
     signed: true,
     maxAge: process.env.COOKIE_MAXAGE,
+    ...samesiteConfig,
   })
 );
 app.use(passport.initialize());
