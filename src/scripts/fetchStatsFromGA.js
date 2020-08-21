@@ -55,7 +55,7 @@ const statsSources = {
       useContentGroup ? 'ga:contentGroup1' : 'ga:pagePathLevel2',
     primaryMetric: 'ga:pageviews',
     viewId: webViewId,
-    timezone: process.env.GA_WEB_TIMEZONE || '+08:00'
+    timezone: process.env.GA_WEB_TIMEZONE || '+08:00',
   },
   LINE: {
     filtersExpression: docType =>
@@ -64,7 +64,7 @@ const statsSources = {
     primaryDimension: () => 'ga:eventLabel',
     primaryMetric: 'ga:hits',
     viewId: lineViewId,
-    timezone: process.env.GA_LINE_TIMEZONE || '+08:00'
+    timezone: process.env.GA_LINE_TIMEZONE || '+08:00',
   },
 };
 
