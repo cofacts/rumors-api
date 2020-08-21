@@ -15,6 +15,11 @@
     as the first content group.  Because content group is not retroactive, to
     fetch data without content group, run with `--useContentGroup=false`.
     It would use pagePathLevel2 as primary dimension and extracts docId from there.
+
+  - Make sure `GA_WEB_VIEW_ID`, `GA_LINE_VIEW_ID`, `GA_LINE_TIMEZONE`, and
+   `GA_WEB_TIMEZONE` are set with correct settings in .env.  Each view's timezone
+   can be found at view settings, see https://support.google.com/analytics/answer/1010249
+   for more details.
 */
 
 import 'dotenv/config';
@@ -50,6 +55,7 @@ const statsSources = {
       useContentGroup ? 'ga:contentGroup1' : 'ga:pagePathLevel2',
     primaryMetric: 'ga:pageviews',
     viewId: webViewId,
+    timezone: process.env.GA_WEB_TIMEZONE || '+08:00',
   },
   LINE: {
     filtersExpression: docType =>
@@ -58,6 +64,7 @@ const statsSources = {
     primaryDimension: () => 'ga:eventLabel',
     primaryMetric: 'ga:hits',
     viewId: lineViewId,
+    timezone: process.env.GA_LINE_TIMEZONE || '+08:00',
   },
 };
 
@@ -265,13 +272,15 @@ const processReport = async function(
 
   let bulkUpdates = [];
   const sourceName = sourceType.toLowerCase();
+  const timezone = statsSources[sourceType].timezone;
 
   rows.forEach(row => {
     const docId = parseIdFromRow(row);
     const date = formatDate(row.dimensions[1]);
+    const timestamp = `${date}T00:00:00.000${timezone}`;
     const [visits, users] = row.metrics[0].values.map(v => parseInt(v, 10));
     const isSameEntry =
-      lastParams && lastParams.date === date && lastParams.docId === docId;
+      lastParams && lastParams.date === timestamp && lastParams.docId === docId;
     let docUserId, stats;
 
     if (docType === docTypes.REPLY && replyUsers[docId]) {
@@ -292,7 +301,14 @@ const processReport = async function(
     }
 
     const id = `${docType}_${docId}_${date}`;
-    lastParams = { fetchedAt, date, docId, docUserId, stats, type: docType };
+    lastParams = {
+      fetchedAt,
+      date: timestamp,
+      docId,
+      docUserId,
+      stats,
+      type: docType,
+    };
 
     // Page views on the same reply/article could have different `pagePathLevel2`
     // values due to query parameters in the url.  Checking if bulkUpdates is empty

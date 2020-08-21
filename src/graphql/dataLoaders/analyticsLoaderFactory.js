@@ -1,20 +1,18 @@
+import { subDays } from 'date-fns';
 import DataLoader from 'dataloader';
 import client from 'util/client';
 import { getRangeFieldParamFromArithmeticExpression } from 'graphql/util';
 
-const defaultDuration = 30 * 24 * 60 * 60 * 1000;
+const defaultDuration = 31;
 
 export default () =>
   new DataLoader(
     async statsQueries => {
       const body = [];
-      const now = new Date();
-      const defaultEndDate = now.toISOString().substr(0, 10);
-      const defaultStartDate = new Date(now - defaultDuration)
-        .toISOString()
-        .substr(0, 10);
+      const defaultEndDate = new Date();
+      const defaultStartDate = subDays(defaultEndDate, defaultDuration);
       const defaultDateRange = {
-        gte: defaultStartDate,
+        gt: defaultStartDate,
         lte: defaultEndDate,
       };
       statsQueries.forEach(

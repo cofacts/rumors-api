@@ -346,7 +346,7 @@ Object {
 
 exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggregate rows of data 1`] = `
 Object {
-  "date": "2020-07-15",
+  "date": "2020-07-15T00:00:00.000+08:00",
   "docId": "testID5",
   "docType": "article",
   "docUserId": undefined,
@@ -362,7 +362,7 @@ exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggre
 Array [
   "article_testID1_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID1",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -374,7 +374,7 @@ Array [
   },
   "article_testID2_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID2",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -386,7 +386,7 @@ Array [
   },
   "article_testID3_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID3",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -398,7 +398,7 @@ Array [
   },
   "article_testID4_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID4",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -410,7 +410,7 @@ Array [
   },
   "article_testID5_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID5",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -425,7 +425,7 @@ Array [
 
 exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggregate rows of data cross pages 1`] = `
 Object {
-  "date": "2020-07-15",
+  "date": "2020-07-15T00:00:00.000+08:00",
   "docId": "testID5",
   "docType": "article",
   "docUserId": undefined,
@@ -441,7 +441,7 @@ exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggre
 Array [
   "article_testID1_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID1",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -453,7 +453,7 @@ Array [
   },
   "article_testID2_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID2",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -465,7 +465,7 @@ Array [
   },
   "article_testID3_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID3",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -477,7 +477,7 @@ Array [
   },
   "article_testID4_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID4",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -489,7 +489,7 @@ Array [
   },
   "article_testID5_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID5",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -504,7 +504,7 @@ Array [
 
 exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggregate rows of data cross pages 3`] = `
 Object {
-  "date": "2020-07-16",
+  "date": "2020-07-16T00:00:00.000+08:00",
   "docId": "testID5",
   "docType": "article",
   "docUserId": undefined,
@@ -520,7 +520,7 @@ exports[`fetchStatsFromGA processReport with stubbed upsertDocStats should aggre
 Array [
   "article_testID5_2020-07-15",
   Object {
-    "date": "2020-07-15",
+    "date": "2020-07-15T00:00:00.000+08:00",
     "docId": "testID5",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -532,7 +532,7 @@ Array [
   },
   "article_testID1_2020-07-16",
   Object {
-    "date": "2020-07-16",
+    "date": "2020-07-16T00:00:00.000+08:00",
     "docId": "testID1",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -544,7 +544,7 @@ Array [
   },
   "article_testID2_2020-07-16",
   Object {
-    "date": "2020-07-16",
+    "date": "2020-07-16T00:00:00.000+08:00",
     "docId": "testID2",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -556,7 +556,7 @@ Array [
   },
   "article_testID5_2020-07-16",
   Object {
-    "date": "2020-07-16",
+    "date": "2020-07-16T00:00:00.000+08:00",
     "docId": "testID5",
     "docUserId": undefined,
     "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -582,7 +582,7 @@ Array [
     "script": Object {
       "id": "analyticsUpsertScript",
       "params": Object {
-        "date": "2020-07-15",
+        "date": "2020-07-15T00:00:00.000+08:00",
         "docId": "testID1",
         "docUserId": undefined,
         "fetchedAt": 2020-01-01T00:00:00.000Z,
@@ -604,7 +604,7 @@ Array [
   Object {
     "_id": "article_testID1_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID1",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -617,7 +617,7 @@ Array [
   Object {
     "_id": "article_testID2_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID2",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -630,7 +630,7 @@ Array [
   Object {
     "_id": "article_testID3_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID3",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -643,7 +643,7 @@ Array [
   Object {
     "_id": "article_testID4_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID4",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -656,7 +656,7 @@ Array [
   Object {
     "_id": "article_testID5_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID5",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -674,7 +674,7 @@ Array [
   Object {
     "_id": "article_testID1_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID1",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -687,7 +687,7 @@ Array [
   Object {
     "_id": "article_testID1_2020-07-16",
     "_source": Object {
-      "date": "2020-07-16",
+      "date": "2020-07-16T00:00:00.000+08:00",
       "docId": "testID1",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -700,7 +700,7 @@ Array [
   Object {
     "_id": "article_testID2_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID2",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -713,7 +713,7 @@ Array [
   Object {
     "_id": "article_testID2_2020-07-16",
     "_source": Object {
-      "date": "2020-07-16",
+      "date": "2020-07-16T00:00:00.000+08:00",
       "docId": "testID2",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -726,7 +726,7 @@ Array [
   Object {
     "_id": "article_testID3_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID3",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -739,7 +739,7 @@ Array [
   Object {
     "_id": "article_testID4_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID4",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -752,7 +752,7 @@ Array [
   Object {
     "_id": "article_testID5_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID5",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -765,7 +765,7 @@ Array [
   Object {
     "_id": "article_testID5_2020-07-16",
     "_source": Object {
-      "date": "2020-07-16",
+      "date": "2020-07-16T00:00:00.000+08:00",
       "docId": "testID5",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -783,7 +783,7 @@ Array [
   Object {
     "_id": "reply_testID1_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID1",
       "docUserId": "user1",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
@@ -797,7 +797,7 @@ Array [
   Object {
     "_id": "reply_testID2_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID2",
       "docUserId": "user2",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
@@ -811,7 +811,7 @@ Array [
   Object {
     "_id": "reply_testID3_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID3",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
@@ -824,7 +824,7 @@ Array [
   Object {
     "_id": "reply_testID4_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID4",
       "docUserId": "user1",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
@@ -838,7 +838,7 @@ Array [
   Object {
     "_id": "reply_testID5_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID5",
       "docUserId": "user3",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
@@ -857,7 +857,7 @@ Array [
   Object {
     "_id": "article_testID1_2020-07-15",
     "_source": Object {
-      "date": "2020-07-15",
+      "date": "2020-07-15T00:00:00.000+08:00",
       "docId": "testID1",
       "fetchedAt": "2020-01-01T00:00:00.000Z",
       "stats": Object {
