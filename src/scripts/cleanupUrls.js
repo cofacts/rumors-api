@@ -50,7 +50,9 @@ async function processUrls(processFn) {
   console.info(`${processedCount} / ${total} Processed`);
 
   while (processedCount < total) {
-    const { hits, _scroll_id } = await client.scroll({
+    const {
+      body: { hits, _scroll_id },
+    } = await client.scroll({
       scroll: '30s',
       scrollId,
     });
