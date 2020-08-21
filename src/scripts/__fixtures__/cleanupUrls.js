@@ -47,4 +47,12 @@ export default {
     canonical: 'bar.com',
     fetchedAt: '2018-01-01T00:00:00Z', // more than 1 day ago
   },
+  ...Array.from(Array(100)).reduce((fixtures, _, i) => {
+    fixtures[`/urls/doc/quantityTest${i}`] = {
+      url: `not-exist${i}.com`,
+      canonical: `not-exist${i}.com`,
+      fetchedAt: '2018-01-01T00:00:00Z', // more than 1 day ago
+    };
+    return fixtures;
+  }, {}),
 };
