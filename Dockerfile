@@ -27,4 +27,4 @@ COPY --from=builder /srv/www/node_modules ./node_modules
 COPY --from=builder /srv/www/build ./build
 COPY src/jade ./build/jade
 COPY src/util/protobuf ./build/util/protobuf
-COPY package.json package-lock.json process.json ./
+COPY package.json package-lock.json ecosystem.config.js ./

@@ -1,6 +1,6 @@
 *
 !.babelrc
-!process.json
+!ecosystem.config.js
 !package.json
 !package-lock.json
 !static
