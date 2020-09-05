@@ -6,8 +6,8 @@ export default {
     createdAt: '2020-02-06T00:00:00.000Z',
   },
   '/replies/doc/moreLikeThis2': {
-    text: 'foo foo foo',
-    reference: 'barbar',
+    text: 'bar bar bar',
+    reference: 'foo foo foo',
     type: 'NOT_ARTICLE',
     createdAt: '2020-02-05T00:00:00.000Z',
   },
