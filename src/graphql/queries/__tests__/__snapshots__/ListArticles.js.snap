@@ -29,6 +29,14 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "text": "
+      <HIGHLIGHT>憶昔封書與君</HIGHLIGHT>夜，<HIGHLIGHT>金鑾殿後欲明天</HIGHLIGHT>。<HIGHLIGHT>今夜封書</HIGHLIGHT>在何處？<HIGHLIGHT>廬山庵裏曉燈前</HIGHLIGHT>。<HIGHLIGHT>籠鳥檻猿俱未死</HIGHLIGHT>，<HIGHLIGHT>人間相見是何</HIGHLIGHT>年？
+
+      微之，微之！此夕此心，君知之乎！
+    ",
+          },
           "node": Object {
             "id": "listArticleTest1",
           },
@@ -46,11 +54,23 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "text": "人生幾何，離闊如此！況以膠漆之心，置於胡越之身，進不得相合，退不能相忘，<HIGHLIGHT>牽攣乖隔</HIGHLIGHT>，<HIGHLIGHT>各欲白首</HIGHLIGHT>。",
+          },
           "node": Object {
             "id": "listArticleTest3",
           },
         },
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "text": "
+      憶昔封書與君夜，金鑾殿後欲明天。今夜封書在何處？廬山庵裏曉燈前。籠鳥檻猿俱未死，<HIGHLIGHT>人間相見是何年</HIGHLIGHT>？
+
+      微之，微之！此夕此心，君知之乎！
+    ",
+          },
           "node": Object {
             "id": "listArticleTest1",
           },
@@ -72,6 +92,39 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [
+              Object {
+                "summary": "<HIGHLIGHT>今天下三分</HIGHLIGHT>，<HIGHLIGHT>益州</HIGHLIGHT> <HIGHLIGHT>疲弊</HIGHLIGHT>，<HIGHLIGHT>此誠危急存亡之秋也</HIGHLIGHT>。",
+                "title": "<HIGHLIGHT>出師表</HIGHLIGHT>",
+                "url": "http://qoo.com",
+              },
+            ],
+            "text": null,
+          },
+          "node": Object {
+            "hyperlinks": Array [
+              Object {
+                "summary": "居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚。」左右以告。孟嘗君曰：「食之，比門下之客。」",
+                "topImageUrl": "http://gohome.com/image.jpg",
+              },
+              Object {
+                "summary": "今天下三分，益州 疲弊，此誠危急存亡之秋也。",
+                "topImageUrl": null,
+              },
+              Object {
+                "summary": "summary should not match.",
+                "topImageUrl": null,
+              },
+            ],
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "text": "<HIGHLIGHT>臣亮言</HIGHLIGHT>：<HIGHLIGHT>先帝創業未半</HIGHLIGHT>，<HIGHLIGHT>而中道崩殂</HIGHLIGHT>。<HIGHLIGHT>今天下三分</HIGHLIGHT>，<HIGHLIGHT>益州</HIGHLIGHT> <HIGHLIGHT>疲弊</HIGHLIGHT>，<HIGHLIGHT>此誠危急存亡之秋也</HIGHLIGHT>。",
+          },
           "node": Object {
             "hyperlinks": null,
             "id": "listArticleTest2",
@@ -89,11 +142,29 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [
+              Object {
+                "summary": "<HIGHLIGHT>居有頃</HIGHLIGHT>，<HIGHLIGHT>倚柱彈其劍</HIGHLIGHT>，<HIGHLIGHT>歌曰</HIGHLIGHT>：「<HIGHLIGHT>長鋏歸來乎</HIGHLIGHT>！<HIGHLIGHT>食無魚</HIGHLIGHT>。」<HIGHLIGHT>左右以告</HIGHLIGHT>。<HIGHLIGHT>孟嘗君曰</HIGHLIGHT>：「<HIGHLIGHT>食之</HIGHLIGHT>，<HIGHLIGHT>比門下之客</HIGHLIGHT>。」",
+                "title": null,
+                "url": "http://gohome.com",
+              },
+            ],
+            "text": null,
+          },
           "node": Object {
             "hyperlinks": Array [
               Object {
                 "summary": "居有頃，倚柱彈其劍，歌曰：「長鋏歸來乎！食無魚。」左右以告。孟嘗君曰：「食之，比門下之客。」",
                 "topImageUrl": "http://gohome.com/image.jpg",
+              },
+              Object {
+                "summary": "今天下三分，益州 疲弊，此誠危急存亡之秋也。",
+                "topImageUrl": null,
+              },
+              Object {
+                "summary": "summary should not match.",
+                "topImageUrl": null,
               },
             ],
             "id": "listArticleTest4",

@@ -128,6 +128,14 @@ describe('ListArticles', () => {
               node {
                 id
               }
+              highlight {
+                text
+                hyperlinks {
+                  url
+                  title
+                  summary
+                }
+              }
             }
             totalCount
             pageInfo {
@@ -153,6 +161,14 @@ describe('ListArticles', () => {
                 hyperlinks {
                   summary
                   topImageUrl
+                }
+              }
+              highlight {
+                text
+                hyperlinks {
+                  url
+                  title
+                  summary
                 }
               }
             }
@@ -181,6 +197,14 @@ describe('ListArticles', () => {
                 hyperlinks {
                   summary
                   topImageUrl
+                }
+              }
+              highlight {
+                text
+                hyperlinks {
+                  url
+                  title
+                  summary
                 }
               }
             }
@@ -389,6 +413,14 @@ describe('ListArticles', () => {
               node {
                 id
               }
+              highlight {
+                text
+                hyperlinks {
+                  url
+                  title
+                  summary
+                }
+              }
             }
             totalCount
           }
@@ -486,6 +518,14 @@ describe('ListArticles', () => {
             edges {
               node {
                 id
+              }
+              highlight {
+                text
+                hyperlinks {
+                  url
+                  title
+                  summary
+                }
               }
             }
             totalCount
