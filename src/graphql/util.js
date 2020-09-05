@@ -252,6 +252,11 @@ export async function defaultResolveEdges(
             fragment_size: 200, // word count of highlighted fragment
             type: 'plain',
           },
+          reference: {
+            number_of_fragments: 1, // Return only 1 piece highlight text
+            fragment_size: 200, // word count of highlighted fragment
+            type: 'plain',
+          },
         },
         pre_tags: ['<HIGHLIGHT>'],
         post_tags: ['</HIGHLIGHT>'],
@@ -315,15 +320,15 @@ async function defaultResolveFirstCursor(
 }
 
 async function defaultResolveHighlights(edge) {
-  const {
-    highlight: { text },
-    inner_hits,
-  } = edge;
+  const { highlight: { text, reference } = {}, inner_hits } = edge;
 
   const hyperlinks = inner_hits?.hyperlinks.hits.hits?.map(
     ({
       _source: { url },
-      highlight: { 'hyperlinks.title': title, 'hyperlinks.summary': summary },
+      highlight: {
+        'hyperlinks.title': title,
+        'hyperlinks.summary': summary,
+      } = {},
     }) => ({
       url,
       title: title ? title[0] : undefined,
@@ -333,7 +338,11 @@ async function defaultResolveHighlights(edge) {
 
   // Elasticsearch highlight returns an array because it can be multiple fragments,
   // We directly returns first element(text, title, summary) here because we set number_of_fragments to 1.
-  return { text: text ? text[0] : undefined, hyperlinks };
+  return {
+    text: text ? text[0] : undefined,
+    reference: reference ? reference[0] : undefined,
+    hyperlinks,
+  };
 }
 
 // All search
