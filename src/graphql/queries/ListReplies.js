@@ -83,7 +83,17 @@ export default {
       shouldQueries.push(
         {
           more_like_this: {
-            fields: ['text', 'reference'],
+            fields: ['text'],
+            like: likeQuery,
+            min_term_freq: 1,
+            min_doc_freq: 1,
+            minimum_should_match:
+              filter.moreLikeThis.minimumShouldMatch || '10<70%',
+          },
+        },
+        {
+          more_like_this: {
+            fields: ['reference'],
             like: likeQuery,
             min_term_freq: 1,
             min_doc_freq: 1,
