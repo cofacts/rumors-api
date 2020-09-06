@@ -15,11 +15,9 @@
     "seed": "cd test/rumors-db && npm run seed",
     "pretest": "npm run rumors-db:test",
     "test": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 jest --runInBand",
-    "start": "pm2 startOrRestart process.json --env production --log-date-format=\"YYYY-MM-DD HH:mm Z\" --no-daemon",
+    "start": "pm2 startOrRestart ecosystem.config.js --env production --no-daemon",
     "lint": "eslint src/.",
     "lint:fix": "eslint --fix src/.",
-    "validate:sameDoc": "echo Please run 'npm run evaluate' instead. See README.md for setting up test db.",
-    "clean": "rm -rf build",
     "rumors-db:pull": "cd test/rumors-db && git pull",
     "rumors-db:test": "cd test/rumors-db && ELASTICSEARCH_URL=http://localhost:62223 npm t"
   },
