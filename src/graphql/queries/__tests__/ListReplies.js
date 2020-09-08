@@ -61,6 +61,15 @@ describe('ListReplies', () => {
                 id
                 text
               }
+              highlight {
+                text
+                reference
+                hyperlinks {
+                  url
+                  title
+                  summary
+                }
+              }
             }
             totalCount
             pageInfo {
@@ -173,6 +182,15 @@ describe('ListReplies', () => {
               node {
                 id
               }
+              highlight {
+                text
+                reference
+                hyperlinks {
+                  url
+                  title
+                  summary
+                }
+              }
             }
           }
         }
@@ -195,6 +213,15 @@ describe('ListReplies', () => {
             edges {
               node {
                 id
+              }
+              highlight {
+                text
+                reference
+                hyperlinks {
+                  url
+                  title
+                  summary
+                }
               }
             }
           }
@@ -275,6 +302,15 @@ describe('ListReplies', () => {
             edges {
               node {
                 id
+              }
+              highlight {
+                text
+                reference
+                hyperlinks {
+                  url
+                  title
+                  summary
+                }
               }
             }
             totalCount

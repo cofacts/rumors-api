@@ -6,11 +6,21 @@ Object {
     "ListReplies": Object {
       "edges": Array [
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": "<HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT>",
+            "text": null,
+          },
           "node": Object {
             "id": "moreLikeThis2",
           },
         },
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": null,
+            "text": "<HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT>",
+          },
           "node": Object {
             "id": "moreLikeThis1",
           },
@@ -28,6 +38,17 @@ Object {
     "ListReplies": Object {
       "edges": Array [
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [
+              Object {
+                "summary": "居有頃，倚柱彈其劍，歌曰：「<HIGHLIGHT>長鋏歸來乎</HIGHLIGHT>！<HIGHLIGHT>食無魚</HIGHLIGHT>。」左右以告。孟嘗君曰：「食之，比門下之客。」",
+                "title": null,
+                "url": "http://gohome.com",
+              },
+            ],
+            "reference": null,
+            "text": null,
+          },
           "node": Object {
             "id": "referenceUrl",
           },
@@ -44,13 +65,53 @@ Object {
     "ListReplies": Object {
       "edges": Array [
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": null,
+            "text": "<HIGHLIGHT>bar</HIGHLIGHT>",
+          },
           "node": Object {
             "id": "userFoo",
           },
         },
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": null,
+            "text": "<HIGHLIGHT>bar</HIGHLIGHT>",
+          },
           "node": Object {
             "id": "rumor",
+          },
+        },
+        Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": "<HIGHLIGHT>http</HIGHLIGHT>://gohome.com",
+            "text": null,
+          },
+          "node": Object {
+            "id": "referenceUrl",
+          },
+        },
+        Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": null,
+            "text": "<HIGHLIGHT>bar</HIGHLIGHT> <HIGHLIGHT>bar</HIGHLIGHT> <HIGHLIGHT>bar</HIGHLIGHT>",
+          },
+          "node": Object {
+            "id": "moreLikeThis2",
+          },
+        },
+        Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": "<HIGHLIGHT>bar</HIGHLIGHT> <HIGHLIGHT>bar</HIGHLIGHT>",
+            "text": null,
+          },
+          "node": Object {
+            "id": "moreLikeThis1",
           },
         },
       ],
@@ -155,12 +216,22 @@ Object {
     "ListReplies": Object {
       "edges": Array [
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": "<HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT>",
+            "text": null,
+          },
           "node": Object {
             "id": "moreLikeThis2",
-            "text": "foo foo foo",
+            "text": "bar bar bar",
           },
         },
         Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": null,
+            "text": "<HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT>",
+          },
           "node": Object {
             "id": "moreLikeThis1",
             "text": "foo foo",
