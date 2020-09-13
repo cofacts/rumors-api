@@ -378,7 +378,7 @@ export function createConnectionType(
           new GraphQLList(
             new GraphQLNonNull(
               new GraphQLObjectType({
-                name: `${typeName}Edges`,
+                name: `${typeName}Edge`,
                 interfaces: [Edge],
                 fields: {
                   node: { type: new GraphQLNonNull(nodeType) },
