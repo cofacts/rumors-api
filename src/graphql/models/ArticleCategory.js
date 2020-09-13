@@ -5,20 +5,32 @@ import {
   GraphQLFloat,
   GraphQLString,
   GraphQLBoolean,
+  GraphQLID,
+  GraphQLNonNull,
 } from 'graphql';
 
+import { createConnectionType, defaultResolveEdges } from 'graphql/util';
+
+import Node from '../interfaces/Node';
 import Article from './Article';
 import User, { userFieldResolver } from './User';
 import Category from './Category';
 import ArticleCategoryFeedback from './ArticleCategoryFeedback';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 import FeedbackVote from './FeedbackVote';
-import { createConnectionType, defaultResolveEdges } from 'graphql/util';
 
 const ArticleCategory = new GraphQLObjectType({
   name: 'ArticleCategory',
+  interfaces: [Node],
   description: 'The linkage between an Article and a Category',
   fields: () => ({
+    id: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve({ categoryId, articleId }) {
+        return `${articleId}__${categoryId}`;
+      },
+    },
+
     categoryId: { type: GraphQLString },
 
     category: {

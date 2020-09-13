@@ -132,6 +132,7 @@ Object {
             "title": "性少數與愛滋病",
           },
           "categoryId": "c1",
+          "id": "foo__c1",
         },
       ],
       "text": "Lorum ipsum",

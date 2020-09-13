@@ -1,4 +1,6 @@
 import {
+  GraphQLNonNull,
+  GraphQLID,
   GraphQLObjectType,
   GraphQLString,
   GraphQLList,
@@ -19,6 +21,7 @@ import {
   timeRangeInput,
 } from 'graphql/util';
 
+import Node from '../interfaces/Node';
 import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
@@ -31,8 +34,9 @@ import ReplyRequest from './ReplyRequest';
 
 const Article = new GraphQLObjectType({
   name: 'Article',
+  interfaces: [Node],
   fields: () => ({
-    id: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLID) },
     text: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
