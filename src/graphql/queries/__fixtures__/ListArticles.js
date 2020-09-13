@@ -35,9 +35,15 @@ export default {
     articleCategories: [
       {
         categoryId: 'category1',
+        status: 'NORMAL',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 0,
       },
       {
         categoryId: 'category-author-1',
+        status: 'NORMAL',
+        positiveFeedbackCount: 1,
+        negativeFeedbackCount: 0,
       },
     ],
   },
@@ -84,9 +90,15 @@ export default {
     articleCategories: [
       {
         categoryId: 'category1',
+        status: 'NORMAL',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 0,
       },
       {
         categoryId: 'category-author-2',
+        status: 'NORMAL',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 0,
       },
     ],
   },
@@ -100,6 +112,15 @@ export default {
     text:
       '人生幾何，離闊如此！況以膠漆之心，置於胡越之身，進不得相合，退不能相忘，牽攣乖隔，各欲白首。',
     articleReplies: [],
+    articleCategories: [
+      {
+        // Ineffective articleCategory since it's deleted
+        categoryId: 'category1',
+        status: 'DELETED',
+        positiveFeedbackCount: 1,
+        negativeFeedbackCount: 0,
+      },
+    ],
   },
   '/articles/doc/listArticleTest4': {
     userId: 'user2',
@@ -154,6 +175,15 @@ export default {
         updatedAt: '2020-02-09T15:11:04.472Z',
         positiveFeedbackCount: 3,
         negativeFeedbackCount: 4,
+      },
+    ],
+    articleCategories: [
+      {
+        // Ineffective articleCategory since it has more negative feedback
+        categoryId: 'category1',
+        status: 'NORMAL',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 1,
       },
     ],
   },
