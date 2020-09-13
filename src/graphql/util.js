@@ -6,8 +6,12 @@ import {
   GraphQLList,
   GraphQLEnumType,
   GraphQLFloat,
+  GraphQLNonNull,
 } from 'graphql';
 
+import Connection from './interfaces/Connection';
+import Edge from './interfaces/Edge';
+import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
 
@@ -361,48 +365,53 @@ export function createConnectionType(
 ) {
   return new GraphQLObjectType({
     name: typeName,
+    interfaces: [Connection],
     fields: () => ({
       totalCount: {
-        type: GraphQLInt,
+        type: new GraphQLNonNull(GraphQLInt),
         description:
           'The total count of the entire collection, regardless of "before", "after".',
         resolve: resolveTotalCount,
       },
       edges: {
-        type: new GraphQLList(
-          new GraphQLObjectType({
-            name: `${typeName}Edges`,
-            fields: {
-              node: { type: nodeType },
-              cursor: { type: GraphQLString },
-              score: { type: GraphQLFloat },
-              highlight: {
-                type: Highlights,
-                resolve: resolveHighlights,
-              },
-            },
-          })
+        type: new GraphQLNonNull(
+          new GraphQLList(
+            new GraphQLNonNull(
+              new GraphQLObjectType({
+                name: `${typeName}Edges`,
+                interfaces: [Edge],
+                fields: {
+                  node: { type: new GraphQLNonNull(nodeType) },
+                  cursor: { type: new GraphQLNonNull(GraphQLString) },
+                  score: { type: GraphQLFloat },
+                  highlight: {
+                    type: Highlights,
+                    resolve: resolveHighlights,
+                  },
+                },
+              })
+            )
+          )
         ),
         resolve: resolveEdges,
       },
       pageInfo: {
-        type: new GraphQLObjectType({
-          name: `${typeName}PageInfo`,
-          fields: {
-            lastCursor: {
-              type: GraphQLString,
-              description:
-                'The cursor pointing to the last node of the entire collection, regardless of "before" and "after". Can be used to determine if is in the last page.',
-              resolve: resolveLastCursor,
+        type: new GraphQLNonNull(
+          new GraphQLObjectType({
+            name: `${typeName}PageInfo`,
+            interfaces: [PageInfo],
+            fields: {
+              lastCursor: {
+                type: GraphQLString,
+                resolve: resolveLastCursor,
+              },
+              firstCursor: {
+                type: GraphQLString,
+                resolve: resolveFirstCursor,
+              },
             },
-            firstCursor: {
-              type: GraphQLString,
-              description:
-                'The cursor pointing to the first node of the entire collection, regardless of "before" and "after". Can be used to determine if is in first page.',
-              resolve: resolveFirstCursor,
-            },
-          },
-        }),
+          })
+        ),
         resolve: params => params,
       },
     }),
