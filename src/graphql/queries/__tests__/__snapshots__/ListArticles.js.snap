@@ -782,14 +782,7 @@ Object {
 exports[`ListArticles should fail if before and after both exist 1`] = `
 Object {
   "data": Object {
-    "ListArticles": Object {
-      "edges": null,
-      "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
-      },
-      "totalCount": 4,
-    },
+    "ListArticles": null,
   },
   "errors": Array [
     [GraphQLError: Use of before & after is prohibited.],
