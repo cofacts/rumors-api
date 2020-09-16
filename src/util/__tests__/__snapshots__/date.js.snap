@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`date utils assertDateRange should raise error upon invalid params 1`] = `[Error: must include both start date and end date]`;
-
-exports[`date utils assertDateRange should raise error upon invalid params 2`] = `[Error: end date cannot be earlier than start date]`;
-
-exports[`date utils assertDateRange should raise error upon invalid params 3`] = `[Error: start date and end date cannot be more than 2592000000 apart]`;
-
-exports[`date utils assertDateRange should raise error upon invalid params 4`] = `[Error: end date must be no later than today]`;
