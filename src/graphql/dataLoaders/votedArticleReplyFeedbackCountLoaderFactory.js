@@ -5,7 +5,7 @@ export default () =>
   new DataLoader(
     /**
      * @param {string[]} userIds - list of userIds
-     * @returns {Promise<number[]>} - replied article count for the specified user
+     * @returns {Promise<number[]>} - number of article reply feedbacks the specified user has voted
      */
     async userIds => {
       const body = userIds.reduce(
