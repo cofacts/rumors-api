@@ -34,4 +34,13 @@ export default {
       { status: 'NORMAL', appId: 'WEBSITE', userId: 'other-user' },
     ],
   },
+  '/articlereplyfeedbacks/doc/f1': {
+    userId: 'current-user',
+    appId: 'app1',
+    articleId: 'a1',
+    replyId: 'r1',
+    score: 1,
+    createdAt: '2020-03-06T00:00:00.000Z',
+    updatedAt: '2020-04-06T00:00:00.000Z',
+  },
 };

@@ -13,6 +13,7 @@ Object {
         "total": 3,
       },
       "repliedArticleCount": 2,
+      "votedArticleReplyCount": 1,
     },
   },
 }
@@ -25,6 +26,13 @@ Object {
       "email": null,
       "level": 0,
       "name": "test user",
+      "points": Object {
+        "currentLevel": 0,
+        "nextLevel": 1,
+        "total": 0,
+      },
+      "repliedArticleCount": 0,
+      "votedArticleReplyCount": 0,
     },
   },
 }
