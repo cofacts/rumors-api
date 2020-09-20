@@ -7,7 +7,7 @@ import articleCategoryFeedbacksLoaderFactory from './articleCategoryFeedbacksLoa
 import searchResultLoaderFactory from './searchResultLoaderFactory';
 import urlLoaderFactory from './urlLoaderFactory';
 import repliedArticleCountLoaderFactory from './repliedArticleCountLoaderFactory';
-import votedArticleReplyFeedbackCountLoaderFactory from './votedArticleReplyFeedbackCountLoaderFactory';
+import votedArticleReplyCountLoaderFactory from './votedArticleReplyCountLoaderFactory';
 import userLevelLoaderFactory from './userLevelLoaderFactory';
 
 export default class DataLoaders {
@@ -58,10 +58,10 @@ export default class DataLoaders {
     );
   }
 
-  get votedArticleReplyFeedbackCountLoader() {
+  get votedArticleReplyCountLoader() {
     return this._checkOrSetLoader(
-      'votedArticleReplyFeedbackCountLoader',
-      votedArticleReplyFeedbackCountLoaderFactory
+      'votedArticleReplyCountLoader',
+      votedArticleReplyCountLoaderFactory
     );
   }
 

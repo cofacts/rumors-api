@@ -63,7 +63,7 @@ const User = new GraphQLObjectType({
       type: GraphQLNonNull(GraphQLInt),
       description: 'Number of article replies this user has given feedbacks',
       resolve: (user, args, context) =>
-        context.loaders.votedArticleReplyFeedbackCountLoader
+        context.loaders.votedArticleReplyCountLoader
           .load(user.id)
           .then(num => num || 0),
     },
