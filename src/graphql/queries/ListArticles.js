@@ -39,7 +39,8 @@ export default {
         categoryIds: {
           type: new GraphQLList(GraphQLString),
           description:
-            'Articles with more matching categories will come to front',
+            'List only articles that match any of the specified categories.' +
+            'ArticleCategories that are deleted or has more negative feedbacks than positive ones are not taken into account.',
         },
         moreLikeThis: {
           type: moreLikeThisInput,
@@ -330,8 +331,28 @@ export default {
             nested: {
               path: 'articleCategories',
               query: {
-                term: {
-                  'articleCategories.categoryId': categoryId,
+                bool: {
+                  must: [
+                    {
+                      term: {
+                        'articleCategories.categoryId': categoryId,
+                      },
+                    },
+                    {
+                      term: {
+                        'articleCategories.status': 'NORMAL',
+                      },
+                    },
+                    {
+                      script: {
+                        script: {
+                          source:
+                            "doc['articleCategories.positiveFeedbackCount'].value >= doc['articleCategories.negativeFeedbackCount'].value",
+                          lang: 'painless',
+                        },
+                      },
+                    },
+                  ],
                 },
               },
             },
