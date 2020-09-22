@@ -1,15 +1,22 @@
-import { GraphQLObjectType, GraphQLString } from 'graphql';
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLNonNull,
+  GraphQLID,
+} from 'graphql';
 
 import { createSortType, pagingArgs, getSortArgs } from 'graphql/util';
 
+import Node from '../interfaces/Node';
 import { ArticleCategoryConnection } from './ArticleCategory';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 
 const Category = new GraphQLObjectType({
   name: 'Category',
   description: 'Category label for specific topic',
+  interfaces: [Node],
   fields: () => ({
-    id: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLID) },
     title: { type: GraphQLString },
     description: { type: GraphQLString },
     createdAt: { type: GraphQLString },

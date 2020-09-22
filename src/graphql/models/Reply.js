@@ -1,6 +1,13 @@
-import { GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql';
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLID,
+} from 'graphql';
 
 import { filterArticleRepliesByStatus } from 'graphql/util';
+import Node from '../interfaces/Node';
 import ReplyTypeEnum from './ReplyTypeEnum';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
@@ -9,8 +16,9 @@ import Hyperlink from './Hyperlink';
 
 const Reply = new GraphQLObjectType({
   name: 'Reply',
+  interfaces: [Node],
   fields: () => ({
-    id: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLID) },
     user: {
       type: User,
       description: 'The user submitted this reply version',

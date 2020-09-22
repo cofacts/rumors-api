@@ -203,6 +203,7 @@ describe('GetReplyAndGetArticle', () => {
             GetArticle(id: "foo") {
               text
               articleCategories(status: NORMAL) {
+                id
                 categoryId
                 category {
                   id

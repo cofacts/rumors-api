@@ -1,6 +1,13 @@
-import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
-import FeedbackVote from './FeedbackVote';
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLInt,
+  GraphQLID,
+  GraphQLNonNull,
+} from 'graphql';
 
+import Node from '../interfaces/Node';
+import FeedbackVote from './FeedbackVote';
 import User, { userFieldResolver } from './User';
 import Article from './Article';
 import Reply from './Reply';
@@ -9,8 +16,9 @@ import ArticleReply from './ArticleReply';
 export default new GraphQLObjectType({
   name: 'ArticleReplyFeedback',
   description: 'User feedback to an ArticleReply',
+  interfaces: [Node],
   fields: () => ({
-    id: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLID) },
 
     user: {
       type: User,
