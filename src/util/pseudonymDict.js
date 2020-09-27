@@ -1436,8 +1436,11 @@ export const adjectives = [
   '喜交朋友的',
   '令人信服的',
 ];
-
+// duplicate identity separators and decorators so that special separators/decorators are less likely to appear
 export const separators = [
+  ({ adj, place, name }) => `${adj}${place}${name}`,
+  ({ adj, place, name }) => `${adj}${place}${name}`,
+  ({ adj, place, name }) => `${adj}${place}${name}`,
   ({ adj, place, name }) => `${adj}${place}${name}`,
   ({ adj, place, name }) => `${adj}✖${place}✖${name}`,
   ({ adj, place, name }) => `來自${place}✖${adj}✖${name}`,
@@ -1446,6 +1449,14 @@ export const separators = [
 ];
 
 export const decorators = [
+  joinedName => `${joinedName}`,
+  joinedName => `${joinedName}`,
+  joinedName => `${joinedName}`,
+  joinedName => `${joinedName}`,
+  joinedName => `${joinedName}`,
+  joinedName => `${joinedName}`,
+  joinedName => `${joinedName}`,
+  joinedName => `${joinedName}`,
   joinedName => `${joinedName}`,
   joinedName => `${joinedName}®`,
   joinedName => `${joinedName}™`,
