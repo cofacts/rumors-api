@@ -1,5 +1,58 @@
 import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
 import crypto from 'crypto';
+import {
+  adjectives,
+  names,
+  towns,
+  separators,
+  decorators,
+} from 'util/pseudonymDict';
+import {
+  accessories,
+  faces,
+  facialHairStyles,
+  hairStyles,
+  bustPoses,
+} from 'util/openPeepsOptions';
+import { sample, random } from 'lodash';
+
+/**
+ * Generate a pseudonym.
+ */
+export const generatePseudonym = () => {
+  const [adj, name, place, separator, decorator] = [
+    adjectives,
+    names,
+    towns,
+    separators,
+    decorators,
+  ].map(ary => sample(ary));
+  return decorator(separator({ adj, name, place }));
+};
+
+/**
+ * Generate data for open peeps avatar.
+ */
+export const generateOpenPeepsAvatar = () => {
+  const accessory = random() ? sample(accessories) : 'None';
+  const facialHair = random() ? sample(facialHairStyles) : 'None';
+  const flip = !!random();
+  const backgroundColorIndex = random(0, 1, true);
+
+  const face = sample(faces);
+  const hair = sample(hairStyles);
+  const body = sample(bustPoses);
+
+  return {
+    accessory,
+    body,
+    face,
+    hair,
+    facialHair,
+    backgroundColorIndex,
+    flip,
+  };
+};
 
 /**
  * Field config helper for current user only field.
