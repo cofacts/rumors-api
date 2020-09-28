@@ -118,6 +118,7 @@ const Reply = new GraphQLObjectType({
                   },
                 },
               ],
+              minimum_should_match: 1,
             },
           },
           sort: getSortArgs(orderBy),

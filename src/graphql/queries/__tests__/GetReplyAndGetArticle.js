@@ -122,7 +122,14 @@ describe('GetReplyAndGetArticle', () => {
                   cursor
                   node {
                     id
+                  }
+                  highlight {
                     text
+                    reference
+                    hyperlinks {
+                      title
+                      summary
+                    }
                   }
                   score
                 }

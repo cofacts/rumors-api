@@ -57,6 +57,12 @@ export default {
       },
     ],
     normalArticleCategoryCount: 1,
+    hyperlinks: [
+      {
+        title: 'title',
+        summary: 'summary summary',
+      },
+    ],
   },
   '/articles/doc/foo2': {
     text: 'Lorum ipsum Lorum ipsum',
@@ -83,6 +89,12 @@ export default {
     ],
     normalArticleReplyCount: 1,
     references: [{ type: 'LINE' }],
+    hyperlinks: [
+      {
+        title: 'title title',
+        summary: 'summary',
+      },
+    ],
   },
   '/articles/doc/manyRequests': {
     text: 'Popular',

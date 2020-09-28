@@ -187,11 +187,52 @@ const Article = new GraphQLObjectType({
       ) {
         const body = {
           query: {
-            more_like_this: {
-              fields: ['text'],
-              like: [{ _index: 'articles', _type: 'doc', _id: id }],
-              min_term_freq: 1,
-              min_doc_freq: 1,
+            bool: {
+              should: [
+                {
+                  more_like_this: {
+                    fields: ['text'],
+                    like: [{ _index: 'articles', _type: 'doc', _id: id }],
+                    min_term_freq: 1,
+                    min_doc_freq: 1,
+                  },
+                },
+                {
+                  nested: {
+                    path: 'hyperlinks',
+                    score_mode: 'sum',
+                    query: {
+                      more_like_this: {
+                        fields: ['hyperlinks.title', 'hyperlinks.summary'],
+                        like: [{ _index: 'articles', _type: 'doc', _id: id }],
+                        min_term_freq: 1,
+                        min_doc_freq: 1,
+                      },
+                    },
+                    inner_hits: {
+                      highlight: {
+                        order: 'score',
+                        fields: {
+                          'hyperlinks.title': {
+                            number_of_fragments: 1, // Return only 1 piece highlight text
+                            fragment_size: 200, // word count of highlighted fragment
+                            type: 'plain',
+                          },
+                          'hyperlinks.summary': {
+                            number_of_fragments: 1, // Return only 1 piece highlight text
+                            fragment_size: 200, // word count of highlighted fragment
+                            type: 'plain',
+                          },
+                        },
+                        require_field_match: false,
+                        pre_tags: ['<HIGHLIGHT>'],
+                        post_tags: ['</HIGHLIGHT>'],
+                      },
+                    },
+                  },
+                },
+              ],
+              minimum_should_match: 1,
             },
           },
           sort: getSortArgs(orderBy),
@@ -199,20 +240,15 @@ const Article = new GraphQLObjectType({
         };
 
         if (filter.replyCount) {
-          // Switch to bool query so that we can filter more_like_this results
-          //
-          body.query = {
-            bool: {
-              must: body.query,
-              filter: {
-                range: {
-                  normalArticleReplyCount: getRangeFieldParamFromArithmeticExpression(
-                    filter.replyCount
-                  ),
-                },
+          body.query.bool.filter = [
+            {
+              range: {
+                normalArticleReplyCount: getRangeFieldParamFromArithmeticExpression(
+                  filter.replyCount
+                ),
               },
             },
-          };
+          ];
         }
 
         return {

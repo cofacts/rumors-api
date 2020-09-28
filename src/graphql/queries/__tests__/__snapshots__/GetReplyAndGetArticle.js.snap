@@ -148,12 +148,12 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuOTQ4OTIxMywiZm9vMyJd",
+            "cursor": "WzEuMzg5MjM0OCwiZm9vMyJd",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.9489213,
+            "score": 1.3892348,
           },
           Object {
             "cursor": "WzAuOTIxMDc0OCwiZm9vMiJd",
@@ -177,18 +177,31 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuOTQ4OTIxMywiZm9vMyJd",
+            "cursor": "WzEuMzg5MjM0OCwiZm9vMyJd",
+            "highlight": Object {
+              "hyperlinks": Array [
+                Object {
+                  "summary": "<HIGHLIGHT>summary</HIGHLIGHT>",
+                  "title": "<HIGHLIGHT>title</HIGHLIGHT> <HIGHLIGHT>title</HIGHLIGHT>",
+                },
+              ],
+              "reference": null,
+              "text": "<HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT> <HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT> <HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT>",
+            },
             "node": Object {
               "id": "foo3",
-              "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.9489213,
+            "score": 1.3892348,
           },
           Object {
             "cursor": "WzAuOTIxMDc0OCwiZm9vMiJd",
+            "highlight": Object {
+              "hyperlinks": Array [],
+              "reference": null,
+              "text": "<HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT> <HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT>",
+            },
             "node": Object {
               "id": "foo2",
-              "text": "Lorum ipsum Lorum ipsum",
             },
             "score": 0.9210748,
           },
@@ -214,12 +227,12 @@ Object {
             "score": 0.9210748,
           },
           Object {
-            "cursor": "WzAuOTQ4OTIxMywiZm9vMyJd",
+            "cursor": "WzEuMzg5MjM0OCwiZm9vMyJd",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.9489213,
+            "score": 1.3892348,
           },
         ],
       },
