@@ -303,6 +303,63 @@ describe('GetReplyAndGetArticle', () => {
         `()
       ).toMatchSnapshot();
     });
+    it('similarReplies should work', async () => {
+      // No param
+      //
+      expect(
+        await gql`
+          {
+            GetReply(id: "bar") {
+              similarReplies {
+                edges {
+                  cursor
+                  node {
+                    id
+                  }
+                  score
+                  highlight {
+                    text
+                    reference
+                    hyperlinks {
+                      title
+                      summary
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `()
+      ).toMatchSnapshot('similarReply no-param test');
+
+      // sort
+      //
+      expect(
+        await gql`
+          {
+            GetReply(id: "bar") {
+              similarReplies(orderBy: [{ _score: ASC }]) {
+                edges {
+                  cursor
+                  node {
+                    id
+                  }
+                  score
+                  highlight {
+                    text
+                    reference
+                    hyperlinks {
+                      title
+                      summary
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `()
+      ).toMatchSnapshot('similarReply sorting test');
+    });
   });
 
   afterAll(() => unloadFixtures(fixtures));

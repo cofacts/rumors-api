@@ -181,7 +181,10 @@ const Article = new GraphQLObjectType({
         },
         ...pagingArgs,
       },
-      async resolve({ id }, { filter = {}, orderBy = [], ...otherParams }) {
+      async resolve(
+        { id },
+        { filter = {}, orderBy = [{ _score: 'DESC' }], ...otherParams }
+      ) {
         const body = {
           query: {
             more_like_this: {

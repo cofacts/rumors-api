@@ -92,6 +92,12 @@ export default {
     text: 'bar',
     reference: 'barbar',
     type: 'NOT_ARTICLE',
+    hyperlinks: [
+      {
+        title: 'GG',
+        summary: 'Lorem Ipsum',
+      },
+    ],
   },
   '/replies/doc/bar2': {
     text: 'bar2',
@@ -102,6 +108,24 @@ export default {
     text: 'fofo',
     reference: 'barfofo',
     type: 'NOT_ARTICLE',
+  },
+  '/replies/doc/similar-to-bar': {
+    text: 'bar bar',
+    reference: 'barbar',
+    type: 'NOT_ARTICLE',
+    createdAt: '2015-01-01T12:10:30Z',
+  },
+  '/replies/doc/similar-to-bar2': {
+    text: 'GG',
+    reference: 'GGG',
+    type: 'NOT_ARTICLE',
+    createdAt: '2015-01-02T12:10:30Z',
+    hyperlinks: [
+      {
+        title: 'GG G',
+        summary: 'Lorem Ipsum Ipsum',
+      },
+    ],
   },
   '/replyrequests/doc/articleTest1': {
     articleId: 'foo',
