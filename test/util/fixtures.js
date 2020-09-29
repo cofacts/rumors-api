@@ -31,7 +31,11 @@ export async function loadFixtures(fixtureMap) {
 }
 
 export async function unloadFixtures(fixtureMap) {
-  const body = Object.keys(fixtureMap).map(key => {
+  unloadDocs(Object.keys(fixtureMap));
+}
+
+export async function unloadDocs(keys) {
+  const body = keys.map(key => {
     const [, _index, _type, _id] = key.split('/');
     return { delete: { _index, _type, _id } };
   });

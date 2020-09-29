@@ -1,7 +1,12 @@
 jest.mock('util/grpc');
 
 import gql from 'util/GraphQL';
-import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
+import {
+  loadFixtures,
+  unloadFixtures,
+  resetFrom,
+  unloadDocs,
+} from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateReply';
@@ -136,6 +141,8 @@ describe('CreateReply', () => {
       id: replyId,
     });
     expect(reply._source).toMatchSnapshot();
+
+    await unloadDocs([`/replies/doc/${replyId}`]);
   });
 
   it('should throw error since a reference is required for type !== NOT_ARTICLE', async () => {
