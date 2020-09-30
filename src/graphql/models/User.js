@@ -1,4 +1,9 @@
-import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLInt,
+  GraphQLNonNull,
+} from 'graphql';
 import crypto from 'crypto';
 import {
   adjectives,
@@ -99,53 +104,65 @@ const User = new GraphQLObjectType({
     facebookId: currentUserOnlyField(GraphQLString),
     githubId: currentUserOnlyField(GraphQLString),
     twitterId: currentUserOnlyField(GraphQLString),
-    repliedArticleCount: currentUserOnlyField(
-      GraphQLInt,
-      (user, args, context) =>
-        context.loaders.repliedArticleCountLoader.load(user.id)
-    ),
+    repliedArticleCount: {
+      type: GraphQLNonNull(GraphQLInt),
+      description: 'Number of articles this user has replied to',
+      resolve: (user, args, context) =>
+        context.loaders.repliedArticleCountLoader
+          .load(user.id)
+          .then(num => num || 0),
+    },
+    votedArticleReplyCount: {
+      type: GraphQLNonNull(GraphQLInt),
+      description: 'Number of article replies this user has given feedbacks',
+      resolve: (user, args, context) =>
+        context.loaders.votedArticleReplyCountLoader
+          .load(user.id)
+          .then(num => num || 0),
+    },
+
     level: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       async resolve(user, arg, context) {
-        const { level } = await context.loaders.userLevelLoader.load(user.id);
-        return level;
+        const { level } =
+          (await context.loaders.userLevelLoader.load(user.id)) || {};
+        return level || 0;
       },
     },
-    points: currentUserOnlyField(
-      new GraphQLObjectType({
-        name: 'PointInfo',
-        description:
-          "Information of a user's point. Only available for current user.",
-        fields: {
-          total: {
-            type: GraphQLInt,
-            description: 'Points earned by the current user',
+    points: {
+      type: new GraphQLNonNull(
+        new GraphQLObjectType({
+          name: 'PointInfo',
+          description:
+            "Information of a user's point. Only available for current user.",
+          fields: {
+            total: {
+              type: new GraphQLNonNull(GraphQLInt),
+              description: 'Points earned by the current user',
+            },
+            currentLevel: {
+              type: new GraphQLNonNull(GraphQLInt),
+              description: 'Points required for current level',
+            },
+            nextLevel: {
+              type: new GraphQLNonNull(GraphQLInt),
+              description:
+                'Points required for next level. null when there is no next level.',
+            },
           },
-          currentLevel: {
-            type: GraphQLInt,
-            description: 'Points required for current level',
-          },
-          nextLevel: {
-            type: GraphQLInt,
-            description:
-              'Points required for next level. null when there is no next level.',
-          },
-        },
-      }),
-      async (user, arg, context) => {
-        const {
-          totalPoints,
-          currentLevelPoints,
-          nextLevelPoints,
-        } = await context.loaders.userLevelLoader.load(user.id);
+        })
+      ),
+      resolve: async (user, arg, context) => {
+        const { totalPoints, currentLevelPoints, nextLevelPoints } =
+          (await context.loaders.userLevelLoader.load(user.id)) || {};
 
         return {
-          total: totalPoints,
-          currentLevel: currentLevelPoints,
-          nextLevel: nextLevelPoints,
+          total: totalPoints || 0,
+          currentLevel: currentLevelPoints || 0,
+          nextLevel: nextLevelPoints || 1,
         };
-      }
-    ),
+      },
+    },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
   }),

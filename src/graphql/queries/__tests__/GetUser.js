@@ -15,6 +15,7 @@ describe('GetUser', () => {
             name
             email
             repliedArticleCount
+            votedArticleReplyCount
             level
             points {
               total
@@ -33,8 +34,15 @@ describe('GetUser', () => {
         {
           GetUser(id: "test-user") {
             name
-            email
+            email # should be null
+            repliedArticleCount
+            votedArticleReplyCount
             level
+            points {
+              total
+              currentLevel
+              nextLevel
+            }
           }
         }
       `({}, { user: currentUser })
