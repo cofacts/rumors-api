@@ -100,14 +100,14 @@ const storeScriptInDB = async () => {
   });
 };
 
-const parseIdFromRow = function(row) {
+const parseIdFromRow = function (row) {
   const id = row.dimensions[0];
   const match = idExtractor.exec(id);
   return match ? match[1] : id;
 };
 
 // Contructs request body for google reporting API.
-const requestBodyBuilder = function(sourceType, docType, pageToken, params) {
+const requestBodyBuilder = function (sourceType, docType, pageToken, params) {
   const {
     useContentGroup = true,
     startDate = 'today',
@@ -152,7 +152,7 @@ const requestBodyBuilder = function(sourceType, docType, pageToken, params) {
     hasMore: {bool} whether there's more data to fetch
  }
  */
-const fetchReports = async function(sourceType, pageTokens = {}, params) {
+const fetchReports = async function (sourceType, pageTokens = {}, params) {
   let reportRequests = [];
   let nextPageTokens = {};
   // when pageToken is -1, it means there's no more rows to fetch
@@ -188,14 +188,12 @@ const fetchReports = async function(sourceType, pageTokens = {}, params) {
     if (rows) {
       console.log(
         `fetched ${rows.length} starting at ${pageTokens[docType] || 0} ` +
-          `out of total ${
-            report.data.rowCount
-          } rows for ${sourceType} ${docType}` +
-          ` ${
-            report.nextPageToken
-              ? `with next pageToken ${report.nextPageToken}`
-              : ''
-          }`
+        `out of total ${report.data.rowCount
+        } rows for ${sourceType} ${docType}` +
+        ` ${report.nextPageToken
+          ? `with next pageToken ${report.nextPageToken}`
+          : ''
+        }`
       );
     } else {
       console.log(`no entries for ${sourceType} ${docType}`);
@@ -208,7 +206,7 @@ const fetchReports = async function(sourceType, pageTokens = {}, params) {
   return { results, pageTokens: nextPageTokens, hasMore };
 };
 
-const upsertDocStats = async function(body) {
+const upsertDocStats = async function (body) {
   const res = await client.bulk({
     body,
     refresh: 'true',
@@ -258,7 +256,7 @@ async function fetchReplyUsers(rows) {
 
  * @return {object} Return the stats of last processed row, same format as lastParams.
  */
-const processReport = async function(
+const processReport = async function (
   sourceType,
   docType,
   rows,
@@ -355,7 +353,7 @@ const processReport = async function(
  * @param {object} params        Object of the from:
     {useContentGroup: [bool=true], [startDate: string], [endDate: string]}
  */
-const updateStats = async function(params) {
+const updateStats = async function (params) {
   for (const sourceType of allSourceTypes) {
     let results,
       pageTokens,

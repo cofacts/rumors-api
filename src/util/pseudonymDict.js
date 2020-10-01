@@ -1437,27 +1437,18 @@ export const adjectives = [
   '令人信服的',
 ];
 // duplicate identity separators and decorators so that special separators/decorators are less likely to appear
-export const separators = [
-  ({ adj, place, name }) => `${adj}${place}${name}`,
-  ({ adj, place, name }) => `${adj}${place}${name}`,
-  ({ adj, place, name }) => `${adj}${place}${name}`,
-  ({ adj, place, name }) => `${adj}${place}${name}`,
+export const separators = Array(16).fill(
+  ({ adj, place, name }) => `${adj}${place}${name}`
+).concat([
   ({ adj, place, name }) => `${adj}✖${place}✖${name}`,
   ({ adj, place, name }) => `來自${place}✖${adj}✖${name}`,
   ({ adj, place, name }) => `${adj}✿${place}✿${name}`,
   ({ adj, place, name }) => `${adj}卍${place}卍${name}`,
-];
+]);
 
-export const decorators = [
-  joinedName => `${joinedName}`,
-  joinedName => `${joinedName}`,
-  joinedName => `${joinedName}`,
-  joinedName => `${joinedName}`,
-  joinedName => `${joinedName}`,
-  joinedName => `${joinedName}`,
-  joinedName => `${joinedName}`,
-  joinedName => `${joinedName}`,
-  joinedName => `${joinedName}`,
+export const decorators = Array(36).fill(
+  joinedName => `${joinedName}`
+).concat([
   joinedName => `${joinedName}®`,
   joinedName => `${joinedName}™`,
   joinedName => `↖${joinedName}↗`,
@@ -1467,4 +1458,4 @@ export const decorators = [
   joinedName => `㊣${joinedName}㊣`,
   joinedName => `Oo${joinedName}oO`,
   joinedName => `乂${joinedName}乂`,
-];
+]);
