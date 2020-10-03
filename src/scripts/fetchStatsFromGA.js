@@ -27,6 +27,7 @@ import client from 'util/client';
 import rollbar from '../rollbarInstance';
 import { google } from 'googleapis';
 import yargs from 'yargs';
+import { pick, get } from 'lodash';
 
 const analyticsreporting = google.analyticsreporting('v4');
 
@@ -43,6 +44,11 @@ const formatDate = date =>
 const docTypes = {
   ARTICLE: 'article',
   REPLY: 'reply',
+};
+
+const docIndices = {
+  article: 'articles',
+  reply: 'replies'
 };
 
 const allDocTypes = [docTypes.ARTICLE, docTypes.REPLY];
@@ -71,7 +77,7 @@ const statsSources = {
 const allSourceTypes = [statsSources.WEB.name, statsSources.LINE.name];
 const upsertScriptID = 'analyticsUpsertScript';
 
-// since web stats and line stats are fetched seperately, need to do a merge
+// since web stats and line stats are fetched separately, need to do a merge
 // update on `stats` so existing values won't be overwritten.
 const upsertScript = `
   if (ctx._source.size() == 0 || ctx._source.stats.size() == 0) {
@@ -81,6 +87,9 @@ const upsertScript = `
   }
   if (params.docUserId != null) {
     ctx._source.docUserId = params.docUserId;
+  }
+  if (params.docAppId != null) {
+    ctx._source.docAppId = params.docAppId;
   }
   ctx._source.fetchedAt = params.fetchedAt;
   ctx._source.date = params.date;
@@ -100,14 +109,14 @@ const storeScriptInDB = async () => {
   });
 };
 
-const parseIdFromRow = function(row) {
+const parseIdFromRow = function (row) {
   const id = row.dimensions[0];
   const match = idExtractor.exec(id);
   return match ? match[1] : id;
 };
 
-// Contructs request body for google reporting API.
-const requestBodyBuilder = function(sourceType, docType, pageToken, params) {
+// Constructs request body for google reporting API.
+const requestBodyBuilder = function (sourceType, docType, pageToken, params) {
   const {
     useContentGroup = true,
     startDate = 'today',
@@ -152,7 +161,7 @@ const requestBodyBuilder = function(sourceType, docType, pageToken, params) {
     hasMore: {bool} whether there's more data to fetch
  }
  */
-const fetchReports = async function(sourceType, pageTokens = {}, params) {
+const fetchReports = async function (sourceType, pageTokens = {}, params) {
   let reportRequests = [];
   let nextPageTokens = {};
   // when pageToken is -1, it means there's no more rows to fetch
@@ -188,14 +197,12 @@ const fetchReports = async function(sourceType, pageTokens = {}, params) {
     if (rows) {
       console.log(
         `fetched ${rows.length} starting at ${pageTokens[docType] || 0} ` +
-          `out of total ${
-            report.data.rowCount
-          } rows for ${sourceType} ${docType}` +
-          ` ${
-            report.nextPageToken
-              ? `with next pageToken ${report.nextPageToken}`
-              : ''
-          }`
+        `out of total ${report.data.rowCount
+        } rows for ${sourceType} ${docType}` +
+        ` ${report.nextPageToken
+          ? `with next pageToken ${report.nextPageToken}`
+          : ''
+        }`
       );
     } else {
       console.log(`no entries for ${sourceType} ${docType}`);
@@ -208,7 +215,7 @@ const fetchReports = async function(sourceType, pageTokens = {}, params) {
   return { results, pageTokens: nextPageTokens, hasMore };
 };
 
-const upsertDocStats = async function(body) {
+const upsertDocStats = async function (body) {
   const res = await client.bulk({
     body,
     refresh: 'true',
@@ -220,27 +227,32 @@ const upsertDocStats = async function(body) {
   }
 };
 
-async function fetchReplyUsers(rows) {
-  const replyIds = rows.map(row => parseIdFromRow(row));
+async function fetchDocUsers(index, rows) {
+  const ids = rows.map(row => parseIdFromRow(row));
   const {
     body: {
-      hits: { hits: replies },
+      hits: { hits: docs },
     },
   } = await client.search({
-    index: 'replies',
+    index,
     size: pageSize,
     body: {
       query: {
-        ids: { values: replyIds },
+        ids: { values: ids },
       },
       _source: {
-        includes: ['userId'],
+        includes: ['userId', 'appId'],
       },
     },
   });
-  let replyUsers = {};
-  replies.forEach(reply => (replyUsers[reply._id] = reply._source.userId));
-  return replyUsers;
+  let docUsers = {};
+  docs.forEach(doc => (docUsers[doc._id] = {
+    docUserId: doc._source.userId,
+    docAppId: doc._source.appId
+  }));
+  console.log(`docs: ${JSON.stringify(docs, null, 2)}`);
+  console.log(`docUsers: ${JSON.stringify(docUsers, null, 2)}`);
+  return docUsers;
 }
 
 /**
@@ -258,17 +270,15 @@ async function fetchReplyUsers(rows) {
 
  * @return {object} Return the stats of last processed row, same format as lastParams.
  */
-const processReport = async function(
+const processReport = async function (
   sourceType,
   docType,
   rows,
   fetchedAt,
   lastParams
 ) {
-  let replyUsers;
-  if (docType === docTypes.REPLY) {
-    replyUsers = await fetchReplyUsers(rows);
-  }
+  const docUsers = await fetchDocUsers(docIndices[docType], rows);
+  console.log(`docUsers: ${JSON.stringify(docUsers, null, 2)}`);
 
   let bulkUpdates = [];
   const sourceName = sourceType.toLowerCase();
@@ -281,13 +291,7 @@ const processReport = async function(
     const [visits, users] = row.metrics[0].values.map(v => parseInt(v, 10));
     const isSameEntry =
       lastParams && lastParams.date === timestamp && lastParams.docId === docId;
-    let docUserId, stats;
-
-    if (docType === docTypes.REPLY && replyUsers[docId]) {
-      docUserId = replyUsers[docId];
-    }
-
-    stats = {
+    let stats = {
       [`${sourceName}Visit`]: parseInt(visits, 10),
       [`${sourceName}User`]: parseInt(users, 10),
     };
@@ -299,15 +303,16 @@ const processReport = async function(
       stats[`${sourceName}Visit`] += parseInt(visits, 10);
       stats[`${sourceName}User`] += parseInt(users, 10);
     }
+    console.log(`docUser: ${get(docUsers, docId)}`);
 
     const id = `${docType}_${docId}_${date}`;
     lastParams = {
       fetchedAt,
       date: timestamp,
       docId,
-      docUserId,
       stats,
       type: docType,
+      ...get(docUsers, docId, {})
     };
 
     // Page views on the same reply/article could have different `pagePathLevel2`
@@ -344,6 +349,7 @@ const processReport = async function(
       date: lastParams.date,
       docId: lastParams.docId,
       docUserId: lastParams.docUserId,
+      docAppId: lastParams.docAppId,
       stats: lastParams.stats,
     };
   }
@@ -355,7 +361,7 @@ const processReport = async function(
  * @param {object} params        Object of the from:
     {useContentGroup: [bool=true], [startDate: string], [endDate: string]}
  */
-const updateStats = async function(params) {
+const updateStats = async function (params) {
   for (const sourceType of allSourceTypes) {
     let results,
       pageTokens,
@@ -412,7 +418,7 @@ async function main() {
         useContentGroup: {
           default: true,
           description:
-            'wheter to use ga:contentGroup1 as a dimension for web stats',
+            'whether to use ga:contentGroup1 as a dimension for web stats',
           type: 'boolean',
         },
       })

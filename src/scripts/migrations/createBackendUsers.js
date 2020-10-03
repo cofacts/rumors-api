@@ -42,7 +42,7 @@ import {
   AvatarTypes,
   convertAppUserIdToUserId,
 } from 'graphql/models/User';
-import _ from 'lodash';
+import { get, set } from 'lodash';
 
 const AGG_NAME = 'userIdPair';
 
@@ -110,15 +110,13 @@ const isBackendApp = appId =>
 const userReferenceInSchema = {
   articlecategoryfeedbacks: {
     fields: [],
-    genId: source =>
-      `${source.articleId}__${source.categoryId}__${source.userId}__${source.appId
-      }`,
+    genId: doc =>
+      `${doc.articleId}__${doc.categoryId}__${doc.userId}__${doc.appId}`,
   },
   articlereplyfeedbacks: {
     fields: [],
-    genId: source =>
-      `${source.articleId}__${source.replyId}__${source.userId}__${source.appId
-      }`,
+    genId: doc =>
+      `${doc.articleId}__${doc.replyId}__${doc.userId}__${doc.appId}`,
   },
   articles: {
     fields: ['references', 'articleReplies', 'articleCategories'],
@@ -126,7 +124,7 @@ const userReferenceInSchema = {
   replies: { fields: [] },
   replyrequests: {
     fields: ['feedbacks'],
-    genId: source => `${source.articleId}__${source.userId}__${source.appId}`,
+    genId: doc => `${doc.articleId}__${doc.userId}__${doc.appId}`,
   },
 };
 
@@ -199,7 +197,7 @@ export default class CreateBackendUsers {
         // logError(error);
       } else if (isBackendApp(appId)) {
         const dbUserId = convertAppUserIdToUserId(appId, userId);
-        const appUserId = _.get(this.reversedUserIdMap, [dbUserId, 1]);
+        const appUserId = get(this.reversedUserIdMap, [dbUserId, 1]);
         // if the hashed id already exists, check for collision
         if (appUserId !== undefined) {
           if (appUserId !== userId) {
@@ -208,8 +206,8 @@ export default class CreateBackendUsers {
             );
           }
         } else {
-          _.set(this.userIdMap, [appId, userId], dbUserId);
-          _.set(this.reversedUserIdMap, dbUserId, [appId, userId]);
+          set(this.userIdMap, [appId, userId], dbUserId);
+          set(this.reversedUserIdMap, dbUserId, [appId, userId]);
           bulkOperations.push(
             {
               index: {
@@ -281,7 +279,6 @@ export default class CreateBackendUsers {
       await this.processUsers(buckets);
       return lastKey;
     } catch (e) {
-      debugger;
       logError(
         `error while fetching users for indexName:${indexName} with pageIndex ${pageIndex}`
       );
@@ -335,7 +332,7 @@ export default class CreateBackendUsers {
   getUserIds(appId, userId) {
     return isBackendApp(appId)
       ? {
-        userId: _.get(this.userIdMap, [appId, userId], userId),
+        userId: get(this.userIdMap, [appId, userId], userId),
         appUserId: userId,
       }
       : { userId };
