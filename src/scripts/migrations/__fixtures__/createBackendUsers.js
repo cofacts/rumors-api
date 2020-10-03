@@ -1,194 +1,194 @@
 export default {
   fixturesToLoad: {
-    "/users_v1_0_2/doc/CBUT_user_0": {
+    "/users/doc/CBUT_user_0": {
       "createdAt": "2019-02-18T06:28:55.720Z",
       "updatedAt": "2019-02-18T06:28:55.720Z",
       "email": "cnMsf0z@example.com",
       "name": "uH2VDAgiwf UC6V4",
       "facebookId": "CBUT_facebook_0"
     },
-    "/users_v1_0_2/doc/CBUT_user_1": {
+    "/users/doc/CBUT_user_1": {
       "createdAt": "2019-10-15T05:11:15.972Z",
       "updatedAt": "2019-10-15T05:11:15.972Z",
       "email": "8xeGKHZOda@example.com",
       "name": "QcGDf68rq D3ZWh",
       "facebookId": "CBUT_facebook_1"
     },
-    "/users_v1_0_2/doc/CBUT_user_2": {
+    "/users/doc/CBUT_user_2": {
       "createdAt": "2020-07-06T05:46:06.931Z",
       "updatedAt": "2020-07-06T05:46:06.931Z",
       "email": "GFsBpOzw1t@example.com",
       "name": "fzAlW7 lTLr8U",
       "facebookId": "CBUT_facebook_2"
     },
-    "/users_v1_0_2/doc/CBUT_user_3": {
+    "/users/doc/CBUT_user_3": {
       "createdAt": "2017-08-07T04:03:29.995Z",
       "updatedAt": "2017-08-07T04:03:29.995Z",
       "email": "WNEhSxYx@example.com",
       "name": "nUWqA 9zu04Q",
       "facebookId": "CBUT_facebook_3"
     },
-    "/users_v1_0_2/doc/CBUT_user_4": {
+    "/users/doc/CBUT_user_4": {
       "createdAt": "2019-03-30T03:46:39.014Z",
       "updatedAt": "2019-03-30T03:46:39.014Z",
       "email": "-49hG@example.com",
       "name": "0W8kdJ Vg9XsuVhy",
       "facebookId": "CBUT_facebook_4"
     },
-    "/users_v1_0_2/doc/CBUT_user_5": {
+    "/users/doc/CBUT_user_5": {
       "createdAt": "2018-12-25T10:06:57.131Z",
       "updatedAt": "2018-12-25T10:06:57.131Z",
       "email": "hsnKHanBb5@example.com",
       "name": "dTPZcxn4W aWHchdvji",
       "facebookId": "CBUT_facebook_5"
     },
-    "/users_v1_0_2/doc/CBUT_user_6": {
+    "/users/doc/CBUT_user_6": {
       "createdAt": "2019-02-12T03:40:04.690Z",
       "updatedAt": "2019-02-12T03:40:04.690Z",
       "email": "X6M6CqP6-@example.com",
       "name": "2PK0m KbAK-wu",
       "facebookId": "CBUT_facebook_6"
     },
-    "/users_v1_0_2/doc/CBUT_user_7": {
+    "/users/doc/CBUT_user_7": {
       "createdAt": "2019-06-17T03:14:26.547Z",
       "updatedAt": "2019-06-17T05:39:45.935Z",
       "email": "mtSHa9pQR@example.com",
       "name": "1waeHG H5nlk5w",
       "facebookId": "CBUT_facebook_7"
     },
-    "/users_v1_0_2/doc/CBUT_user_8": {
+    "/users/doc/CBUT_user_8": {
       "createdAt": "2018-12-02T05:48:31.102Z",
       "updatedAt": "2018-12-02T05:48:31.102Z",
       "email": "9bScmbJ@example.com",
       "name": "B4ywca jlF0w",
       "facebookId": "CBUT_facebook_8"
     },
-    "/users_v1_0_2/doc/CBUT_user_9": {
+    "/users/doc/CBUT_user_9": {
       "createdAt": "2020-05-05T09:14:15.364Z",
       "updatedAt": "2020-05-05T09:14:15.364Z",
       "email": "k-MJ48Wozf@example.com",
       "name": "AvqX7 SXguFvvotD",
       "facebookId": "CBUT_facebook_9"
     },
-    "/users_v1_0_2/doc/CBUT_user_10": {
+    "/users/doc/CBUT_user_10": {
       "createdAt": "2020-03-12T14:45:03.825Z",
       "updatedAt": "2020-03-12T14:45:03.825Z",
       "email": "LOv6ae2@example.com",
       "name": "5aDOfh nMM705Ml",
       "facebookId": "CBUT_facebook_10"
     },
-    "/users_v1_0_2/doc/CBUT_user_11": {
+    "/users/doc/CBUT_user_11": {
       "createdAt": "2020-02-07T15:27:05.303Z",
       "updatedAt": "2020-02-07T15:27:05.303Z",
       "email": "ZRc1WF1ih@example.com",
       "name": "KDnWGKCis HUQADXS5dP",
       "facebookId": "CBUT_facebook_11"
     },
-    "/users_v1_0_2/doc/CBUT_user_12": {
+    "/users/doc/CBUT_user_12": {
       "createdAt": "2019-05-14T02:20:27.275Z",
       "updatedAt": "2019-05-14T02:20:27.275Z",
       "name": "BPZWZW BufLuDil",
       "facebookId": "CBUT_facebook_12"
     },
-    "/users_v1_0_2/doc/CBUT_user_13": {
+    "/users/doc/CBUT_user_13": {
       "createdAt": "2019-06-18T15:20:54.339Z",
       "updatedAt": "2019-06-18T15:20:54.339Z",
       "email": "DmjXIw@example.com",
       "name": "EXJbf brCVMftg",
       "facebookId": "CBUT_facebook_13"
     },
-    "/users_v1_0_2/doc/CBUT_user_14": {
+    "/users/doc/CBUT_user_14": {
       "createdAt": "2020-09-26T21:38:58.624Z",
       "updatedAt": "2020-09-26T21:38:58.624Z",
       "email": "Ci_HpyP6m@example.com",
       "name": "8peFNlZdWT aSAqUlJ",
       "facebookId": "CBUT_facebook_14"
     },
-    "/users_v1_0_2/doc/CBUT_user_15": {
+    "/users/doc/CBUT_user_15": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_16": {
+    "/users/doc/CBUT_user_16": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_20": {
+    "/users/doc/CBUT_user_20": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_23": {
+    "/users/doc/CBUT_user_23": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_35": {
+    "/users/doc/CBUT_user_35": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_38": {
+    "/users/doc/CBUT_user_38": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_40": {
+    "/users/doc/CBUT_user_40": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_45": {
+    "/users/doc/CBUT_user_45": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_47": {
+    "/users/doc/CBUT_user_47": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_48": {
+    "/users/doc/CBUT_user_48": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_49": {
+    "/users/doc/CBUT_user_49": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_53": {
+    "/users/doc/CBUT_user_53": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_54": {
+    "/users/doc/CBUT_user_54": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_57": {
+    "/users/doc/CBUT_user_57": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_60": {
+    "/users/doc/CBUT_user_60": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_61": {
+    "/users/doc/CBUT_user_61": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_63": {
+    "/users/doc/CBUT_user_63": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_65": {
+    "/users/doc/CBUT_user_65": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_68": {
+    "/users/doc/CBUT_user_68": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_69": {
+    "/users/doc/CBUT_user_69": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_71": {
+    "/users/doc/CBUT_user_71": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_73": {
+    "/users/doc/CBUT_user_73": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_74": {
+    "/users/doc/CBUT_user_74": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_79": {
+    "/users/doc/CBUT_user_79": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_84": {
+    "/users/doc/CBUT_user_84": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_85": {
+    "/users/doc/CBUT_user_85": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_88": {
+    "/users/doc/CBUT_user_88": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/users_v1_0_2/doc/CBUT_user_90": {
+    "/users/doc/CBUT_user_90": {
       "createdAt": "2010-01-01T00:00:00Z"
     },
-    "/articlecategoryfeedbacks_v1_0_2/doc/CBUT_article_0__CBUT_category_0__CBUT_user_15__WEBSITE": {
+    "/articlecategoryfeedbacks/doc/CBUT_article_0__CBUT_category_0__CBUT_user_15__WEBSITE": {
       "articleId": "CBUT_article_0",
       "categoryId": "CBUT_category_0",
       "userId": "CBUT_user_15",
@@ -196,7 +196,7 @@ export default {
       "createdAt": "2020-09-19T07:07:05.785Z",
       "updatedAt": "2020-09-19T07:07:05.785Z",
     },
-    "/articlecategoryfeedbacks_v1_0_2/doc/CBUT_article_1__CBUT_category_1__CBUT_user_15__WEBSITE": {
+    "/articlecategoryfeedbacks/doc/CBUT_article_1__CBUT_category_1__CBUT_user_15__WEBSITE": {
       "articleId": "CBUT_article_1",
       "categoryId": "CBUT_category_1",
       "userId": "CBUT_user_15",
@@ -205,7 +205,7 @@ export default {
       "updatedAt": "2020-07-25T03:32:50.190Z",
       "comment": "irrelevant",
     },
-    "/articlecategoryfeedbacks_v1_0_2/doc/CBUT_article_2__CBUT_category_1__CBUT_user_15__WEBSITE": {
+    "/articlecategoryfeedbacks/doc/CBUT_article_2__CBUT_category_1__CBUT_user_15__WEBSITE": {
       "articleId": "CBUT_article_2",
       "categoryId": "CBUT_category_1",
       "userId": "CBUT_user_15",
@@ -214,7 +214,7 @@ export default {
       "updatedAt": "2020-07-25T03:31:47.629Z",
       "comment": "irrelevant",
     },
-    "/articlecategoryfeedbacks_v1_0_2/doc/CBUT_article_3__CBUT_category_1__CBUT_user_15__WEBSITE": {
+    "/articlecategoryfeedbacks/doc/CBUT_article_3__CBUT_category_1__CBUT_user_15__WEBSITE": {
       "articleId": "CBUT_article_3",
       "categoryId": "CBUT_category_1",
       "userId": "CBUT_user_15",
@@ -223,7 +223,7 @@ export default {
       "updatedAt": "2020-07-25T03:35:36.459Z",
       "comment": "irrelevant",
     },
-    "/articlecategoryfeedbacks_v1_0_2/doc/CBUT_article_4__CBUT_category_1__CBUT_user_15__WEBSITE": {
+    "/articlecategoryfeedbacks/doc/CBUT_article_4__CBUT_category_1__CBUT_user_15__WEBSITE": {
       "articleId": "CBUT_article_4",
       "categoryId": "CBUT_category_1",
       "userId": "CBUT_user_15",
@@ -232,7 +232,7 @@ export default {
       "updatedAt": "2020-07-25T04:14:22.278Z",
       "comment": "irrelevant",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_5__CBUT_reply_0__CBUT_user_16__DEVELOPMENT_FRONTEND": {
+    "/articlereplyfeedbacks/doc/CBUT_article_5__CBUT_reply_0__CBUT_user_16__DEVELOPMENT_FRONTEND": {
       "createdAt": "2017-11-19T09:40:11.292Z",
       "appId": "DEVELOPMENT_FRONTEND",
       "userId": "CBUT_user_16",
@@ -240,7 +240,7 @@ export default {
       "articleId": "CBUT_article_5",
       "replyId": "CBUT_reply_0",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_6__CBUT_reply_1__CBUT_user_17__DEVELOPMENT_BACKEND": {
+    "/articlereplyfeedbacks/doc/CBUT_article_6__CBUT_reply_1__CBUT_user_17__DEVELOPMENT_BACKEND": {
       "createdAt": "2018-01-11T08:29:22.045Z",
       "appId": "DEVELOPMENT_BACKEND",
       "userId": "CBUT_user_17",
@@ -248,7 +248,7 @@ export default {
       "articleId": "CBUT_article_6",
       "replyId": "CBUT_reply_1",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_7__CBUT_reply_2__CBUT_user_18__RUMORS_LINE_BOT": {
+    "/articlereplyfeedbacks/doc/CBUT_article_7__CBUT_reply_2__CBUT_user_18__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_7",
       "replyId": "CBUT_reply_2",
       "userId": "CBUT_user_18",
@@ -256,7 +256,7 @@ export default {
       "createdAt": "2018-10-29T14:32:04.786Z",
       "updatedAt": "2018-10-29T14:32:04.786Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_8__CBUT_reply_3__CBUT_user_19__RUMORS_LINE_BOT": {
+    "/articlereplyfeedbacks/doc/CBUT_article_8__CBUT_reply_3__CBUT_user_19__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_8",
       "replyId": "CBUT_reply_3",
       "userId": "CBUT_user_19",
@@ -264,7 +264,7 @@ export default {
       "createdAt": "2019-06-25T02:42:31.105Z",
       "updatedAt": "2019-06-25T02:42:31.636Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_9__CBUT_reply_4__CBUT_user_20__WEBSITE": {
+    "/articlereplyfeedbacks/doc/CBUT_article_9__CBUT_reply_4__CBUT_user_20__WEBSITE": {
       "articleId": "CBUT_article_9",
       "replyId": "CBUT_reply_4",
       "userId": "CBUT_user_20",
@@ -273,7 +273,7 @@ export default {
       "updatedAt": "2020-09-10T11:45:55.227Z",
       "comment": "",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_10__CBUT_reply_5__CBUT_user_21__DEVELOPMENT_BACKEND": {
+    "/articlereplyfeedbacks/doc/CBUT_article_10__CBUT_reply_5__CBUT_user_21__DEVELOPMENT_BACKEND": {
       "articleId": "CBUT_article_10",
       "replyId": "CBUT_reply_5",
       "userId": "CBUT_user_21",
@@ -281,7 +281,7 @@ export default {
       "createdAt": "2020-02-27T09:18:07.301Z",
       "updatedAt": "2020-02-27T09:18:07.301Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_11__CBUT_reply_6__CBUT_user_22__DEVELOPMENT_BACKEND": {
+    "/articlereplyfeedbacks/doc/CBUT_article_11__CBUT_reply_6__CBUT_user_22__DEVELOPMENT_BACKEND": {
       "createdAt": "2018-01-24T05:28:35.650Z",
       "appId": "DEVELOPMENT_BACKEND",
       "userId": "CBUT_user_22",
@@ -289,7 +289,7 @@ export default {
       "articleId": "CBUT_article_11",
       "replyId": "CBUT_reply_6",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_12__CBUT_reply_7__CBUT_user_23__WEBSITE": {
+    "/articlereplyfeedbacks/doc/CBUT_article_12__CBUT_reply_7__CBUT_user_23__WEBSITE": {
       "articleId": "CBUT_article_12",
       "replyId": "CBUT_reply_7",
       "userId": "CBUT_user_23",
@@ -298,7 +298,7 @@ export default {
       "updatedAt": "2020-06-28T08:33:54.411Z",
       "comment": "",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_13__CBUT_reply_8__CBUT_user_24__RUMORS_LINE_BOT": {
+    "/articlereplyfeedbacks/doc/CBUT_article_13__CBUT_reply_8__CBUT_user_24__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_13",
       "replyId": "CBUT_reply_8",
       "userId": "CBUT_user_24",
@@ -307,7 +307,7 @@ export default {
       "updatedAt": "2020-09-26T13:53:24.365Z",
       "comment": "",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_14__CBUT_reply_9__CBUT_user_25__DEVELOPMENT_BACKEND": {
+    "/articlereplyfeedbacks/doc/CBUT_article_14__CBUT_reply_9__CBUT_user_25__DEVELOPMENT_BACKEND": {
       "articleId": "CBUT_article_14",
       "replyId": "CBUT_reply_9",
       "userId": "CBUT_user_25",
@@ -315,7 +315,7 @@ export default {
       "createdAt": "2018-03-29T06:42:21.545Z",
       "updatedAt": "2018-03-29T06:42:21.545Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_15__CBUT_reply_10__CBUT_user_15__DEVELOPMENT_FRONTEND": {
+    "/articlereplyfeedbacks/doc/CBUT_article_15__CBUT_reply_10__CBUT_user_15__DEVELOPMENT_FRONTEND": {
       "createdAt": "2018-02-07T18:09:49.594Z",
       "appId": "DEVELOPMENT_FRONTEND",
       "userId": "CBUT_user_15",
@@ -323,7 +323,7 @@ export default {
       "articleId": "CBUT_article_15",
       "replyId": "CBUT_reply_10",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_16__CBUT_reply_11__CBUT_user_26__RUMORS_LINE_BOT": {
+    "/articlereplyfeedbacks/doc/CBUT_article_16__CBUT_reply_11__CBUT_user_26__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_16",
       "replyId": "CBUT_reply_11",
       "userId": "CBUT_user_26",
@@ -331,7 +331,7 @@ export default {
       "createdAt": "2020-03-10T12:02:07.419Z",
       "updatedAt": "2020-03-10T12:02:08.394Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_17__CBUT_reply_12__CBUT_user_15__WEBSITE": {
+    "/articlereplyfeedbacks/doc/CBUT_article_17__CBUT_reply_12__CBUT_user_15__WEBSITE": {
       "articleId": "CBUT_article_17",
       "replyId": "CBUT_reply_12",
       "userId": "CBUT_user_15",
@@ -339,7 +339,7 @@ export default {
       "createdAt": "2020-04-05T09:33:19.299Z",
       "updatedAt": "2020-04-05T09:33:19.299Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_18__CBUT_reply_13__CBUT_user_27__RUMORS_LINE_BOT": {
+    "/articlereplyfeedbacks/doc/CBUT_article_18__CBUT_reply_13__CBUT_user_27__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_18",
       "replyId": "CBUT_reply_13",
       "userId": "CBUT_user_27",
@@ -347,7 +347,7 @@ export default {
       "createdAt": "2019-02-20T05:11:06.611Z",
       "updatedAt": "2019-02-20T05:11:06.611Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_19__CBUT_reply_14__CBUT_user_20__WEBSITE": {
+    "/articlereplyfeedbacks/doc/CBUT_article_19__CBUT_reply_14__CBUT_user_20__WEBSITE": {
       "articleId": "CBUT_article_19",
       "replyId": "CBUT_reply_14",
       "userId": "CBUT_user_20",
@@ -356,7 +356,7 @@ export default {
       "updatedAt": "2020-06-27T23:11:24.480Z",
       "comment": "",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_20__CBUT_reply_15__CBUT_user_20__WEBSITE": {
+    "/articlereplyfeedbacks/doc/CBUT_article_20__CBUT_reply_15__CBUT_user_20__WEBSITE": {
       "articleId": "CBUT_article_20",
       "replyId": "CBUT_reply_15",
       "userId": "CBUT_user_20",
@@ -365,7 +365,7 @@ export default {
       "updatedAt": "2020-09-26T05:54:08.502Z",
       "comment": "",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_21__CBUT_reply_16__CBUT_user_28__RUMORS_LINE_BOT": {
+    "/articlereplyfeedbacks/doc/CBUT_article_21__CBUT_reply_16__CBUT_user_28__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_21",
       "replyId": "CBUT_reply_16",
       "userId": "CBUT_user_28",
@@ -373,7 +373,7 @@ export default {
       "createdAt": "2019-04-06T06:45:23.016Z",
       "updatedAt": "2019-04-06T06:45:23.016Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_22__CBUT_reply_17__CBUT_user_29__RUMORS_LINE_BOT": {
+    "/articlereplyfeedbacks/doc/CBUT_article_22__CBUT_reply_17__CBUT_user_29__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_22",
       "replyId": "CBUT_reply_17",
       "userId": "CBUT_user_29",
@@ -381,7 +381,7 @@ export default {
       "createdAt": "2018-11-11T23:43:02.406Z",
       "updatedAt": "2018-11-11T23:43:02.406Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_23__CBUT_reply_18__CBUT_user_30__RUMORS_LINE_BOT": {
+    "/articlereplyfeedbacks/doc/CBUT_article_23__CBUT_reply_18__CBUT_user_30__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_23",
       "replyId": "CBUT_reply_18",
       "userId": "CBUT_user_30",
@@ -389,7 +389,7 @@ export default {
       "createdAt": "2019-01-22T11:01:54.027Z",
       "updatedAt": "2019-01-22T11:01:54.027Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_24__CBUT_reply_19__CBUT_user_31__DEVELOPMENT_BACKEND": {
+    "/articlereplyfeedbacks/doc/CBUT_article_24__CBUT_reply_19__CBUT_user_31__DEVELOPMENT_BACKEND": {
       "articleId": "CBUT_article_24",
       "replyId": "CBUT_reply_19",
       "userId": "CBUT_user_31",
@@ -397,7 +397,7 @@ export default {
       "createdAt": "2019-11-20T22:23:54.285Z",
       "updatedAt": "2019-11-20T22:23:54.285Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_25__CBUT_reply_20__CBUT_user_32__RUMORS_LINE_BOT": {
+    "/articlereplyfeedbacks/doc/CBUT_article_25__CBUT_reply_20__CBUT_user_32__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_25",
       "replyId": "CBUT_reply_20",
       "userId": "CBUT_user_32",
@@ -405,7 +405,7 @@ export default {
       "createdAt": "2018-10-02T04:01:02.366Z",
       "updatedAt": "2018-10-02T04:01:02.366Z",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_26__CBUT_reply_21__CBUT_user_16__DEVELOPMENT_FRONTEND": {
+    "/articlereplyfeedbacks/doc/CBUT_article_26__CBUT_reply_21__CBUT_user_16__DEVELOPMENT_FRONTEND": {
       "createdAt": "2017-11-22T12:27:20.578Z",
       "appId": "DEVELOPMENT_FRONTEND",
       "userId": "CBUT_user_16",
@@ -413,7 +413,7 @@ export default {
       "articleId": "CBUT_article_26",
       "replyId": "CBUT_reply_21",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_27__CBUT_reply_22__CBUT_user_17__DEVELOPMENT_BACKEND": {
+    "/articlereplyfeedbacks/doc/CBUT_article_27__CBUT_reply_22__CBUT_user_17__DEVELOPMENT_BACKEND": {
       "createdAt": "2017-08-11T16:55:48.227Z",
       "appId": "DEVELOPMENT_BACKEND",
       "userId": "CBUT_user_17",
@@ -421,7 +421,7 @@ export default {
       "articleId": "CBUT_article_27",
       "replyId": "CBUT_reply_22",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_28__CBUT_reply_23__CBUT_user_33__DEVELOPMENT_BACKEND": {
+    "/articlereplyfeedbacks/doc/CBUT_article_28__CBUT_reply_23__CBUT_user_33__DEVELOPMENT_BACKEND": {
       "createdAt": "2018-01-31T13:52:33.249Z",
       "appId": "DEVELOPMENT_BACKEND",
       "userId": "CBUT_user_33",
@@ -429,7 +429,7 @@ export default {
       "articleId": "CBUT_article_28",
       "replyId": "CBUT_reply_23",
     },
-    "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_29__CBUT_reply_24__CBUT_user_23__WEBSITE": {
+    "/articlereplyfeedbacks/doc/CBUT_article_29__CBUT_reply_24__CBUT_user_23__WEBSITE": {
       "articleId": "CBUT_article_29",
       "replyId": "CBUT_reply_24",
       "userId": "CBUT_user_23",
@@ -438,7 +438,7 @@ export default {
       "updatedAt": "2020-09-19T17:04:20.167Z",
       "comment": "",
     },
-    "/articles_v1_0_2/doc/CBUT_article_30": {
+    "/articles/doc/CBUT_article_30": {
       "references": [
         {
           "createdAt": "2019-03-18T15:31:50.099Z",
@@ -487,7 +487,7 @@ export default {
       "updatedAt": "2019-03-18T15:31:50.099Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_31": {
+    "/articles/doc/CBUT_article_31": {
       "references": [
         {
           "createdAt": "2017-01-20T00:58:00.000Z",
@@ -539,7 +539,7 @@ export default {
       "updatedAt": "2017-01-20T00:58:00.000Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_32": {
+    "/articles/doc/CBUT_article_32": {
       "references": [
         {
           "createdAt": "2018-06-15T07:34:36.490Z",
@@ -594,7 +594,7 @@ export default {
       "updatedAt": "2018-06-15T07:34:36.490Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_33": {
+    "/articles/doc/CBUT_article_33": {
       "references": [
         {
           "createdAt": "2019-05-16T15:09:42.254Z",
@@ -644,7 +644,7 @@ export default {
       "updatedAt": "2019-05-16T15:09:42.254Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_34": {
+    "/articles/doc/CBUT_article_34": {
       "references": [
         {
           "createdAt": "2017-01-18T02:58:00.000Z",
@@ -690,7 +690,7 @@ export default {
       "updatedAt": "2017-01-18T02:58:00.000Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_15": {
+    "/articles/doc/CBUT_article_15": {
       "references": [
         {
           "createdAt": "2018-01-07T16:35:06.585Z",
@@ -742,7 +742,7 @@ export default {
       "updatedAt": "2018-01-07T16:35:06.585Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_35": {
+    "/articles/doc/CBUT_article_35": {
       "references": [
         {
           "createdAt": "2017-12-24T23:48:52.794Z",
@@ -794,7 +794,7 @@ export default {
       "updatedAt": "2017-12-24T23:48:52.794Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_26": {
+    "/articles/doc/CBUT_article_26": {
       "references": [
         {
           "createdAt": "2017-11-19T09:35:45.073Z",
@@ -840,7 +840,7 @@ export default {
       "updatedAt": "2017-11-19T09:35:45.073Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_36": {
+    "/articles/doc/CBUT_article_36": {
       "references": [
         {
           "type": "LINE"
@@ -891,7 +891,7 @@ export default {
       "updatedAt": "2017-03-05T00:13:37.379Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_8": {
+    "/articles/doc/CBUT_article_8": {
       "references": [
         {
           "createdAt": "2017-08-01T08:45:13.720Z",
@@ -943,7 +943,7 @@ export default {
       "updatedAt": "2017-08-01T08:45:13.720Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_22": {
+    "/articles/doc/CBUT_article_22": {
       "references": [
         {
           "createdAt": "2017-01-16T14:55:00.000Z",
@@ -1044,7 +1044,7 @@ export default {
       "updatedAt": "2017-01-16T14:55:00.000Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_25": {
+    "/articles/doc/CBUT_article_25": {
       "references": [
         {
           "createdAt": "2017-01-16T12:47:00.000Z",
@@ -1112,7 +1112,7 @@ export default {
       "updatedAt": "2017-01-16T12:47:00.000Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_5": {
+    "/articles/doc/CBUT_article_5": {
       "references": [
         {
           "createdAt": "2017-11-14T23:42:12.624Z",
@@ -1164,7 +1164,7 @@ export default {
       "updatedAt": "2017-11-14T23:42:12.624Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_37": {
+    "/articles/doc/CBUT_article_37": {
       "references": [
         {
           "createdAt": "2017-01-11T08:52:00.000Z",
@@ -1216,7 +1216,7 @@ export default {
       "updatedAt": "2017-01-11T08:52:00.000Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_7": {
+    "/articles/doc/CBUT_article_7": {
       "references": [
         {
           "createdAt": "2018-10-23T09:21:35.323Z",
@@ -1315,7 +1315,7 @@ export default {
       "updatedAt": "2018-10-30T01:50:21.966Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_16": {
+    "/articles/doc/CBUT_article_16": {
       "references": [
         {
           "createdAt": "2020-03-03T15:37:27.556Z",
@@ -1363,7 +1363,7 @@ export default {
       "updatedAt": "2020-03-03T15:37:27.556Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_38": {
+    "/articles/doc/CBUT_article_38": {
       "references": [
         {
           "createdAt": "2020-02-21T02:02:54.455Z",
@@ -1423,7 +1423,7 @@ export default {
       "updatedAt": "2020-02-21T02:02:54.455Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_28": {
+    "/articles/doc/CBUT_article_28": {
       "references": [
         {
           "createdAt": "2017-08-29T03:38:35.524Z",
@@ -1491,7 +1491,7 @@ export default {
       "updatedAt": "2017-08-29T03:38:35.524Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_2": {
+    "/articles/doc/CBUT_article_2": {
       "references": [
         {
           "createdAt": "2020-04-17T13:11:33.426Z",
@@ -1560,7 +1560,7 @@ export default {
       "updatedAt": "2020-04-17T13:11:33.426Z",
       "normalArticleCategoryCount": 2,
     },
-    "/articles_v1_0_2/doc/CBUT_article_1": {
+    "/articles/doc/CBUT_article_1": {
       "references": [
         {
           "createdAt": "2020-04-06T04:35:45.919Z",
@@ -1618,7 +1618,7 @@ export default {
       "updatedAt": "2020-04-06T04:35:45.919Z",
       "normalArticleCategoryCount": 2,
     },
-    "/articles_v1_0_2/doc/CBUT_article_3": {
+    "/articles/doc/CBUT_article_3": {
       "references": [
         {
           "createdAt": "2019-12-24T02:03:16.857Z",
@@ -1706,7 +1706,7 @@ export default {
       "updatedAt": "2019-12-24T02:03:16.857Z",
       "normalArticleCategoryCount": 2,
     },
-    "/articles_v1_0_2/doc/CBUT_article_4": {
+    "/articles/doc/CBUT_article_4": {
       "references": [
         {
           "createdAt": "2019-05-30T13:03:09.773Z",
@@ -1755,7 +1755,7 @@ export default {
       "updatedAt": "2019-05-30T13:03:09.773Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_39": {
+    "/articles/doc/CBUT_article_39": {
       "references": [
         {
           "createdAt": "2020-04-26T07:32:15.732Z",
@@ -1821,7 +1821,7 @@ export default {
       ],
       "updatedAt": "2020-04-26T07:32:15.732Z",
     },
-    "/articles_v1_0_2/doc/CBUT_article_21": {
+    "/articles/doc/CBUT_article_21": {
       "references": [
         {
           "type": "LINE"
@@ -1877,7 +1877,7 @@ export default {
       "updatedAt": "2017-03-13T14:12:52.385Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_40": {
+    "/articles/doc/CBUT_article_40": {
       "references": [
         {
           "createdAt": "2017-05-27T04:06:18.243Z",
@@ -1940,7 +1940,7 @@ export default {
       "updatedAt": "2017-05-27T04:06:18.243Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_23": {
+    "/articles/doc/CBUT_article_23": {
       "references": [
         {
           "createdAt": "2018-12-28T13:18:06.346Z",
@@ -2017,7 +2017,7 @@ export default {
       "updatedAt": "2018-12-28T13:18:06.346Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_17": {
+    "/articles/doc/CBUT_article_17": {
       "references": [
         {
           "createdAt": "2020-04-03T01:27:41.969Z",
@@ -2076,7 +2076,7 @@ export default {
       "updatedAt": "2020-04-03T01:27:41.969Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_10": {
+    "/articles/doc/CBUT_article_10": {
       "references": [
         {
           "createdAt": "2020-02-27T03:27:49.869Z",
@@ -2124,7 +2124,7 @@ export default {
       "updatedAt": "2020-02-27T03:27:49.869Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_41": {
+    "/articles/doc/CBUT_article_41": {
       "references": [
         {
           "createdAt": "2019-04-17T06:56:36.132Z",
@@ -2173,7 +2173,7 @@ export default {
       "updatedAt": "2019-04-17T06:56:36.132Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_42": {
+    "/articles/doc/CBUT_article_42": {
       "references": [
         {
           "createdAt": "2019-04-15T16:38:11.456Z",
@@ -2223,7 +2223,7 @@ export default {
       "updatedAt": "2019-04-15T16:38:11.456Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_19": {
+    "/articles/doc/CBUT_article_19": {
       "references": [
         {
           "createdAt": "2019-11-10T06:18:52.830Z",
@@ -2283,7 +2283,7 @@ export default {
       "updatedAt": "2019-11-10T06:18:52.830Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_24": {
+    "/articles/doc/CBUT_article_24": {
       "references": [
         {
           "createdAt": "2019-11-13T16:17:15.137Z",
@@ -2333,7 +2333,7 @@ export default {
       "updatedAt": "2019-11-13T16:17:15.137Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_12": {
+    "/articles/doc/CBUT_article_12": {
       "references": [
         {
           "createdAt": "2018-03-30T12:13:57.322Z",
@@ -2381,7 +2381,7 @@ export default {
       "updatedAt": "2018-03-30T12:13:57.322Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_6": {
+    "/articles/doc/CBUT_article_6": {
       "references": [
         {
           "createdAt": "2017-01-10T01:12:00.000Z",
@@ -2449,7 +2449,7 @@ export default {
       "updatedAt": "2017-01-10T01:12:00.000Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_27": {
+    "/articles/doc/CBUT_article_27": {
       "references": [
         {
           "createdAt": "2017-06-24T02:25:38.653Z",
@@ -2512,7 +2512,7 @@ export default {
       "updatedAt": "2017-06-24T02:25:38.653Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_14": {
+    "/articles/doc/CBUT_article_14": {
       "references": [
         {
           "createdAt": "2017-07-10T11:37:00.087Z",
@@ -2569,7 +2569,7 @@ export default {
       "updatedAt": "2017-07-10T11:37:00.087Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_9": {
+    "/articles/doc/CBUT_article_9": {
       "references": [
         {
           "createdAt": "2017-05-14T13:07:55.057Z",
@@ -2648,7 +2648,7 @@ export default {
       "updatedAt": "2017-05-14T13:07:55.057Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_18": {
+    "/articles/doc/CBUT_article_18": {
       "references": [
         {
           "createdAt": "2017-01-22T04:05:00.000Z",
@@ -2705,7 +2705,7 @@ export default {
       "updatedAt": "2017-01-22T04:05:00.000Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_11": {
+    "/articles/doc/CBUT_article_11": {
       "references": [
         {
           "createdAt": "2017-12-30T01:01:44.438Z",
@@ -2762,7 +2762,7 @@ export default {
       "updatedAt": "2017-12-30T01:01:44.438Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_29": {
+    "/articles/doc/CBUT_article_29": {
       "references": [
         {
           "createdAt": "2019-08-15T02:39:39.532Z",
@@ -2811,7 +2811,7 @@ export default {
       "updatedAt": "2019-08-15T02:39:39.532Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_0": {
+    "/articles/doc/CBUT_article_0": {
       "text": "轉貼\n\n中華民族崛起的主要敵人 AngloSaxon 民族\n\n兩百年來，鴉片戰爭開始，中國最主要的敵人就是英國，AngloSaxon 民族，現在隨著中國的崛起​...",
       "createdAt": "2020-09-08T15:30:44.659Z",
       "updatedAt": "2020-09-08T15:30:44.659Z",
@@ -2847,7 +2847,7 @@ export default {
       "hyperlinks": [],
       "lastRequestedAt": "2020-09-17T12:44:47.688Z",
     },
-    "/articles_v1_0_2/doc/CBUT_article_20": {
+    "/articles/doc/CBUT_article_20": {
       "references": [
         {
           "createdAt": "2018-01-26T02:28:32.022Z",
@@ -2899,7 +2899,7 @@ export default {
       "updatedAt": "2018-01-26T02:28:32.022Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_13": {
+    "/articles/doc/CBUT_article_13": {
       "references": [
         {
           "createdAt": "2017-01-13T03:49:00.000Z",
@@ -2945,7 +2945,7 @@ export default {
       "updatedAt": "2017-01-13T03:49:00.000Z",
       "normalArticleCategoryCount": 1,
     },
-    "/articles_v1_0_2/doc/CBUT_article_43": {
+    "/articles/doc/CBUT_article_43": {
       "text": "百億離岸風電國產大餅訂單爆肥水外流\n蘋果日報\n離岸風電產業近年因政策利多及多家國際能源大廠來台投資，號稱將帶動八千億產值，其中鋼鐵股王世紀集團被視為民營鋼廠的領...",
       "createdAt": "2020-09-26T07:29:51.676Z",
       "updatedAt": "2020-09-26T07:29:51.676Z",
@@ -2994,7 +2994,7 @@ export default {
       "hyperlinks": [],
       "lastRequestedAt": "2020-09-26T07:29:51.708Z",
     },
-    "/articles_v1_0_2/doc/CBUT_article_44": {
+    "/articles/doc/CBUT_article_44": {
       "text": "柯文哲行程曝光，也讓現場媒體相當質疑，特別是先前曝光的國務院、國防部皆被取消，由於當天柯的行程相當鬆散，加上柯訪美期間每天都安排早上受訪，唯獨華盛頓安排中午，也...",
       "createdAt": "2020-09-26T09:39:48.802Z",
       "updatedAt": "2020-09-26T09:39:48.802Z",
@@ -3043,7 +3043,7 @@ export default {
       "hyperlinks": [],
       "lastRequestedAt": "2020-09-26T09:39:48.829Z",
     },
-    "/replies_v1_0_2/doc/CBUT_reply_76": {
+    "/replies/doc/CBUT_reply_76": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "OPINIONATED",
@@ -3063,7 +3063,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_77": {
+    "/replies/doc/CBUT_reply_77": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3079,7 +3079,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_78": {
+    "/replies/doc/CBUT_reply_78": {
       "userId": "CBUT_user_90",
       "appId": "WEBSITE",
       "type": "NOT_ARTICLE",
@@ -3088,7 +3088,7 @@ export default {
       "createdAt": "2020-07-31T08:25:23.003Z",
       "hyperlinks": [],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_79": {
+    "/replies/doc/CBUT_reply_79": {
       "createdAt": "2017-12-04T15:18:29.041Z",
       "appId": "DEVELOPMENT_FRONTEND",
       "text": "聊天",
@@ -3096,7 +3096,7 @@ export default {
       "userId": "CBUT_user_16",
       "hyperlinks": [],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_80": {
+    "/replies/doc/CBUT_reply_80": {
       "userId": "CBUT_user_45",
       "appId": "DEVELOPMENT_FRONTEND",
       "type": "RUMOR",
@@ -3112,7 +3112,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_69": {
+    "/replies/doc/CBUT_reply_69": {
       "reference": "",
       "createdAt": "2017-07-10T14:01:55.446Z",
       "appId": "WEBSITE",
@@ -3121,7 +3121,7 @@ export default {
       "userId": "CBUT_user_45",
       "hyperlinks": [],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_30": {
+    "/replies/doc/CBUT_reply_30": {
       "reference": "",
       "createdAt": "2017-12-27T14:55:54.646Z",
       "appId": "WEBSITE",
@@ -3130,7 +3130,7 @@ export default {
       "userId": "CBUT_user_35",
       "hyperlinks": [],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_15": {
+    "/replies/doc/CBUT_reply_15": {
       "reference": "",
       "createdAt": "2018-01-26T03:24:02.717Z",
       "appId": "WEBSITE",
@@ -3139,7 +3139,7 @@ export default {
       "userId": "CBUT_user_35",
       "hyperlinks": [],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_21": {
+    "/replies/doc/CBUT_reply_21": {
       "reference": "",
       "createdAt": "2017-11-19T10:08:18.033Z",
       "appId": "WEBSITE",
@@ -3148,7 +3148,7 @@ export default {
       "userId": "CBUT_user_35",
       "hyperlinks": [],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_26": {
+    "/replies/doc/CBUT_reply_26": {
       "reference": "",
       "createdAt": "2017-09-13T13:44:48.946Z",
       "appId": "WEBSITE",
@@ -3157,7 +3157,7 @@ export default {
       "userId": "CBUT_user_38",
       "hyperlinks": [],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_27": {
+    "/replies/doc/CBUT_reply_27": {
       "userId": "CBUT_user_40",
       "appId": "WEBSITE",
       "type": "NOT_ARTICLE",
@@ -3165,7 +3165,7 @@ export default {
       "reference": "",
       "createdAt": "2018-07-10T16:17:54.862Z",
     },
-    "/replies_v1_0_2/doc/CBUT_reply_20": {
+    "/replies/doc/CBUT_reply_20": {
       "userId": "CBUT_user_49",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3180,7 +3180,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_70": {
+    "/replies/doc/CBUT_reply_70": {
       "reference": "http://www.mygopen.com/2017/06/blog-post_26.html\n神奇的地瓜葉？搭配鮮奶遠離三高？謠言讓醫生說：有痛風或是腎臟不好的人要小心！",
       "createdAt": "2017-07-09T15:02:23.370Z",
       "appId": "WEBSITE",
@@ -3195,7 +3195,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_39": {
+    "/replies/doc/CBUT_reply_39": {
       "reference": "https://www.nownews.com/news/20100519/636359\n藥水比藥錠吸收快？　專業藥師破除網路傳言",
       "createdAt": "2017-12-14T04:09:00.110Z",
       "appId": "WEBSITE",
@@ -3210,7 +3210,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_0": {
+    "/replies/doc/CBUT_reply_0": {
       "reference": "https://kknews.cc/zh-tw/fashion/lznly52.html\n太早用眼霜會長脂肪粒？別再傳這樣的謠言了",
       "createdAt": "2017-11-15T05:23:58.752Z",
       "appId": "WEBSITE",
@@ -3225,7 +3225,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_1": {
+    "/replies/doc/CBUT_reply_1": {
       "reference": "http://www.mygopen.com/2017/10/14line.html\n【假新聞】年金改革委員會第14次會議？LINE 傳的都假的，不要採信！",
       "createdAt": "2017-10-03T03:37:10.740Z",
       "appId": "WEBSITE",
@@ -3240,7 +3240,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_35": {
+    "/replies/doc/CBUT_reply_35": {
       "reference": "http://www.edu.tw/News_Content.aspx?n=9E⋯&sms=169B8E91BB75571F&s=6DDDD36D6874DB8...",
       "createdAt": "2017-07-06T06:44:19.192Z",
       "appId": "WEBSITE",
@@ -3265,7 +3265,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_8": {
+    "/replies/doc/CBUT_reply_8": {
       "reference": "https://www.fda.gov.tw/tc/newsContent.aspx?cid=5049&id=22092\n會中毒，所以要少吃勾芡料理？",
       "createdAt": "2017-07-07T09:39:54.019Z",
       "appId": "WEBSITE",
@@ -3280,7 +3280,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_32": {
+    "/replies/doc/CBUT_reply_32": {
       "reference": "http://news.ltn.com.tw/news/life/paper/1060978",
       "createdAt": "2017-03-27T14:21:52.619Z",
       "appId": "WEBSITE",
@@ -3295,7 +3295,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_72": {
+    "/replies/doc/CBUT_reply_72": {
       "reference": "https://www.everydayhealth.com.tw/article/857\nhttps://www.amazon.co.jp/%E8%AA%8D...",
       "createdAt": "2017-04-12T11:21:23.414Z",
       "appId": "WEBSITE",
@@ -3315,7 +3315,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_13": {
+    "/replies/doc/CBUT_reply_13": {
       "reference": "http://www.tada2002.org.tw/tada_know_02.html",
       "createdAt": "2017-04-12T11:25:01.484Z",
       "appId": "WEBSITE",
@@ -3330,7 +3330,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_66": {
+    "/replies/doc/CBUT_reply_66": {
       "reference": "http://pension.president.gov.tw/cp.aspx?n=03E38CC0FF75CFBE&s=FB4868255F8CFFAD",
       "createdAt": "2017-03-24T16:51:23.373Z",
       "appId": "WEBSITE",
@@ -3345,7 +3345,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_6": {
+    "/replies/doc/CBUT_reply_6": {
       "reference": "http://news.ltn.com.tw/news/life/paper/111309\n心肌梗塞突襲 咳嗽不能自救 快就醫才對",
       "createdAt": "2018-01-23T15:42:02.674Z",
       "appId": "WEBSITE",
@@ -3360,7 +3360,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_23": {
+    "/replies/doc/CBUT_reply_23": {
       "reference": "\nhttp://www.appledaily.com.tw/realtimenews/article/new/20170614/1139982/\n海獸胃腺蟲」鑽胃壁　專家：過去國內僅１例",
       "createdAt": "2017-08-29T04:03:40.178Z",
       "appId": "WEBSITE",
@@ -3375,7 +3375,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_73": {
+    "/replies/doc/CBUT_reply_73": {
       "reference": "https://zh.wikipedia.org/wiki/李孟贤",
       "createdAt": "2018-01-01T12:00:04.036Z",
       "appId": "WEBSITE",
@@ -3390,7 +3390,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_37": {
+    "/replies/doc/CBUT_reply_37": {
       "reference": "http://www.appledaily.com.tw/realtimenews/article/new/20150819/672912/",
       "createdAt": "2017-01-10T02:42:00.000Z",
       "appId": null,
@@ -3404,7 +3404,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_16": {
+    "/replies/doc/CBUT_reply_16": {
       "reference": "http://www.ettoday.net/news/20130826/261531.htm",
       "createdAt": "2017-03-21T16:25:34.315Z",
       "appId": "WEBSITE",
@@ -3419,7 +3419,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_38": {
+    "/replies/doc/CBUT_reply_38": {
       "reference": "http://www.traffic.police.ntpc.gov.tw/cp-1084-32629-27.html\n網路流傳「道路交通法規修法加重處罰」謠言澄清一覽表",
       "createdAt": "2017-10-15T16:05:28.182Z",
       "appId": "WEBSITE",
@@ -3434,7 +3434,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_7": {
+    "/replies/doc/CBUT_reply_7": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3449,7 +3449,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_3": {
+    "/replies/doc/CBUT_reply_3": {
       "reference": "https://www.youtube.com/watch?v=RbrCFWkwhPQ",
       "createdAt": "2017-08-01T13:53:32.743Z",
       "appId": "WEBSITE",
@@ -3464,7 +3464,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_71": {
+    "/replies/doc/CBUT_reply_71": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3479,7 +3479,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_10": {
+    "/replies/doc/CBUT_reply_10": {
       "reference": "http://sp1.hso.mohw.gov.tw/doctor/Often_question/type_detail.php?PageNo=2&q_type...",
       "createdAt": "2018-02-07T17:33:53.022Z",
       "appId": "WEBSITE",
@@ -3499,7 +3499,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_40": {
+    "/replies/doc/CBUT_reply_40": {
       "userId": "CBUT_user_45",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3519,7 +3519,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_41": {
+    "/replies/doc/CBUT_reply_41": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3579,7 +3579,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_42": {
+    "/replies/doc/CBUT_reply_42": {
       "userId": "CBUT_user_53",
       "appId": "WEBSITE",
       "type": "NOT_RUMOR",
@@ -3587,7 +3587,7 @@ export default {
       "reference": "https://tw.news.yahoo.com/%E5%90%8C%E6%80%A7%E5%A9%9A%E5%A7%BB%E9%87%8B%E6%86%B2...",
       "createdAt": "2018-10-24T13:19:03.710Z",
     },
-    "/replies_v1_0_2/doc/CBUT_reply_46": {
+    "/replies/doc/CBUT_reply_46": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3602,7 +3602,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_18": {
+    "/replies/doc/CBUT_reply_18": {
       "userId": "CBUT_user_73",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3622,7 +3622,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_25": {
+    "/replies/doc/CBUT_reply_25": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "NOT_ARTICLE",
@@ -3630,7 +3630,7 @@ export default {
       "reference": "",
       "createdAt": "2019-03-19T14:57:01.101Z",
     },
-    "/replies_v1_0_2/doc/CBUT_reply_64": {
+    "/replies/doc/CBUT_reply_64": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3655,7 +3655,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_63": {
+    "/replies/doc/CBUT_reply_63": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "OPINIONATED",
@@ -3670,7 +3670,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_28": {
+    "/replies/doc/CBUT_reply_28": {
       "userId": "CBUT_user_15",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3700,7 +3700,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_29": {
+    "/replies/doc/CBUT_reply_29": {
       "reference": "http://news.ltn.com.tw/news/life/breakingnews/1950973\n泰豐大火空氣落塵",
       "createdAt": "2017-06-12T11:50:12.535Z",
       "appId": "WEBSITE",
@@ -3715,7 +3715,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_68": {
+    "/replies/doc/CBUT_reply_68": {
       "reference": "https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB",
       "createdAt": "2017-06-24T07:35:54.955Z",
       "appId": "WEBSITE",
@@ -3730,7 +3730,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_58": {
+    "/replies/doc/CBUT_reply_58": {
       "reference": "http://www.appledaily.com.tw/appledaily/article/headline/20151103/36878044/",
       "createdAt": "2017-06-20T17:29:47.805Z",
       "appId": "WEBSITE",
@@ -3745,7 +3745,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_31": {
+    "/replies/doc/CBUT_reply_31": {
       "reference": "https://my83.com.tw/blogs?p=1338",
       "createdAt": "2017-06-19T14:54:52.139Z",
       "appId": "WEBSITE",
@@ -3760,7 +3760,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_2": {
+    "/replies/doc/CBUT_reply_2": {
       "userId": "CBUT_user_15",
       "appId": "WEBSITE",
       "type": "OPINIONATED",
@@ -3790,7 +3790,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_33": {
+    "/replies/doc/CBUT_reply_33": {
       "userId": "CBUT_user_15",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3810,7 +3810,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_34": {
+    "/replies/doc/CBUT_reply_34": {
       "userId": "CBUT_user_15",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3830,7 +3830,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_54": {
+    "/replies/doc/CBUT_reply_54": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "NOT_ARTICLE",
@@ -3838,7 +3838,7 @@ export default {
       "reference": "",
       "createdAt": "2019-06-02T01:40:59.872Z",
     },
-    "/replies_v1_0_2/doc/CBUT_reply_60": {
+    "/replies/doc/CBUT_reply_60": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3853,7 +3853,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_9": {
+    "/replies/doc/CBUT_reply_9": {
       "userId": "CBUT_user_15",
       "appId": "WEBSITE",
       "type": "OPINIONATED",
@@ -3873,7 +3873,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_22": {
+    "/replies/doc/CBUT_reply_22": {
       "reference": "比對 join 平台提案內容以及教育部新聞稿 https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB\n",
       "createdAt": "2017-06-27T15:25:17.272Z",
       "appId": "WEBSITE",
@@ -3888,7 +3888,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_43": {
+    "/replies/doc/CBUT_reply_43": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3903,7 +3903,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_17": {
+    "/replies/doc/CBUT_reply_17": {
       "userId": "CBUT_user_47",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3918,7 +3918,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_36": {
+    "/replies/doc/CBUT_reply_36": {
       "userId": "CBUT_user_48",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3948,7 +3948,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_61": {
+    "/replies/doc/CBUT_reply_61": {
       "userId": "CBUT_user_74",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3963,7 +3963,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_57": {
+    "/replies/doc/CBUT_reply_57": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3978,7 +3978,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_24": {
+    "/replies/doc/CBUT_reply_24": {
       "userId": "CBUT_user_88",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -3986,7 +3986,7 @@ export default {
       "reference": " ",
       "createdAt": "2019-08-21T02:10:43.987Z",
     },
-    "/replies_v1_0_2/doc/CBUT_reply_47": {
+    "/replies/doc/CBUT_reply_47": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4001,7 +4001,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_19": {
+    "/replies/doc/CBUT_reply_19": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4017,7 +4017,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_65": {
+    "/replies/doc/CBUT_reply_65": {
       "userId": "CBUT_user_79",
       "appId": "WEBSITE",
       "type": "NOT_ARTICLE",
@@ -4025,7 +4025,7 @@ export default {
       "reference": "",
       "createdAt": "2019-11-18T07:31:32.985Z",
     },
-    "/replies_v1_0_2/doc/CBUT_reply_14": {
+    "/replies/doc/CBUT_reply_14": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4053,7 +4053,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_4": {
+    "/replies/doc/CBUT_reply_4": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4069,7 +4069,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_5": {
+    "/replies/doc/CBUT_reply_5": {
       "userId": "CBUT_user_68",
       "appId": "WEBSITE",
       "type": "OPINIONATED",
@@ -4103,7 +4103,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_11": {
+    "/replies/doc/CBUT_reply_11": {
       "userId": "CBUT_user_15",
       "appId": "WEBSITE",
       "type": "OPINIONATED",
@@ -4119,7 +4119,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_53": {
+    "/replies/doc/CBUT_reply_53": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4135,7 +4135,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_44": {
+    "/replies/doc/CBUT_reply_44": {
       "userId": "CBUT_user_57",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4157,7 +4157,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_51": {
+    "/replies/doc/CBUT_reply_51": {
       "userId": "CBUT_user_65",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4173,7 +4173,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_52": {
+    "/replies/doc/CBUT_reply_52": {
       "userId": "CBUT_user_65",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4189,7 +4189,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_12": {
+    "/replies/doc/CBUT_reply_12": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4205,7 +4205,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_50": {
+    "/replies/doc/CBUT_reply_50": {
       "userId": "CBUT_user_63",
       "appId": "WEBSITE",
       "type": "OPINIONATED",
@@ -4221,7 +4221,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_67": {
+    "/replies/doc/CBUT_reply_67": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4237,7 +4237,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_62": {
+    "/replies/doc/CBUT_reply_62": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4253,7 +4253,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_45": {
+    "/replies/doc/CBUT_reply_45": {
       "userId": "CBUT_user_54",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4269,7 +4269,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_56": {
+    "/replies/doc/CBUT_reply_56": {
       "userId": "CBUT_user_69",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4285,7 +4285,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_55": {
+    "/replies/doc/CBUT_reply_55": {
       "userId": "CBUT_user_68",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4319,7 +4319,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_48": {
+    "/replies/doc/CBUT_reply_48": {
       "userId": "CBUT_user_60",
       "appId": "WEBSITE",
       "type": "OPINIONATED",
@@ -4327,7 +4327,7 @@ export default {
       "reference": "【疫情處置評論】\n\n布魯金斯學會-Coronavirus lessons from New York and San Francisco\nhttps://www...",
       "createdAt": "2020-04-28T13:51:19.413Z",
     },
-    "/replies_v1_0_2/doc/CBUT_reply_49": {
+    "/replies/doc/CBUT_reply_49": {
       "userId": "CBUT_user_61",
       "appId": "WEBSITE",
       "type": "NOT_ARTICLE",
@@ -4336,7 +4336,7 @@ export default {
       "createdAt": "2020-05-05T09:41:19.615Z",
       "hyperlinks": [],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_59": {
+    "/replies/doc/CBUT_reply_59": {
       "userId": "CBUT_user_71",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4352,7 +4352,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_74": {
+    "/replies/doc/CBUT_reply_74": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4368,7 +4368,7 @@ export default {
         }
       ],
     },
-    "/replies_v1_0_2/doc/CBUT_reply_75": {
+    "/replies/doc/CBUT_reply_75": {
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
       "type": "RUMOR",
@@ -4384,21 +4384,21 @@ export default {
         }
       ],
     },
-    "/replyrequests_v1_0_2/doc/CBUT_article_40__CBUT_user_17__DEVELOPMENT_BACKEND": {
+    "/replyrequests/doc/CBUT_article_40__CBUT_user_17__DEVELOPMENT_BACKEND": {
       "createdAt": "2017-05-30T15:36:48.738Z",
       "appId": "DEVELOPMENT_BACKEND",
       "userId": "CBUT_user_17",
       "updatedAt": "2017-05-30T15:36:48.738Z",
       "articleId": "CBUT_article_40",
     },
-    "/replyrequests_v1_0_2/doc/CBUT_article_36__CBUT_user_17__DEVELOPMENT_BACKEND": {
+    "/replyrequests/doc/CBUT_article_36__CBUT_user_17__DEVELOPMENT_BACKEND": {
       "createdAt": "2017-05-10T13:36:53.795Z",
       "appId": "DEVELOPMENT_BACKEND",
       "userId": "CBUT_user_17",
       "updatedAt": "2017-05-10T13:36:53.795Z",
       "articleId": "CBUT_article_36",
     },
-    "/replyrequests_v1_0_2/doc/CBUT_article_44__CBUT_user_35__WEBSITE": {
+    "/replyrequests/doc/CBUT_article_44__CBUT_user_35__WEBSITE": {
       "articleId": "CBUT_article_44",
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
@@ -4409,7 +4409,7 @@ export default {
       "createdAt": "2020-09-26T09:39:48.829Z",
       "updatedAt": "2020-09-26T09:39:48.829Z",
     },
-    "/replyrequests_v1_0_2/doc/CBUT_article_38__CBUT_user_56__RUMORS_LINE_BOT": {
+    "/replyrequests/doc/CBUT_article_38__CBUT_user_56__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_38",
       "userId": "CBUT_user_56",
       "appId": "RUMORS_LINE_BOT",
@@ -4420,7 +4420,7 @@ export default {
       "createdAt": "2020-02-21T02:02:55.271Z",
       "updatedAt": "2020-02-21T02:02:55.271Z",
     },
-    "/replyrequests_v1_0_2/doc/CBUT_article_42__CBUT_user_35__WEBSITE": {
+    "/replyrequests/doc/CBUT_article_42__CBUT_user_35__WEBSITE": {
       "articleId": "CBUT_article_42",
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
@@ -4431,7 +4431,7 @@ export default {
       "createdAt": "2019-04-15T16:38:11.473Z",
       "updatedAt": "2019-04-15T16:38:11.473Z",
     },
-    "/replyrequests_v1_0_2/doc/CBUT_article_43__CBUT_user_35__WEBSITE": {
+    "/replyrequests/doc/CBUT_article_43__CBUT_user_35__WEBSITE": {
       "articleId": "CBUT_article_43",
       "userId": "CBUT_user_35",
       "appId": "WEBSITE",
@@ -4442,7 +4442,7 @@ export default {
       "createdAt": "2020-09-26T07:29:51.708Z",
       "updatedAt": "2020-09-26T07:29:51.708Z",
     },
-    "/replyrequests_v1_0_2/doc/CBUT_article_39__CBUT_user_69__WEBSITE": {
+    "/replyrequests/doc/CBUT_article_39__CBUT_user_69__WEBSITE": {
       "articleId": "CBUT_article_39",
       "userId": "CBUT_user_69",
       "appId": "WEBSITE",
@@ -4453,20 +4453,20 @@ export default {
       "createdAt": "2020-04-27T09:34:01.196Z",
       "updatedAt": "2020-04-27T09:34:01.196Z",
     },
-    "/replyrequests_v1_0_2/doc/CBUT_article_35__CBUT_user_42__RUMORS_LINE_BOT": {
+    "/replyrequests/doc/CBUT_article_35__CBUT_user_42__RUMORS_LINE_BOT": {
       "createdAt": "2017-12-24T23:48:52.805Z",
       "appId": "RUMORS_LINE_BOT",
       "userId": "CBUT_user_42",
       "updatedAt": "2017-12-24T23:48:52.805Z",
       "articleId": "CBUT_article_35",
     },
-    "/replyrequests_v1_0_2/doc/CBUT_article_37__CBUT_user_37__BOT_LEGACY": {
+    "/replyrequests/doc/CBUT_article_37__CBUT_user_37__BOT_LEGACY": {
       "createdAt": "2017-01-11T08:52:00.000Z",
       "appId": "BOT_LEGACY",
       "userId": "CBUT_user_37",
       "articleId": "CBUT_article_37",
     },
-    "/replyrequests_v1_0_2/doc/CBUT_article_41__CBUT_user_77__RUMORS_LINE_BOT": {
+    "/replyrequests/doc/CBUT_article_41__CBUT_user_77__RUMORS_LINE_BOT": {
       "articleId": "CBUT_article_41",
       "userId": "CBUT_user_77",
       "appId": "RUMORS_LINE_BOT",
@@ -4480,447 +4480,447 @@ export default {
   },
   expectedResults: {
     users: {
-      "/users_v1_0_2/doc/CBUT_user_0": {
+      "/users/doc/CBUT_user_0": {
         "createdAt": "2019-02-18T06:28:55.720Z",
         "updatedAt": "2019-02-18T06:28:55.720Z",
         "email": "cnMsf0z@example.com",
         "name": "uH2VDAgiwf UC6V4",
         "facebookId": "CBUT_facebook_0"
       },
-      "/users_v1_0_2/doc/CBUT_user_1": {
+      "/users/doc/CBUT_user_1": {
         "createdAt": "2019-10-15T05:11:15.972Z",
         "updatedAt": "2019-10-15T05:11:15.972Z",
         "email": "8xeGKHZOda@example.com",
         "name": "QcGDf68rq D3ZWh",
         "facebookId": "CBUT_facebook_1"
       },
-      "/users_v1_0_2/doc/CBUT_user_10": {
+      "/users/doc/CBUT_user_10": {
         "createdAt": "2020-03-12T14:45:03.825Z",
         "updatedAt": "2020-03-12T14:45:03.825Z",
         "email": "LOv6ae2@example.com",
         "name": "5aDOfh nMM705Ml",
         "facebookId": "CBUT_facebook_10"
       },
-      "/users_v1_0_2/doc/CBUT_user_11": {
+      "/users/doc/CBUT_user_11": {
         "createdAt": "2020-02-07T15:27:05.303Z",
         "updatedAt": "2020-02-07T15:27:05.303Z",
         "email": "ZRc1WF1ih@example.com",
         "name": "KDnWGKCis HUQADXS5dP",
         "facebookId": "CBUT_facebook_11"
       },
-      "/users_v1_0_2/doc/CBUT_user_12": {
+      "/users/doc/CBUT_user_12": {
         "createdAt": "2019-05-14T02:20:27.275Z",
         "updatedAt": "2019-05-14T02:20:27.275Z",
         "name": "BPZWZW BufLuDil",
         "facebookId": "CBUT_facebook_12"
       },
-      "/users_v1_0_2/doc/CBUT_user_13": {
+      "/users/doc/CBUT_user_13": {
         "createdAt": "2019-06-18T15:20:54.339Z",
         "updatedAt": "2019-06-18T15:20:54.339Z",
         "email": "DmjXIw@example.com",
         "name": "EXJbf brCVMftg",
         "facebookId": "CBUT_facebook_13"
       },
-      "/users_v1_0_2/doc/CBUT_user_14": {
+      "/users/doc/CBUT_user_14": {
         "createdAt": "2020-09-26T21:38:58.624Z",
         "updatedAt": "2020-09-26T21:38:58.624Z",
         "email": "Ci_HpyP6m@example.com",
         "name": "8peFNlZdWT aSAqUlJ",
         "facebookId": "CBUT_facebook_14"
       },
-      "/users_v1_0_2/doc/CBUT_user_15": {
+      "/users/doc/CBUT_user_15": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_16": {
+      "/users/doc/CBUT_user_16": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_2": {
+      "/users/doc/CBUT_user_2": {
         "createdAt": "2020-07-06T05:46:06.931Z",
         "updatedAt": "2020-07-06T05:46:06.931Z",
         "email": "GFsBpOzw1t@example.com",
         "name": "fzAlW7 lTLr8U",
         "facebookId": "CBUT_facebook_2"
       },
-      "/users_v1_0_2/doc/CBUT_user_20": {
+      "/users/doc/CBUT_user_20": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_23": {
+      "/users/doc/CBUT_user_23": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_3": {
+      "/users/doc/CBUT_user_3": {
         "createdAt": "2017-08-07T04:03:29.995Z",
         "updatedAt": "2017-08-07T04:03:29.995Z",
         "email": "WNEhSxYx@example.com",
         "name": "nUWqA 9zu04Q",
         "facebookId": "CBUT_facebook_3"
       },
-      "/users_v1_0_2/doc/CBUT_user_35": {
+      "/users/doc/CBUT_user_35": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_38": {
+      "/users/doc/CBUT_user_38": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_4": {
+      "/users/doc/CBUT_user_4": {
         "createdAt": "2019-03-30T03:46:39.014Z",
         "updatedAt": "2019-03-30T03:46:39.014Z",
         "email": "-49hG@example.com",
         "name": "0W8kdJ Vg9XsuVhy",
         "facebookId": "CBUT_facebook_4"
       },
-      "/users_v1_0_2/doc/CBUT_user_40": {
+      "/users/doc/CBUT_user_40": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_45": {
+      "/users/doc/CBUT_user_45": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_47": {
+      "/users/doc/CBUT_user_47": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_48": {
+      "/users/doc/CBUT_user_48": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_49": {
+      "/users/doc/CBUT_user_49": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_5": {
+      "/users/doc/CBUT_user_5": {
         "createdAt": "2018-12-25T10:06:57.131Z",
         "updatedAt": "2018-12-25T10:06:57.131Z",
         "email": "hsnKHanBb5@example.com",
         "name": "dTPZcxn4W aWHchdvji",
         "facebookId": "CBUT_facebook_5"
       },
-      "/users_v1_0_2/doc/CBUT_user_53": {
+      "/users/doc/CBUT_user_53": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_54": {
+      "/users/doc/CBUT_user_54": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_57": {
+      "/users/doc/CBUT_user_57": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_6": {
+      "/users/doc/CBUT_user_6": {
         "createdAt": "2019-02-12T03:40:04.690Z",
         "updatedAt": "2019-02-12T03:40:04.690Z",
         "email": "X6M6CqP6-@example.com",
         "name": "2PK0m KbAK-wu",
         "facebookId": "CBUT_facebook_6"
       },
-      "/users_v1_0_2/doc/CBUT_user_60": {
+      "/users/doc/CBUT_user_60": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_61": {
+      "/users/doc/CBUT_user_61": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_63": {
+      "/users/doc/CBUT_user_63": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_65": {
+      "/users/doc/CBUT_user_65": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_68": {
+      "/users/doc/CBUT_user_68": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_69": {
+      "/users/doc/CBUT_user_69": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_7": {
+      "/users/doc/CBUT_user_7": {
         "createdAt": "2019-06-17T03:14:26.547Z",
         "updatedAt": "2019-06-17T05:39:45.935Z",
         "email": "mtSHa9pQR@example.com",
         "name": "1waeHG H5nlk5w",
         "facebookId": "CBUT_facebook_7"
       },
-      "/users_v1_0_2/doc/CBUT_user_71": {
+      "/users/doc/CBUT_user_71": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_73": {
+      "/users/doc/CBUT_user_73": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_74": {
+      "/users/doc/CBUT_user_74": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_79": {
+      "/users/doc/CBUT_user_79": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_8": {
+      "/users/doc/CBUT_user_8": {
         "createdAt": "2018-12-02T05:48:31.102Z",
         "updatedAt": "2018-12-02T05:48:31.102Z",
         "email": "9bScmbJ@example.com",
         "name": "B4ywca jlF0w",
         "facebookId": "CBUT_facebook_8"
       },
-      "/users_v1_0_2/doc/CBUT_user_84": {
+      "/users/doc/CBUT_user_84": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_85": {
+      "/users/doc/CBUT_user_85": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_88": {
+      "/users/doc/CBUT_user_88": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/CBUT_user_9": {
+      "/users/doc/CBUT_user_9": {
         "createdAt": "2020-05-05T09:14:15.364Z",
         "updatedAt": "2020-05-05T09:14:15.364Z",
         "email": "k-MJ48Wozf@example.com",
         "name": "AvqX7 SXguFvvotD",
         "facebookId": "CBUT_facebook_9"
       },
-      "/users_v1_0_2/doc/CBUT_user_90": {
+      "/users/doc/CBUT_user_90": {
         "createdAt": "2010-01-01T00:00:00Z"
       },
-      "/users_v1_0_2/doc/Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU": {
+      "/users/doc/Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU": {
         "appUserId": "CBUT_user_37",
         "appId": "BOT_LEGACY",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/Z0k1e_9jAgBIhrjzs66_4pQrS0Gq4m79N5KCuHY9q8U1xUjYw": {
+      "/users/doc/Z0k1e_9jAgBIhrjzs66_4pQrS0Gq4m79N5KCuHY9q8U1xUjYw": {
         "appUserId": "CBUT_user_35",
         "appId": "BOT_LEGACY",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_-jyEGNy2w04UVgIb9-imCXweVYP3sniZ-q4Y8JNXL9k": {
+      "/users/doc/j4S8C_-jyEGNy2w04UVgIb9-imCXweVYP3sniZ-q4Y8JNXL9k": {
         "appUserId": "CBUT_user_26",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_4PNVISSWISKdcDP111lIO_cSmpR1jMjSyzDwLoYDvH4": {
+      "/users/doc/j4S8C_4PNVISSWISKdcDP111lIO_cSmpR1jMjSyzDwLoYDvH4": {
         "appUserId": "CBUT_user_80",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_4WVN4mcFb9V8KKu6LT8xXvRud2LWcSa-UjL_qvy0ksw": {
+      "/users/doc/j4S8C_4WVN4mcFb9V8KKu6LT8xXvRud2LWcSa-UjL_qvy0ksw": {
         "appUserId": "CBUT_user_76",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_4iGkmTeduiI5SrYlHehwmaS3SX4Nszoyb1oyUWvLMEo": {
+      "/users/doc/j4S8C_4iGkmTeduiI5SrYlHehwmaS3SX4Nszoyb1oyUWvLMEo": {
         "appUserId": "CBUT_user_82",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_9V5d6E7GKiGNn1Yv_ifdq_WCxK4GET6BedItZHNN3W0": {
+      "/users/doc/j4S8C_9V5d6E7GKiGNn1Yv_ifdq_WCxK4GET6BedItZHNN3W0": {
         "appUserId": "CBUT_user_72",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_AunHFdGqCNC2QRUrQ9PSqkcE49Z4JTrkG9mYcgeogm8": {
+      "/users/doc/j4S8C_AunHFdGqCNC2QRUrQ9PSqkcE49Z4JTrkG9mYcgeogm8": {
         "appUserId": "CBUT_user_67",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY": {
+      "/users/doc/j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY": {
         "appUserId": "CBUT_user_42",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_Imj3cjSxE4ieAND7jCqxBcT1kYMCozfzPqI2CM2B4d4": {
+      "/users/doc/j4S8C_Imj3cjSxE4ieAND7jCqxBcT1kYMCozfzPqI2CM2B4d4": {
         "appUserId": "CBUT_user_18",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_J-qFf2nzWHvRnx3qA2hEhRhp4ASBnYRkq3IA2i7ngg8": {
+      "/users/doc/j4S8C_J-qFf2nzWHvRnx3qA2hEhRhp4ASBnYRkq3IA2i7ngg8": {
         "appUserId": "CBUT_user_30",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_LD7dd370hd6B1O-rTkpX9I_n1AhIlTPD_QmDsGA6WoQ": {
+      "/users/doc/j4S8C_LD7dd370hd6B1O-rTkpX9I_n1AhIlTPD_QmDsGA6WoQ": {
         "appUserId": "CBUT_user_29",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_LY7EIPDC671J6K2uZ9EznQAEDhznt8gUPsK0cwSDbFQ": {
+      "/users/doc/j4S8C_LY7EIPDC671J6K2uZ9EznQAEDhznt8gUPsK0cwSDbFQ": {
         "appUserId": "CBUT_user_24",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_MKBfQLupvhw4_Pf0ua4s1ag2aNnC7lr88z8Hyx7C31g": {
+      "/users/doc/j4S8C_MKBfQLupvhw4_Pf0ua4s1ag2aNnC7lr88z8Hyx7C31g": {
         "appUserId": "CBUT_user_89",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_O3LIyatOUXZjhZqeqQ5whc8glQZy6b-53QrsrO_SFbs": {
+      "/users/doc/j4S8C_O3LIyatOUXZjhZqeqQ5whc8glQZy6b-53QrsrO_SFbs": {
         "appUserId": "CBUT_user_28",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_RW_vDd8lKq4WdfWYxmVh6sJImYM96kix8X4A6FhRJHI": {
+      "/users/doc/j4S8C_RW_vDd8lKq4WdfWYxmVh6sJImYM96kix8X4A6FhRJHI": {
         "appUserId": "CBUT_user_55",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M": {
+      "/users/doc/j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M": {
         "appUserId": "CBUT_user_56",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_VSYVIlqF4l_puOdN_Pzu64YnjMc-nM5iu0OWcWTt4xk": {
+      "/users/doc/j4S8C_VSYVIlqF4l_puOdN_Pzu64YnjMc-nM5iu0OWcWTt4xk": {
         "appUserId": "CBUT_user_78",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU": {
+      "/users/doc/j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU": {
         "appUserId": "CBUT_user_87",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_YWVSKKajD6USiTghIEQzrWT_YKdnVVqVI96-cyS6zWA": {
+      "/users/doc/j4S8C_YWVSKKajD6USiTghIEQzrWT_YKdnVVqVI96-cyS6zWA": {
         "appUserId": "CBUT_user_81",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_Yk4N-rJ2LtcKZc0Wa2smuJQNB5I7mmo-d2j1k-nyfSo": {
+      "/users/doc/j4S8C_Yk4N-rJ2LtcKZc0Wa2smuJQNB5I7mmo-d2j1k-nyfSo": {
         "appUserId": "CBUT_user_83",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_Z8nYqKv190EeosqG5O1H8aeTg64m6xLkRyZOTxSYQ7A": {
+      "/users/doc/j4S8C_Z8nYqKv190EeosqG5O1H8aeTg64m6xLkRyZOTxSYQ7A": {
         "appUserId": "CBUT_user_46",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_ZvTJZB57GHkjobdIGZXOtibZ9PYEmQu8pnG-rYXS85A": {
+      "/users/doc/j4S8C_ZvTJZB57GHkjobdIGZXOtibZ9PYEmQu8pnG-rYXS85A": {
         "appUserId": "CBUT_user_32",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_f0pGq97e0_aH_2-8x0BLaj36xzuu2M1W54ZVcAZ4fM0": {
+      "/users/doc/j4S8C_f0pGq97e0_aH_2-8x0BLaj36xzuu2M1W54ZVcAZ4fM0": {
         "appUserId": "CBUT_user_39",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_fqo4vs7i2gmJi3mc1zlp_YgMi2_xyGiHfOR5_eLeYkE": {
+      "/users/doc/j4S8C_fqo4vs7i2gmJi3mc1zlp_YgMi2_xyGiHfOR5_eLeYkE": {
         "appUserId": "CBUT_user_66",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_igegSRiBLdZh9argcdWuKn3cZzYGaSCes5WLJr-9l2s": {
+      "/users/doc/j4S8C_igegSRiBLdZh9argcdWuKn3cZzYGaSCes5WLJr-9l2s": {
         "appUserId": "CBUT_user_58",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_lQfJ8fARjHNzkXa4s0ZENAkcWbKn_UOARG7VY11af8E": {
+      "/users/doc/j4S8C_lQfJ8fARjHNzkXa4s0ZENAkcWbKn_UOARG7VY11af8E": {
         "appUserId": "CBUT_user_50",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_n66M1oaUXCwx_g7G3O5VFjHWL4dbZqq9aiEewD4s8-g": {
+      "/users/doc/j4S8C_n66M1oaUXCwx_g7G3O5VFjHWL4dbZqq9aiEewD4s8-g": {
         "appUserId": "CBUT_user_62",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_nEkrBWbE4FfkBTIV9QMn1exDEGReMdemzfznDgx6nA8": {
+      "/users/doc/j4S8C_nEkrBWbE4FfkBTIV9QMn1exDEGReMdemzfznDgx6nA8": {
         "appUserId": "CBUT_user_70",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_nRWu8ne4K6M1m6ibF8HbOq07hUxK3pvrOD4g7cn-okY": {
+      "/users/doc/j4S8C_nRWu8ne4K6M1m6ibF8HbOq07hUxK3pvrOD4g7cn-okY": {
         "appUserId": "CBUT_user_64",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_pGTVQioRDsflknEcedoVAbKom5K10ipYSV4rWSq2G_4": {
+      "/users/doc/j4S8C_pGTVQioRDsflknEcedoVAbKom5K10ipYSV4rWSq2G_4": {
         "appUserId": "CBUT_user_41",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_pYR1NvuKvLQfho6HCkJWbMqLYFnDzoATlM4SyqsxdEU": {
+      "/users/doc/j4S8C_pYR1NvuKvLQfho6HCkJWbMqLYFnDzoATlM4SyqsxdEU": {
         "appUserId": "CBUT_user_44",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk": {
+      "/users/doc/j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk": {
         "appUserId": "CBUT_user_77",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_pwhC-K1IePUO5xsLr_3CDzSaH1yk7_OfUJoJeG3lVi4": {
+      "/users/doc/j4S8C_pwhC-K1IePUO5xsLr_3CDzSaH1yk7_OfUJoJeG3lVi4": {
         "appUserId": "CBUT_user_19",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo": {
+      "/users/doc/j4S8C_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo": {
         "appUserId": "CBUT_user_17",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_rjLUCvhHqmYeT37nsWvYMXt7o0r3Mbniqdr7qU5LXgo": {
+      "/users/doc/j4S8C_rjLUCvhHqmYeT37nsWvYMXt7o0r3Mbniqdr7qU5LXgo": {
         "appUserId": "CBUT_user_51",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_sJtyYDWJm0yBONBKJix3-poQzSELnS-Xyr7WPZdwvvA": {
+      "/users/doc/j4S8C_sJtyYDWJm0yBONBKJix3-poQzSELnS-Xyr7WPZdwvvA": {
         "appUserId": "CBUT_user_75",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_u7STzSnt-bwqVRc9tCmf47W2LE79MRzNrA-_oxzLIFc": {
+      "/users/doc/j4S8C_u7STzSnt-bwqVRc9tCmf47W2LE79MRzNrA-_oxzLIFc": {
         "appUserId": "CBUT_user_27",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_uQip0_ezI3-UENg4tvIubbsdJDOHYWUs8sbOeCIaKN8": {
+      "/users/doc/j4S8C_uQip0_ezI3-UENg4tvIubbsdJDOHYWUs8sbOeCIaKN8": {
         "appUserId": "CBUT_user_52",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_uURhRzjSSV6s0wz7Patvy8Fb2hBM46AgZeTSyZ0OUfk": {
+      "/users/doc/j4S8C_uURhRzjSSV6s0wz7Patvy8Fb2hBM46AgZeTSyZ0OUfk": {
         "appUserId": "CBUT_user_43",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_v8peSS0932LsPFMsF61kNZqh7-ZkQ_2QHV22_C3PXf4": {
+      "/users/doc/j4S8C_v8peSS0932LsPFMsF61kNZqh7-ZkQ_2QHV22_C3PXf4": {
         "appUserId": "CBUT_user_86",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/j4S8C_xhN2O5Ouv6Y6AbEoDULy9Crc1TRdEaQ03ANLtAEJWnY": {
+      "/users/doc/j4S8C_xhN2O5Ouv6Y6AbEoDULy9Crc1TRdEaQ03ANLtAEJWnY": {
         "appUserId": "CBUT_user_59",
         "appId": "RUMORS_LINE_BOT",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/qO1C3_86RLd-liEHXfx4M_8H9J7Y0Wb13RIieRp5-2pFxb0Jo": {
+      "/users/doc/qO1C3_86RLd-liEHXfx4M_8H9J7Y0Wb13RIieRp5-2pFxb0Jo": {
         "appUserId": "CBUT_user_31",
         "appId": "DEVELOPMENT_BACKEND",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/qO1C3_gGWtOcj9ARqZRT4msCGaXS-Iof7eL3XxmT3AOTTGCVU": {
+      "/users/doc/qO1C3_gGWtOcj9ARqZRT4msCGaXS-Iof7eL3XxmT3AOTTGCVU": {
         "appUserId": "CBUT_user_25",
         "appId": "DEVELOPMENT_BACKEND",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/qO1C3_lAgNK9-guL13qEJSGROTsi_UZbF5N5WoQ17vnsOrl6s": {
+      "/users/doc/qO1C3_lAgNK9-guL13qEJSGROTsi_UZbF5N5WoQ17vnsOrl6s": {
         "appUserId": "CBUT_user_34",
         "appId": "DEVELOPMENT_BACKEND",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/qO1C3_lHfjAYn66nWNP7XCDrdY1gaZmJbQ1wYAgzOTT8xsTXc": {
+      "/users/doc/qO1C3_lHfjAYn66nWNP7XCDrdY1gaZmJbQ1wYAgzOTT8xsTXc": {
         "appUserId": "CBUT_user_21",
         "appId": "DEVELOPMENT_BACKEND",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/qO1C3_qRN1QoZXuSa3AXBwlee3RiStUngzO50-GUF46nH-pOU": {
+      "/users/doc/qO1C3_qRN1QoZXuSa3AXBwlee3RiStUngzO50-GUF46nH-pOU": {
         "appUserId": "CBUT_user_36",
         "appId": "DEVELOPMENT_BACKEND",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo": {
+      "/users/doc/qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo": {
         "appUserId": "CBUT_user_17",
         "appId": "DEVELOPMENT_BACKEND",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/qO1C3_sYnv5g2wKCqsHcFZh-LocxMbYLn-fPAet_WiV0JRIDE": {
+      "/users/doc/qO1C3_sYnv5g2wKCqsHcFZh-LocxMbYLn-fPAet_WiV0JRIDE": {
         "appUserId": "CBUT_user_22",
         "appId": "DEVELOPMENT_BACKEND",
         "avatarType": "OpenPeeps",
       },
-      "/users_v1_0_2/doc/qO1C3_wR_HXQWSJ2jY6OA3JRGZrIgVXadixeKTQsX1qxuHsKo": {
+      "/users/doc/qO1C3_wR_HXQWSJ2jY6OA3JRGZrIgVXadixeKTQsX1qxuHsKo": {
         "appUserId": "CBUT_user_33",
         "appId": "DEVELOPMENT_BACKEND",
         "avatarType": "OpenPeeps",
       },
     },
     articlecategoryfeedbacks: {
-      "/articlecategoryfeedbacks_v1_0_2/doc/CBUT_article_0__CBUT_category_0__CBUT_user_15__WEBSITE": {
+      "/articlecategoryfeedbacks/doc/CBUT_article_0__CBUT_category_0__CBUT_user_15__WEBSITE": {
         "articleId": "CBUT_article_0",
         "categoryId": "CBUT_category_0",
         "userId": "CBUT_user_15",
@@ -4928,7 +4928,7 @@ export default {
         "createdAt": "2020-09-19T07:07:05.785Z",
         "updatedAt": "2020-09-19T07:07:05.785Z"
       },
-      "/articlecategoryfeedbacks_v1_0_2/doc/CBUT_article_1__CBUT_category_1__CBUT_user_15__WEBSITE": {
+      "/articlecategoryfeedbacks/doc/CBUT_article_1__CBUT_category_1__CBUT_user_15__WEBSITE": {
         "articleId": "CBUT_article_1",
         "categoryId": "CBUT_category_1",
         "userId": "CBUT_user_15",
@@ -4937,7 +4937,7 @@ export default {
         "updatedAt": "2020-07-25T03:32:50.190Z",
         "comment": "irrelevant"
       },
-      "/articlecategoryfeedbacks_v1_0_2/doc/CBUT_article_2__CBUT_category_1__CBUT_user_15__WEBSITE": {
+      "/articlecategoryfeedbacks/doc/CBUT_article_2__CBUT_category_1__CBUT_user_15__WEBSITE": {
         "articleId": "CBUT_article_2",
         "categoryId": "CBUT_category_1",
         "userId": "CBUT_user_15",
@@ -4946,7 +4946,7 @@ export default {
         "updatedAt": "2020-07-25T03:31:47.629Z",
         "comment": "irrelevant"
       },
-      "/articlecategoryfeedbacks_v1_0_2/doc/CBUT_article_3__CBUT_category_1__CBUT_user_15__WEBSITE": {
+      "/articlecategoryfeedbacks/doc/CBUT_article_3__CBUT_category_1__CBUT_user_15__WEBSITE": {
         "articleId": "CBUT_article_3",
         "categoryId": "CBUT_category_1",
         "userId": "CBUT_user_15",
@@ -4955,7 +4955,7 @@ export default {
         "updatedAt": "2020-07-25T03:35:36.459Z",
         "comment": "irrelevant"
       },
-      "/articlecategoryfeedbacks_v1_0_2/doc/CBUT_article_4__CBUT_category_1__CBUT_user_15__WEBSITE": {
+      "/articlecategoryfeedbacks/doc/CBUT_article_4__CBUT_category_1__CBUT_user_15__WEBSITE": {
         "articleId": "CBUT_article_4",
         "categoryId": "CBUT_category_1",
         "userId": "CBUT_user_15",
@@ -4966,7 +4966,7 @@ export default {
       },
     },
     articlereplyfeedbacks: {
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_10__CBUT_reply_5__qO1C3_lHfjAYn66nWNP7XCDrdY1gaZmJbQ1wYAgzOTT8xsTXc__DEVELOPMENT_BACKEND": {
+      "/articlereplyfeedbacks/doc/CBUT_article_10__CBUT_reply_5__qO1C3_lHfjAYn66nWNP7XCDrdY1gaZmJbQ1wYAgzOTT8xsTXc__DEVELOPMENT_BACKEND": {
         "articleId": "CBUT_article_10",
         "replyId": "CBUT_reply_5",
         "userId": "qO1C3_lHfjAYn66nWNP7XCDrdY1gaZmJbQ1wYAgzOTT8xsTXc",
@@ -4975,7 +4975,7 @@ export default {
         "updatedAt": "2020-02-27T09:18:07.301Z",
         "appUserId": "CBUT_user_21"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_11__CBUT_reply_6__qO1C3_sYnv5g2wKCqsHcFZh-LocxMbYLn-fPAet_WiV0JRIDE__DEVELOPMENT_BACKEND": {
+      "/articlereplyfeedbacks/doc/CBUT_article_11__CBUT_reply_6__qO1C3_sYnv5g2wKCqsHcFZh-LocxMbYLn-fPAet_WiV0JRIDE__DEVELOPMENT_BACKEND": {
         "createdAt": "2018-01-24T05:28:35.650Z",
         "appId": "DEVELOPMENT_BACKEND",
         "userId": "qO1C3_sYnv5g2wKCqsHcFZh-LocxMbYLn-fPAet_WiV0JRIDE",
@@ -4984,7 +4984,7 @@ export default {
         "replyId": "CBUT_reply_6",
         "appUserId": "CBUT_user_22"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_12__CBUT_reply_7__CBUT_user_23__WEBSITE": {
+      "/articlereplyfeedbacks/doc/CBUT_article_12__CBUT_reply_7__CBUT_user_23__WEBSITE": {
         "articleId": "CBUT_article_12",
         "replyId": "CBUT_reply_7",
         "userId": "CBUT_user_23",
@@ -4993,7 +4993,7 @@ export default {
         "updatedAt": "2020-06-28T08:33:54.411Z",
         "comment": ""
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_13__CBUT_reply_8__j4S8C_LY7EIPDC671J6K2uZ9EznQAEDhznt8gUPsK0cwSDbFQ__RUMORS_LINE_BOT": {
+      "/articlereplyfeedbacks/doc/CBUT_article_13__CBUT_reply_8__j4S8C_LY7EIPDC671J6K2uZ9EznQAEDhznt8gUPsK0cwSDbFQ__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_13",
         "replyId": "CBUT_reply_8",
         "userId": "j4S8C_LY7EIPDC671J6K2uZ9EznQAEDhznt8gUPsK0cwSDbFQ",
@@ -5003,7 +5003,7 @@ export default {
         "comment": "",
         "appUserId": "CBUT_user_24"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_14__CBUT_reply_9__qO1C3_gGWtOcj9ARqZRT4msCGaXS-Iof7eL3XxmT3AOTTGCVU__DEVELOPMENT_BACKEND": {
+      "/articlereplyfeedbacks/doc/CBUT_article_14__CBUT_reply_9__qO1C3_gGWtOcj9ARqZRT4msCGaXS-Iof7eL3XxmT3AOTTGCVU__DEVELOPMENT_BACKEND": {
         "articleId": "CBUT_article_14",
         "replyId": "CBUT_reply_9",
         "userId": "qO1C3_gGWtOcj9ARqZRT4msCGaXS-Iof7eL3XxmT3AOTTGCVU",
@@ -5012,7 +5012,7 @@ export default {
         "updatedAt": "2018-03-29T06:42:21.545Z",
         "appUserId": "CBUT_user_25"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_15__CBUT_reply_10__CBUT_user_15__DEVELOPMENT_FRONTEND": {
+      "/articlereplyfeedbacks/doc/CBUT_article_15__CBUT_reply_10__CBUT_user_15__DEVELOPMENT_FRONTEND": {
         "createdAt": "2018-02-07T18:09:49.594Z",
         "appId": "DEVELOPMENT_FRONTEND",
         "userId": "CBUT_user_15",
@@ -5020,7 +5020,7 @@ export default {
         "articleId": "CBUT_article_15",
         "replyId": "CBUT_reply_10"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_16__CBUT_reply_11__j4S8C_-jyEGNy2w04UVgIb9-imCXweVYP3sniZ-q4Y8JNXL9k__RUMORS_LINE_BOT": {
+      "/articlereplyfeedbacks/doc/CBUT_article_16__CBUT_reply_11__j4S8C_-jyEGNy2w04UVgIb9-imCXweVYP3sniZ-q4Y8JNXL9k__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_16",
         "replyId": "CBUT_reply_11",
         "userId": "j4S8C_-jyEGNy2w04UVgIb9-imCXweVYP3sniZ-q4Y8JNXL9k",
@@ -5029,7 +5029,7 @@ export default {
         "updatedAt": "2020-03-10T12:02:08.394Z",
         "appUserId": "CBUT_user_26"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_17__CBUT_reply_12__CBUT_user_15__WEBSITE": {
+      "/articlereplyfeedbacks/doc/CBUT_article_17__CBUT_reply_12__CBUT_user_15__WEBSITE": {
         "articleId": "CBUT_article_17",
         "replyId": "CBUT_reply_12",
         "userId": "CBUT_user_15",
@@ -5037,7 +5037,7 @@ export default {
         "createdAt": "2020-04-05T09:33:19.299Z",
         "updatedAt": "2020-04-05T09:33:19.299Z"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_18__CBUT_reply_13__j4S8C_u7STzSnt-bwqVRc9tCmf47W2LE79MRzNrA-_oxzLIFc__RUMORS_LINE_BOT": {
+      "/articlereplyfeedbacks/doc/CBUT_article_18__CBUT_reply_13__j4S8C_u7STzSnt-bwqVRc9tCmf47W2LE79MRzNrA-_oxzLIFc__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_18",
         "replyId": "CBUT_reply_13",
         "userId": "j4S8C_u7STzSnt-bwqVRc9tCmf47W2LE79MRzNrA-_oxzLIFc",
@@ -5046,7 +5046,7 @@ export default {
         "updatedAt": "2019-02-20T05:11:06.611Z",
         "appUserId": "CBUT_user_27"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_19__CBUT_reply_14__CBUT_user_20__WEBSITE": {
+      "/articlereplyfeedbacks/doc/CBUT_article_19__CBUT_reply_14__CBUT_user_20__WEBSITE": {
         "articleId": "CBUT_article_19",
         "replyId": "CBUT_reply_14",
         "userId": "CBUT_user_20",
@@ -5055,7 +5055,7 @@ export default {
         "updatedAt": "2020-06-27T23:11:24.480Z",
         "comment": ""
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_20__CBUT_reply_15__CBUT_user_20__WEBSITE": {
+      "/articlereplyfeedbacks/doc/CBUT_article_20__CBUT_reply_15__CBUT_user_20__WEBSITE": {
         "articleId": "CBUT_article_20",
         "replyId": "CBUT_reply_15",
         "userId": "CBUT_user_20",
@@ -5064,7 +5064,7 @@ export default {
         "updatedAt": "2020-09-26T05:54:08.502Z",
         "comment": ""
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_21__CBUT_reply_16__j4S8C_O3LIyatOUXZjhZqeqQ5whc8glQZy6b-53QrsrO_SFbs__RUMORS_LINE_BOT": {
+      "/articlereplyfeedbacks/doc/CBUT_article_21__CBUT_reply_16__j4S8C_O3LIyatOUXZjhZqeqQ5whc8glQZy6b-53QrsrO_SFbs__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_21",
         "replyId": "CBUT_reply_16",
         "userId": "j4S8C_O3LIyatOUXZjhZqeqQ5whc8glQZy6b-53QrsrO_SFbs",
@@ -5073,7 +5073,7 @@ export default {
         "updatedAt": "2019-04-06T06:45:23.016Z",
         "appUserId": "CBUT_user_28"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_22__CBUT_reply_17__j4S8C_LD7dd370hd6B1O-rTkpX9I_n1AhIlTPD_QmDsGA6WoQ__RUMORS_LINE_BOT": {
+      "/articlereplyfeedbacks/doc/CBUT_article_22__CBUT_reply_17__j4S8C_LD7dd370hd6B1O-rTkpX9I_n1AhIlTPD_QmDsGA6WoQ__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_22",
         "replyId": "CBUT_reply_17",
         "userId": "j4S8C_LD7dd370hd6B1O-rTkpX9I_n1AhIlTPD_QmDsGA6WoQ",
@@ -5082,7 +5082,7 @@ export default {
         "updatedAt": "2018-11-11T23:43:02.406Z",
         "appUserId": "CBUT_user_29"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_23__CBUT_reply_18__j4S8C_J-qFf2nzWHvRnx3qA2hEhRhp4ASBnYRkq3IA2i7ngg8__RUMORS_LINE_BOT": {
+      "/articlereplyfeedbacks/doc/CBUT_article_23__CBUT_reply_18__j4S8C_J-qFf2nzWHvRnx3qA2hEhRhp4ASBnYRkq3IA2i7ngg8__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_23",
         "replyId": "CBUT_reply_18",
         "userId": "j4S8C_J-qFf2nzWHvRnx3qA2hEhRhp4ASBnYRkq3IA2i7ngg8",
@@ -5091,7 +5091,7 @@ export default {
         "updatedAt": "2019-01-22T11:01:54.027Z",
         "appUserId": "CBUT_user_30"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_24__CBUT_reply_19__qO1C3_86RLd-liEHXfx4M_8H9J7Y0Wb13RIieRp5-2pFxb0Jo__DEVELOPMENT_BACKEND": {
+      "/articlereplyfeedbacks/doc/CBUT_article_24__CBUT_reply_19__qO1C3_86RLd-liEHXfx4M_8H9J7Y0Wb13RIieRp5-2pFxb0Jo__DEVELOPMENT_BACKEND": {
         "articleId": "CBUT_article_24",
         "replyId": "CBUT_reply_19",
         "userId": "qO1C3_86RLd-liEHXfx4M_8H9J7Y0Wb13RIieRp5-2pFxb0Jo",
@@ -5100,7 +5100,7 @@ export default {
         "updatedAt": "2019-11-20T22:23:54.285Z",
         "appUserId": "CBUT_user_31"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_25__CBUT_reply_20__j4S8C_ZvTJZB57GHkjobdIGZXOtibZ9PYEmQu8pnG-rYXS85A__RUMORS_LINE_BOT": {
+      "/articlereplyfeedbacks/doc/CBUT_article_25__CBUT_reply_20__j4S8C_ZvTJZB57GHkjobdIGZXOtibZ9PYEmQu8pnG-rYXS85A__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_25",
         "replyId": "CBUT_reply_20",
         "userId": "j4S8C_ZvTJZB57GHkjobdIGZXOtibZ9PYEmQu8pnG-rYXS85A",
@@ -5109,7 +5109,7 @@ export default {
         "updatedAt": "2018-10-02T04:01:02.366Z",
         "appUserId": "CBUT_user_32"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_26__CBUT_reply_21__CBUT_user_16__DEVELOPMENT_FRONTEND": {
+      "/articlereplyfeedbacks/doc/CBUT_article_26__CBUT_reply_21__CBUT_user_16__DEVELOPMENT_FRONTEND": {
         "createdAt": "2017-11-22T12:27:20.578Z",
         "appId": "DEVELOPMENT_FRONTEND",
         "userId": "CBUT_user_16",
@@ -5117,7 +5117,7 @@ export default {
         "articleId": "CBUT_article_26",
         "replyId": "CBUT_reply_21"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_27__CBUT_reply_22__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND": {
+      "/articlereplyfeedbacks/doc/CBUT_article_27__CBUT_reply_22__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND": {
         "createdAt": "2017-08-11T16:55:48.227Z",
         "appId": "DEVELOPMENT_BACKEND",
         "userId": "qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo",
@@ -5126,7 +5126,7 @@ export default {
         "replyId": "CBUT_reply_22",
         "appUserId": "CBUT_user_17"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_28__CBUT_reply_23__qO1C3_wR_HXQWSJ2jY6OA3JRGZrIgVXadixeKTQsX1qxuHsKo__DEVELOPMENT_BACKEND": {
+      "/articlereplyfeedbacks/doc/CBUT_article_28__CBUT_reply_23__qO1C3_wR_HXQWSJ2jY6OA3JRGZrIgVXadixeKTQsX1qxuHsKo__DEVELOPMENT_BACKEND": {
         "createdAt": "2018-01-31T13:52:33.249Z",
         "appId": "DEVELOPMENT_BACKEND",
         "userId": "qO1C3_wR_HXQWSJ2jY6OA3JRGZrIgVXadixeKTQsX1qxuHsKo",
@@ -5135,7 +5135,7 @@ export default {
         "replyId": "CBUT_reply_23",
         "appUserId": "CBUT_user_33"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_29__CBUT_reply_24__CBUT_user_23__WEBSITE": {
+      "/articlereplyfeedbacks/doc/CBUT_article_29__CBUT_reply_24__CBUT_user_23__WEBSITE": {
         "articleId": "CBUT_article_29",
         "replyId": "CBUT_reply_24",
         "userId": "CBUT_user_23",
@@ -5144,7 +5144,7 @@ export default {
         "updatedAt": "2020-09-19T17:04:20.167Z",
         "comment": ""
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_5__CBUT_reply_0__CBUT_user_16__DEVELOPMENT_FRONTEND": {
+      "/articlereplyfeedbacks/doc/CBUT_article_5__CBUT_reply_0__CBUT_user_16__DEVELOPMENT_FRONTEND": {
         "createdAt": "2017-11-19T09:40:11.292Z",
         "appId": "DEVELOPMENT_FRONTEND",
         "userId": "CBUT_user_16",
@@ -5152,7 +5152,7 @@ export default {
         "articleId": "CBUT_article_5",
         "replyId": "CBUT_reply_0"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_6__CBUT_reply_1__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND": {
+      "/articlereplyfeedbacks/doc/CBUT_article_6__CBUT_reply_1__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND": {
         "createdAt": "2018-01-11T08:29:22.045Z",
         "appId": "DEVELOPMENT_BACKEND",
         "userId": "qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo",
@@ -5161,7 +5161,7 @@ export default {
         "replyId": "CBUT_reply_1",
         "appUserId": "CBUT_user_17"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_7__CBUT_reply_2__j4S8C_Imj3cjSxE4ieAND7jCqxBcT1kYMCozfzPqI2CM2B4d4__RUMORS_LINE_BOT": {
+      "/articlereplyfeedbacks/doc/CBUT_article_7__CBUT_reply_2__j4S8C_Imj3cjSxE4ieAND7jCqxBcT1kYMCozfzPqI2CM2B4d4__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_7",
         "replyId": "CBUT_reply_2",
         "userId": "j4S8C_Imj3cjSxE4ieAND7jCqxBcT1kYMCozfzPqI2CM2B4d4",
@@ -5170,7 +5170,7 @@ export default {
         "updatedAt": "2018-10-29T14:32:04.786Z",
         "appUserId": "CBUT_user_18"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_8__CBUT_reply_3__j4S8C_pwhC-K1IePUO5xsLr_3CDzSaH1yk7_OfUJoJeG3lVi4__RUMORS_LINE_BOT": {
+      "/articlereplyfeedbacks/doc/CBUT_article_8__CBUT_reply_3__j4S8C_pwhC-K1IePUO5xsLr_3CDzSaH1yk7_OfUJoJeG3lVi4__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_8",
         "replyId": "CBUT_reply_3",
         "userId": "j4S8C_pwhC-K1IePUO5xsLr_3CDzSaH1yk7_OfUJoJeG3lVi4",
@@ -5179,7 +5179,7 @@ export default {
         "updatedAt": "2019-06-25T02:42:31.636Z",
         "appUserId": "CBUT_user_19"
       },
-      "/articlereplyfeedbacks_v1_0_2/doc/CBUT_article_9__CBUT_reply_4__CBUT_user_20__WEBSITE": {
+      "/articlereplyfeedbacks/doc/CBUT_article_9__CBUT_reply_4__CBUT_user_20__WEBSITE": {
         "articleId": "CBUT_article_9",
         "replyId": "CBUT_reply_4",
         "userId": "CBUT_user_20",
@@ -5190,7 +5190,7 @@ export default {
       },
     },
     articles: {
-      "/articles_v1_0_2/doc/CBUT_article_0": {
+      "/articles/doc/CBUT_article_0": {
         "text": "轉貼\n\n中華民族崛起的主要敵人 AngloSaxon 民族\n\n兩百年來，鴉片戰爭開始，中國最主要的敵人就是英國，AngloSaxon 民族，現在隨著中國的崛起​...",
         "createdAt": "2020-09-08T15:30:44.659Z",
         "updatedAt": "2020-09-08T15:30:44.659Z",
@@ -5229,7 +5229,7 @@ export default {
         "lastRequestedAt": "2020-09-17T12:44:47.688Z",
         "appUserId": "CBUT_user_87"
       },
-      "/articles_v1_0_2/doc/CBUT_article_1": {
+      "/articles/doc/CBUT_article_1": {
         "references": [
           {
             "createdAt": "2020-04-06T04:35:45.919Z",
@@ -5290,7 +5290,7 @@ export default {
         "normalArticleCategoryCount": 2,
         "appUserId": "CBUT_user_62"
       },
-      "/articles_v1_0_2/doc/CBUT_article_10": {
+      "/articles/doc/CBUT_article_10": {
         "references": [
           {
             "createdAt": "2020-02-27T03:27:49.869Z",
@@ -5341,7 +5341,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_76"
       },
-      "/articles_v1_0_2/doc/CBUT_article_11": {
+      "/articles/doc/CBUT_article_11": {
         "references": [
           {
             "createdAt": "2017-12-30T01:01:44.438Z",
@@ -5400,7 +5400,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_86"
       },
-      "/articles_v1_0_2/doc/CBUT_article_12": {
+      "/articles/doc/CBUT_article_12": {
         "references": [
           {
             "createdAt": "2018-03-30T12:13:57.322Z",
@@ -5451,7 +5451,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_80"
       },
-      "/articles_v1_0_2/doc/CBUT_article_13": {
+      "/articles/doc/CBUT_article_13": {
         "references": [
           {
             "createdAt": "2017-01-13T03:49:00.000Z",
@@ -5499,7 +5499,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_37"
       },
-      "/articles_v1_0_2/doc/CBUT_article_14": {
+      "/articles/doc/CBUT_article_14": {
         "references": [
           {
             "createdAt": "2017-07-10T11:37:00.087Z",
@@ -5558,7 +5558,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_82"
       },
-      "/articles_v1_0_2/doc/CBUT_article_15": {
+      "/articles/doc/CBUT_article_15": {
         "references": [
           {
             "createdAt": "2018-01-07T16:35:06.585Z",
@@ -5612,7 +5612,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_41"
       },
-      "/articles_v1_0_2/doc/CBUT_article_16": {
+      "/articles/doc/CBUT_article_16": {
         "references": [
           {
             "createdAt": "2020-03-03T15:37:27.556Z",
@@ -5663,7 +5663,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_55"
       },
-      "/articles_v1_0_2/doc/CBUT_article_17": {
+      "/articles/doc/CBUT_article_17": {
         "references": [
           {
             "createdAt": "2020-04-03T01:27:41.969Z",
@@ -5725,7 +5725,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_75"
       },
-      "/articles_v1_0_2/doc/CBUT_article_18": {
+      "/articles/doc/CBUT_article_18": {
         "references": [
           {
             "createdAt": "2017-01-22T04:05:00.000Z",
@@ -5784,7 +5784,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_37"
       },
-      "/articles_v1_0_2/doc/CBUT_article_19": {
+      "/articles/doc/CBUT_article_19": {
         "references": [
           {
             "createdAt": "2019-11-10T06:18:52.830Z",
@@ -5847,7 +5847,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_78"
       },
-      "/articles_v1_0_2/doc/CBUT_article_2": {
+      "/articles/doc/CBUT_article_2": {
         "references": [
           {
             "createdAt": "2020-04-17T13:11:33.426Z",
@@ -5919,7 +5919,7 @@ export default {
         "normalArticleCategoryCount": 2,
         "appUserId": "CBUT_user_59"
       },
-      "/articles_v1_0_2/doc/CBUT_article_20": {
+      "/articles/doc/CBUT_article_20": {
         "references": [
           {
             "createdAt": "2018-01-26T02:28:32.022Z",
@@ -5973,7 +5973,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_89"
       },
-      "/articles_v1_0_2/doc/CBUT_article_21": {
+      "/articles/doc/CBUT_article_21": {
         "references": [
           {
             "type": "LINE"
@@ -6031,7 +6031,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_70"
       },
-      "/articles_v1_0_2/doc/CBUT_article_22": {
+      "/articles/doc/CBUT_article_22": {
         "references": [
           {
             "createdAt": "2017-01-16T14:55:00.000Z",
@@ -6134,7 +6134,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_37"
       },
-      "/articles_v1_0_2/doc/CBUT_article_23": {
+      "/articles/doc/CBUT_article_23": {
         "references": [
           {
             "createdAt": "2018-12-28T13:18:06.346Z",
@@ -6214,7 +6214,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_72"
       },
-      "/articles_v1_0_2/doc/CBUT_article_24": {
+      "/articles/doc/CBUT_article_24": {
         "references": [
           {
             "createdAt": "2019-11-13T16:17:15.137Z",
@@ -6265,7 +6265,7 @@ export default {
         "updatedAt": "2019-11-13T16:17:15.137Z",
         "normalArticleCategoryCount": 1
       },
-      "/articles_v1_0_2/doc/CBUT_article_25": {
+      "/articles/doc/CBUT_article_25": {
         "references": [
           {
             "createdAt": "2017-01-16T12:47:00.000Z",
@@ -6336,7 +6336,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_37"
       },
-      "/articles_v1_0_2/doc/CBUT_article_26": {
+      "/articles/doc/CBUT_article_26": {
         "references": [
           {
             "createdAt": "2017-11-19T09:35:45.073Z",
@@ -6384,7 +6384,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_43"
       },
-      "/articles_v1_0_2/doc/CBUT_article_27": {
+      "/articles/doc/CBUT_article_27": {
         "references": [
           {
             "createdAt": "2017-06-24T02:25:38.653Z",
@@ -6449,7 +6449,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_81"
       },
-      "/articles_v1_0_2/doc/CBUT_article_28": {
+      "/articles/doc/CBUT_article_28": {
         "references": [
           {
             "createdAt": "2017-08-29T03:38:35.524Z",
@@ -6519,7 +6519,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_58"
       },
-      "/articles_v1_0_2/doc/CBUT_article_29": {
+      "/articles/doc/CBUT_article_29": {
         "references": [
           {
             "createdAt": "2019-08-15T02:39:39.532Z",
@@ -6571,7 +6571,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_87"
       },
-      "/articles_v1_0_2/doc/CBUT_article_3": {
+      "/articles/doc/CBUT_article_3": {
         "references": [
           {
             "createdAt": "2019-12-24T02:03:16.857Z",
@@ -6662,7 +6662,7 @@ export default {
         "normalArticleCategoryCount": 2,
         "appUserId": "CBUT_user_64"
       },
-      "/articles_v1_0_2/doc/CBUT_article_30": {
+      "/articles/doc/CBUT_article_30": {
         "references": [
           {
             "createdAt": "2019-03-18T15:31:50.099Z",
@@ -6714,7 +6714,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_34"
       },
-      "/articles_v1_0_2/doc/CBUT_article_31": {
+      "/articles/doc/CBUT_article_31": {
         "references": [
           {
             "createdAt": "2017-01-20T00:58:00.000Z",
@@ -6768,7 +6768,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_37"
       },
-      "/articles_v1_0_2/doc/CBUT_article_32": {
+      "/articles/doc/CBUT_article_32": {
         "references": [
           {
             "createdAt": "2018-06-15T07:34:36.490Z",
@@ -6826,7 +6826,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_39"
       },
-      "/articles_v1_0_2/doc/CBUT_article_33": {
+      "/articles/doc/CBUT_article_33": {
         "references": [
           {
             "createdAt": "2019-05-16T15:09:42.254Z",
@@ -6877,7 +6877,7 @@ export default {
         "updatedAt": "2019-05-16T15:09:42.254Z",
         "normalArticleCategoryCount": 1
       },
-      "/articles_v1_0_2/doc/CBUT_article_34": {
+      "/articles/doc/CBUT_article_34": {
         "references": [
           {
             "createdAt": "2017-01-18T02:58:00.000Z",
@@ -6925,7 +6925,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_37"
       },
-      "/articles_v1_0_2/doc/CBUT_article_35": {
+      "/articles/doc/CBUT_article_35": {
         "references": [
           {
             "createdAt": "2017-12-24T23:48:52.794Z",
@@ -6979,7 +6979,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_42"
       },
-      "/articles_v1_0_2/doc/CBUT_article_36": {
+      "/articles/doc/CBUT_article_36": {
         "references": [
           {
             "type": "LINE"
@@ -7032,7 +7032,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_44"
       },
-      "/articles_v1_0_2/doc/CBUT_article_37": {
+      "/articles/doc/CBUT_article_37": {
         "references": [
           {
             "createdAt": "2017-01-11T08:52:00.000Z",
@@ -7086,7 +7086,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_37"
       },
-      "/articles_v1_0_2/doc/CBUT_article_38": {
+      "/articles/doc/CBUT_article_38": {
         "references": [
           {
             "createdAt": "2020-02-21T02:02:54.455Z",
@@ -7149,7 +7149,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_56"
       },
-      "/articles_v1_0_2/doc/CBUT_article_39": {
+      "/articles/doc/CBUT_article_39": {
         "references": [
           {
             "createdAt": "2020-04-26T07:32:15.732Z",
@@ -7218,7 +7218,7 @@ export default {
         "updatedAt": "2020-04-26T07:32:15.732Z",
         "appUserId": "CBUT_user_67"
       },
-      "/articles_v1_0_2/doc/CBUT_article_4": {
+      "/articles/doc/CBUT_article_4": {
         "references": [
           {
             "createdAt": "2019-05-30T13:03:09.773Z",
@@ -7270,7 +7270,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_66"
       },
-      "/articles_v1_0_2/doc/CBUT_article_40": {
+      "/articles/doc/CBUT_article_40": {
         "references": [
           {
             "createdAt": "2017-05-27T04:06:18.243Z",
@@ -7335,7 +7335,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_17"
       },
-      "/articles_v1_0_2/doc/CBUT_article_41": {
+      "/articles/doc/CBUT_article_41": {
         "references": [
           {
             "createdAt": "2019-04-17T06:56:36.132Z",
@@ -7387,7 +7387,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_77"
       },
-      "/articles_v1_0_2/doc/CBUT_article_42": {
+      "/articles/doc/CBUT_article_42": {
         "references": [
           {
             "createdAt": "2019-04-15T16:38:11.456Z",
@@ -7438,7 +7438,7 @@ export default {
         "updatedAt": "2019-04-15T16:38:11.456Z",
         "normalArticleCategoryCount": 1
       },
-      "/articles_v1_0_2/doc/CBUT_article_43": {
+      "/articles/doc/CBUT_article_43": {
         "text": "百億離岸風電國產大餅訂單爆肥水外流\n蘋果日報\n離岸風電產業近年因政策利多及多家國際能源大廠來台投資，號稱將帶動八千億產值，其中鋼鐵股王世紀集團被視為民營鋼廠的領...",
         "createdAt": "2020-09-26T07:29:51.676Z",
         "updatedAt": "2020-09-26T07:29:51.676Z",
@@ -7488,7 +7488,7 @@ export default {
         "hyperlinks": [],
         "lastRequestedAt": "2020-09-26T07:29:51.708Z"
       },
-      "/articles_v1_0_2/doc/CBUT_article_44": {
+      "/articles/doc/CBUT_article_44": {
         "text": "柯文哲行程曝光，也讓現場媒體相當質疑，特別是先前曝光的國務院、國防部皆被取消，由於當天柯的行程相當鬆散，加上柯訪美期間每天都安排早上受訪，唯獨華盛頓安排中午，也...",
         "createdAt": "2020-09-26T09:39:48.802Z",
         "updatedAt": "2020-09-26T09:39:48.802Z",
@@ -7538,7 +7538,7 @@ export default {
         "hyperlinks": [],
         "lastRequestedAt": "2020-09-26T09:39:48.829Z"
       },
-      "/articles_v1_0_2/doc/CBUT_article_5": {
+      "/articles/doc/CBUT_article_5": {
         "references": [
           {
             "createdAt": "2017-11-14T23:42:12.624Z",
@@ -7592,7 +7592,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_50"
       },
-      "/articles_v1_0_2/doc/CBUT_article_6": {
+      "/articles/doc/CBUT_article_6": {
         "references": [
           {
             "createdAt": "2017-01-10T01:12:00.000Z",
@@ -7662,7 +7662,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_37"
       },
-      "/articles_v1_0_2/doc/CBUT_article_7": {
+      "/articles/doc/CBUT_article_7": {
         "references": [
           {
             "createdAt": "2018-10-23T09:21:35.323Z",
@@ -7765,7 +7765,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_51"
       },
-      "/articles_v1_0_2/doc/CBUT_article_8": {
+      "/articles/doc/CBUT_article_8": {
         "references": [
           {
             "createdAt": "2017-08-01T08:45:13.720Z",
@@ -7819,7 +7819,7 @@ export default {
         "normalArticleCategoryCount": 1,
         "appUserId": "CBUT_user_46"
       },
-      "/articles_v1_0_2/doc/CBUT_article_9": {
+      "/articles/doc/CBUT_article_9": {
         "references": [
           {
             "createdAt": "2017-05-14T13:07:55.057Z",
@@ -7902,7 +7902,7 @@ export default {
       },
     },
     replies: {
-      "/replies_v1_0_2/doc/CBUT_reply_0": {
+      "/replies/doc/CBUT_reply_0": {
         "reference": "https://kknews.cc/zh-tw/fashion/lznly52.html\n太早用眼霜會長脂肪粒？別再傳這樣的謠言了",
         "createdAt": "2017-11-15T05:23:58.752Z",
         "appId": "WEBSITE",
@@ -7917,7 +7917,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_1": {
+      "/replies/doc/CBUT_reply_1": {
         "reference": "http://www.mygopen.com/2017/10/14line.html\n【假新聞】年金改革委員會第14次會議？LINE 傳的都假的，不要採信！",
         "createdAt": "2017-10-03T03:37:10.740Z",
         "appId": "WEBSITE",
@@ -7932,7 +7932,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_10": {
+      "/replies/doc/CBUT_reply_10": {
         "reference": "http://sp1.hso.mohw.gov.tw/doctor/Often_question/type_detail.php?PageNo=2&q_type...",
         "createdAt": "2018-02-07T17:33:53.022Z",
         "appId": "WEBSITE",
@@ -7952,7 +7952,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_11": {
+      "/replies/doc/CBUT_reply_11": {
         "userId": "CBUT_user_15",
         "appId": "WEBSITE",
         "type": "OPINIONATED",
@@ -7968,7 +7968,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_12": {
+      "/replies/doc/CBUT_reply_12": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -7984,7 +7984,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_13": {
+      "/replies/doc/CBUT_reply_13": {
         "reference": "http://www.tada2002.org.tw/tada_know_02.html",
         "createdAt": "2017-04-12T11:25:01.484Z",
         "appId": "WEBSITE",
@@ -7999,7 +7999,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_14": {
+      "/replies/doc/CBUT_reply_14": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8027,7 +8027,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_15": {
+      "/replies/doc/CBUT_reply_15": {
         "reference": "",
         "createdAt": "2018-01-26T03:24:02.717Z",
         "appId": "WEBSITE",
@@ -8036,7 +8036,7 @@ export default {
         "userId": "CBUT_user_35",
         "hyperlinks": []
       },
-      "/replies_v1_0_2/doc/CBUT_reply_16": {
+      "/replies/doc/CBUT_reply_16": {
         "reference": "http://www.ettoday.net/news/20130826/261531.htm",
         "createdAt": "2017-03-21T16:25:34.315Z",
         "appId": "WEBSITE",
@@ -8051,7 +8051,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_17": {
+      "/replies/doc/CBUT_reply_17": {
         "userId": "CBUT_user_47",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8066,7 +8066,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_18": {
+      "/replies/doc/CBUT_reply_18": {
         "userId": "CBUT_user_73",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8086,7 +8086,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_19": {
+      "/replies/doc/CBUT_reply_19": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8102,7 +8102,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_2": {
+      "/replies/doc/CBUT_reply_2": {
         "userId": "CBUT_user_15",
         "appId": "WEBSITE",
         "type": "OPINIONATED",
@@ -8132,7 +8132,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_20": {
+      "/replies/doc/CBUT_reply_20": {
         "userId": "CBUT_user_49",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8147,7 +8147,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_21": {
+      "/replies/doc/CBUT_reply_21": {
         "reference": "",
         "createdAt": "2017-11-19T10:08:18.033Z",
         "appId": "WEBSITE",
@@ -8156,7 +8156,7 @@ export default {
         "userId": "CBUT_user_35",
         "hyperlinks": []
       },
-      "/replies_v1_0_2/doc/CBUT_reply_22": {
+      "/replies/doc/CBUT_reply_22": {
         "reference": "比對 join 平台提案內容以及教育部新聞稿 https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB\n",
         "createdAt": "2017-06-27T15:25:17.272Z",
         "appId": "WEBSITE",
@@ -8171,7 +8171,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_23": {
+      "/replies/doc/CBUT_reply_23": {
         "reference": "\nhttp://www.appledaily.com.tw/realtimenews/article/new/20170614/1139982/\n海獸胃腺蟲」鑽胃壁　專家：過去國內僅１例",
         "createdAt": "2017-08-29T04:03:40.178Z",
         "appId": "WEBSITE",
@@ -8186,7 +8186,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_24": {
+      "/replies/doc/CBUT_reply_24": {
         "userId": "CBUT_user_88",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8194,7 +8194,7 @@ export default {
         "reference": " ",
         "createdAt": "2019-08-21T02:10:43.987Z"
       },
-      "/replies_v1_0_2/doc/CBUT_reply_25": {
+      "/replies/doc/CBUT_reply_25": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "NOT_ARTICLE",
@@ -8202,7 +8202,7 @@ export default {
         "reference": "",
         "createdAt": "2019-03-19T14:57:01.101Z"
       },
-      "/replies_v1_0_2/doc/CBUT_reply_26": {
+      "/replies/doc/CBUT_reply_26": {
         "reference": "",
         "createdAt": "2017-09-13T13:44:48.946Z",
         "appId": "WEBSITE",
@@ -8211,7 +8211,7 @@ export default {
         "userId": "CBUT_user_38",
         "hyperlinks": []
       },
-      "/replies_v1_0_2/doc/CBUT_reply_27": {
+      "/replies/doc/CBUT_reply_27": {
         "userId": "CBUT_user_40",
         "appId": "WEBSITE",
         "type": "NOT_ARTICLE",
@@ -8219,7 +8219,7 @@ export default {
         "reference": "",
         "createdAt": "2018-07-10T16:17:54.862Z"
       },
-      "/replies_v1_0_2/doc/CBUT_reply_28": {
+      "/replies/doc/CBUT_reply_28": {
         "userId": "CBUT_user_15",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8249,7 +8249,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_29": {
+      "/replies/doc/CBUT_reply_29": {
         "reference": "http://news.ltn.com.tw/news/life/breakingnews/1950973\n泰豐大火空氣落塵",
         "createdAt": "2017-06-12T11:50:12.535Z",
         "appId": "WEBSITE",
@@ -8264,7 +8264,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_3": {
+      "/replies/doc/CBUT_reply_3": {
         "reference": "https://www.youtube.com/watch?v=RbrCFWkwhPQ",
         "createdAt": "2017-08-01T13:53:32.743Z",
         "appId": "WEBSITE",
@@ -8279,7 +8279,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_30": {
+      "/replies/doc/CBUT_reply_30": {
         "reference": "",
         "createdAt": "2017-12-27T14:55:54.646Z",
         "appId": "WEBSITE",
@@ -8288,7 +8288,7 @@ export default {
         "userId": "CBUT_user_35",
         "hyperlinks": []
       },
-      "/replies_v1_0_2/doc/CBUT_reply_31": {
+      "/replies/doc/CBUT_reply_31": {
         "reference": "https://my83.com.tw/blogs?p=1338",
         "createdAt": "2017-06-19T14:54:52.139Z",
         "appId": "WEBSITE",
@@ -8303,7 +8303,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_32": {
+      "/replies/doc/CBUT_reply_32": {
         "reference": "http://news.ltn.com.tw/news/life/paper/1060978",
         "createdAt": "2017-03-27T14:21:52.619Z",
         "appId": "WEBSITE",
@@ -8318,7 +8318,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_33": {
+      "/replies/doc/CBUT_reply_33": {
         "userId": "CBUT_user_15",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8338,7 +8338,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_34": {
+      "/replies/doc/CBUT_reply_34": {
         "userId": "CBUT_user_15",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8358,7 +8358,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_35": {
+      "/replies/doc/CBUT_reply_35": {
         "reference": "http://www.edu.tw/News_Content.aspx?n=9E⋯&sms=169B8E91BB75571F&s=6DDDD36D6874DB8...",
         "createdAt": "2017-07-06T06:44:19.192Z",
         "appId": "WEBSITE",
@@ -8383,7 +8383,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_36": {
+      "/replies/doc/CBUT_reply_36": {
         "userId": "CBUT_user_48",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8413,7 +8413,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_37": {
+      "/replies/doc/CBUT_reply_37": {
         "reference": "http://www.appledaily.com.tw/realtimenews/article/new/20150819/672912/",
         "createdAt": "2017-01-10T02:42:00.000Z",
         "appId": null,
@@ -8427,7 +8427,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_38": {
+      "/replies/doc/CBUT_reply_38": {
         "reference": "http://www.traffic.police.ntpc.gov.tw/cp-1084-32629-27.html\n網路流傳「道路交通法規修法加重處罰」謠言澄清一覽表",
         "createdAt": "2017-10-15T16:05:28.182Z",
         "appId": "WEBSITE",
@@ -8442,7 +8442,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_39": {
+      "/replies/doc/CBUT_reply_39": {
         "reference": "https://www.nownews.com/news/20100519/636359\n藥水比藥錠吸收快？　專業藥師破除網路傳言",
         "createdAt": "2017-12-14T04:09:00.110Z",
         "appId": "WEBSITE",
@@ -8457,7 +8457,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_4": {
+      "/replies/doc/CBUT_reply_4": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8473,7 +8473,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_40": {
+      "/replies/doc/CBUT_reply_40": {
         "userId": "CBUT_user_45",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8493,7 +8493,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_41": {
+      "/replies/doc/CBUT_reply_41": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8553,7 +8553,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_42": {
+      "/replies/doc/CBUT_reply_42": {
         "userId": "CBUT_user_53",
         "appId": "WEBSITE",
         "type": "NOT_RUMOR",
@@ -8561,7 +8561,7 @@ export default {
         "reference": "https://tw.news.yahoo.com/%E5%90%8C%E6%80%A7%E5%A9%9A%E5%A7%BB%E9%87%8B%E6%86%B2...",
         "createdAt": "2018-10-24T13:19:03.710Z"
       },
-      "/replies_v1_0_2/doc/CBUT_reply_43": {
+      "/replies/doc/CBUT_reply_43": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8576,7 +8576,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_44": {
+      "/replies/doc/CBUT_reply_44": {
         "userId": "CBUT_user_57",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8598,7 +8598,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_45": {
+      "/replies/doc/CBUT_reply_45": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8614,7 +8614,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_46": {
+      "/replies/doc/CBUT_reply_46": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8629,7 +8629,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_47": {
+      "/replies/doc/CBUT_reply_47": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8644,7 +8644,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_48": {
+      "/replies/doc/CBUT_reply_48": {
         "userId": "CBUT_user_60",
         "appId": "WEBSITE",
         "type": "OPINIONATED",
@@ -8652,7 +8652,7 @@ export default {
         "reference": "【疫情處置評論】\n\n布魯金斯學會-Coronavirus lessons from New York and San Francisco\nhttps://www...",
         "createdAt": "2020-04-28T13:51:19.413Z"
       },
-      "/replies_v1_0_2/doc/CBUT_reply_49": {
+      "/replies/doc/CBUT_reply_49": {
         "userId": "CBUT_user_61",
         "appId": "WEBSITE",
         "type": "NOT_ARTICLE",
@@ -8661,7 +8661,7 @@ export default {
         "createdAt": "2020-05-05T09:41:19.615Z",
         "hyperlinks": []
       },
-      "/replies_v1_0_2/doc/CBUT_reply_5": {
+      "/replies/doc/CBUT_reply_5": {
         "userId": "CBUT_user_68",
         "appId": "WEBSITE",
         "type": "OPINIONATED",
@@ -8695,7 +8695,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_50": {
+      "/replies/doc/CBUT_reply_50": {
         "userId": "CBUT_user_63",
         "appId": "WEBSITE",
         "type": "OPINIONATED",
@@ -8711,7 +8711,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_51": {
+      "/replies/doc/CBUT_reply_51": {
         "userId": "CBUT_user_65",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8727,7 +8727,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_52": {
+      "/replies/doc/CBUT_reply_52": {
         "userId": "CBUT_user_65",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8743,7 +8743,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_53": {
+      "/replies/doc/CBUT_reply_53": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8759,7 +8759,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_54": {
+      "/replies/doc/CBUT_reply_54": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "NOT_ARTICLE",
@@ -8767,7 +8767,7 @@ export default {
         "reference": "",
         "createdAt": "2019-06-02T01:40:59.872Z"
       },
-      "/replies_v1_0_2/doc/CBUT_reply_55": {
+      "/replies/doc/CBUT_reply_55": {
         "userId": "CBUT_user_68",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8801,7 +8801,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_56": {
+      "/replies/doc/CBUT_reply_56": {
         "userId": "CBUT_user_69",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8817,7 +8817,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_57": {
+      "/replies/doc/CBUT_reply_57": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8832,7 +8832,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_58": {
+      "/replies/doc/CBUT_reply_58": {
         "reference": "http://www.appledaily.com.tw/appledaily/article/headline/20151103/36878044/",
         "createdAt": "2017-06-20T17:29:47.805Z",
         "appId": "WEBSITE",
@@ -8847,7 +8847,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_59": {
+      "/replies/doc/CBUT_reply_59": {
         "userId": "CBUT_user_71",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8863,7 +8863,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_6": {
+      "/replies/doc/CBUT_reply_6": {
         "reference": "http://news.ltn.com.tw/news/life/paper/111309\n心肌梗塞突襲 咳嗽不能自救 快就醫才對",
         "createdAt": "2018-01-23T15:42:02.674Z",
         "appId": "WEBSITE",
@@ -8878,7 +8878,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_60": {
+      "/replies/doc/CBUT_reply_60": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8893,7 +8893,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_61": {
+      "/replies/doc/CBUT_reply_61": {
         "userId": "CBUT_user_74",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8908,7 +8908,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_62": {
+      "/replies/doc/CBUT_reply_62": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8924,7 +8924,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_63": {
+      "/replies/doc/CBUT_reply_63": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "OPINIONATED",
@@ -8939,7 +8939,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_64": {
+      "/replies/doc/CBUT_reply_64": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -8964,7 +8964,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_65": {
+      "/replies/doc/CBUT_reply_65": {
         "userId": "CBUT_user_79",
         "appId": "WEBSITE",
         "type": "NOT_ARTICLE",
@@ -8972,7 +8972,7 @@ export default {
         "reference": "",
         "createdAt": "2019-11-18T07:31:32.985Z"
       },
-      "/replies_v1_0_2/doc/CBUT_reply_66": {
+      "/replies/doc/CBUT_reply_66": {
         "reference": "http://pension.president.gov.tw/cp.aspx?n=03E38CC0FF75CFBE&s=FB4868255F8CFFAD",
         "createdAt": "2017-03-24T16:51:23.373Z",
         "appId": "WEBSITE",
@@ -8987,7 +8987,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_67": {
+      "/replies/doc/CBUT_reply_67": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -9003,7 +9003,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_68": {
+      "/replies/doc/CBUT_reply_68": {
         "reference": "https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB",
         "createdAt": "2017-06-24T07:35:54.955Z",
         "appId": "WEBSITE",
@@ -9018,7 +9018,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_69": {
+      "/replies/doc/CBUT_reply_69": {
         "reference": "",
         "createdAt": "2017-07-10T14:01:55.446Z",
         "appId": "WEBSITE",
@@ -9027,7 +9027,7 @@ export default {
         "userId": "CBUT_user_45",
         "hyperlinks": []
       },
-      "/replies_v1_0_2/doc/CBUT_reply_7": {
+      "/replies/doc/CBUT_reply_7": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -9042,7 +9042,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_70": {
+      "/replies/doc/CBUT_reply_70": {
         "reference": "http://www.mygopen.com/2017/06/blog-post_26.html\n神奇的地瓜葉？搭配鮮奶遠離三高？謠言讓醫生說：有痛風或是腎臟不好的人要小心！",
         "createdAt": "2017-07-09T15:02:23.370Z",
         "appId": "WEBSITE",
@@ -9057,7 +9057,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_71": {
+      "/replies/doc/CBUT_reply_71": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -9072,7 +9072,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_72": {
+      "/replies/doc/CBUT_reply_72": {
         "reference": "https://www.everydayhealth.com.tw/article/857\nhttps://www.amazon.co.jp/%E8%AA%8D...",
         "createdAt": "2017-04-12T11:21:23.414Z",
         "appId": "WEBSITE",
@@ -9092,7 +9092,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_73": {
+      "/replies/doc/CBUT_reply_73": {
         "reference": "https://zh.wikipedia.org/wiki/李孟贤",
         "createdAt": "2018-01-01T12:00:04.036Z",
         "appId": "WEBSITE",
@@ -9107,7 +9107,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_74": {
+      "/replies/doc/CBUT_reply_74": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -9123,7 +9123,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_75": {
+      "/replies/doc/CBUT_reply_75": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -9139,7 +9139,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_76": {
+      "/replies/doc/CBUT_reply_76": {
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
         "type": "OPINIONATED",
@@ -9159,7 +9159,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_77": {
+      "/replies/doc/CBUT_reply_77": {
         "userId": "CBUT_user_54",
         "appId": "WEBSITE",
         "type": "RUMOR",
@@ -9175,7 +9175,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_78": {
+      "/replies/doc/CBUT_reply_78": {
         "userId": "CBUT_user_90",
         "appId": "WEBSITE",
         "type": "NOT_ARTICLE",
@@ -9184,7 +9184,7 @@ export default {
         "createdAt": "2020-07-31T08:25:23.003Z",
         "hyperlinks": []
       },
-      "/replies_v1_0_2/doc/CBUT_reply_79": {
+      "/replies/doc/CBUT_reply_79": {
         "createdAt": "2017-12-04T15:18:29.041Z",
         "appId": "DEVELOPMENT_FRONTEND",
         "text": "聊天",
@@ -9192,7 +9192,7 @@ export default {
         "userId": "CBUT_user_16",
         "hyperlinks": []
       },
-      "/replies_v1_0_2/doc/CBUT_reply_8": {
+      "/replies/doc/CBUT_reply_8": {
         "reference": "https://www.fda.gov.tw/tc/newsContent.aspx?cid=5049&id=22092\n會中毒，所以要少吃勾芡料理？",
         "createdAt": "2017-07-07T09:39:54.019Z",
         "appId": "WEBSITE",
@@ -9207,7 +9207,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_80": {
+      "/replies/doc/CBUT_reply_80": {
         "userId": "CBUT_user_45",
         "appId": "DEVELOPMENT_FRONTEND",
         "type": "RUMOR",
@@ -9223,7 +9223,7 @@ export default {
           }
         ]
       },
-      "/replies_v1_0_2/doc/CBUT_reply_9": {
+      "/replies/doc/CBUT_reply_9": {
         "userId": "CBUT_user_15",
         "appId": "WEBSITE",
         "type": "OPINIONATED",
@@ -9245,7 +9245,7 @@ export default {
       },
     },
     replyrequests: {
-      "/replyrequests_v1_0_2/doc/CBUT_article_35__j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY__RUMORS_LINE_BOT": {
+      "/replyrequests/doc/CBUT_article_35__j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY__RUMORS_LINE_BOT": {
         "createdAt": "2017-12-24T23:48:52.805Z",
         "appId": "RUMORS_LINE_BOT",
         "userId": "j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY",
@@ -9253,7 +9253,7 @@ export default {
         "articleId": "CBUT_article_35",
         "appUserId": "CBUT_user_42"
       },
-      "/replyrequests_v1_0_2/doc/CBUT_article_36__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND": {
+      "/replyrequests/doc/CBUT_article_36__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND": {
         "createdAt": "2017-05-10T13:36:53.795Z",
         "appId": "DEVELOPMENT_BACKEND",
         "userId": "qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo",
@@ -9261,14 +9261,14 @@ export default {
         "articleId": "CBUT_article_36",
         "appUserId": "CBUT_user_17"
       },
-      "/replyrequests_v1_0_2/doc/CBUT_article_37__Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU__BOT_LEGACY": {
+      "/replyrequests/doc/CBUT_article_37__Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU__BOT_LEGACY": {
         "createdAt": "2017-01-11T08:52:00.000Z",
         "appId": "BOT_LEGACY",
         "userId": "Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU",
         "articleId": "CBUT_article_37",
         "appUserId": "CBUT_user_37"
       },
-      "/replyrequests_v1_0_2/doc/CBUT_article_38__j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M__RUMORS_LINE_BOT": {
+      "/replyrequests/doc/CBUT_article_38__j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_38",
         "userId": "j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M",
         "appId": "RUMORS_LINE_BOT",
@@ -9280,7 +9280,7 @@ export default {
         "updatedAt": "2020-02-21T02:02:55.271Z",
         "appUserId": "CBUT_user_56"
       },
-      "/replyrequests_v1_0_2/doc/CBUT_article_39__CBUT_user_69__WEBSITE": {
+      "/replyrequests/doc/CBUT_article_39__CBUT_user_69__WEBSITE": {
         "articleId": "CBUT_article_39",
         "userId": "CBUT_user_69",
         "appId": "WEBSITE",
@@ -9291,7 +9291,7 @@ export default {
         "createdAt": "2020-04-27T09:34:01.196Z",
         "updatedAt": "2020-04-27T09:34:01.196Z"
       },
-      "/replyrequests_v1_0_2/doc/CBUT_article_40__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND": {
+      "/replyrequests/doc/CBUT_article_40__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND": {
         "createdAt": "2017-05-30T15:36:48.738Z",
         "appId": "DEVELOPMENT_BACKEND",
         "userId": "qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo",
@@ -9299,7 +9299,7 @@ export default {
         "articleId": "CBUT_article_40",
         "appUserId": "CBUT_user_17"
       },
-      "/replyrequests_v1_0_2/doc/CBUT_article_41__j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk__RUMORS_LINE_BOT": {
+      "/replyrequests/doc/CBUT_article_41__j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk__RUMORS_LINE_BOT": {
         "articleId": "CBUT_article_41",
         "userId": "j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk",
         "appId": "RUMORS_LINE_BOT",
@@ -9311,7 +9311,7 @@ export default {
         "updatedAt": "2019-04-17T06:56:36.153Z",
         "appUserId": "CBUT_user_77"
       },
-      "/replyrequests_v1_0_2/doc/CBUT_article_42__CBUT_user_35__WEBSITE": {
+      "/replyrequests/doc/CBUT_article_42__CBUT_user_35__WEBSITE": {
         "articleId": "CBUT_article_42",
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
@@ -9322,7 +9322,7 @@ export default {
         "createdAt": "2019-04-15T16:38:11.473Z",
         "updatedAt": "2019-04-15T16:38:11.473Z"
       },
-      "/replyrequests_v1_0_2/doc/CBUT_article_43__CBUT_user_35__WEBSITE": {
+      "/replyrequests/doc/CBUT_article_43__CBUT_user_35__WEBSITE": {
         "articleId": "CBUT_article_43",
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",
@@ -9333,7 +9333,7 @@ export default {
         "createdAt": "2020-09-26T07:29:51.708Z",
         "updatedAt": "2020-09-26T07:29:51.708Z"
       },
-      "/replyrequests_v1_0_2/doc/CBUT_article_44__CBUT_user_35__WEBSITE": {
+      "/replyrequests/doc/CBUT_article_44__CBUT_user_35__WEBSITE": {
         "articleId": "CBUT_article_44",
         "userId": "CBUT_user_35",
         "appId": "WEBSITE",

@@ -19,19 +19,22 @@ const checkAllDocsForIndex = async (index) => {
         sort: [{ _id: 'asc' }],
       },
     });
-    docs.forEach(doc => res[`/${doc._index}/${doc._type}/${doc._id}`] = doc._source)
+    docs.forEach(doc => res[`/${index}/${doc._type}/${doc._id}`] = doc._source)
   }
   catch (e) {
     console.log(e);
   }
+
   const expected = fixtures.expectedResults[index];
+
+  expect(
+    Object.keys(res)
+  ).toStrictEqual(Object.keys(expected));
+
   expect(
     res
   ).toMatchObject(expected);
 
-  expect(
-    Object.keys(res).length
-  ).toBe(Object.keys(expected).length);
 }
 
 const indices = ['users', 'articlecategoryfeedbacks', 'articlereplyfeedbacks', 'articles', 'replies', 'replyrequests'];
@@ -39,10 +42,10 @@ const indices = ['users', 'articlecategoryfeedbacks', 'articlereplyfeedbacks', '
 describe('createBackendUsers', () => {
   beforeAll(async () => {
     await loadFixtures(fixtures.fixturesToLoad);
-    await new CreateBackendUsers({
+    await (new CreateBackendUsers({
       batchSize: 20,
       aggBatchSize: 5
-    }).execute();
+    }).execute());
   })
   afterAll(async () => {
     for (const index of indices) {

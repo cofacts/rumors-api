@@ -226,27 +226,6 @@ export default class CreateBackendUsers {
             }
           );
         }
-      } else {
-        _.set(userIdMap, [appId, userId], dbUserId);
-        _.set(reversedUserIdMap, dbUserId, [appId, userId]);
-        bulkOperations.push(
-          {
-            create: {
-              _index: getIndexName('users'),
-              _type: 'doc',
-              _id: dbUserId,
-            },
-          },
-          {
-            name: generatePseudonym(),
-            avatarType: AvatarTypes.OpenPeeps,
-            avatarData: JSON.stringify(generateOpenPeepsAvatar()),
-            appId,
-            appUserId: userId,
-            createdAt: now,
-            updatedAt: now,
-          }
-        );
       }
     };
     await this.bulk.push(bulkOperations, bulkOperations.length / 2);
@@ -332,7 +311,6 @@ export default class CreateBackendUsers {
     while (true) {
       const docs = resp.body.hits.hits;
       if (docs.length === 0) break;
-
       for (const doc of docs) {
         yield doc;
       }
@@ -415,10 +393,8 @@ export default class CreateBackendUsers {
     await this.storeScriptInDB();
     await this.fetchUsersFromAllDocs();
     await this.bulk.flush();
-
     await this.updateAllDocs();
     await this.bulk.flush();
-
     // update analytics
   }
 };
@@ -440,5 +416,6 @@ async function main() {
 }
 
 if (require.main === module) {
+  console.log('I dont belong here!!!!!!!!!!!!!!!!!!!');
   main();
 }

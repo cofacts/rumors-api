@@ -25,7 +25,6 @@ export default class Bulk {
     // Process entires queued up
     const op = this._operations.splice(0);
     this.actionCounts = 0;
-
     const { body } = await this.client.bulk({
       body: op,
       refresh: 'true',
