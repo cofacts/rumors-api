@@ -3,31 +3,24 @@ import client from 'util/client';
 import CreateBackendUsers from '../createBackendUsers';
 import fixtures from '../__fixtures__/createBackendUsers';
 import { sortBy } from 'lodash';
-jest.setTimeout(30000);
 
 const checkAllDocsForIndex = async index => {
   let res = {};
-  try {
-    const {
-      body: {
-        hits: { hits: docs },
+  const {
+    body: {
+      hits: { hits: docs },
+    },
+  } = await client.search({
+    index,
+    body: {
+      query: {
+        match_all: {},
       },
-    } = await client.search({
-      index,
-      body: {
-        query: {
-          match_all: {},
-        },
-        size: 10000,
-        sort: [{ _id: 'asc' }],
-      },
-    });
-    docs.forEach(
-      doc => (res[`/${index}/${doc._type}/${doc._id}`] = doc._source)
-    );
-  } catch (e) {
-    console.log(e);
-  }
+      size: 10000,
+      sort: [{ _id: 'asc' }],
+    },
+  });
+  docs.forEach(doc => (res[`/${index}/${doc._type}/${doc._id}`] = doc._source));
 
   const expected = fixtures.expectedResults[index];
   expect(sortBy(Object.keys(res))).toStrictEqual(sortBy(Object.keys(expected)));
@@ -42,16 +35,16 @@ const indices = [
   'articles',
   'replies',
   'replyrequests',
-  'analytics'
+  'analytics',
 ];
 
 describe('createBackendUsers', () => {
   beforeAll(async () => {
     await loadFixtures(fixtures.fixturesToLoad);
     await new CreateBackendUsers({
-      batchSize: 20,
-      aggBatchSize: 5,
-      analyticsBatchSize: 50
+      batchSize: 50,
+      aggBatchSize: 10,
+      analyticsBatchSize: 100,
     }).execute();
   });
   afterAll(async () => {

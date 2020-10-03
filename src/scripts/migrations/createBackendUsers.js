@@ -138,7 +138,12 @@ const logError = error => {
 
 export default class CreateBackendUsers {
   // TODO: maybe not hardcode version number?
-  constructor({ batchSize, schemaVersion, aggBatchSize, analyticsBatchSize } = {}) {
+  constructor({
+    batchSize,
+    schemaVersion,
+    aggBatchSize,
+    analyticsBatchSize,
+  } = {}) {
     this.userIdMap = {}; // {[appID]: {[appUserId]: dbUserId}}
     this.reversedUserIdMap = {}; // {[dbUserId]: [appId, appUserId]};
     this.batchSize = batchSize ?? BATCH_SIZE;
@@ -195,9 +200,7 @@ export default class CreateBackendUsers {
       }
       const { userId, appId, error } = JSON.parse(userIdPair);
       if (error) {
-        continue;
-        // console.info(error);
-        // logError(error);
+        logError(error);
       } else if (isBackendApp(appId)) {
         const dbUserId = convertAppUserIdToUserId(appId, userId);
         const appUserId = get(this.reversedUserIdMap, [dbUserId, 1]);
@@ -337,9 +340,9 @@ export default class CreateBackendUsers {
   getUserIds(appId, userId) {
     return isBackendApp(appId)
       ? {
-        userId: get(this.userIdMap, [appId, userId], userId),
-        appUserId: userId,
-      }
+          userId: get(this.userIdMap, [appId, userId], userId),
+          appUserId: userId,
+        }
       : { userId };
   }
 
@@ -405,6 +408,7 @@ export default class CreateBackendUsers {
     return this;
   }
 
+  // Fetches unique doc ids in analytics, and updates analytics entries for each doc
   async fetchUniqueDocs(docType, docIndex, pageIndex = undefined) {
     try {
       const {
@@ -423,9 +427,7 @@ export default class CreateBackendUsers {
               composite: {
                 size: this.analyticsBatchSize,
                 after: pageIndex,
-                sources: [
-                  { docId: { terms: { field: 'docId' } } }
-                ],
+                sources: [{ docId: { terms: { field: 'docId' } } }],
               },
             },
           },
@@ -451,7 +453,9 @@ export default class CreateBackendUsers {
       return afterKey;
     } catch (e) {
       logError(
-        `error while updating analytics type ${docType} with pageIndex ${pageIndex ? JSON.stringify(pageIndex) : pageIndex}`
+        `error while updating analytics type ${docType} with pageIndex ${
+          pageIndex ? JSON.stringify(pageIndex) : null
+        }`
       );
       logError(e);
     }
@@ -468,37 +472,47 @@ export default class CreateBackendUsers {
               lang: 'painless',
               params: {
                 docAppId: doc._source.appId,
-                docUserId: doc._source.userId
-              }
+                docUserId: doc._source.userId,
+              },
             },
             query: {
               bool: {
                 must: [
                   { term: { type: docType } },
-                  { term: { docId: doc._id } }
-                ]
-              }
-            }
+                  { term: { docId: doc._id } },
+                ],
+              },
+            },
           };
-          const { body: { updated } } = await client.updateByQuery({
+          const {
+            body: { updated },
+          } = await client.updateByQuery({
             index: 'analytics',
             body: requestBody,
-            refresh: 'true'
+            refresh: 'true',
           });
           totalUpdated += updated;
-        }
-        catch (e) {
-          logError(`error trying to update analytics user for doc ${docType} ${doc._id}`);
+        } catch (e) {
+          logError(
+            `error trying to update analytics user for doc ${docType} ${
+              doc._id
+            }`
+          );
           logError(e);
         }
       }
     }
-    console.log(`${totalUpdated} updated for ${docs.length} ${docType} analytics docs ${new Date().toISOString()}`);
+    console.log(
+      `${totalUpdated} updated for ${docs.length} ${docType} analytics docs`
+    );
     return this;
-  };
+  }
 
   async updateAnalytics() {
-    for (const [docType, docIndex] of [['article', 'articles'], ['reply', 'replies']]) {
+    for (const [docType, docIndex] of [
+      ['article', 'articles'],
+      ['reply', 'replies'],
+    ]) {
       let pageIndex;
       do {
         pageIndex = await this.fetchUniqueDocs(docType, docIndex, pageIndex);
@@ -513,7 +527,7 @@ export default class CreateBackendUsers {
     await this.bulk.flush();
     await this.updateAllDocs();
     await this.bulk.flush();
-    await this.updateAnalytics()
+    await this.updateAnalytics();
     return this;
   }
 }

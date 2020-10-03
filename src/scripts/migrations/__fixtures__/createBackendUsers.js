@@ -4840,9 +4840,9 @@ export default {
         webUser: 2,
         webVisit: 2,
         lineUser: 2,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_34'
+      docUserId: 'CBUT_user_34',
     },
     '/analytics/doc/article_CBUT_article_30_2019-03-12': {
       date: '2019-03-12T00:00:00.000+08:00',
@@ -4852,9 +4852,9 @@ export default {
         webUser: 7,
         webVisit: 6,
         lineUser: 5,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_34'
+      docUserId: 'CBUT_user_34',
     },
     '/analytics/doc/article_CBUT_article_30_2019-04-21': {
       date: '2019-04-21T00:00:00.000+08:00',
@@ -4864,9 +4864,9 @@ export default {
         webUser: 5,
         webVisit: 9,
         lineUser: 5,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_34'
+      docUserId: 'CBUT_user_34',
     },
     '/analytics/doc/article_CBUT_article_30_2019-08-05': {
       date: '2019-08-05T00:00:00.000+08:00',
@@ -4876,9 +4876,9 @@ export default {
         webUser: 6,
         webVisit: 1,
         lineUser: 5,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_34'
+      docUserId: 'CBUT_user_34',
     },
     '/analytics/doc/article_CBUT_article_31_2019-05-12': {
       date: '2019-05-12T00:00:00.000+08:00',
@@ -4888,9 +4888,9 @@ export default {
         webUser: 6,
         webVisit: 8,
         lineUser: 5,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_31_2019-07-13': {
       date: '2019-07-13T00:00:00.000+08:00',
@@ -4900,9 +4900,9 @@ export default {
         webUser: 7,
         webVisit: 8,
         lineUser: 5,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_31_2019-08-19': {
       date: '2019-08-19T00:00:00.000+08:00',
@@ -4912,9 +4912,9 @@ export default {
         webUser: 9,
         webVisit: 3,
         lineUser: 6,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_31_2019-08-28': {
       date: '2019-08-28T00:00:00.000+08:00',
@@ -4924,9 +4924,9 @@ export default {
         webUser: 5,
         webVisit: 5,
         lineUser: 6,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_31_2019-12-24': {
       date: '2019-12-24T00:00:00.000+08:00',
@@ -4934,9 +4934,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 10,
-        webVisit: 4
+        webVisit: 4,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_32_2019-04-05': {
       date: '2019-04-05T00:00:00.000+08:00',
@@ -4946,9 +4946,9 @@ export default {
         webUser: 7,
         webVisit: 6,
         lineUser: 2,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_39'
+      docUserId: 'CBUT_user_39',
     },
     '/analytics/doc/article_CBUT_article_32_2019-04-29': {
       date: '2019-04-29T00:00:00.000+08:00',
@@ -4958,9 +4958,9 @@ export default {
         webUser: 9,
         webVisit: 6,
         lineUser: 7,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_39'
+      docUserId: 'CBUT_user_39',
     },
     '/analytics/doc/article_CBUT_article_32_2019-11-30': {
       date: '2019-11-30T00:00:00.000+08:00',
@@ -4968,9 +4968,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 2,
-        webVisit: 3
+        webVisit: 3,
       },
-      docUserId: 'CBUT_user_39'
+      docUserId: 'CBUT_user_39',
     },
     '/analytics/doc/article_CBUT_article_33_2019-03-21': {
       date: '2019-03-21T00:00:00.000+08:00',
@@ -4980,9 +4980,9 @@ export default {
         webUser: 5,
         webVisit: 5,
         lineUser: 9,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/article_CBUT_article_33_2019-08-28': {
       date: '2019-08-28T00:00:00.000+08:00',
@@ -4992,9 +4992,9 @@ export default {
         webUser: 1,
         webVisit: 4,
         lineUser: 8,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/article_CBUT_article_33_2019-09-23': {
       date: '2019-09-23T00:00:00.000+08:00',
@@ -5004,9 +5004,9 @@ export default {
         webUser: 1,
         webVisit: 1,
         lineUser: 4,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/article_CBUT_article_33_2019-12-28': {
       date: '2019-12-28T00:00:00.000+08:00',
@@ -5016,9 +5016,9 @@ export default {
         webUser: 9,
         webVisit: 2,
         lineUser: 1,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/article_CBUT_article_34_2019-01-25': {
       date: '2019-01-25T00:00:00.000+08:00',
@@ -5028,9 +5028,9 @@ export default {
         webUser: 4,
         webVisit: 7,
         lineUser: 1,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_34_2019-03-07': {
       date: '2019-03-07T00:00:00.000+08:00',
@@ -5038,9 +5038,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 5,
-        webVisit: 10
+        webVisit: 10,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_15_2019-05-07': {
       date: '2019-05-07T00:00:00.000+08:00',
@@ -5050,9 +5050,9 @@ export default {
         webUser: 1,
         webVisit: 4,
         lineUser: 4,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_41'
+      docUserId: 'CBUT_user_41',
     },
     '/analytics/doc/article_CBUT_article_15_2019-07-17': {
       date: '2019-07-17T00:00:00.000+08:00',
@@ -5062,9 +5062,9 @@ export default {
         webUser: 2,
         webVisit: 6,
         lineUser: 2,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_41'
+      docUserId: 'CBUT_user_41',
     },
     '/analytics/doc/article_CBUT_article_15_2019-08-04': {
       date: '2019-08-04T00:00:00.000+08:00',
@@ -5072,9 +5072,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 7,
-        webVisit: 8
+        webVisit: 8,
       },
-      docUserId: 'CBUT_user_41'
+      docUserId: 'CBUT_user_41',
     },
     '/analytics/doc/article_CBUT_article_15_2019-08-10': {
       date: '2019-08-10T00:00:00.000+08:00',
@@ -5084,9 +5084,9 @@ export default {
         webUser: 3,
         webVisit: 10,
         lineUser: 5,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_41'
+      docUserId: 'CBUT_user_41',
     },
     '/analytics/doc/article_CBUT_article_15_2019-09-09': {
       date: '2019-09-09T00:00:00.000+08:00',
@@ -5094,9 +5094,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 6,
-        webVisit: 6
+        webVisit: 6,
       },
-      docUserId: 'CBUT_user_41'
+      docUserId: 'CBUT_user_41',
     },
     '/analytics/doc/article_CBUT_article_35_2019-03-22': {
       date: '2019-03-22T00:00:00.000+08:00',
@@ -5104,9 +5104,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 2,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_42'
+      docUserId: 'CBUT_user_42',
     },
     '/analytics/doc/article_CBUT_article_35_2019-06-09': {
       date: '2019-06-09T00:00:00.000+08:00',
@@ -5116,9 +5116,9 @@ export default {
         webUser: 3,
         webVisit: 2,
         lineUser: 1,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_42'
+      docUserId: 'CBUT_user_42',
     },
     '/analytics/doc/article_CBUT_article_35_2019-06-19': {
       date: '2019-06-19T00:00:00.000+08:00',
@@ -5128,9 +5128,9 @@ export default {
         webUser: 2,
         webVisit: 5,
         lineUser: 6,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_42'
+      docUserId: 'CBUT_user_42',
     },
     '/analytics/doc/article_CBUT_article_35_2019-07-14': {
       date: '2019-07-14T00:00:00.000+08:00',
@@ -5140,9 +5140,9 @@ export default {
         webUser: 1,
         webVisit: 3,
         lineUser: 6,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_42'
+      docUserId: 'CBUT_user_42',
     },
     '/analytics/doc/article_CBUT_article_26_2019-01-08': {
       date: '2019-01-08T00:00:00.000+08:00',
@@ -5152,9 +5152,9 @@ export default {
         webUser: 4,
         webVisit: 5,
         lineUser: 1,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_43'
+      docUserId: 'CBUT_user_43',
     },
     '/analytics/doc/article_CBUT_article_26_2019-05-09': {
       date: '2019-05-09T00:00:00.000+08:00',
@@ -5162,9 +5162,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 1,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_43'
+      docUserId: 'CBUT_user_43',
     },
     '/analytics/doc/article_CBUT_article_26_2019-06-05': {
       date: '2019-06-05T00:00:00.000+08:00',
@@ -5174,9 +5174,9 @@ export default {
         webUser: 7,
         webVisit: 8,
         lineUser: 2,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_43'
+      docUserId: 'CBUT_user_43',
     },
     '/analytics/doc/article_CBUT_article_26_2019-10-19': {
       date: '2019-10-19T00:00:00.000+08:00',
@@ -5184,9 +5184,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 4,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_43'
+      docUserId: 'CBUT_user_43',
     },
     '/analytics/doc/article_CBUT_article_26_2019-11-02': {
       date: '2019-11-02T00:00:00.000+08:00',
@@ -5196,9 +5196,9 @@ export default {
         webUser: 6,
         webVisit: 4,
         lineUser: 9,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_43'
+      docUserId: 'CBUT_user_43',
     },
     '/analytics/doc/article_CBUT_article_36_2019-01-20': {
       date: '2019-01-20T00:00:00.000+08:00',
@@ -5208,9 +5208,9 @@ export default {
         webUser: 1,
         webVisit: 10,
         lineUser: 6,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_44'
+      docUserId: 'CBUT_user_44',
     },
     '/analytics/doc/article_CBUT_article_36_2019-02-02': {
       date: '2019-02-02T00:00:00.000+08:00',
@@ -5218,9 +5218,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 3,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_44'
+      docUserId: 'CBUT_user_44',
     },
     '/analytics/doc/article_CBUT_article_36_2019-02-28': {
       date: '2019-02-28T00:00:00.000+08:00',
@@ -5230,9 +5230,9 @@ export default {
         webUser: 5,
         webVisit: 1,
         lineUser: 5,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_44'
+      docUserId: 'CBUT_user_44',
     },
     '/analytics/doc/article_CBUT_article_36_2019-06-20': {
       date: '2019-06-20T00:00:00.000+08:00',
@@ -5242,9 +5242,9 @@ export default {
         webUser: 3,
         webVisit: 7,
         lineUser: 9,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_44'
+      docUserId: 'CBUT_user_44',
     },
     '/analytics/doc/article_CBUT_article_8_2019-04-16': {
       date: '2019-04-16T00:00:00.000+08:00',
@@ -5254,9 +5254,9 @@ export default {
         webUser: 3,
         webVisit: 2,
         lineUser: 5,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_46'
+      docUserId: 'CBUT_user_46',
     },
     '/analytics/doc/article_CBUT_article_8_2019-04-27': {
       date: '2019-04-27T00:00:00.000+08:00',
@@ -5266,9 +5266,9 @@ export default {
         webUser: 7,
         webVisit: 3,
         lineUser: 5,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_46'
+      docUserId: 'CBUT_user_46',
     },
     '/analytics/doc/article_CBUT_article_8_2019-05-16': {
       date: '2019-05-16T00:00:00.000+08:00',
@@ -5276,9 +5276,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 2,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_46'
+      docUserId: 'CBUT_user_46',
     },
     '/analytics/doc/article_CBUT_article_8_2019-06-12': {
       date: '2019-06-12T00:00:00.000+08:00',
@@ -5288,9 +5288,9 @@ export default {
         webUser: 4,
         webVisit: 9,
         lineUser: 10,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_46'
+      docUserId: 'CBUT_user_46',
     },
     '/analytics/doc/article_CBUT_article_8_2019-11-14': {
       date: '2019-11-14T00:00:00.000+08:00',
@@ -5300,9 +5300,9 @@ export default {
         webUser: 4,
         webVisit: 1,
         lineUser: 9,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_46'
+      docUserId: 'CBUT_user_46',
     },
     '/analytics/doc/article_CBUT_article_22_2019-02-09': {
       date: '2019-02-09T00:00:00.000+08:00',
@@ -5312,9 +5312,9 @@ export default {
         webUser: 1,
         webVisit: 10,
         lineUser: 6,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_22_2019-04-21': {
       date: '2019-04-21T00:00:00.000+08:00',
@@ -5324,9 +5324,9 @@ export default {
         webUser: 5,
         webVisit: 7,
         lineUser: 9,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_25_2019-03-24': {
       date: '2019-03-24T00:00:00.000+08:00',
@@ -5336,9 +5336,9 @@ export default {
         webUser: 9,
         webVisit: 10,
         lineUser: 9,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_25_2019-04-01': {
       date: '2019-04-01T00:00:00.000+08:00',
@@ -5348,9 +5348,9 @@ export default {
         webUser: 3,
         webVisit: 9,
         lineUser: 4,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_25_2019-04-14': {
       date: '2019-04-14T00:00:00.000+08:00',
@@ -5360,9 +5360,9 @@ export default {
         webUser: 6,
         webVisit: 5,
         lineUser: 8,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_25_2019-06-14': {
       date: '2019-06-14T00:00:00.000+08:00',
@@ -5372,9 +5372,9 @@ export default {
         webUser: 3,
         webVisit: 1,
         lineUser: 4,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_25_2019-07-09': {
       date: '2019-07-09T00:00:00.000+08:00',
@@ -5384,9 +5384,9 @@ export default {
         webUser: 6,
         webVisit: 5,
         lineUser: 4,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_5_2019-05-25': {
       date: '2019-05-25T00:00:00.000+08:00',
@@ -5396,9 +5396,9 @@ export default {
         webUser: 9,
         webVisit: 3,
         lineUser: 10,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_50'
+      docUserId: 'CBUT_user_50',
     },
     '/analytics/doc/article_CBUT_article_5_2019-08-15': {
       date: '2019-08-15T00:00:00.000+08:00',
@@ -5408,9 +5408,9 @@ export default {
         webUser: 7,
         webVisit: 3,
         lineUser: 7,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_50'
+      docUserId: 'CBUT_user_50',
     },
     '/analytics/doc/article_CBUT_article_37_2019-01-10': {
       date: '2019-01-10T00:00:00.000+08:00',
@@ -5420,9 +5420,9 @@ export default {
         webUser: 5,
         webVisit: 3,
         lineUser: 7,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_37_2019-03-31': {
       date: '2019-03-31T00:00:00.000+08:00',
@@ -5432,9 +5432,9 @@ export default {
         webUser: 2,
         webVisit: 10,
         lineUser: 6,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_37_2019-06-18': {
       date: '2019-06-18T00:00:00.000+08:00',
@@ -5444,9 +5444,9 @@ export default {
         webUser: 8,
         webVisit: 4,
         lineUser: 5,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_37_2019-10-22': {
       date: '2019-10-22T00:00:00.000+08:00',
@@ -5456,9 +5456,9 @@ export default {
         webUser: 6,
         webVisit: 5,
         lineUser: 2,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_37_2019-12-02': {
       date: '2019-12-02T00:00:00.000+08:00',
@@ -5468,9 +5468,9 @@ export default {
         webUser: 8,
         webVisit: 7,
         lineUser: 10,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_7_2019-01-13': {
       date: '2019-01-13T00:00:00.000+08:00',
@@ -5480,9 +5480,9 @@ export default {
         webUser: 8,
         webVisit: 2,
         lineUser: 2,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_51'
+      docUserId: 'CBUT_user_51',
     },
     '/analytics/doc/article_CBUT_article_7_2019-03-23': {
       date: '2019-03-23T00:00:00.000+08:00',
@@ -5492,9 +5492,9 @@ export default {
         webUser: 3,
         webVisit: 4,
         lineUser: 2,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_51'
+      docUserId: 'CBUT_user_51',
     },
     '/analytics/doc/article_CBUT_article_7_2019-09-28': {
       date: '2019-09-28T00:00:00.000+08:00',
@@ -5504,9 +5504,9 @@ export default {
         webUser: 8,
         webVisit: 2,
         lineUser: 6,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_51'
+      docUserId: 'CBUT_user_51',
     },
     '/analytics/doc/article_CBUT_article_7_2019-10-17': {
       date: '2019-10-17T00:00:00.000+08:00',
@@ -5516,9 +5516,9 @@ export default {
         webUser: 6,
         webVisit: 2,
         lineUser: 10,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_51'
+      docUserId: 'CBUT_user_51',
     },
     '/analytics/doc/article_CBUT_article_7_2019-11-14': {
       date: '2019-11-14T00:00:00.000+08:00',
@@ -5528,9 +5528,9 @@ export default {
         webUser: 2,
         webVisit: 2,
         lineUser: 2,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_51'
+      docUserId: 'CBUT_user_51',
     },
     '/analytics/doc/article_CBUT_article_16_2019-07-22': {
       date: '2019-07-22T00:00:00.000+08:00',
@@ -5540,9 +5540,9 @@ export default {
         webUser: 6,
         webVisit: 9,
         lineUser: 3,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_55'
+      docUserId: 'CBUT_user_55',
     },
     '/analytics/doc/article_CBUT_article_16_2019-08-24': {
       date: '2019-08-24T00:00:00.000+08:00',
@@ -5552,9 +5552,9 @@ export default {
         webUser: 6,
         webVisit: 5,
         lineUser: 4,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_55'
+      docUserId: 'CBUT_user_55',
     },
     '/analytics/doc/article_CBUT_article_16_2019-09-08': {
       date: '2019-09-08T00:00:00.000+08:00',
@@ -5562,9 +5562,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 4,
-        webVisit: 9
+        webVisit: 9,
       },
-      docUserId: 'CBUT_user_55'
+      docUserId: 'CBUT_user_55',
     },
     '/analytics/doc/article_CBUT_article_38_2019-03-31': {
       date: '2019-03-31T00:00:00.000+08:00',
@@ -5574,9 +5574,9 @@ export default {
         webUser: 9,
         webVisit: 10,
         lineUser: 10,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_56'
+      docUserId: 'CBUT_user_56',
     },
     '/analytics/doc/article_CBUT_article_28_2019-03-08': {
       date: '2019-03-08T00:00:00.000+08:00',
@@ -5586,9 +5586,9 @@ export default {
         webUser: 6,
         webVisit: 5,
         lineUser: 10,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_58'
+      docUserId: 'CBUT_user_58',
     },
     '/analytics/doc/article_CBUT_article_2_2019-05-04': {
       date: '2019-05-04T00:00:00.000+08:00',
@@ -5598,9 +5598,9 @@ export default {
         webUser: 5,
         webVisit: 8,
         lineUser: 9,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_59'
+      docUserId: 'CBUT_user_59',
     },
     '/analytics/doc/article_CBUT_article_1_2019-02-08': {
       date: '2019-02-08T00:00:00.000+08:00',
@@ -5610,9 +5610,9 @@ export default {
         webUser: 1,
         webVisit: 4,
         lineUser: 1,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_62'
+      docUserId: 'CBUT_user_62',
     },
     '/analytics/doc/article_CBUT_article_1_2019-03-22': {
       date: '2019-03-22T00:00:00.000+08:00',
@@ -5622,9 +5622,9 @@ export default {
         webUser: 8,
         webVisit: 2,
         lineUser: 8,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_62'
+      docUserId: 'CBUT_user_62',
     },
     '/analytics/doc/article_CBUT_article_1_2019-04-09': {
       date: '2019-04-09T00:00:00.000+08:00',
@@ -5632,9 +5632,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 1,
-        webVisit: 7
+        webVisit: 7,
       },
-      docUserId: 'CBUT_user_62'
+      docUserId: 'CBUT_user_62',
     },
     '/analytics/doc/article_CBUT_article_3_2019-08-22': {
       date: '2019-08-22T00:00:00.000+08:00',
@@ -5644,9 +5644,9 @@ export default {
         webUser: 5,
         webVisit: 2,
         lineUser: 6,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_64'
+      docUserId: 'CBUT_user_64',
     },
     '/analytics/doc/article_CBUT_article_4_2019-05-16': {
       date: '2019-05-16T00:00:00.000+08:00',
@@ -5656,9 +5656,9 @@ export default {
         webUser: 6,
         webVisit: 7,
         lineUser: 2,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_66'
+      docUserId: 'CBUT_user_66',
     },
     '/analytics/doc/article_CBUT_article_4_2019-06-24': {
       date: '2019-06-24T00:00:00.000+08:00',
@@ -5668,9 +5668,9 @@ export default {
         webUser: 3,
         webVisit: 9,
         lineUser: 4,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_66'
+      docUserId: 'CBUT_user_66',
     },
     '/analytics/doc/article_CBUT_article_4_2019-12-01': {
       date: '2019-12-01T00:00:00.000+08:00',
@@ -5680,9 +5680,9 @@ export default {
         webUser: 3,
         webVisit: 3,
         lineUser: 5,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_66'
+      docUserId: 'CBUT_user_66',
     },
     '/analytics/doc/article_CBUT_article_4_2019-12-14': {
       date: '2019-12-14T00:00:00.000+08:00',
@@ -5692,9 +5692,9 @@ export default {
         webUser: 3,
         webVisit: 9,
         lineUser: 2,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_66'
+      docUserId: 'CBUT_user_66',
     },
     '/analytics/doc/article_CBUT_article_39_2019-05-22': {
       date: '2019-05-22T00:00:00.000+08:00',
@@ -5704,9 +5704,9 @@ export default {
         webUser: 2,
         webVisit: 7,
         lineUser: 10,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_67'
+      docUserId: 'CBUT_user_67',
     },
     '/analytics/doc/article_CBUT_article_39_2019-07-18': {
       date: '2019-07-18T00:00:00.000+08:00',
@@ -5716,9 +5716,9 @@ export default {
         webUser: 10,
         webVisit: 4,
         lineUser: 4,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_67'
+      docUserId: 'CBUT_user_67',
     },
     '/analytics/doc/article_CBUT_article_39_2019-09-15': {
       date: '2019-09-15T00:00:00.000+08:00',
@@ -5728,9 +5728,9 @@ export default {
         webUser: 7,
         webVisit: 3,
         lineUser: 10,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_67'
+      docUserId: 'CBUT_user_67',
     },
     '/analytics/doc/article_CBUT_article_21_2019-01-06': {
       date: '2019-01-06T00:00:00.000+08:00',
@@ -5738,9 +5738,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 4,
-        webVisit: 1
+        webVisit: 1,
       },
-      docUserId: 'CBUT_user_70'
+      docUserId: 'CBUT_user_70',
     },
     '/analytics/doc/article_CBUT_article_21_2019-01-17': {
       date: '2019-01-17T00:00:00.000+08:00',
@@ -5750,9 +5750,9 @@ export default {
         webUser: 8,
         webVisit: 6,
         lineUser: 10,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_70'
+      docUserId: 'CBUT_user_70',
     },
     '/analytics/doc/article_CBUT_article_21_2019-02-05': {
       date: '2019-02-05T00:00:00.000+08:00',
@@ -5762,9 +5762,9 @@ export default {
         webUser: 10,
         webVisit: 6,
         lineUser: 8,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_70'
+      docUserId: 'CBUT_user_70',
     },
     '/analytics/doc/article_CBUT_article_40_2019-04-09': {
       date: '2019-04-09T00:00:00.000+08:00',
@@ -5774,9 +5774,9 @@ export default {
         webUser: 1,
         webVisit: 1,
         lineUser: 9,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_17'
+      docUserId: 'CBUT_user_17',
     },
     '/analytics/doc/article_CBUT_article_23_2019-01-06': {
       date: '2019-01-06T00:00:00.000+08:00',
@@ -5786,9 +5786,9 @@ export default {
         webUser: 6,
         webVisit: 7,
         lineUser: 3,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_72'
+      docUserId: 'CBUT_user_72',
     },
     '/analytics/doc/article_CBUT_article_23_2019-02-26': {
       date: '2019-02-26T00:00:00.000+08:00',
@@ -5798,9 +5798,9 @@ export default {
         webUser: 7,
         webVisit: 9,
         lineUser: 3,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_72'
+      docUserId: 'CBUT_user_72',
     },
     '/analytics/doc/article_CBUT_article_23_2019-12-02': {
       date: '2019-12-02T00:00:00.000+08:00',
@@ -5810,9 +5810,9 @@ export default {
         webUser: 4,
         webVisit: 4,
         lineUser: 2,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_72'
+      docUserId: 'CBUT_user_72',
     },
     '/analytics/doc/article_CBUT_article_23_2019-12-08': {
       date: '2019-12-08T00:00:00.000+08:00',
@@ -5822,9 +5822,9 @@ export default {
         webUser: 7,
         webVisit: 2,
         lineUser: 6,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_72'
+      docUserId: 'CBUT_user_72',
     },
     '/analytics/doc/article_CBUT_article_17_2019-05-01': {
       date: '2019-05-01T00:00:00.000+08:00',
@@ -5834,9 +5834,9 @@ export default {
         webUser: 7,
         webVisit: 4,
         lineUser: 9,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_75'
+      docUserId: 'CBUT_user_75',
     },
     '/analytics/doc/article_CBUT_article_10_2019-10-04': {
       date: '2019-10-04T00:00:00.000+08:00',
@@ -5846,9 +5846,9 @@ export default {
         webUser: 1,
         webVisit: 4,
         lineUser: 7,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_76'
+      docUserId: 'CBUT_user_76',
     },
     '/analytics/doc/article_CBUT_article_10_2019-10-15': {
       date: '2019-10-15T00:00:00.000+08:00',
@@ -5858,9 +5858,9 @@ export default {
         webUser: 3,
         webVisit: 6,
         lineUser: 7,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_76'
+      docUserId: 'CBUT_user_76',
     },
     '/analytics/doc/article_CBUT_article_41_2019-04-11': {
       date: '2019-04-11T00:00:00.000+08:00',
@@ -5868,9 +5868,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 10,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_77'
+      docUserId: 'CBUT_user_77',
     },
     '/analytics/doc/article_CBUT_article_41_2019-04-15': {
       date: '2019-04-15T00:00:00.000+08:00',
@@ -5880,9 +5880,9 @@ export default {
         webUser: 1,
         webVisit: 7,
         lineUser: 5,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_77'
+      docUserId: 'CBUT_user_77',
     },
     '/analytics/doc/article_CBUT_article_41_2019-08-18': {
       date: '2019-08-18T00:00:00.000+08:00',
@@ -5892,9 +5892,9 @@ export default {
         webUser: 1,
         webVisit: 4,
         lineUser: 5,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_77'
+      docUserId: 'CBUT_user_77',
     },
     '/analytics/doc/article_CBUT_article_41_2019-10-04': {
       date: '2019-10-04T00:00:00.000+08:00',
@@ -5904,9 +5904,9 @@ export default {
         webUser: 5,
         webVisit: 9,
         lineUser: 6,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_77'
+      docUserId: 'CBUT_user_77',
     },
     '/analytics/doc/article_CBUT_article_41_2019-12-01': {
       date: '2019-12-01T00:00:00.000+08:00',
@@ -5916,9 +5916,9 @@ export default {
         webUser: 6,
         webVisit: 8,
         lineUser: 7,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_77'
+      docUserId: 'CBUT_user_77',
     },
     '/analytics/doc/article_CBUT_article_42_2019-01-16': {
       date: '2019-01-16T00:00:00.000+08:00',
@@ -5928,9 +5928,9 @@ export default {
         webUser: 6,
         webVisit: 4,
         lineUser: 9,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_42_2019-02-12': {
       date: '2019-02-12T00:00:00.000+08:00',
@@ -5938,9 +5938,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 5,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_42_2019-10-19': {
       date: '2019-10-19T00:00:00.000+08:00',
@@ -5950,9 +5950,9 @@ export default {
         webUser: 3,
         webVisit: 4,
         lineUser: 4,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_42_2019-11-30': {
       date: '2019-11-30T00:00:00.000+08:00',
@@ -5962,9 +5962,9 @@ export default {
         webUser: 9,
         webVisit: 1,
         lineUser: 6,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_19_2019-02-26': {
       date: '2019-02-26T00:00:00.000+08:00',
@@ -5974,9 +5974,9 @@ export default {
         webUser: 8,
         webVisit: 10,
         lineUser: 10,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_78'
+      docUserId: 'CBUT_user_78',
     },
     '/analytics/doc/article_CBUT_article_19_2019-09-12': {
       date: '2019-09-12T00:00:00.000+08:00',
@@ -5984,9 +5984,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 1,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_78'
+      docUserId: 'CBUT_user_78',
     },
     '/analytics/doc/article_CBUT_article_24_2019-01-03': {
       date: '2019-01-03T00:00:00.000+08:00',
@@ -5996,9 +5996,9 @@ export default {
         webUser: 2,
         webVisit: 5,
         lineUser: 1,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_24_2019-03-18': {
       date: '2019-03-18T00:00:00.000+08:00',
@@ -6008,9 +6008,9 @@ export default {
         webUser: 8,
         webVisit: 6,
         lineUser: 6,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_24_2019-06-06': {
       date: '2019-06-06T00:00:00.000+08:00',
@@ -6020,9 +6020,9 @@ export default {
         webUser: 5,
         webVisit: 7,
         lineUser: 7,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_24_2019-06-26': {
       date: '2019-06-26T00:00:00.000+08:00',
@@ -6032,9 +6032,9 @@ export default {
         webUser: 4,
         webVisit: 7,
         lineUser: 2,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_12_2019-01-21': {
       date: '2019-01-21T00:00:00.000+08:00',
@@ -6044,9 +6044,9 @@ export default {
         webUser: 2,
         webVisit: 7,
         lineUser: 5,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_80'
+      docUserId: 'CBUT_user_80',
     },
     '/analytics/doc/article_CBUT_article_12_2019-06-03': {
       date: '2019-06-03T00:00:00.000+08:00',
@@ -6056,9 +6056,9 @@ export default {
         webUser: 1,
         webVisit: 6,
         lineUser: 2,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_80'
+      docUserId: 'CBUT_user_80',
     },
     '/analytics/doc/article_CBUT_article_12_2019-11-02': {
       date: '2019-11-02T00:00:00.000+08:00',
@@ -6068,9 +6068,9 @@ export default {
         webUser: 5,
         webVisit: 1,
         lineUser: 7,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_80'
+      docUserId: 'CBUT_user_80',
     },
     '/analytics/doc/article_CBUT_article_6_2019-08-27': {
       date: '2019-08-27T00:00:00.000+08:00',
@@ -6080,9 +6080,9 @@ export default {
         webUser: 5,
         webVisit: 2,
         lineUser: 8,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_27_2019-01-08': {
       date: '2019-01-08T00:00:00.000+08:00',
@@ -6092,9 +6092,9 @@ export default {
         webUser: 10,
         webVisit: 6,
         lineUser: 10,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_81'
+      docUserId: 'CBUT_user_81',
     },
     '/analytics/doc/article_CBUT_article_27_2019-08-08': {
       date: '2019-08-08T00:00:00.000+08:00',
@@ -6104,9 +6104,9 @@ export default {
         webUser: 8,
         webVisit: 8,
         lineUser: 7,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_81'
+      docUserId: 'CBUT_user_81',
     },
     '/analytics/doc/article_CBUT_article_27_2019-09-16': {
       date: '2019-09-16T00:00:00.000+08:00',
@@ -6114,9 +6114,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 6,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_81'
+      docUserId: 'CBUT_user_81',
     },
     '/analytics/doc/article_CBUT_article_27_2019-10-21': {
       date: '2019-10-21T00:00:00.000+08:00',
@@ -6126,9 +6126,9 @@ export default {
         webUser: 9,
         webVisit: 2,
         lineUser: 7,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_81'
+      docUserId: 'CBUT_user_81',
     },
     '/analytics/doc/article_CBUT_article_14_2019-01-30': {
       date: '2019-01-30T00:00:00.000+08:00',
@@ -6138,9 +6138,9 @@ export default {
         webUser: 3,
         webVisit: 2,
         lineUser: 4,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_82'
+      docUserId: 'CBUT_user_82',
     },
     '/analytics/doc/article_CBUT_article_14_2019-05-08': {
       date: '2019-05-08T00:00:00.000+08:00',
@@ -6150,9 +6150,9 @@ export default {
         webUser: 4,
         webVisit: 2,
         lineUser: 8,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_82'
+      docUserId: 'CBUT_user_82',
     },
     '/analytics/doc/article_CBUT_article_14_2019-08-23': {
       date: '2019-08-23T00:00:00.000+08:00',
@@ -6162,9 +6162,9 @@ export default {
         webUser: 5,
         webVisit: 5,
         lineUser: 6,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_82'
+      docUserId: 'CBUT_user_82',
     },
     '/analytics/doc/article_CBUT_article_14_2019-10-25': {
       date: '2019-10-25T00:00:00.000+08:00',
@@ -6174,9 +6174,9 @@ export default {
         webUser: 3,
         webVisit: 4,
         lineUser: 9,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_82'
+      docUserId: 'CBUT_user_82',
     },
     '/analytics/doc/article_CBUT_article_9_2019-01-23': {
       date: '2019-01-23T00:00:00.000+08:00',
@@ -6186,9 +6186,9 @@ export default {
         webUser: 4,
         webVisit: 2,
         lineUser: 8,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_83'
+      docUserId: 'CBUT_user_83',
     },
     '/analytics/doc/article_CBUT_article_9_2019-07-29': {
       date: '2019-07-29T00:00:00.000+08:00',
@@ -6198,9 +6198,9 @@ export default {
         webUser: 5,
         webVisit: 1,
         lineUser: 1,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_83'
+      docUserId: 'CBUT_user_83',
     },
     '/analytics/doc/article_CBUT_article_18_2019-02-16': {
       date: '2019-02-16T00:00:00.000+08:00',
@@ -6210,9 +6210,9 @@ export default {
         webUser: 9,
         webVisit: 4,
         lineUser: 6,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_18_2019-08-05': {
       date: '2019-08-05T00:00:00.000+08:00',
@@ -6222,9 +6222,9 @@ export default {
         webUser: 3,
         webVisit: 8,
         lineUser: 3,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_18_2019-10-15': {
       date: '2019-10-15T00:00:00.000+08:00',
@@ -6232,9 +6232,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 2,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_11_2019-05-22': {
       date: '2019-05-22T00:00:00.000+08:00',
@@ -6242,9 +6242,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 2,
-        webVisit: 9
+        webVisit: 9,
       },
-      docUserId: 'CBUT_user_86'
+      docUserId: 'CBUT_user_86',
     },
     '/analytics/doc/article_CBUT_article_11_2019-07-10': {
       date: '2019-07-10T00:00:00.000+08:00',
@@ -6254,9 +6254,9 @@ export default {
         webUser: 5,
         webVisit: 8,
         lineUser: 8,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_86'
+      docUserId: 'CBUT_user_86',
     },
     '/analytics/doc/article_CBUT_article_11_2019-09-08': {
       date: '2019-09-08T00:00:00.000+08:00',
@@ -6266,9 +6266,9 @@ export default {
         webUser: 6,
         webVisit: 8,
         lineUser: 2,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_86'
+      docUserId: 'CBUT_user_86',
     },
     '/analytics/doc/article_CBUT_article_29_2019-01-13': {
       date: '2019-01-13T00:00:00.000+08:00',
@@ -6278,9 +6278,9 @@ export default {
         webUser: 10,
         webVisit: 5,
         lineUser: 9,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_87'
+      docUserId: 'CBUT_user_87',
     },
     '/analytics/doc/article_CBUT_article_29_2019-02-03': {
       date: '2019-02-03T00:00:00.000+08:00',
@@ -6290,9 +6290,9 @@ export default {
         webUser: 1,
         webVisit: 4,
         lineUser: 10,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_87'
+      docUserId: 'CBUT_user_87',
     },
     '/analytics/doc/article_CBUT_article_29_2019-03-08': {
       date: '2019-03-08T00:00:00.000+08:00',
@@ -6302,9 +6302,9 @@ export default {
         webUser: 8,
         webVisit: 4,
         lineUser: 5,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_87'
+      docUserId: 'CBUT_user_87',
     },
     '/analytics/doc/article_CBUT_article_29_2019-11-16': {
       date: '2019-11-16T00:00:00.000+08:00',
@@ -6312,9 +6312,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 5,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_87'
+      docUserId: 'CBUT_user_87',
     },
     '/analytics/doc/article_CBUT_article_29_2019-12-13': {
       date: '2019-12-13T00:00:00.000+08:00',
@@ -6324,9 +6324,9 @@ export default {
         webUser: 10,
         webVisit: 9,
         lineUser: 5,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_87'
+      docUserId: 'CBUT_user_87',
     },
     '/analytics/doc/article_CBUT_article_0_2019-01-06': {
       date: '2019-01-06T00:00:00.000+08:00',
@@ -6334,9 +6334,9 @@ export default {
       type: 'article',
       stats: {
         lineUser: 4,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_87'
+      docUserId: 'CBUT_user_87',
     },
     '/analytics/doc/article_CBUT_article_0_2019-04-15': {
       date: '2019-04-15T00:00:00.000+08:00',
@@ -6344,9 +6344,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 2,
-        webVisit: 9
+        webVisit: 9,
       },
-      docUserId: 'CBUT_user_87'
+      docUserId: 'CBUT_user_87',
     },
     '/analytics/doc/article_CBUT_article_0_2019-05-19': {
       date: '2019-05-19T00:00:00.000+08:00',
@@ -6354,9 +6354,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 5,
-        webVisit: 9
+        webVisit: 9,
       },
-      docUserId: 'CBUT_user_87'
+      docUserId: 'CBUT_user_87',
     },
     '/analytics/doc/article_CBUT_article_0_2019-08-22': {
       date: '2019-08-22T00:00:00.000+08:00',
@@ -6366,9 +6366,9 @@ export default {
         webUser: 7,
         webVisit: 2,
         lineUser: 6,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_87'
+      docUserId: 'CBUT_user_87',
     },
     '/analytics/doc/article_CBUT_article_0_2019-12-26': {
       date: '2019-12-26T00:00:00.000+08:00',
@@ -6378,9 +6378,9 @@ export default {
         webUser: 6,
         webVisit: 9,
         lineUser: 7,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_87'
+      docUserId: 'CBUT_user_87',
     },
     '/analytics/doc/article_CBUT_article_20_2019-04-26': {
       date: '2019-04-26T00:00:00.000+08:00',
@@ -6390,9 +6390,9 @@ export default {
         webUser: 1,
         webVisit: 1,
         lineUser: 5,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_89'
+      docUserId: 'CBUT_user_89',
     },
     '/analytics/doc/article_CBUT_article_20_2019-07-31': {
       date: '2019-07-31T00:00:00.000+08:00',
@@ -6402,9 +6402,9 @@ export default {
         webUser: 10,
         webVisit: 5,
         lineUser: 10,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_89'
+      docUserId: 'CBUT_user_89',
     },
     '/analytics/doc/article_CBUT_article_20_2019-08-13': {
       date: '2019-08-13T00:00:00.000+08:00',
@@ -6414,9 +6414,9 @@ export default {
         webUser: 4,
         webVisit: 3,
         lineUser: 2,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_89'
+      docUserId: 'CBUT_user_89',
     },
     '/analytics/doc/article_CBUT_article_20_2019-08-19': {
       date: '2019-08-19T00:00:00.000+08:00',
@@ -6426,9 +6426,9 @@ export default {
         webUser: 7,
         webVisit: 6,
         lineUser: 7,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_89'
+      docUserId: 'CBUT_user_89',
     },
     '/analytics/doc/article_CBUT_article_20_2019-09-24': {
       date: '2019-09-24T00:00:00.000+08:00',
@@ -6438,9 +6438,9 @@ export default {
         webUser: 8,
         webVisit: 7,
         lineUser: 1,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_89'
+      docUserId: 'CBUT_user_89',
     },
     '/analytics/doc/article_CBUT_article_13_2019-01-22': {
       date: '2019-01-22T00:00:00.000+08:00',
@@ -6450,9 +6450,9 @@ export default {
         webUser: 10,
         webVisit: 8,
         lineUser: 1,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_13_2019-02-19': {
       date: '2019-02-19T00:00:00.000+08:00',
@@ -6462,9 +6462,9 @@ export default {
         webUser: 2,
         webVisit: 4,
         lineUser: 3,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_13_2019-06-30': {
       date: '2019-06-30T00:00:00.000+08:00',
@@ -6474,9 +6474,9 @@ export default {
         webUser: 1,
         webVisit: 1,
         lineUser: 7,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_13_2019-12-09': {
       date: '2019-12-09T00:00:00.000+08:00',
@@ -6486,9 +6486,9 @@ export default {
         webUser: 3,
         webVisit: 9,
         lineUser: 4,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_37'
+      docUserId: 'CBUT_user_37',
     },
     '/analytics/doc/article_CBUT_article_43_2019-03-21': {
       date: '2019-03-21T00:00:00.000+08:00',
@@ -6498,9 +6498,9 @@ export default {
         webUser: 8,
         webVisit: 7,
         lineUser: 5,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_43_2019-04-28': {
       date: '2019-04-28T00:00:00.000+08:00',
@@ -6510,9 +6510,9 @@ export default {
         webUser: 6,
         webVisit: 4,
         lineUser: 2,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_43_2019-06-20': {
       date: '2019-06-20T00:00:00.000+08:00',
@@ -6520,9 +6520,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 7,
-        webVisit: 2
+        webVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_43_2019-08-31': {
       date: '2019-08-31T00:00:00.000+08:00',
@@ -6530,9 +6530,9 @@ export default {
       type: 'article',
       stats: {
         webUser: 3,
-        webVisit: 7
+        webVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_44_2019-03-26': {
       date: '2019-03-26T00:00:00.000+08:00',
@@ -6542,9 +6542,9 @@ export default {
         webUser: 6,
         webVisit: 3,
         lineUser: 1,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_44_2019-04-18': {
       date: '2019-04-18T00:00:00.000+08:00',
@@ -6554,9 +6554,9 @@ export default {
         webUser: 8,
         webVisit: 6,
         lineUser: 3,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_44_2019-05-06': {
       date: '2019-05-06T00:00:00.000+08:00',
@@ -6566,9 +6566,9 @@ export default {
         webUser: 6,
         webVisit: 1,
         lineUser: 9,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_44_2019-10-22': {
       date: '2019-10-22T00:00:00.000+08:00',
@@ -6578,9 +6578,9 @@ export default {
         webUser: 1,
         webVisit: 6,
         lineUser: 7,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/article_CBUT_article_44_2019-11-27': {
       date: '2019-11-27T00:00:00.000+08:00',
@@ -6590,9 +6590,9 @@ export default {
         webUser: 6,
         webVisit: 4,
         lineUser: 8,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_76_2019-09-03': {
       date: '2019-09-03T00:00:00.000+08:00',
@@ -6602,9 +6602,9 @@ export default {
         webUser: 3,
         webVisit: 6,
         lineUser: 3,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_77_2019-04-27': {
       date: '2019-04-27T00:00:00.000+08:00',
@@ -6614,9 +6614,9 @@ export default {
         webUser: 6,
         webVisit: 8,
         lineUser: 5,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_78_2019-03-22': {
       date: '2019-03-22T00:00:00.000+08:00',
@@ -6626,9 +6626,9 @@ export default {
         webUser: 7,
         webVisit: 5,
         lineUser: 5,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_90'
+      docUserId: 'CBUT_user_90',
     },
     '/analytics/doc/reply_CBUT_reply_78_2019-05-03': {
       date: '2019-05-03T00:00:00.000+08:00',
@@ -6636,9 +6636,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 10,
-        webVisit: 6
+        webVisit: 6,
       },
-      docUserId: 'CBUT_user_90'
+      docUserId: 'CBUT_user_90',
     },
     '/analytics/doc/reply_CBUT_reply_78_2019-06-19': {
       date: '2019-06-19T00:00:00.000+08:00',
@@ -6648,9 +6648,9 @@ export default {
         webUser: 7,
         webVisit: 7,
         lineUser: 6,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_90'
+      docUserId: 'CBUT_user_90',
     },
     '/analytics/doc/reply_CBUT_reply_79_2019-05-09': {
       date: '2019-05-09T00:00:00.000+08:00',
@@ -6658,9 +6658,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 6,
-        webVisit: 2
+        webVisit: 2,
       },
-      docUserId: 'CBUT_user_16'
+      docUserId: 'CBUT_user_16',
     },
     '/analytics/doc/reply_CBUT_reply_79_2019-05-16': {
       date: '2019-05-16T00:00:00.000+08:00',
@@ -6670,9 +6670,9 @@ export default {
         webUser: 2,
         webVisit: 4,
         lineUser: 1,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_16'
+      docUserId: 'CBUT_user_16',
     },
     '/analytics/doc/reply_CBUT_reply_79_2019-10-27': {
       date: '2019-10-27T00:00:00.000+08:00',
@@ -6682,9 +6682,9 @@ export default {
         webUser: 2,
         webVisit: 9,
         lineUser: 6,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_16'
+      docUserId: 'CBUT_user_16',
     },
     '/analytics/doc/reply_CBUT_reply_79_2019-12-23': {
       date: '2019-12-23T00:00:00.000+08:00',
@@ -6694,9 +6694,9 @@ export default {
         webUser: 7,
         webVisit: 1,
         lineUser: 8,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_16'
+      docUserId: 'CBUT_user_16',
     },
     '/analytics/doc/reply_CBUT_reply_80_2019-04-26': {
       date: '2019-04-26T00:00:00.000+08:00',
@@ -6706,9 +6706,9 @@ export default {
         webUser: 2,
         webVisit: 7,
         lineUser: 2,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_80_2019-05-03': {
       date: '2019-05-03T00:00:00.000+08:00',
@@ -6718,9 +6718,9 @@ export default {
         webUser: 8,
         webVisit: 1,
         lineUser: 2,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_80_2019-07-26': {
       date: '2019-07-26T00:00:00.000+08:00',
@@ -6730,9 +6730,9 @@ export default {
         webUser: 5,
         webVisit: 4,
         lineUser: 7,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_80_2019-09-03': {
       date: '2019-09-03T00:00:00.000+08:00',
@@ -6742,9 +6742,9 @@ export default {
         webUser: 2,
         webVisit: 7,
         lineUser: 3,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_69_2019-01-22': {
       date: '2019-01-22T00:00:00.000+08:00',
@@ -6754,9 +6754,9 @@ export default {
         webUser: 7,
         webVisit: 6,
         lineUser: 4,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_69_2019-03-19': {
       date: '2019-03-19T00:00:00.000+08:00',
@@ -6766,9 +6766,9 @@ export default {
         webUser: 5,
         webVisit: 5,
         lineUser: 2,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_69_2019-10-16': {
       date: '2019-10-16T00:00:00.000+08:00',
@@ -6778,9 +6778,9 @@ export default {
         webUser: 1,
         webVisit: 6,
         lineUser: 3,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_69_2019-12-23': {
       date: '2019-12-23T00:00:00.000+08:00',
@@ -6790,9 +6790,9 @@ export default {
         webUser: 5,
         webVisit: 1,
         lineUser: 9,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_30_2019-02-25': {
       date: '2019-02-25T00:00:00.000+08:00',
@@ -6802,9 +6802,9 @@ export default {
         webUser: 1,
         webVisit: 4,
         lineUser: 6,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_15_2019-09-07': {
       date: '2019-09-07T00:00:00.000+08:00',
@@ -6814,9 +6814,9 @@ export default {
         webUser: 10,
         webVisit: 3,
         lineUser: 10,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_15_2019-12-08': {
       date: '2019-12-08T00:00:00.000+08:00',
@@ -6824,9 +6824,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 2,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_21_2019-09-21': {
       date: '2019-09-21T00:00:00.000+08:00',
@@ -6836,9 +6836,9 @@ export default {
         webUser: 10,
         webVisit: 2,
         lineUser: 5,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_21_2019-12-09': {
       date: '2019-12-09T00:00:00.000+08:00',
@@ -6848,9 +6848,9 @@ export default {
         webUser: 9,
         webVisit: 1,
         lineUser: 2,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_26_2019-03-30': {
       date: '2019-03-30T00:00:00.000+08:00',
@@ -6860,9 +6860,9 @@ export default {
         webUser: 7,
         webVisit: 4,
         lineUser: 10,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_38'
+      docUserId: 'CBUT_user_38',
     },
     '/analytics/doc/reply_CBUT_reply_26_2019-05-07': {
       date: '2019-05-07T00:00:00.000+08:00',
@@ -6870,9 +6870,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 1,
-        webVisit: 3
+        webVisit: 3,
       },
-      docUserId: 'CBUT_user_38'
+      docUserId: 'CBUT_user_38',
     },
     '/analytics/doc/reply_CBUT_reply_26_2019-06-07': {
       date: '2019-06-07T00:00:00.000+08:00',
@@ -6880,9 +6880,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 9,
-        webVisit: 9
+        webVisit: 9,
       },
-      docUserId: 'CBUT_user_38'
+      docUserId: 'CBUT_user_38',
     },
     '/analytics/doc/reply_CBUT_reply_26_2019-08-26': {
       date: '2019-08-26T00:00:00.000+08:00',
@@ -6890,9 +6890,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 6,
-        webVisit: 3
+        webVisit: 3,
       },
-      docUserId: 'CBUT_user_38'
+      docUserId: 'CBUT_user_38',
     },
     '/analytics/doc/reply_CBUT_reply_27_2019-06-17': {
       date: '2019-06-17T00:00:00.000+08:00',
@@ -6902,9 +6902,9 @@ export default {
         webUser: 7,
         webVisit: 1,
         lineUser: 2,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_40'
+      docUserId: 'CBUT_user_40',
     },
     '/analytics/doc/reply_CBUT_reply_20_2019-04-09': {
       date: '2019-04-09T00:00:00.000+08:00',
@@ -6914,9 +6914,9 @@ export default {
         webUser: 1,
         webVisit: 3,
         lineUser: 3,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_49'
+      docUserId: 'CBUT_user_49',
     },
     '/analytics/doc/reply_CBUT_reply_20_2019-05-01': {
       date: '2019-05-01T00:00:00.000+08:00',
@@ -6926,9 +6926,9 @@ export default {
         webUser: 6,
         webVisit: 5,
         lineUser: 1,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_49'
+      docUserId: 'CBUT_user_49',
     },
     '/analytics/doc/reply_CBUT_reply_20_2019-12-25': {
       date: '2019-12-25T00:00:00.000+08:00',
@@ -6938,9 +6938,9 @@ export default {
         webUser: 1,
         webVisit: 7,
         lineUser: 9,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_49'
+      docUserId: 'CBUT_user_49',
     },
     '/analytics/doc/reply_CBUT_reply_70_2019-01-03': {
       date: '2019-01-03T00:00:00.000+08:00',
@@ -6950,9 +6950,9 @@ export default {
         webUser: 9,
         webVisit: 4,
         lineUser: 4,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_70_2019-05-22': {
       date: '2019-05-22T00:00:00.000+08:00',
@@ -6962,9 +6962,9 @@ export default {
         webUser: 3,
         webVisit: 4,
         lineUser: 1,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_70_2019-08-13': {
       date: '2019-08-13T00:00:00.000+08:00',
@@ -6974,9 +6974,9 @@ export default {
         webUser: 3,
         webVisit: 6,
         lineUser: 5,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_70_2019-10-13': {
       date: '2019-10-13T00:00:00.000+08:00',
@@ -6984,9 +6984,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 5,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_70_2019-12-07': {
       date: '2019-12-07T00:00:00.000+08:00',
@@ -6994,9 +6994,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 5,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_39_2019-04-04': {
       date: '2019-04-04T00:00:00.000+08:00',
@@ -7006,9 +7006,9 @@ export default {
         webUser: 7,
         webVisit: 9,
         lineUser: 10,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_39_2019-05-21': {
       date: '2019-05-21T00:00:00.000+08:00',
@@ -7016,9 +7016,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 1,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_0_2019-07-05': {
       date: '2019-07-05T00:00:00.000+08:00',
@@ -7028,9 +7028,9 @@ export default {
         webUser: 4,
         webVisit: 3,
         lineUser: 7,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_1_2019-01-18': {
       date: '2019-01-18T00:00:00.000+08:00',
@@ -7040,9 +7040,9 @@ export default {
         webUser: 6,
         webVisit: 6,
         lineUser: 9,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_1_2019-03-17': {
       date: '2019-03-17T00:00:00.000+08:00',
@@ -7050,9 +7050,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 4,
-        webVisit: 6
+        webVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_1_2019-05-29': {
       date: '2019-05-29T00:00:00.000+08:00',
@@ -7062,9 +7062,9 @@ export default {
         webUser: 8,
         webVisit: 8,
         lineUser: 4,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_1_2019-07-03': {
       date: '2019-07-03T00:00:00.000+08:00',
@@ -7072,9 +7072,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 7,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_35_2019-01-27': {
       date: '2019-01-27T00:00:00.000+08:00',
@@ -7084,9 +7084,9 @@ export default {
         webUser: 6,
         webVisit: 6,
         lineUser: 1,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_35_2019-06-01': {
       date: '2019-06-01T00:00:00.000+08:00',
@@ -7094,9 +7094,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 1,
-        webVisit: 2
+        webVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_35_2019-08-01': {
       date: '2019-08-01T00:00:00.000+08:00',
@@ -7106,9 +7106,9 @@ export default {
         webUser: 10,
         webVisit: 8,
         lineUser: 9,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_35_2019-10-02': {
       date: '2019-10-02T00:00:00.000+08:00',
@@ -7118,9 +7118,9 @@ export default {
         webUser: 7,
         webVisit: 9,
         lineUser: 2,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_8_2019-01-15': {
       date: '2019-01-15T00:00:00.000+08:00',
@@ -7130,9 +7130,9 @@ export default {
         webUser: 5,
         webVisit: 6,
         lineUser: 4,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_8_2019-07-12': {
       date: '2019-07-12T00:00:00.000+08:00',
@@ -7142,9 +7142,9 @@ export default {
         webUser: 8,
         webVisit: 4,
         lineUser: 1,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_8_2019-08-22': {
       date: '2019-08-22T00:00:00.000+08:00',
@@ -7154,9 +7154,9 @@ export default {
         webUser: 6,
         webVisit: 1,
         lineUser: 6,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_8_2019-09-24': {
       date: '2019-09-24T00:00:00.000+08:00',
@@ -7166,9 +7166,9 @@ export default {
         webUser: 3,
         webVisit: 3,
         lineUser: 7,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_8_2019-10-23': {
       date: '2019-10-23T00:00:00.000+08:00',
@@ -7178,9 +7178,9 @@ export default {
         webUser: 7,
         webVisit: 6,
         lineUser: 2,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_32_2019-02-08': {
       date: '2019-02-08T00:00:00.000+08:00',
@@ -7190,9 +7190,9 @@ export default {
         webUser: 6,
         webVisit: 1,
         lineUser: 4,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_32_2019-12-27': {
       date: '2019-12-27T00:00:00.000+08:00',
@@ -7202,9 +7202,9 @@ export default {
         webUser: 9,
         webVisit: 4,
         lineUser: 5,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_72_2019-02-27': {
       date: '2019-02-27T00:00:00.000+08:00',
@@ -7214,9 +7214,9 @@ export default {
         webUser: 1,
         webVisit: 4,
         lineUser: 5,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_85'
+      docUserId: 'CBUT_user_85',
     },
     '/analytics/doc/reply_CBUT_reply_72_2019-10-30': {
       date: '2019-10-30T00:00:00.000+08:00',
@@ -7226,9 +7226,9 @@ export default {
         webUser: 9,
         webVisit: 10,
         lineUser: 8,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_85'
+      docUserId: 'CBUT_user_85',
     },
     '/analytics/doc/reply_CBUT_reply_72_2019-12-21': {
       date: '2019-12-21T00:00:00.000+08:00',
@@ -7238,9 +7238,9 @@ export default {
         webUser: 7,
         webVisit: 2,
         lineUser: 4,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_85'
+      docUserId: 'CBUT_user_85',
     },
     '/analytics/doc/reply_CBUT_reply_13_2019-01-05': {
       date: '2019-01-05T00:00:00.000+08:00',
@@ -7250,9 +7250,9 @@ export default {
         webUser: 4,
         webVisit: 2,
         lineUser: 3,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_85'
+      docUserId: 'CBUT_user_85',
     },
     '/analytics/doc/reply_CBUT_reply_13_2019-02-17': {
       date: '2019-02-17T00:00:00.000+08:00',
@@ -7262,9 +7262,9 @@ export default {
         webUser: 2,
         webVisit: 7,
         lineUser: 7,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_85'
+      docUserId: 'CBUT_user_85',
     },
     '/analytics/doc/reply_CBUT_reply_13_2019-04-14': {
       date: '2019-04-14T00:00:00.000+08:00',
@@ -7274,9 +7274,9 @@ export default {
         webUser: 5,
         webVisit: 2,
         lineUser: 6,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_85'
+      docUserId: 'CBUT_user_85',
     },
     '/analytics/doc/reply_CBUT_reply_13_2019-04-19': {
       date: '2019-04-19T00:00:00.000+08:00',
@@ -7286,9 +7286,9 @@ export default {
         webUser: 1,
         webVisit: 4,
         lineUser: 8,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_85'
+      docUserId: 'CBUT_user_85',
     },
     '/analytics/doc/reply_CBUT_reply_13_2019-11-23': {
       date: '2019-11-23T00:00:00.000+08:00',
@@ -7298,9 +7298,9 @@ export default {
         webUser: 1,
         webVisit: 3,
         lineUser: 7,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_85'
+      docUserId: 'CBUT_user_85',
     },
     '/analytics/doc/reply_CBUT_reply_66_2019-04-06': {
       date: '2019-04-06T00:00:00.000+08:00',
@@ -7310,9 +7310,9 @@ export default {
         webUser: 6,
         webVisit: 3,
         lineUser: 1,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_66_2019-05-07': {
       date: '2019-05-07T00:00:00.000+08:00',
@@ -7322,9 +7322,9 @@ export default {
         webUser: 3,
         webVisit: 3,
         lineUser: 7,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_6_2019-02-05': {
       date: '2019-02-05T00:00:00.000+08:00',
@@ -7334,9 +7334,9 @@ export default {
         webUser: 10,
         webVisit: 1,
         lineUser: 3,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_6_2019-04-18': {
       date: '2019-04-18T00:00:00.000+08:00',
@@ -7346,9 +7346,9 @@ export default {
         webUser: 2,
         webVisit: 1,
         lineUser: 4,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_6_2019-07-10': {
       date: '2019-07-10T00:00:00.000+08:00',
@@ -7358,9 +7358,9 @@ export default {
         webUser: 5,
         webVisit: 1,
         lineUser: 8,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_6_2019-08-12': {
       date: '2019-08-12T00:00:00.000+08:00',
@@ -7368,9 +7368,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 3,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_6_2019-12-12': {
       date: '2019-12-12T00:00:00.000+08:00',
@@ -7380,9 +7380,9 @@ export default {
         webUser: 9,
         webVisit: 7,
         lineUser: 5,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_23_2019-01-17': {
       date: '2019-01-17T00:00:00.000+08:00',
@@ -7392,9 +7392,9 @@ export default {
         webUser: 9,
         webVisit: 6,
         lineUser: 8,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_23_2019-07-11': {
       date: '2019-07-11T00:00:00.000+08:00',
@@ -7404,9 +7404,9 @@ export default {
         webUser: 4,
         webVisit: 8,
         lineUser: 8,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_23_2019-07-30': {
       date: '2019-07-30T00:00:00.000+08:00',
@@ -7416,9 +7416,9 @@ export default {
         webUser: 2,
         webVisit: 5,
         lineUser: 6,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_23_2019-08-29': {
       date: '2019-08-29T00:00:00.000+08:00',
@@ -7426,9 +7426,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 5,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_23_2019-12-07': {
       date: '2019-12-07T00:00:00.000+08:00',
@@ -7438,9 +7438,9 @@ export default {
         webUser: 9,
         webVisit: 3,
         lineUser: 1,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_73_2019-03-10': {
       date: '2019-03-10T00:00:00.000+08:00',
@@ -7450,9 +7450,9 @@ export default {
         webUser: 10,
         webVisit: 1,
         lineUser: 2,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_73_2019-05-07': {
       date: '2019-05-07T00:00:00.000+08:00',
@@ -7462,9 +7462,9 @@ export default {
         webUser: 6,
         webVisit: 7,
         lineUser: 4,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_73_2019-08-20': {
       date: '2019-08-20T00:00:00.000+08:00',
@@ -7474,9 +7474,9 @@ export default {
         webUser: 1,
         webVisit: 7,
         lineUser: 6,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_16_2019-03-02': {
       date: '2019-03-02T00:00:00.000+08:00',
@@ -7486,9 +7486,9 @@ export default {
         webUser: 6,
         webVisit: 10,
         lineUser: 9,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_16_2019-04-20': {
       date: '2019-04-20T00:00:00.000+08:00',
@@ -7498,9 +7498,9 @@ export default {
         webUser: 3,
         webVisit: 2,
         lineUser: 7,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_16_2019-05-17': {
       date: '2019-05-17T00:00:00.000+08:00',
@@ -7510,9 +7510,9 @@ export default {
         webUser: 6,
         webVisit: 5,
         lineUser: 2,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_16_2019-08-25': {
       date: '2019-08-25T00:00:00.000+08:00',
@@ -7522,9 +7522,9 @@ export default {
         webUser: 4,
         webVisit: 3,
         lineUser: 3,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_16_2019-09-23': {
       date: '2019-09-23T00:00:00.000+08:00',
@@ -7534,9 +7534,9 @@ export default {
         webUser: 1,
         webVisit: 1,
         lineUser: 6,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_38_2019-08-08': {
       date: '2019-08-08T00:00:00.000+08:00',
@@ -7546,9 +7546,9 @@ export default {
         webUser: 5,
         webVisit: 3,
         lineUser: 7,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_38_2019-09-11': {
       date: '2019-09-11T00:00:00.000+08:00',
@@ -7558,9 +7558,9 @@ export default {
         webUser: 3,
         webVisit: 10,
         lineUser: 8,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_38_2019-12-30': {
       date: '2019-12-30T00:00:00.000+08:00',
@@ -7570,9 +7570,9 @@ export default {
         webUser: 5,
         webVisit: 8,
         lineUser: 7,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_7_2019-03-23': {
       date: '2019-03-23T00:00:00.000+08:00',
@@ -7582,9 +7582,9 @@ export default {
         webUser: 2,
         webVisit: 9,
         lineUser: 6,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_7_2019-06-06': {
       date: '2019-06-06T00:00:00.000+08:00',
@@ -7594,9 +7594,9 @@ export default {
         webUser: 4,
         webVisit: 8,
         lineUser: 3,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_7_2019-07-10': {
       date: '2019-07-10T00:00:00.000+08:00',
@@ -7604,9 +7604,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 8,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_7_2019-08-27': {
       date: '2019-08-27T00:00:00.000+08:00',
@@ -7616,9 +7616,9 @@ export default {
         webUser: 9,
         webVisit: 9,
         lineUser: 9,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_7_2019-12-19': {
       date: '2019-12-19T00:00:00.000+08:00',
@@ -7628,9 +7628,9 @@ export default {
         webUser: 10,
         webVisit: 3,
         lineUser: 8,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_3_2019-03-06': {
       date: '2019-03-06T00:00:00.000+08:00',
@@ -7638,9 +7638,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 3,
-        webVisit: 4
+        webVisit: 4,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_3_2019-04-09': {
       date: '2019-04-09T00:00:00.000+08:00',
@@ -7650,9 +7650,9 @@ export default {
         webUser: 5,
         webVisit: 4,
         lineUser: 3,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_3_2019-11-02': {
       date: '2019-11-02T00:00:00.000+08:00',
@@ -7662,9 +7662,9 @@ export default {
         webUser: 10,
         webVisit: 9,
         lineUser: 10,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_71_2019-05-18': {
       date: '2019-05-18T00:00:00.000+08:00',
@@ -7672,9 +7672,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 8,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_71_2019-07-11': {
       date: '2019-07-11T00:00:00.000+08:00',
@@ -7684,9 +7684,9 @@ export default {
         webUser: 2,
         webVisit: 2,
         lineUser: 3,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_71_2019-08-26': {
       date: '2019-08-26T00:00:00.000+08:00',
@@ -7696,9 +7696,9 @@ export default {
         webUser: 5,
         webVisit: 2,
         lineUser: 7,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_71_2019-12-25': {
       date: '2019-12-25T00:00:00.000+08:00',
@@ -7708,9 +7708,9 @@ export default {
         webUser: 8,
         webVisit: 4,
         lineUser: 6,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_10_2019-03-22': {
       date: '2019-03-22T00:00:00.000+08:00',
@@ -7718,9 +7718,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 2,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_10_2019-05-02': {
       date: '2019-05-02T00:00:00.000+08:00',
@@ -7730,9 +7730,9 @@ export default {
         webUser: 9,
         webVisit: 9,
         lineUser: 1,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_10_2019-08-05': {
       date: '2019-08-05T00:00:00.000+08:00',
@@ -7740,9 +7740,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 5,
-        webVisit: 6
+        webVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_10_2019-10-01': {
       date: '2019-10-01T00:00:00.000+08:00',
@@ -7752,9 +7752,9 @@ export default {
         webUser: 8,
         webVisit: 6,
         lineUser: 2,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_10_2019-12-25': {
       date: '2019-12-25T00:00:00.000+08:00',
@@ -7764,9 +7764,9 @@ export default {
         webUser: 8,
         webVisit: 9,
         lineUser: 7,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_40_2019-01-04': {
       date: '2019-01-04T00:00:00.000+08:00',
@@ -7776,9 +7776,9 @@ export default {
         webUser: 8,
         webVisit: 2,
         lineUser: 7,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_40_2019-03-09': {
       date: '2019-03-09T00:00:00.000+08:00',
@@ -7788,9 +7788,9 @@ export default {
         webUser: 10,
         webVisit: 2,
         lineUser: 1,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_40_2019-04-29': {
       date: '2019-04-29T00:00:00.000+08:00',
@@ -7800,9 +7800,9 @@ export default {
         webUser: 9,
         webVisit: 3,
         lineUser: 8,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_40_2019-09-24': {
       date: '2019-09-24T00:00:00.000+08:00',
@@ -7812,9 +7812,9 @@ export default {
         webUser: 2,
         webVisit: 1,
         lineUser: 3,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_40_2019-10-25': {
       date: '2019-10-25T00:00:00.000+08:00',
@@ -7824,9 +7824,9 @@ export default {
         webUser: 8,
         webVisit: 6,
         lineUser: 9,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_41_2019-11-22': {
       date: '2019-11-22T00:00:00.000+08:00',
@@ -7836,9 +7836,9 @@ export default {
         webUser: 3,
         webVisit: 6,
         lineUser: 2,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_42_2019-03-23': {
       date: '2019-03-23T00:00:00.000+08:00',
@@ -7848,9 +7848,9 @@ export default {
         webUser: 6,
         webVisit: 10,
         lineUser: 4,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_53'
+      docUserId: 'CBUT_user_53',
     },
     '/analytics/doc/reply_CBUT_reply_42_2019-07-17': {
       date: '2019-07-17T00:00:00.000+08:00',
@@ -7860,9 +7860,9 @@ export default {
         webUser: 6,
         webVisit: 6,
         lineUser: 2,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_53'
+      docUserId: 'CBUT_user_53',
     },
     '/analytics/doc/reply_CBUT_reply_42_2019-08-03': {
       date: '2019-08-03T00:00:00.000+08:00',
@@ -7872,9 +7872,9 @@ export default {
         webUser: 3,
         webVisit: 5,
         lineUser: 7,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_53'
+      docUserId: 'CBUT_user_53',
     },
     '/analytics/doc/reply_CBUT_reply_42_2019-09-15': {
       date: '2019-09-15T00:00:00.000+08:00',
@@ -7884,9 +7884,9 @@ export default {
         webUser: 5,
         webVisit: 10,
         lineUser: 9,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_53'
+      docUserId: 'CBUT_user_53',
     },
     '/analytics/doc/reply_CBUT_reply_42_2019-10-01': {
       date: '2019-10-01T00:00:00.000+08:00',
@@ -7896,9 +7896,9 @@ export default {
         webUser: 2,
         webVisit: 7,
         lineUser: 1,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_53'
+      docUserId: 'CBUT_user_53',
     },
     '/analytics/doc/reply_CBUT_reply_46_2019-03-14': {
       date: '2019-03-14T00:00:00.000+08:00',
@@ -7906,9 +7906,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 7,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_46_2019-11-14': {
       date: '2019-11-14T00:00:00.000+08:00',
@@ -7918,9 +7918,9 @@ export default {
         webUser: 3,
         webVisit: 3,
         lineUser: 5,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_18_2019-05-20': {
       date: '2019-05-20T00:00:00.000+08:00',
@@ -7928,9 +7928,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 6,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_73'
+      docUserId: 'CBUT_user_73',
     },
     '/analytics/doc/reply_CBUT_reply_18_2019-08-11': {
       date: '2019-08-11T00:00:00.000+08:00',
@@ -7938,9 +7938,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 6,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_73'
+      docUserId: 'CBUT_user_73',
     },
     '/analytics/doc/reply_CBUT_reply_25_2019-04-09': {
       date: '2019-04-09T00:00:00.000+08:00',
@@ -7950,9 +7950,9 @@ export default {
         webUser: 8,
         webVisit: 10,
         lineUser: 2,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_25_2019-06-22': {
       date: '2019-06-22T00:00:00.000+08:00',
@@ -7962,9 +7962,9 @@ export default {
         webUser: 6,
         webVisit: 9,
         lineUser: 1,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_25_2019-08-30': {
       date: '2019-08-30T00:00:00.000+08:00',
@@ -7974,9 +7974,9 @@ export default {
         webUser: 1,
         webVisit: 7,
         lineUser: 4,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_64_2019-01-19': {
       date: '2019-01-19T00:00:00.000+08:00',
@@ -7986,9 +7986,9 @@ export default {
         webUser: 1,
         webVisit: 7,
         lineUser: 5,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_64_2019-03-13': {
       date: '2019-03-13T00:00:00.000+08:00',
@@ -7998,9 +7998,9 @@ export default {
         webUser: 8,
         webVisit: 1,
         lineUser: 4,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_64_2019-03-22': {
       date: '2019-03-22T00:00:00.000+08:00',
@@ -8008,9 +8008,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 5,
-        webVisit: 4
+        webVisit: 4,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_63_2019-04-18': {
       date: '2019-04-18T00:00:00.000+08:00',
@@ -8020,9 +8020,9 @@ export default {
         webUser: 2,
         webVisit: 1,
         lineUser: 8,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_63_2019-07-05': {
       date: '2019-07-05T00:00:00.000+08:00',
@@ -8032,9 +8032,9 @@ export default {
         webUser: 5,
         webVisit: 5,
         lineUser: 10,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_28_2019-08-30': {
       date: '2019-08-30T00:00:00.000+08:00',
@@ -8044,9 +8044,9 @@ export default {
         webUser: 6,
         webVisit: 10,
         lineUser: 1,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_29_2019-02-27': {
       date: '2019-02-27T00:00:00.000+08:00',
@@ -8054,9 +8054,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 2,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_29_2019-10-13': {
       date: '2019-10-13T00:00:00.000+08:00',
@@ -8066,9 +8066,9 @@ export default {
         webUser: 1,
         webVisit: 9,
         lineUser: 8,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_68_2019-03-24': {
       date: '2019-03-24T00:00:00.000+08:00',
@@ -8078,9 +8078,9 @@ export default {
         webUser: 6,
         webVisit: 1,
         lineUser: 8,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_68_2019-07-08': {
       date: '2019-07-08T00:00:00.000+08:00',
@@ -8090,9 +8090,9 @@ export default {
         webUser: 1,
         webVisit: 9,
         lineUser: 8,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_68_2019-10-11': {
       date: '2019-10-11T00:00:00.000+08:00',
@@ -8102,9 +8102,9 @@ export default {
         webUser: 4,
         webVisit: 2,
         lineUser: 3,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_68_2019-10-16': {
       date: '2019-10-16T00:00:00.000+08:00',
@@ -8114,9 +8114,9 @@ export default {
         webUser: 4,
         webVisit: 5,
         lineUser: 5,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_58_2019-01-13': {
       date: '2019-01-13T00:00:00.000+08:00',
@@ -8126,9 +8126,9 @@ export default {
         webUser: 1,
         webVisit: 1,
         lineUser: 6,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_58_2019-04-11': {
       date: '2019-04-11T00:00:00.000+08:00',
@@ -8138,9 +8138,9 @@ export default {
         webUser: 5,
         webVisit: 9,
         lineUser: 3,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_58_2019-11-07': {
       date: '2019-11-07T00:00:00.000+08:00',
@@ -8150,9 +8150,9 @@ export default {
         webUser: 3,
         webVisit: 10,
         lineUser: 9,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_58_2019-12-12': {
       date: '2019-12-12T00:00:00.000+08:00',
@@ -8162,9 +8162,9 @@ export default {
         webUser: 5,
         webVisit: 4,
         lineUser: 9,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_31_2019-10-02': {
       date: '2019-10-02T00:00:00.000+08:00',
@@ -8174,9 +8174,9 @@ export default {
         webUser: 4,
         webVisit: 6,
         lineUser: 5,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_45'
+      docUserId: 'CBUT_user_45',
     },
     '/analytics/doc/reply_CBUT_reply_2_2019-04-11': {
       date: '2019-04-11T00:00:00.000+08:00',
@@ -8184,9 +8184,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 1,
-        webVisit: 5
+        webVisit: 5,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_2_2019-06-01': {
       date: '2019-06-01T00:00:00.000+08:00',
@@ -8196,9 +8196,9 @@ export default {
         webUser: 3,
         webVisit: 2,
         lineUser: 6,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_2_2019-07-04': {
       date: '2019-07-04T00:00:00.000+08:00',
@@ -8206,9 +8206,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 8,
-        webVisit: 1
+        webVisit: 1,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_2_2019-10-20': {
       date: '2019-10-20T00:00:00.000+08:00',
@@ -8218,9 +8218,9 @@ export default {
         webUser: 5,
         webVisit: 4,
         lineUser: 2,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_2_2019-11-18': {
       date: '2019-11-18T00:00:00.000+08:00',
@@ -8230,9 +8230,9 @@ export default {
         webUser: 4,
         webVisit: 6,
         lineUser: 9,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_33_2019-03-13': {
       date: '2019-03-13T00:00:00.000+08:00',
@@ -8242,9 +8242,9 @@ export default {
         webUser: 5,
         webVisit: 1,
         lineUser: 4,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_33_2019-03-29': {
       date: '2019-03-29T00:00:00.000+08:00',
@@ -8252,9 +8252,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 5,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_33_2019-09-13': {
       date: '2019-09-13T00:00:00.000+08:00',
@@ -8264,9 +8264,9 @@ export default {
         webUser: 5,
         webVisit: 9,
         lineUser: 4,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_33_2019-10-09': {
       date: '2019-10-09T00:00:00.000+08:00',
@@ -8276,9 +8276,9 @@ export default {
         webUser: 4,
         webVisit: 8,
         lineUser: 3,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_34_2019-01-12': {
       date: '2019-01-12T00:00:00.000+08:00',
@@ -8288,9 +8288,9 @@ export default {
         webUser: 8,
         webVisit: 2,
         lineUser: 5,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_34_2019-06-22': {
       date: '2019-06-22T00:00:00.000+08:00',
@@ -8298,9 +8298,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 3,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_34_2019-11-29': {
       date: '2019-11-29T00:00:00.000+08:00',
@@ -8310,9 +8310,9 @@ export default {
         webUser: 1,
         webVisit: 10,
         lineUser: 3,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_34_2019-12-15': {
       date: '2019-12-15T00:00:00.000+08:00',
@@ -8322,9 +8322,9 @@ export default {
         webUser: 6,
         webVisit: 5,
         lineUser: 3,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_54_2019-01-29': {
       date: '2019-01-29T00:00:00.000+08:00',
@@ -8334,9 +8334,9 @@ export default {
         webUser: 2,
         webVisit: 8,
         lineUser: 3,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_60_2019-03-19': {
       date: '2019-03-19T00:00:00.000+08:00',
@@ -8344,9 +8344,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 3,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_60_2019-03-21': {
       date: '2019-03-21T00:00:00.000+08:00',
@@ -8356,9 +8356,9 @@ export default {
         webUser: 10,
         webVisit: 8,
         lineUser: 1,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_60_2019-04-15': {
       date: '2019-04-15T00:00:00.000+08:00',
@@ -8368,9 +8368,9 @@ export default {
         webUser: 2,
         webVisit: 10,
         lineUser: 5,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_60_2019-05-04': {
       date: '2019-05-04T00:00:00.000+08:00',
@@ -8380,9 +8380,9 @@ export default {
         webUser: 7,
         webVisit: 2,
         lineUser: 10,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_9_2019-06-02': {
       date: '2019-06-02T00:00:00.000+08:00',
@@ -8390,9 +8390,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 9,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_22_2019-01-26': {
       date: '2019-01-26T00:00:00.000+08:00',
@@ -8402,9 +8402,9 @@ export default {
         webUser: 1,
         webVisit: 1,
         lineUser: 1,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_22_2019-05-19': {
       date: '2019-05-19T00:00:00.000+08:00',
@@ -8414,9 +8414,9 @@ export default {
         webUser: 9,
         webVisit: 5,
         lineUser: 4,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_43_2019-02-14': {
       date: '2019-02-14T00:00:00.000+08:00',
@@ -8426,9 +8426,9 @@ export default {
         webUser: 8,
         webVisit: 7,
         lineUser: 7,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_43_2019-02-22': {
       date: '2019-02-22T00:00:00.000+08:00',
@@ -8436,9 +8436,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 5,
-        webVisit: 8
+        webVisit: 8,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_43_2019-08-24': {
       date: '2019-08-24T00:00:00.000+08:00',
@@ -8448,9 +8448,9 @@ export default {
         webUser: 2,
         webVisit: 9,
         lineUser: 7,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_43_2019-10-31': {
       date: '2019-10-31T00:00:00.000+08:00',
@@ -8460,9 +8460,9 @@ export default {
         webUser: 3,
         webVisit: 3,
         lineUser: 5,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_17_2019-09-19': {
       date: '2019-09-19T00:00:00.000+08:00',
@@ -8472,9 +8472,9 @@ export default {
         webUser: 7,
         webVisit: 3,
         lineUser: 7,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_47'
+      docUserId: 'CBUT_user_47',
     },
     '/analytics/doc/reply_CBUT_reply_36_2019-09-14': {
       date: '2019-09-14T00:00:00.000+08:00',
@@ -8484,9 +8484,9 @@ export default {
         webUser: 8,
         webVisit: 8,
         lineUser: 10,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_48'
+      docUserId: 'CBUT_user_48',
     },
     '/analytics/doc/reply_CBUT_reply_36_2019-12-14': {
       date: '2019-12-14T00:00:00.000+08:00',
@@ -8496,9 +8496,9 @@ export default {
         webUser: 4,
         webVisit: 6,
         lineUser: 2,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_48'
+      docUserId: 'CBUT_user_48',
     },
     '/analytics/doc/reply_CBUT_reply_61_2019-01-12': {
       date: '2019-01-12T00:00:00.000+08:00',
@@ -8508,9 +8508,9 @@ export default {
         webUser: 9,
         webVisit: 4,
         lineUser: 1,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_74'
+      docUserId: 'CBUT_user_74',
     },
     '/analytics/doc/reply_CBUT_reply_61_2019-01-28': {
       date: '2019-01-28T00:00:00.000+08:00',
@@ -8520,9 +8520,9 @@ export default {
         webUser: 8,
         webVisit: 7,
         lineUser: 4,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_74'
+      docUserId: 'CBUT_user_74',
     },
     '/analytics/doc/reply_CBUT_reply_61_2019-03-19': {
       date: '2019-03-19T00:00:00.000+08:00',
@@ -8530,9 +8530,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 9,
-        webVisit: 3
+        webVisit: 3,
       },
-      docUserId: 'CBUT_user_74'
+      docUserId: 'CBUT_user_74',
     },
     '/analytics/doc/reply_CBUT_reply_61_2019-05-12': {
       date: '2019-05-12T00:00:00.000+08:00',
@@ -8542,9 +8542,9 @@ export default {
         webUser: 4,
         webVisit: 4,
         lineUser: 3,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_74'
+      docUserId: 'CBUT_user_74',
     },
     '/analytics/doc/reply_CBUT_reply_57_2019-03-29': {
       date: '2019-03-29T00:00:00.000+08:00',
@@ -8554,9 +8554,9 @@ export default {
         webUser: 2,
         webVisit: 8,
         lineUser: 4,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_57_2019-04-29': {
       date: '2019-04-29T00:00:00.000+08:00',
@@ -8566,9 +8566,9 @@ export default {
         webUser: 6,
         webVisit: 10,
         lineUser: 5,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_57_2019-05-06': {
       date: '2019-05-06T00:00:00.000+08:00',
@@ -8578,9 +8578,9 @@ export default {
         webUser: 3,
         webVisit: 3,
         lineUser: 5,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_57_2019-11-02': {
       date: '2019-11-02T00:00:00.000+08:00',
@@ -8588,9 +8588,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 4,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_57_2019-12-25': {
       date: '2019-12-25T00:00:00.000+08:00',
@@ -8600,9 +8600,9 @@ export default {
         webUser: 10,
         webVisit: 8,
         lineUser: 2,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_24_2019-01-28': {
       date: '2019-01-28T00:00:00.000+08:00',
@@ -8612,9 +8612,9 @@ export default {
         webUser: 3,
         webVisit: 6,
         lineUser: 5,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_88'
+      docUserId: 'CBUT_user_88',
     },
     '/analytics/doc/reply_CBUT_reply_24_2019-10-16': {
       date: '2019-10-16T00:00:00.000+08:00',
@@ -8624,9 +8624,9 @@ export default {
         webUser: 6,
         webVisit: 7,
         lineUser: 7,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_88'
+      docUserId: 'CBUT_user_88',
     },
     '/analytics/doc/reply_CBUT_reply_47_2019-05-07': {
       date: '2019-05-07T00:00:00.000+08:00',
@@ -8634,9 +8634,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 4,
-        webVisit: 6
+        webVisit: 6,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_47_2019-05-08': {
       date: '2019-05-08T00:00:00.000+08:00',
@@ -8646,9 +8646,9 @@ export default {
         webUser: 7,
         webVisit: 9,
         lineUser: 1,
-        lineVisit: 10
+        lineVisit: 10,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_19_2019-01-11': {
       date: '2019-01-11T00:00:00.000+08:00',
@@ -8658,9 +8658,9 @@ export default {
         webUser: 9,
         webVisit: 3,
         lineUser: 2,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_19_2019-09-24': {
       date: '2019-09-24T00:00:00.000+08:00',
@@ -8670,9 +8670,9 @@ export default {
         webUser: 3,
         webVisit: 1,
         lineUser: 4,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_65_2019-02-14': {
       date: '2019-02-14T00:00:00.000+08:00',
@@ -8682,9 +8682,9 @@ export default {
         webUser: 3,
         webVisit: 1,
         lineUser: 5,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_79'
+      docUserId: 'CBUT_user_79',
     },
     '/analytics/doc/reply_CBUT_reply_65_2019-06-03': {
       date: '2019-06-03T00:00:00.000+08:00',
@@ -8694,9 +8694,9 @@ export default {
         webUser: 10,
         webVisit: 9,
         lineUser: 8,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_79'
+      docUserId: 'CBUT_user_79',
     },
     '/analytics/doc/reply_CBUT_reply_65_2019-09-10': {
       date: '2019-09-10T00:00:00.000+08:00',
@@ -8706,9 +8706,9 @@ export default {
         webUser: 9,
         webVisit: 9,
         lineUser: 5,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_79'
+      docUserId: 'CBUT_user_79',
     },
     '/analytics/doc/reply_CBUT_reply_65_2020-01-01': {
       date: '2020-01-01T00:00:00.000+08:00',
@@ -8718,9 +8718,9 @@ export default {
         webUser: 4,
         webVisit: 7,
         lineUser: 8,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_79'
+      docUserId: 'CBUT_user_79',
     },
     '/analytics/doc/reply_CBUT_reply_14_2019-02-06': {
       date: '2019-02-06T00:00:00.000+08:00',
@@ -8730,9 +8730,9 @@ export default {
         webUser: 6,
         webVisit: 9,
         lineUser: 4,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_14_2019-02-18': {
       date: '2019-02-18T00:00:00.000+08:00',
@@ -8740,9 +8740,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 5,
-        webVisit: 5
+        webVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_14_2019-03-13': {
       date: '2019-03-13T00:00:00.000+08:00',
@@ -8752,9 +8752,9 @@ export default {
         webUser: 9,
         webVisit: 5,
         lineUser: 3,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_14_2019-04-08': {
       date: '2019-04-08T00:00:00.000+08:00',
@@ -8764,9 +8764,9 @@ export default {
         webUser: 5,
         webVisit: 9,
         lineUser: 4,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_4_2019-08-02': {
       date: '2019-08-02T00:00:00.000+08:00',
@@ -8776,9 +8776,9 @@ export default {
         webUser: 6,
         webVisit: 4,
         lineUser: 1,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_5_2019-03-16': {
       date: '2019-03-16T00:00:00.000+08:00',
@@ -8788,9 +8788,9 @@ export default {
         webUser: 7,
         webVisit: 9,
         lineUser: 5,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_68'
+      docUserId: 'CBUT_user_68',
     },
     '/analytics/doc/reply_CBUT_reply_5_2019-03-22': {
       date: '2019-03-22T00:00:00.000+08:00',
@@ -8800,9 +8800,9 @@ export default {
         webUser: 2,
         webVisit: 1,
         lineUser: 4,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_68'
+      docUserId: 'CBUT_user_68',
     },
     '/analytics/doc/reply_CBUT_reply_5_2019-09-21': {
       date: '2019-09-21T00:00:00.000+08:00',
@@ -8812,9 +8812,9 @@ export default {
         webUser: 8,
         webVisit: 2,
         lineUser: 5,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_68'
+      docUserId: 'CBUT_user_68',
     },
     '/analytics/doc/reply_CBUT_reply_5_2019-11-13': {
       date: '2019-11-13T00:00:00.000+08:00',
@@ -8824,9 +8824,9 @@ export default {
         webUser: 6,
         webVisit: 10,
         lineUser: 9,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_68'
+      docUserId: 'CBUT_user_68',
     },
     '/analytics/doc/reply_CBUT_reply_11_2019-12-22': {
       date: '2019-12-22T00:00:00.000+08:00',
@@ -8836,9 +8836,9 @@ export default {
         webUser: 5,
         webVisit: 8,
         lineUser: 8,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_15'
+      docUserId: 'CBUT_user_15',
     },
     '/analytics/doc/reply_CBUT_reply_53_2019-07-06': {
       date: '2019-07-06T00:00:00.000+08:00',
@@ -8848,9 +8848,9 @@ export default {
         webUser: 1,
         webVisit: 3,
         lineUser: 2,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_53_2019-08-02': {
       date: '2019-08-02T00:00:00.000+08:00',
@@ -8858,9 +8858,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 6,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_53_2019-10-20': {
       date: '2019-10-20T00:00:00.000+08:00',
@@ -8870,9 +8870,9 @@ export default {
         webUser: 6,
         webVisit: 5,
         lineUser: 9,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_44_2019-01-15': {
       date: '2019-01-15T00:00:00.000+08:00',
@@ -8882,9 +8882,9 @@ export default {
         webUser: 5,
         webVisit: 3,
         lineUser: 2,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_57'
+      docUserId: 'CBUT_user_57',
     },
     '/analytics/doc/reply_CBUT_reply_44_2019-04-27': {
       date: '2019-04-27T00:00:00.000+08:00',
@@ -8894,9 +8894,9 @@ export default {
         webUser: 1,
         webVisit: 8,
         lineUser: 10,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_57'
+      docUserId: 'CBUT_user_57',
     },
     '/analytics/doc/reply_CBUT_reply_44_2019-05-29': {
       date: '2019-05-29T00:00:00.000+08:00',
@@ -8906,9 +8906,9 @@ export default {
         webUser: 4,
         webVisit: 1,
         lineUser: 8,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_57'
+      docUserId: 'CBUT_user_57',
     },
     '/analytics/doc/reply_CBUT_reply_44_2019-10-28': {
       date: '2019-10-28T00:00:00.000+08:00',
@@ -8918,9 +8918,9 @@ export default {
         webUser: 2,
         webVisit: 6,
         lineUser: 3,
-        lineVisit: 5
+        lineVisit: 5,
       },
-      docUserId: 'CBUT_user_57'
+      docUserId: 'CBUT_user_57',
     },
     '/analytics/doc/reply_CBUT_reply_51_2019-03-22': {
       date: '2019-03-22T00:00:00.000+08:00',
@@ -8930,9 +8930,9 @@ export default {
         webUser: 5,
         webVisit: 7,
         lineUser: 8,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_65'
+      docUserId: 'CBUT_user_65',
     },
     '/analytics/doc/reply_CBUT_reply_51_2019-12-17': {
       date: '2019-12-17T00:00:00.000+08:00',
@@ -8942,9 +8942,9 @@ export default {
         webUser: 9,
         webVisit: 8,
         lineUser: 5,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_65'
+      docUserId: 'CBUT_user_65',
     },
     '/analytics/doc/reply_CBUT_reply_52_2019-03-08': {
       date: '2019-03-08T00:00:00.000+08:00',
@@ -8952,9 +8952,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 9,
-        webVisit: 1
+        webVisit: 1,
       },
-      docUserId: 'CBUT_user_65'
+      docUserId: 'CBUT_user_65',
     },
     '/analytics/doc/reply_CBUT_reply_52_2019-10-31': {
       date: '2019-10-31T00:00:00.000+08:00',
@@ -8964,9 +8964,9 @@ export default {
         webUser: 8,
         webVisit: 7,
         lineUser: 5,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_65'
+      docUserId: 'CBUT_user_65',
     },
     '/analytics/doc/reply_CBUT_reply_12_2019-10-12': {
       date: '2019-10-12T00:00:00.000+08:00',
@@ -8976,9 +8976,9 @@ export default {
         webUser: 8,
         webVisit: 6,
         lineUser: 8,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_50_2019-02-05': {
       date: '2019-02-05T00:00:00.000+08:00',
@@ -8988,9 +8988,9 @@ export default {
         webUser: 5,
         webVisit: 4,
         lineUser: 6,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_63'
+      docUserId: 'CBUT_user_63',
     },
     '/analytics/doc/reply_CBUT_reply_50_2019-04-14': {
       date: '2019-04-14T00:00:00.000+08:00',
@@ -9000,9 +9000,9 @@ export default {
         webUser: 1,
         webVisit: 7,
         lineUser: 6,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_63'
+      docUserId: 'CBUT_user_63',
     },
     '/analytics/doc/reply_CBUT_reply_50_2019-07-01': {
       date: '2019-07-01T00:00:00.000+08:00',
@@ -9012,9 +9012,9 @@ export default {
         webUser: 4,
         webVisit: 2,
         lineUser: 4,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_63'
+      docUserId: 'CBUT_user_63',
     },
     '/analytics/doc/reply_CBUT_reply_50_2019-12-29': {
       date: '2019-12-29T00:00:00.000+08:00',
@@ -9022,9 +9022,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 1,
-        webVisit: 9
+        webVisit: 9,
       },
-      docUserId: 'CBUT_user_63'
+      docUserId: 'CBUT_user_63',
     },
     '/analytics/doc/reply_CBUT_reply_67_2019-02-06': {
       date: '2019-02-06T00:00:00.000+08:00',
@@ -9034,9 +9034,9 @@ export default {
         webUser: 7,
         webVisit: 7,
         lineUser: 1,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_62_2019-03-17': {
       date: '2019-03-17T00:00:00.000+08:00',
@@ -9046,9 +9046,9 @@ export default {
         webUser: 2,
         webVisit: 3,
         lineUser: 8,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_62_2019-09-28': {
       date: '2019-09-28T00:00:00.000+08:00',
@@ -9058,9 +9058,9 @@ export default {
         webUser: 7,
         webVisit: 6,
         lineUser: 5,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_45_2019-03-01': {
       date: '2019-03-01T00:00:00.000+08:00',
@@ -9070,9 +9070,9 @@ export default {
         webUser: 9,
         webVisit: 7,
         lineUser: 4,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_45_2019-07-05': {
       date: '2019-07-05T00:00:00.000+08:00',
@@ -9082,9 +9082,9 @@ export default {
         webUser: 3,
         webVisit: 2,
         lineUser: 1,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_45_2019-09-10': {
       date: '2019-09-10T00:00:00.000+08:00',
@@ -9094,9 +9094,9 @@ export default {
         webUser: 9,
         webVisit: 7,
         lineUser: 2,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_54'
+      docUserId: 'CBUT_user_54',
     },
     '/analytics/doc/reply_CBUT_reply_56_2019-01-07': {
       date: '2019-01-07T00:00:00.000+08:00',
@@ -9106,9 +9106,9 @@ export default {
         webUser: 1,
         webVisit: 4,
         lineUser: 1,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_69'
+      docUserId: 'CBUT_user_69',
     },
     '/analytics/doc/reply_CBUT_reply_56_2019-04-27': {
       date: '2019-04-27T00:00:00.000+08:00',
@@ -9118,9 +9118,9 @@ export default {
         webUser: 6,
         webVisit: 2,
         lineUser: 8,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_69'
+      docUserId: 'CBUT_user_69',
     },
     '/analytics/doc/reply_CBUT_reply_56_2019-05-19': {
       date: '2019-05-19T00:00:00.000+08:00',
@@ -9130,9 +9130,9 @@ export default {
         webUser: 8,
         webVisit: 6,
         lineUser: 9,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_69'
+      docUserId: 'CBUT_user_69',
     },
     '/analytics/doc/reply_CBUT_reply_56_2019-10-18': {
       date: '2019-10-18T00:00:00.000+08:00',
@@ -9142,9 +9142,9 @@ export default {
         webUser: 5,
         webVisit: 2,
         lineUser: 6,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_69'
+      docUserId: 'CBUT_user_69',
     },
     '/analytics/doc/reply_CBUT_reply_55_2019-02-15': {
       date: '2019-02-15T00:00:00.000+08:00',
@@ -9154,9 +9154,9 @@ export default {
         webUser: 2,
         webVisit: 5,
         lineUser: 7,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_68'
+      docUserId: 'CBUT_user_68',
     },
     '/analytics/doc/reply_CBUT_reply_48_2019-09-11': {
       date: '2019-09-11T00:00:00.000+08:00',
@@ -9166,9 +9166,9 @@ export default {
         webUser: 9,
         webVisit: 9,
         lineUser: 9,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_60'
+      docUserId: 'CBUT_user_60',
     },
     '/analytics/doc/reply_CBUT_reply_48_2019-09-18': {
       date: '2019-09-18T00:00:00.000+08:00',
@@ -9178,9 +9178,9 @@ export default {
         webUser: 7,
         webVisit: 1,
         lineUser: 9,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_60'
+      docUserId: 'CBUT_user_60',
     },
     '/analytics/doc/reply_CBUT_reply_48_2019-09-21': {
       date: '2019-09-21T00:00:00.000+08:00',
@@ -9190,9 +9190,9 @@ export default {
         webUser: 5,
         webVisit: 1,
         lineUser: 6,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_60'
+      docUserId: 'CBUT_user_60',
     },
     '/analytics/doc/reply_CBUT_reply_48_2019-11-27': {
       date: '2019-11-27T00:00:00.000+08:00',
@@ -9202,9 +9202,9 @@ export default {
         webUser: 2,
         webVisit: 8,
         lineUser: 10,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_60'
+      docUserId: 'CBUT_user_60',
     },
     '/analytics/doc/reply_CBUT_reply_48_2019-12-24': {
       date: '2019-12-24T00:00:00.000+08:00',
@@ -9212,9 +9212,9 @@ export default {
       type: 'reply',
       stats: {
         lineUser: 8,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_60'
+      docUserId: 'CBUT_user_60',
     },
     '/analytics/doc/reply_CBUT_reply_49_2019-05-21': {
       date: '2019-05-21T00:00:00.000+08:00',
@@ -9224,9 +9224,9 @@ export default {
         webUser: 3,
         webVisit: 5,
         lineUser: 6,
-        lineVisit: 6
+        lineVisit: 6,
       },
-      docUserId: 'CBUT_user_61'
+      docUserId: 'CBUT_user_61',
     },
     '/analytics/doc/reply_CBUT_reply_49_2019-11-20': {
       date: '2019-11-20T00:00:00.000+08:00',
@@ -9236,9 +9236,9 @@ export default {
         webUser: 4,
         webVisit: 6,
         lineUser: 1,
-        lineVisit: 7
+        lineVisit: 7,
       },
-      docUserId: 'CBUT_user_61'
+      docUserId: 'CBUT_user_61',
     },
     '/analytics/doc/reply_CBUT_reply_59_2019-01-31': {
       date: '2019-01-31T00:00:00.000+08:00',
@@ -9248,9 +9248,9 @@ export default {
         webUser: 5,
         webVisit: 7,
         lineUser: 8,
-        lineVisit: 2
+        lineVisit: 2,
       },
-      docUserId: 'CBUT_user_71'
+      docUserId: 'CBUT_user_71',
     },
     '/analytics/doc/reply_CBUT_reply_59_2019-04-27': {
       date: '2019-04-27T00:00:00.000+08:00',
@@ -9260,9 +9260,9 @@ export default {
         webUser: 9,
         webVisit: 10,
         lineUser: 6,
-        lineVisit: 4
+        lineVisit: 4,
       },
-      docUserId: 'CBUT_user_71'
+      docUserId: 'CBUT_user_71',
     },
     '/analytics/doc/reply_CBUT_reply_59_2019-06-08': {
       date: '2019-06-08T00:00:00.000+08:00',
@@ -9272,9 +9272,9 @@ export default {
         webUser: 6,
         webVisit: 6,
         lineUser: 7,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_71'
+      docUserId: 'CBUT_user_71',
     },
     '/analytics/doc/reply_CBUT_reply_59_2019-08-28': {
       date: '2019-08-28T00:00:00.000+08:00',
@@ -9284,9 +9284,9 @@ export default {
         webUser: 8,
         webVisit: 1,
         lineUser: 1,
-        lineVisit: 8
+        lineVisit: 8,
       },
-      docUserId: 'CBUT_user_71'
+      docUserId: 'CBUT_user_71',
     },
     '/analytics/doc/reply_CBUT_reply_59_2019-10-25': {
       date: '2019-10-25T00:00:00.000+08:00',
@@ -9296,9 +9296,9 @@ export default {
         webUser: 8,
         webVisit: 2,
         lineUser: 1,
-        lineVisit: 1
+        lineVisit: 1,
       },
-      docUserId: 'CBUT_user_71'
+      docUserId: 'CBUT_user_71',
     },
     '/analytics/doc/reply_CBUT_reply_74_2019-07-03': {
       date: '2019-07-03T00:00:00.000+08:00',
@@ -9306,9 +9306,9 @@ export default {
       type: 'reply',
       stats: {
         webUser: 2,
-        webVisit: 7
+        webVisit: 7,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_74_2019-11-04': {
       date: '2019-11-04T00:00:00.000+08:00',
@@ -9318,9 +9318,9 @@ export default {
         webUser: 1,
         webVisit: 6,
         lineUser: 6,
-        lineVisit: 9
+        lineVisit: 9,
       },
-      docUserId: 'CBUT_user_35'
+      docUserId: 'CBUT_user_35',
     },
     '/analytics/doc/reply_CBUT_reply_75_2019-02-08': {
       date: '2019-02-08T00:00:00.000+08:00',
@@ -9330,10 +9330,10 @@ export default {
         webUser: 3,
         webVisit: 4,
         lineUser: 6,
-        lineVisit: 3
+        lineVisit: 3,
       },
-      docUserId: 'CBUT_user_35'
-    }
+      docUserId: 'CBUT_user_35',
+    },
   },
   expectedResults: {
     users: {
@@ -14573,7 +14573,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 2, lineUser: 2, lineVisit: 4 },
         docUserId: 'qO1C3_lAgNK9-guL13qEJSGROTsi_UZbF5N5WoQ17vnsOrl6s',
-        docAppId: 'DEVELOPMENT_BACKEND'
+        docAppId: 'DEVELOPMENT_BACKEND',
       },
       '/analytics/doc/article_CBUT_article_30_2019-03-12': {
         date: '2019-03-12T00:00:00.000+08:00',
@@ -14581,7 +14581,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 6, lineUser: 5, lineVisit: 4 },
         docUserId: 'qO1C3_lAgNK9-guL13qEJSGROTsi_UZbF5N5WoQ17vnsOrl6s',
-        docAppId: 'DEVELOPMENT_BACKEND'
+        docAppId: 'DEVELOPMENT_BACKEND',
       },
       '/analytics/doc/article_CBUT_article_30_2019-04-21': {
         date: '2019-04-21T00:00:00.000+08:00',
@@ -14589,7 +14589,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 9, lineUser: 5, lineVisit: 3 },
         docUserId: 'qO1C3_lAgNK9-guL13qEJSGROTsi_UZbF5N5WoQ17vnsOrl6s',
-        docAppId: 'DEVELOPMENT_BACKEND'
+        docAppId: 'DEVELOPMENT_BACKEND',
       },
       '/analytics/doc/article_CBUT_article_30_2019-08-05': {
         date: '2019-08-05T00:00:00.000+08:00',
@@ -14597,7 +14597,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 1, lineUser: 5, lineVisit: 4 },
         docUserId: 'qO1C3_lAgNK9-guL13qEJSGROTsi_UZbF5N5WoQ17vnsOrl6s',
-        docAppId: 'DEVELOPMENT_BACKEND'
+        docAppId: 'DEVELOPMENT_BACKEND',
       },
       '/analytics/doc/article_CBUT_article_31_2019-05-12': {
         date: '2019-05-12T00:00:00.000+08:00',
@@ -14605,7 +14605,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 8, lineUser: 5, lineVisit: 7 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_31_2019-07-13': {
         date: '2019-07-13T00:00:00.000+08:00',
@@ -14613,7 +14613,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 8, lineUser: 5, lineVisit: 4 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_31_2019-08-19': {
         date: '2019-08-19T00:00:00.000+08:00',
@@ -14621,7 +14621,7 @@ export default {
         type: 'article',
         stats: { webUser: 9, webVisit: 3, lineUser: 6, lineVisit: 9 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_31_2019-08-28': {
         date: '2019-08-28T00:00:00.000+08:00',
@@ -14629,7 +14629,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 5, lineUser: 6, lineVisit: 2 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_31_2019-12-24': {
         date: '2019-12-24T00:00:00.000+08:00',
@@ -14637,7 +14637,7 @@ export default {
         type: 'article',
         stats: { webUser: 10, webVisit: 4 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_32_2019-04-05': {
         date: '2019-04-05T00:00:00.000+08:00',
@@ -14645,7 +14645,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 6, lineUser: 2, lineVisit: 10 },
         docUserId: 'j4S8C_f0pGq97e0_aH_2-8x0BLaj36xzuu2M1W54ZVcAZ4fM0',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_32_2019-04-29': {
         date: '2019-04-29T00:00:00.000+08:00',
@@ -14653,7 +14653,7 @@ export default {
         type: 'article',
         stats: { webUser: 9, webVisit: 6, lineUser: 7, lineVisit: 3 },
         docUserId: 'j4S8C_f0pGq97e0_aH_2-8x0BLaj36xzuu2M1W54ZVcAZ4fM0',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_32_2019-11-30': {
         date: '2019-11-30T00:00:00.000+08:00',
@@ -14661,7 +14661,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 3 },
         docUserId: 'j4S8C_f0pGq97e0_aH_2-8x0BLaj36xzuu2M1W54ZVcAZ4fM0',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_33_2019-03-21': {
         date: '2019-03-21T00:00:00.000+08:00',
@@ -14669,7 +14669,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 5, lineUser: 9, lineVisit: 8 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_33_2019-08-28': {
         date: '2019-08-28T00:00:00.000+08:00',
@@ -14677,7 +14677,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 4, lineUser: 8, lineVisit: 10 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_33_2019-09-23': {
         date: '2019-09-23T00:00:00.000+08:00',
@@ -14685,7 +14685,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 1, lineUser: 4, lineVisit: 6 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_33_2019-12-28': {
         date: '2019-12-28T00:00:00.000+08:00',
@@ -14693,7 +14693,7 @@ export default {
         type: 'article',
         stats: { webUser: 9, webVisit: 2, lineUser: 1, lineVisit: 1 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_34_2019-01-25': {
         date: '2019-01-25T00:00:00.000+08:00',
@@ -14701,7 +14701,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 7, lineUser: 1, lineVisit: 8 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_34_2019-03-07': {
         date: '2019-03-07T00:00:00.000+08:00',
@@ -14709,7 +14709,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 10 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_15_2019-05-07': {
         date: '2019-05-07T00:00:00.000+08:00',
@@ -14717,7 +14717,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 4, lineUser: 4, lineVisit: 7 },
         docUserId: 'j4S8C_pGTVQioRDsflknEcedoVAbKom5K10ipYSV4rWSq2G_4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_15_2019-07-17': {
         date: '2019-07-17T00:00:00.000+08:00',
@@ -14725,7 +14725,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 6, lineUser: 2, lineVisit: 6 },
         docUserId: 'j4S8C_pGTVQioRDsflknEcedoVAbKom5K10ipYSV4rWSq2G_4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_15_2019-08-04': {
         date: '2019-08-04T00:00:00.000+08:00',
@@ -14733,7 +14733,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 8 },
         docUserId: 'j4S8C_pGTVQioRDsflknEcedoVAbKom5K10ipYSV4rWSq2G_4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_15_2019-08-10': {
         date: '2019-08-10T00:00:00.000+08:00',
@@ -14741,7 +14741,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 10, lineUser: 5, lineVisit: 2 },
         docUserId: 'j4S8C_pGTVQioRDsflknEcedoVAbKom5K10ipYSV4rWSq2G_4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_15_2019-09-09': {
         date: '2019-09-09T00:00:00.000+08:00',
@@ -14749,7 +14749,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 6 },
         docUserId: 'j4S8C_pGTVQioRDsflknEcedoVAbKom5K10ipYSV4rWSq2G_4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_35_2019-03-22': {
         date: '2019-03-22T00:00:00.000+08:00',
@@ -14757,7 +14757,7 @@ export default {
         type: 'article',
         stats: { lineUser: 2, lineVisit: 3 },
         docUserId: 'j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_35_2019-06-09': {
         date: '2019-06-09T00:00:00.000+08:00',
@@ -14765,7 +14765,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 2, lineUser: 1, lineVisit: 7 },
         docUserId: 'j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_35_2019-06-19': {
         date: '2019-06-19T00:00:00.000+08:00',
@@ -14773,7 +14773,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 5, lineUser: 6, lineVisit: 2 },
         docUserId: 'j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_35_2019-07-14': {
         date: '2019-07-14T00:00:00.000+08:00',
@@ -14781,7 +14781,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 3, lineUser: 6, lineVisit: 3 },
         docUserId: 'j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_26_2019-01-08': {
         date: '2019-01-08T00:00:00.000+08:00',
@@ -14789,7 +14789,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 5, lineUser: 1, lineVisit: 9 },
         docUserId: 'j4S8C_uURhRzjSSV6s0wz7Patvy8Fb2hBM46AgZeTSyZ0OUfk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_26_2019-05-09': {
         date: '2019-05-09T00:00:00.000+08:00',
@@ -14797,7 +14797,7 @@ export default {
         type: 'article',
         stats: { lineUser: 1, lineVisit: 10 },
         docUserId: 'j4S8C_uURhRzjSSV6s0wz7Patvy8Fb2hBM46AgZeTSyZ0OUfk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_26_2019-06-05': {
         date: '2019-06-05T00:00:00.000+08:00',
@@ -14805,7 +14805,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 8, lineUser: 2, lineVisit: 3 },
         docUserId: 'j4S8C_uURhRzjSSV6s0wz7Patvy8Fb2hBM46AgZeTSyZ0OUfk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_26_2019-10-19': {
         date: '2019-10-19T00:00:00.000+08:00',
@@ -14813,7 +14813,7 @@ export default {
         type: 'article',
         stats: { lineUser: 4, lineVisit: 3 },
         docUserId: 'j4S8C_uURhRzjSSV6s0wz7Patvy8Fb2hBM46AgZeTSyZ0OUfk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_26_2019-11-02': {
         date: '2019-11-02T00:00:00.000+08:00',
@@ -14821,7 +14821,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 4, lineUser: 9, lineVisit: 9 },
         docUserId: 'j4S8C_uURhRzjSSV6s0wz7Patvy8Fb2hBM46AgZeTSyZ0OUfk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_36_2019-01-20': {
         date: '2019-01-20T00:00:00.000+08:00',
@@ -14829,7 +14829,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 10, lineUser: 6, lineVisit: 2 },
         docUserId: 'j4S8C_pYR1NvuKvLQfho6HCkJWbMqLYFnDzoATlM4SyqsxdEU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_36_2019-02-02': {
         date: '2019-02-02T00:00:00.000+08:00',
@@ -14837,7 +14837,7 @@ export default {
         type: 'article',
         stats: { lineUser: 3, lineVisit: 7 },
         docUserId: 'j4S8C_pYR1NvuKvLQfho6HCkJWbMqLYFnDzoATlM4SyqsxdEU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_36_2019-02-28': {
         date: '2019-02-28T00:00:00.000+08:00',
@@ -14845,7 +14845,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 1, lineUser: 5, lineVisit: 10 },
         docUserId: 'j4S8C_pYR1NvuKvLQfho6HCkJWbMqLYFnDzoATlM4SyqsxdEU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_36_2019-06-20': {
         date: '2019-06-20T00:00:00.000+08:00',
@@ -14853,7 +14853,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 7, lineUser: 9, lineVisit: 4 },
         docUserId: 'j4S8C_pYR1NvuKvLQfho6HCkJWbMqLYFnDzoATlM4SyqsxdEU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_8_2019-04-16': {
         date: '2019-04-16T00:00:00.000+08:00',
@@ -14861,7 +14861,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 2, lineUser: 5, lineVisit: 9 },
         docUserId: 'j4S8C_Z8nYqKv190EeosqG5O1H8aeTg64m6xLkRyZOTxSYQ7A',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_8_2019-04-27': {
         date: '2019-04-27T00:00:00.000+08:00',
@@ -14869,7 +14869,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 3, lineUser: 5, lineVisit: 8 },
         docUserId: 'j4S8C_Z8nYqKv190EeosqG5O1H8aeTg64m6xLkRyZOTxSYQ7A',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_8_2019-05-16': {
         date: '2019-05-16T00:00:00.000+08:00',
@@ -14877,7 +14877,7 @@ export default {
         type: 'article',
         stats: { lineUser: 2, lineVisit: 2 },
         docUserId: 'j4S8C_Z8nYqKv190EeosqG5O1H8aeTg64m6xLkRyZOTxSYQ7A',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_8_2019-06-12': {
         date: '2019-06-12T00:00:00.000+08:00',
@@ -14885,7 +14885,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 9, lineUser: 10, lineVisit: 2 },
         docUserId: 'j4S8C_Z8nYqKv190EeosqG5O1H8aeTg64m6xLkRyZOTxSYQ7A',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_8_2019-11-14': {
         date: '2019-11-14T00:00:00.000+08:00',
@@ -14893,7 +14893,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 1, lineUser: 9, lineVisit: 10 },
         docUserId: 'j4S8C_Z8nYqKv190EeosqG5O1H8aeTg64m6xLkRyZOTxSYQ7A',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_22_2019-02-09': {
         date: '2019-02-09T00:00:00.000+08:00',
@@ -14901,7 +14901,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 10, lineUser: 6, lineVisit: 1 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_22_2019-04-21': {
         date: '2019-04-21T00:00:00.000+08:00',
@@ -14909,7 +14909,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 7, lineUser: 9, lineVisit: 8 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_25_2019-03-24': {
         date: '2019-03-24T00:00:00.000+08:00',
@@ -14917,7 +14917,7 @@ export default {
         type: 'article',
         stats: { webUser: 9, webVisit: 10, lineUser: 9, lineVisit: 4 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_25_2019-04-01': {
         date: '2019-04-01T00:00:00.000+08:00',
@@ -14925,7 +14925,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 9, lineUser: 4, lineVisit: 10 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_25_2019-04-14': {
         date: '2019-04-14T00:00:00.000+08:00',
@@ -14933,7 +14933,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 5, lineUser: 8, lineVisit: 2 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_25_2019-06-14': {
         date: '2019-06-14T00:00:00.000+08:00',
@@ -14941,7 +14941,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 1, lineUser: 4, lineVisit: 7 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_25_2019-07-09': {
         date: '2019-07-09T00:00:00.000+08:00',
@@ -14949,7 +14949,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 5, lineUser: 4, lineVisit: 2 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_5_2019-05-25': {
         date: '2019-05-25T00:00:00.000+08:00',
@@ -14957,7 +14957,7 @@ export default {
         type: 'article',
         stats: { webUser: 9, webVisit: 3, lineUser: 10, lineVisit: 5 },
         docUserId: 'j4S8C_lQfJ8fARjHNzkXa4s0ZENAkcWbKn_UOARG7VY11af8E',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_5_2019-08-15': {
         date: '2019-08-15T00:00:00.000+08:00',
@@ -14965,7 +14965,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 3, lineUser: 7, lineVisit: 3 },
         docUserId: 'j4S8C_lQfJ8fARjHNzkXa4s0ZENAkcWbKn_UOARG7VY11af8E',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_37_2019-01-10': {
         date: '2019-01-10T00:00:00.000+08:00',
@@ -14973,7 +14973,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 3, lineUser: 7, lineVisit: 8 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_37_2019-03-31': {
         date: '2019-03-31T00:00:00.000+08:00',
@@ -14981,7 +14981,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 10, lineUser: 6, lineVisit: 10 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_37_2019-06-18': {
         date: '2019-06-18T00:00:00.000+08:00',
@@ -14989,7 +14989,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 4, lineUser: 5, lineVisit: 9 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_37_2019-10-22': {
         date: '2019-10-22T00:00:00.000+08:00',
@@ -14997,7 +14997,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 5, lineUser: 2, lineVisit: 6 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_37_2019-12-02': {
         date: '2019-12-02T00:00:00.000+08:00',
@@ -15005,7 +15005,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 7, lineUser: 10, lineVisit: 4 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_7_2019-01-13': {
         date: '2019-01-13T00:00:00.000+08:00',
@@ -15013,7 +15013,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 2, lineUser: 2, lineVisit: 5 },
         docUserId: 'j4S8C_rjLUCvhHqmYeT37nsWvYMXt7o0r3Mbniqdr7qU5LXgo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_7_2019-03-23': {
         date: '2019-03-23T00:00:00.000+08:00',
@@ -15021,7 +15021,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 4, lineUser: 2, lineVisit: 7 },
         docUserId: 'j4S8C_rjLUCvhHqmYeT37nsWvYMXt7o0r3Mbniqdr7qU5LXgo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_7_2019-09-28': {
         date: '2019-09-28T00:00:00.000+08:00',
@@ -15029,7 +15029,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 2, lineUser: 6, lineVisit: 10 },
         docUserId: 'j4S8C_rjLUCvhHqmYeT37nsWvYMXt7o0r3Mbniqdr7qU5LXgo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_7_2019-10-17': {
         date: '2019-10-17T00:00:00.000+08:00',
@@ -15037,7 +15037,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 2, lineUser: 10, lineVisit: 9 },
         docUserId: 'j4S8C_rjLUCvhHqmYeT37nsWvYMXt7o0r3Mbniqdr7qU5LXgo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_7_2019-11-14': {
         date: '2019-11-14T00:00:00.000+08:00',
@@ -15045,7 +15045,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 2, lineUser: 2, lineVisit: 10 },
         docUserId: 'j4S8C_rjLUCvhHqmYeT37nsWvYMXt7o0r3Mbniqdr7qU5LXgo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_16_2019-07-22': {
         date: '2019-07-22T00:00:00.000+08:00',
@@ -15053,7 +15053,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 9, lineUser: 3, lineVisit: 3 },
         docUserId: 'j4S8C_RW_vDd8lKq4WdfWYxmVh6sJImYM96kix8X4A6FhRJHI',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_16_2019-08-24': {
         date: '2019-08-24T00:00:00.000+08:00',
@@ -15061,7 +15061,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 5, lineUser: 4, lineVisit: 9 },
         docUserId: 'j4S8C_RW_vDd8lKq4WdfWYxmVh6sJImYM96kix8X4A6FhRJHI',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_16_2019-09-08': {
         date: '2019-09-08T00:00:00.000+08:00',
@@ -15069,7 +15069,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 9 },
         docUserId: 'j4S8C_RW_vDd8lKq4WdfWYxmVh6sJImYM96kix8X4A6FhRJHI',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_38_2019-03-31': {
         date: '2019-03-31T00:00:00.000+08:00',
@@ -15077,7 +15077,7 @@ export default {
         type: 'article',
         stats: { webUser: 9, webVisit: 10, lineUser: 10, lineVisit: 2 },
         docUserId: 'j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_28_2019-03-08': {
         date: '2019-03-08T00:00:00.000+08:00',
@@ -15085,7 +15085,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 5, lineUser: 10, lineVisit: 5 },
         docUserId: 'j4S8C_igegSRiBLdZh9argcdWuKn3cZzYGaSCes5WLJr-9l2s',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_2_2019-05-04': {
         date: '2019-05-04T00:00:00.000+08:00',
@@ -15093,7 +15093,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 8, lineUser: 9, lineVisit: 8 },
         docUserId: 'j4S8C_xhN2O5Ouv6Y6AbEoDULy9Crc1TRdEaQ03ANLtAEJWnY',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_1_2019-02-08': {
         date: '2019-02-08T00:00:00.000+08:00',
@@ -15101,7 +15101,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 4, lineUser: 1, lineVisit: 9 },
         docUserId: 'j4S8C_n66M1oaUXCwx_g7G3O5VFjHWL4dbZqq9aiEewD4s8-g',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_1_2019-03-22': {
         date: '2019-03-22T00:00:00.000+08:00',
@@ -15109,7 +15109,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 2, lineUser: 8, lineVisit: 5 },
         docUserId: 'j4S8C_n66M1oaUXCwx_g7G3O5VFjHWL4dbZqq9aiEewD4s8-g',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_1_2019-04-09': {
         date: '2019-04-09T00:00:00.000+08:00',
@@ -15117,7 +15117,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 7 },
         docUserId: 'j4S8C_n66M1oaUXCwx_g7G3O5VFjHWL4dbZqq9aiEewD4s8-g',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_3_2019-08-22': {
         date: '2019-08-22T00:00:00.000+08:00',
@@ -15125,7 +15125,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 2, lineUser: 6, lineVisit: 6 },
         docUserId: 'j4S8C_nRWu8ne4K6M1m6ibF8HbOq07hUxK3pvrOD4g7cn-okY',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_4_2019-05-16': {
         date: '2019-05-16T00:00:00.000+08:00',
@@ -15133,7 +15133,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 7, lineUser: 2, lineVisit: 3 },
         docUserId: 'j4S8C_fqo4vs7i2gmJi3mc1zlp_YgMi2_xyGiHfOR5_eLeYkE',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_4_2019-06-24': {
         date: '2019-06-24T00:00:00.000+08:00',
@@ -15141,7 +15141,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 9, lineUser: 4, lineVisit: 2 },
         docUserId: 'j4S8C_fqo4vs7i2gmJi3mc1zlp_YgMi2_xyGiHfOR5_eLeYkE',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_4_2019-12-01': {
         date: '2019-12-01T00:00:00.000+08:00',
@@ -15149,7 +15149,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 3, lineUser: 5, lineVisit: 1 },
         docUserId: 'j4S8C_fqo4vs7i2gmJi3mc1zlp_YgMi2_xyGiHfOR5_eLeYkE',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_4_2019-12-14': {
         date: '2019-12-14T00:00:00.000+08:00',
@@ -15157,7 +15157,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 9, lineUser: 2, lineVisit: 6 },
         docUserId: 'j4S8C_fqo4vs7i2gmJi3mc1zlp_YgMi2_xyGiHfOR5_eLeYkE',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_39_2019-05-22': {
         date: '2019-05-22T00:00:00.000+08:00',
@@ -15165,7 +15165,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 7, lineUser: 10, lineVisit: 5 },
         docUserId: 'j4S8C_AunHFdGqCNC2QRUrQ9PSqkcE49Z4JTrkG9mYcgeogm8',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_39_2019-07-18': {
         date: '2019-07-18T00:00:00.000+08:00',
@@ -15173,7 +15173,7 @@ export default {
         type: 'article',
         stats: { webUser: 10, webVisit: 4, lineUser: 4, lineVisit: 2 },
         docUserId: 'j4S8C_AunHFdGqCNC2QRUrQ9PSqkcE49Z4JTrkG9mYcgeogm8',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_39_2019-09-15': {
         date: '2019-09-15T00:00:00.000+08:00',
@@ -15181,7 +15181,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 3, lineUser: 10, lineVisit: 7 },
         docUserId: 'j4S8C_AunHFdGqCNC2QRUrQ9PSqkcE49Z4JTrkG9mYcgeogm8',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_21_2019-01-06': {
         date: '2019-01-06T00:00:00.000+08:00',
@@ -15189,7 +15189,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 1 },
         docUserId: 'j4S8C_nEkrBWbE4FfkBTIV9QMn1exDEGReMdemzfznDgx6nA8',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_21_2019-01-17': {
         date: '2019-01-17T00:00:00.000+08:00',
@@ -15197,7 +15197,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 6, lineUser: 10, lineVisit: 6 },
         docUserId: 'j4S8C_nEkrBWbE4FfkBTIV9QMn1exDEGReMdemzfznDgx6nA8',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_21_2019-02-05': {
         date: '2019-02-05T00:00:00.000+08:00',
@@ -15205,7 +15205,7 @@ export default {
         type: 'article',
         stats: { webUser: 10, webVisit: 6, lineUser: 8, lineVisit: 1 },
         docUserId: 'j4S8C_nEkrBWbE4FfkBTIV9QMn1exDEGReMdemzfznDgx6nA8',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_40_2019-04-09': {
         date: '2019-04-09T00:00:00.000+08:00',
@@ -15213,7 +15213,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 1, lineUser: 9, lineVisit: 7 },
         docUserId: 'j4S8C_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_23_2019-01-06': {
         date: '2019-01-06T00:00:00.000+08:00',
@@ -15221,7 +15221,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 7, lineUser: 3, lineVisit: 7 },
         docUserId: 'j4S8C_9V5d6E7GKiGNn1Yv_ifdq_WCxK4GET6BedItZHNN3W0',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_23_2019-02-26': {
         date: '2019-02-26T00:00:00.000+08:00',
@@ -15229,7 +15229,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 9, lineUser: 3, lineVisit: 2 },
         docUserId: 'j4S8C_9V5d6E7GKiGNn1Yv_ifdq_WCxK4GET6BedItZHNN3W0',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_23_2019-12-02': {
         date: '2019-12-02T00:00:00.000+08:00',
@@ -15237,7 +15237,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 4, lineUser: 2, lineVisit: 8 },
         docUserId: 'j4S8C_9V5d6E7GKiGNn1Yv_ifdq_WCxK4GET6BedItZHNN3W0',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_23_2019-12-08': {
         date: '2019-12-08T00:00:00.000+08:00',
@@ -15245,7 +15245,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 2, lineUser: 6, lineVisit: 9 },
         docUserId: 'j4S8C_9V5d6E7GKiGNn1Yv_ifdq_WCxK4GET6BedItZHNN3W0',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_17_2019-05-01': {
         date: '2019-05-01T00:00:00.000+08:00',
@@ -15253,7 +15253,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 4, lineUser: 9, lineVisit: 6 },
         docUserId: 'j4S8C_sJtyYDWJm0yBONBKJix3-poQzSELnS-Xyr7WPZdwvvA',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_10_2019-10-04': {
         date: '2019-10-04T00:00:00.000+08:00',
@@ -15261,7 +15261,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 4, lineUser: 7, lineVisit: 1 },
         docUserId: 'j4S8C_4WVN4mcFb9V8KKu6LT8xXvRud2LWcSa-UjL_qvy0ksw',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_10_2019-10-15': {
         date: '2019-10-15T00:00:00.000+08:00',
@@ -15269,7 +15269,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 6, lineUser: 7, lineVisit: 8 },
         docUserId: 'j4S8C_4WVN4mcFb9V8KKu6LT8xXvRud2LWcSa-UjL_qvy0ksw',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_41_2019-04-11': {
         date: '2019-04-11T00:00:00.000+08:00',
@@ -15277,7 +15277,7 @@ export default {
         type: 'article',
         stats: { lineUser: 10, lineVisit: 6 },
         docUserId: 'j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_41_2019-04-15': {
         date: '2019-04-15T00:00:00.000+08:00',
@@ -15285,7 +15285,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 7, lineUser: 5, lineVisit: 1 },
         docUserId: 'j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_41_2019-08-18': {
         date: '2019-08-18T00:00:00.000+08:00',
@@ -15293,7 +15293,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 4, lineUser: 5, lineVisit: 7 },
         docUserId: 'j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_41_2019-10-04': {
         date: '2019-10-04T00:00:00.000+08:00',
@@ -15301,7 +15301,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 9, lineUser: 6, lineVisit: 8 },
         docUserId: 'j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_41_2019-12-01': {
         date: '2019-12-01T00:00:00.000+08:00',
@@ -15309,7 +15309,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 8, lineUser: 7, lineVisit: 9 },
         docUserId: 'j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_42_2019-01-16': {
         date: '2019-01-16T00:00:00.000+08:00',
@@ -15317,7 +15317,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 4, lineUser: 9, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_42_2019-02-12': {
         date: '2019-02-12T00:00:00.000+08:00',
@@ -15325,7 +15325,7 @@ export default {
         type: 'article',
         stats: { lineUser: 5, lineVisit: 1 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_42_2019-10-19': {
         date: '2019-10-19T00:00:00.000+08:00',
@@ -15333,7 +15333,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 4, lineUser: 4, lineVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_42_2019-11-30': {
         date: '2019-11-30T00:00:00.000+08:00',
@@ -15341,7 +15341,7 @@ export default {
         type: 'article',
         stats: { webUser: 9, webVisit: 1, lineUser: 6, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_19_2019-02-26': {
         date: '2019-02-26T00:00:00.000+08:00',
@@ -15349,7 +15349,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 10, lineUser: 10, lineVisit: 4 },
         docUserId: 'j4S8C_VSYVIlqF4l_puOdN_Pzu64YnjMc-nM5iu0OWcWTt4xk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_19_2019-09-12': {
         date: '2019-09-12T00:00:00.000+08:00',
@@ -15357,7 +15357,7 @@ export default {
         type: 'article',
         stats: { lineUser: 1, lineVisit: 5 },
         docUserId: 'j4S8C_VSYVIlqF4l_puOdN_Pzu64YnjMc-nM5iu0OWcWTt4xk',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_24_2019-01-03': {
         date: '2019-01-03T00:00:00.000+08:00',
@@ -15365,7 +15365,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 5, lineUser: 1, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_24_2019-03-18': {
         date: '2019-03-18T00:00:00.000+08:00',
@@ -15373,7 +15373,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 6, lineUser: 6, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_24_2019-06-06': {
         date: '2019-06-06T00:00:00.000+08:00',
@@ -15381,7 +15381,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 7, lineUser: 7, lineVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_24_2019-06-26': {
         date: '2019-06-26T00:00:00.000+08:00',
@@ -15389,7 +15389,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 7, lineUser: 2, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_12_2019-01-21': {
         date: '2019-01-21T00:00:00.000+08:00',
@@ -15397,7 +15397,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 7, lineUser: 5, lineVisit: 2 },
         docUserId: 'j4S8C_4PNVISSWISKdcDP111lIO_cSmpR1jMjSyzDwLoYDvH4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_12_2019-06-03': {
         date: '2019-06-03T00:00:00.000+08:00',
@@ -15405,7 +15405,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 6, lineUser: 2, lineVisit: 3 },
         docUserId: 'j4S8C_4PNVISSWISKdcDP111lIO_cSmpR1jMjSyzDwLoYDvH4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_12_2019-11-02': {
         date: '2019-11-02T00:00:00.000+08:00',
@@ -15413,7 +15413,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 1, lineUser: 7, lineVisit: 6 },
         docUserId: 'j4S8C_4PNVISSWISKdcDP111lIO_cSmpR1jMjSyzDwLoYDvH4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_6_2019-08-27': {
         date: '2019-08-27T00:00:00.000+08:00',
@@ -15421,7 +15421,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 2, lineUser: 8, lineVisit: 2 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_27_2019-01-08': {
         date: '2019-01-08T00:00:00.000+08:00',
@@ -15429,7 +15429,7 @@ export default {
         type: 'article',
         stats: { webUser: 10, webVisit: 6, lineUser: 10, lineVisit: 8 },
         docUserId: 'j4S8C_YWVSKKajD6USiTghIEQzrWT_YKdnVVqVI96-cyS6zWA',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_27_2019-08-08': {
         date: '2019-08-08T00:00:00.000+08:00',
@@ -15437,7 +15437,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 8, lineUser: 7, lineVisit: 10 },
         docUserId: 'j4S8C_YWVSKKajD6USiTghIEQzrWT_YKdnVVqVI96-cyS6zWA',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_27_2019-09-16': {
         date: '2019-09-16T00:00:00.000+08:00',
@@ -15445,7 +15445,7 @@ export default {
         type: 'article',
         stats: { lineUser: 6, lineVisit: 8 },
         docUserId: 'j4S8C_YWVSKKajD6USiTghIEQzrWT_YKdnVVqVI96-cyS6zWA',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_27_2019-10-21': {
         date: '2019-10-21T00:00:00.000+08:00',
@@ -15453,7 +15453,7 @@ export default {
         type: 'article',
         stats: { webUser: 9, webVisit: 2, lineUser: 7, lineVisit: 4 },
         docUserId: 'j4S8C_YWVSKKajD6USiTghIEQzrWT_YKdnVVqVI96-cyS6zWA',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_14_2019-01-30': {
         date: '2019-01-30T00:00:00.000+08:00',
@@ -15461,7 +15461,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 2, lineUser: 4, lineVisit: 6 },
         docUserId: 'j4S8C_4iGkmTeduiI5SrYlHehwmaS3SX4Nszoyb1oyUWvLMEo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_14_2019-05-08': {
         date: '2019-05-08T00:00:00.000+08:00',
@@ -15469,7 +15469,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 2, lineUser: 8, lineVisit: 8 },
         docUserId: 'j4S8C_4iGkmTeduiI5SrYlHehwmaS3SX4Nszoyb1oyUWvLMEo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_14_2019-08-23': {
         date: '2019-08-23T00:00:00.000+08:00',
@@ -15477,7 +15477,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 5, lineUser: 6, lineVisit: 8 },
         docUserId: 'j4S8C_4iGkmTeduiI5SrYlHehwmaS3SX4Nszoyb1oyUWvLMEo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_14_2019-10-25': {
         date: '2019-10-25T00:00:00.000+08:00',
@@ -15485,7 +15485,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 4, lineUser: 9, lineVisit: 7 },
         docUserId: 'j4S8C_4iGkmTeduiI5SrYlHehwmaS3SX4Nszoyb1oyUWvLMEo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_9_2019-01-23': {
         date: '2019-01-23T00:00:00.000+08:00',
@@ -15493,7 +15493,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 2, lineUser: 8, lineVisit: 4 },
         docUserId: 'j4S8C_Yk4N-rJ2LtcKZc0Wa2smuJQNB5I7mmo-d2j1k-nyfSo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_9_2019-07-29': {
         date: '2019-07-29T00:00:00.000+08:00',
@@ -15501,7 +15501,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 1, lineUser: 1, lineVisit: 9 },
         docUserId: 'j4S8C_Yk4N-rJ2LtcKZc0Wa2smuJQNB5I7mmo-d2j1k-nyfSo',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_18_2019-02-16': {
         date: '2019-02-16T00:00:00.000+08:00',
@@ -15509,7 +15509,7 @@ export default {
         type: 'article',
         stats: { webUser: 9, webVisit: 4, lineUser: 6, lineVisit: 3 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_18_2019-08-05': {
         date: '2019-08-05T00:00:00.000+08:00',
@@ -15517,7 +15517,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 8, lineUser: 3, lineVisit: 4 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_18_2019-10-15': {
         date: '2019-10-15T00:00:00.000+08:00',
@@ -15525,7 +15525,7 @@ export default {
         type: 'article',
         stats: { lineUser: 2, lineVisit: 1 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_11_2019-05-22': {
         date: '2019-05-22T00:00:00.000+08:00',
@@ -15533,7 +15533,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 9 },
         docUserId: 'j4S8C_v8peSS0932LsPFMsF61kNZqh7-ZkQ_2QHV22_C3PXf4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_11_2019-07-10': {
         date: '2019-07-10T00:00:00.000+08:00',
@@ -15541,7 +15541,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 8, lineUser: 8, lineVisit: 7 },
         docUserId: 'j4S8C_v8peSS0932LsPFMsF61kNZqh7-ZkQ_2QHV22_C3PXf4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_11_2019-09-08': {
         date: '2019-09-08T00:00:00.000+08:00',
@@ -15549,7 +15549,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 8, lineUser: 2, lineVisit: 6 },
         docUserId: 'j4S8C_v8peSS0932LsPFMsF61kNZqh7-ZkQ_2QHV22_C3PXf4',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_29_2019-01-13': {
         date: '2019-01-13T00:00:00.000+08:00',
@@ -15557,7 +15557,7 @@ export default {
         type: 'article',
         stats: { webUser: 10, webVisit: 5, lineUser: 9, lineVisit: 1 },
         docUserId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_29_2019-02-03': {
         date: '2019-02-03T00:00:00.000+08:00',
@@ -15565,7 +15565,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 4, lineUser: 10, lineVisit: 5 },
         docUserId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_29_2019-03-08': {
         date: '2019-03-08T00:00:00.000+08:00',
@@ -15573,7 +15573,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 4, lineUser: 5, lineVisit: 2 },
         docUserId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_29_2019-11-16': {
         date: '2019-11-16T00:00:00.000+08:00',
@@ -15581,7 +15581,7 @@ export default {
         type: 'article',
         stats: { lineUser: 5, lineVisit: 5 },
         docUserId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_29_2019-12-13': {
         date: '2019-12-13T00:00:00.000+08:00',
@@ -15589,7 +15589,7 @@ export default {
         type: 'article',
         stats: { webUser: 10, webVisit: 9, lineUser: 5, lineVisit: 6 },
         docUserId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_0_2019-01-06': {
         date: '2019-01-06T00:00:00.000+08:00',
@@ -15597,7 +15597,7 @@ export default {
         type: 'article',
         stats: { lineUser: 4, lineVisit: 6 },
         docUserId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_0_2019-04-15': {
         date: '2019-04-15T00:00:00.000+08:00',
@@ -15605,7 +15605,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 9 },
         docUserId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_0_2019-05-19': {
         date: '2019-05-19T00:00:00.000+08:00',
@@ -15613,7 +15613,7 @@ export default {
         type: 'article',
         stats: { webUser: 5, webVisit: 9 },
         docUserId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_0_2019-08-22': {
         date: '2019-08-22T00:00:00.000+08:00',
@@ -15621,7 +15621,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 2, lineUser: 6, lineVisit: 3 },
         docUserId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_0_2019-12-26': {
         date: '2019-12-26T00:00:00.000+08:00',
@@ -15629,7 +15629,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 9, lineUser: 7, lineVisit: 5 },
         docUserId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_20_2019-04-26': {
         date: '2019-04-26T00:00:00.000+08:00',
@@ -15637,7 +15637,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 1, lineUser: 5, lineVisit: 8 },
         docUserId: 'j4S8C_MKBfQLupvhw4_Pf0ua4s1ag2aNnC7lr88z8Hyx7C31g',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_20_2019-07-31': {
         date: '2019-07-31T00:00:00.000+08:00',
@@ -15645,7 +15645,7 @@ export default {
         type: 'article',
         stats: { webUser: 10, webVisit: 5, lineUser: 10, lineVisit: 3 },
         docUserId: 'j4S8C_MKBfQLupvhw4_Pf0ua4s1ag2aNnC7lr88z8Hyx7C31g',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_20_2019-08-13': {
         date: '2019-08-13T00:00:00.000+08:00',
@@ -15653,7 +15653,7 @@ export default {
         type: 'article',
         stats: { webUser: 4, webVisit: 3, lineUser: 2, lineVisit: 5 },
         docUserId: 'j4S8C_MKBfQLupvhw4_Pf0ua4s1ag2aNnC7lr88z8Hyx7C31g',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_20_2019-08-19': {
         date: '2019-08-19T00:00:00.000+08:00',
@@ -15661,7 +15661,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 6, lineUser: 7, lineVisit: 6 },
         docUserId: 'j4S8C_MKBfQLupvhw4_Pf0ua4s1ag2aNnC7lr88z8Hyx7C31g',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_20_2019-09-24': {
         date: '2019-09-24T00:00:00.000+08:00',
@@ -15669,7 +15669,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 7, lineUser: 1, lineVisit: 8 },
         docUserId: 'j4S8C_MKBfQLupvhw4_Pf0ua4s1ag2aNnC7lr88z8Hyx7C31g',
-        docAppId: 'RUMORS_LINE_BOT'
+        docAppId: 'RUMORS_LINE_BOT',
       },
       '/analytics/doc/article_CBUT_article_13_2019-01-22': {
         date: '2019-01-22T00:00:00.000+08:00',
@@ -15677,7 +15677,7 @@ export default {
         type: 'article',
         stats: { webUser: 10, webVisit: 8, lineUser: 1, lineVisit: 5 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_13_2019-02-19': {
         date: '2019-02-19T00:00:00.000+08:00',
@@ -15685,7 +15685,7 @@ export default {
         type: 'article',
         stats: { webUser: 2, webVisit: 4, lineUser: 3, lineVisit: 2 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_13_2019-06-30': {
         date: '2019-06-30T00:00:00.000+08:00',
@@ -15693,7 +15693,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 1, lineUser: 7, lineVisit: 2 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_13_2019-12-09': {
         date: '2019-12-09T00:00:00.000+08:00',
@@ -15701,7 +15701,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 9, lineUser: 4, lineVisit: 5 },
         docUserId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        docAppId: 'BOT_LEGACY'
+        docAppId: 'BOT_LEGACY',
       },
       '/analytics/doc/article_CBUT_article_43_2019-03-21': {
         date: '2019-03-21T00:00:00.000+08:00',
@@ -15709,7 +15709,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 7, lineUser: 5, lineVisit: 1 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_43_2019-04-28': {
         date: '2019-04-28T00:00:00.000+08:00',
@@ -15717,7 +15717,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 4, lineUser: 2, lineVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_43_2019-06-20': {
         date: '2019-06-20T00:00:00.000+08:00',
@@ -15725,7 +15725,7 @@ export default {
         type: 'article',
         stats: { webUser: 7, webVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_43_2019-08-31': {
         date: '2019-08-31T00:00:00.000+08:00',
@@ -15733,7 +15733,7 @@ export default {
         type: 'article',
         stats: { webUser: 3, webVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_44_2019-03-26': {
         date: '2019-03-26T00:00:00.000+08:00',
@@ -15741,7 +15741,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 3, lineUser: 1, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_44_2019-04-18': {
         date: '2019-04-18T00:00:00.000+08:00',
@@ -15749,7 +15749,7 @@ export default {
         type: 'article',
         stats: { webUser: 8, webVisit: 6, lineUser: 3, lineVisit: 9 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_44_2019-05-06': {
         date: '2019-05-06T00:00:00.000+08:00',
@@ -15757,7 +15757,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 1, lineUser: 9, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_44_2019-10-22': {
         date: '2019-10-22T00:00:00.000+08:00',
@@ -15765,7 +15765,7 @@ export default {
         type: 'article',
         stats: { webUser: 1, webVisit: 6, lineUser: 7, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/article_CBUT_article_44_2019-11-27': {
         date: '2019-11-27T00:00:00.000+08:00',
@@ -15773,7 +15773,7 @@ export default {
         type: 'article',
         stats: { webUser: 6, webVisit: 4, lineUser: 8, lineVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_76_2019-09-03': {
         date: '2019-09-03T00:00:00.000+08:00',
@@ -15781,7 +15781,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 6, lineUser: 3, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_77_2019-04-27': {
         date: '2019-04-27T00:00:00.000+08:00',
@@ -15789,7 +15789,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 8, lineUser: 5, lineVisit: 7 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_78_2019-03-22': {
         date: '2019-03-22T00:00:00.000+08:00',
@@ -15797,7 +15797,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 5, lineUser: 5, lineVisit: 1 },
         docUserId: 'CBUT_user_90',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_78_2019-05-03': {
         date: '2019-05-03T00:00:00.000+08:00',
@@ -15805,7 +15805,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 6 },
         docUserId: 'CBUT_user_90',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_78_2019-06-19': {
         date: '2019-06-19T00:00:00.000+08:00',
@@ -15813,7 +15813,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 7, lineUser: 6, lineVisit: 8 },
         docUserId: 'CBUT_user_90',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_79_2019-05-09': {
         date: '2019-05-09T00:00:00.000+08:00',
@@ -15821,7 +15821,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 2 },
         docUserId: 'CBUT_user_16',
-        docAppId: 'DEVELOPMENT_FRONTEND'
+        docAppId: 'DEVELOPMENT_FRONTEND',
       },
       '/analytics/doc/reply_CBUT_reply_79_2019-05-16': {
         date: '2019-05-16T00:00:00.000+08:00',
@@ -15829,7 +15829,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 4, lineUser: 1, lineVisit: 2 },
         docUserId: 'CBUT_user_16',
-        docAppId: 'DEVELOPMENT_FRONTEND'
+        docAppId: 'DEVELOPMENT_FRONTEND',
       },
       '/analytics/doc/reply_CBUT_reply_79_2019-10-27': {
         date: '2019-10-27T00:00:00.000+08:00',
@@ -15837,7 +15837,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 9, lineUser: 6, lineVisit: 3 },
         docUserId: 'CBUT_user_16',
-        docAppId: 'DEVELOPMENT_FRONTEND'
+        docAppId: 'DEVELOPMENT_FRONTEND',
       },
       '/analytics/doc/reply_CBUT_reply_79_2019-12-23': {
         date: '2019-12-23T00:00:00.000+08:00',
@@ -15845,7 +15845,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 1, lineUser: 8, lineVisit: 7 },
         docUserId: 'CBUT_user_16',
-        docAppId: 'DEVELOPMENT_FRONTEND'
+        docAppId: 'DEVELOPMENT_FRONTEND',
       },
       '/analytics/doc/reply_CBUT_reply_80_2019-04-26': {
         date: '2019-04-26T00:00:00.000+08:00',
@@ -15853,7 +15853,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 7, lineUser: 2, lineVisit: 2 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'DEVELOPMENT_FRONTEND'
+        docAppId: 'DEVELOPMENT_FRONTEND',
       },
       '/analytics/doc/reply_CBUT_reply_80_2019-05-03': {
         date: '2019-05-03T00:00:00.000+08:00',
@@ -15861,7 +15861,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 1, lineUser: 2, lineVisit: 6 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'DEVELOPMENT_FRONTEND'
+        docAppId: 'DEVELOPMENT_FRONTEND',
       },
       '/analytics/doc/reply_CBUT_reply_80_2019-07-26': {
         date: '2019-07-26T00:00:00.000+08:00',
@@ -15869,7 +15869,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 4, lineUser: 7, lineVisit: 1 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'DEVELOPMENT_FRONTEND'
+        docAppId: 'DEVELOPMENT_FRONTEND',
       },
       '/analytics/doc/reply_CBUT_reply_80_2019-09-03': {
         date: '2019-09-03T00:00:00.000+08:00',
@@ -15877,7 +15877,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 7, lineUser: 3, lineVisit: 6 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'DEVELOPMENT_FRONTEND'
+        docAppId: 'DEVELOPMENT_FRONTEND',
       },
       '/analytics/doc/reply_CBUT_reply_69_2019-01-22': {
         date: '2019-01-22T00:00:00.000+08:00',
@@ -15885,7 +15885,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 6, lineUser: 4, lineVisit: 3 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_69_2019-03-19': {
         date: '2019-03-19T00:00:00.000+08:00',
@@ -15893,7 +15893,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 5, lineUser: 2, lineVisit: 8 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_69_2019-10-16': {
         date: '2019-10-16T00:00:00.000+08:00',
@@ -15901,7 +15901,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 6, lineUser: 3, lineVisit: 2 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_69_2019-12-23': {
         date: '2019-12-23T00:00:00.000+08:00',
@@ -15909,7 +15909,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 1, lineUser: 9, lineVisit: 2 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_30_2019-02-25': {
         date: '2019-02-25T00:00:00.000+08:00',
@@ -15917,7 +15917,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 4, lineUser: 6, lineVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_15_2019-09-07': {
         date: '2019-09-07T00:00:00.000+08:00',
@@ -15925,7 +15925,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 3, lineUser: 10, lineVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_15_2019-12-08': {
         date: '2019-12-08T00:00:00.000+08:00',
@@ -15933,7 +15933,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 2, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_21_2019-09-21': {
         date: '2019-09-21T00:00:00.000+08:00',
@@ -15941,7 +15941,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 2, lineUser: 5, lineVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_21_2019-12-09': {
         date: '2019-12-09T00:00:00.000+08:00',
@@ -15949,7 +15949,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 1, lineUser: 2, lineVisit: 9 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_26_2019-03-30': {
         date: '2019-03-30T00:00:00.000+08:00',
@@ -15957,7 +15957,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 4, lineUser: 10, lineVisit: 3 },
         docUserId: 'CBUT_user_38',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_26_2019-05-07': {
         date: '2019-05-07T00:00:00.000+08:00',
@@ -15965,7 +15965,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 3 },
         docUserId: 'CBUT_user_38',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_26_2019-06-07': {
         date: '2019-06-07T00:00:00.000+08:00',
@@ -15973,7 +15973,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 9 },
         docUserId: 'CBUT_user_38',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_26_2019-08-26': {
         date: '2019-08-26T00:00:00.000+08:00',
@@ -15981,7 +15981,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 3 },
         docUserId: 'CBUT_user_38',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_27_2019-06-17': {
         date: '2019-06-17T00:00:00.000+08:00',
@@ -15989,7 +15989,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 1, lineUser: 2, lineVisit: 7 },
         docUserId: 'CBUT_user_40',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_20_2019-04-09': {
         date: '2019-04-09T00:00:00.000+08:00',
@@ -15997,7 +15997,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 3, lineUser: 3, lineVisit: 1 },
         docUserId: 'CBUT_user_49',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_20_2019-05-01': {
         date: '2019-05-01T00:00:00.000+08:00',
@@ -16005,7 +16005,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 5, lineUser: 1, lineVisit: 3 },
         docUserId: 'CBUT_user_49',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_20_2019-12-25': {
         date: '2019-12-25T00:00:00.000+08:00',
@@ -16013,7 +16013,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 7, lineUser: 9, lineVisit: 5 },
         docUserId: 'CBUT_user_49',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_70_2019-01-03': {
         date: '2019-01-03T00:00:00.000+08:00',
@@ -16021,7 +16021,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 4, lineUser: 4, lineVisit: 9 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_70_2019-05-22': {
         date: '2019-05-22T00:00:00.000+08:00',
@@ -16029,7 +16029,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 4, lineUser: 1, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_70_2019-08-13': {
         date: '2019-08-13T00:00:00.000+08:00',
@@ -16037,7 +16037,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 6, lineUser: 5, lineVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_70_2019-10-13': {
         date: '2019-10-13T00:00:00.000+08:00',
@@ -16045,7 +16045,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 5, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_70_2019-12-07': {
         date: '2019-12-07T00:00:00.000+08:00',
@@ -16053,7 +16053,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 5, lineVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_39_2019-04-04': {
         date: '2019-04-04T00:00:00.000+08:00',
@@ -16061,7 +16061,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 9, lineUser: 10, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_39_2019-05-21': {
         date: '2019-05-21T00:00:00.000+08:00',
@@ -16069,7 +16069,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 1, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_0_2019-07-05': {
         date: '2019-07-05T00:00:00.000+08:00',
@@ -16077,7 +16077,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 3, lineUser: 7, lineVisit: 10 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_1_2019-01-18': {
         date: '2019-01-18T00:00:00.000+08:00',
@@ -16085,7 +16085,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 6, lineUser: 9, lineVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_1_2019-03-17': {
         date: '2019-03-17T00:00:00.000+08:00',
@@ -16093,7 +16093,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_1_2019-05-29': {
         date: '2019-05-29T00:00:00.000+08:00',
@@ -16101,7 +16101,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 8, lineUser: 4, lineVisit: 10 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_1_2019-07-03': {
         date: '2019-07-03T00:00:00.000+08:00',
@@ -16109,7 +16109,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 7, lineVisit: 9 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_35_2019-01-27': {
         date: '2019-01-27T00:00:00.000+08:00',
@@ -16117,7 +16117,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 6, lineUser: 1, lineVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_35_2019-06-01': {
         date: '2019-06-01T00:00:00.000+08:00',
@@ -16125,7 +16125,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_35_2019-08-01': {
         date: '2019-08-01T00:00:00.000+08:00',
@@ -16133,7 +16133,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 8, lineUser: 9, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_35_2019-10-02': {
         date: '2019-10-02T00:00:00.000+08:00',
@@ -16141,7 +16141,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 9, lineUser: 2, lineVisit: 4 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_8_2019-01-15': {
         date: '2019-01-15T00:00:00.000+08:00',
@@ -16149,7 +16149,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 6, lineUser: 4, lineVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_8_2019-07-12': {
         date: '2019-07-12T00:00:00.000+08:00',
@@ -16157,7 +16157,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 4, lineUser: 1, lineVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_8_2019-08-22': {
         date: '2019-08-22T00:00:00.000+08:00',
@@ -16165,7 +16165,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 1, lineUser: 6, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_8_2019-09-24': {
         date: '2019-09-24T00:00:00.000+08:00',
@@ -16173,7 +16173,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 3, lineUser: 7, lineVisit: 4 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_8_2019-10-23': {
         date: '2019-10-23T00:00:00.000+08:00',
@@ -16181,7 +16181,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 6, lineUser: 2, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_32_2019-02-08': {
         date: '2019-02-08T00:00:00.000+08:00',
@@ -16189,7 +16189,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 1, lineUser: 4, lineVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_32_2019-12-27': {
         date: '2019-12-27T00:00:00.000+08:00',
@@ -16197,7 +16197,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 4, lineUser: 5, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_72_2019-02-27': {
         date: '2019-02-27T00:00:00.000+08:00',
@@ -16205,7 +16205,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 4, lineUser: 5, lineVisit: 4 },
         docUserId: 'CBUT_user_85',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_72_2019-10-30': {
         date: '2019-10-30T00:00:00.000+08:00',
@@ -16213,7 +16213,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 10, lineUser: 8, lineVisit: 6 },
         docUserId: 'CBUT_user_85',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_72_2019-12-21': {
         date: '2019-12-21T00:00:00.000+08:00',
@@ -16221,7 +16221,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 2, lineUser: 4, lineVisit: 9 },
         docUserId: 'CBUT_user_85',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_13_2019-01-05': {
         date: '2019-01-05T00:00:00.000+08:00',
@@ -16229,7 +16229,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 2, lineUser: 3, lineVisit: 8 },
         docUserId: 'CBUT_user_85',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_13_2019-02-17': {
         date: '2019-02-17T00:00:00.000+08:00',
@@ -16237,7 +16237,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 7, lineUser: 7, lineVisit: 2 },
         docUserId: 'CBUT_user_85',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_13_2019-04-14': {
         date: '2019-04-14T00:00:00.000+08:00',
@@ -16245,7 +16245,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 2, lineUser: 6, lineVisit: 9 },
         docUserId: 'CBUT_user_85',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_13_2019-04-19': {
         date: '2019-04-19T00:00:00.000+08:00',
@@ -16253,7 +16253,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 4, lineUser: 8, lineVisit: 7 },
         docUserId: 'CBUT_user_85',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_13_2019-11-23': {
         date: '2019-11-23T00:00:00.000+08:00',
@@ -16261,7 +16261,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 3, lineUser: 7, lineVisit: 8 },
         docUserId: 'CBUT_user_85',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_66_2019-04-06': {
         date: '2019-04-06T00:00:00.000+08:00',
@@ -16269,7 +16269,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 3, lineUser: 1, lineVisit: 4 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_66_2019-05-07': {
         date: '2019-05-07T00:00:00.000+08:00',
@@ -16277,7 +16277,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 3, lineUser: 7, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_6_2019-02-05': {
         date: '2019-02-05T00:00:00.000+08:00',
@@ -16285,7 +16285,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 1, lineUser: 3, lineVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_6_2019-04-18': {
         date: '2019-04-18T00:00:00.000+08:00',
@@ -16293,7 +16293,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 1, lineUser: 4, lineVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_6_2019-07-10': {
         date: '2019-07-10T00:00:00.000+08:00',
@@ -16301,7 +16301,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 1, lineUser: 8, lineVisit: 4 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_6_2019-08-12': {
         date: '2019-08-12T00:00:00.000+08:00',
@@ -16309,7 +16309,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 3, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_6_2019-12-12': {
         date: '2019-12-12T00:00:00.000+08:00',
@@ -16317,7 +16317,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 7, lineUser: 5, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_23_2019-01-17': {
         date: '2019-01-17T00:00:00.000+08:00',
@@ -16325,7 +16325,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 6, lineUser: 8, lineVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_23_2019-07-11': {
         date: '2019-07-11T00:00:00.000+08:00',
@@ -16333,7 +16333,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 8, lineUser: 8, lineVisit: 10 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_23_2019-07-30': {
         date: '2019-07-30T00:00:00.000+08:00',
@@ -16341,7 +16341,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 5, lineUser: 6, lineVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_23_2019-08-29': {
         date: '2019-08-29T00:00:00.000+08:00',
@@ -16349,7 +16349,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 5, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_23_2019-12-07': {
         date: '2019-12-07T00:00:00.000+08:00',
@@ -16357,7 +16357,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 3, lineUser: 1, lineVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_73_2019-03-10': {
         date: '2019-03-10T00:00:00.000+08:00',
@@ -16365,7 +16365,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 1, lineUser: 2, lineVisit: 9 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_73_2019-05-07': {
         date: '2019-05-07T00:00:00.000+08:00',
@@ -16373,7 +16373,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 7, lineUser: 4, lineVisit: 7 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_73_2019-08-20': {
         date: '2019-08-20T00:00:00.000+08:00',
@@ -16381,7 +16381,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 7, lineUser: 6, lineVisit: 3 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_16_2019-03-02': {
         date: '2019-03-02T00:00:00.000+08:00',
@@ -16389,7 +16389,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 10, lineUser: 9, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_16_2019-04-20': {
         date: '2019-04-20T00:00:00.000+08:00',
@@ -16397,7 +16397,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 2, lineUser: 7, lineVisit: 2 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_16_2019-05-17': {
         date: '2019-05-17T00:00:00.000+08:00',
@@ -16405,7 +16405,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 5, lineUser: 2, lineVisit: 1 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_16_2019-08-25': {
         date: '2019-08-25T00:00:00.000+08:00',
@@ -16413,7 +16413,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 3, lineUser: 3, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_16_2019-09-23': {
         date: '2019-09-23T00:00:00.000+08:00',
@@ -16421,7 +16421,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 1, lineUser: 6, lineVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_38_2019-08-08': {
         date: '2019-08-08T00:00:00.000+08:00',
@@ -16429,7 +16429,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 3, lineUser: 7, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_38_2019-09-11': {
         date: '2019-09-11T00:00:00.000+08:00',
@@ -16437,7 +16437,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 10, lineUser: 8, lineVisit: 4 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_38_2019-12-30': {
         date: '2019-12-30T00:00:00.000+08:00',
@@ -16445,7 +16445,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 8, lineUser: 7, lineVisit: 9 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_7_2019-03-23': {
         date: '2019-03-23T00:00:00.000+08:00',
@@ -16453,7 +16453,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 9, lineUser: 6, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_7_2019-06-06': {
         date: '2019-06-06T00:00:00.000+08:00',
@@ -16461,7 +16461,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 8, lineUser: 3, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_7_2019-07-10': {
         date: '2019-07-10T00:00:00.000+08:00',
@@ -16469,7 +16469,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 8, lineVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_7_2019-08-27': {
         date: '2019-08-27T00:00:00.000+08:00',
@@ -16477,7 +16477,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 9, lineUser: 9, lineVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_7_2019-12-19': {
         date: '2019-12-19T00:00:00.000+08:00',
@@ -16485,7 +16485,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 3, lineUser: 8, lineVisit: 9 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_3_2019-03-06': {
         date: '2019-03-06T00:00:00.000+08:00',
@@ -16493,7 +16493,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 4 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_3_2019-04-09': {
         date: '2019-04-09T00:00:00.000+08:00',
@@ -16501,7 +16501,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 4, lineUser: 3, lineVisit: 10 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_3_2019-11-02': {
         date: '2019-11-02T00:00:00.000+08:00',
@@ -16509,7 +16509,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 9, lineUser: 10, lineVisit: 6 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_71_2019-05-18': {
         date: '2019-05-18T00:00:00.000+08:00',
@@ -16517,7 +16517,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 8, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_71_2019-07-11': {
         date: '2019-07-11T00:00:00.000+08:00',
@@ -16525,7 +16525,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 2, lineUser: 3, lineVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_71_2019-08-26': {
         date: '2019-08-26T00:00:00.000+08:00',
@@ -16533,7 +16533,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 2, lineUser: 7, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_71_2019-12-25': {
         date: '2019-12-25T00:00:00.000+08:00',
@@ -16541,7 +16541,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 4, lineUser: 6, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_10_2019-03-22': {
         date: '2019-03-22T00:00:00.000+08:00',
@@ -16549,7 +16549,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 2, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_10_2019-05-02': {
         date: '2019-05-02T00:00:00.000+08:00',
@@ -16557,7 +16557,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 9, lineUser: 1, lineVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_10_2019-08-05': {
         date: '2019-08-05T00:00:00.000+08:00',
@@ -16565,7 +16565,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_10_2019-10-01': {
         date: '2019-10-01T00:00:00.000+08:00',
@@ -16573,7 +16573,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 6, lineUser: 2, lineVisit: 4 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_10_2019-12-25': {
         date: '2019-12-25T00:00:00.000+08:00',
@@ -16581,7 +16581,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 9, lineUser: 7, lineVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_40_2019-01-04': {
         date: '2019-01-04T00:00:00.000+08:00',
@@ -16589,7 +16589,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 2, lineUser: 7, lineVisit: 9 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_40_2019-03-09': {
         date: '2019-03-09T00:00:00.000+08:00',
@@ -16597,7 +16597,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 2, lineUser: 1, lineVisit: 10 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_40_2019-04-29': {
         date: '2019-04-29T00:00:00.000+08:00',
@@ -16605,7 +16605,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 3, lineUser: 8, lineVisit: 8 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_40_2019-09-24': {
         date: '2019-09-24T00:00:00.000+08:00',
@@ -16613,7 +16613,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 1, lineUser: 3, lineVisit: 7 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_40_2019-10-25': {
         date: '2019-10-25T00:00:00.000+08:00',
@@ -16621,7 +16621,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 6, lineUser: 9, lineVisit: 1 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_41_2019-11-22': {
         date: '2019-11-22T00:00:00.000+08:00',
@@ -16629,7 +16629,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 6, lineUser: 2, lineVisit: 10 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_42_2019-03-23': {
         date: '2019-03-23T00:00:00.000+08:00',
@@ -16637,7 +16637,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 10, lineUser: 4, lineVisit: 8 },
         docUserId: 'CBUT_user_53',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_42_2019-07-17': {
         date: '2019-07-17T00:00:00.000+08:00',
@@ -16645,7 +16645,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 6, lineUser: 2, lineVisit: 9 },
         docUserId: 'CBUT_user_53',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_42_2019-08-03': {
         date: '2019-08-03T00:00:00.000+08:00',
@@ -16653,7 +16653,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 5, lineUser: 7, lineVisit: 1 },
         docUserId: 'CBUT_user_53',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_42_2019-09-15': {
         date: '2019-09-15T00:00:00.000+08:00',
@@ -16661,7 +16661,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 10, lineUser: 9, lineVisit: 2 },
         docUserId: 'CBUT_user_53',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_42_2019-10-01': {
         date: '2019-10-01T00:00:00.000+08:00',
@@ -16669,7 +16669,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 7, lineUser: 1, lineVisit: 7 },
         docUserId: 'CBUT_user_53',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_46_2019-03-14': {
         date: '2019-03-14T00:00:00.000+08:00',
@@ -16677,7 +16677,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 7, lineVisit: 8 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_46_2019-11-14': {
         date: '2019-11-14T00:00:00.000+08:00',
@@ -16685,7 +16685,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 3, lineUser: 5, lineVisit: 1 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_18_2019-05-20': {
         date: '2019-05-20T00:00:00.000+08:00',
@@ -16693,7 +16693,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 6, lineVisit: 5 },
         docUserId: 'CBUT_user_73',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_18_2019-08-11': {
         date: '2019-08-11T00:00:00.000+08:00',
@@ -16701,7 +16701,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 6, lineVisit: 10 },
         docUserId: 'CBUT_user_73',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_25_2019-04-09': {
         date: '2019-04-09T00:00:00.000+08:00',
@@ -16709,7 +16709,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 10, lineUser: 2, lineVisit: 1 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_25_2019-06-22': {
         date: '2019-06-22T00:00:00.000+08:00',
@@ -16717,7 +16717,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 9, lineUser: 1, lineVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_25_2019-08-30': {
         date: '2019-08-30T00:00:00.000+08:00',
@@ -16725,7 +16725,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 7, lineUser: 4, lineVisit: 9 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_64_2019-01-19': {
         date: '2019-01-19T00:00:00.000+08:00',
@@ -16733,7 +16733,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 7, lineUser: 5, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_64_2019-03-13': {
         date: '2019-03-13T00:00:00.000+08:00',
@@ -16741,7 +16741,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 1, lineUser: 4, lineVisit: 4 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_64_2019-03-22': {
         date: '2019-03-22T00:00:00.000+08:00',
@@ -16749,7 +16749,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 4 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_63_2019-04-18': {
         date: '2019-04-18T00:00:00.000+08:00',
@@ -16757,7 +16757,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 1, lineUser: 8, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_63_2019-07-05': {
         date: '2019-07-05T00:00:00.000+08:00',
@@ -16765,7 +16765,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 5, lineUser: 10, lineVisit: 10 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_28_2019-08-30': {
         date: '2019-08-30T00:00:00.000+08:00',
@@ -16773,7 +16773,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 10, lineUser: 1, lineVisit: 5 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_29_2019-02-27': {
         date: '2019-02-27T00:00:00.000+08:00',
@@ -16781,7 +16781,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 2, lineVisit: 8 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_29_2019-10-13': {
         date: '2019-10-13T00:00:00.000+08:00',
@@ -16789,7 +16789,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 9, lineUser: 8, lineVisit: 10 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_68_2019-03-24': {
         date: '2019-03-24T00:00:00.000+08:00',
@@ -16797,7 +16797,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 1, lineUser: 8, lineVisit: 4 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_68_2019-07-08': {
         date: '2019-07-08T00:00:00.000+08:00',
@@ -16805,7 +16805,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 9, lineUser: 8, lineVisit: 4 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_68_2019-10-11': {
         date: '2019-10-11T00:00:00.000+08:00',
@@ -16813,7 +16813,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 2, lineUser: 3, lineVisit: 6 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_68_2019-10-16': {
         date: '2019-10-16T00:00:00.000+08:00',
@@ -16821,7 +16821,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 5, lineUser: 5, lineVisit: 10 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_58_2019-01-13': {
         date: '2019-01-13T00:00:00.000+08:00',
@@ -16829,7 +16829,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 1, lineUser: 6, lineVisit: 3 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_58_2019-04-11': {
         date: '2019-04-11T00:00:00.000+08:00',
@@ -16837,7 +16837,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 9, lineUser: 3, lineVisit: 2 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_58_2019-11-07': {
         date: '2019-11-07T00:00:00.000+08:00',
@@ -16845,7 +16845,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 10, lineUser: 9, lineVisit: 4 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_58_2019-12-12': {
         date: '2019-12-12T00:00:00.000+08:00',
@@ -16853,7 +16853,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 4, lineUser: 9, lineVisit: 8 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_31_2019-10-02': {
         date: '2019-10-02T00:00:00.000+08:00',
@@ -16861,7 +16861,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 6, lineUser: 5, lineVisit: 8 },
         docUserId: 'CBUT_user_45',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_2_2019-04-11': {
         date: '2019-04-11T00:00:00.000+08:00',
@@ -16869,7 +16869,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 5 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_2_2019-06-01': {
         date: '2019-06-01T00:00:00.000+08:00',
@@ -16877,7 +16877,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 2, lineUser: 6, lineVisit: 8 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_2_2019-07-04': {
         date: '2019-07-04T00:00:00.000+08:00',
@@ -16885,7 +16885,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 1 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_2_2019-10-20': {
         date: '2019-10-20T00:00:00.000+08:00',
@@ -16893,7 +16893,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 4, lineUser: 2, lineVisit: 10 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_2_2019-11-18': {
         date: '2019-11-18T00:00:00.000+08:00',
@@ -16901,7 +16901,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 6, lineUser: 9, lineVisit: 1 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_33_2019-03-13': {
         date: '2019-03-13T00:00:00.000+08:00',
@@ -16909,7 +16909,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 1, lineUser: 4, lineVisit: 2 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_33_2019-03-29': {
         date: '2019-03-29T00:00:00.000+08:00',
@@ -16917,7 +16917,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 5, lineVisit: 2 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_33_2019-09-13': {
         date: '2019-09-13T00:00:00.000+08:00',
@@ -16925,7 +16925,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 9, lineUser: 4, lineVisit: 10 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_33_2019-10-09': {
         date: '2019-10-09T00:00:00.000+08:00',
@@ -16933,7 +16933,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 8, lineUser: 3, lineVisit: 1 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_34_2019-01-12': {
         date: '2019-01-12T00:00:00.000+08:00',
@@ -16941,7 +16941,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 2, lineUser: 5, lineVisit: 7 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_34_2019-06-22': {
         date: '2019-06-22T00:00:00.000+08:00',
@@ -16949,7 +16949,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 3, lineVisit: 2 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_34_2019-11-29': {
         date: '2019-11-29T00:00:00.000+08:00',
@@ -16957,7 +16957,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 10, lineUser: 3, lineVisit: 9 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_34_2019-12-15': {
         date: '2019-12-15T00:00:00.000+08:00',
@@ -16965,7 +16965,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 5, lineUser: 3, lineVisit: 7 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_54_2019-01-29': {
         date: '2019-01-29T00:00:00.000+08:00',
@@ -16973,7 +16973,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 8, lineUser: 3, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_60_2019-03-19': {
         date: '2019-03-19T00:00:00.000+08:00',
@@ -16981,7 +16981,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 3, lineVisit: 4 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_60_2019-03-21': {
         date: '2019-03-21T00:00:00.000+08:00',
@@ -16989,7 +16989,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 8, lineUser: 1, lineVisit: 3 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_60_2019-04-15': {
         date: '2019-04-15T00:00:00.000+08:00',
@@ -16997,7 +16997,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 10, lineUser: 5, lineVisit: 4 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_60_2019-05-04': {
         date: '2019-05-04T00:00:00.000+08:00',
@@ -17005,7 +17005,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 2, lineUser: 10, lineVisit: 2 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_9_2019-06-02': {
         date: '2019-06-02T00:00:00.000+08:00',
@@ -17013,7 +17013,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 9, lineVisit: 3 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_22_2019-01-26': {
         date: '2019-01-26T00:00:00.000+08:00',
@@ -17021,7 +17021,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 1, lineUser: 1, lineVisit: 8 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_22_2019-05-19': {
         date: '2019-05-19T00:00:00.000+08:00',
@@ -17029,7 +17029,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 5, lineUser: 4, lineVisit: 3 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_43_2019-02-14': {
         date: '2019-02-14T00:00:00.000+08:00',
@@ -17037,7 +17037,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 7, lineUser: 7, lineVisit: 2 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_43_2019-02-22': {
         date: '2019-02-22T00:00:00.000+08:00',
@@ -17045,7 +17045,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 8 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_43_2019-08-24': {
         date: '2019-08-24T00:00:00.000+08:00',
@@ -17053,7 +17053,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 9, lineUser: 7, lineVisit: 2 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_43_2019-10-31': {
         date: '2019-10-31T00:00:00.000+08:00',
@@ -17061,7 +17061,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 3, lineUser: 5, lineVisit: 2 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_17_2019-09-19': {
         date: '2019-09-19T00:00:00.000+08:00',
@@ -17069,7 +17069,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 3, lineUser: 7, lineVisit: 9 },
         docUserId: 'CBUT_user_47',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_36_2019-09-14': {
         date: '2019-09-14T00:00:00.000+08:00',
@@ -17077,7 +17077,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 8, lineUser: 10, lineVisit: 9 },
         docUserId: 'CBUT_user_48',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_36_2019-12-14': {
         date: '2019-12-14T00:00:00.000+08:00',
@@ -17085,7 +17085,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 6, lineUser: 2, lineVisit: 5 },
         docUserId: 'CBUT_user_48',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_61_2019-01-12': {
         date: '2019-01-12T00:00:00.000+08:00',
@@ -17093,7 +17093,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 4, lineUser: 1, lineVisit: 9 },
         docUserId: 'CBUT_user_74',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_61_2019-01-28': {
         date: '2019-01-28T00:00:00.000+08:00',
@@ -17101,7 +17101,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 7, lineUser: 4, lineVisit: 4 },
         docUserId: 'CBUT_user_74',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_61_2019-03-19': {
         date: '2019-03-19T00:00:00.000+08:00',
@@ -17109,7 +17109,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 3 },
         docUserId: 'CBUT_user_74',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_61_2019-05-12': {
         date: '2019-05-12T00:00:00.000+08:00',
@@ -17117,7 +17117,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 4, lineUser: 3, lineVisit: 2 },
         docUserId: 'CBUT_user_74',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_57_2019-03-29': {
         date: '2019-03-29T00:00:00.000+08:00',
@@ -17125,7 +17125,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 8, lineUser: 4, lineVisit: 5 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_57_2019-04-29': {
         date: '2019-04-29T00:00:00.000+08:00',
@@ -17133,7 +17133,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 10, lineUser: 5, lineVisit: 1 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_57_2019-05-06': {
         date: '2019-05-06T00:00:00.000+08:00',
@@ -17141,7 +17141,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 3, lineUser: 5, lineVisit: 2 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_57_2019-11-02': {
         date: '2019-11-02T00:00:00.000+08:00',
@@ -17149,7 +17149,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 4, lineVisit: 2 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_57_2019-12-25': {
         date: '2019-12-25T00:00:00.000+08:00',
@@ -17157,7 +17157,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 8, lineUser: 2, lineVisit: 8 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_24_2019-01-28': {
         date: '2019-01-28T00:00:00.000+08:00',
@@ -17165,7 +17165,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 6, lineUser: 5, lineVisit: 1 },
         docUserId: 'CBUT_user_88',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_24_2019-10-16': {
         date: '2019-10-16T00:00:00.000+08:00',
@@ -17173,7 +17173,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 7, lineUser: 7, lineVisit: 6 },
         docUserId: 'CBUT_user_88',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_47_2019-05-07': {
         date: '2019-05-07T00:00:00.000+08:00',
@@ -17181,7 +17181,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 6 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_47_2019-05-08': {
         date: '2019-05-08T00:00:00.000+08:00',
@@ -17189,7 +17189,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 9, lineUser: 1, lineVisit: 10 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_19_2019-01-11': {
         date: '2019-01-11T00:00:00.000+08:00',
@@ -17197,7 +17197,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 3, lineUser: 2, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_19_2019-09-24': {
         date: '2019-09-24T00:00:00.000+08:00',
@@ -17205,7 +17205,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 1, lineUser: 4, lineVisit: 4 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_65_2019-02-14': {
         date: '2019-02-14T00:00:00.000+08:00',
@@ -17213,7 +17213,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 1, lineUser: 5, lineVisit: 5 },
         docUserId: 'CBUT_user_79',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_65_2019-06-03': {
         date: '2019-06-03T00:00:00.000+08:00',
@@ -17221,7 +17221,7 @@ export default {
         type: 'reply',
         stats: { webUser: 10, webVisit: 9, lineUser: 8, lineVisit: 2 },
         docUserId: 'CBUT_user_79',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_65_2019-09-10': {
         date: '2019-09-10T00:00:00.000+08:00',
@@ -17229,7 +17229,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 9, lineUser: 5, lineVisit: 2 },
         docUserId: 'CBUT_user_79',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_65_2020-01-01': {
         date: '2020-01-01T00:00:00.000+08:00',
@@ -17237,7 +17237,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 7, lineUser: 8, lineVisit: 3 },
         docUserId: 'CBUT_user_79',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_14_2019-02-06': {
         date: '2019-02-06T00:00:00.000+08:00',
@@ -17245,7 +17245,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 9, lineUser: 4, lineVisit: 9 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_14_2019-02-18': {
         date: '2019-02-18T00:00:00.000+08:00',
@@ -17253,7 +17253,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_14_2019-03-13': {
         date: '2019-03-13T00:00:00.000+08:00',
@@ -17261,7 +17261,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 5, lineUser: 3, lineVisit: 5 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_14_2019-04-08': {
         date: '2019-04-08T00:00:00.000+08:00',
@@ -17269,7 +17269,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 9, lineUser: 4, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_4_2019-08-02': {
         date: '2019-08-02T00:00:00.000+08:00',
@@ -17277,7 +17277,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 4, lineUser: 1, lineVisit: 9 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_5_2019-03-16': {
         date: '2019-03-16T00:00:00.000+08:00',
@@ -17285,7 +17285,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 9, lineUser: 5, lineVisit: 3 },
         docUserId: 'CBUT_user_68',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_5_2019-03-22': {
         date: '2019-03-22T00:00:00.000+08:00',
@@ -17293,7 +17293,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 1, lineUser: 4, lineVisit: 5 },
         docUserId: 'CBUT_user_68',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_5_2019-09-21': {
         date: '2019-09-21T00:00:00.000+08:00',
@@ -17301,7 +17301,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 2, lineUser: 5, lineVisit: 9 },
         docUserId: 'CBUT_user_68',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_5_2019-11-13': {
         date: '2019-11-13T00:00:00.000+08:00',
@@ -17309,7 +17309,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 10, lineUser: 9, lineVisit: 9 },
         docUserId: 'CBUT_user_68',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_11_2019-12-22': {
         date: '2019-12-22T00:00:00.000+08:00',
@@ -17317,7 +17317,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 8, lineUser: 8, lineVisit: 8 },
         docUserId: 'CBUT_user_15',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_53_2019-07-06': {
         date: '2019-07-06T00:00:00.000+08:00',
@@ -17325,7 +17325,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 3, lineUser: 2, lineVisit: 5 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_53_2019-08-02': {
         date: '2019-08-02T00:00:00.000+08:00',
@@ -17333,7 +17333,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 6, lineVisit: 3 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_53_2019-10-20': {
         date: '2019-10-20T00:00:00.000+08:00',
@@ -17341,7 +17341,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 5, lineUser: 9, lineVisit: 4 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_44_2019-01-15': {
         date: '2019-01-15T00:00:00.000+08:00',
@@ -17349,7 +17349,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 3, lineUser: 2, lineVisit: 2 },
         docUserId: 'CBUT_user_57',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_44_2019-04-27': {
         date: '2019-04-27T00:00:00.000+08:00',
@@ -17357,7 +17357,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 8, lineUser: 10, lineVisit: 5 },
         docUserId: 'CBUT_user_57',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_44_2019-05-29': {
         date: '2019-05-29T00:00:00.000+08:00',
@@ -17365,7 +17365,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 1, lineUser: 8, lineVisit: 2 },
         docUserId: 'CBUT_user_57',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_44_2019-10-28': {
         date: '2019-10-28T00:00:00.000+08:00',
@@ -17373,7 +17373,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 6, lineUser: 3, lineVisit: 5 },
         docUserId: 'CBUT_user_57',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_51_2019-03-22': {
         date: '2019-03-22T00:00:00.000+08:00',
@@ -17381,7 +17381,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 7, lineUser: 8, lineVisit: 7 },
         docUserId: 'CBUT_user_65',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_51_2019-12-17': {
         date: '2019-12-17T00:00:00.000+08:00',
@@ -17389,7 +17389,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 8, lineUser: 5, lineVisit: 6 },
         docUserId: 'CBUT_user_65',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_52_2019-03-08': {
         date: '2019-03-08T00:00:00.000+08:00',
@@ -17397,7 +17397,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 1 },
         docUserId: 'CBUT_user_65',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_52_2019-10-31': {
         date: '2019-10-31T00:00:00.000+08:00',
@@ -17405,7 +17405,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 7, lineUser: 5, lineVisit: 1 },
         docUserId: 'CBUT_user_65',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_12_2019-10-12': {
         date: '2019-10-12T00:00:00.000+08:00',
@@ -17413,7 +17413,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 6, lineUser: 8, lineVisit: 6 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_50_2019-02-05': {
         date: '2019-02-05T00:00:00.000+08:00',
@@ -17421,7 +17421,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 4, lineUser: 6, lineVisit: 9 },
         docUserId: 'CBUT_user_63',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_50_2019-04-14': {
         date: '2019-04-14T00:00:00.000+08:00',
@@ -17429,7 +17429,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 7, lineUser: 6, lineVisit: 6 },
         docUserId: 'CBUT_user_63',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_50_2019-07-01': {
         date: '2019-07-01T00:00:00.000+08:00',
@@ -17437,7 +17437,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 2, lineUser: 4, lineVisit: 8 },
         docUserId: 'CBUT_user_63',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_50_2019-12-29': {
         date: '2019-12-29T00:00:00.000+08:00',
@@ -17445,7 +17445,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 9 },
         docUserId: 'CBUT_user_63',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_67_2019-02-06': {
         date: '2019-02-06T00:00:00.000+08:00',
@@ -17453,7 +17453,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 7, lineUser: 1, lineVisit: 4 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_62_2019-03-17': {
         date: '2019-03-17T00:00:00.000+08:00',
@@ -17461,7 +17461,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 3, lineUser: 8, lineVisit: 3 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_62_2019-09-28': {
         date: '2019-09-28T00:00:00.000+08:00',
@@ -17469,7 +17469,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 6, lineUser: 5, lineVisit: 7 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_45_2019-03-01': {
         date: '2019-03-01T00:00:00.000+08:00',
@@ -17477,7 +17477,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 7, lineUser: 4, lineVisit: 3 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_45_2019-07-05': {
         date: '2019-07-05T00:00:00.000+08:00',
@@ -17485,7 +17485,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 2, lineUser: 1, lineVisit: 3 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_45_2019-09-10': {
         date: '2019-09-10T00:00:00.000+08:00',
@@ -17493,7 +17493,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 7, lineUser: 2, lineVisit: 8 },
         docUserId: 'CBUT_user_54',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_56_2019-01-07': {
         date: '2019-01-07T00:00:00.000+08:00',
@@ -17501,7 +17501,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 4, lineUser: 1, lineVisit: 2 },
         docUserId: 'CBUT_user_69',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_56_2019-04-27': {
         date: '2019-04-27T00:00:00.000+08:00',
@@ -17509,7 +17509,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 2, lineUser: 8, lineVisit: 9 },
         docUserId: 'CBUT_user_69',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_56_2019-05-19': {
         date: '2019-05-19T00:00:00.000+08:00',
@@ -17517,7 +17517,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 6, lineUser: 9, lineVisit: 4 },
         docUserId: 'CBUT_user_69',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_56_2019-10-18': {
         date: '2019-10-18T00:00:00.000+08:00',
@@ -17525,7 +17525,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 2, lineUser: 6, lineVisit: 9 },
         docUserId: 'CBUT_user_69',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_55_2019-02-15': {
         date: '2019-02-15T00:00:00.000+08:00',
@@ -17533,7 +17533,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 5, lineUser: 7, lineVisit: 4 },
         docUserId: 'CBUT_user_68',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_48_2019-09-11': {
         date: '2019-09-11T00:00:00.000+08:00',
@@ -17541,7 +17541,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 9, lineUser: 9, lineVisit: 4 },
         docUserId: 'CBUT_user_60',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_48_2019-09-18': {
         date: '2019-09-18T00:00:00.000+08:00',
@@ -17549,7 +17549,7 @@ export default {
         type: 'reply',
         stats: { webUser: 7, webVisit: 1, lineUser: 9, lineVisit: 2 },
         docUserId: 'CBUT_user_60',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_48_2019-09-21': {
         date: '2019-09-21T00:00:00.000+08:00',
@@ -17557,7 +17557,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 1, lineUser: 6, lineVisit: 1 },
         docUserId: 'CBUT_user_60',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_48_2019-11-27': {
         date: '2019-11-27T00:00:00.000+08:00',
@@ -17565,7 +17565,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 8, lineUser: 10, lineVisit: 4 },
         docUserId: 'CBUT_user_60',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_48_2019-12-24': {
         date: '2019-12-24T00:00:00.000+08:00',
@@ -17573,7 +17573,7 @@ export default {
         type: 'reply',
         stats: { lineUser: 8, lineVisit: 7 },
         docUserId: 'CBUT_user_60',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_49_2019-05-21': {
         date: '2019-05-21T00:00:00.000+08:00',
@@ -17581,7 +17581,7 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 5, lineUser: 6, lineVisit: 6 },
         docUserId: 'CBUT_user_61',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_49_2019-11-20': {
         date: '2019-11-20T00:00:00.000+08:00',
@@ -17589,7 +17589,7 @@ export default {
         type: 'reply',
         stats: { webUser: 4, webVisit: 6, lineUser: 1, lineVisit: 7 },
         docUserId: 'CBUT_user_61',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_59_2019-01-31': {
         date: '2019-01-31T00:00:00.000+08:00',
@@ -17597,7 +17597,7 @@ export default {
         type: 'reply',
         stats: { webUser: 5, webVisit: 7, lineUser: 8, lineVisit: 2 },
         docUserId: 'CBUT_user_71',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_59_2019-04-27': {
         date: '2019-04-27T00:00:00.000+08:00',
@@ -17605,7 +17605,7 @@ export default {
         type: 'reply',
         stats: { webUser: 9, webVisit: 10, lineUser: 6, lineVisit: 4 },
         docUserId: 'CBUT_user_71',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_59_2019-06-08': {
         date: '2019-06-08T00:00:00.000+08:00',
@@ -17613,7 +17613,7 @@ export default {
         type: 'reply',
         stats: { webUser: 6, webVisit: 6, lineUser: 7, lineVisit: 1 },
         docUserId: 'CBUT_user_71',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_59_2019-08-28': {
         date: '2019-08-28T00:00:00.000+08:00',
@@ -17621,7 +17621,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 1, lineUser: 1, lineVisit: 8 },
         docUserId: 'CBUT_user_71',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_59_2019-10-25': {
         date: '2019-10-25T00:00:00.000+08:00',
@@ -17629,7 +17629,7 @@ export default {
         type: 'reply',
         stats: { webUser: 8, webVisit: 2, lineUser: 1, lineVisit: 1 },
         docUserId: 'CBUT_user_71',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_74_2019-07-03': {
         date: '2019-07-03T00:00:00.000+08:00',
@@ -17637,7 +17637,7 @@ export default {
         type: 'reply',
         stats: { webUser: 2, webVisit: 7 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_74_2019-11-04': {
         date: '2019-11-04T00:00:00.000+08:00',
@@ -17645,7 +17645,7 @@ export default {
         type: 'reply',
         stats: { webUser: 1, webVisit: 6, lineUser: 6, lineVisit: 9 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
+        docAppId: 'WEBSITE',
       },
       '/analytics/doc/reply_CBUT_reply_75_2019-02-08': {
         date: '2019-02-08T00:00:00.000+08:00',
@@ -17653,8 +17653,8 @@ export default {
         type: 'reply',
         stats: { webUser: 3, webVisit: 4, lineUser: 6, lineVisit: 3 },
         docUserId: 'CBUT_user_35',
-        docAppId: 'WEBSITE'
-      }
-    }
+        docAppId: 'WEBSITE',
+      },
+    },
   },
 };
