@@ -5,48 +5,55 @@ import fixtures from '../__fixtures__/createBackendUsers';
 
 jest.setTimeout(8000);
 
-const checkAllDocsForIndex = async (index) => {
+const checkAllDocsForIndex = async index => {
   let res = {};
   try {
     console.log(`checking ${index}`);
-    const { body: { hits: { hits: docs } } } = await client.search({
+    const {
+      body: {
+        hits: { hits: docs },
+      },
+    } = await client.search({
       index,
       body: {
         query: {
-          match_all: {}
+          match_all: {},
         },
         size: 10000,
         sort: [{ _id: 'asc' }],
       },
     });
-    docs.forEach(doc => res[`/${index}/${doc._type}/${doc._id}`] = doc._source)
-  }
-  catch (e) {
+    docs.forEach(
+      doc => (res[`/${index}/${doc._type}/${doc._id}`] = doc._source)
+    );
+  } catch (e) {
     console.log(e);
   }
 
   const expected = fixtures.expectedResults[index];
 
-  expect(
-    Object.keys(res)
-  ).toStrictEqual(Object.keys(expected));
+  expect(Object.keys(res)).toStrictEqual(Object.keys(expected));
 
-  expect(
-    res
-  ).toMatchObject(expected);
+  expect(res).toMatchObject(expected);
+};
 
-}
-
-const indices = ['users', 'articlecategoryfeedbacks', 'articlereplyfeedbacks', 'articles', 'replies', 'replyrequests'];
+const indices = [
+  'users',
+  'articlecategoryfeedbacks',
+  'articlereplyfeedbacks',
+  'articles',
+  'replies',
+  'replyrequests',
+];
 
 describe('createBackendUsers', () => {
   beforeAll(async () => {
     await loadFixtures(fixtures.fixturesToLoad);
-    await (new CreateBackendUsers({
+    await new CreateBackendUsers({
       batchSize: 20,
-      aggBatchSize: 5
-    }).execute());
-  })
+      aggBatchSize: 5,
+    }).execute();
+  });
   afterAll(async () => {
     for (const index of indices) {
       await unloadFixtures(fixtures.expectedResults[index]);
@@ -57,4 +64,4 @@ describe('createBackendUsers', () => {
       await checkAllDocsForIndex(index);
     });
   }
-})
+});

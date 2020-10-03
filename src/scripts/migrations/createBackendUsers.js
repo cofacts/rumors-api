@@ -36,20 +36,13 @@ import 'dotenv/config';
 import client from 'util/client';
 import Bulk from 'util/bulk';
 import rollbar from 'rollbarInstance';
-import { google } from 'googleapis';
-import yargs from 'yargs';
 import {
   generatePseudonym,
   generateOpenPeepsAvatar,
-  encodeAppId,
-  sha256,
   AvatarTypes,
   convertAppUserIdToUserId,
 } from 'graphql/models/User';
 import _ from 'lodash';
-import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import fixtures from './__fixtures__/createBackendUsers';
-import { debug } from 'dotenv/lib/env-options';
 
 const AGG_NAME = 'userIdPair';
 
@@ -107,21 +100,25 @@ const backendUserQuery = {
     must_not: [
       { term: { appId: 'WEBSITE' } },
       { term: { appId: 'DEVELOPMENT_FRONTEND' } },
-
-    ]
-  }
+    ],
+  },
 };
 
-const isBackendApp = appId => appId !== 'WEBSITE' && appId !== 'DEVELOPMENT_FRONTEND';
+const isBackendApp = appId =>
+  appId !== 'WEBSITE' && appId !== 'DEVELOPMENT_FRONTEND';
 
 const userReferenceInSchema = {
   articlecategoryfeedbacks: {
     fields: [],
-    genId: source => `${source.articleId}__${source.categoryId}__${source.userId}__${source.appId}`
+    genId: source =>
+      `${source.articleId}__${source.categoryId}__${source.userId}__${source.appId
+      }`,
   },
   articlereplyfeedbacks: {
     fields: [],
-    genId: source => `${source.articleId}__${source.replyId}__${source.userId}__${source.appId}`
+    genId: source =>
+      `${source.articleId}__${source.replyId}__${source.userId}__${source.appId
+      }`,
   },
   articles: {
     fields: ['references', 'articleReplies', 'articleCategories'],
@@ -129,25 +126,23 @@ const userReferenceInSchema = {
   replies: { fields: [] },
   replyrequests: {
     fields: ['feedbacks'],
-    genId: source => `${source.articleId}__${source.userId}__${source.appId}`
+    genId: source => `${source.articleId}__${source.userId}__${source.appId}`,
   },
 };
 
 const emptyUserIdAllowedFields = { articles: ['articleCategories'] };
 
 const logError = error => {
-  debugger;
   console.error(`createBackendUserError: ${error}`);
-  // rollbar.error(`createBackendUserError: ${error}`);
+  rollbar.error(`createBackendUserError: ${error}`);
 };
 
 export default class CreateBackendUsers {
-
   // TODO: maybe not hardcode version number?
   constructor({ batchSize, schemaVersion, aggBatchSize } = {}) {
     this.userIdMap = {}; // {[appID]: {[appUserId]: dbUserId}}
     this.reversedUserIdMap = {}; // {[dbUserId]: [appId, appUserId]};
-    this.batchSize = batchSize ?? BATCH_SIZE
+    this.batchSize = batchSize ?? BATCH_SIZE;
     this.version = schemaVersion ?? SCHEMA_VERSION;
     this.aggBatchSize = aggBatchSize ?? AGG_BATCH_SIZE;
     this.bulk = new Bulk(client, this.batchSize);
@@ -155,7 +150,9 @@ export default class CreateBackendUsers {
     this.emptyUserIdAllowedFields = {};
     for (const index in emptyUserIdAllowedFields) {
       for (const field of emptyUserIdAllowedFields[index]) {
-        this.emptyUserIdAllowedFields[`${this.getIndexName(index)}__${field}`] = true;
+        this.emptyUserIdAllowedFields[
+          `${this.getIndexName(index)}__${field}`
+        ] = true;
       }
     }
   }
@@ -183,13 +180,15 @@ export default class CreateBackendUsers {
   // buckets is an array of {
   //  key: {
   //    [AGG_NAME]: "{appId:[appId], userId:[userId]}" || "{error:[errorMessage]}"
-  //  }, 
+  //  },
   //  doc_count: [doc_count]
   // }
   async processUsers(buckets) {
     let bulkOperations = [];
     const now = new Date().toISOString();
-    for (const { key: { [AGG_NAME]: userIdPair } } of buckets) {
+    for (const {
+      key: { [AGG_NAME]: userIdPair },
+    } of buckets) {
       if (userIdPair === '') {
         continue;
       }
@@ -213,7 +212,11 @@ export default class CreateBackendUsers {
           _.set(this.reversedUserIdMap, dbUserId, [appId, userId]);
           bulkOperations.push(
             {
-              index: { _index: this.getIndexName('users'), _type: 'doc', _id: dbUserId },
+              index: {
+                _index: this.getIndexName('users'),
+                _type: 'doc',
+                _id: dbUserId,
+              },
             },
             {
               name: generatePseudonym(),
@@ -227,10 +230,9 @@ export default class CreateBackendUsers {
           );
         }
       }
-    };
+    }
     await this.bulk.push(bulkOperations, bulkOperations.length / 2);
   }
-
 
   // response is of the form {
   //   aggregations: { [AGG_NAME]: {
@@ -261,8 +263,10 @@ export default class CreateBackendUsers {
                         script: {
                           id: SCRIPT_ID,
                           params: {
-                            emptyUserIdAllowedFields: this.emptyUserIdAllowedFields,
-                            additionalFields: userReferenceInSchema[indexName].fields,
+                            emptyUserIdAllowedFields: this
+                              .emptyUserIdAllowedFields,
+                            additionalFields:
+                              userReferenceInSchema[indexName].fields,
                           },
                         },
                       },
@@ -277,8 +281,10 @@ export default class CreateBackendUsers {
       await this.processUsers(buckets);
       return lastKey;
     } catch (e) {
-      debugger
-      logError(`error while fetching users for indexName:${indexName} with pageIndex ${pageIndex}`);
+      debugger;
+      logError(
+        `error while fetching users for indexName:${indexName} with pageIndex ${pageIndex}`
+      );
       logError(e);
     }
   }
@@ -298,13 +304,13 @@ export default class CreateBackendUsers {
    * @param {String} indexName The name of the index to fetch
    * @yields {Object} the document
    */
-  async * getAllDocs(indexName, hasAdditionalUserFields = false) {
+  async *getAllDocs(indexName, hasAdditionalUserFields = false) {
     let resp = await client.search({
       index: this.getIndexName(indexName),
       scroll: SCROLL_TIMEOUT,
       size: this.batchSize,
       body: {
-        query: hasAdditionalUserFields ? matchAllQuery : backendUserQuery
+        query: hasAdditionalUserFields ? matchAllQuery : backendUserQuery,
       },
     });
 
@@ -326,18 +332,22 @@ export default class CreateBackendUsers {
     }
   }
 
-
   getUserIds(appId, userId) {
-    return isBackendApp(appId) ? {
-      userId: _.get(this.userIdMap, [appId, userId], userId),
-      appUserId: userId
-    } : { userId };
+    return isBackendApp(appId)
+      ? {
+        userId: _.get(this.userIdMap, [appId, userId], userId),
+        appUserId: userId,
+      }
+      : { userId };
   }
 
   async updateAllDocs() {
     for (const indexName in userReferenceInSchema) {
       const { genId, fields } = userReferenceInSchema[indexName];
-      for await (const doc of this.getAllDocs(indexName, fields && fields.length > 0)) {
+      for await (const doc of this.getAllDocs(
+        indexName,
+        fields && fields.length > 0
+      )) {
         const { appId, userId } = doc._source;
         let newFields = {};
 
@@ -346,34 +356,37 @@ export default class CreateBackendUsers {
           if (doc._source[field]) {
             newFields[field] = doc._source[field].map(entry => ({
               ...entry,
-              ...this.getUserIds(entry.appId, entry.userId)
-            }))
+              ...this.getUserIds(entry.appId, entry.userId),
+            }));
           }
         }
         if (genId !== undefined) {
-          await this.bulk.push([
-            {
-              delete: {
-                _index: doc._index,
-                _type: 'doc',
-                _id: doc._id,
+          await this.bulk.push(
+            [
+              {
+                delete: {
+                  _index: doc._index,
+                  _type: 'doc',
+                  _id: doc._id,
+                },
               },
-            },
-            {
-              index: {
-                _index: doc._index,
-                _type: 'doc',
-                _id: genId({ ...doc._source, ...newFields })
+              {
+                index: {
+                  _index: doc._index,
+                  _type: 'doc',
+                  _id: genId({ ...doc._source, ...newFields }),
+                },
               },
-            },
-            {
-              ...doc._source,
-              ...newFields
-            }], 2
+              {
+                ...doc._source,
+                ...newFields,
+              },
+            ],
+            2
           );
         } else {
-          await this.bulk.push(
-            [{
+          await this.bulk.push([
+            {
               update: {
                 _index: doc._index,
                 _type: 'doc',
@@ -381,9 +394,9 @@ export default class CreateBackendUsers {
               },
             },
             {
-              doc: newFields
-            }]
-          );
+              doc: newFields,
+            },
+          ]);
         }
       }
     }
@@ -397,7 +410,7 @@ export default class CreateBackendUsers {
     await this.bulk.flush();
     // update analytics
   }
-};
+}
 
 async function main() {
   try {
@@ -409,8 +422,7 @@ async function main() {
       aggBatchSize: 5
     }).execute();
     */
-  }
-  catch (e) {
+  } catch (e) {
     logError(e);
   }
 }

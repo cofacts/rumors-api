@@ -11,7 +11,10 @@ export default class Bulk {
   async push(items, count = 1) {
     this._operations.push(...items);
     this.actionsCount += count;
-    if (this.actionCounts > this.batch_size || this._operations.length > 3 * this.batch_size) {
+    if (
+      this.actionCounts > this.batch_size ||
+      this._operations.length > 3 * this.batch_size
+    ) {
       await this.flush();
     }
     return this;
