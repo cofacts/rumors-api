@@ -2,13 +2,12 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import CreateBackendUsers from '../createBackendUsers';
 import fixtures from '../__fixtures__/createBackendUsers';
-
-jest.setTimeout(8000);
+import { sortBy } from 'lodash';
+jest.setTimeout(30000);
 
 const checkAllDocsForIndex = async index => {
   let res = {};
   try {
-    console.log(`checking ${index}`);
     const {
       body: {
         hits: { hits: docs },
@@ -31,8 +30,7 @@ const checkAllDocsForIndex = async index => {
   }
 
   const expected = fixtures.expectedResults[index];
-
-  expect(Object.keys(res)).toStrictEqual(Object.keys(expected));
+  expect(sortBy(Object.keys(res))).toStrictEqual(sortBy(Object.keys(expected)));
 
   expect(res).toMatchObject(expected);
 };
@@ -44,6 +42,7 @@ const indices = [
   'articles',
   'replies',
   'replyrequests',
+  'analytics'
 ];
 
 describe('createBackendUsers', () => {
@@ -52,6 +51,7 @@ describe('createBackendUsers', () => {
     await new CreateBackendUsers({
       batchSize: 20,
       aggBatchSize: 5,
+      analyticsBatchSize: 50
     }).execute();
   });
   afterAll(async () => {

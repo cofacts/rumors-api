@@ -87,6 +87,7 @@ const AGG_SCRIPT = `
 
 const BATCH_SIZE = 10000;
 const AGG_BATCH_SIZE = 10000;
+const ANALYTICS_BATCH_SIZE = 10000;
 const SCROLL_TIMEOUT = '30s';
 const SCRIPT_ID = 'appIdUserIdAggScript';
 const SCHEMA_VERSION = 'v1_0_2';
@@ -137,12 +138,13 @@ const logError = error => {
 
 export default class CreateBackendUsers {
   // TODO: maybe not hardcode version number?
-  constructor({ batchSize, schemaVersion, aggBatchSize } = {}) {
+  constructor({ batchSize, schemaVersion, aggBatchSize, analyticsBatchSize } = {}) {
     this.userIdMap = {}; // {[appID]: {[appUserId]: dbUserId}}
     this.reversedUserIdMap = {}; // {[dbUserId]: [appId, appUserId]};
     this.batchSize = batchSize ?? BATCH_SIZE;
     this.version = schemaVersion ?? SCHEMA_VERSION;
     this.aggBatchSize = aggBatchSize ?? AGG_BATCH_SIZE;
+    this.analyticsBatchSize = analyticsBatchSize ?? ANALYTICS_BATCH_SIZE;
     this.bulk = new Bulk(client, this.batchSize);
 
     this.emptyUserIdAllowedFields = {};
@@ -173,6 +175,7 @@ export default class CreateBackendUsers {
     } catch (e) {
       logError(e);
     }
+    return this;
   }
 
   // buckets is an array of {
@@ -230,6 +233,7 @@ export default class CreateBackendUsers {
       }
     }
     await this.bulk.push(bulkOperations, bulkOperations.length / 2);
+    return this;
   }
 
   // response is of the form {
@@ -293,6 +297,7 @@ export default class CreateBackendUsers {
         pageIndex = await this.fetchUniqueUsers(indexName, pageIndex);
       } while (pageIndex !== undefined);
     }
+    return this;
   }
 
   /**
@@ -397,6 +402,109 @@ export default class CreateBackendUsers {
         }
       }
     }
+    return this;
+  }
+
+  async fetchUniqueDocs(docType, docIndex, pageIndex = undefined) {
+    try {
+      const {
+        body: {
+          aggregations: {
+            docIds: { after_key: afterKey, buckets },
+          },
+        },
+      } = await client.search({
+        index: this.getIndexName('analytics'),
+        size: 0,
+        body: {
+          query: { term: { type: docType } },
+          aggs: {
+            docIds: {
+              composite: {
+                size: this.analyticsBatchSize,
+                after: pageIndex,
+                sources: [
+                  { docId: { terms: { field: 'docId' } } }
+                ],
+              },
+            },
+          },
+        },
+      });
+      const {
+        body: {
+          hits: { hits: docs },
+        },
+      } = await client.search({
+        index: docIndex,
+        size: this.analyticsBatchSize * 2,
+        body: {
+          query: {
+            ids: { values: buckets.map(bucket => bucket.key.docId) },
+          },
+          _source: {
+            includes: ['userId', 'appId'],
+          },
+        },
+      });
+      await this.updateAnalyticsForDocs(docType, docs);
+      return afterKey;
+    } catch (e) {
+      logError(
+        `error while updating analytics type ${docType} with pageIndex ${pageIndex ? JSON.stringify(pageIndex) : pageIndex}`
+      );
+      logError(e);
+    }
+  }
+
+  async updateAnalyticsForDocs(docType, docs) {
+    let totalUpdated = 0;
+    for (const doc of docs) {
+      {
+        try {
+          const requestBody = {
+            script: {
+              source: `ctx._source.docAppId = params.docAppId; ctx._source.docUserId = params.docUserId;`,
+              lang: 'painless',
+              params: {
+                docAppId: doc._source.appId,
+                docUserId: doc._source.userId
+              }
+            },
+            query: {
+              bool: {
+                must: [
+                  { term: { type: docType } },
+                  { term: { docId: doc._id } }
+                ]
+              }
+            }
+          };
+          const { body: { updated } } = await client.updateByQuery({
+            index: 'analytics',
+            body: requestBody,
+            refresh: 'true'
+          });
+          totalUpdated += updated;
+        }
+        catch (e) {
+          logError(`error trying to update analytics user for doc ${docType} ${doc._id}`);
+          logError(e);
+        }
+      }
+    }
+    console.log(`${totalUpdated} updated for ${docs.length} ${docType} analytics docs ${new Date().toISOString()}`);
+    return this;
+  };
+
+  async updateAnalytics() {
+    for (const [docType, docIndex] of [['article', 'articles'], ['reply', 'replies']]) {
+      let pageIndex;
+      do {
+        pageIndex = await this.fetchUniqueDocs(docType, docIndex, pageIndex);
+      } while (pageIndex !== undefined);
+    }
+    return this;
   }
 
   async execute() {
@@ -405,26 +513,19 @@ export default class CreateBackendUsers {
     await this.bulk.flush();
     await this.updateAllDocs();
     await this.bulk.flush();
-    // update analytics
+    await this.updateAnalytics()
+    return this;
   }
 }
 
 async function main() {
   try {
     await new CreateBackendUsers().execute();
-    /*
-    await loadFixtures(fixtures.fixturesToLoad);
-      await new CreateBackendUsers({
-      batchSize: 10,
-      aggBatchSize: 5
-    }).execute();
-    */
   } catch (e) {
     logError(e);
   }
 }
 
 if (require.main === module) {
-  console.log('I dont belong here!!!!!!!!!!!!!!!!!!!');
   main();
 }
