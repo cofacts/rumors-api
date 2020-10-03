@@ -86,7 +86,7 @@ async function createNewArticle({
         hyperlinks: [],
       },
     },
-    refresh: true, // Make sure the data is indexed when we create ReplyRequest
+    refresh: 'true', // Make sure the data is indexed when we create ReplyRequest
   });
 
   return articleId;

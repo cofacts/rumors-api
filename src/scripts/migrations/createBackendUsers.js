@@ -527,6 +527,9 @@ export default class CreateBackendUsers {
     await this.bulk.flush();
     await this.updateAllDocs();
     await this.bulk.flush();
+
+    await client.indices.refresh({ index: 'replies' });
+    await client.indices.refresh({ index: 'articles' });
     await this.updateAnalytics();
     return this;
   }

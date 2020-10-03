@@ -61,6 +61,6 @@ export async function resetFrom(fixtureMap, key) {
     body: {
       doc: fixtureMap[key],
     },
-    refresh: true,
+    refresh: 'true',
   });
 }
