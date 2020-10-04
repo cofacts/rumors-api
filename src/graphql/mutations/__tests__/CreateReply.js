@@ -1,11 +1,7 @@
 jest.mock('util/grpc');
 
 import gql from 'util/GraphQL';
-import {
-  loadFixtures,
-  unloadFixtures,
-  resetFrom
-} from 'util/fixtures';
+import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateReply';

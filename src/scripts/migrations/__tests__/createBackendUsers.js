@@ -1,4 +1,4 @@
-import { loadFixtures, unloadFixtures, clearIndices } from 'util/fixtures';
+import { loadFixtures, clearIndices } from 'util/fixtures';
 import client from 'util/client';
 import CreateBackendUsers from '../createBackendUsers';
 import fixtures from '../__fixtures__/createBackendUsers';
