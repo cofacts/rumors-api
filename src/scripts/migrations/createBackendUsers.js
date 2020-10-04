@@ -283,7 +283,7 @@ export default class CreateBackendUsers {
       });
       console.log(`processing ${buckets.length} ${indexName} users`);
       await this.processUsers(buckets);
-      console.log(`finished processing ${buckets.length} ${indexName} users`);
+      console.log(`finished processing ${buckets.length} ${indexName} users, lastkey=${lastKey ? JSON.stringify(lastKey) : null}`);
       return lastKey;
     } catch (e) {
       logError(
@@ -340,9 +340,9 @@ export default class CreateBackendUsers {
   getUserIds(appId, userId) {
     return isBackendApp(appId)
       ? {
-          userId: get(this.userIdMap, [appId, userId], userId),
-          appUserId: userId,
-        }
+        userId: get(this.userIdMap, [appId, userId], userId),
+        appUserId: userId,
+      }
       : { userId };
   }
 
@@ -453,8 +453,7 @@ export default class CreateBackendUsers {
       return afterKey;
     } catch (e) {
       logError(
-        `error while updating analytics type ${docType} with pageIndex ${
-          pageIndex ? JSON.stringify(pageIndex) : null
+        `error while updating analytics type ${docType} with pageIndex ${pageIndex ? JSON.stringify(pageIndex) : null
         }`
       );
       logError(e);
@@ -494,8 +493,7 @@ export default class CreateBackendUsers {
           totalUpdated += updated;
         } catch (e) {
           logError(
-            `error trying to update analytics user for doc ${docType} ${
-              doc._id
+            `error trying to update analytics user for doc ${docType} ${doc._id
             }`
           );
           logError(e);
