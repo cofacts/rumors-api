@@ -54,8 +54,8 @@ describe('createBackendUsers', () => {
       console.log('fixture loaded');
 
       await new CreateBackendUsers({
-        batchSize: 50,
-        aggBatchSize: 10,
+        batchSize: 100,
+        aggBatchSize: 100,
         analyticsBatchSize: 100,
       }).execute();
       console.log('script executed');
