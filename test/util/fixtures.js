@@ -31,11 +31,7 @@ export async function loadFixtures(fixtureMap) {
 }
 
 export async function unloadFixtures(fixtureMap) {
-  unloadDocs(Object.keys(fixtureMap));
-}
-
-export async function unloadDocs(keys) {
-  const body = keys.map(key => {
+  const body = Object.keys(fixtureMap).map(key => {
     const [, _index, _type, _id] = key.split('/');
     return { delete: { _index, _type, _id } };
   });
@@ -63,4 +59,18 @@ export async function resetFrom(fixtureMap, key) {
     },
     refresh: 'true',
   });
+}
+
+export async function clearIndices(indices) {
+  for (const index of indices) {
+    await client.deleteByQuery({
+      index,
+      body: {
+        query: {
+          match_all: {},
+        },
+      },
+      refresh: 'true'
+    })
+  }
 }

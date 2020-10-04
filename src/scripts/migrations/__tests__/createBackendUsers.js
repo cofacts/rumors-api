@@ -1,4 +1,4 @@
-import { loadFixtures, unloadFixtures } from 'util/fixtures';
+import { loadFixtures, unloadFixtures, clearIndices } from 'util/fixtures';
 import client from 'util/client';
 import CreateBackendUsers from '../createBackendUsers';
 import fixtures from '../__fixtures__/createBackendUsers';
@@ -41,6 +41,7 @@ const indices = [
 
 describe('createBackendUsers', () => {
   beforeAll(async () => {
+    await clearIndices(indices);
     await loadFixtures(fixtures.fixturesToLoad);
     await new CreateBackendUsers({
       batchSize: 50,
@@ -52,9 +53,7 @@ describe('createBackendUsers', () => {
     }
   });
   afterAll(async () => {
-    for (const index of indices) {
-      await unloadFixtures(fixtures.expectedResults[index]);
-    }
+    await clearIndices(indices);
   });
   for (const index of indices) {
     it(`All ${index} docs have been created/updated accordingly`, async () => {

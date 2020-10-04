@@ -1,5 +1,5 @@
 import MockDate from 'mockdate';
-import { loadFixtures, unloadFixtures, unloadDocs } from 'util/fixtures';
+import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/auth';
 import { verifyProfile } from '../auth';
 
@@ -50,6 +50,5 @@ describe('verifyProfile', () => {
     MockDate.reset();
 
     expect(newUser).toMatchSnapshot();
-    await unloadDocs([`/users/doc/${id}`]);
   });
 });
