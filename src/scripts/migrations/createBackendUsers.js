@@ -244,7 +244,13 @@ export default class CreateBackendUsers {
   // }}}
   async fetchUniqueUsers(indexName, pageIndex = undefined) {
     try {
-      const res = await client.search({
+      const {
+        body: {
+          aggregations: {
+            [AGG_NAME]: { buckets },
+          },
+        },
+      } = await client.search({
         index: this.getIndexName(indexName),
         size: 0,
         body: {
@@ -275,22 +281,11 @@ export default class CreateBackendUsers {
           },
         },
       });
-      const {
-        body: {
-          aggregations: {
-            [AGG_NAME]: { after_key: lastKey, buckets },
-          },
-        },
-      } = res;
-      console.log(`${JSON.stringify(res, null, 2)}`);
-      console.log(`processing ${buckets.length} ${indexName} users`);
-      await this.processUsers(buckets);
-      console.log(
-        `finished processing ${buckets.length} ${indexName} users, lastkey=${
-          lastKey ? JSON.stringify(lastKey) : null
-        }`
-      );
-      return lastKey;
+      if (buckets.length > 0) {
+        const lastKey = { ...buckets[buckets.length - 1].key };
+        await this.processUsers(buckets);
+        return lastKey;
+      }
     } catch (e) {
       logError(
         `error while fetching users for indexName:${indexName} with pageIndex ${pageIndex}`
@@ -420,7 +415,7 @@ export default class CreateBackendUsers {
       const {
         body: {
           aggregations: {
-            docIds: { after_key: afterKey, buckets },
+            docIds: { buckets },
           },
         },
       } = await client.search({
@@ -439,24 +434,27 @@ export default class CreateBackendUsers {
           },
         },
       });
-      const {
-        body: {
-          hits: { hits: docs },
-        },
-      } = await client.search({
-        index: docIndex,
-        size: this.analyticsBatchSize * 2,
-        body: {
-          query: {
-            ids: { values: buckets.map(bucket => bucket.key.docId) },
+      if (buckets.length > 0) {
+        const {
+          body: {
+            hits: { hits: docs },
           },
-          _source: {
-            includes: ['userId', 'appId'],
+        } = await client.search({
+          index: docIndex,
+          size: this.analyticsBatchSize,
+          body: {
+            query: {
+              ids: { values: buckets.map(bucket => bucket.key.docId) },
+            },
+            _source: {
+              includes: ['userId', 'appId'],
+            },
           },
-        },
-      });
-      await this.updateAnalyticsForDocs(docType, docs);
-      return afterKey;
+        });
+        const lastKey = { ...buckets[buckets.length - 1].key };
+        await this.updateAnalyticsForDocs(docType, docs);
+        return lastKey;
+      }
     } catch (e) {
       logError(
         `error while updating analytics type ${docType} with pageIndex ${
