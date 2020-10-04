@@ -281,7 +281,9 @@ export default class CreateBackendUsers {
           },
         },
       });
+      console.log(`processing ${buckets.length} ${indexName} users`);
       await this.processUsers(buckets);
+      console.log(`finished processing ${buckets.length} ${indexName} users`);
       return lastKey;
     } catch (e) {
       logError(
