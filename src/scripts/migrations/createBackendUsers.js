@@ -180,7 +180,6 @@ export default class CreateBackendUsers {
     } catch (e) {
       logError(e);
     }
-    return this;
   }
 
   // buckets is an array of {
@@ -236,7 +235,6 @@ export default class CreateBackendUsers {
       }
     }
     await this.bulk.push(bulkOperations, bulkOperations.length / 2);
-    return this;
   }
 
   // response is of the form {
@@ -527,11 +525,11 @@ export default class CreateBackendUsers {
     await this.bulk.flush();
     await this.updateAllDocs();
     await this.bulk.flush();
+    console.log(JSON.stringify(this.reversedUserIdMap, null, 2));
 
     await client.indices.refresh({ index: 'replies' });
     await client.indices.refresh({ index: 'articles' });
     await this.updateAnalytics();
-    return this;
   }
 }
 
