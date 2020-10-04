@@ -2,18 +2,18 @@
   A script that loads all documents in db and create user for all occurrences of non-web users.
 
   The followings are current references to user records in db:
-    - analytics: (1825k)
+    - analytics: (~1825k entries as of 2020/10)
       - (docUserId, docAppId) via docId (reply/article)
 
-    - articlecategoryfeedbacks: (less than 1k)
+    - articlecategoryfeedbacks: (less than 1k  entries as of 2020/10)
       id = ${articleId}__${categoryId}__${userId}__${appId},
       - (userId, appId)
 
-    - articlereplyfeedbacks: (~179k)
+    - articlereplyfeedbacks: (~179k entries as of 2020/10)
       id = ${articleId}__${replyId}__${userId}__${appId},
       - (userId, appId)
 
-    - articles:  (~ 40k)
+    - articles:  (~ 40k entries as of 2020/10)
       - (userId, appId)
       - [references]: 
           - (userId, appId)
@@ -22,10 +22,10 @@
       - [articleCategories]:
           - (userId, appId)
 
-    - replies: (~42k)
+    - replies: (~42k entries as of 2020/10)
       - (userId, appId)
 
-    - replyrequests: (~61k)
+    - replyrequests: (~61k entries as of 2020/10)
       id = ${articleId}__${userId}__${appId}
       - (userId, appId)
       - [feedbacks]:
@@ -506,9 +506,7 @@ export default class CreateBackendUsers {
         }
       }
     }
-    console.log(
-      `${totalUpdated} updated for ${docs.length} ${docType} analytics docs`
-    );
+    `${totalUpdated} updated for ${docs.length} ${docType} analytics docs`;
     return this;
   }
 
@@ -531,7 +529,6 @@ export default class CreateBackendUsers {
     await this.bulk.flush();
     await this.updateAllDocs();
     await this.bulk.flush();
-    console.log(JSON.stringify(this.reversedUserIdMap, null, 2));
 
     await client.indices.refresh({ index: 'replies' });
     await client.indices.refresh({ index: 'articles' });

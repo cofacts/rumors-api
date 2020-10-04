@@ -183,8 +183,15 @@ HTTP request.
 
 ### Generate User instances for backend users
 
+First, make sure `.env` is configured so that the correct DB is specified, you might want to create a snapshot before running the script.
+Then at project root, run:
+```
+$ node_modules/.bin/babel-node src/scripts/migrations/createBackendUsers.js
+```
 
-
+This script would scan for all the user references in `analytics`, `articlecategoryfeedbacks`, `articlereplyfeedbacks`, 
+`articles`, `replies`, `replyrequests`, create users for those that are not already in db and updates all the docs.
+See the comments at the top of the script for how users are referenced in each doc.
 
 
 ## Troubleshooting 

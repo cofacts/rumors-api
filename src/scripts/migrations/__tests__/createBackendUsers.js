@@ -3,7 +3,6 @@ import client from 'util/client';
 import CreateBackendUsers from '../createBackendUsers';
 import fixtures from '../__fixtures__/createBackendUsers';
 import { sortBy } from 'lodash';
-jest.setTimeout(120000);
 
 const checkAllDocsForIndex = async index => {
   let res = {};
@@ -43,41 +42,31 @@ const indices = [
 let dbStates = {};
 describe('createBackendUsers', () => {
   beforeAll(async () => {
-    try {
-      console.log('in beforeAll');
-      dbStates = await saveStateForIndices(indices);
-      console.log('state loaded');
-      console.log(JSON.stringify(dbStates, null, 2));
-      await clearIndices(indices);
-      console.log('indices cleared');
-      await loadFixtures(fixtures.fixturesToLoad);
-      console.log('fixture loaded');
+    // storing the current db states to restore to after the test is completed
+    dbStates = await saveStateForIndices(indices);
+    await clearIndices(indices);
+    await loadFixtures(fixtures.fixturesToLoad);
 
-      await new CreateBackendUsers({
-        batchSize: 50,
-        aggBatchSize: 10,
-        analyticsBatchSize: 100,
-      }).execute();
-      console.log('script executed');
+    await new CreateBackendUsers({
+      batchSize: 50,
+      aggBatchSize: 10,
+      analyticsBatchSize: 100,
+    }).execute();
 
-      for (const index of indices) {
-        await client.indices.refresh({ index });
-      }
-      console.log('indices refreshed');
-    } catch (e) {
-      console.log(e);
+    // refreshing all indices to ensure test consistency
+    for (const index of indices) {
+      await client.indices.refresh({ index });
     }
   });
+
   afterAll(async () => {
     await clearIndices(indices);
-
+    // restore db states to prevent affecting other tests
     await loadFixtures(dbStates);
   });
 
   for (const index of indices) {
     it(`All ${index} docs have been created/updated accordingly`, async () => {
-      console.log('testing ' + index);
-
       await checkAllDocsForIndex(index);
     });
   }
