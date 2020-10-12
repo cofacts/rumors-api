@@ -15,9 +15,10 @@ import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
 import { AUTH_ERROR_MSG } from './graphql/util';
 import CookieStore from './CookieStore';
-
+import { isBackendApp } from 'graphql/models/User';
 import { loginRouter, authRouter } from './auth';
 import rollbar from './rollbarInstance';
+import { createOrUpdateBackendUser } from './graphql/mutations/CreateOrUpdateUser';
 
 const app = new Koa();
 const router = Router();
@@ -82,18 +83,26 @@ const apolloServer = new ApolloServer({
   schema,
   introspection: true, // Allow introspection in production as well
   playground: true,
-  context: ({ ctx }) => ({
-    loaders: new DataLoaders(), // new loaders per request
-    user: ctx.state.user,
+  context: ({ ctx }) => {
+    let userId;
+    if (isBackendApp(ctx.appId)) {
+      userId = createOrUpdateBackendUser({
+        appUserId: ctx.query.userId,
+        appId: ctx.appId,
+      }).userId;
+    } else {
+      userId = ctx.state.user?.id;
+    }
+    return {
+      loaders: new DataLoaders(), // new loaders per request
+      user: ctx.state.user,
 
-    // userId-appId pair
-    //
-    userId:
-      ctx.appId === 'WEBSITE' || ctx.appId === 'DEVELOPMENT_FRONTEND'
-        ? (ctx.state.user || {}).id
-        : ctx.query.userId,
-    appId: ctx.appId,
-  }),
+      // userId-appId pair
+      //
+      userId,
+      appId: ctx.appId,
+    };
+  },
   formatError(err) {
     // make web clients know they should login
     //

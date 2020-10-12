@@ -201,7 +201,7 @@ export default class CreateBackendUsers {
       if (error) {
         logError(error);
       } else if (isBackendApp(appId)) {
-        const dbUserId = convertAppUserIdToUserId(appId, userId);
+        const dbUserId = convertAppUserIdToUserId({ appId, appUserId: userId });
         const appUserId = get(this.reversedUserIdMap, [dbUserId, 1]);
         // if the hashed id already exists, check for collision
         if (appUserId !== undefined) {

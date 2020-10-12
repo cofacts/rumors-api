@@ -39,6 +39,9 @@ export const AvatarTypes = {
   OpenPeeps: 'OpenPeeps',
 };
 
+export const isBackendApp = appId =>
+  appId !== 'WEBSITE' && appId !== 'DEVELOPMENT_FRONTEND';
+
 /**
  * Generates data for open peeps avatar.
  */
@@ -70,6 +73,7 @@ export const encodeAppId = appId =>
     .digest('base64')
     .replace(/[+/]/g, '')
     .substr(0, 5);
+
 export const sha256 = value =>
   crypto
     .createHash('sha256')
@@ -84,7 +88,7 @@ export const sha256 = value =>
  * @param {string} appId - app ID
  * @returns {string} the id used to index `user` in db
  */
-export const convertAppUserIdToUserId = (appId, appUserId) => {
+export const convertAppUserIdToUserId = ({ appId, appUserId }) => {
   return `${encodeAppId(appId)}_${sha256(appUserId)}`;
 };
 
@@ -129,6 +133,7 @@ const User = new GraphQLObjectType({
     email: currentUserOnlyField(GraphQLString),
     name: { type: GraphQLString },
     avatarUrl: avatarResolver(),
+    //    avatarData: { type: GraphQLString },
 
     facebookId: currentUserOnlyField(GraphQLString),
     githubId: currentUserOnlyField(GraphQLString),
@@ -194,21 +199,34 @@ const User = new GraphQLObjectType({
     },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
+    //    lastActiveAt: { type: GraphQLString },
   }),
 });
 
 export default User;
 
-export const userFieldResolver = (
+export const userFieldResolver = async (
   { userId, appId },
   args,
   { loaders, ...context }
 ) => {
-  // If the root document is created by website users, we can resolve user from userId.
-  //
-  if (appId === 'WEBSITE')
-    return loaders.docLoader.load({ index: 'users', id: userId });
+  // If the root document is created by website users or if the userId is already converted to db userId, 
+  // we can resolve user from userId.
+  // 
+  if (!isBackendApp(appId))
+    return await loaders.docLoader.load({ index: 'users', id: userId });
 
+  /*
+  if (userId && userId.substr(0, 6) === `${encodeAppId(appId)}_`) {
+    return await loaders.docLoader.load({ index: 'users', id: userId });
+  }
+  
+
+  const user = await loaders.docLoader.load({ index: 'users', id: convertAppUserIdToUserId({ appId, appUserId: userId }) });
+  if (user) return user;
+  */
+
+  // Todo: some unit tests are depending on this code block, need to clean up those tests and then remove the following lines.
   // If the user comes from the same client as the root document, return the user id.
   //
   if (context.appId === appId) return { id: userId };

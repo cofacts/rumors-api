@@ -363,7 +363,6 @@ describe('fetchStatsFromGA', () => {
       afterEach(() => {
         upsertDocStatsMock.mockReset();
       });
-
       it('should call bulkUpdates with right params', async () => {
         await fetchStatsFromGA.processReport(
           'WEB',
