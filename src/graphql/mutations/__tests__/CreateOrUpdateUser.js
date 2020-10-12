@@ -6,52 +6,36 @@ import fixtures from '../__fixtures__/CreateOrUpdateUser';
 import rollbar from 'rollbarInstance';
 import { convertAppUserIdToUserId } from 'graphql/models/User';
 
-
 jest.mock('../../models/User', () => {
   const UserModel = jest.requireActual('../../models/User');
   return {
     ...UserModel,
     __esModule: true,
-    generatePseudonym: jest.fn().mockReturnValue('Friendly Neighborhood Spider Man'),
-    generateOpenPeepsAvatar: jest.fn().mockReturnValue({ 'accessory': 'mask' }),
-    convertAppUserIdToUserId: jest.spyOn(UserModel, 'convertAppUserIdToUserId')
-  }
+    generatePseudonym: jest
+      .fn()
+      .mockReturnValue('Friendly Neighborhood Spider Man'),
+    generateOpenPeepsAvatar: jest.fn().mockReturnValue({ accessory: 'mask' }),
+    convertAppUserIdToUserId: jest.spyOn(UserModel, 'convertAppUserIdToUserId'),
+  };
 });
 
 jest.mock('../../../rollbarInstance', () => ({
   __esModule: true,
-  default: { error: jest.fn() }
-}))
+  default: { error: jest.fn() },
+}));
 
 let dbStates = {};
 
 describe('CreateOrUpdateUser', () => {
   beforeAll(async () => {
-    // dbStates = await saveStateForIndices(['users']);
+    dbStates = await saveStateForIndices(['users']);
     await loadFixtures(fixtures);
   });
 
   afterAll(async () => {
-    await client.delete({
-      index: 'users',
-      type: 'doc',
-      id: convertAppUserIdToUserId({
-        appUserId: 'testUser2',
-        appId: 'TEST_BACKEND',
-      }),
-    });
-    await client.delete({
-      index: 'users',
-      type: 'doc',
-      id: convertAppUserIdToUserId({
-        appUserId: 'testUser1',
-        appId: 'TEST_BACKEND',
-      }),
-    });
-
-    //await clearIndices(['users']);
+    await clearIndices(['users']);
     // restore db states to prevent affecting other tests
-    // await loadFixtures(dbStates);
+    await loadFixtures(dbStates);
   });
 
   it('creates backend user if not existed', async () => {
@@ -65,7 +49,7 @@ describe('CreateOrUpdateUser', () => {
           id
           name
           createdAt
-          updatedAt          
+          updatedAt
         }
       }
     `({}, { userId, appId });

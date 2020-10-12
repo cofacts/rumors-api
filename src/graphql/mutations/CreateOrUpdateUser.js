@@ -52,8 +52,9 @@ export async function createOrUpdateBackendUser({ appUserId, appId }) {
   const isCreated = result === 'created';
   const user = processMeta({ ...userFound, _id: dbUserId });
   if (!isCreated && (user.appId !== appId || user.appUserId !== appUserId)) {
-    const errorMessage = `collision found! ${user.appUserId
-      } and ${appUserId} both hash to ${dbUserId}`;
+    const errorMessage = `collision found! ${
+      user.appUserId
+    } and ${appUserId} both hash to ${dbUserId}`;
     console.log(errorMessage);
     rollbar.error(`createBackendUserError: ${errorMessage}`);
   }

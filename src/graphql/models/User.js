@@ -210,9 +210,9 @@ export const userFieldResolver = async (
   args,
   { loaders, ...context }
 ) => {
-  // If the root document is created by website users or if the userId is already converted to db userId, 
+  // If the root document is created by website users or if the userId is already converted to db userId,
   // we can resolve user from userId.
-  // 
+  //
   if (!isBackendApp(appId))
     return await loaders.docLoader.load({ index: 'users', id: userId });
 

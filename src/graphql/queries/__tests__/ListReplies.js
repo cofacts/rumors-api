@@ -3,10 +3,7 @@ import gql from 'util/GraphQL';
 import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListReplies';
 
-const indices = [
-  'replies',
-  'urls',
-];
+const indices = ['replies', 'urls'];
 let dbStates;
 describe('ListReplies', () => {
   beforeAll(async () => {
@@ -14,7 +11,7 @@ describe('ListReplies', () => {
     dbStates = await saveStateForIndices(indices);
     await clearIndices(indices);
     await loadFixtures(fixtures);
-  })
+  });
 
   it('lists all replies', async () => {
     expect(
@@ -393,11 +390,9 @@ describe('ListReplies', () => {
     ).toMatchSnapshot();
   });
 
-
   afterAll(async () => {
     await clearIndices(indices);
     // restore db states to prevent affecting other tests
     await loadFixtures(dbStates);
   });
-
 });
