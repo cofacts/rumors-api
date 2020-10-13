@@ -22,7 +22,7 @@ import {
 import { sample, random } from 'lodash';
 
 /**
- * Generate a pseudonym.
+ * Generates a pseudonym.
  */
 export const generatePseudonym = () => {
   const [adj, name, place, separator, decorator] = [
@@ -35,8 +35,12 @@ export const generatePseudonym = () => {
   return decorator(separator({ adj, name, place }));
 };
 
+export const AvatarTypes = {
+  OpenPeeps: 'OpenPeeps',
+};
+
 /**
- * Generate data for open peeps avatar.
+ * Generates data for open peeps avatar.
  */
 export const generateOpenPeepsAvatar = () => {
   const accessory = random() ? sample(accessories) : 'None';
@@ -57,6 +61,31 @@ export const generateOpenPeepsAvatar = () => {
     backgroundColorIndex,
     flip,
   };
+};
+
+export const encodeAppId = appId =>
+  crypto
+    .createHash('md5')
+    .update(appId)
+    .digest('base64')
+    .replace(/[+/]/g, '')
+    .substr(0, 5);
+export const sha256 = value =>
+  crypto
+    .createHash('sha256')
+    .update(value)
+    .digest('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+
+/**
+ * @param {string} appUserId - user ID given by an backend app
+ * @param {string} appId - app ID
+ * @returns {string} the id used to index `user` in db
+ */
+export const convertAppUserIdToUserId = (appId, appUserId) => {
+  return `${encodeAppId(appId)}_${sha256(appUserId)}`;
 };
 
 /**

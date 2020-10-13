@@ -90,7 +90,7 @@ describe('CreateReply', () => {
       index: 'urls',
       type: 'doc',
       body: { query: { term: { url: REF_URL } } },
-      refresh: true,
+      refresh: 'true',
     });
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });

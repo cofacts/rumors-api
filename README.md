@@ -143,19 +143,7 @@ Run the docker image on local machine, then visit `http://localhost:5000`.
 $ docker run --rm -it -p 5000:5000 --env-file .env cofacts/rumors-api
 ```
 
-## Other scripts
-
-### Fill in `urls` index and `hyperlinks` field for all articles & replies
-
-First, make sure `.env` is configured so that the correct DB is specified.
-Then at project root, run:
-```
-$ node_modules/.bin/babel-node src/scripts/fillAllHyperlinks.js
-```
-
-This script would scan for all articles & replies to fill in their `hyperlinks` field, also populates
-`urls` index. The `urls` index is used as cache. If an URL already exists in `urls`, it will not trigger
-HTTP request.
+## Cronjob scripts
 
 ### Clean up old `urls` entries that are not referenced by any article & reply
 
@@ -176,6 +164,34 @@ $ node_modules/.bin/babel-node src/scripts/fetchStatsFromGA.js
 ```
 
 -  For more options, run the above script with `--help` or see the file level comments.
+
+
+## One-off migration scripts
+
+### Fill in `urls` index and `hyperlinks` field for all articles & replies
+
+First, make sure `.env` is configured so that the correct DB is specified.
+Then at project root, run:
+```
+$ node_modules/.bin/babel-node src/scripts/migrations/fillAllHyperlinks.js
+```
+
+This script would scan for all articles & replies to fill in their `hyperlinks` field, also populates
+`urls` index. The `urls` index is used as cache. If an URL already exists in `urls`, it will not trigger
+HTTP request.
+
+
+### Generate User instances for backend users
+
+First, make sure `.env` is configured so that the correct DB is specified, you might want to create a snapshot before running the script.
+Then at project root, run:
+```
+$ node_modules/.bin/babel-node src/scripts/migrations/createBackendUsers.js
+```
+
+This script would scan for all the user references in `analytics`, `articlecategoryfeedbacks`, `articlereplyfeedbacks`, 
+`articles`, `replies`, `replyrequests`, create users for those that are not already in db and updates all the docs.
+See the comments at the top of the script for how users are referenced in each doc.
 
 
 ## Troubleshooting 

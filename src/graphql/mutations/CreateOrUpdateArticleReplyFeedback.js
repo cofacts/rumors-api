@@ -63,7 +63,7 @@ export default {
           comment: comment,
         },
       },
-      refresh: true, // We are searching for articlereplyfeedbacks immediately
+      refresh: 'true', // We are searching for articlereplyfeedbacks immediately
     });
 
     const feedbacks = await loaders.articleReplyFeedbacksLoader.load({

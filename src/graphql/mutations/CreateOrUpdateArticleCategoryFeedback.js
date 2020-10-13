@@ -64,7 +64,7 @@ export default {
           comment: comment,
         },
       },
-      refresh: true, // We are searching for articlecategoryfeedbacks immediately
+      refresh: 'true', // We are searching for articlecategoryfeedbacks immediately
     });
 
     const feedbacks = await loaders.articleCategoryFeedbacksLoader.load({

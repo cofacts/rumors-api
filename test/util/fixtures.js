@@ -57,6 +57,39 @@ export async function resetFrom(fixtureMap, key) {
     body: {
       doc: fixtureMap[key],
     },
-    refresh: true,
+    refresh: 'true',
   });
+}
+
+export async function saveStateForIndices(indices) {
+  let states = {}
+  for (const index of indices) {
+    const { body: { hits: { hits } } } = await client.search({
+      index,
+      body: {
+        query: {
+          match_all: {},
+        },
+      },
+      size: 10000
+    })
+    for (const doc of hits) {
+      states[`/${doc._index}/${doc._type}/${doc._id}`] = { ...doc._source };
+    }
+  }
+  return states
+}
+
+export async function clearIndices(indices) {
+  for (const index of indices) {
+    await client.deleteByQuery({
+      index,
+      body: {
+        query: {
+          match_all: {},
+        },
+      },
+      refresh: 'true'
+    })
+  }
 }
