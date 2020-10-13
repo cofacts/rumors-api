@@ -2,12 +2,16 @@ import MockDate from 'mockdate';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/auth';
 import { verifyProfile } from '../auth';
+import client from 'util/client';
 
 const FIXED_DATE = 612921600000;
 
 describe('verifyProfile', () => {
-  beforeEach(() => loadFixtures(fixtures));
-  afterEach(() => unloadFixtures(fixtures));
+  beforeAll(() => loadFixtures(fixtures));
+  afterAll(async () => {
+    await unloadFixtures(fixtures);
+    await client.delete({ index: 'users', type: 'doc', id: 'another-fb-id' });
+  });
 
   it('authenticates user via profile ID', async () => {
     const passportProfile = {

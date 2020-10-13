@@ -66,6 +66,18 @@ export const generateOpenPeepsAvatar = () => {
   };
 };
 
+/**
+ * check if the userId for a backend user is the user id in db or it is the app user Id.
+ */
+export const isDBUserId = ({ appId, userId }) => {
+  return (
+    appId &&
+    userId &&
+    userId.length === 49 &&
+    userId.substr(0, 6) === `${encodeAppId(appId)}_`
+  );
+};
+
 export const encodeAppId = appId =>
   crypto
     .createHash('md5')
@@ -133,7 +145,7 @@ const User = new GraphQLObjectType({
     email: currentUserOnlyField(GraphQLString),
     name: { type: GraphQLString },
     avatarUrl: avatarResolver(),
-    //    avatarData: { type: GraphQLString },
+    avatarData: { type: GraphQLString },
 
     facebookId: currentUserOnlyField(GraphQLString),
     githubId: currentUserOnlyField(GraphQLString),
@@ -199,7 +211,7 @@ const User = new GraphQLObjectType({
     },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
-    //    lastActiveAt: { type: GraphQLString },
+    lastActiveAt: { type: GraphQLString },
   }),
 });
 
@@ -213,20 +225,18 @@ export const userFieldResolver = async (
   // If the root document is created by website users or if the userId is already converted to db userId,
   // we can resolve user from userId.
   //
-  if (!isBackendApp(appId))
-    return await loaders.docLoader.load({ index: 'users', id: userId });
-
-  /*
-  if (userId && userId.substr(0, 6) === `${encodeAppId(appId)}_`) {
-    return await loaders.docLoader.load({ index: 'users', id: userId });
+  if (userId && appId) {
+    const id =
+      !isBackendApp(appId) || isDBUserId({ appId, userId })
+        ? userId
+        : convertAppUserIdToUserId({ appId, appUserId: userId });
+    const user = await loaders.docLoader.load({ index: 'users', id });
+    if (user) return user;
   }
-  
 
-  const user = await loaders.docLoader.load({ index: 'users', id: convertAppUserIdToUserId({ appId, appUserId: userId }) });
-  if (user) return user;
-  */
+  /* TODO: some unit tests are depending on this code block, need to clean up those tests and then 
+     remove the following lines. */
 
-  // Todo: some unit tests are depending on this code block, need to clean up those tests and then remove the following lines.
   // If the user comes from the same client as the root document, return the user id.
   //
   if (context.appId === appId) return { id: userId };
