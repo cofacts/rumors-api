@@ -5,6 +5,8 @@ import fixtures from '../__fixtures__/createBackendUsers';
 import { sortBy } from 'lodash';
 jest.setTimeout(50000);
 
+jest.setTimeout(45000);
+
 const checkAllDocsForIndex = async index => {
   let res = {};
   const {

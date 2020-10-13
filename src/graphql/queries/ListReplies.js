@@ -4,7 +4,6 @@ import client from 'util/client';
 import {
   createFilterType,
   createSortType,
-  createConnectionType,
   getSortArgs,
   pagingArgs,
   timeRangeInput,
@@ -13,7 +12,7 @@ import {
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 
-import Reply from 'graphql/models/Reply';
+import { ReplyConnection } from 'graphql/models/Reply';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 
 export default {
@@ -209,5 +208,5 @@ export default {
       ...otherParams,
     };
   },
-  type: createConnectionType('ListReplyConnection', Reply),
+  type: ReplyConnection,
 };
