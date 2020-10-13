@@ -1,9 +1,9 @@
 const BATCH_SIZE = 100;
 
 export default class Bulk {
-  constructor(client, batch_size = BATCH_SIZE) {
+  constructor(client, batchSize = BATCH_SIZE) {
     this.client = client;
-    this.batch_size = batch_size;
+    this.batchSize = batchSize;
     this._operations = [];
     this.actionsCount = 0;
   }
@@ -12,8 +12,8 @@ export default class Bulk {
     this._operations.push(...items);
     this.actionsCount += count;
     if (
-      this.actionCounts > this.batch_size ||
-      this._operations.length > 3 * this.batch_size
+      this.actionCounts > this.batchSize ||
+      this._operations.length > 3 * this.batchSize
     ) {
       await this.flush();
     }
@@ -35,18 +35,7 @@ export default class Bulk {
     if (body.errors) {
       console.error(body.errors);
     } else {
-      console.info(body.items.length);
-      // console.log(JSON.stringify(body, null, 2));
-
-      /* console.info(
-        'Bulk operations complete:',
-
-        // Count each results
-        body.items.reduce((results, { result }) => {
-          if (results[result] === undefined) results[result] = 0;
-          results[result] += 1;
-        }, {})
-      );*/
+      console.info(`${body.items.length} items processed`);
     }
 
     return this;

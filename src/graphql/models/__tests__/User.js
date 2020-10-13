@@ -20,8 +20,6 @@ describe('User model', () => {
         349, // towns
         17, // separators
         42, // decorators
-        5, // separators
-        15, // decorators
       ].forEach(index => sample.mockImplementationOnce(ary => ary[index]));
 
       expect(generatePseudonym()).toBe(`忠懇的信義區艾達`);
