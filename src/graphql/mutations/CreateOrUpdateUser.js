@@ -20,6 +20,7 @@ import rollbar from 'rollbarInstance';
  */
 export async function createOrUpdateBackendUser({ appUserId, appId }) {
   assertUser({ appId, userId: appUserId });
+
   if (!isBackendApp(appId)) return { user: {}, isCreated: false };
 
   const now = new Date().toISOString();

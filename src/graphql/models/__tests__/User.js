@@ -8,7 +8,6 @@ import {
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import DataLoaders from '../../dataLoaders';
 
-
 jest.mock('lodash', () => ({
   random: jest.fn(),
   sample: jest.fn(),

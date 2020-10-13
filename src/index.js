@@ -79,27 +79,27 @@ router.get('/', ctx => {
 app.use(koaStatic(path.join(__dirname, '../static/')));
 app.use(router.routes(), router.allowedMethods());
 
-const apolloServer = new ApolloServer({
+export const apolloServer = new ApolloServer({
   schema,
   introspection: true, // Allow introspection in production as well
   playground: true,
-  context: ({ ctx }) => {
-    let userId;
-    if (isBackendApp(ctx.appId)) {
-      userId = createOrUpdateBackendUser({
+  context: async ({ ctx }) => {
+    let user = ctx.state.user || {};
+    if (ctx.appId && isBackendApp(ctx.appId)) {
+      const { user: backendUser } = await createOrUpdateBackendUser({
         appUserId: ctx.query.userId,
         appId: ctx.appId,
-      }).userId;
-    } else {
-      userId = ctx.state.user?.id;
+      });
+      user = { ...user, ...backendUser };
     }
+
     return {
       loaders: new DataLoaders(), // new loaders per request
-      user: ctx.state.user,
+      user: user,
 
       // userId-appId pair
       //
-      userId,
+      userId: user.id,
       appId: ctx.appId,
     };
   },
