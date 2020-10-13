@@ -148,15 +148,15 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WyJmb28zIl0=",
+            "cursor": "WzEuMzg5MjM0OCwiZm9vMyJd",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.9489213,
+            "score": 1.3892348,
           },
           Object {
-            "cursor": "WyJmb28yIl0=",
+            "cursor": "WzAuOTIxMDc0OCwiZm9vMiJd",
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
@@ -177,18 +177,31 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WyJmb28zIl0=",
+            "cursor": "WzEuMzg5MjM0OCwiZm9vMyJd",
+            "highlight": Object {
+              "hyperlinks": Array [
+                Object {
+                  "summary": "<HIGHLIGHT>summary</HIGHLIGHT>",
+                  "title": "<HIGHLIGHT>title</HIGHLIGHT> <HIGHLIGHT>title</HIGHLIGHT>",
+                },
+              ],
+              "reference": null,
+              "text": "<HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT> <HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT> <HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT>",
+            },
             "node": Object {
               "id": "foo3",
-              "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.9489213,
+            "score": 1.3892348,
           },
           Object {
-            "cursor": "WyJmb28yIl0=",
+            "cursor": "WzAuOTIxMDc0OCwiZm9vMiJd",
+            "highlight": Object {
+              "hyperlinks": Array [],
+              "reference": null,
+              "text": "<HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT> <HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT>",
+            },
             "node": Object {
               "id": "foo2",
-              "text": "Lorum ipsum Lorum ipsum",
             },
             "score": 0.9210748,
           },
@@ -214,12 +227,12 @@ Object {
             "score": 0.9210748,
           },
           Object {
-            "cursor": "WzAuOTQ4OTIxMywiZm9vMyJd",
+            "cursor": "WzEuMzg5MjM0OCwiZm9vMyJd",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.9489213,
+            "score": 1.3892348,
           },
         ],
       },
@@ -405,6 +418,90 @@ Object {
       "reference": "barbar",
       "text": "bar",
       "type": "NOT_ARTICLE",
+    },
+  },
+}
+`;
+
+exports[`GetReplyAndGetArticle GetReply similarReplies should work: similarReply no-param test 1`] = `
+Object {
+  "data": Object {
+    "GetReply": Object {
+      "similarReplies": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WzEuODg5MTY5Mywic2ltaWxhci10by1iYXIiXQ==",
+            "highlight": Object {
+              "hyperlinks": Array [],
+              "reference": "<HIGHLIGHT>barbar</HIGHLIGHT>",
+              "text": "<HIGHLIGHT>bar</HIGHLIGHT> <HIGHLIGHT>bar</HIGHLIGHT>",
+            },
+            "node": Object {
+              "id": "similar-to-bar",
+            },
+            "score": 1.8891693,
+          },
+          Object {
+            "cursor": "WzAuNTY2MzE3Miwic2ltaWxhci10by1iYXIyIl0=",
+            "highlight": Object {
+              "hyperlinks": Array [
+                Object {
+                  "summary": "<HIGHLIGHT>Lorem</HIGHLIGHT> <HIGHLIGHT>Ipsum</HIGHLIGHT> <HIGHLIGHT>Ipsum</HIGHLIGHT>",
+                  "title": "<HIGHLIGHT>GG</HIGHLIGHT> G",
+                },
+              ],
+              "reference": null,
+              "text": null,
+            },
+            "node": Object {
+              "id": "similar-to-bar2",
+            },
+            "score": 0.5663172,
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`GetReplyAndGetArticle GetReply similarReplies should work: similarReply sorting test 1`] = `
+Object {
+  "data": Object {
+    "GetReply": Object {
+      "similarReplies": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WzAuNTY2MzE3Miwic2ltaWxhci10by1iYXIyIl0=",
+            "highlight": Object {
+              "hyperlinks": Array [
+                Object {
+                  "summary": "<HIGHLIGHT>Lorem</HIGHLIGHT> <HIGHLIGHT>Ipsum</HIGHLIGHT> <HIGHLIGHT>Ipsum</HIGHLIGHT>",
+                  "title": "<HIGHLIGHT>GG</HIGHLIGHT> G",
+                },
+              ],
+              "reference": null,
+              "text": null,
+            },
+            "node": Object {
+              "id": "similar-to-bar2",
+            },
+            "score": 0.5663172,
+          },
+          Object {
+            "cursor": "WzEuODg5MTY5Mywic2ltaWxhci10by1iYXIiXQ==",
+            "highlight": Object {
+              "hyperlinks": Array [],
+              "reference": "<HIGHLIGHT>barbar</HIGHLIGHT>",
+              "text": "<HIGHLIGHT>bar</HIGHLIGHT> <HIGHLIGHT>bar</HIGHLIGHT>",
+            },
+            "node": Object {
+              "id": "similar-to-bar",
+            },
+            "score": 1.8891693,
+          },
+        ],
+      },
     },
   },
 }
