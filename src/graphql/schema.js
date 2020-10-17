@@ -20,7 +20,6 @@ import CreateOrUpdateArticleReplyFeedback from './mutations/CreateOrUpdateArticl
 import CreateOrUpdateReplyRequestFeedback from './mutations/CreateOrUpdateReplyRequestFeedback';
 import CreateOrUpdateArticleCategoryFeedback from './mutations/CreateOrUpdateArticleCategoryFeedback';
 import CreateOrUpdateReplyRequest from './mutations/CreateOrUpdateReplyRequest';
-import CreateOrUpdateUser from './mutations/CreateOrUpdateUser';
 import UpdateArticleReplyStatus from './mutations/UpdateArticleReplyStatus';
 import UpdateArticleCategoryStatus from './mutations/UpdateArticleCategoryStatus';
 import UpdateUser from './mutations/UpdateUser';
@@ -55,7 +54,6 @@ export default new GraphQLSchema({
       CreateOrUpdateArticleReplyFeedback,
       CreateOrUpdateArticleCategoryFeedback,
       CreateOrUpdateReplyRequestFeedback,
-      CreateOrUpdateUser,
       UpdateArticleReplyStatus,
       UpdateArticleCategoryStatus,
       UpdateUser,

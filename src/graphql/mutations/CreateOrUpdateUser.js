@@ -3,8 +3,7 @@ import User, {
   generatePseudonym,
   generateOpenPeepsAvatar,
   AvatarTypes,
-  isBackendApp,
-  convertAppUserIdToUserId,
+  getUserId,
 } from 'graphql/models/User';
 import client, { processMeta } from 'util/client';
 
@@ -18,20 +17,17 @@ import rollbar from 'rollbarInstance';
  *
  * @returns {user: User, isCreated: boolean}
  */
-export async function createOrUpdateBackendUser({ appUserId, appId }) {
+export async function createOrUpdateUser({ appUserId, appId }) {
   assertUser({ appId, userId: appUserId });
-
-  if (!isBackendApp(appId)) return { user: {}, isCreated: false };
-
   const now = new Date().toISOString();
-  const dbUserId = convertAppUserIdToUserId({ appId, appUserId });
+  const userId = getUserId({ appId, appUserId });
 
   const {
     body: { result, get: userFound },
   } = await client.update({
     index: 'users',
     type: 'doc',
-    id: dbUserId,
+    id: userId,
     body: {
       doc: {
         lastActiveAt: now,
@@ -51,11 +47,12 @@ export async function createOrUpdateBackendUser({ appUserId, appId }) {
   });
 
   const isCreated = result === 'created';
-  const user = processMeta({ ...userFound, _id: dbUserId });
+  const user = processMeta({ ...userFound, _id: userId });
+
   if (!isCreated && (user.appId !== appId || user.appUserId !== appUserId)) {
     const errorMessage = `collision found! ${
       user.appUserId
-    } and ${appUserId} both hash to ${dbUserId}`;
+    } and ${appUserId} both hash to ${userId}`;
     console.log(errorMessage);
     rollbar.error(`createBackendUserError: ${errorMessage}`);
   }
@@ -71,7 +68,7 @@ export default {
   args: {},
 
   async resolve(rootValue, _, { appId, userId }) {
-    const { user } = await createOrUpdateBackendUser({
+    const { user } = await createOrUpdateUser({
       appId,
       appUserId: userId,
     });

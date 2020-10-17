@@ -1,10 +1,10 @@
-import gql from 'util/GraphQL';
 import { loadFixtures, saveStateForIndices, clearIndices } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateOrUpdateUser';
 import rollbar from 'rollbarInstance';
-import { convertAppUserIdToUserId } from 'graphql/models/User';
+import { getUserId } from 'graphql/models/User';
+import { createOrUpdateUser } from '../CreateOrUpdateUser';
 
 jest.mock('../../models/User', () => {
   const UserModel = jest.requireActual('../../models/User');
@@ -15,7 +15,7 @@ jest.mock('../../models/User', () => {
       .fn()
       .mockReturnValue('Friendly Neighborhood Spider Man'),
     generateOpenPeepsAvatar: jest.fn().mockReturnValue({ accessory: 'mask' }),
-    convertAppUserIdToUserId: jest.spyOn(UserModel, 'convertAppUserIdToUserId'),
+    getUserId: jest.spyOn(UserModel, 'getUserId'),
   };
 });
 
@@ -29,6 +29,7 @@ let dbStates = {};
 describe('CreateOrUpdateUser', () => {
   beforeAll(async () => {
     dbStates = await saveStateForIndices(['users']);
+    await clearIndices(['users']);
     await loadFixtures(fixtures);
   });
 
@@ -43,30 +44,24 @@ describe('CreateOrUpdateUser', () => {
     const userId = 'testUser2';
     const appId = 'TEST_BACKEND';
 
-    const { data, errors } = await gql`
-      mutation {
-        CreateOrUpdateUser {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-      }
-    `({}, { userId, appId });
+    const { user, isCreated } = await createOrUpdateUser({
+      appUserId: userId,
+      appId,
+    });
 
-    expect(errors).toBeUndefined();
-    expect(data).toMatchSnapshot();
+    expect(isCreated).toBe(true);
+    expect(user).toMatchSnapshot();
 
-    const id = convertAppUserIdToUserId({ appUserId: userId, appId });
+    const id = getUserId({ appUserId: userId, appId });
 
     const {
-      body: { _source: user },
+      body: { _source: source },
     } = await client.get({
       index: 'users',
       type: 'doc',
       id,
     });
-    expect(user).toMatchSnapshot();
+    expect(source).toMatchSnapshot();
 
     MockDate.reset();
   });
@@ -77,59 +72,49 @@ describe('CreateOrUpdateUser', () => {
     const userId = 'testUser1';
     const appId = 'TEST_BACKEND';
 
-    const { data, errors } = await gql`
-      mutation {
-        CreateOrUpdateUser {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-      }
-    `({}, { userId, appId });
+    const { user, isCreated } = await createOrUpdateUser({
+      appUserId: userId,
+      appId,
+    });
 
-    expect(errors).toBeUndefined();
-    expect(data).toMatchSnapshot();
+    expect(isCreated).toBe(false);
+    expect(user).toMatchSnapshot();
 
-    const id = convertAppUserIdToUserId({ appUserId: userId, appId });
+    const id = getUserId({ appUserId: userId, appId });
     const {
-      body: { _source: user },
+      body: { _source: source },
     } = await client.get({
       index: 'users',
       type: 'doc',
       id,
     });
-    expect(user).toMatchSnapshot();
+    expect(source).toMatchSnapshot();
   });
 
   it('logs error if collision occurs', async () => {
     MockDate.set(1602291600000);
 
-    const userId = 'testUser2';
+    const userId = 'testUser3';
     const appId = 'TEST_BACKEND';
-    const id = convertAppUserIdToUserId({ appUserId: 'testUser1', appId });
+    const id = getUserId({ appUserId: 'testUser1', appId });
 
-    convertAppUserIdToUserId.mockReturnValueOnce(id);
-    const { data, errors } = await gql`
-      mutation {
-        CreateOrUpdateUser {
-          id
-          name
-        }
-      }
-    `({}, { userId, appId });
+    getUserId.mockReturnValueOnce(id);
+    const { user, isCreated } = await createOrUpdateUser({
+      appUserId: userId,
+      appId,
+    });
 
-    expect(errors).toBeUndefined();
-    expect(data).toMatchSnapshot();
+    expect(isCreated).toBe(false);
+    expect(user).toMatchSnapshot();
 
     const {
-      body: { _source: user },
+      body: { _source: source },
     } = await client.get({
       index: 'users',
       type: 'doc',
       id,
     });
-    expect(user).toMatchSnapshot();
+    expect(source).toMatchSnapshot();
     expect(rollbar.error.mock.calls).toMatchSnapshot();
   });
 });

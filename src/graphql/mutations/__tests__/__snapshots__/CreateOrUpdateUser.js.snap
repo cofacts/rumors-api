@@ -2,12 +2,19 @@
 
 exports[`CreateOrUpdateUser creates backend user if not existed 1`] = `
 Object {
-  "CreateOrUpdateUser": Object {
-    "createdAt": "2020-10-10T00:00:00.000Z",
-    "id": "6LOqD_3gpe4ZVaxRvemf7KNTfm6y3WNBu1hbs-5MRdSWiWVss",
-    "name": "Friendly Neighborhood Spider Man",
-    "updatedAt": "2020-10-10T00:00:00.000Z",
-  },
+  "_cursor": undefined,
+  "_score": undefined,
+  "appId": "TEST_BACKEND",
+  "appUserId": "testUser2",
+  "avatarData": "{\\"accessory\\":\\"mask\\"}",
+  "avatarType": "OpenPeeps",
+  "createdAt": "2020-10-10T00:00:00.000Z",
+  "highlight": undefined,
+  "id": "6LOqD_3gpe4ZVaxRvemf7KNTfm6y3WNBu1hbs-5MRdSWiWVss",
+  "inner_hits": undefined,
+  "lastActiveAt": "2020-10-10T00:00:00.000Z",
+  "name": "Friendly Neighborhood Spider Man",
+  "updatedAt": "2020-10-10T00:00:00.000Z",
 }
 `;
 
@@ -26,10 +33,15 @@ Object {
 
 exports[`CreateOrUpdateUser logs error if collision occurs 1`] = `
 Object {
-  "CreateOrUpdateUser": Object {
-    "id": "6LOqD_QabTT7XXTrsz7ybEa5PLfc0GfXlV578HYPhODPfSWc8",
-    "name": "test user 1",
-  },
+  "_cursor": undefined,
+  "_score": undefined,
+  "appId": "TEST_BACKEND",
+  "appUserId": "testUser1",
+  "highlight": undefined,
+  "id": "6LOqD_QabTT7XXTrsz7ybEa5PLfc0GfXlV578HYPhODPfSWc8",
+  "inner_hits": undefined,
+  "lastActiveAt": "2020-10-10T01:00:00.000Z",
+  "name": "test user 1",
 }
 `;
 
@@ -45,19 +57,22 @@ Object {
 exports[`CreateOrUpdateUser logs error if collision occurs 3`] = `
 Array [
   Array [
-    "createBackendUserError: collision found! testUser1 and testUser2 both hash to 6LOqD_QabTT7XXTrsz7ybEa5PLfc0GfXlV578HYPhODPfSWc8",
+    "createBackendUserError: collision found! testUser1 and testUser3 both hash to 6LOqD_QabTT7XXTrsz7ybEa5PLfc0GfXlV578HYPhODPfSWc8",
   ],
 ]
 `;
 
 exports[`CreateOrUpdateUser updates backend users' last active time if user already existed 1`] = `
 Object {
-  "CreateOrUpdateUser": Object {
-    "createdAt": null,
-    "id": "6LOqD_QabTT7XXTrsz7ybEa5PLfc0GfXlV578HYPhODPfSWc8",
-    "name": "test user 1",
-    "updatedAt": null,
-  },
+  "_cursor": undefined,
+  "_score": undefined,
+  "appId": "TEST_BACKEND",
+  "appUserId": "testUser1",
+  "highlight": undefined,
+  "id": "6LOqD_QabTT7XXTrsz7ybEa5PLfc0GfXlV578HYPhODPfSWc8",
+  "inner_hits": undefined,
+  "lastActiveAt": "2020-10-10T01:00:00.000Z",
+  "name": "test user 1",
 }
 `;
 
