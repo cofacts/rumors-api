@@ -1,5 +1,5 @@
 import { assertUser } from 'graphql/util';
-import User, {
+import {
   generatePseudonym,
   generateOpenPeepsAvatar,
   AvatarTypes,
@@ -61,17 +61,3 @@ export async function createOrUpdateUser({ appUserId, appId }) {
     isCreated,
   };
 }
-
-export default {
-  description: 'Create or update a user for the given appId, appUserId pair',
-  type: User,
-  args: {},
-
-  async resolve(rootValue, _, { appId, userId }) {
-    const { user } = await createOrUpdateUser({
-      appId,
-      appUserId: userId,
-    });
-    return user;
-  },
-};
