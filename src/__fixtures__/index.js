@@ -4,4 +4,8 @@ export default {
     appUserId: 'testUser2',
     appId: 'TEST_BACKEND',
   },
+  '/users/doc/testUser1': {
+    name: 'test user 1',
+    appId: 'WEBSITE',
+  },
 };

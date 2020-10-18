@@ -156,6 +156,10 @@ const User = new GraphQLObjectType({
     avatarUrl: avatarResolver(),
     avatarData: { type: GraphQLString },
 
+    // TODO: also enable these two fields for requests from the same app?
+    appId: currentUserOnlyField(GraphQLString),
+    appUserId: currentUserOnlyField(GraphQLString),
+
     facebookId: currentUserOnlyField(GraphQLString),
     githubId: currentUserOnlyField(GraphQLString),
     twitterId: currentUserOnlyField(GraphQLString),

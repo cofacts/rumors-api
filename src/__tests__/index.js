@@ -3,6 +3,7 @@ import client from 'util/client';
 import { apolloServer } from '../index';
 import fixtures from '../__fixtures__/index';
 import { createTestClient } from 'apollo-server-testing';
+import MockDate from 'mockdate';
 
 jest.mock('koa', () => {
   const Koa = jest.requireActual('koa');
@@ -17,12 +18,19 @@ describe('apolloServer', () => {
   const actualGraphQLServerOptions = apolloServer.graphQLServerOptions;
   const mockGraphQLServerOptions = ctx => async () =>
     actualGraphQLServerOptions.call(apolloServer, { ctx });
+  let now;
 
   beforeAll(async () => {
+    MockDate.set(1602288000000);
+    now = new Date().toISOString();
+
     apolloServer.app;
     await loadFixtures(fixtures);
   });
+
   afterAll(async () => {
+    MockDate.reset();
+
     await unloadFixtures(fixtures);
     await client.delete({
       index: 'users',
@@ -50,13 +58,19 @@ describe('apolloServer', () => {
       query: `{
         GetUser {
           id
+          appId
+          appUserId
           name
+          lastActiveAt
         }
       }`,
     });
     expect(errors).toBeUndefined();
     expect(res).toMatchObject({
       id: 'testUser1',
+      name: 'test user 1',
+      appId: 'WEBSITE',
+      lastActiveAt: now,
     });
   });
 
@@ -78,7 +92,10 @@ describe('apolloServer', () => {
       query: `{
         GetUser {
           id
+          appId
+          appUserId
           name
+          lastActiveAt
         }
       }`,
     });
@@ -86,6 +103,9 @@ describe('apolloServer', () => {
     expect(res).toMatchObject({
       id: '6LOqD_3gpe4ZVaxRvemf7KNTfm6y3WNBu1hbs-5MRdSWiWVss',
       name: 'test user 2',
+      appId: 'TEST_BACKEND',
+      appUserId: 'testUser2',
+      lastActiveAt: now,
     });
   });
 
@@ -107,7 +127,10 @@ describe('apolloServer', () => {
       query: `{
         GetUser {
           id
+          appId
+          appUserId
           name
+          lastActiveAt
         }
       }`,
     });
@@ -115,6 +138,9 @@ describe('apolloServer', () => {
     expect(res).toMatchObject({
       id: '6LOqD_gsUWLlGviSA4KFdKpsNncQfTYeueOl-DGx9fL6zCNeA',
       name: expect.any(String),
+      appId: 'TEST_BACKEND',
+      appUserId: 'testUser3',
+      lastActiveAt: now,
     });
   });
 });
