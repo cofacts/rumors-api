@@ -15,8 +15,8 @@ jest.mock('lodash', () => ({
 }));
 
 describe('User model', () => {
-  beforeAll(async () => loadFixtures(fixtures));
-  afterAll(async () => unloadFixtures(fixtures));
+  beforeAll(async () => await loadFixtures(fixtures));
+  afterAll(async () => await unloadFixtures(fixtures));
 
   describe('currentUserOnlyField', () => {
     const user = {
@@ -64,66 +64,65 @@ describe('User model', () => {
       expect(await currentUserOnlyField('type').resolve(...args)).toBe(null);
     });
   });
-});
 
-describe('userFieldResolver', () => {
-  const loaders = new DataLoaders();
-  const resolveUser = ({ userId, appId }, ctx = {}) =>
-    userFieldResolver({ userId, appId }, {}, { loaders, ...ctx });
+  describe('userFieldResolver', () => {
+    const loaders = new DataLoaders();
+    const resolveUser = ({ userId, appId }, ctx = {}) =>
+      userFieldResolver({ userId, appId }, {}, { loaders, ...ctx });
 
-  it('handles missing arguments gracefully', async () => {
-    expect(await resolveUser({ appId: 'WEBSITE' })).toBe(null);
-    expect(await resolveUser({ appId: 'TEST_BACKEND' })).toBe(null);
-    expect(await resolveUser({ userId: 'abc' })).toBe(null);
-  });
+    it('handles missing arguments gracefully', async () => {
+      expect(await resolveUser({ appId: 'WEBSITE' })).toBe(null);
+      expect(await resolveUser({ appId: 'TEST_BACKEND' })).toBe(null);
+      expect(await resolveUser({ userId: 'abc' })).toBe(null);
+    });
 
-  it('returns the right backend user given appUserId', async () => {
-    expect(
-      await resolveUser({
-        appId: 'TEST_BACKEND',
-        userId: 'userTest1',
-      })
-    ).toMatchSnapshot();
-  });
-
-  it('returns the right backend user given db userId', async () => {
-    expect(
-      await resolveUser({
-        userId: '6LOqD_z5A8BwUr4gh1P2gw_2zFU3IIrSchTSl-vemod7CChMU',
-        appId: 'TEST_BACKEND',
-      })
-    ).toMatchSnapshot();
-  });
-
-  it('returns the right web user given userId', async () => {
-    expect(
-      await resolveUser({
-        userId: 'userTest2',
-        appId: 'WEBSITE',
-      })
-    ).toMatchSnapshot();
-  });
-
-  it('returns appUserId only to requests from the same client', async () => {
-    expect(
-      await resolveUser({
-        userId: 'userTest3',
-        appId: 'WEBSITE',
-      })
-    ).toBe(null);
-
-    expect(
-      await resolveUser(
-        {
-          userId: 'userTest3',
+    it('returns the right backend user given appUserId', async () => {
+      expect(
+        await resolveUser({
           appId: 'TEST_BACKEND',
-        },
-        { appId: 'TEST_BACKEND' }
-      )
-    ).toStrictEqual({ id: 'userTest3' });
+          userId: 'userTest1',
+        })
+      ).toMatchSnapshot();
+    });
+
+    it('returns the right backend user given db userId', async () => {
+      expect(
+        await resolveUser({
+          userId: '6LOqD_z5A8BwUr4gh1P2gw_2zFU3IIrSchTSl-vemod7CChMU',
+          appId: 'TEST_BACKEND',
+        })
+      ).toMatchSnapshot();
+    });
+
+    it('returns the right web user given userId', async () => {
+      expect(
+        await resolveUser({
+          userId: 'userTest2',
+          appId: 'WEBSITE',
+        })
+      ).toMatchSnapshot();
+    });
+
+    it('returns appUserId only to requests from the same client', async () => {
+      expect(
+        await resolveUser({
+          userId: 'userTest3',
+          appId: 'WEBSITE',
+        })
+      ).toBe(null);
+
+      expect(
+        await resolveUser(
+          {
+            userId: 'userTest3',
+            appId: 'TEST_BACKEND',
+          },
+          { appId: 'TEST_BACKEND' }
+        )
+      ).toStrictEqual({ id: 'userTest3' });
+    });
   });
 });
-
 describe('pseudo name and avatar generators', () => {
   it('should generate pseudo names for user', () => {
     [

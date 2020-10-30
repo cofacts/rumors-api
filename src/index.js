@@ -98,7 +98,7 @@ export const apolloServer = new ApolloServer({
         appId: appId,
       }));
     }
-    
+
     return {
       loaders: new DataLoaders(), // new loaders per request
       user: currentUser,

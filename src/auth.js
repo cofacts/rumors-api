@@ -17,14 +17,6 @@ passport.serializeUser((user, done) => {
  */
 passport.deserializeUser((userId, done) => {
   try {
-    /*
-    const { body: user } = await client.get({
-      index: 'users',
-      type: 'doc',
-      id: userId,
-    });
-    done(null, processMeta(user));
-    */
     done(null, { userId });
   } catch (err) {
     done(err);
