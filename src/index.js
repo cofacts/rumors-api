@@ -83,23 +83,30 @@ export const apolloServer = new ApolloServer({
   introspection: true, // Allow introspection in production as well
   playground: true,
   context: async ({ ctx }) => {
-    let currentUser = ctx.state.user || {};
-    if (ctx.appId) {
-      const { user } = await createOrUpdateUser({
-        appUserId: ctx.query.userId,
-        appId: ctx.appId,
-      });
-      currentUser = { ...currentUser, ...user };
-    }
+    const {
+      appId,
+      query: { userId: queryUserId } = {},
+      state: { user: { userId: sessionUserId } = {} } = {},
+    } = ctx;
 
+    const userId = queryUserId ?? sessionUserId;
+
+    let currentUser = null;
+    if (appId && userId) {
+      ({ user: currentUser } = await createOrUpdateUser({
+        appUserId: userId,
+        appId: appId,
+      }));
+    }
+    
     return {
       loaders: new DataLoaders(), // new loaders per request
       user: currentUser,
 
       // userId-appId pair
       //
-      userId: currentUser.id,
-      appId: ctx.appId,
+      userId,
+      appId,
     };
   },
   formatError(err) {

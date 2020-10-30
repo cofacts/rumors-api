@@ -20,11 +20,31 @@ describe('apolloServer', () => {
     actualGraphQLServerOptions.call(apolloServer, { ctx });
   let now;
 
+  const getCurrentUser = async (ctx = {}) => {
+    apolloServer.graphQLServerOptions = mockGraphQLServerOptions(ctx);
+
+    const testClient = createTestClient(apolloServer);
+    const {
+      data: { GetUser: res },
+      errors,
+    } = await testClient.query({
+      query: `{
+        GetUser {
+          id
+          appId
+          appUserId
+          name
+          lastActiveAt
+        }
+      }`,
+    });
+    return { res, errors };
+  };
+
   beforeAll(async () => {
     MockDate.set(1602288000000);
     now = new Date().toISOString();
 
-    apolloServer.app;
     await loadFixtures(fixtures);
   });
 
@@ -39,32 +59,23 @@ describe('apolloServer', () => {
     });
   });
 
+  it('gracefully handles no auth request', async () => {
+    const { res, errors } = await getCurrentUser();
+    expect(errors).toBeUndefined();
+    expect(res).toBe(null);
+  });
+
   it('resolves current web user', async () => {
     const appId = 'WEBSITE';
     const userId = 'testUser1';
 
-    apolloServer.graphQLServerOptions = mockGraphQLServerOptions({
+    const { res, errors } = await getCurrentUser({
       appId,
       userId,
       state: { user: { id: userId } },
       query: { userId },
     });
 
-    const testClient = createTestClient(apolloServer);
-    const {
-      data: { GetUser: res },
-      errors,
-    } = await testClient.query({
-      query: `{
-        GetUser {
-          id
-          appId
-          appUserId
-          name
-          lastActiveAt
-        }
-      }`,
-    });
     expect(errors).toBeUndefined();
     expect(res).toMatchObject({
       id: 'testUser1',
@@ -78,27 +89,13 @@ describe('apolloServer', () => {
     const appId = 'TEST_BACKEND';
     const userId = 'testUser2';
 
-    apolloServer.graphQLServerOptions = mockGraphQLServerOptions({
+    const { res, errors } = await getCurrentUser({
       appId,
       userId,
       state: {},
       query: { userId },
     });
-    const testClient = createTestClient(apolloServer);
-    const {
-      data: { GetUser: res },
-      errors,
-    } = await testClient.query({
-      query: `{
-        GetUser {
-          id
-          appId
-          appUserId
-          name
-          lastActiveAt
-        }
-      }`,
-    });
+
     expect(errors).toBeUndefined();
     expect(res).toMatchObject({
       id: '6LOqD_3gpe4ZVaxRvemf7KNTfm6y3WNBu1hbs-5MRdSWiWVss',
@@ -113,27 +110,13 @@ describe('apolloServer', () => {
     const appId = 'TEST_BACKEND';
     const userId = 'testUser3';
 
-    apolloServer.graphQLServerOptions = mockGraphQLServerOptions({
+    const { res, errors } = await getCurrentUser({
       appId,
       userId,
       state: {},
       query: { userId },
     });
-    const testClient = createTestClient(apolloServer);
-    const {
-      data: { GetUser: res },
-      errors,
-    } = await testClient.query({
-      query: `{
-        GetUser {
-          id
-          appId
-          appUserId
-          name
-          lastActiveAt
-        }
-      }`,
-    });
+
     expect(errors).toBeUndefined();
     expect(res).toMatchObject({
       id: '6LOqD_gsUWLlGviSA4KFdKpsNncQfTYeueOl-DGx9fL6zCNeA',

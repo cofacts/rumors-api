@@ -120,11 +120,11 @@ export const convertAppUserIdToUserId = ({ appId, appUserId }) => {
  * @param {GraphQLScalarType | GraphQLObjectType} type
  * @param {function?} resolver - Use default resolver if not given.
  */
-const currentUserOnlyField = (type, resolver) => ({
+export const currentUserOnlyField = (type, resolver) => ({
   type,
   description: 'Returns only for current user. Returns `null` otherwise.',
   resolve(user, arg, context, info) {
-    if (user.id !== context.user.id) return null;
+    if (!context.user || user.id !== context.user.id) return null;
 
     return resolver ? resolver(user, arg, context, info) : user[info.fieldName];
   },
@@ -245,11 +245,11 @@ export const userFieldResolver = async (
   }
 
   /* TODO: some unit tests are depending on this code block, need to clean up those tests and then 
-     remove the following lines. */
+     remove the following lines, and the corresponding unit test. */
 
   // If the user comes from the same client as the root document, return the user id.
   //
-  if (context.appId === appId) return { id: userId };
+  if (context.appId && context.appId === appId) return { id: userId };
 
   // If not, this client is not allowed to see user.
   //

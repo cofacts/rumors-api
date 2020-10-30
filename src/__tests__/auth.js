@@ -7,11 +7,8 @@ import client from 'util/client';
 const FIXED_DATE = 612921600000;
 
 describe('verifyProfile', () => {
-  beforeAll(() => loadFixtures(fixtures));
-  afterAll(async () => {
-    await unloadFixtures(fixtures);
-    await client.delete({ index: 'users', type: 'doc', id: 'another-fb-id' });
-  });
+  beforeAll(async () => loadFixtures(fixtures));
+  afterAll(async () => unloadFixtures(fixtures));
 
   it('authenticates user via profile ID', async () => {
     const passportProfile = {
@@ -52,7 +49,11 @@ describe('verifyProfile', () => {
       'facebookId'
     );
     MockDate.reset();
-
+    await client.delete({
+      index: 'users',
+      type: 'doc',
+      id: id,
+    });
     expect(newUser).toMatchSnapshot();
   });
 });

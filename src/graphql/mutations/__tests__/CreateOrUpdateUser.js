@@ -62,6 +62,8 @@ describe('CreateOrUpdateUser', () => {
       id,
     });
     expect(source).toMatchSnapshot();
+    expect(rollbar.error).not.toHaveBeenCalled();
+    rollbar.error.mockClear();
 
     MockDate.reset();
   });
@@ -89,6 +91,8 @@ describe('CreateOrUpdateUser', () => {
       id,
     });
     expect(source).toMatchSnapshot();
+    expect(rollbar.error).not.toHaveBeenCalled();
+    rollbar.error.mockClear();
   });
 
   it('logs error if collision occurs', async () => {
@@ -116,5 +120,6 @@ describe('CreateOrUpdateUser', () => {
     });
     expect(source).toMatchSnapshot();
     expect(rollbar.error.mock.calls).toMatchSnapshot();
+    rollbar.error.mockClear();
   });
 });

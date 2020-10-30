@@ -1,39 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`User model userFieldResolver returns the right user 1`] = `
-Object {
-  "_cursor": undefined,
-  "_score": undefined,
-  "appId": "TEST_BACKEND",
-  "appUserId": "userTest1",
-  "highlight": undefined,
-  "id": "6LOqD_z5A8BwUr4gh1P2gw_2zFU3IIrSchTSl-vemod7CChMU",
-  "inner_hits": undefined,
-  "name": "test user 1",
-}
-`;
+exports[`userFieldResolver returns the right backend user given appUserId 1`] = `null`;
 
-exports[`User model userFieldResolver returns the right user 2`] = `
-Object {
-  "_cursor": undefined,
-  "_score": undefined,
-  "appId": "TEST_BACKEND",
-  "appUserId": "userTest1",
-  "highlight": undefined,
-  "id": "6LOqD_z5A8BwUr4gh1P2gw_2zFU3IIrSchTSl-vemod7CChMU",
-  "inner_hits": undefined,
-  "name": "test user 1",
-}
-`;
+exports[`userFieldResolver returns the right backend user given db userId 1`] = `null`;
 
-exports[`User model userFieldResolver returns the right user 3`] = `
-Object {
-  "_cursor": undefined,
-  "_score": undefined,
-  "appId": "WEBSITE",
-  "highlight": undefined,
-  "id": "userTest2",
-  "inner_hits": undefined,
-  "name": "test user 2",
-}
-`;
+exports[`userFieldResolver returns the right web user given userId 1`] = `null`;

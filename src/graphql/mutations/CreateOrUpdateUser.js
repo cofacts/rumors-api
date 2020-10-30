@@ -4,6 +4,7 @@ import {
   generateOpenPeepsAvatar,
   AvatarTypes,
   getUserId,
+  isBackendApp,
 } from 'graphql/models/User';
 import client, { processMeta } from 'util/client';
 
@@ -49,13 +50,19 @@ export async function createOrUpdateUser({ appUserId, appId }) {
   const isCreated = result === 'created';
   const user = processMeta({ ...userFound, _id: userId });
 
-  if (!isCreated && (user.appId !== appId || user.appUserId !== appUserId)) {
+  // checking for collision
+  if (
+    !isCreated &&
+    isBackendApp(appId) &&
+    (user.appId !== appId || user.appUserId !== appUserId)
+  ) {
     const errorMessage = `collision found! ${
       user.appUserId
     } and ${appUserId} both hash to ${userId}`;
     console.log(errorMessage);
     rollbar.error(`createBackendUserError: ${errorMessage}`);
   }
+
   return {
     user,
     isCreated,
