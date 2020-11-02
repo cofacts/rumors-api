@@ -84,7 +84,9 @@
     ],
     "setupFilesAfterEnv": [
       "./test/setup.js"
-    ]
+    ],
+      "testSequencer": "./test/testSequencer.js"
+
   },
   "engines": {
     "node": ">=12"
