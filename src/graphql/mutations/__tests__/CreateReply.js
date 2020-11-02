@@ -135,7 +135,11 @@ describe('CreateReply', () => {
       type: 'doc',
       id: replyId,
     });
+
     expect(reply._source).toMatchSnapshot();
+
+    // Cleanup
+    await client.delete({ index: 'replies', type: 'doc', id: replyId });
   });
 
   it('should throw error since a reference is required for type !== NOT_ARTICLE', async () => {
