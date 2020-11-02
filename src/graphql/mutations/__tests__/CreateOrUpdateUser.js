@@ -19,12 +19,10 @@ jest.mock('../../models/User', () => {
   };
 });
 
-let dbStates = {};
-
 describe('CreateOrUpdateUser', () => {
-  beforeAll( () => loadFixtures(fixtures));
+  beforeAll(() => loadFixtures(fixtures));
 
-  afterAll( () => unloadFixtures(fixtures));
+  afterAll(() => unloadFixtures(fixtures));
 
   it('creates backend user if not existed', async () => {
     MockDate.set(1602288000000);
@@ -53,7 +51,7 @@ describe('CreateOrUpdateUser', () => {
     rollbar.error.mockClear();
 
     MockDate.reset();
-    await client.delete({index: 'users', type: 'doc', id })
+    await client.delete({ index: 'users', type: 'doc', id });
   });
 
   it("updates backend users' last active time if user already existed", async () => {

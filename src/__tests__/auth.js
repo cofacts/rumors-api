@@ -7,8 +7,8 @@ import client from 'util/client';
 const FIXED_DATE = 612921600000;
 
 describe('verifyProfile', () => {
-  beforeAll(async () => loadFixtures(fixtures));
-  afterAll(async () => unloadFixtures(fixtures));
+  beforeAll(() => loadFixtures(fixtures));
+  afterAll(() => unloadFixtures(fixtures));
 
   it('authenticates user via profile ID', async () => {
     const passportProfile = {

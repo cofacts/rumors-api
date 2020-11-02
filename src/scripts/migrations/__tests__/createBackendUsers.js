@@ -39,7 +39,6 @@ const indices = [
   'analytics',
 ];
 
-let dbStates = {};
 describe('createBackendUsers', () => {
   beforeAll(async () => {
     await loadFixtures(fixtures.fixturesToLoad);
@@ -65,8 +64,8 @@ describe('createBackendUsers', () => {
             match_all: {},
           },
         },
-        refresh: 'true'
-      })
+        refresh: 'true',
+      });
     }
   });
 

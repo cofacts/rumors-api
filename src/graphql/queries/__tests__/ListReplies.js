@@ -3,9 +3,8 @@ import gql from 'util/GraphQL';
 import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListReplies';
 
-
 describe('ListReplies', () => {
-  beforeAll( () => loadFixtures(fixtures));
+  beforeAll(() => loadFixtures(fixtures));
 
   it('lists all replies', async () => {
     expect(
@@ -384,5 +383,5 @@ describe('ListReplies', () => {
     ).toMatchSnapshot();
   });
 
-  afterAll(() => unloadFixtures(fixtures) );
+  afterAll(() => unloadFixtures(fixtures));
 });
