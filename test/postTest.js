@@ -1,8 +1,17 @@
 import main from 'scripts/cleanupUrls';
 import client from 'util/client';
 
+
 const checkDocs = async () => {
-  const {body: {hits: {total, hits}}} = await client.search({
+
+  const {body: aliases} = await client.cat.aliases({
+    format: 'JSON'
+  })
+  
+  const indices = aliases.map(i => i.alias);
+
+  const { body: { hits: { total, hits } } } = await client.search({
+    index: indices,
     _source: 'false'
   })
 

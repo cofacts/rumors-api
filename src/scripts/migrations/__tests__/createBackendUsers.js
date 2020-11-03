@@ -56,7 +56,7 @@ describe('createBackendUsers', () => {
   });
 
   afterAll(async () => {
-    /*for (const index of indices) {
+    for (const index of indices) {
       await client.deleteByQuery({
         index,
         body: {
@@ -66,7 +66,7 @@ describe('createBackendUsers', () => {
         },
         refresh: 'true',
       });
-    }*/
+    }
   });
 
   for (const index of indices) {
