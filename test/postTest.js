@@ -16,9 +16,8 @@ const checkDocs = async () => {
     for (const d of hits) {
       await client.delete({index: d._index, type: d._type, id: d._id})
     }
-    throw new Error()
+    process.exit(1) 
   }    
 }
 
 checkDocs()
-
