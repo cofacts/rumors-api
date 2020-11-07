@@ -94,8 +94,8 @@ export const apolloServer = new ApolloServer({
     let currentUser = null;
     if (appId && userId) {
       ({ user: currentUser } = await createOrUpdateUser({
-        appUserId: userId,
-        appId: appId,
+        userId,
+        appId,
       }));
     }
 

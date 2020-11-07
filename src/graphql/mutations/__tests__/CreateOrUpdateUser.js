@@ -30,14 +30,14 @@ describe('CreateOrUpdateUser', () => {
     const appId = 'TEST_BACKEND';
 
     const { user, isCreated } = await createOrUpdateUser({
-      appUserId: userId,
+      userId,
       appId,
     });
 
     expect(isCreated).toBe(true);
     expect(user).toMatchSnapshot();
 
-    const id = getUserId({ appUserId: userId, appId });
+    const id = getUserId({ userId, appId });
 
     const {
       body: { _source: source },
@@ -61,14 +61,14 @@ describe('CreateOrUpdateUser', () => {
     const appId = 'TEST_BACKEND';
 
     const { user, isCreated } = await createOrUpdateUser({
-      appUserId: userId,
+      userId,
       appId,
     });
 
     expect(isCreated).toBe(false);
     expect(user).toMatchSnapshot();
 
-    const id = getUserId({ appUserId: userId, appId });
+    const id = getUserId({ userId, appId });
     const {
       body: { _source: source },
     } = await client.get({
@@ -86,11 +86,11 @@ describe('CreateOrUpdateUser', () => {
 
     const userId = 'testUser3';
     const appId = 'TEST_BACKEND';
-    const id = getUserId({ appUserId: 'testUser1', appId });
+    const id = getUserId({ userId: 'testUser1', appId });
 
     getUserId.mockReturnValueOnce(id);
     const { user, isCreated } = await createOrUpdateUser({
-      appUserId: userId,
+      userId,
       appId,
     });
 

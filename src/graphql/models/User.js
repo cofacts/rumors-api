@@ -70,22 +70,22 @@ export const generateOpenPeepsAvatar = () => {
 };
 
 /**
- * Given appId, appUserId pair, returns the id of corresponding user in db.
+ * Given appId, userId pair, where userId could be appUserId or dbUserID, returns the id of corresponding user in db.
  */
-export const getUserId = ({ appId, appUserId }) => {
-  if (!appId || !isBackendApp(appId) || isDBUserId({ appId, appUserId }))
-    return appUserId;
-  else return convertAppUserIdToUserId({ appId, appUserId });
+export const getUserId = ({ appId, userId }) => {
+  if (!appId || !isBackendApp(appId) || isDBUserId({ appId, userId }))
+    return userId;
+  else return convertAppUserIdToUserId({ appId, appUserId: userId });
 };
 
 /**
  * Check if the userId for a backend user is the user id in db or it is the app user Id.
  */
-export const isDBUserId = ({ appId, appUserId }) =>
+export const isDBUserId = ({ appId, userId }) =>
   appId &&
-  appUserId &&
-  appUserId.length === BACKEND_USER_ID_LEN &&
-  appUserId.substr(0, 6) === `${encodeAppId(appId)}_`;
+  userId &&
+  userId.length === BACKEND_USER_ID_LEN &&
+  userId.substr(0, 6) === `${encodeAppId(appId)}_`;
 
 export const encodeAppId = appId =>
   crypto
@@ -239,7 +239,7 @@ export const userFieldResolver = async (
   // we can resolve user from userId.
   //
   if (userId && appId) {
-    const id = getUserId({ appId, appUserId: userId });
+    const id = getUserId({ appId, userId });
     const user = await loaders.docLoader.load({ index: 'users', id });
     if (user) return user;
   }

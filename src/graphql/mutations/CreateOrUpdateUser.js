@@ -13,22 +13,22 @@ import rollbar from 'rollbarInstance';
 /**
  * Index backend user if not existed, and record the last active time as now.
  *
- * @param {string} appUserId - user ID given by an backend app
+ * @param {string} userID    - either appUserID given by an backend app or userId for frontend users
  * @param {string} appId     - app ID
  *
  * @returns {user: User, isCreated: boolean}
  */
-export async function createOrUpdateUser({ appUserId, appId }) {
-  assertUser({ appId, userId: appUserId });
+export async function createOrUpdateUser({ userId, appId }) {
+  assertUser({ appId, userId });
   const now = new Date().toISOString();
-  const userId = getUserId({ appId, appUserId });
+  const dbUserId = getUserId({ appId, userId });
 
   const {
     body: { result, get: userFound },
   } = await client.update({
     index: 'users',
     type: 'doc',
-    id: userId,
+    id: dbUserId,
     body: {
       doc: {
         lastActiveAt: now,
@@ -38,7 +38,7 @@ export async function createOrUpdateUser({ appUserId, appId }) {
         avatarType: AvatarTypes.OpenPeeps,
         avatarData: JSON.stringify(generateOpenPeepsAvatar()),
         appId,
-        appUserId,
+        appUserId: userId,
         createdAt: now,
         updatedAt: now,
         lastActiveAt: now,
@@ -48,17 +48,17 @@ export async function createOrUpdateUser({ appUserId, appId }) {
   });
 
   const isCreated = result === 'created';
-  const user = processMeta({ ...userFound, _id: userId });
+  const user = processMeta({ ...userFound, _id: dbUserId });
 
   // checking for collision
   if (
     !isCreated &&
     isBackendApp(appId) &&
-    (user.appId !== appId || user.appUserId !== appUserId)
+    (user.appId !== appId || user.appUserId !== userId)
   ) {
     const errorMessage = `collision found! ${
       user.appUserId
-    } and ${appUserId} both hash to ${userId}`;
+    } and ${userId} both hash to ${dbUserId}`;
     console.log(errorMessage);
     rollbar.error(`createBackendUserError: ${errorMessage}`);
   }
