@@ -41,7 +41,8 @@ import {
   generateOpenPeepsAvatar,
   AvatarTypes,
   convertAppUserIdToUserId,
-} from 'graphql/models/User';
+  isBackendApp,
+} from 'util/user';
 import { get, set } from 'lodash';
 
 const AGG_NAME = 'userIdPair';
@@ -104,9 +105,6 @@ const backendUserQuery = {
     ],
   },
 };
-
-const isBackendApp = appId =>
-  appId !== 'WEBSITE' && appId !== 'DEVELOPMENT_FRONTEND';
 
 const userReferenceInSchema = {
   articlecategoryfeedbacks: {

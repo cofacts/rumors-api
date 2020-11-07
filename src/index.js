@@ -17,7 +17,7 @@ import { AUTH_ERROR_MSG } from './graphql/util';
 import CookieStore from './CookieStore';
 import { loginRouter, authRouter } from './auth';
 import rollbar from './rollbarInstance';
-import { createOrUpdateUser } from './graphql/mutations/CreateOrUpdateUser';
+import { createOrUpdateUser } from './util/user';
 
 const app = new Koa();
 const router = Router();
