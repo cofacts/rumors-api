@@ -61,7 +61,7 @@ describe('fetchStatsFromGA', () => {
       yargs.argvMock.mockReset();
     });
 
-    it('without any arugments', async () => {
+    it('without any arguments', async () => {
       yargs.argvMock.mockReturnValue({
         useContentGroup: true,
         loadScript: false,
@@ -73,7 +73,7 @@ describe('fetchStatsFromGA', () => {
       expect(storeScriptInDBMock).not.toHaveBeenCalled();
     });
 
-    it('with date arugments', async () => {
+    it('with date arguments', async () => {
       yargs.argvMock.mockReturnValue({
         startDate: '2020-01-01',
         endDate: '2020-02-01',
@@ -93,7 +93,7 @@ describe('fetchStatsFromGA', () => {
       expect(storeScriptInDBMock).not.toHaveBeenCalled();
     });
 
-    it('with loadScript arugments', async () => {
+    it('with loadScript arguments', async () => {
       yargs.argvMock.mockReturnValue({
         loadScript: true,
         useContentGroup: true,
@@ -105,7 +105,7 @@ describe('fetchStatsFromGA', () => {
       expect(storeScriptInDBMock).toHaveBeenCalled();
     });
 
-    it('with loadScript and date arugments', async () => {
+    it('with loadScript and date arguments', async () => {
       yargs.argvMock.mockReturnValue({
         loadScript: true,
         startDate: '2020-01-01',
@@ -474,8 +474,8 @@ describe('fetchStatsFromGA', () => {
         upsertDocStatsSpy.mockClear();
       });
 
-      afterAll(async () =>
-        await client.delete_script({ id: fetchStatsFromGA.upsertScriptID }));
+      afterAll(() =>
+        client.delete_script({ id: fetchStatsFromGA.upsertScriptID }));
 
       it('should aggregate rows of data', async () => {
         await fetchStatsFromGA.processReport(

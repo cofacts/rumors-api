@@ -15,7 +15,8 @@
     "seed": "cd test/rumors-db && npm run seed",
     "pretest": "npm run rumors-db:test",
     "test": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 jest --runInBand",
-    "start": "pm2 startOrRestart ecosystem.config.js --env production --no-daemon",
+    "posttest": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 babel-node test/postTest.js",
+    "start": "pm2 startOrRestart ecosystem.config.js --env production --no-daemon",    
     "lint": "eslint src/.",
     "lint:fix": "eslint --fix src/.",
     "rumors-db:pull": "cd test/rumors-db && git pull",
@@ -83,7 +84,8 @@
     ],
     "setupFilesAfterEnv": [
       "./test/setup.js"
-    ]
+    ],
+    "testSequencer": "./test/testSequencer.js"
   },
   "engines": {
     "node": ">=12"

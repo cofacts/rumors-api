@@ -1,17 +1,10 @@
-import { loadFixtures, clearIndices, saveStateForIndices } from 'util/fixtures';
+import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import gql from 'util/GraphQL';
 import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListReplies';
 
-const indices = ['replies', 'urls'];
-let dbStates;
 describe('ListReplies', () => {
-  beforeAll(async () => {
-    // storing the current db states to restore to after the test is completed
-    dbStates = await saveStateForIndices(indices);
-    await clearIndices(indices);
-    await loadFixtures(fixtures);
-  });
+  beforeAll(() => loadFixtures(fixtures));
 
   it('lists all replies', async () => {
     expect(
@@ -390,9 +383,5 @@ describe('ListReplies', () => {
     ).toMatchSnapshot();
   });
 
-  afterAll(async () => {
-    await clearIndices(indices);
-    // restore db states to prevent affecting other tests
-    await loadFixtures(dbStates);
-  });
+  afterAll(() => unloadFixtures(fixtures));
 });

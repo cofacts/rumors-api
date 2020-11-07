@@ -15,8 +15,8 @@ jest.mock('lodash', () => ({
 }));
 
 describe('User model', () => {
-  beforeAll(async () => await loadFixtures(fixtures));
-  afterAll(async () => await unloadFixtures(fixtures));
+  beforeAll(() => loadFixtures(fixtures));
+  afterAll(() => unloadFixtures(fixtures));
 
   describe('currentUserOnlyField', () => {
     const user = {

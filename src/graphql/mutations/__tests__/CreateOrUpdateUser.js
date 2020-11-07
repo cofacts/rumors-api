@@ -1,4 +1,4 @@
-import { loadFixtures, saveStateForIndices, clearIndices } from 'util/fixtures';
+import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateOrUpdateUser';
@@ -19,25 +19,10 @@ jest.mock('../../models/User', () => {
   };
 });
 
-jest.mock('../../../rollbarInstance', () => ({
-  __esModule: true,
-  default: { error: jest.fn() },
-}));
-
-let dbStates = {};
-
 describe('CreateOrUpdateUser', () => {
-  beforeAll(async () => {
-    dbStates = await saveStateForIndices(['users']);
-    await clearIndices(['users']);
-    await loadFixtures(fixtures);
-  });
+  beforeAll(() => loadFixtures(fixtures));
 
-  afterAll(async () => {
-    await clearIndices(['users']);
-    // restore db states to prevent affecting other tests
-    await loadFixtures(dbStates);
-  });
+  afterAll(() => unloadFixtures(fixtures));
 
   it('creates backend user if not existed', async () => {
     MockDate.set(1602288000000);
@@ -66,6 +51,7 @@ describe('CreateOrUpdateUser', () => {
     rollbar.error.mockClear();
 
     MockDate.reset();
+    await client.delete({ index: 'users', type: 'doc', id });
   });
 
   it("updates backend users' last active time if user already existed", async () => {

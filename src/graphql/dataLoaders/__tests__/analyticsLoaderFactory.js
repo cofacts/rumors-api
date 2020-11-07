@@ -7,7 +7,7 @@ const loader = new DataLoaders();
 MockDate.set(1578589200000); // 2020-01-10T01:00:00.000+08:00
 
 describe('analyticsLoaderFactory', () => {
-  beforeAll(async () => await loadFixtures(fixtures));
+  beforeAll(() => loadFixtures(fixtures));
 
   it('should load last 31 days of data for given id', async () => {
     const res = await loader.analyticsLoader.load({
@@ -64,5 +64,5 @@ describe('analyticsLoaderFactory', () => {
     expect(error).toBe('docType is required');
   });
 
-  afterAll(async () => await unloadFixtures(fixtures));
+  afterAll(() => unloadFixtures(fixtures));
 });
