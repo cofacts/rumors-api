@@ -10,6 +10,8 @@ import {
   generateOpenPeepsAvatar,
   getUserId,
   createOrUpdateUser,
+  assertUser,
+  AUTH_ERROR_MSG,
 } from '../user';
 
 jest.mock('lodash', () => {
@@ -32,6 +34,25 @@ jest.mock('../user', () => {
 });
 
 describe('user utils', () => {
+  describe('assertUser', () => {
+    it('should throw error if userId is not present', () => {
+      expect(() => assertUser({})).toThrow(AUTH_ERROR_MSG);
+      expect(() => assertUser({ appId: 'appId' })).toThrow(AUTH_ERROR_MSG);
+    });
+
+    it('should throw error if appId is not present', () => {
+      expect(() => assertUser({ userId: 'userId' })).toThrow(
+        'userId is set, but x-app-id or x-app-secret is not set accordingly.'
+      );
+    });
+
+    it('should not throw error if userId and appId are both present', () => {
+      expect(() =>
+        assertUser({ appId: 'appId', userId: 'userId' })
+      ).not.toThrow();
+    });
+  });
+
   describe('pseudo name and avatar generators', () => {
     it('should generate pseudo names for user', () => {
       [

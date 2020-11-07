@@ -13,10 +13,23 @@ import {
   bustPoses,
 } from 'util/openPeepsOptions';
 import { sample, random } from 'lodash';
-import { assertUser } from 'graphql/util';
 import client, { processMeta } from 'util/client';
 import rollbar from 'rollbarInstance';
 import crypto from 'crypto';
+
+export const AUTH_ERROR_MSG = 'userId is not set via query string.';
+
+export function assertUser({ userId, appId }) {
+  if (!userId) {
+    throw new Error(AUTH_ERROR_MSG);
+  }
+
+  if (userId && !appId) {
+    throw new Error(
+      'userId is set, but x-app-id or x-app-secret is not set accordingly.'
+    );
+  }
+}
 
 /**
  * Generates a pseudonym.

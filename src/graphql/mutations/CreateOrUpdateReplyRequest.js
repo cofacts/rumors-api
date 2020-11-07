@@ -1,5 +1,5 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
-import { assertUser } from 'graphql/util';
+import { assertUser } from 'util/user';
 import Article from '../models/Article';
 
 import client, { processMeta } from 'util/client';

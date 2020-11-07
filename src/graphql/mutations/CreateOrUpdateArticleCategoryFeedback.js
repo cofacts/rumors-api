@@ -1,6 +1,6 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
-import { assertUser } from 'graphql/util';
+import { assertUser } from 'util/user';
 import FeedbackVote from 'graphql/models/FeedbackVote';
 import ArticleCategory from 'graphql/models/ArticleCategory';
 

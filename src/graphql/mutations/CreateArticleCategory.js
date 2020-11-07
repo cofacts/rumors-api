@@ -6,7 +6,7 @@ import {
 } from 'graphql';
 
 import client from 'util/client';
-import { assertUser } from 'graphql/util';
+import { assertUser } from 'util/user';
 import ArticleCategory from 'graphql/models/ArticleCategory';
 
 /**

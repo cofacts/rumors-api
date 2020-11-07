@@ -418,20 +418,6 @@ export function createConnectionType(
   });
 }
 
-export const AUTH_ERROR_MSG = 'userId is not set via query string.';
-
-export function assertUser({ userId, appId }) {
-  if (!userId) {
-    throw new Error(AUTH_ERROR_MSG);
-  }
-
-  if (userId && !appId) {
-    throw new Error(
-      'userId is set, but x-app-id or x-app-secret is not set accordingly.'
-    );
-  }
-}
-
 export function filterArticleRepliesByStatus(articleReplies, status) {
   if (!status) return articleReplies;
 
