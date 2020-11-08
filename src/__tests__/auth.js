@@ -2,12 +2,13 @@ import MockDate from 'mockdate';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/auth';
 import { verifyProfile } from '../auth';
+import client from 'util/client';
 
 const FIXED_DATE = 612921600000;
 
 describe('verifyProfile', () => {
-  beforeEach(() => loadFixtures(fixtures));
-  afterEach(() => unloadFixtures(fixtures));
+  beforeAll(() => loadFixtures(fixtures));
+  afterAll(() => unloadFixtures(fixtures));
 
   it('authenticates user via profile ID', async () => {
     const passportProfile = {
@@ -48,7 +49,11 @@ describe('verifyProfile', () => {
       'facebookId'
     );
     MockDate.reset();
-
+    await client.delete({
+      index: 'users',
+      type: 'doc',
+      id: id,
+    });
     expect(newUser).toMatchSnapshot();
   });
 });

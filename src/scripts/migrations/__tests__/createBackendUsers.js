@@ -1,10 +1,8 @@
-import { loadFixtures, clearIndices, saveStateForIndices } from 'util/fixtures';
+import { loadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import CreateBackendUsers from '../createBackendUsers';
 import fixtures from '../__fixtures__/createBackendUsers';
 import { sortBy } from 'lodash';
-
-jest.setTimeout(45000);
 
 const checkAllDocsForIndex = async index => {
   let res = {};
@@ -41,12 +39,8 @@ const indices = [
   'analytics',
 ];
 
-let dbStates = {};
 describe('createBackendUsers', () => {
   beforeAll(async () => {
-    // storing the current db states to restore to after the test is completed
-    dbStates = await saveStateForIndices(indices);
-    await clearIndices(indices);
     await loadFixtures(fixtures.fixturesToLoad);
 
     await new CreateBackendUsers({
@@ -62,9 +56,17 @@ describe('createBackendUsers', () => {
   });
 
   afterAll(async () => {
-    await clearIndices(indices);
-    // restore db states to prevent affecting other tests
-    await loadFixtures(dbStates);
+    for (const index of indices) {
+      await client.deleteByQuery({
+        index,
+        body: {
+          query: {
+            match_all: {},
+          },
+        },
+        refresh: 'true',
+      });
+    }
   });
 
   for (const index of indices) {

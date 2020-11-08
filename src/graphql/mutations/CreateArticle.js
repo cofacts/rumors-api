@@ -1,7 +1,7 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { h64 } from 'xxhashjs';
 
-import { assertUser } from 'graphql/util';
+import { assertUser } from 'util/user';
 import client from 'util/client';
 import scrapUrls from 'util/scrapUrls';
 

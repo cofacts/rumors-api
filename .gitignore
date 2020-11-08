@@ -38,9 +38,10 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-config/local-*
-
 # docker-compose test data
 esdata
 
+# local config
+config/local-*
+.vscode/
 .env

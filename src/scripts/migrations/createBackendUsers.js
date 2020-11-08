@@ -41,7 +41,8 @@ import {
   generateOpenPeepsAvatar,
   AvatarTypes,
   convertAppUserIdToUserId,
-} from 'graphql/models/User';
+  isBackendApp,
+} from 'util/user';
 import { get, set } from 'lodash';
 
 const AGG_NAME = 'userIdPair';
@@ -104,9 +105,6 @@ const backendUserQuery = {
     ],
   },
 };
-
-const isBackendApp = appId =>
-  appId !== 'WEBSITE' && appId !== 'DEVELOPMENT_FRONTEND';
 
 const userReferenceInSchema = {
   articlecategoryfeedbacks: {
@@ -201,7 +199,7 @@ export default class CreateBackendUsers {
       if (error) {
         logError(error);
       } else if (isBackendApp(appId)) {
-        const dbUserId = convertAppUserIdToUserId(appId, userId);
+        const dbUserId = convertAppUserIdToUserId({ appId, appUserId: userId });
         const appUserId = get(this.reversedUserIdMap, [dbUserId, 1]);
         // if the hashed id already exists, check for collision
         if (appUserId !== undefined) {

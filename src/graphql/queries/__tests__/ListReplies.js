@@ -1,5 +1,5 @@
-import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
+import gql from 'util/GraphQL';
 import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListReplies';
 

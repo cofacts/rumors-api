@@ -13,11 +13,10 @@ import { formatError } from 'graphql';
 import checkHeaders from './checkHeaders';
 import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
-import { AUTH_ERROR_MSG } from './graphql/util';
 import CookieStore from './CookieStore';
-
 import { loginRouter, authRouter } from './auth';
 import rollbar from './rollbarInstance';
+import { AUTH_ERROR_MSG, createOrUpdateUser } from './util/user';
 
 const app = new Koa();
 const router = Router();
@@ -78,22 +77,37 @@ router.get('/', ctx => {
 app.use(koaStatic(path.join(__dirname, '../static/')));
 app.use(router.routes(), router.allowedMethods());
 
-const apolloServer = new ApolloServer({
+export const apolloServer = new ApolloServer({
   schema,
   introspection: true, // Allow introspection in production as well
   playground: true,
-  context: ({ ctx }) => ({
-    loaders: new DataLoaders(), // new loaders per request
-    user: ctx.state.user,
+  context: async ({ ctx }) => {
+    const {
+      appId,
+      query: { userId: queryUserId } = {},
+      state: { user: { userId: sessionUserId } = {} } = {},
+    } = ctx;
 
-    // userId-appId pair
-    //
-    userId:
-      ctx.appId === 'WEBSITE' || ctx.appId === 'DEVELOPMENT_FRONTEND'
-        ? (ctx.state.user || {}).id
-        : ctx.query.userId,
-    appId: ctx.appId,
-  }),
+    const userId = queryUserId ?? sessionUserId;
+
+    let currentUser = null;
+    if (appId && userId) {
+      ({ user: currentUser } = await createOrUpdateUser({
+        userId,
+        appId,
+      }));
+    }
+
+    return {
+      loaders: new DataLoaders(), // new loaders per request
+      user: currentUser,
+
+      // userId-appId pair
+      //
+      userId,
+      appId,
+    };
+  },
   formatError(err) {
     // make web clients know they should login
     //

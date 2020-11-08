@@ -5,88 +5,7 @@ import {
   GraphQLNonNull,
 } from 'graphql';
 import crypto from 'crypto';
-import {
-  adjectives,
-  names,
-  towns,
-  separators,
-  decorators,
-} from 'util/pseudonymDict';
-import {
-  accessories,
-  faces,
-  facialHairStyles,
-  hairStyles,
-  bustPoses,
-} from 'util/openPeepsOptions';
-import { sample, random } from 'lodash';
-
-/**
- * Generates a pseudonym.
- */
-export const generatePseudonym = () => {
-  const [adj, name, place, separator, decorator] = [
-    adjectives,
-    names,
-    towns,
-    separators,
-    decorators,
-  ].map(ary => sample(ary));
-  return decorator(separator({ adj, name, place }));
-};
-
-export const AvatarTypes = {
-  OpenPeeps: 'OpenPeeps',
-};
-
-/**
- * Generates data for open peeps avatar.
- */
-export const generateOpenPeepsAvatar = () => {
-  const accessory = random() ? sample(accessories) : 'None';
-  const facialHair = random() ? sample(facialHairStyles) : 'None';
-  const flip = !!random();
-  const backgroundColorIndex = random(0, 1, true);
-
-  const face = sample(faces);
-  const hair = sample(hairStyles);
-  const body = sample(bustPoses);
-
-  return {
-    accessory,
-    body,
-    face,
-    hair,
-    facialHair,
-    backgroundColorIndex,
-    flip,
-  };
-};
-
-export const encodeAppId = appId =>
-  crypto
-    .createHash('md5')
-    .update(appId)
-    .digest('base64')
-    .replace(/[+/]/g, '')
-    .substr(0, 5);
-export const sha256 = value =>
-  crypto
-    .createHash('sha256')
-    .update(value)
-    .digest('base64')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
-
-/**
- * @param {string} appUserId - user ID given by an backend app
- * @param {string} appId - app ID
- * @returns {string} the id used to index `user` in db
- */
-export const convertAppUserIdToUserId = (appId, appUserId) => {
-  return `${encodeAppId(appId)}_${sha256(appUserId)}`;
-};
+import { getUserId } from 'util/user';
 
 /**
  * Field config helper for current user only field.
@@ -95,11 +14,11 @@ export const convertAppUserIdToUserId = (appId, appUserId) => {
  * @param {GraphQLScalarType | GraphQLObjectType} type
  * @param {function?} resolver - Use default resolver if not given.
  */
-const currentUserOnlyField = (type, resolver) => ({
+export const currentUserOnlyField = (type, resolver) => ({
   type,
   description: 'Returns only for current user. Returns `null` otherwise.',
   resolve(user, arg, context, info) {
-    if (user.id !== context.user.id) return null;
+    if (!context.user || user.id !== context.user.id) return null;
 
     return resolver ? resolver(user, arg, context, info) : user[info.fieldName];
   },
@@ -129,6 +48,11 @@ const User = new GraphQLObjectType({
     email: currentUserOnlyField(GraphQLString),
     name: { type: GraphQLString },
     avatarUrl: avatarResolver(),
+    avatarData: { type: GraphQLString },
+
+    // TODO: also enable these two fields for requests from the same app?
+    appId: currentUserOnlyField(GraphQLString),
+    appUserId: currentUserOnlyField(GraphQLString),
 
     facebookId: currentUserOnlyField(GraphQLString),
     githubId: currentUserOnlyField(GraphQLString),
@@ -194,24 +118,32 @@ const User = new GraphQLObjectType({
     },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
+    lastActiveAt: { type: GraphQLString },
   }),
 });
 
 export default User;
 
-export const userFieldResolver = (
+export const userFieldResolver = async (
   { userId, appId },
   args,
   { loaders, ...context }
 ) => {
-  // If the root document is created by website users, we can resolve user from userId.
+  // If the root document is created by website users or if the userId is already converted to db userId,
+  // we can resolve user from userId.
   //
-  if (appId === 'WEBSITE')
-    return loaders.docLoader.load({ index: 'users', id: userId });
+  if (userId && appId) {
+    const id = getUserId({ appId, userId });
+    const user = await loaders.docLoader.load({ index: 'users', id });
+    if (user) return user;
+  }
+
+  /* TODO: some unit tests are depending on this code block, need to clean up those tests and then 
+     remove the following lines, and the corresponding unit test. */
 
   // If the user comes from the same client as the root document, return the user id.
   //
-  if (context.appId === appId) return { id: userId };
+  if (context.appId && context.appId === appId) return { id: userId };
 
   // If not, this client is not allowed to see user.
   //

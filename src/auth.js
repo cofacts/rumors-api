@@ -15,14 +15,9 @@ passport.serializeUser((user, done) => {
 /**
  * De-serialize and populates ctx.state.user
  */
-passport.deserializeUser(async (userId, done) => {
+passport.deserializeUser((userId, done) => {
   try {
-    const { body: user } = await client.get({
-      index: 'users',
-      type: 'doc',
-      id: userId,
-    });
-    done(null, processMeta(user));
+    done(null, { userId });
   } catch (err) {
     done(err);
   }
@@ -31,7 +26,7 @@ passport.deserializeUser(async (userId, done) => {
 /**
  * Common verify callback for all login strategies.
  * It tries first authenticating user with profile.id agains fieldName in DB.
- * If not applicatble, search for existing users with their email.
+ * If not applicable, search for existing users with their email.
  * If still not applicable, create a user with currently given profile.
  *
  * @param {object} profile - passport profile object
@@ -222,7 +217,10 @@ export const authRouter = Router()
     await next();
 
     let basePath = '';
-    if (ctx.session.appId === 'RUMORS_SITE') {
+    if (
+      ctx.session.appId === 'RUMORS_SITE' ||
+      ctx.session.appId === 'DEVELOPMENT_FRONTEND'
+    ) {
       const allowedOrigins = process.env.RUMORS_SITE_CORS_ORIGIN.split(',');
       basePath = allowedOrigins.find(o => o === ctx.session.origin);
     }

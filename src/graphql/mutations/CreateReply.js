@@ -1,6 +1,6 @@
 import { GraphQLString, GraphQLNonNull, GraphQLBoolean } from 'graphql';
 
-import { assertUser } from 'graphql/util';
+import { assertUser } from 'util/user';
 
 import client from 'util/client';
 import scrapUrls from 'util/scrapUrls';

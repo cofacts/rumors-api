@@ -1,7 +1,7 @@
 import { GraphQLString, GraphQLNonNull, GraphQLList } from 'graphql';
 
 import client from 'util/client';
-import { assertUser } from 'graphql/util';
+import { assertUser } from 'util/user';
 import ArticleReply from 'graphql/models/ArticleReply';
 
 /**
