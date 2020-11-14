@@ -59,3 +59,48 @@ Object {
   },
 }
 `;
+
+exports[`GetUser Get user by id and slug should fail 1`] = `
+Array [
+  [GraphQLError: cannot search by both id and slug],
+]
+`;
+
+exports[`GetUser Get user by slug: currentUser 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "avatarUrl": "https://www.gravatar.com/avatar/cd2cad5a1d8a2dbf1e93cb33ee6ce254?s=80&d=identicon&r=g",
+      "id": "current-user",
+      "name": "current user",
+      "slug": "def456",
+    },
+  },
+}
+`;
+
+exports[`GetUser Get user by slug: testEmailUser 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=80&d=identicon&r=g",
+      "id": "test-email-user",
+      "name": "test email user",
+      "slug": "ghi789",
+    },
+  },
+}
+`;
+
+exports[`GetUser Get user by slug: testUser 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "avatarUrl": "https://www.gravatar.com/avatar/302be4d4325de641a89e586a1e6b42a7?s=80&d=identicon&r=g",
+      "id": "test-user",
+      "name": "test user",
+      "slug": "abc123",
+    },
+  },
+}
+`;

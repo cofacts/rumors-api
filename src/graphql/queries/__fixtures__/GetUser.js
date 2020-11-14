@@ -1,16 +1,19 @@
 export default {
   '/users/doc/test-user': {
     id: 'test-user',
+    slug: 'abc123',
     name: 'test user',
     email: 'secret@secret.com',
   },
   '/users/doc/current-user': {
     id: 'current-user',
+    slug: 'def456',
     name: 'current user',
     email: 'hi@me.com',
   },
   '/users/doc/test-email-user': {
     id: 'test-email-user',
+    slug: 'ghi789',
     name: 'test email user',
     email: 'cofacts.tw@gmail.com',
   },
