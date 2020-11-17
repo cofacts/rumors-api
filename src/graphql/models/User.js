@@ -5,8 +5,12 @@ import {
   GraphQLNonNull,
   GraphQLList,
 } from 'graphql';
-import crypto from 'crypto';
-import { AvatarTypes, getAvailableAvatarTypes, getUserId } from 'util/user';
+import {
+  AvatarTypes,
+  getAvailableAvatarTypes,
+  getUserId,
+  avatarUrlResolver,
+} from 'util/user';
 
 /**
  * Field config helper for current user only field.
@@ -25,37 +29,6 @@ export const currentUserOnlyField = (type, resolver) => ({
   },
 });
 
-/**
- * Use Gravatar as avatar provider.
- */
-const avatarResolver = (s = 80, d = 'identicon', r = 'g') => ({
-  type: GraphQLString,
-  description: 'returns avatar url from facebook, github or gravatar',
-  resolve(user) {
-    switch (user.avatarType) {
-      case AvatarTypes.OpenPeeps:
-        return null;
-      case AvatarTypes.Facebook:
-        return `https://graph.facebook.com/v9.0/${user.facebookId}/picture`;
-      case AvatarTypes.Github:
-        return `https://avatars2.githubusercontent.com/u/${
-          user.githubId
-        }?s=${d}`;
-      case AvatarTypes.Gravatar:
-      default: {
-        // return hash based on user email for gravatar url
-        const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
-        const hash = crypto
-          .createHash('md5')
-          .update((user.email || user.id).trim().toLocaleLowerCase())
-          .digest('hex');
-        const params = `?s=${s}&d=${d}&r=${r}`;
-        return `${GRAVATAR_URL}${hash}${params}`;
-      }
-    }
-  },
-});
-
 const User = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
@@ -64,9 +37,18 @@ const User = new GraphQLObjectType({
     email: currentUserOnlyField(GraphQLString),
     name: { type: GraphQLString },
 
-    avatarUrl: avatarResolver(),
+    avatarUrl: {
+      type: GraphQLString,
+      description: 'returns avatar url from facebook, github or gravatar',
+      resolve: avatarUrlResolver(),
+    },
     avatarData: { type: GraphQLString },
-    avatarType: { type: GraphQLString },
+    avatarType: {
+      type: GraphQLString,
+      resolver(user) {
+        return user?.avatarType ?? AvatarTypes.Gravatar;
+      },
+    },
 
     availableAvatarTypes: currentUserOnlyField(
       new GraphQLList(GraphQLString),

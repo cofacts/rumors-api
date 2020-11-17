@@ -52,6 +52,34 @@ export const AvatarTypes = {
   Github: 'Github',
 };
 
+/**
+ * Returns avatar url based on avatarType.
+ */
+export const avatarUrlResolver = (s = 80, d = 'identicon', r = 'g') => user => {
+  switch (user.avatarType) {
+    case AvatarTypes.OpenPeeps:
+      return null;
+    case AvatarTypes.Facebook:
+      return `https://graph.facebook.com/v9.0/${user.facebookId}/picture`;
+    case AvatarTypes.Github:
+      return `https://avatars2.githubusercontent.com/u/${user.githubId}?s=${d}`;
+    case AvatarTypes.Gravatar:
+    default: {
+      // return hash based on user email for gravatar url
+      const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
+      const hash = crypto
+        .createHash('md5')
+        .update((user.email ?? user.id ?? '').trim().toLocaleLowerCase())
+        .digest('hex');
+      const params = `?s=${s}&d=${d}&r=${r}`;
+      return `${GRAVATAR_URL}${hash}${params}`;
+    }
+  }
+};
+
+/**
+ * Returns a list of avatar type options based on information available for a user.
+ */
 export const getAvailableAvatarTypes = user => {
   let types = [AvatarTypes.OpenPeeps, AvatarTypes.Gravatar];
   if (user?.facebookId) types.push(AvatarTypes.Facebook);
