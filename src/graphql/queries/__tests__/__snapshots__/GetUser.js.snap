@@ -108,7 +108,7 @@ Object {
     "GetUser": Object {
       "avatarData": null,
       "avatarType": "Github",
-      "avatarUrl": "https://avatars2.githubusercontent.com/u/undefined?s=identicon",
+      "avatarUrl": "https://avatars2.githubusercontent.com/u/654321?s=identicon",
       "id": "current-user",
     },
   },

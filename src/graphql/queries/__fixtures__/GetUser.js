@@ -13,7 +13,7 @@ export default {
     name: 'current user',
     email: 'hi@me.com',
     avatarType: 'Github',
-    GithubId: 654321,
+    githubId: 654321,
   },
   '/users/doc/test-email-user': {
     id: 'test-email-user',
