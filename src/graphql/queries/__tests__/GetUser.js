@@ -159,6 +159,7 @@ describe('GetUser', () => {
             avatarType
             avatarUrl
             avatarData
+            availableAvatarTypes
           }
         }
       `({}, { user: currentUser })
@@ -171,6 +172,7 @@ describe('GetUser', () => {
             avatarType
             avatarUrl
             avatarData
+            availableAvatarTypes
           }
         }
       `({}, { user: currentUser })
@@ -183,9 +185,10 @@ describe('GetUser', () => {
             avatarType
             avatarUrl
             avatarData
+            availableAvatarTypes
           }
         }
-      `({}, { user: currentUser })
+      `({}, { user: testEmailUser })
     ).toMatchSnapshot('testEmailUser');
     expect(
       await gql`
@@ -195,6 +198,7 @@ describe('GetUser', () => {
             avatarType
             avatarUrl
             avatarData
+            availableAvatarTypes
           }
         }
       `({}, { user: currentUser })
