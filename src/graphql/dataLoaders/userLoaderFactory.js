@@ -22,4 +22,7 @@ export default () =>
       if (!hits || !hits.hits || hits.hits.length == 0) return null;
       return processMeta(hits.hits[0]);
     });
-  });
+  },
+    {
+      cacheKeyFn: ({ slug }) => `/user/slug/${slug}`,
+    });

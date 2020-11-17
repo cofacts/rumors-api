@@ -11,6 +11,7 @@ import {
   getUserId,
   avatarUrlResolver,
 } from 'util/user';
+import AvatarTypeEnum from './AvatarTypeEnum';
 
 /**
  * Field config helper for current user only field.
@@ -36,6 +37,7 @@ const User = new GraphQLObjectType({
     slug: { type: GraphQLString },
     email: currentUserOnlyField(GraphQLString),
     name: { type: GraphQLString },
+    bio: { type: GraphQLString },
 
     avatarUrl: {
       type: GraphQLString,
@@ -44,7 +46,7 @@ const User = new GraphQLObjectType({
     },
     avatarData: { type: GraphQLString },
     avatarType: {
-      type: GraphQLString,
+      type: AvatarTypeEnum,
       resolver(user) {
         return user?.avatarType ?? AvatarTypes.Gravatar;
       },
