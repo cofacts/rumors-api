@@ -3,9 +3,10 @@ import {
   GraphQLString,
   GraphQLInt,
   GraphQLNonNull,
+  GraphQLList
 } from 'graphql';
 import crypto from 'crypto';
-import { getUserId } from 'util/user';
+import { AvatarTypes, getAvailableAvatarTypes, getUserId } from 'util/user';
 
 /**
  * Field config helper for current user only field.
@@ -29,15 +30,26 @@ export const currentUserOnlyField = (type, resolver) => ({
  */
 const avatarResolver = (s = 80, d = 'identicon', r = 'g') => ({
   type: GraphQLString,
-  description: 'return hash based on user email for gravatar url',
+  description: 'returns avatar url from facebook, github or gravatar',
   resolve(user) {
-    const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
-    const hash = crypto
-      .createHash('md5')
-      .update((user.email || user.id).trim().toLocaleLowerCase())
-      .digest('hex');
-    const params = `?s=${s}&d=${d}&r=${r}`;
-    return `${GRAVATAR_URL}${hash}${params}`;
+    switch (user.avatarType) {
+      case AvatarTypes.OpenPeeps:
+        return null;
+      case AvatarTypes.Facebook:
+        return `https://graph.facebook.com/v9.0/${user.facebookId}/picture`
+      case AvatarTypes.Github:
+        return `https://avatars2.githubusercontent.com/u/${user.githubId}?s=${d}`
+      case AvatarTypes.Gravatar:
+      default:
+        // return hash based on user email for gravatar url
+        const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
+        const hash = crypto
+          .createHash('md5')
+          .update((user.email || user.id).trim().toLocaleLowerCase())
+          .digest('hex');
+        const params = `?s=${s}&d=${d}&r=${r}`;
+        return `${GRAVATAR_URL}${hash}${params}`;
+    }
   },
 });
 
@@ -48,8 +60,15 @@ const User = new GraphQLObjectType({
     slug: { type: GraphQLString },
     email: currentUserOnlyField(GraphQLString),
     name: { type: GraphQLString },
+    
     avatarUrl: avatarResolver(),
     avatarData: { type: GraphQLString },
+    avatarType: { type: GraphQLString },
+    
+    availableAvatarTypes: currentUserOnlyField(
+      new GraphQLList(GraphQLString),
+      (user) => getAvailableAvatarTypes(user)
+    ),
 
     // TODO: also enable these two fields for requests from the same app?
     appId: currentUserOnlyField(GraphQLString),

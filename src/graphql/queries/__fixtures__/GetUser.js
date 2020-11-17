@@ -4,18 +4,29 @@ export default {
     slug: 'abc123',
     name: 'test user',
     email: 'secret@secret.com',
+    avatarType: 'Facebook',
+    facebookId: 123456
   },
   '/users/doc/current-user': {
     id: 'current-user',
     slug: 'def456',
     name: 'current user',
     email: 'hi@me.com',
+    avatarType: 'Github',
+    GithubId: 654321
   },
   '/users/doc/test-email-user': {
     id: 'test-email-user',
     slug: 'ghi789',
     name: 'test email user',
     email: 'cofacts.tw@gmail.com',
+  },
+  '/users/doc/another-user': {
+    id: 'another-user',
+    name: 'open peeps user',
+    email: 'user@example.com',
+    avatarType: 'OpenPeeps',
+    avatarData: '{"key":"value"}'
   },
   '/articles/doc/some-doc': {
     articleReplies: [

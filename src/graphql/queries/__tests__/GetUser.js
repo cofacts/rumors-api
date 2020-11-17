@@ -84,7 +84,6 @@ describe('GetUser', () => {
             id
             slug
             name
-            avatarUrl
           }
         }
       `({}, { user: currentUser })
@@ -96,7 +95,6 @@ describe('GetUser', () => {
             id
             slug
             name
-            avatarUrl
           }
         }
       `({}, { user: currentUser })
@@ -108,7 +106,6 @@ describe('GetUser', () => {
             id
             slug
             name
-            avatarUrl
           }
         }
       `({}, { user: currentUser })
@@ -151,6 +148,58 @@ describe('GetUser', () => {
     `({}, { user: currentUser });
     expect(data).toMatchObject({ GetUser: null });
     expect(errors).toBe(undefined);
+  });
+
+
+  it('returns avatarUrl/avatarData based on avatarType selected by User', async () => {
+expect(
+      await gql`
+        {
+          GetUser(id: "test-user") {
+            id
+            avatarType
+            avatarUrl
+            avatarData
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('testUser');
+    expect(
+      await gql`
+        {
+          GetUser(id: "current-user") {
+            id
+            avatarType
+            avatarUrl
+            avatarData
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('currentUser');
+    expect(
+      await gql`
+        {
+          GetUser(id: "test-email-user") {
+            id
+            avatarType
+            avatarUrl
+            avatarData
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('testEmailUser');
+    expect(
+      await gql`
+        {
+          GetUser(id: "another-user") {
+            id
+            avatarType
+            avatarUrl
+            avatarData
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('openPeepsUser');
   });
 
   afterAll(() => unloadFixtures(fixtures));

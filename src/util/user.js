@@ -47,7 +47,20 @@ export const generatePseudonym = () => {
 
 export const AvatarTypes = {
   OpenPeeps: 'OpenPeeps',
+  Gravatar: 'Gravatar',
+  Facebook: 'Facebook',
+  Github: 'Github',
 };
+
+export const getAvailableAvatarTypes = user => {
+  let types = [AvatarTypes.OpenPeeps, AvatarTypes.Gravatar];
+  if (user?.facebookId)
+    types.push(AvatarTypes.Facebook)
+  if (user?.githubId)
+    types.push(AvatarTypes.Github)
+  return types
+}
+
 
 export const isBackendApp = appId =>
   appId !== 'WEBSITE' && appId !== 'DEVELOPMENT_FRONTEND';
