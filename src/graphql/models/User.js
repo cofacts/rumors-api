@@ -3,7 +3,7 @@ import {
   GraphQLString,
   GraphQLInt,
   GraphQLNonNull,
-  GraphQLList
+  GraphQLList,
 } from 'graphql';
 import crypto from 'crypto';
 import { AvatarTypes, getAvailableAvatarTypes, getUserId } from 'util/user';
@@ -36,11 +36,13 @@ const avatarResolver = (s = 80, d = 'identicon', r = 'g') => ({
       case AvatarTypes.OpenPeeps:
         return null;
       case AvatarTypes.Facebook:
-        return `https://graph.facebook.com/v9.0/${user.facebookId}/picture`
+        return `https://graph.facebook.com/v9.0/${user.facebookId}/picture`;
       case AvatarTypes.Github:
-        return `https://avatars2.githubusercontent.com/u/${user.githubId}?s=${d}`
+        return `https://avatars2.githubusercontent.com/u/${
+          user.githubId
+        }?s=${d}`;
       case AvatarTypes.Gravatar:
-      default:
+      default: {
         // return hash based on user email for gravatar url
         const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
         const hash = crypto
@@ -49,6 +51,7 @@ const avatarResolver = (s = 80, d = 'identicon', r = 'g') => ({
           .digest('hex');
         const params = `?s=${s}&d=${d}&r=${r}`;
         return `${GRAVATAR_URL}${hash}${params}`;
+      }
     }
   },
 });
@@ -60,14 +63,14 @@ const User = new GraphQLObjectType({
     slug: { type: GraphQLString },
     email: currentUserOnlyField(GraphQLString),
     name: { type: GraphQLString },
-    
+
     avatarUrl: avatarResolver(),
     avatarData: { type: GraphQLString },
     avatarType: { type: GraphQLString },
-    
+
     availableAvatarTypes: currentUserOnlyField(
       new GraphQLList(GraphQLString),
-      (user) => getAvailableAvatarTypes(user)
+      user => getAvailableAvatarTypes(user)
     ),
 
     // TODO: also enable these two fields for requests from the same app?

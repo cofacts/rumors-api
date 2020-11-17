@@ -5,7 +5,7 @@ export default {
     name: 'test user',
     email: 'secret@secret.com',
     avatarType: 'Facebook',
-    facebookId: 123456
+    facebookId: 123456,
   },
   '/users/doc/current-user': {
     id: 'current-user',
@@ -13,7 +13,7 @@ export default {
     name: 'current user',
     email: 'hi@me.com',
     avatarType: 'Github',
-    GithubId: 654321
+    GithubId: 654321,
   },
   '/users/doc/test-email-user': {
     id: 'test-email-user',
@@ -26,7 +26,7 @@ export default {
     name: 'open peeps user',
     email: 'user@example.com',
     avatarType: 'OpenPeeps',
-    avatarData: '{"key":"value"}'
+    avatarData: '{"key":"value"}',
   },
   '/articles/doc/some-doc': {
     articleReplies: [

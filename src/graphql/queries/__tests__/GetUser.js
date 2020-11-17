@@ -150,9 +150,8 @@ describe('GetUser', () => {
     expect(errors).toBe(undefined);
   });
 
-
   it('returns avatarUrl/avatarData based on avatarType selected by User', async () => {
-expect(
+    expect(
       await gql`
         {
           GetUser(id: "test-user") {

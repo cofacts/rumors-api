@@ -54,13 +54,10 @@ export const AvatarTypes = {
 
 export const getAvailableAvatarTypes = user => {
   let types = [AvatarTypes.OpenPeeps, AvatarTypes.Gravatar];
-  if (user?.facebookId)
-    types.push(AvatarTypes.Facebook)
-  if (user?.githubId)
-    types.push(AvatarTypes.Github)
-  return types
-}
-
+  if (user?.facebookId) types.push(AvatarTypes.Facebook);
+  if (user?.githubId) types.push(AvatarTypes.Github);
+  return types;
+};
 
 export const isBackendApp = appId =>
   appId !== 'WEBSITE' && appId !== 'DEVELOPMENT_FRONTEND';
