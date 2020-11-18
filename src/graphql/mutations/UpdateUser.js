@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLNonNull } from 'graphql';
+import { GraphQLString } from 'graphql';
 import client from 'util/client';
 import User from 'graphql/models/User';
 import { omitBy } from 'lodash';
@@ -31,10 +31,10 @@ export default {
       },
       v => v === undefined || v === null || v === ''
     );
-    
-    if (Object.keys(doc).length === 1) 
+
+    if (Object.keys(doc).length === 1)
       throw new Error(`There's nothing to update`);
-    
+
     // Ensure uniqueness of slug
     if (slug !== undefined) {
       const {
@@ -56,8 +56,9 @@ export default {
       if (total > 0) throw new Error(`Slug already taken`);
     }
 
-    if (avatarType && avatarType !== AvatarTypes.OpenPeeps) doc.avatarData = null;
-    console.log(JSON.stringify(doc))
+    if (avatarType && avatarType !== AvatarTypes.OpenPeeps)
+      doc.avatarData = null;
+    
     const {
       body: {
         result,
@@ -74,7 +75,7 @@ export default {
     });
 
     if (result === 'noop') {
-      throw new Error(`Cannot change name for user`);
+      throw new Error(`Cannot update user`);
     }
 
     return { id: userId, ..._source };
