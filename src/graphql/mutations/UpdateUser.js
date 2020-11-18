@@ -58,7 +58,7 @@ export default {
 
     if (avatarType && avatarType !== AvatarTypes.OpenPeeps)
       doc.avatarData = null;
-    
+
     const {
       body: {
         result,
