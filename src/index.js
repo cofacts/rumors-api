@@ -104,7 +104,8 @@ export const apolloServer = new ApolloServer({
 
       // userId-appId pair
       //
-      userId,
+      userId: currentUser?.id,
+      appUserId: userId,
       appId,
     };
   },

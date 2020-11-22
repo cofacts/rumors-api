@@ -4,12 +4,24 @@ import { apolloServer } from '../index';
 import fixtures from '../__fixtures__/index';
 import { createTestClient } from 'apollo-server-testing';
 import MockDate from 'mockdate';
+import GetUser from '../graphql/queries/GetUser';
 
 jest.mock('koa', () => {
   const Koa = jest.requireActual('koa');
   Koa.prototype.listen = () => null;
   return {
     default: Koa,
+    __esModule: true,
+  };
+});
+
+jest.mock('../graphql/queries/GetUser', () => {
+  const GetUser = jest.requireActual('../graphql/queries/GetUser').default;
+  return {
+    default: {
+      ...GetUser,
+      resolve: jest.spyOn(GetUser, 'resolve'),
+    },
     __esModule: true,
   };
 });
@@ -59,6 +71,8 @@ describe('apolloServer', () => {
     });
   });
 
+  afterEach(() => GetUser.resolve.mockClear());
+
   it('gracefully handles no auth request', async () => {
     const { res, errors } = await getCurrentUser();
     expect(errors).toBeUndefined();
@@ -76,13 +90,25 @@ describe('apolloServer', () => {
       query: { userId },
     });
 
-    expect(errors).toBeUndefined();
-    expect(res).toMatchObject({
+    const expectedUser = {
       id: 'testUser1',
       name: 'test user 1',
       appId: 'WEBSITE',
       lastActiveAt: now,
-    });
+    };
+
+    expect(errors).toBeUndefined();
+    expect(res).toMatchObject(expectedUser);
+    const {
+      user: ctxUser,
+      userId: ctxUserId,
+      appUserId: ctxAppUserId,
+      appId: ctxAppId,
+    } = GetUser.resolve.mock.calls[0][2];
+    expect(ctxUser).toMatchObject(expectedUser);
+    expect(ctxUserId).toBe(userId);
+    expect(ctxAppUserId).toBe(userId);
+    expect(ctxAppId).toBe(appId);
   });
 
   it('resolves current backend user', async () => {
@@ -96,14 +122,25 @@ describe('apolloServer', () => {
       query: { userId },
     });
 
-    expect(errors).toBeUndefined();
-    expect(res).toMatchObject({
+    const expectedUser = {
       id: '6LOqD_3gpe4ZVaxRvemf7KNTfm6y3WNBu1hbs-5MRdSWiWVss',
       name: 'test user 2',
       appId: 'TEST_BACKEND',
       appUserId: 'testUser2',
       lastActiveAt: now,
-    });
+    };
+    expect(errors).toBeUndefined();
+    expect(res).toMatchObject(expectedUser);
+    const {
+      user: ctxUser,
+      userId: ctxUserId,
+      appUserId: ctxAppUserId,
+      appId: ctxAppId,
+    } = GetUser.resolve.mock.calls[0][2];
+    expect(ctxUser).toMatchObject(expectedUser);
+    expect(ctxUserId).toBe(expectedUser.id);
+    expect(ctxAppUserId).toBe(userId);
+    expect(ctxAppId).toBe(appId);
   });
 
   it('creates new backend user if not existed', async () => {
@@ -117,13 +154,24 @@ describe('apolloServer', () => {
       query: { userId },
     });
 
-    expect(errors).toBeUndefined();
-    expect(res).toMatchObject({
+    const expectedUser = {
       id: '6LOqD_gsUWLlGviSA4KFdKpsNncQfTYeueOl-DGx9fL6zCNeA',
       name: expect.any(String),
       appId: 'TEST_BACKEND',
       appUserId: 'testUser3',
       lastActiveAt: now,
-    });
+    };
+    expect(errors).toBeUndefined();
+    expect(res).toMatchObject(expectedUser);
+    const {
+      user: ctxUser,
+      userId: ctxUserId,
+      appUserId: ctxAppUserId,
+      appId: ctxAppId,
+    } = GetUser.resolve.mock.calls[0][2];
+    expect(ctxUser).toMatchObject(expectedUser);
+    expect(ctxUserId).toBe(expectedUser.id);
+    expect(ctxAppUserId).toBe(userId);
+    expect(ctxAppId).toBe(appId);
   });
 });
