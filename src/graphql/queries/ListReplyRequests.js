@@ -25,31 +25,28 @@ export default {
         },
         createdAt: {
           type: timeRangeInput,
-        }
+        },
       }),
     },
     orderBy: {
-      type: createSortType('ListReplyRequestOrderBy', [
-        'createdAt',
-        'vote',
-      ]),
+      type: createSortType('ListReplyRequestOrderBy', ['createdAt', 'vote']),
     },
     ...pagingArgs,
   },
   async resolve(rootValue, { orderBy = [], filter = {}, ...otherParams }) {
-    
-    const filterQueries = []; 
+    const filterQueries = [];
 
     ['userId', 'appId', 'articleId'].forEach(field => {
       if (!filter[field]) return;
       filterQueries.push({ term: { [field]: filter[field] } });
     });
 
-    
-    if (filter.createdAt) 
+    if (filter.createdAt)
       filterQueries.push({
         range: {
-          createdAt: getRangeFieldParamFromArithmeticExpression(filter.createdAt),
+          createdAt: getRangeFieldParamFromArithmeticExpression(
+            filter.createdAt
+          ),
         },
       });
 
@@ -63,13 +60,13 @@ export default {
               path: 'feedbacks',
             },
           },
-        })
+        }),
       }),
       query: {
         bool: {
           filter: filterQueries,
         },
-      }
+      },
     };
 
     return {
@@ -79,8 +76,5 @@ export default {
       ...otherParams,
     };
   },
-  type: createConnectionType(
-    'ListReplyRequestConnection',
-    ReplyRequest
-  ),
+  type: createConnectionType('ListReplyRequestConnection', ReplyRequest),
 };

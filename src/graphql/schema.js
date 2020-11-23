@@ -37,7 +37,7 @@ export default new GraphQLSchema({
       ListReplies,
       ListCategories,
       ListArticleReplyFeedbacks,
-      ListReplyRequests
+      ListReplyRequests,
     },
   }),
   mutation: new GraphQLObjectType({

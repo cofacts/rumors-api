@@ -1,4 +1,10 @@
-import { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLID, GraphQLNonNull } from 'graphql';
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLInt,
+  GraphQLID,
+  GraphQLNonNull,
+} from 'graphql';
 import FeedbackVote from './FeedbackVote';
 import Node from '../interfaces/Node';
 
