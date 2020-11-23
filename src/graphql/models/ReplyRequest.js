@@ -1,10 +1,12 @@
-import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLID, GraphQLNonNull } from 'graphql';
 import FeedbackVote from './FeedbackVote';
+import Node from '../interfaces/Node';
 
 export default new GraphQLObjectType({
   name: 'ReplyRequest',
+  interfaces: [Node],
   fields: () => ({
-    id: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLID) },
     userId: { type: GraphQLString },
     appId: { type: GraphQLString },
     reason: { type: GraphQLString },
