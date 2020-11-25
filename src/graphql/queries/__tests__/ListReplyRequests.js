@@ -15,6 +15,10 @@ describe('ListReplyRequests', () => {
             edges {
               node {
                 id
+                user {
+                  id
+                  name
+                }
               }
               cursor
             }

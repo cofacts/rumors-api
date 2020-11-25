@@ -119,24 +119,40 @@ Object {
           "cursor": "WyJyZXBseXJlcXVlc3RzNCJd",
           "node": Object {
             "id": "replyrequests4",
+            "user": Object {
+              "id": "user2",
+              "name": "user 2",
+            },
           },
         },
         Object {
           "cursor": "WyJyZXBseXJlcXVlc3RzMyJd",
           "node": Object {
             "id": "replyrequests3",
+            "user": Object {
+              "id": "user1",
+              "name": "user 1",
+            },
           },
         },
         Object {
           "cursor": "WyJyZXBseXJlcXVlc3RzMiJd",
           "node": Object {
             "id": "replyrequests2",
+            "user": Object {
+              "id": "user1",
+              "name": "user 1",
+            },
           },
         },
         Object {
           "cursor": "WyJyZXBseXJlcXVlc3RzMSJd",
           "node": Object {
             "id": "replyrequests1",
+            "user": Object {
+              "id": "user1",
+              "name": "user 1",
+            },
           },
         },
       ],

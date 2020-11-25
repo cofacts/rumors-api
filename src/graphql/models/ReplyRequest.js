@@ -5,6 +5,7 @@ import {
   GraphQLID,
   GraphQLNonNull,
 } from 'graphql';
+import User, { userFieldResolver } from './User';
 import FeedbackVote from './FeedbackVote';
 import Node from '../interfaces/Node';
 
@@ -15,6 +16,13 @@ export default new GraphQLObjectType({
     id: { type: new GraphQLNonNull(GraphQLID) },
     userId: { type: GraphQLString },
     appId: { type: GraphQLString },
+
+    user: {
+      type: User,
+      description: 'The author of reply request.',
+      resolve: userFieldResolver,
+    },
+
     reason: { type: GraphQLString },
     feedbackCount: {
       type: GraphQLInt,
