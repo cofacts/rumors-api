@@ -6,7 +6,7 @@
 import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
 import yargs from 'yargs';
 
-async function main({ articleId, replyId, userId }) {
+async function main({ articleId, replyId, userId } = {}) {
   if (!articleId || !replyId || !userId)
     throw new Error('Please provide all of articleId, replyId and userId');
 
