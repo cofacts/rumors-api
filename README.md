@@ -168,7 +168,7 @@ $ node_modules/.bin/babel-node src/scripts/fetchStatsFromGA.js
 ### Removing article-reply from database
 -  To set an article-reply to deleted state on production, run:
 ```
-$ node build/scripts/removeArticleReply.js -- --userId=<userId> --articleId=<articleId> --replyId=<replyId>
+$ node build/scripts/removeArticleReply.js --userId=<userId> --articleId=<articleId> --replyId=<replyId>
 ```
 
 -  For more options, run the above script with `--help` or see the file level comments.
