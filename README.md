@@ -165,6 +165,14 @@ $ node_modules/.bin/babel-node src/scripts/fetchStatsFromGA.js
 
 -  For more options, run the above script with `--help` or see the file level comments.
 
+### Removing article-reply from database
+-  To set an article-reply to deleted state on production, run:
+```
+$ node build/scripts/removeArticleReply.js --userId=<userId> --articleId=<articleId> --replyId=<replyId>
+```
+
+-  For more options, run the above script with `--help` or see the file level comments.
+
 
 ## One-off migration scripts
 
@@ -189,12 +197,12 @@ Then at project root, run:
 $ node_modules/.bin/babel-node src/scripts/migrations/createBackendUsers.js
 ```
 
-This script would scan for all the user references in `analytics`, `articlecategoryfeedbacks`, `articlereplyfeedbacks`, 
+This script would scan for all the user references in `analytics`, `articlecategoryfeedbacks`, `articlereplyfeedbacks`,
 `articles`, `replies`, `replyrequests`, create users for those that are not already in db and updates all the docs.
 See the comments at the top of the script for how users are referenced in each doc.
 
 
-## Troubleshooting 
+## Troubleshooting
 
 ### Failed to load gRPC binary on Mac
 
