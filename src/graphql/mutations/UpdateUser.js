@@ -38,9 +38,7 @@ export default {
     // Ensure uniqueness of slug
     if (slug !== undefined) {
       const {
-        body: {
-          count,
-        },
+        body: { count },
       } = await client.count({
         index: 'users',
         type: 'doc',

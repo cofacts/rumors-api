@@ -46,7 +46,8 @@ const User = new GraphQLObjectType({
     },
     avatarData: {
       type: GraphQLString,
-      description: 'return avatar data as JSON string, currently only used when avatarType is OpenPeeps',
+      description:
+        'return avatar data as JSON string, currently only used when avatarType is OpenPeeps',
     },
     avatarType: {
       type: AvatarTypeEnum,
