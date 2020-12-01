@@ -44,7 +44,10 @@ const User = new GraphQLObjectType({
       description: 'returns avatar url from facebook, github or gravatar',
       resolve: avatarUrlResolver(),
     },
-    avatarData: { type: GraphQLString },
+    avatarData: {
+      type: GraphQLString,
+      description: 'return avatar data as JSON string, currently only used when avatarType is OpenPeeps',
+    },
     avatarType: {
       type: AvatarTypeEnum,
       resolver(user) {

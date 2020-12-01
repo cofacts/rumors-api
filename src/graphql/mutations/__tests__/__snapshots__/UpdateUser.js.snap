@@ -14,7 +14,7 @@ Object {
   "id": "testUser1",
   "name": "test user 1",
   "slug": "test-user-1",
-  "updatedAt": "2017-01-28T08:46:07.011Z",
+  "updatedAt": "2020-01-01T00:00:10.000Z",
 }
 `;
 
@@ -29,7 +29,7 @@ Object {
   "id": "testUser1",
   "name": "new name",
   "slug": "test-user-3",
-  "updatedAt": "2017-01-28T08:46:57.011Z",
+  "updatedAt": "2020-01-01T00:01:00.000Z",
 }
 `;
 
@@ -43,7 +43,7 @@ Object {
     "id": "testUser1",
     "name": "new name",
     "slug": "test-user-3",
-    "updatedAt": "2017-01-28T08:46:57.011Z",
+    "updatedAt": "2020-01-01T00:01:00.000Z",
   },
 }
 `;
@@ -58,7 +58,7 @@ Object {
     "id": "testUser1",
     "name": "new name",
     "slug": "test-user-3",
-    "updatedAt": "2017-01-28T08:46:57.011Z",
+    "updatedAt": "2020-01-01T00:01:00.000Z",
   },
 }
 `;
@@ -73,7 +73,7 @@ Object {
     "id": "testUser1",
     "name": "new name",
     "slug": "test-user-3",
-    "updatedAt": "2017-01-28T08:46:57.011Z",
+    "updatedAt": "2020-01-01T00:01:00.000Z",
   },
 }
 `;
@@ -95,7 +95,7 @@ Object {
   "id": "testUser1",
   "name": "new name",
   "slug": "test-user-3",
-  "updatedAt": "2017-01-28T08:46:27.011Z",
+  "updatedAt": "2020-01-01T00:00:30.000Z",
 }
 `;
 
@@ -116,7 +116,7 @@ Object {
   "id": "testUser1",
   "name": "new name",
   "slug": "test-user-3",
-  "updatedAt": "2017-01-28T08:46:27.011Z",
+  "updatedAt": "2020-01-01T00:00:30.000Z",
 }
 `;
 
@@ -130,7 +130,7 @@ Object {
     "id": "testUser1",
     "name": "new name",
     "slug": "test-user-3",
-    "updatedAt": "2017-01-28T08:46:27.011Z",
+    "updatedAt": "2020-01-01T00:00:30.000Z",
   },
 }
 `;
@@ -146,7 +146,7 @@ Object {
   "id": "testUser1",
   "name": "new name",
   "slug": "test-user-3",
-  "updatedAt": "2017-01-28T08:46:27.011Z",
+  "updatedAt": "2020-01-01T00:00:30.000Z",
 }
 `;
 
@@ -155,7 +155,7 @@ Object {
   "updatedUser": Object {
     "id": "normal",
     "name": "Mark",
-    "updatedAt": "2017-01-28T08:45:57.011Z",
+    "updatedAt": "2020-01-01T00:00:00.000Z",
   },
 }
 `;
@@ -163,7 +163,7 @@ Object {
 exports[`UpdateUser should set user name field correctly 2`] = `
 Object {
   "name": "Mark",
-  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "updatedAt": "2020-01-01T00:00:00.000Z",
   "users": Array [
     Object {
       "name": "Bill",
@@ -183,7 +183,7 @@ Object {
     "id": "testUser1",
     "name": "test user 1",
     "slug": "test-user-1",
-    "updatedAt": "2017-01-28T08:46:07.011Z",
+    "updatedAt": "2020-01-01T00:00:10.000Z",
   },
 }
 `;
@@ -196,6 +196,6 @@ Object {
   "id": "testUser1",
   "name": "test user 1",
   "slug": "test-user-1",
-  "updatedAt": "2017-01-28T08:46:07.011Z",
+  "updatedAt": "2020-01-01T00:00:10.000Z",
 }
 `;

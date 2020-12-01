@@ -39,9 +39,9 @@ export default {
     if (slug !== undefined) {
       const {
         body: {
-          hits: { total },
+          count,
         },
-      } = await client.search({
+      } = await client.count({
         index: 'users',
         type: 'doc',
         body: {
@@ -53,7 +53,7 @@ export default {
           },
         },
       });
-      if (total > 0) throw new Error(`Slug already taken`);
+      if (count > 0) throw new Error(`Slug already taken`);
     }
 
     if (avatarType && avatarType !== AvatarTypes.OpenPeeps)

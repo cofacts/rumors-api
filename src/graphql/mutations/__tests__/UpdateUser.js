@@ -35,7 +35,7 @@ const getUser = async userId => {
 };
 
 describe('UpdateUser', () => {
-  let now = 1485593157011;
+  let now = 1577836800000;
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
     MockDate.set(now);
