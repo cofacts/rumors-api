@@ -67,7 +67,7 @@ export const facialHairStyles = [
   'MoustacheThin',
   'Yosemite',
   'GrayFull',
-  'zMajesticHandlebars',
+  'MajesticHandlebars',
 ];
 
 export const hairStyles = [
