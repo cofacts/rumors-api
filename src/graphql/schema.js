@@ -9,6 +9,7 @@ import ListArticles from './queries/ListArticles';
 import ListReplies from './queries/ListReplies';
 import ListCategories from './queries/ListCategories';
 import ListArticleReplyFeedbacks from './queries/ListArticleReplyFeedbacks';
+import ListReplyRequests from './queries/ListReplyRequests';
 
 // Set individual objects
 import CreateArticle from './mutations/CreateArticle';
@@ -36,6 +37,7 @@ export default new GraphQLSchema({
       ListReplies,
       ListCategories,
       ListArticleReplyFeedbacks,
+      ListReplyRequests,
     },
   }),
   mutation: new GraphQLObjectType({

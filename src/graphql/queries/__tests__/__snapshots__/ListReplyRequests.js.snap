@@ -1,0 +1,286 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListReplyRequests filters by mixed query 1`] = `
+Object {
+  "data": Object {
+    "ListReplyRequests": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "replyrequests3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests2",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListReplyRequests filters: by articleId 1`] = `
+Object {
+  "data": Object {
+    "ListReplyRequests": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "replyrequests3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJyZXBseXJlcXVlc3RzMyJd",
+        "lastCursor": "WyJyZXBseXJlcXVlc3RzMSJd",
+      },
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListReplyRequests filters: by createdAt 1`] = `
+Object {
+  "data": Object {
+    "ListReplyRequests": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "replyrequests4",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJyZXBseXJlcXVlc3RzNCJd",
+        "lastCursor": "WyJyZXBseXJlcXVlc3RzMSJd",
+      },
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListReplyRequests filters: by userId 1`] = `
+Object {
+  "data": Object {
+    "ListReplyRequests": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "replyrequests3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJyZXBseXJlcXVlc3RzMyJd",
+        "lastCursor": "WyJyZXBseXJlcXVlc3RzMSJd",
+      },
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListReplyRequests lists all RelyRequests 1`] = `
+Object {
+  "data": Object {
+    "ListReplyRequests": Object {
+      "edges": Array [
+        Object {
+          "cursor": "WyJyZXBseXJlcXVlc3RzNCJd",
+          "node": Object {
+            "id": "replyrequests4",
+            "user": Object {
+              "id": "user2",
+              "name": "user 2",
+            },
+          },
+        },
+        Object {
+          "cursor": "WyJyZXBseXJlcXVlc3RzMyJd",
+          "node": Object {
+            "id": "replyrequests3",
+            "user": Object {
+              "id": "user1",
+              "name": "user 1",
+            },
+          },
+        },
+        Object {
+          "cursor": "WyJyZXBseXJlcXVlc3RzMiJd",
+          "node": Object {
+            "id": "replyrequests2",
+            "user": Object {
+              "id": "user1",
+              "name": "user 1",
+            },
+          },
+        },
+        Object {
+          "cursor": "WyJyZXBseXJlcXVlc3RzMSJd",
+          "node": Object {
+            "id": "replyrequests1",
+            "user": Object {
+              "id": "user1",
+              "name": "user 1",
+            },
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJyZXBseXJlcXVlc3RzNCJd",
+        "lastCursor": "WyJyZXBseXJlcXVlc3RzMSJd",
+      },
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListReplyRequests sorts: by createdAt 1`] = `
+Object {
+  "data": Object {
+    "ListReplyRequests": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "replyrequests2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests4",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WzE1ODA2ODgwMDAwMDAsInJlcGx5cmVxdWVzdHMyIl0=",
+        "lastCursor": "WzE1Nzc4MzY4MDAwMDAsInJlcGx5cmVxdWVzdHMxIl0=",
+      },
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListReplyRequests sorts: by vote 1`] = `
+Object {
+  "data": Object {
+    "ListReplyRequests": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "replyrequests2",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests4",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests3",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "Wy00LCJyZXBseXJlcXVlc3RzMiJd",
+        "lastCursor": "WzIsInJlcGx5cmVxdWVzdHMxIl0=",
+      },
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListReplyRequests supports after 1`] = `
+Object {
+  "data": Object {
+    "ListReplyRequests": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "replyrequests1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJyZXBseXJlcXVlc3RzNCJd",
+        "lastCursor": "WyJyZXBseXJlcXVlc3RzMSJd",
+      },
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListReplyRequests supports before 1`] = `
+Object {
+  "data": Object {
+    "ListReplyRequests": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "replyrequests4",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests3",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJyZXBseXJlcXVlc3RzNCJd",
+        "lastCursor": "WyJyZXBseXJlcXVlc3RzMSJd",
+      },
+      "totalCount": 4,
+    },
+  },
+}
+`;
