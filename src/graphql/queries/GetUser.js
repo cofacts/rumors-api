@@ -10,10 +10,13 @@ export default {
   `,
   args: {
     id: { type: GraphQLString },
+    slug: { type: GraphQLString },
   },
-  resolve(rootValue, { id }, { user = null, loaders }) {
-    if (!id) return user;
+  resolve(rootValue, { id, slug }, { user = null, loaders }) {
+    if (!id && !slug) return user;
+    if (id && slug) throw new Error('cannot search by both id and slug');
 
-    return loaders.docLoader.load({ index: 'users', id });
+    if (id) return loaders.docLoader.load({ index: 'users', id });
+    else return loaders.userLoader.load({ slug });
   },
 };

@@ -12,6 +12,9 @@ import {
   createOrUpdateUser,
   assertUser,
   AUTH_ERROR_MSG,
+  avatarUrlResolver,
+  getAvailableAvatarTypes,
+  AvatarTypes,
 } from '../user';
 
 jest.mock('lodash', () => {
@@ -113,6 +116,72 @@ describe('user utils', () => {
         backgroundColorIndex: 0.17,
         flip: false,
       });
+    });
+  });
+
+  describe('avatarResolvers', () => {
+    it('avatarUrlResolver returns avatar url based on avatar type', () => {
+      const user = {
+        id: '123',
+        facebookId: 'facebookId',
+        githubId: 'githubId',
+      };
+      expect(avatarUrlResolver()(user)).toBe(
+        'https://www.gravatar.com/avatar/?s=80&d=mp'
+      );
+      expect(
+        avatarUrlResolver()({ ...user, email: ' UserId@Example.com  ' })
+      ).toBe(
+        'https://www.gravatar.com/avatar/6a5ba97dfa6cd3a497a73a517342c643?s=80&d=identicon&r=g'
+      );
+      expect(
+        avatarUrlResolver()({
+          ...user,
+          email: 'userid@example.com',
+          avatarType: 'Gravatar',
+        })
+      ).toBe(
+        'https://www.gravatar.com/avatar/6a5ba97dfa6cd3a497a73a517342c643?s=80&d=identicon&r=g'
+      );
+      expect(avatarUrlResolver()({ ...user, avatarType: 'Facebook' })).toBe(
+        `https://graph.facebook.com/v9.0/${user.facebookId}/picture`
+      );
+      expect(avatarUrlResolver()({ ...user, avatarType: 'Github' })).toBe(
+        `https://avatars2.githubusercontent.com/u/${user.githubId}?s=80`
+      );
+    });
+
+    it('getAvailableAvatarTypes returns a list of avatar types based on availabe fields', () => {
+      expect(getAvailableAvatarTypes()).toStrictEqual([AvatarTypes.OpenPeeps]);
+      expect(
+        getAvailableAvatarTypes({ facebookId: 'facebookId' })
+      ).toStrictEqual([AvatarTypes.OpenPeeps, AvatarTypes.Facebook]);
+      expect(
+        getAvailableAvatarTypes({ facebookId: 'facebookId', email: 'email' })
+      ).toStrictEqual([
+        AvatarTypes.OpenPeeps,
+        AvatarTypes.Gravatar,
+        AvatarTypes.Facebook,
+      ]);
+      expect(
+        getAvailableAvatarTypes({ githubId: 'githubId', email: 'email' })
+      ).toStrictEqual([
+        AvatarTypes.OpenPeeps,
+        AvatarTypes.Gravatar,
+        AvatarTypes.Github,
+      ]);
+      expect(
+        getAvailableAvatarTypes({
+          facebookId: 'facebookId',
+          githubId: 'githubId',
+          email: 'email',
+        })
+      ).toStrictEqual([
+        AvatarTypes.OpenPeeps,
+        AvatarTypes.Gravatar,
+        AvatarTypes.Facebook,
+        AvatarTypes.Github,
+      ]);
     });
   });
 

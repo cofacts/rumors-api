@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`userLoaderFactory should return correct user with given slug 1`] = `
+Object {
+  "_cursor": undefined,
+  "_score": 0.6931472,
+  "email": "secret@secret.com",
+  "highlight": undefined,
+  "id": "test-user",
+  "inner_hits": undefined,
+  "name": "test user",
+  "slug": "abc123",
+}
+`;
+
+exports[`userLoaderFactory should return correct user with given slug 2`] = `
+Object {
+  "_cursor": undefined,
+  "_score": 0.6931472,
+  "email": "hi@me.com",
+  "highlight": undefined,
+  "id": "test-user2",
+  "inner_hits": undefined,
+  "name": "test user2",
+  "slug": "def456",
+}
+`;

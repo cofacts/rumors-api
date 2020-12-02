@@ -3,9 +3,15 @@ import {
   GraphQLString,
   GraphQLInt,
   GraphQLNonNull,
+  GraphQLList,
 } from 'graphql';
-import crypto from 'crypto';
-import { getUserId } from 'util/user';
+import {
+  AvatarTypes,
+  getAvailableAvatarTypes,
+  getUserId,
+  avatarUrlResolver,
+} from 'util/user';
+import AvatarTypeEnum from './AvatarTypeEnum';
 
 /**
  * Field config helper for current user only field.
@@ -24,31 +30,36 @@ export const currentUserOnlyField = (type, resolver) => ({
   },
 });
 
-/**
- * Use Gravatar as avatar provider.
- */
-const avatarResolver = (s = 80, d = 'identicon', r = 'g') => ({
-  type: GraphQLString,
-  description: 'return hash based on user email for gravatar url',
-  resolve(user) {
-    const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
-    const hash = crypto
-      .createHash('md5')
-      .update((user.email || user.id).trim().toLocaleLowerCase())
-      .digest('hex');
-    const params = `?s=${s}&d=${d}&r=${r}`;
-    return `${GRAVATAR_URL}${hash}${params}`;
-  },
-});
-
 const User = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: { type: GraphQLString },
+    slug: { type: GraphQLString },
     email: currentUserOnlyField(GraphQLString),
     name: { type: GraphQLString },
-    avatarUrl: avatarResolver(),
-    avatarData: { type: GraphQLString },
+    bio: { type: GraphQLString },
+
+    avatarUrl: {
+      type: GraphQLString,
+      description: 'returns avatar url from facebook, github or gravatar',
+      resolve: avatarUrlResolver(),
+    },
+    avatarData: {
+      type: GraphQLString,
+      description:
+        'return avatar data as JSON string, currently only used when avatarType is OpenPeeps',
+    },
+    avatarType: {
+      type: AvatarTypeEnum,
+      resolver(user) {
+        return user?.avatarType ?? AvatarTypes.Gravatar;
+      },
+    },
+
+    availableAvatarTypes: currentUserOnlyField(
+      new GraphQLList(GraphQLString),
+      user => getAvailableAvatarTypes(user)
+    ),
 
     // TODO: also enable these two fields for requests from the same app?
     appId: currentUserOnlyField(GraphQLString),

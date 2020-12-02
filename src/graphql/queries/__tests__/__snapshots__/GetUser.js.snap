@@ -59,3 +59,108 @@ Object {
   },
 }
 `;
+
+exports[`GetUser Get user by id and slug should fail 1`] = `
+Array [
+  [GraphQLError: cannot search by both id and slug],
+]
+`;
+
+exports[`GetUser Get user by slug: currentUser 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "id": "current-user",
+      "name": "current user",
+      "slug": "def456",
+    },
+  },
+}
+`;
+
+exports[`GetUser Get user by slug: testEmailUser 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "id": "test-email-user",
+      "name": "test email user",
+      "slug": "ghi789",
+    },
+  },
+}
+`;
+
+exports[`GetUser Get user by slug: testUser 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "id": "test-user",
+      "name": "test user",
+      "slug": "abc123",
+    },
+  },
+}
+`;
+
+exports[`GetUser returns avatarUrl/avatarData based on avatarType selected by User: currentUser 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "availableAvatarTypes": Array [
+        "OpenPeeps",
+        "Gravatar",
+        "Github",
+      ],
+      "avatarData": null,
+      "avatarType": "Github",
+      "avatarUrl": "https://avatars2.githubusercontent.com/u/654321?s=80",
+      "id": "current-user",
+    },
+  },
+}
+`;
+
+exports[`GetUser returns avatarUrl/avatarData based on avatarType selected by User: openPeepsUser 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "availableAvatarTypes": null,
+      "avatarData": "{\\"key\\":\\"value\\"}",
+      "avatarType": "OpenPeeps",
+      "avatarUrl": null,
+      "id": "another-user",
+    },
+  },
+}
+`;
+
+exports[`GetUser returns avatarUrl/avatarData based on avatarType selected by User: testEmailUser 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "availableAvatarTypes": Array [
+        "OpenPeeps",
+        "Gravatar",
+      ],
+      "avatarData": null,
+      "avatarType": null,
+      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=80&d=identicon&r=g",
+      "id": "test-email-user",
+    },
+  },
+}
+`;
+
+exports[`GetUser returns avatarUrl/avatarData based on avatarType selected by User: testUser 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "availableAvatarTypes": null,
+      "avatarData": null,
+      "avatarType": "Facebook",
+      "avatarUrl": "https://graph.facebook.com/v9.0/123456/picture",
+      "id": "test-user",
+    },
+  },
+}
+`;

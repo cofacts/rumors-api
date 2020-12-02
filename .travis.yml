@@ -3,6 +3,9 @@ sudo: required
 services:
   - docker
 
+env:
+  - JEST_TIMEOUT=100000
+
 language: node_js
 
 node_js: '12'

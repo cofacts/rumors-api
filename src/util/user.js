@@ -47,6 +47,48 @@ export const generatePseudonym = () => {
 
 export const AvatarTypes = {
   OpenPeeps: 'OpenPeeps',
+  Gravatar: 'Gravatar',
+  Facebook: 'Facebook',
+  Github: 'Github',
+};
+
+/**
+ * Returns avatar url based on avatarType.
+ */
+export const avatarUrlResolver = (s = 80, d = 'identicon', r = 'g') => user => {
+  switch (user.avatarType) {
+    case AvatarTypes.OpenPeeps:
+      return null;
+    case AvatarTypes.Facebook:
+      return `https://graph.facebook.com/v9.0/${user.facebookId}/picture`;
+    case AvatarTypes.Github:
+      return `https://avatars2.githubusercontent.com/u/${user.githubId}?s=${s}`;
+    case AvatarTypes.Gravatar:
+    default: {
+      // return hash based on user email for gravatar url
+      const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
+      if (user.email) {
+        const hash = crypto
+          .createHash('md5')
+          .update(user.email.trim().toLocaleLowerCase())
+          .digest('hex');
+        const params = `?s=${s}&d=${d}&r=${r}`;
+        return `${GRAVATAR_URL}${hash}${params}`;
+      }
+      return `${GRAVATAR_URL}?s=${s}&d=mp`;
+    }
+  }
+};
+
+/**
+ * Returns a list of avatar type options based on information available for a user.
+ */
+export const getAvailableAvatarTypes = user => {
+  let types = [AvatarTypes.OpenPeeps];
+  if (user?.email) types.push(AvatarTypes.Gravatar);
+  if (user?.facebookId) types.push(AvatarTypes.Facebook);
+  if (user?.githubId) types.push(AvatarTypes.Github);
+  return types;
 };
 
 export const isBackendApp = appId =>
@@ -131,6 +173,7 @@ export const convertAppUserIdToUserId = ({ appId, appUserId }) => {
  *
  * @returns {user: User, isCreated: boolean}
  */
+
 export async function createOrUpdateUser({ userId, appId }) {
   assertUser({ appId, userId });
   const now = new Date().toISOString();

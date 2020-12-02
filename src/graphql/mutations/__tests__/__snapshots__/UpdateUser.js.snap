@@ -1,11 +1,161 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`UpdateUser cannot set duplicated slug 1`] = `
+Array [
+  [GraphQLError: Slug already taken],
+]
+`;
+
+exports[`UpdateUser cannot set duplicated slug 2`] = `
+Object {
+  "email": "user1@example.com",
+  "facebookId": "fbid123",
+  "githubId": "githubId123",
+  "id": "testUser1",
+  "name": "test user 1",
+  "slug": "test-user-1",
+  "updatedAt": "2020-01-01T00:00:10.000Z",
+}
+`;
+
+exports[`UpdateUser should clear avatarData field for non openpeeps avatar 1`] = `
+Object {
+  "avatarData": null,
+  "avatarType": "Github",
+  "bio": "blahblahblah",
+  "email": "user1@example.com",
+  "facebookId": "fbid123",
+  "githubId": "githubId123",
+  "id": "testUser1",
+  "name": "new name",
+  "slug": "test-user-3",
+  "updatedAt": "2020-01-01T00:01:00.000Z",
+}
+`;
+
+exports[`UpdateUser should clear avatarData field for non openpeeps avatar: facebook 1`] = `
+Object {
+  "updatedUser": Object {
+    "avatarData": null,
+    "avatarType": "Facebook",
+    "avatarUrl": "https://graph.facebook.com/v9.0/fbid123/picture",
+    "bio": "blahblahblah",
+    "id": "testUser1",
+    "name": "new name",
+    "slug": "test-user-3",
+    "updatedAt": "2020-01-01T00:01:00.000Z",
+  },
+}
+`;
+
+exports[`UpdateUser should clear avatarData field for non openpeeps avatar: github 1`] = `
+Object {
+  "updatedUser": Object {
+    "avatarData": null,
+    "avatarType": "Github",
+    "avatarUrl": "https://avatars2.githubusercontent.com/u/githubId123?s=80",
+    "bio": "blahblahblah",
+    "id": "testUser1",
+    "name": "new name",
+    "slug": "test-user-3",
+    "updatedAt": "2020-01-01T00:01:00.000Z",
+  },
+}
+`;
+
+exports[`UpdateUser should clear avatarData field for non openpeeps avatar: openpeeps 1`] = `
+Object {
+  "updatedUser": Object {
+    "avatarData": "{\\"key\\":\\"value\\"}",
+    "avatarType": "OpenPeeps",
+    "avatarUrl": null,
+    "bio": "blahblahblah",
+    "id": "testUser1",
+    "name": "new name",
+    "slug": "test-user-3",
+    "updatedAt": "2020-01-01T00:01:00.000Z",
+  },
+}
+`;
+
+exports[`UpdateUser should not set unsupported fields 1`] = `
+Array [
+  [GraphQLError: Unknown argument "email" on field "Mutation.UpdateUser".],
+]
+`;
+
+exports[`UpdateUser should not set unsupported fields 2`] = `
+Object {
+  "avatarData": null,
+  "avatarType": "Gravatar",
+  "bio": "blahblahblah",
+  "email": "user1@example.com",
+  "facebookId": "fbid123",
+  "githubId": "githubId123",
+  "id": "testUser1",
+  "name": "new name",
+  "slug": "test-user-3",
+  "updatedAt": "2020-01-01T00:00:30.000Z",
+}
+`;
+
+exports[`UpdateUser should not unset fields 1`] = `
+Array [
+  [GraphQLError: There's nothing to update],
+]
+`;
+
+exports[`UpdateUser should not unset fields 2`] = `
+Object {
+  "avatarData": null,
+  "avatarType": "Gravatar",
+  "bio": "blahblahblah",
+  "email": "user1@example.com",
+  "facebookId": "fbid123",
+  "githubId": "githubId123",
+  "id": "testUser1",
+  "name": "new name",
+  "slug": "test-user-3",
+  "updatedAt": "2020-01-01T00:00:30.000Z",
+}
+`;
+
+exports[`UpdateUser should set all provided fields correctly 1`] = `
+Object {
+  "updatedUser": Object {
+    "avatarData": null,
+    "avatarType": "Gravatar",
+    "avatarUrl": "https://www.gravatar.com/avatar/111d68d06e2d317b5a59c2c6c5bad808?s=80&d=identicon&r=g",
+    "bio": "blahblahblah",
+    "id": "testUser1",
+    "name": "new name",
+    "slug": "test-user-3",
+    "updatedAt": "2020-01-01T00:00:30.000Z",
+  },
+}
+`;
+
+exports[`UpdateUser should set all provided fields correctly 2`] = `
+Object {
+  "avatarData": null,
+  "avatarType": "Gravatar",
+  "bio": "blahblahblah",
+  "email": "user1@example.com",
+  "facebookId": "fbid123",
+  "githubId": "githubId123",
+  "id": "testUser1",
+  "name": "new name",
+  "slug": "test-user-3",
+  "updatedAt": "2020-01-01T00:00:30.000Z",
+}
+`;
+
 exports[`UpdateUser should set user name field correctly 1`] = `
 Object {
   "updatedUser": Object {
     "id": "normal",
     "name": "Mark",
-    "updatedAt": "2017-01-28T08:45:57.011Z",
+    "updatedAt": "2020-01-01T00:00:00.000Z",
   },
 }
 `;
@@ -13,12 +163,39 @@ Object {
 exports[`UpdateUser should set user name field correctly 2`] = `
 Object {
   "name": "Mark",
-  "updatedAt": "2017-01-28T08:45:57.011Z",
+  "updatedAt": "2020-01-01T00:00:00.000Z",
   "users": Array [
     Object {
       "name": "Bill",
       "updatedAt": 0,
     },
   ],
+}
+`;
+
+exports[`UpdateUser should set user slug field correctly 1`] = `
+Object {
+  "updatedUser": Object {
+    "avatarData": null,
+    "avatarType": null,
+    "avatarUrl": "https://www.gravatar.com/avatar/111d68d06e2d317b5a59c2c6c5bad808?s=80&d=identicon&r=g",
+    "bio": null,
+    "id": "testUser1",
+    "name": "test user 1",
+    "slug": "test-user-1",
+    "updatedAt": "2020-01-01T00:00:10.000Z",
+  },
+}
+`;
+
+exports[`UpdateUser should set user slug field correctly 2`] = `
+Object {
+  "email": "user1@example.com",
+  "facebookId": "fbid123",
+  "githubId": "githubId123",
+  "id": "testUser1",
+  "name": "test user 1",
+  "slug": "test-user-1",
+  "updatedAt": "2020-01-01T00:00:10.000Z",
 }
 `;

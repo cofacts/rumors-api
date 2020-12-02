@@ -76,5 +76,134 @@ describe('GetUser', () => {
     ).toMatchSnapshot();
   });
 
+  it('Get user by slug', async () => {
+    expect(
+      await gql`
+        {
+          GetUser(slug: "abc123") {
+            id
+            slug
+            name
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('testUser');
+    expect(
+      await gql`
+        {
+          GetUser(slug: "def456") {
+            id
+            slug
+            name
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('currentUser');
+    expect(
+      await gql`
+        {
+          GetUser(slug: "ghi789") {
+            id
+            slug
+            name
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('testEmailUser');
+  });
+
+  it('Get user by id and slug should fail', async () => {
+    const { errors } = await gql`
+      {
+        GetUser(slug: "ghi789", id: "id") {
+          id
+          slug
+        }
+      }
+    `({}, { user: currentUser });
+    expect(errors).toMatchSnapshot();
+  });
+
+  it('Get user by non existing slug return null', async () => {
+    const { data, errors } = await gql`
+      {
+        GetUser(slug: "adsf") {
+          id
+          slug
+        }
+      }
+    `({}, { user: currentUser });
+    expect(data).toMatchObject({ GetUser: null });
+    expect(errors).toBe(undefined);
+  });
+
+  it('Get user by non existing id return null', async () => {
+    const { data, errors } = await gql`
+      {
+        GetUser(id: "adsf") {
+          id
+          slug
+        }
+      }
+    `({}, { user: currentUser });
+    expect(data).toMatchObject({ GetUser: null });
+    expect(errors).toBe(undefined);
+  });
+
+  it('returns avatarUrl/avatarData based on avatarType selected by User', async () => {
+    expect(
+      await gql`
+        {
+          GetUser(id: "test-user") {
+            id
+            avatarType
+            avatarUrl
+            avatarData
+            availableAvatarTypes
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('testUser');
+    expect(
+      await gql`
+        {
+          GetUser(id: "current-user") {
+            id
+            avatarType
+            avatarUrl
+            avatarData
+            availableAvatarTypes
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('currentUser');
+    expect(
+      await gql`
+        {
+          GetUser(id: "test-email-user") {
+            id
+            avatarType
+            avatarUrl
+            avatarData
+            availableAvatarTypes
+          }
+        }
+      `({}, { user: testEmailUser })
+    ).toMatchSnapshot('testEmailUser');
+    expect(
+      await gql`
+        {
+          GetUser(id: "another-user") {
+            id
+            avatarType
+            avatarUrl
+            avatarData
+            availableAvatarTypes
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('openPeepsUser');
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });

@@ -9,6 +9,7 @@ import urlLoaderFactory from './urlLoaderFactory';
 import repliedArticleCountLoaderFactory from './repliedArticleCountLoaderFactory';
 import votedArticleReplyCountLoaderFactory from './votedArticleReplyCountLoaderFactory';
 import userLevelLoaderFactory from './userLevelLoaderFactory';
+import userLoaderFactory from './userLoaderFactory';
 
 export default class DataLoaders {
   // List of data loaders
@@ -63,6 +64,10 @@ export default class DataLoaders {
       'votedArticleReplyCountLoader',
       votedArticleReplyCountLoaderFactory
     );
+  }
+
+  get userLoader() {
+    return this._checkOrSetLoader('userLoader', userLoaderFactory);
   }
 
   get userLevelLoader() {
