@@ -68,10 +68,12 @@ router.post('/logout', checkHeaders(), ctx => {
 router.options('/graphql', checkHeaders());
 router.post('/graphql', checkHeaders());
 
-const indexFn = pug.compileFile(path.join(__dirname, 'jade/index.jade'));
-const schemaStr = printSchema(schema);
+const indexBody = pug.renderFile(path.join(__dirname, 'jade/index.jade'), {
+  schemaStr: printSchema(schema),
+  license: process.env.LICENSE_URL,
+});
 router.get('/', ctx => {
-  ctx.body = indexFn({ schemaStr });
+  ctx.body = indexBody;
 });
 
 app.use(koaStatic(path.join(__dirname, '../static/')));
