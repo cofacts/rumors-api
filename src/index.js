@@ -11,6 +11,7 @@ import session from 'koa-session2';
 import passport from 'koa-passport';
 import { formatError } from 'graphql';
 import checkHeaders from './checkHeaders';
+import checkConsent from './checkConsent';
 import schema from './graphql/schema';
 import DataLoaders from './graphql/dataLoaders';
 import CookieStore from './CookieStore';
@@ -64,6 +65,10 @@ router.post('/logout', checkHeaders(), ctx => {
   ctx.logout();
   ctx.body = { success: true };
 });
+
+if (process.env.LICENSE_URL) {
+  router.post('/graphql', checkConsent());
+}
 
 router.options('/graphql', checkHeaders());
 router.post('/graphql', checkHeaders());
