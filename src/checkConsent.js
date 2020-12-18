@@ -1,4 +1,4 @@
-const LICENSES = (process.env.LICENSE_URL || '').split(',');
+const LICENSES = (process.env.LICENSE_URL || '').split(',').map(s => s.trim());
 
 export default () => (ctx, next) => {
   if (LICENSES.includes(ctx.get('x-accept-license'))) {
