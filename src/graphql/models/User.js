@@ -61,8 +61,7 @@ const User = new GraphQLObjectType({
       user => getAvailableAvatarTypes(user)
     ),
 
-    // TODO: also enable these two fields for requests from the same app?
-    appId: currentUserOnlyField(GraphQLString),
+    appId: { type: GraphQLString },
     appUserId: currentUserOnlyField(GraphQLString),
 
     facebookId: currentUserOnlyField(GraphQLString),
@@ -149,7 +148,7 @@ export const userFieldResolver = async (
     if (user) return user;
   }
 
-  /* TODO: some unit tests are depending on this code block, need to clean up those tests and then 
+  /* TODO: some unit tests are depending on this code block, need to clean up those tests and then
      remove the following lines, and the corresponding unit test. */
 
   // If the user comes from the same client as the root document, return the user id.
