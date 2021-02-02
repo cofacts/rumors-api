@@ -4,7 +4,7 @@
 
 ## 一、API 程式授權及所提供資料
 
-1. API 程式碼本身採 MIT License (MIT) 發布，程式碼的授權規範，請參閱 https://github.com/cofacts/rumors-api 檔案庫目錄裡 LICENSE 檔案內容所示。
+1. API 程式碼本身採 MIT License (MIT) 發布，程式碼的授權規範，請參閱 https://github.com/cofacts/rumors-api 檔案庫目錄裡 `LICENSE` 檔案內容所示。
 
 2. Cofacts 所提供資料包含：
     1. Cofacts 真的假的公布於 https://github.com/cofacts/opendata 的資料存檔，或 Cofacts 真的假的用其他方式提供給您的資料存檔。
