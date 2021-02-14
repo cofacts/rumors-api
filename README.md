@@ -214,3 +214,9 @@ try running:
 ```
 npm rebuild --target_platform=linux --target_arch=x64 --target_libc=glibc --update-binary
 ```
+
+## Legal
+
+`LICENSE` defines the license agreement for the source code in this repository.
+
+`LEGAL.md` is the user agreement for Cofacts data users that leverages Cofacts data provided by API or via cofacts/opendata.
