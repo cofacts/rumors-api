@@ -16,15 +16,30 @@ html(lang="en")
       a(href="http://cofacts.org") Website
 
 
-    if license
-      h2 Terms of Use
-      p
-      | Data provided by this API is distributed under CC BY-SA 4.0 license.
-      | You must agree with the #[a(href="") data license]
-      | and conform the attribution share-alike conditions in order to use the data provided by this API.
-      p As a Cofacts API user, you must send following HTTP header and value to the API to express your consent:
-      code
-        pre x-accept-license: #{license}
+    h2 Cofacts Data User Agreement
+    p
+    | Access data via this API means that you accept #[a(href="https://github.com/cofacts/rumors-api/blob/master/LEGAL.md") Cofacts data user agreement].
+    p
+    | Please contact Cofacts WG to express your consent and apply for a client application in order to get #[code app-id] and #[code app-secret].
+    | See #[a(href="https://github.com/cofacts/rumors-api/blob/master/LEGAL.md") Cofacts data user agreement] for the detail of application.
+
+    h2 Using this API
+    p
+    | Cofacst API is a GraphQL server.
+    | You can visit #[a(href="/graphql") #[code /graphql]] endpoint for GraphQL playground.
+    | Send #[code POST] requests to #[code /graphql] endpoint to use the API.
+    | You can refer to #[a(href="https://www.apollographql.com/blog/4-simple-ways-to-call-a-graphql-api-a6807bcdb355/") this blog post by Apollo] if you are new to GraphQL.
+
+    p After getting your #[code app-secret] you can test out Cofacts API in CLI using this command:
+    pre.
+      curl -X POST -H "Content-Type: application/json" \
+      -H "x-app-secret: &lt;Your App Secret&gt;" \
+      --data '{ "query": "{ ListArticles { totalCount } } " }' \
+      #{hostName}/graphql
+
+    p The command above should give you the total number of articles (reported messages) currently in the database, in JSON format:
+    pre.
+      {"data":{"ListArticles":{"totalCount":43835}}}
 
     h2 GraphQL Schema
     code
