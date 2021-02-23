@@ -1,7 +1,7 @@
 import { GraphQLString } from 'graphql';
 import client from 'util/client';
 import User from 'graphql/models/User';
-import { omitBy } from 'lodash';
+import { omit, omitBy } from 'lodash';
 import { AvatarTypes } from 'util/user';
 import AvatarTypeEnum from 'graphql/models/AvatarTypeEnum';
 
@@ -55,7 +55,7 @@ export default {
     }
 
     if (avatarType && avatarType !== AvatarTypes.OpenPeeps)
-      doc.avatarData = null;
+      doc = omit(doc, ['avatarData']);
 
     const {
       body: {
