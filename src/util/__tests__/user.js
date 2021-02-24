@@ -127,12 +127,12 @@ describe('user utils', () => {
         githubId: 'githubId',
       };
       expect(avatarUrlResolver()(user)).toBe(
-        'https://www.gravatar.com/avatar/?s=80&d=mp'
+        'https://www.gravatar.com/avatar/?s=100&d=mp'
       );
       expect(
         avatarUrlResolver()({ ...user, email: ' UserId@Example.com  ' })
       ).toBe(
-        'https://www.gravatar.com/avatar/6a5ba97dfa6cd3a497a73a517342c643?s=80&d=identicon&r=g'
+        'https://www.gravatar.com/avatar/6a5ba97dfa6cd3a497a73a517342c643?s=100&d=identicon&r=g'
       );
       expect(
         avatarUrlResolver()({
@@ -141,17 +141,17 @@ describe('user utils', () => {
           avatarType: 'Gravatar',
         })
       ).toBe(
-        'https://www.gravatar.com/avatar/6a5ba97dfa6cd3a497a73a517342c643?s=80&d=identicon&r=g'
+        'https://www.gravatar.com/avatar/6a5ba97dfa6cd3a497a73a517342c643?s=100&d=identicon&r=g'
       );
       expect(avatarUrlResolver()({ ...user, avatarType: 'Facebook' })).toBe(
-        `https://graph.facebook.com/v9.0/${user.facebookId}/picture`
+        `https://graph.facebook.com/v9.0/${user.facebookId}/picture?height=100`
       );
       expect(avatarUrlResolver()({ ...user, avatarType: 'Github' })).toBe(
-        `https://avatars2.githubusercontent.com/u/${user.githubId}?s=80`
+        `https://avatars2.githubusercontent.com/u/${user.githubId}?s=100`
       );
     });
 
-    it('getAvailableAvatarTypes returns a list of avatar types based on availabe fields', () => {
+    it('getAvailableAvatarTypes returns a list of avatar types based on available fields', () => {
       expect(getAvailableAvatarTypes()).toStrictEqual([AvatarTypes.OpenPeeps]);
       expect(
         getAvailableAvatarTypes({ facebookId: 'facebookId' })

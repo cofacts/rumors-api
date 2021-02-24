@@ -55,12 +55,18 @@ export const AvatarTypes = {
 /**
  * Returns avatar url based on avatarType.
  */
-export const avatarUrlResolver = (s = 80, d = 'identicon', r = 'g') => user => {
+export const avatarUrlResolver = (
+  s = 100,
+  d = 'identicon',
+  r = 'g'
+) => user => {
   switch (user.avatarType) {
     case AvatarTypes.OpenPeeps:
       return null;
     case AvatarTypes.Facebook:
-      return `https://graph.facebook.com/v9.0/${user.facebookId}/picture`;
+      return `https://graph.facebook.com/v9.0/${
+        user.facebookId
+      }/picture?height=${s}`;
     case AvatarTypes.Github:
       return `https://avatars2.githubusercontent.com/u/${user.githubId}?s=${s}`;
     case AvatarTypes.Gravatar:

@@ -42,7 +42,7 @@ exports[`GetUser Get user avatar url from gravatar 1`] = `
 Object {
   "data": Object {
     "GetUser": Object {
-      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=80&d=identicon&r=g",
+      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=100&d=identicon&r=g",
       "name": "test email user",
     },
   },
@@ -53,7 +53,7 @@ exports[`GetUser Get user avatar url from gravatar 2`] = `
 Object {
   "data": Object {
     "GetUser": Object {
-      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=80&d=identicon&r=g",
+      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=100&d=identicon&r=g",
       "name": "test email user",
     },
   },
@@ -113,7 +113,7 @@ Object {
       ],
       "avatarData": null,
       "avatarType": "Github",
-      "avatarUrl": "https://avatars2.githubusercontent.com/u/654321?s=80",
+      "avatarUrl": "https://avatars2.githubusercontent.com/u/654321?s=100",
       "id": "current-user",
     },
   },
@@ -144,7 +144,7 @@ Object {
       ],
       "avatarData": null,
       "avatarType": null,
-      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=80&d=identicon&r=g",
+      "avatarUrl": "https://www.gravatar.com/avatar/ca87e79f73877094f4cd381a38dbc356?s=100&d=identicon&r=g",
       "id": "test-email-user",
     },
   },
@@ -158,7 +158,7 @@ Object {
       "availableAvatarTypes": null,
       "avatarData": null,
       "avatarType": "Facebook",
-      "avatarUrl": "https://graph.facebook.com/v9.0/123456/picture",
+      "avatarUrl": "https://graph.facebook.com/v9.0/123456/picture?height=100",
       "id": "test-user",
     },
   },

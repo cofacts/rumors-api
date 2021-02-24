@@ -18,9 +18,9 @@ Object {
 }
 `;
 
-exports[`UpdateUser should clear avatarData field for non openpeeps avatar 1`] = `
+exports[`UpdateUser should preserve avatarData field for non openpeeps avatar 1`] = `
 Object {
-  "avatarData": null,
+  "avatarData": "{\\"key\\":\\"value\\"}",
   "avatarType": "Github",
   "bio": "blahblahblah",
   "email": "user1@example.com",
@@ -33,12 +33,12 @@ Object {
 }
 `;
 
-exports[`UpdateUser should clear avatarData field for non openpeeps avatar: facebook 1`] = `
+exports[`UpdateUser should preserve avatarData field for non openpeeps avatar: facebook 1`] = `
 Object {
   "updatedUser": Object {
-    "avatarData": null,
+    "avatarData": "{\\"key\\":\\"value\\"}",
     "avatarType": "Facebook",
-    "avatarUrl": "https://graph.facebook.com/v9.0/fbid123/picture",
+    "avatarUrl": "https://graph.facebook.com/v9.0/fbid123/picture?height=100",
     "bio": "blahblahblah",
     "id": "testUser1",
     "name": "new name",
@@ -48,12 +48,12 @@ Object {
 }
 `;
 
-exports[`UpdateUser should clear avatarData field for non openpeeps avatar: github 1`] = `
+exports[`UpdateUser should preserve avatarData field for non openpeeps avatar: github 1`] = `
 Object {
   "updatedUser": Object {
-    "avatarData": null,
+    "avatarData": "{\\"key\\":\\"value\\"}",
     "avatarType": "Github",
-    "avatarUrl": "https://avatars2.githubusercontent.com/u/githubId123?s=80",
+    "avatarUrl": "https://avatars2.githubusercontent.com/u/githubId123?s=100",
     "bio": "blahblahblah",
     "id": "testUser1",
     "name": "new name",
@@ -63,7 +63,7 @@ Object {
 }
 `;
 
-exports[`UpdateUser should clear avatarData field for non openpeeps avatar: openpeeps 1`] = `
+exports[`UpdateUser should preserve avatarData field for non openpeeps avatar: openpeeps 1`] = `
 Object {
   "updatedUser": Object {
     "avatarData": "{\\"key\\":\\"value\\"}",
@@ -86,7 +86,6 @@ Array [
 
 exports[`UpdateUser should not set unsupported fields 2`] = `
 Object {
-  "avatarData": null,
   "avatarType": "Gravatar",
   "bio": "blahblahblah",
   "email": "user1@example.com",
@@ -107,7 +106,6 @@ Array [
 
 exports[`UpdateUser should not unset fields 2`] = `
 Object {
-  "avatarData": null,
   "avatarType": "Gravatar",
   "bio": "blahblahblah",
   "email": "user1@example.com",
@@ -125,7 +123,7 @@ Object {
   "updatedUser": Object {
     "avatarData": null,
     "avatarType": "Gravatar",
-    "avatarUrl": "https://www.gravatar.com/avatar/111d68d06e2d317b5a59c2c6c5bad808?s=80&d=identicon&r=g",
+    "avatarUrl": "https://www.gravatar.com/avatar/111d68d06e2d317b5a59c2c6c5bad808?s=100&d=identicon&r=g",
     "bio": "blahblahblah",
     "id": "testUser1",
     "name": "new name",
@@ -137,7 +135,6 @@ Object {
 
 exports[`UpdateUser should set all provided fields correctly 2`] = `
 Object {
-  "avatarData": null,
   "avatarType": "Gravatar",
   "bio": "blahblahblah",
   "email": "user1@example.com",
@@ -178,7 +175,7 @@ Object {
   "updatedUser": Object {
     "avatarData": null,
     "avatarType": null,
-    "avatarUrl": "https://www.gravatar.com/avatar/111d68d06e2d317b5a59c2c6c5bad808?s=80&d=identicon&r=g",
+    "avatarUrl": "https://www.gravatar.com/avatar/111d68d06e2d317b5a59c2c6c5bad808?s=100&d=identicon&r=g",
     "bio": null,
     "id": "testUser1",
     "name": "test user 1",
