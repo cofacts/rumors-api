@@ -18,7 +18,7 @@ Object {
 }
 `;
 
-exports[`UpdateUser should clear avatarData field for non openpeeps avatar 1`] = `
+exports[`UpdateUser should preserve avatarData field for non openpeeps avatar 1`] = `
 Object {
   "avatarData": "{\\"key\\":\\"value\\"}",
   "avatarType": "Github",
@@ -33,7 +33,7 @@ Object {
 }
 `;
 
-exports[`UpdateUser should clear avatarData field for non openpeeps avatar: facebook 1`] = `
+exports[`UpdateUser should preserve avatarData field for non openpeeps avatar: facebook 1`] = `
 Object {
   "updatedUser": Object {
     "avatarData": "{\\"key\\":\\"value\\"}",
@@ -48,7 +48,7 @@ Object {
 }
 `;
 
-exports[`UpdateUser should clear avatarData field for non openpeeps avatar: github 1`] = `
+exports[`UpdateUser should preserve avatarData field for non openpeeps avatar: github 1`] = `
 Object {
   "updatedUser": Object {
     "avatarData": "{\\"key\\":\\"value\\"}",
@@ -63,7 +63,7 @@ Object {
 }
 `;
 
-exports[`UpdateUser should clear avatarData field for non openpeeps avatar: openpeeps 1`] = `
+exports[`UpdateUser should preserve avatarData field for non openpeeps avatar: openpeeps 1`] = `
 Object {
   "updatedUser": Object {
     "avatarData": "{\\"key\\":\\"value\\"}",

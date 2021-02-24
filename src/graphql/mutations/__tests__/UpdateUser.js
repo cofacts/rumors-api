@@ -126,7 +126,7 @@ describe('UpdateUser', () => {
     expect(await getUser(testUser1.id)).toMatchSnapshot();
   });
 
-  it('should clear avatarData field for non openpeeps avatar', async () => {
+  it('should preserve avatarData field for non openpeeps avatar', async () => {
     let { data, errors } = await updateUser(
       `avatarData:"""{"key":"value"}""", avatarType: OpenPeeps`,
       testUser1.id
@@ -139,7 +139,7 @@ describe('UpdateUser', () => {
     expect(data).toMatchSnapshot('facebook');
 
     ({ data, errors } = await updateUser(
-      `avatarType: Github, avatarData:"""{"key":"value"}"""`,
+      `avatarType: Github, avatarData:"""{"key":"123"}"""`,
       testUser1.id
     ));
     expect(errors).toBe(undefined);
