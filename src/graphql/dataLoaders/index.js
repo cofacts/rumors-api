@@ -10,6 +10,7 @@ import repliedArticleCountLoaderFactory from './repliedArticleCountLoaderFactory
 import votedArticleReplyCountLoaderFactory from './votedArticleReplyCountLoaderFactory';
 import userLevelLoaderFactory from './userLevelLoaderFactory';
 import userLoaderFactory from './userLoaderFactory';
+import contributionsLoaderFactory from './contributionsLoaderFactory';
 
 export default class DataLoaders {
   // List of data loaders
@@ -76,6 +77,13 @@ export default class DataLoaders {
 
   get analyticsLoader() {
     return this._checkOrSetLoader('analyticsLoader', analyticsLoaderFactory);
+  }
+
+  get contributionsLoader() {
+    return this._checkOrSetLoader(
+      'contributionsLoader',
+      contributionsLoaderFactory
+    );
   }
 
   // inner-workings

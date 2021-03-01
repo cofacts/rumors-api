@@ -13,7 +13,7 @@ Object {
         "total": 3,
       },
       "repliedArticleCount": 2,
-      "votedArticleReplyCount": 1,
+      "votedArticleReplyCount": 3,
     },
   },
 }
@@ -160,6 +160,30 @@ Object {
       "avatarType": "Facebook",
       "avatarUrl": "https://graph.facebook.com/v9.0/123456/picture?height=100",
       "id": "test-user",
+    },
+  },
+}
+`;
+
+exports[`GetUser returns contributions of a user 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "contributions": Array [
+        Object {
+          "count": 2,
+          "date": "2020-02-02",
+        },
+        Object {
+          "count": 1,
+          "date": "2020-02-03",
+        },
+        Object {
+          "count": 1,
+          "date": "2020-02-04",
+        },
+      ],
+      "id": "current-user",
     },
   },
 }
