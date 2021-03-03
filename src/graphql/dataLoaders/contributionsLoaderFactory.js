@@ -46,7 +46,7 @@ export default () =>
                 interval: 'day',
                 min_doc_count: 1,
                 format: 'yyyy-MM-dd',
-                time_zone: '+08:00',
+                time_zone: process.env.TIMEZONE || '+08:00',
               },
             },
           },
