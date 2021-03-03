@@ -205,5 +205,21 @@ describe('GetUser', () => {
     ).toMatchSnapshot('openPeepsUser');
   });
 
+  it('returns contributions of a user', async () => {
+    expect(
+      await gql`
+        {
+          GetUser {
+            id
+            contributions(dateRange: { GTE: "2020-02-01", LTE: "2020-02-05" }) {
+              date
+              count
+            }
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot();
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });

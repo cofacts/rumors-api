@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`contributionsLoaderFactory should load data for the date range specified 1`] = `
+Array [
+  Object {
+    "count": 1,
+    "date": "2020-02-02",
+  },
+  Object {
+    "count": 2,
+    "date": "2020-02-03",
+  },
+  Object {
+    "count": 3,
+    "date": "2020-02-04",
+  },
+  Object {
+    "count": 1,
+    "date": "2020-02-06",
+  },
+  Object {
+    "count": 1,
+    "date": "2020-02-08",
+  },
+  Object {
+    "count": 2,
+    "date": "2020-02-09",
+  },
+]
+`;
+
+exports[`contributionsLoaderFactory should load last year of data for given userId 1`] = `
+Array [
+  Object {
+    "count": 3,
+    "date": "2020-02-01",
+  },
+  Object {
+    "count": 1,
+    "date": "2020-02-02",
+  },
+  Object {
+    "count": 2,
+    "date": "2020-02-03",
+  },
+  Object {
+    "count": 3,
+    "date": "2020-02-04",
+  },
+  Object {
+    "count": 1,
+    "date": "2020-02-06",
+  },
+  Object {
+    "count": 1,
+    "date": "2020-02-08",
+  },
+  Object {
+    "count": 2,
+    "date": "2020-02-09",
+  },
+]
+`;

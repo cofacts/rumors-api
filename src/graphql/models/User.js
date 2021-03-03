@@ -12,6 +12,8 @@ import {
   avatarUrlResolver,
 } from 'util/user';
 import AvatarTypeEnum from './AvatarTypeEnum';
+import Contribution from './Contribution';
+import { timeRangeInput } from 'graphql/util';
 
 /**
  * Field config helper for current user only field.
@@ -129,6 +131,24 @@ const User = new GraphQLObjectType({
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
     lastActiveAt: { type: GraphQLString },
+
+    contributions: {
+      type: new GraphQLList(Contribution),
+      description: 'List of contributions made by the user',
+      args: {
+        dateRange: {
+          type: timeRangeInput,
+          description:
+            'List only the contributions between the specific time range.',
+        },
+      },
+      resolve: async ({ id }, { dateRange }, { loaders }) => {
+        return await loaders.contributionsLoader.load({
+          userId: id,
+          dateRange,
+        });
+      },
+    },
   }),
 });
 
