@@ -4,10 +4,12 @@ import fixtures from '../__fixtures__/contributionsLoaderFactory';
 import MockDate from 'mockdate';
 
 const loader = new DataLoaders();
-MockDate.set(1609430400000); // 2021-01-01T00:00:00.000+08:00
 
 describe('contributionsLoaderFactory', () => {
-  beforeAll(() => loadFixtures(fixtures));
+  beforeAll(() => {
+    MockDate.set(1609430400000); // 2021-01-01T00:00:00.000+08:00
+    return loadFixtures(fixtures);
+  });
 
   it('should load last year of data for given userId', async () => {
     const res = await loader.contributionsLoader.load({
@@ -38,5 +40,8 @@ describe('contributionsLoaderFactory', () => {
     expect(error).toBe('userId is required');
   });
 
-  afterAll(() => unloadFixtures(fixtures));
+  afterAll(() => {
+    MockDate.reset();
+    return unloadFixtures(fixtures);
+  });
 });

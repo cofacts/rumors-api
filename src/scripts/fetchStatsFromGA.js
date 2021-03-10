@@ -16,8 +16,8 @@
     fetch data without content group, run with `--useContentGroup=false`.
     It would use pagePathLevel2 as primary dimension and extracts docId from there.
 
-  - Make sure `GA_WEB_VIEW_ID`, `GA_LINE_VIEW_ID`, `GA_LINE_TIMEZONE`, and
-   `GA_WEB_TIMEZONE` are set with correct settings in .env.  Each view's timezone
+  - Make sure `GA_WEB_VIEW_ID`, `GA_LINE_VIEW_ID`, and `TIMEZONE=+08:00`
+   are set with correct settings in .env.  Each view's timezone
    can be found at view settings, see https://support.google.com/analytics/answer/1010249
    for more details.
 */
@@ -61,7 +61,7 @@ const statsSources = {
       useContentGroup ? 'ga:contentGroup1' : 'ga:pagePathLevel2',
     primaryMetric: 'ga:pageviews',
     viewId: webViewId,
-    timezone: process.env.GA_WEB_TIMEZONE || '+08:00',
+    timezone: process.env.TIMEZONE || '+08:00',
   },
   LINE: {
     filtersExpression: docType =>
@@ -70,7 +70,7 @@ const statsSources = {
     primaryDimension: () => 'ga:eventLabel',
     primaryMetric: 'ga:hits',
     viewId: lineViewId,
-    timezone: process.env.GA_LINE_TIMEZONE || '+08:00',
+    timezone: process.env.TIMEZONE || '+08:00',
   },
 };
 
