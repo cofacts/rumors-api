@@ -221,11 +221,12 @@ export const authRouter = Router()
       ctx.session.appId === 'RUMORS_SITE' ||
       ctx.session.appId === 'DEVELOPMENT_FRONTEND'
     ) {
-      const allowedOrigins = process.env.RUMORS_SITE_CORS_ORIGIN.split(',');
+      const validOrigins = (
+        process.env.RUMORS_SITE_REDIRECT_ORIGIN || ''
+      ).split(',');
 
-      // Always use the first origin.
-      // Please make sure this matches PUBLIC_API_URL in rumors-site
-      basePath = allowedOrigins[0];
+      basePath =
+        validOrigins.find(o => o === ctx.session.origin) || validOrigins[0];
     }
 
     // TODO: Get basePath from DB for other client apps
