@@ -221,13 +221,23 @@ export const authRouter = Router()
       ctx.session.appId === 'RUMORS_SITE' ||
       ctx.session.appId === 'DEVELOPMENT_FRONTEND'
     ) {
-      const allowedOrigins = process.env.RUMORS_SITE_CORS_ORIGIN.split(',');
-      basePath = allowedOrigins.find(o => o === ctx.session.origin);
+      const validOrigins = (
+        process.env.RUMORS_SITE_REDIRECT_ORIGIN || ''
+      ).split(',');
+
+      basePath =
+        validOrigins.find(o => o === ctx.session.origin) || validOrigins[0];
     }
 
     // TODO: Get basePath from DB for other client apps
+    try {
+      ctx.redirect(new URL(ctx.session.redirect, basePath).href);
+    } catch (err) {
+      err.status = 400;
+      err.expose = true;
+      throw err;
+    }
 
-    ctx.redirect(new URL(ctx.session.redirect, basePath).href);
     // eslint-disable-next-line require-atomic-updates
     ctx.session.appId = undefined;
     // eslint-disable-next-line require-atomic-updates
