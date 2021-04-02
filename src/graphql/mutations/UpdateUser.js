@@ -3,6 +3,8 @@ import client from 'util/client';
 import User from 'graphql/models/User';
 import { omit, omitBy } from 'lodash';
 import { AvatarTypes } from 'util/user';
+
+import { assertSlugIsValid } from 'graphql/queries/ValidateSlug';
 import AvatarTypeEnum from 'graphql/models/AvatarTypeEnum';
 
 export default {
@@ -37,21 +39,7 @@ export default {
 
     // Ensure uniqueness of slug
     if (slug !== undefined) {
-      const {
-        body: { count },
-      } = await client.count({
-        index: 'users',
-        type: 'doc',
-        body: {
-          query: {
-            bool: {
-              must: [{ term: { slug } }],
-              must_not: [{ ids: { values: [userId] } }],
-            },
-          },
-        },
-      });
-      if (count > 0) throw new Error(`Slug already taken`);
+      assertSlugIsValid(slug, userId);
     }
 
     if (avatarType && avatarType !== AvatarTypes.OpenPeeps)
