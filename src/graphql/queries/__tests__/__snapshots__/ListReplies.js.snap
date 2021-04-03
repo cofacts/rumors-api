@@ -87,16 +87,6 @@ Object {
         Object {
           "highlight": Object {
             "hyperlinks": Array [],
-            "reference": "<HIGHLIGHT>http</HIGHLIGHT>://gohome.com",
-            "text": null,
-          },
-          "node": Object {
-            "id": "referenceUrl",
-          },
-        },
-        Object {
-          "highlight": Object {
-            "hyperlinks": Array [],
             "reference": null,
             "text": "<HIGHLIGHT>bar</HIGHLIGHT> <HIGHLIGHT>bar</HIGHLIGHT> <HIGHLIGHT>bar</HIGHLIGHT>",
           },
