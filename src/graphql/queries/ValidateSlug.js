@@ -5,6 +5,7 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 
+import { assertUser } from 'util/user';
 import client from 'util/client';
 import SlugErrorEnum, { errors } from 'graphql/models/SlugErrorEnum';
 
@@ -60,9 +61,10 @@ export default {
       error: { type: SlugErrorEnum },
     },
   }),
-  async resolve(rootValue, { slug }, { userId }) {
+  async resolve(rootValue, { slug }, { userId, appId }) {
+    assertUser({ userId, appId });
     try {
-      assertSlugIsValid(slug, userId);
+      await assertSlugIsValid(slug, userId);
     } catch (e) {
       if (e in errors) {
         return {
@@ -71,8 +73,12 @@ export default {
         };
       }
 
-      // Re-throw if unexpected errors
+      // Re-throw unexpected errors
       throw e;
     }
+
+    return {
+      success: true,
+    };
   },
 };
