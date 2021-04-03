@@ -45,6 +45,9 @@ describe('assertSlugIsValid', () => {
     await expect(assertSlugIsValid(':3', 'other-user')).rejects.toEqual(
       errors.HAS_URI_COMPONENT
     ); // :
+    await expect(assertSlugIsValid('#_#', 'other-user')).rejects.toEqual(
+      errors.HAS_URI_COMPONENT
+    ); // #
     await expect(assertSlugIsValid('1/2', 'other-user')).rejects.toEqual(
       errors.HAS_URI_COMPONENT
     ); // /
