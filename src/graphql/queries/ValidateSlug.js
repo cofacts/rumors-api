@@ -66,6 +66,7 @@ export default {
     try {
       await assertSlugIsValid(slug, userId);
     } catch (e) {
+      /* istanbul ignore else */
       if (e in errors) {
         return {
           success: false,

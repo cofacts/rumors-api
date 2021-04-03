@@ -64,6 +64,7 @@ export default {
       },
     });
 
+    /* istanbul ignore if */
     if (result === 'noop') {
       throw new Error(`Cannot update user`);
     }
