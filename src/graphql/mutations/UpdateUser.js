@@ -39,7 +39,11 @@ export default {
 
     // Ensure uniqueness of slug
     if (slug !== undefined) {
-      assertSlugIsValid(slug, userId);
+      try {
+        await assertSlugIsValid(slug, userId);
+      } catch (e) {
+        throw new Error(`Invalid slug: ${e}`);
+      }
     }
 
     if (avatarType && avatarType !== AvatarTypes.OpenPeeps)
