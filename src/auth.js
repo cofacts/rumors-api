@@ -4,6 +4,7 @@ import FacebookStrategy from 'passport-facebook';
 import TwitterStrategy from 'passport-twitter';
 import GithubStrategy from 'passport-github2';
 import GoogleStrategy from 'passport-google-oauth20';
+import InstagramStrategy from 'passport-instagram-graph';
 import Router from 'koa-router';
 
 /**
@@ -31,7 +32,7 @@ passport.deserializeUser((userId, done) => {
  * If still not applicable, create a user with currently given profile.
  *
  * @param {object} profile - passport profile object
- * @param {'facebookId'|'githubId'|'twitterId'} fieldName - The elasticsearch ID field name in user document
+ * @param {'facebookId'|'githubId'|'twitterId'|'googleId'|'instagramId'} fieldName - The elasticsearch ID field name in user document
  */
 export async function verifyProfile(profile, fieldName) {
   // Find user with such user id
@@ -183,6 +184,24 @@ if (process.env.GOOGLE_CLIENT_ID) {
   );
 }
 
+// Note: Instagram Basic Display API doesn't provide email
+// and it needs the `user_media` scope to get profile photo.
+if (process.env.INSTAGRAM_CLIENT_ID) {
+  passport.use(
+    new InstagramStrategy(
+      {
+        clientID: process.env.INSTAGRAM_CLIENT_ID,
+        clientSecret: process.env.INSTAGRAM_SECRET,
+        callbackURL: process.env.INSTAGRAM_CALLBACK_URL,
+      },
+      (token, tokenSecret, profile, done) =>
+        verifyProfile(profile, 'instagramId')
+          .then(user => done(null, user))
+          .catch(done)
+    )
+  );
+}
+
 // Exports route handlers
 //
 export const loginRouter = Router()
@@ -205,7 +224,11 @@ export const loginRouter = Router()
   .get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
   .get('/twitter', passport.authenticate('twitter'))
   .get('/github', passport.authenticate('github', { scope: ['user:email'] }))
-  .get('/google', passport.authenticate('google', { scope: ['profile'] }));
+  .get('/google', passport.authenticate('google', { scope: ['profile'] }))
+  .get(
+    '/instagram',
+    passport.authenticate('instagram', { scope: ['user_profile'] })
+  );
 
 const handlePassportCallback = strategy => (ctx, next) =>
   passport.authenticate(strategy, (err, user) => {
@@ -264,4 +287,5 @@ export const authRouter = Router()
   .get('/facebook', handlePassportCallback('facebook'))
   .get('/twitter', handlePassportCallback('twitter'))
   .get('/github', handlePassportCallback('github'))
-  .get('/google', handlePassportCallback('google'));
+  .get('/google', handlePassportCallback('google'))
+  .get('/instagram', handlePassportCallback('instagram'));
