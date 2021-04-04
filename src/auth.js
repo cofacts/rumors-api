@@ -3,6 +3,7 @@ import client, { processMeta } from 'util/client';
 import FacebookStrategy from 'passport-facebook';
 import TwitterStrategy from 'passport-twitter';
 import GithubStrategy from 'passport-github2';
+import GoogleStrategy from 'passport-google-oauth20';
 import Router from 'koa-router';
 
 /**
@@ -166,6 +167,22 @@ if (process.env.GITHUB_CLIENT_ID) {
   );
 }
 
+if (process.env.GOOGLE_CLIENT_ID) {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      },
+      (token, tokenSecret, profile, done) =>
+        verifyProfile(profile, 'googleId')
+          .then(user => done(null, user))
+          .catch(done)
+    )
+  );
+}
+
 // Exports route handlers
 //
 export const loginRouter = Router()
@@ -187,7 +204,8 @@ export const loginRouter = Router()
   })
   .get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
   .get('/twitter', passport.authenticate('twitter'))
-  .get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+  .get('/github', passport.authenticate('github', { scope: ['user:email'] }))
+  .get('/google', passport.authenticate('google', { scope: ['profile'] }));
 
 const handlePassportCallback = strategy => (ctx, next) =>
   passport.authenticate(strategy, (err, user) => {
@@ -245,4 +263,5 @@ export const authRouter = Router()
   })
   .get('/facebook', handlePassportCallback('facebook'))
   .get('/twitter', handlePassportCallback('twitter'))
-  .get('/github', handlePassportCallback('github'));
+  .get('/github', handlePassportCallback('github'))
+  .get('/google', handlePassportCallback('google'));
