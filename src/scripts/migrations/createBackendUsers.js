@@ -15,7 +15,7 @@
 
     - articles:  (~ 40k entries as of 2020/10)
       - (userId, appId)
-      - [references]: 
+      - [references]:
           - (userId, appId)
       - [articleReplies]:
           - (userId, appId)
@@ -49,14 +49,14 @@ const AGG_NAME = 'userIdPair';
 
 const AGG_SCRIPT = `
   boolean valueExists(def map, def key) { map.containsKey(key) && map[key] != ''}
-  String getUserIdPair(def map, def docRef, def emptyAllowed) { 
+  String getUserIdPair(def map, def docRef, def emptyAllowed) {
     boolean appIdExists = valueExists(map, 'appId') ;
     boolean userIdExists = valueExists(map, 'userId');
     if (!appIdExists || !userIdExists) {
       if (emptyAllowed) {
         return '';
       } else {
-        return '{"error":"appId and/or userId do not exist on '+ docRef + '"}';    
+        return '{"error":"appId and/or userId do not exist on '+ docRef + '"}';
       }
     } else {
       return '{"appId":"' + map.appId + '", "userId":"' + map.userId + '"}';
@@ -82,7 +82,7 @@ const AGG_SCRIPT = `
         currentIndex += 1;
       }
     }
-  }  
+  }
   return userIds;
 `;
 
@@ -91,7 +91,6 @@ const AGG_BATCH_SIZE = 10000;
 const ANALYTICS_BATCH_SIZE = 10000;
 const SCROLL_TIMEOUT = '30s';
 const SCRIPT_ID = 'appIdUserIdAggScript';
-const SCHEMA_VERSION = 'v1_0_2';
 
 const matchAllQuery = {
   match_all: {},
@@ -135,17 +134,10 @@ const logError = error => {
 };
 
 export default class CreateBackendUsers {
-  // TODO: maybe not hardcode version number?
-  constructor({
-    batchSize,
-    schemaVersion,
-    aggBatchSize,
-    analyticsBatchSize,
-  } = {}) {
+  constructor({ batchSize, aggBatchSize, analyticsBatchSize } = {}) {
     this.userIdMap = {}; // {[appID]: {[appUserId]: dbUserId}}
     this.reversedUserIdMap = {}; // {[dbUserId]: [appId, appUserId]};
     this.batchSize = batchSize ?? BATCH_SIZE;
-    this.version = schemaVersion ?? SCHEMA_VERSION;
     this.aggBatchSize = aggBatchSize ?? AGG_BATCH_SIZE;
     this.analyticsBatchSize = analyticsBatchSize ?? ANALYTICS_BATCH_SIZE;
     this.bulk = new Bulk(client, this.batchSize);
@@ -153,15 +145,9 @@ export default class CreateBackendUsers {
     this.emptyUserIdAllowedFields = {};
     for (const index in emptyUserIdAllowedFields) {
       for (const field of emptyUserIdAllowedFields[index]) {
-        this.emptyUserIdAllowedFields[
-          `${this.getIndexName(index)}__${field}`
-        ] = true;
+        this.emptyUserIdAllowedFields[`${index}__${field}`] = true;
       }
     }
-  }
-
-  getIndexName(index) {
-    return `${index}_${this.version}`;
   }
 
   async storeScriptInDB() {
@@ -214,7 +200,7 @@ export default class CreateBackendUsers {
           bulkOperations.push(
             {
               index: {
-                _index: this.getIndexName('users'),
+                _index: 'users',
                 _type: 'doc',
                 _id: dbUserId,
               },
@@ -249,7 +235,7 @@ export default class CreateBackendUsers {
           },
         },
       } = await client.search({
-        index: this.getIndexName(indexName),
+        index: indexName,
         size: 0,
         body: {
           aggs: {
@@ -310,7 +296,7 @@ export default class CreateBackendUsers {
    */
   async *getAllDocs(indexName, hasAdditionalUserFields = false) {
     let resp = await client.search({
-      index: this.getIndexName(indexName),
+      index: indexName,
       scroll: SCROLL_TIMEOUT,
       size: this.batchSize,
       body: {
@@ -417,7 +403,7 @@ export default class CreateBackendUsers {
           },
         },
       } = await client.search({
-        index: this.getIndexName('analytics'),
+        index: 'analytics',
         size: 0,
         body: {
           query: { term: { type: docType } },
