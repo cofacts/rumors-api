@@ -19,6 +19,11 @@ import crypto from 'crypto';
 
 export const AUTH_ERROR_MSG = 'userId is not set via query string.';
 
+/**
+ * @param {object} param
+ * @param {string} param.userId
+ * @param {string} param.appId
+ */
 export function assertUser({ userId, appId }) {
   if (!userId) {
     throw new Error(AUTH_ERROR_MSG);
