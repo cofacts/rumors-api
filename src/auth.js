@@ -225,7 +225,7 @@ export const loginRouter = Router()
   .get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
   .get('/twitter', passport.authenticate('twitter'))
   .get('/github', passport.authenticate('github', { scope: ['user:email'] }))
-  .get('/google', passport.authenticate('google', { scope: ['profile'] }))
+  .get('/google', passport.authenticate('google', { scope: ['profile email'] }))
   .get(
     '/instagram',
     passport.authenticate('instagram', { scope: ['user_profile'] })
