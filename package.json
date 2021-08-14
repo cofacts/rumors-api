@@ -51,6 +51,9 @@
     "passport-twitter": "^1.0.4",
     "pm2": "^4.0.0",
     "pug": "^2.0.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-peeps": "^0.1.10",
     "rollbar": "^2.3.7",
     "url-regex": "^5.0.0",
     "xxhashjs": "^0.2.2"
