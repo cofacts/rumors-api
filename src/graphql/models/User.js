@@ -4,6 +4,7 @@ import {
   GraphQLInt,
   GraphQLNonNull,
   GraphQLList,
+  GraphQLBoolean,
 } from 'graphql';
 import {
   AvatarTypes,
@@ -44,7 +45,16 @@ const User = new GraphQLObjectType({
     avatarUrl: {
       type: GraphQLString,
       description: 'returns avatar url from facebook, github or gravatar',
-      resolve: avatarUrlResolver(),
+      args: {
+        renderAvatarData: {
+          desription:
+            'Renders data-url from avatarData for users with avatarType is OpenPeeps. When false (default), OpenPeeps avatars will return null for avatarUrl directly',
+          type: GraphQLBoolean,
+        },
+      },
+      resolve(user, args) {
+        return avatarUrlResolver(args.renderAvatarData)(user);
+      },
     },
     avatarData: {
       type: GraphQLString,

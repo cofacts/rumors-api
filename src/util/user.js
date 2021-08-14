@@ -62,13 +62,14 @@ export const AvatarTypes = {
  * Returns avatar url based on avatarType.
  */
 export const avatarUrlResolver = (
+  renderAvatarData = false,
   s = 100,
   d = 'identicon',
   r = 'g'
 ) => user => {
   switch (user.avatarType) {
     case AvatarTypes.OpenPeeps:
-      return renderOpenPeepsDataUrl(user.avatarData);
+      return renderAvatarData ? renderOpenPeepsDataUrl(user.avatarData) : null;
     case AvatarTypes.Facebook:
       return `https://graph.facebook.com/v9.0/${
         user.facebookId
