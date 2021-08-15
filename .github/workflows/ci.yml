@@ -17,19 +17,10 @@ jobs:
           - 62223:9200
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          # https://docs.github.com/en/actions/guides/building-and-testing-nodejs
-          path: ~/.npm
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
-            ${{ runner.OS }}-
+          node-version: '16'
+          cache: 'npm'
       - run: npm ci
       - run: npm run lint
       - run: npm run test -- --coverage
