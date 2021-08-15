@@ -14,6 +14,7 @@ import {
 } from 'util/openPeepsOptions';
 import { sample, random } from 'lodash';
 import client, { processMeta } from 'util/client';
+import renderOpenPeepsDataUrl from 'util/openPeepsRenderer';
 import rollbar from 'rollbarInstance';
 import crypto from 'crypto';
 
@@ -61,13 +62,14 @@ export const AvatarTypes = {
  * Returns avatar url based on avatarType.
  */
 export const avatarUrlResolver = (
+  renderAvatarData = false,
   s = 100,
   d = 'identicon',
   r = 'g'
 ) => user => {
   switch (user.avatarType) {
     case AvatarTypes.OpenPeeps:
-      return null;
+      return renderAvatarData ? renderOpenPeepsDataUrl(user.avatarData) : null;
     case AvatarTypes.Facebook:
       return `https://graph.facebook.com/v9.0/${
         user.facebookId
