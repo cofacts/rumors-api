@@ -1,0 +1,39 @@
+name: CI test
+
+on:
+  # Triggers the workflow on push or pull request events but only for the dev branch
+  - pull_request
+  - push
+  # Allows you to run this workflow manually from the Actions tab
+  - workflow_dispatch
+
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+    services:
+      rumors-test-db:
+        image: elasticsearch:6.1.0
+        ports:
+          - 62223:9200
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          # https://docs.github.com/en/actions/guides/building-and-testing-nodejs
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test -- --coverage
+      - name: Update coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
