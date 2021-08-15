@@ -1,6 +1,6 @@
 # rumors-api
 
-[![Build Status](https://travis-ci.org/cofacts/rumors-api.svg?branch=master)](https://travis-ci.org/cofacts/rumors-api) [![Coverage Status](https://coveralls.io/repos/github/cofacts/rumors-api/badge.svg?branch=master)](https://coveralls.io/github/cofacts/rumors-api?branch=master)
+[![CI test](https://github.com/cofacts/rumors-api/actions/workflows/ci.yml/badge.svg)](https://github.com/cofacts/rumors-api/actions/workflows/ci.yml) [![Coverage Status](https://coveralls.io/repos/github/cofacts/rumors-api/badge.svg?branch=master)](https://coveralls.io/github/cofacts/rumors-api?branch=master)
 
 GraphQL API server for clients like rumors-site and rumors-line-bot
 

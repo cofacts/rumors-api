@@ -1,0 +1,32 @@
+name: CI test
+
+on:
+  # Triggers the workflow on push or pull request events but only for the dev branch
+  - pull_request
+  - push
+  # Allows you to run this workflow manually from the Actions tab
+  - workflow_dispatch
+
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+    services:
+      rumors-test-db:
+        image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.2
+        ports:
+          - 62223:9200
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test -- --coverage
+      - name: Update coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
