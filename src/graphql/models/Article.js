@@ -114,7 +114,7 @@ const Article = new GraphQLObjectType({
         status: {
           type: ArticleCategoryStatusEnum,
           description:
-            'When specified, returns only article categories with the specified status',
+            'Deprecated. Please use statuses instead. When specified, returns only article categories with the specified status',
         },
         statuses: {
           type: new GraphQLList(new GraphQLNonNull(ArticleCategoryStatusEnum)),
