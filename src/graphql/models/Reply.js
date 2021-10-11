@@ -7,11 +7,12 @@ import {
 } from 'graphql';
 
 import {
-  filterArticleRepliesByStatus,
+  filterArticleRepliesByStatuses,
   pagingArgs,
   getSortArgs,
   createSortType,
   createConnectionType,
+  DEFAULT_ARTICLE_REPLY_STATUSES,
 } from 'graphql/util';
 import Node from '../interfaces/Node';
 import ReplyTypeEnum from './ReplyTypeEnum';
@@ -39,15 +40,27 @@ const Reply = new GraphQLObjectType({
       args: {
         status: {
           type: ArticleReplyStatusEnum,
+          description: 'Deprecated. Please use statuses instead.',
+        },
+        statuses: {
+          type: new GraphQLList(new GraphQLNonNull(ArticleReplyStatusEnum)),
+          defaultValue: DEFAULT_ARTICLE_REPLY_STATUSES,
           description:
-            'When specified, returns only reply connections with the specified status',
+            'When specified, returns only article replies with the specified statuses',
         },
       },
-      resolve: async ({ id }, { status }, { loaders }) => {
+      resolve: async (
+        { id },
+        { status, statuses = DEFAULT_ARTICLE_REPLY_STATUSES },
+        { loaders }
+      ) => {
         const articleReplies = await loaders.articleRepliesByReplyIdLoader.load(
           id
         );
-        return filterArticleRepliesByStatus(articleReplies, status);
+        return filterArticleRepliesByStatuses(
+          articleReplies,
+          status ? [status] : statuses
+        );
       },
     },
     hyperlinks: {

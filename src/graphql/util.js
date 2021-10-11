@@ -418,31 +418,30 @@ export function createConnectionType(
   });
 }
 
-export function filterArticleRepliesByStatus(articleReplies, status) {
-  if (!status) return articleReplies;
+/**
+ * @param {{status: T}[]} entriesWithStatus - list of objects with "status" field
+ * @param {T[]} statuses - list of status to keep
+ * @returns {Object[]}
+ */
+function filterByStatuses(entriesWithStatus, statuses) {
+  return entriesWithStatus.filter(entry => {
+    // If an entry does not have status, it is considered "NORMAL".
+    const status = entry.status || 'NORMAL';
 
-  // If a replyConnection does not have status, it is considered "NORMAL".
-  //
-  return articleReplies.filter(articleReply => {
-    if (status !== 'NORMAL') return articleReply.status === status;
-
-    return (
-      articleReply.status === undefined || articleReply.status === 'NORMAL'
-    );
+    return statuses.includes(status);
   });
 }
 
-export function filterArticleCategoriesByStatus(articleCategories, status) {
-  if (!status) return articleCategories;
+export const DEFAULT_ARTICLE_REPLY_STATUSES = ['NORMAL'];
+export const filterArticleRepliesByStatuses = (
+  articleReplies,
+  statuses = DEFAULT_ARTICLE_REPLY_STATUSES
+) => filterByStatuses(articleReplies, statuses);
 
-  // If a articleCategory does not have status, it is considered "NORMAL".
-  //
-  return articleCategories.filter(articleCategory => {
-    if (status !== 'NORMAL') return articleCategory.status === status;
+export const DEFAULT_ARTICLE_CATEGORY_STATUSES = ['NORMAL'];
+export const filterArticleCategoriesByStatus = (
+  articleCategories,
+  statuses = DEFAULT_ARTICLE_CATEGORY_STATUSES
+) => filterByStatuses(articleCategories, statuses);
 
-    return (
-      articleCategory.status === undefined ||
-      articleCategory.status === 'NORMAL'
-    );
-  });
-}
+export const DEFAULT_REPLY_REQUEST_STATUSES = ['NORMAL'];

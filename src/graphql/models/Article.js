@@ -16,9 +16,12 @@ import {
   createFilterType,
   createSortType,
   createConnectionType,
-  filterArticleRepliesByStatus,
+  filterArticleRepliesByStatuses,
   filterArticleCategoriesByStatus,
   timeRangeInput,
+  DEFAULT_ARTICLE_REPLY_STATUSES,
+  DEFAULT_ARTICLE_CATEGORY_STATUSES,
+  DEFAULT_REPLY_REQUEST_STATUSES,
 } from 'graphql/util';
 
 import Node from '../interfaces/Node';
@@ -28,6 +31,7 @@ import User, { userFieldResolver } from 'graphql/models/User';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
+import ReplyRequestStatusEnum from './ReplyRequestStatusEnum';
 import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
@@ -54,19 +58,28 @@ const Article = new GraphQLObjectType({
         status: {
           type: ArticleReplyStatusEnum,
           description:
-            'When specified, returns only article replies with the specified status',
+            'Deprecated. Please use statuses instead. When specified, returns only article replies with the specified status',
+        },
+        statuses: {
+          type: new GraphQLList(new GraphQLNonNull(ArticleReplyStatusEnum)),
+          defaultValue: DEFAULT_ARTICLE_REPLY_STATUSES,
+          description:
+            'When specified, returns only article replies with the specified statuses',
         },
       },
-      resolve: async ({ id, articleReplies = [] }, { status }) => {
+      resolve: async (
+        { id, articleReplies = [] },
+        { status, statuses = DEFAULT_ARTICLE_REPLY_STATUSES }
+      ) => {
         // Sort by usefulness (= positive - negative feedbacks)
         // then use latest first
-        const sortedArticleReplies = filterArticleRepliesByStatus(
+        const sortedArticleReplies = filterArticleRepliesByStatuses(
           // Inject articleId to each articleReply
           articleReplies.map(articleReply => {
             articleReply.articleId = id;
             return articleReply;
           }),
-          status
+          status ? [status] : statuses
         ).sort((a, b) => {
           const usefulnessDiff =
             b.positiveFeedbackCount -
@@ -97,16 +110,24 @@ const Article = new GraphQLObjectType({
 
     articleCategories: {
       type: new GraphQLList(ArticleCategory),
-
       args: {
         status: {
           type: ArticleCategoryStatusEnum,
           description:
             'When specified, returns only article categories with the specified status',
         },
+        statuses: {
+          type: new GraphQLList(new GraphQLNonNull(ArticleCategoryStatusEnum)),
+          defaultValue: DEFAULT_ARTICLE_CATEGORY_STATUSES,
+          description:
+            'When specified, returns only article categories with the specified statuses',
+        },
       },
 
-      resolve: async ({ id, articleCategories = [] }, { status }) => {
+      resolve: async (
+        { id, articleCategories = [] },
+        { status, statuses = DEFAULT_ARTICLE_CATEGORY_STATUSES }
+      ) => {
         // sort by created
         const sortedArticleCategories = filterArticleCategoriesByStatus(
           // Inject articleId to each articleCategory
@@ -114,7 +135,7 @@ const Article = new GraphQLObjectType({
             articleCategory.articleId = id;
             return articleCategory;
           }),
-          status
+          status ? [status] : statuses
         ).sort((a, b) => {
           return +new Date(b.createdAt) - +new Date(a.createdAt);
         });
@@ -132,10 +153,32 @@ const Article = new GraphQLObjectType({
 
     replyRequests: {
       type: new GraphQLList(ReplyRequest),
-      resolve: async ({ id }, args, { loaders }) =>
+      args: {
+        statuses: {
+          type: new GraphQLList(new GraphQLNonNull(ReplyRequestStatusEnum)),
+          defaultValue: DEFAULT_ARTICLE_REPLY_STATUSES,
+          description:
+            'When specified, returns only article replies with the specified statuses',
+        },
+      },
+      resolve: async (
+        { id },
+        { statuses = DEFAULT_REPLY_REQUEST_STATUSES },
+        { loaders }
+      ) =>
         loaders.searchResultLoader.load({
           index: 'replyrequests',
-          body: { query: { term: { articleId: id } }, size: 1000 },
+          body: {
+            query: {
+              bool: {
+                must: [
+                  { term: { articleId: id } },
+                  { terms: { status: statuses } },
+                ],
+              },
+            },
+            size: 1000,
+          },
         }),
     },
     replyRequestCount: { type: GraphQLInt },
