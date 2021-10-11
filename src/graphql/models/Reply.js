@@ -46,7 +46,7 @@ const Reply = new GraphQLObjectType({
           type: new GraphQLList(new GraphQLNonNull(ArticleReplyStatusEnum)),
           defaultValue: DEFAULT_ARTICLE_REPLY_STATUSES,
           description:
-            'When specified, returns only article replies with the specified statuses',
+            'Returns only article replies with the specified statuses',
         },
       },
       resolve: async (

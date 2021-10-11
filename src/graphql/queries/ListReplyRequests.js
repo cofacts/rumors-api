@@ -1,4 +1,4 @@
-import { GraphQLList, GraphQLString } from 'graphql';
+import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
 import {
   createFilterType,
   createSortType,
@@ -10,6 +10,7 @@ import {
   DEFAULT_REPLY_REQUEST_STATUSES,
 } from 'graphql/util';
 import ReplyRequest from 'graphql/models/ReplyRequest';
+import ReplyRequestStatusEnum from 'graphql/models/ReplyRequestStatusEnum';
 
 export default {
   args: {
@@ -28,8 +29,9 @@ export default {
           type: timeRangeInput,
         },
         statuses: {
-          type: new GraphQLList(),
+          type: new GraphQLList(new GraphQLNonNull(ReplyRequestStatusEnum)),
           defaultValue: DEFAULT_REPLY_REQUEST_STATUSES,
+          description: 'List only reply requests with specified statuses',
         },
       }),
     },

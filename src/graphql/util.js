@@ -424,12 +424,7 @@ export function createConnectionType(
  * @returns {Object[]}
  */
 function filterByStatuses(entriesWithStatus, statuses) {
-  return entriesWithStatus.filter(entry => {
-    // If an entry does not have status, it is considered "NORMAL".
-    const status = entry.status || 'NORMAL';
-
-    return statuses.includes(status);
-  });
+  return entriesWithStatus.filter(({ status }) => statuses.includes(status));
 }
 
 export const DEFAULT_ARTICLE_REPLY_STATUSES = ['NORMAL'];
@@ -445,3 +440,5 @@ export const filterArticleCategoriesByStatus = (
 ) => filterByStatuses(articleCategories, statuses);
 
 export const DEFAULT_REPLY_REQUEST_STATUSES = ['NORMAL'];
+
+export const DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES = ['NORMAL'];

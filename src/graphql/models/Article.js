@@ -64,7 +64,7 @@ const Article = new GraphQLObjectType({
           type: new GraphQLList(new GraphQLNonNull(ArticleReplyStatusEnum)),
           defaultValue: DEFAULT_ARTICLE_REPLY_STATUSES,
           description:
-            'When specified, returns only article replies with the specified statuses',
+            'Returns only article replies with the specified statuses',
         },
       },
       resolve: async (
@@ -120,7 +120,7 @@ const Article = new GraphQLObjectType({
           type: new GraphQLList(new GraphQLNonNull(ArticleCategoryStatusEnum)),
           defaultValue: DEFAULT_ARTICLE_CATEGORY_STATUSES,
           description:
-            'When specified, returns only article categories with the specified statuses',
+            'Returns only article categories with the specified statuses',
         },
       },
 
@@ -158,7 +158,7 @@ const Article = new GraphQLObjectType({
           type: new GraphQLList(new GraphQLNonNull(ReplyRequestStatusEnum)),
           defaultValue: DEFAULT_ARTICLE_REPLY_STATUSES,
           description:
-            'When specified, returns only article replies with the specified statuses',
+            'Returns only article replies with the specified statuses',
         },
       },
       resolve: async (

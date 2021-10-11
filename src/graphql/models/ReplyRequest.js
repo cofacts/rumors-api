@@ -9,6 +9,7 @@ import User, { userFieldResolver } from './User';
 import Article from './Article';
 import FeedbackVote from './FeedbackVote';
 import Node from '../interfaces/Node';
+import ReplyRequestStatusEnum from './ReplyRequestStatusEnum';
 
 export default new GraphQLObjectType({
   name: 'ReplyRequest',
@@ -66,6 +67,9 @@ export default new GraphQLObjectType({
       type: new GraphQLNonNull(Article),
       resolve: ({ articleId }, args, { loaders }) =>
         loaders.docLoader.load({ index: 'articles', id: articleId }),
+    },
+    status: {
+      type: new GraphQLNonNull(ReplyRequestStatusEnum),
     },
   }),
 });
