@@ -1,5 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`CreateOrUpdateArticleReplyFeedback creates blocked feedback without updating numbers 1`] = `
+Object {
+  "CreateOrUpdateArticleReplyFeedback": Object {
+    "articleId": "article1",
+    "feedbackCount": 11,
+    "feedbacks": Array [
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": "ads content",
+        "vote": "UPVOTE",
+      },
+    ],
+    "negativeFeedbackCount": 0,
+    "ownVote": "UPVOTE",
+    "positiveFeedbackCount": 11,
+    "replyId": "reply1",
+  },
+}
+`;
+
 exports[`CreateOrUpdateArticleReplyFeedback creates feedback on given article reply 1`] = `
 Object {
   "CreateOrUpdateArticleReplyFeedback": Object {
