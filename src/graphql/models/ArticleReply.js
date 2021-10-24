@@ -4,6 +4,7 @@ import {
   GraphQLInt,
   GraphQLString,
   GraphQLBoolean,
+  GraphQLNonNull,
 } from 'graphql';
 
 import Article from './Article';
@@ -44,6 +45,9 @@ export default new GraphQLObjectType({
       description: 'The user who conencted this reply and this article.',
       resolve: userFieldResolver,
     },
+
+    userId: { type: GraphQLNonNull(GraphQLString) },
+    appId: { type: GraphQLNonNull(GraphQLString) },
 
     canUpdateStatus: {
       type: GraphQLBoolean,

@@ -46,7 +46,7 @@ describe('CreateReply', () => {
         type: 'RUMOR',
         reference: REF_URL,
       },
-      { userId: 'test', appId: 'test' }
+      { user: { id: 'test', appId: 'test' } }
     );
 
     expect(errors).toBeUndefined();
@@ -123,7 +123,7 @@ describe('CreateReply', () => {
         type: 'RUMOR',
         reference: 'http://google.com',
       },
-      { userId: 'test', appId: 'test' }
+      { user: { id: 'test', appId: 'test' } }
     );
     MockDate.reset();
 
@@ -158,7 +158,7 @@ describe('CreateReply', () => {
         text: 'FOO FOO',
         type: 'RUMOR',
       },
-      { userId: 'test', appId: 'test' }
+      { user: { id: 'test', appId: 'test' } }
     );
     MockDate.reset();
 
