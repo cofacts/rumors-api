@@ -79,19 +79,16 @@ export default new GraphQLObjectType({
       type: FeedbackVote,
       description:
         'The feedback of current user. null when not logged in or not voted yet.',
-      resolve: async (
-        { articleId, replyId },
-        args,
-        { userId, appId, loaders }
-      ) => {
-        if (!userId || !appId) return null;
+      resolve: async ({ articleId, replyId }, args, { user, loaders }) => {
+        if (!user) return null;
         const feedbacks = await loaders.articleReplyFeedbacksLoader.load({
           articleId,
           replyId,
         });
 
         const ownFeedback = feedbacks.find(
-          feedback => feedback.userId === userId && feedback.appId === appId
+          feedback =>
+            feedback.userId === user.id && feedback.appId === user.appId
         );
         if (!ownFeedback) return null;
         return ownFeedback.score;
