@@ -20,16 +20,22 @@ import crypto from 'crypto';
 export const AUTH_ERROR_MSG = 'userId is not set via query string.';
 
 /**
- * @param {object} param
- * @param {string} param.userId
- * @param {string} param.appId
+ * @param {User | {userId: string; appId: string}} param - user in GraphQL context, or {userId, appId} pair
  */
-export function assertUser({ userId, appId }) {
+export function assertUser(userOrIds) {
+  if (userOrIds === null || typeof userOrIds !== 'object') {
+    throw new Error(AUTH_ERROR_MSG);
+  }
+
+  const userId =
+    userOrIds.id /* For user instance */ ||
+    userOrIds.userId; /* for legacy {userId, appId} pair */
+
   if (!userId) {
     throw new Error(AUTH_ERROR_MSG);
   }
 
-  if (userId && !appId) {
+  if (userId && !userOrIds.appId) {
     throw new Error(
       'userId is set, but x-app-id or x-app-secret is not set accordingly.'
     );
