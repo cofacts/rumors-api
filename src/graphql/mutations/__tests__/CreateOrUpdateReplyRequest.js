@@ -33,7 +33,7 @@ describe('CreateOrUpdateReplyRequest', () => {
       {
         articleId,
       },
-      { userId, appId }
+      { user: { id: userId, appId } }
     );
     MockDate.reset();
 
@@ -46,14 +46,33 @@ describe('CreateOrUpdateReplyRequest', () => {
       type: 'doc',
       id,
     });
-    expect(request._source).toMatchSnapshot();
+    expect(request._source).toMatchInlineSnapshot(`
+      Object {
+        "appId": "test",
+        "articleId": "createReplyRequestTest1",
+        "createdAt": "2017-01-28T08:45:57.011Z",
+        "feedbacks": Array [],
+        "negativeFeedbackCount": 0,
+        "positiveFeedbackCount": 0,
+        "reason": "気になります",
+        "status": "NORMAL",
+        "updatedAt": "2017-01-28T08:45:57.011Z",
+        "userId": "test",
+      }
+    `);
 
     const { body: article } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,
     });
-    expect(article._source).toMatchSnapshot();
+    expect(article._source).toMatchInlineSnapshot(`
+      Object {
+        "lastRequestedAt": "2017-01-28T08:45:57.011Z",
+        "replyRequestCount": 2,
+        "text": "foofoo",
+      }
+    `);
 
     // Cleanup
     await client.delete({ index: 'replyrequests', type: 'doc', id });
@@ -72,7 +91,7 @@ describe('CreateOrUpdateReplyRequest', () => {
           replyRequestCount
         }
       }
-    `({ articleId }, { userId, appId });
+    `({ articleId }, { user: { id: userId, appId } });
 
     MockDate.set(1485593257011);
 
@@ -91,7 +110,7 @@ describe('CreateOrUpdateReplyRequest', () => {
           requestedForReply
         }
       }
-    `({ articleId }, { userId, appId });
+    `({ articleId }, { user: { id: userId, appId } });
 
     MockDate.reset();
 
@@ -104,14 +123,33 @@ describe('CreateOrUpdateReplyRequest', () => {
       type: 'doc',
       id,
     });
-    expect(conn._source).toMatchSnapshot();
+    expect(conn._source).toMatchInlineSnapshot(`
+      Object {
+        "appId": "test",
+        "articleId": "createReplyRequestTest1",
+        "createdAt": "2017-01-28T08:45:57.011Z",
+        "feedbacks": Array [],
+        "negativeFeedbackCount": 0,
+        "positiveFeedbackCount": 0,
+        "reason": "New reason",
+        "status": "NORMAL",
+        "updatedAt": "2017-01-28T08:47:37.011Z",
+        "userId": "test",
+      }
+    `);
 
     const { body: article } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,
     });
-    expect(article._source).toMatchSnapshot();
+    expect(article._source).toMatchInlineSnapshot(`
+      Object {
+        "lastRequestedAt": "2017-01-28T08:47:37.011Z",
+        "replyRequestCount": 2,
+        "text": "foofoo",
+      }
+    `);
 
     // Cleanup
     await client.delete({ index: 'replyrequests', type: 'doc', id });

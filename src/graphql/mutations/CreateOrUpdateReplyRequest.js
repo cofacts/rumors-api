@@ -1,5 +1,5 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
-import { assertUser } from 'util/user';
+import { assertUser, getContentDefaultStatus } from 'util/user';
 import Article from '../models/Article';
 
 import client, { processMeta } from 'util/client';
@@ -34,14 +34,17 @@ export function getReplyRequestId({ articleId, userId, appId }) {
  */
 export async function createOrUpdateReplyRequest({
   articleId,
-  userId,
-  appId,
+  user,
   reason = '',
 }) {
-  assertUser({ appId, userId });
+  assertUser(user);
 
   const now = new Date().toISOString();
-  const id = getReplyRequestId({ articleId, userId, appId });
+  const id = getReplyRequestId({
+    articleId,
+    userId: user.id,
+    appId: user.appId,
+  });
   const updatedDoc = {
     updatedAt: now,
   };
@@ -50,6 +53,8 @@ export async function createOrUpdateReplyRequest({
   if (reason) {
     updatedDoc.reason = reason;
   }
+
+  const replyRequestStatus = getContentDefaultStatus(user);
 
   const {
     body: { result },
@@ -61,14 +66,15 @@ export async function createOrUpdateReplyRequest({
       doc: updatedDoc,
       upsert: {
         articleId,
-        userId,
-        appId,
+        userId: user.id,
+        appId: user.appId,
         reason,
         feedbacks: [],
         positiveFeedbackCount: 0,
         negativeFeedbackCount: 0,
         createdAt: now,
         updatedAt: now,
+        status: replyRequestStatus,
       },
     },
     refresh: 'true',
@@ -76,28 +82,41 @@ export async function createOrUpdateReplyRequest({
 
   const isCreated = result === 'created';
 
-  const { body: articleUpdateResult } = await client.update({
-    index: 'articles',
-    type: 'doc',
-    id: articleId,
-    body: {
-      script: {
-        source: `
-          ${isCreated ? 'ctx._source.replyRequestCount += 1;' : ''}
-          ctx._source.lastRequestedAt = params.now;
-        `,
-        params: { now },
-      },
-    },
-    _source: true,
-  });
+  // Update article for normal reply requests
+  //
+  const article = await (async () => {
+    if (replyRequestStatus !== 'NORMAL') {
+      return (await client.get({
+        index: 'users',
+        type: 'doc',
+        id: articleId,
+      })).body;
+    }
 
-  if (articleUpdateResult.result !== 'updated') {
-    throw new Error(`Cannot update article ${articleId}`);
-  }
+    const { body: articleUpdateResult } = await client.update({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+      body: {
+        script: {
+          source: `
+            ${isCreated ? 'ctx._source.replyRequestCount += 1;' : ''}
+            ctx._source.lastRequestedAt = params.now;
+          `,
+          params: { now },
+        },
+      },
+      _source: true,
+    });
+    if (articleUpdateResult.result !== 'updated') {
+      throw new Error(`Cannot update article ${articleId}`);
+    }
+
+    return articleUpdateResult.get;
+  })();
 
   return {
-    article: processMeta({ ...articleUpdateResult.get, _id: articleId }),
+    article: processMeta({ ...article, _id: articleId }),
     isCreated,
   };
 }
@@ -112,11 +131,10 @@ export default {
       description: 'The reason why the user want to submit this article',
     },
   },
-  async resolve(rootValue, { articleId, reason }, { appId, userId }) {
+  async resolve(rootValue, { articleId, reason }, { user }) {
     const { article } = await createOrUpdateReplyRequest({
       articleId,
-      appId,
-      userId,
+      user,
       reason,
     });
     return article;
