@@ -87,7 +87,7 @@ export async function createOrUpdateReplyRequest({
   const article = await (async () => {
     if (replyRequestStatus !== 'NORMAL') {
       return (await client.get({
-        index: 'users',
+        index: 'articles',
         type: 'doc',
         id: articleId,
       })).body;

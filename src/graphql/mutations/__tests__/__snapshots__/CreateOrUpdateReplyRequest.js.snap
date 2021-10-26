@@ -31,3 +31,19 @@ Object {
   },
 }
 `;
+
+exports[`CreateOrUpdateReplyRequest inserts blocked reply request without updating article count 1`] = `
+Object {
+  "CreateOrUpdateReplyRequest": Object {
+    "id": "createReplyRequestTest1",
+    "replyRequestCount": 1,
+    "replyRequests": Array [
+      Object {
+        "reason": "Some unwelcomed ads here",
+        "userId": "iAmBlocked",
+      },
+    ],
+    "requestedForReply": true,
+  },
+}
+`;
