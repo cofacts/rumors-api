@@ -30,7 +30,7 @@ describe('creation', () => {
         text: 'FOO FOO http://foo.com/article/1',
         reference: { type: 'LINE' },
       },
-      { userId, appId }
+      { user: { id: userId, appId } }
     );
     MockDate.reset();
 
@@ -61,7 +61,20 @@ describe('creation', () => {
       id: replyRequestId,
     });
 
-    expect(replyRequest).toMatchSnapshot();
+    expect(replyRequest).toMatchInlineSnapshot(`
+      Object {
+        "appId": "foo",
+        "articleId": "y0iq3fr2pqgi",
+        "createdAt": "2017-01-28T08:45:57.011Z",
+        "feedbacks": Array [],
+        "negativeFeedbackCount": 0,
+        "positiveFeedbackCount": 0,
+        "reason": "気になります",
+        "status": "NORMAL",
+        "updatedAt": "2017-01-28T08:45:57.011Z",
+        "userId": "test",
+      }
+    `);
 
     // Cleanup
     await client.delete({
@@ -98,7 +111,7 @@ describe('creation', () => {
         text: fixture1Text,
         reference: { type: 'LINE' },
       },
-      { userId, appId }
+      { user: { id: userId, appId } }
     );
     MockDate.reset();
     expect(errors).toBeUndefined();
@@ -128,7 +141,20 @@ describe('creation', () => {
       id: replyRequestId,
     });
 
-    expect(replyRequest).toMatchSnapshot();
+    expect(replyRequest).toMatchInlineSnapshot(`
+      Object {
+        "appId": "foo",
+        "articleId": "20xz7y20qzyt6",
+        "createdAt": "2017-01-28T08:45:57.011Z",
+        "feedbacks": Array [],
+        "negativeFeedbackCount": 0,
+        "positiveFeedbackCount": 0,
+        "reason": "気になります",
+        "status": "NORMAL",
+        "updatedAt": "2017-01-28T08:45:57.011Z",
+        "userId": "test",
+      }
+    `);
 
     // Cleanup
     await client.delete({
@@ -156,7 +182,7 @@ const testId = async (userId, appId) => {
       text: 'FOO FOO',
       reference: { type: 'LINE' },
     },
-    { userId, appId }
+    { user: { id: userId, appId } }
   );
   MockDate.reset();
   expect(errors).toMatchSnapshot();
