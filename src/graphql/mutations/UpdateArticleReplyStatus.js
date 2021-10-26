@@ -2,6 +2,7 @@ import { GraphQLString, GraphQLNonNull, GraphQLList } from 'graphql';
 import client from 'util/client';
 import ArticleReply from 'graphql/models/ArticleReply';
 import ArticleReplyStatusEnum from 'graphql/models/ArticleReplyStatusEnum';
+import { getContentDefaultStatus } from 'util/user';
 
 /**
  * @param {object} arg
@@ -87,13 +88,17 @@ export default {
       type: new GraphQLNonNull(ArticleReplyStatusEnum),
     },
   },
-  async resolve(rootValue, { articleId, replyId, status }, { userId, appId }) {
+  async resolve(rootValue, { articleId, replyId, status }, { user }) {
+    // If user want to change status to "NORMAL", use the "default" content state for the user instead
+    const targetStatus =
+      status === 'NORMAL' ? getContentDefaultStatus(user) : status;
+
     const articleReplies = await updateArticleReplyStatus({
       articleId,
       replyId,
-      userId,
-      appId,
-      status,
+      userId: user.id,
+      appId: user.appId,
+      status: targetStatus,
     });
 
     // When returning, insert articleId so that ArticleReply object type can resolve article.

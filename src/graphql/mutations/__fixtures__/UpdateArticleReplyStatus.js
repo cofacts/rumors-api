@@ -31,4 +31,15 @@ export default {
       },
     ],
   },
+  '/articles/doc/blocked': {
+    articleReplies: [
+      {
+        replyId: 'reply',
+        userId: 'iAmBlocked',
+        appId: 'test',
+        status: 'DELETED',
+        updatedAt: 0,
+      },
+    ],
+  },
 };
