@@ -51,12 +51,8 @@ export default new GraphQLObjectType({
 
     canUpdateStatus: {
       type: GraphQLBoolean,
-      resolve: (
-        { userId, appId },
-        args,
-        { userId: currentUserId, appId: currentAppId }
-      ) => {
-        return userId === currentUserId && appId === currentAppId;
+      resolve: ({ userId, appId }, args, { user }) => {
+        return !!user && userId === user.id && appId === user.appId;
       },
     },
 
