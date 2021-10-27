@@ -1,18 +1,18 @@
-import gql from "util/GraphQL";
-import { loadFixtures, unloadFixtures, resetFrom } from "util/fixtures";
-import client from "util/client";
-import MockDate from "mockdate";
-import fixtures from "../__fixtures__/UpdateArticleReplyStatus";
+import gql from 'util/GraphQL';
+import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
+import client from 'util/client';
+import MockDate from 'mockdate';
+import fixtures from '../__fixtures__/UpdateArticleReplyStatus';
 
-describe("UpdateArticleReplyStatus", () => {
+describe('UpdateArticleReplyStatus', () => {
   beforeEach(() => {
     MockDate.set(1485593157011);
     return loadFixtures(fixtures);
   });
 
   it("should not allow users to delete other's article replies", async () => {
-    const userId = "foo";
-    const appId = "test";
+    const userId = 'foo';
+    const appId = 'test';
 
     const { errors } = await gql`
       mutation {
@@ -30,9 +30,9 @@ describe("UpdateArticleReplyStatus", () => {
     expect(errors).toMatchSnapshot();
   });
 
-  it("should set article reply fields correctly", async () => {
-    const userId = "foo";
-    const appId = "test";
+  it('should set article reply fields correctly', async () => {
+    const userId = 'foo';
+    const appId = 'test';
 
     const { data, errors } = await gql`
       mutation {
@@ -63,11 +63,11 @@ describe("UpdateArticleReplyStatus", () => {
     expect(data).toMatchSnapshot();
 
     const {
-      body: { _source: normal }
+      body: { _source: normal },
     } = await client.get({
-      index: "articles",
-      type: "doc",
-      id: "normal"
+      index: 'articles',
+      type: 'doc',
+      id: 'normal',
     });
     expect(normal.articleReplies).toMatchInlineSnapshot(`
       Array [
@@ -83,11 +83,11 @@ describe("UpdateArticleReplyStatus", () => {
     expect(normal.normalArticleReplyCount).toBe(0);
 
     const {
-      body: { _source: deleted }
+      body: { _source: deleted },
     } = await client.get({
-      index: "articles",
-      type: "doc",
-      id: "deleted"
+      index: 'articles',
+      type: 'doc',
+      id: 'deleted',
     });
     expect(deleted.articleReplies).toMatchInlineSnapshot(`
       Array [
@@ -103,13 +103,13 @@ describe("UpdateArticleReplyStatus", () => {
     expect(deleted.normalArticleReplyCount).toBe(1);
 
     // Cleanup
-    await resetFrom(fixtures, "/articles/doc/normal");
-    await resetFrom(fixtures, "/articles/doc/deleted");
+    await resetFrom(fixtures, '/articles/doc/normal');
+    await resetFrom(fixtures, '/articles/doc/deleted');
   });
 
-  it("restore delete state to blocked state for blocked users", async () => {
-    const userId = "iAmBlocked";
-    const appId = "test";
+  it('restore delete state to blocked state for blocked users', async () => {
+    const userId = 'iAmBlocked';
+    const appId = 'test';
 
     const { data, errors } = await gql`
       mutation {
@@ -124,17 +124,17 @@ describe("UpdateArticleReplyStatus", () => {
           updatedAt
         }
       }
-    `({}, { user: { id: userId, appId, blockedReason: "Announcement URL" } });
+    `({}, { user: { id: userId, appId, blockedReason: 'Announcement URL' } });
 
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
     const {
-      body: { _source }
+      body: { _source },
     } = await client.get({
-      index: "articles",
-      type: "doc",
-      id: "blocked"
+      index: 'articles',
+      type: 'doc',
+      id: 'blocked',
     });
     expect(_source).toMatchInlineSnapshot(`
       Object {
@@ -152,7 +152,7 @@ describe("UpdateArticleReplyStatus", () => {
     `);
 
     // Cleanup
-    await resetFrom(fixtures, "/articles/doc/blocked");
+    await resetFrom(fixtures, '/articles/doc/blocked');
   });
 
   afterEach(() => {
