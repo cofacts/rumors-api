@@ -17,9 +17,8 @@ describe('CreateArticleCategory', () => {
         CreateArticleCategory(articleId: $articleId, categoryId: $categoryId) {
           positiveFeedbackCount
           negativeFeedbackCount
-          user {
-            id
-          }
+          userId
+          appId
           status
           article {
             id
@@ -34,12 +33,28 @@ describe('CreateArticleCategory', () => {
         articleId,
         categoryId,
       },
-      { userId: 'test', appId: 'test' }
+      { user: { id: 'test', appId: 'test' } }
     );
     MockDate.reset();
 
     expect(errors).toBeUndefined();
-    expect(data.CreateArticleCategory).toMatchSnapshot();
+    expect(data.CreateArticleCategory).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "appId": "test",
+          "article": Object {
+            "id": "createArticleCategory1",
+          },
+          "category": Object {
+            "id": "createArticleCategory2",
+          },
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 0,
+          "status": "NORMAL",
+          "userId": "test",
+        },
+      ]
+    `);
 
     const {
       body: { _source },
@@ -75,9 +90,8 @@ describe('CreateArticleCategory', () => {
         ) {
           positiveFeedbackCount
           negativeFeedbackCount
-          user {
-            id
-          }
+          userId
+          appId
           status
           article {
             id
@@ -94,12 +108,28 @@ describe('CreateArticleCategory', () => {
         aiModel,
         aiConfidence,
       },
-      { userId: 'test', appId: 'test' }
+      { user: { id: 'test', appId: 'test' } }
     );
     MockDate.reset();
 
     expect(errors).toBeUndefined();
-    expect(data.CreateArticleCategory).toMatchSnapshot();
+    expect(data.CreateArticleCategory).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "appId": "test",
+          "article": Object {
+            "id": "createArticleCategory1",
+          },
+          "category": Object {
+            "id": "createArticleCategory2",
+          },
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 0,
+          "status": "NORMAL",
+          "userId": "test",
+        },
+      ]
+    `);
 
     const {
       body: { _source },
@@ -123,7 +153,7 @@ describe('CreateArticleCategory', () => {
           categoryId
         }
       }
-    `({ articleId, categoryId }, { userId: 'test', appId: 'test' });
+    `({ articleId, categoryId }, { user: { id: 'test', appId: 'test' } });
 
     const { errors } = await gql`
       mutation($articleId: String!, $categoryId: String!) {
@@ -131,7 +161,10 @@ describe('CreateArticleCategory', () => {
           categoryId
         }
       }
-    `({ articleId, categoryId }, { userId: 'anotherUser', appId: 'test' });
+    `(
+      { articleId, categoryId },
+      { user: { id: 'anotherUser', appId: 'test' } }
+    );
 
     expect('' + errors[0]).toMatch(/Cannot add articleCategory/);
 
@@ -149,9 +182,8 @@ describe('CreateArticleCategory', () => {
         CreateArticleCategory(articleId: $articleId, categoryId: $categoryId) {
           positiveFeedbackCount
           negativeFeedbackCount
-          user {
-            id
-          }
+          userId
+          appId
           status
           article {
             id
@@ -166,12 +198,28 @@ describe('CreateArticleCategory', () => {
         articleId,
         categoryId,
       },
-      { userId: 'test2', appId: 'test2' }
+      { user: { id: 'test2', appId: 'test2' } }
     );
     MockDate.reset();
 
     expect(errors).toBeUndefined();
-    expect(data.CreateArticleCategory).toMatchSnapshot();
+    expect(data.CreateArticleCategory).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "appId": "test2",
+          "article": Object {
+            "id": "articleHasDeletedArticleCategory",
+          },
+          "category": Object {
+            "id": "createArticleCategory2",
+          },
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 0,
+          "status": "NORMAL",
+          "userId": "test2",
+        },
+      ]
+    `);
 
     const {
       body: { _source },

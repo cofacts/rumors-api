@@ -53,6 +53,9 @@ const ArticleCategory = new GraphQLObjectType({
       resolve: userFieldResolver,
     },
 
+    userId: { type: GraphQLNonNull(GraphQLString) },
+    appId: { type: GraphQLNonNull(GraphQLString) },
+
     canUpdateStatus: {
       type: GraphQLBoolean,
       resolve: (

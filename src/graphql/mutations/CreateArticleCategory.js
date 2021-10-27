@@ -6,7 +6,7 @@ import {
 } from 'graphql';
 
 import client from 'util/client';
-import { assertUser } from 'util/user';
+import { assertUser, getContentDefaultStatus } from 'util/user';
 import ArticleCategory from 'graphql/models/ArticleCategory';
 
 /**
@@ -14,19 +14,17 @@ import ArticleCategory from 'graphql/models/ArticleCategory';
  * @param {object} param
  * @param {object} param.article - The article instance to attach category to
  * @param {object} param.categoryId - The categoryId to attach to article
- * @param {string} param.userId - The user adding this article-reply connection
- * @param {string} param.appId
+ * @param {string} param.user - The user adding this article-reply connection
  * @returns {ArticleCategory[]} The article categories after creation
  */
 export async function createArticleCategory({
   article,
   categoryId,
-  userId,
-  appId,
+  user,
   aiModel,
   aiConfidence,
 }) {
-  assertUser({ userId, appId });
+  assertUser(user);
   if (!article || !categoryId) {
     throw new Error(
       'articleId and categoryId are mandatory when creating ArticleCategory.'
@@ -34,16 +32,17 @@ export async function createArticleCategory({
   }
 
   const now = new Date().toISOString();
+  const defaultStatus = getContentDefaultStatus(user);
 
   const articleCategory = {
-    userId,
-    appId,
+    userId: user.id,
+    appId: user.appId,
     aiModel,
     aiConfidence,
     positiveFeedbackCount: 0,
     negativeFeedbackCount: 0,
     categoryId,
-    status: 'NORMAL',
+    status: defaultStatus,
     createdAt: now,
     updatedAt: now,
   };
@@ -61,7 +60,7 @@ export async function createArticleCategory({
       script: {
         /**
          * Check if the category is already connected in the article.
-         * If connected with DELETED status, then set to NORMAL.
+         * If connected with not default status, then set to default status.
          * If connected with NORMAL status, then do nothing.
          * Otherwise, do update.
          */
@@ -72,13 +71,13 @@ export async function createArticleCategory({
 
           if (found.isPresent()) {
             HashMap ar = found.get();
-            if (ar.get('status').equals('DELETED')) {
-              ar.put('status', 'NORMAL');
+            if (ar.get('status').equals(params.defaultStatus)) {
+              ctx.op = 'none';
+            } else {
+              ar.put('status', params.defaultStatus);
               ar.put('userId', params.articleCategory.get('userId'));
               ar.put('appId', params.articleCategory.get('appId'));
               ar.put('updatedAt', params.articleCategory.get('updatedAt'));
-            } else {
-              ctx.op = 'none';
             }
           } else {
             ctx._source.articleCategories.add(params.articleCategory);
@@ -88,7 +87,7 @@ export async function createArticleCategory({
           }
         `,
         lang: 'painless',
-        params: { articleCategory },
+        params: { articleCategory, defaultStatus },
       },
       _source: ['articleCategories.*'],
     },
@@ -117,7 +116,7 @@ export default {
   async resolve(
     rootValue,
     { articleId, categoryId, aiModel, aiConfidence },
-    { userId, appId, loaders }
+    { user, loaders }
   ) {
     const article = await loaders.docLoader.load({
       index: 'articles',
@@ -127,8 +126,7 @@ export default {
     const articleCategories = await createArticleCategory({
       article,
       categoryId,
-      userId,
-      appId,
+      user,
       aiModel,
       aiConfidence,
     });
