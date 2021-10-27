@@ -63,6 +63,67 @@ Object {
 }
 `;
 
+exports[`CreateOrUpdateArticleCategoryFeedback generates blocked feedback for blocked users 1`] = `
+Object {
+  "CreateOrUpdateArticleCategoryFeedback": Object {
+    "feedbackCount": 11,
+    "feedbacks": Array [
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": "Some ads comment",
+        "vote": "UPVOTE",
+      },
+    ],
+    "negativeFeedbackCount": 0,
+    "ownVote": "UPVOTE",
+    "positiveFeedbackCount": 11,
+  },
+}
+`;
+
 exports[`CreateOrUpdateArticleCategoryFeedback updates existing feedback 1`] = `
 Object {
   "CreateOrUpdateArticleCategoryFeedback": Object {
