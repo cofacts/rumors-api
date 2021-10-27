@@ -233,5 +233,56 @@ describe('CreateArticleCategory', () => {
     await resetFrom(fixtures, '/articles/doc/articleHasDeletedArticleCategory');
   });
 
+  it('generates blocked article category for blocked users', async () => {
+    MockDate.set(1485593157011);
+    const articleId = 'createArticleCategory1';
+    const categoryId = 'createArticleCategory2';
+
+    const { data, errors } = await gql`
+      mutation($articleId: String!, $categoryId: String!) {
+        CreateArticleCategory(articleId: $articleId, categoryId: $categoryId) {
+          userId
+          status
+        }
+      }
+    `(
+      {
+        articleId,
+        categoryId,
+      },
+      {
+        user: {
+          id: 'iAmBlocked',
+          appId: 'test',
+          blockedReason: 'Announcement url',
+        },
+      }
+    );
+    MockDate.reset();
+
+    expect(errors).toBeUndefined();
+    expect(data.CreateArticleCategory).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "status": "BLOCKED",
+          "userId": "iAmBlocked",
+        },
+      ]
+    `);
+
+    // Expect article is not altered
+    //
+    const {
+      body: { _source },
+    } = await client.get({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+    });
+    expect(_source.normalArticleCategoryCount).toBe(0);
+
+    await resetFrom(fixtures, '/articles/doc/createArticleCategory1');
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });
