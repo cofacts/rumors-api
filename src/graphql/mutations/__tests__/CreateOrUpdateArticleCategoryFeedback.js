@@ -1,20 +1,20 @@
-import gql from 'util/GraphQL';
-import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
-import client from 'util/client';
-import { getArticleCategoryFeedbackId } from '../CreateOrUpdateArticleCategoryFeedback';
-import MockDate from 'mockdate';
-import fixtures from '../__fixtures__/CreateOrUpdateArticleCategoryFeedback';
+import gql from "util/GraphQL";
+import { loadFixtures, unloadFixtures, resetFrom } from "util/fixtures";
+import client from "util/client";
+import { getArticleCategoryFeedbackId } from "../CreateOrUpdateArticleCategoryFeedback";
+import MockDate from "mockdate";
+import fixtures from "../__fixtures__/CreateOrUpdateArticleCategoryFeedback";
 
-describe('CreateOrUpdateArticleCategoryFeedback', () => {
+describe("CreateOrUpdateArticleCategoryFeedback", () => {
   beforeAll(() => loadFixtures(fixtures));
 
-  it('creates feedback on given article category', async () => {
+  it("creates feedback on given article category", async () => {
     MockDate.set(1485593157011);
-    const userId = 'test';
-    const appId = 'test';
-    const articleId = 'article1';
-    const categoryId = 'category1';
-    const comment = 'comment1';
+    const userId = "test";
+    const appId = "test";
+    const articleId = "article1";
+    const categoryId = "category1";
+    const comment = "comment1";
 
     const { data, errors } = await gql`
       mutation($articleId: String!, $categoryId: String!, $comment: String!) {
@@ -40,9 +40,9 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
       {
         articleId,
         categoryId,
-        comment,
+        comment
       },
-      { userId, appId, comment }
+      { user: { id: userId, appId } }
     );
     MockDate.reset();
 
@@ -53,38 +53,58 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
       articleId,
       categoryId,
       userId,
-      appId,
+      appId
     });
 
     const { body: conn } = await client.get({
-      index: 'articlecategoryfeedbacks',
-      type: 'doc',
-      id,
+      index: "articlecategoryfeedbacks",
+      type: "doc",
+      id
     });
-    expect(conn._source).toMatchSnapshot();
+    expect(conn._source).toMatchInlineSnapshot(`
+      Object {
+        "appId": "test",
+        "articleId": "article1",
+        "categoryId": "category1",
+        "comment": "comment1",
+        "createdAt": "2017-01-28T08:45:57.011Z",
+        "score": 1,
+        "status": "NORMAL",
+        "updatedAt": "2017-01-28T08:45:57.011Z",
+        "userId": "test",
+      }
+    `);
 
     const { body: article } = await client.get({
-      index: 'articles',
-      type: 'doc',
-      id: articleId,
+      index: "articles",
+      type: "doc",
+      id: articleId
     });
-    expect(article._source.articleCategories).toMatchSnapshot();
+    expect(article._source.articleCategories).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "categoryId": "category1",
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 12,
+        },
+      ]
+    `);
 
     // Cleanup
     await client.delete({
-      index: 'articlecategoryfeedbacks',
-      type: 'doc',
-      id,
+      index: "articlecategoryfeedbacks",
+      type: "doc",
+      id
     });
-    await resetFrom(fixtures, '/articles/doc/article1');
+    await resetFrom(fixtures, "/articles/doc/article1");
   });
 
-  it('updates existing feedback', async () => {
+  it("updates existing feedback", async () => {
     MockDate.set(1485593157011);
-    const userId = 'testUser';
-    const appId = 'testClient';
-    const articleId = 'article1';
-    const categoryId = 'category1';
+    const userId = "testUser";
+    const appId = "testClient";
+    const articleId = "article1";
+    const categoryId = "category1";
 
     const { data, errors } = await gql`
       mutation($articleId: String!, $categoryId: String!) {
@@ -108,9 +128,9 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
     `(
       {
         articleId,
-        categoryId,
+        categoryId
       },
-      { userId, appId }
+      { user: { id: userId, appId } }
     );
     MockDate.reset();
 
@@ -121,13 +141,24 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
       articleId,
       categoryId,
       userId,
-      appId,
+      appId
     });
 
     expect(
-      (await client.get({ index: 'articlecategoryfeedbacks', type: 'doc', id }))
+      (await client.get({ index: "articlecategoryfeedbacks", type: "doc", id }))
         .body._source
-    ).toMatchSnapshot();
+    ).toMatchInlineSnapshot(`
+      Object {
+        "appId": "testClient",
+        "articleId": "article1",
+        "categoryId": "category1",
+        "createdAt": "2017-01-01T00:00:00.000Z",
+        "score": -1,
+        "status": "NORMAL",
+        "updatedAt": "2017-01-28T08:45:57.011Z",
+        "userId": "testUser",
+      }
+    `);
 
     // Cleanup
     await resetFrom(fixtures, `/articlecategoryfeedbacks/doc/${id}`);
