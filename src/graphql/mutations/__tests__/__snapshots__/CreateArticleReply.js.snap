@@ -3,6 +3,7 @@
 exports[`CreateArticleReply connects article and reply together 1`] = `
 Array [
   Object {
+    "appId": "test",
     "article": Object {
       "id": "createArticleReply1",
     },
@@ -12,9 +13,7 @@ Array [
       "id": "createArticleReply2",
     },
     "status": "NORMAL",
-    "user": Object {
-      "id": "test",
-    },
+    "userId": "test",
   },
 ]
 `;
@@ -35,6 +34,31 @@ Object {
     },
   ],
   "normalArticleReplyCount": 1,
+  "references": Array [
+    Object {
+      "type": "LINE",
+    },
+  ],
+  "text": "foofoo",
+}
+`;
+
+exports[`CreateArticleReply inserts blocked article and reply without updating normal count 1`] = `
+Object {
+  "articleReplies": Array [
+    Object {
+      "appId": "test",
+      "createdAt": "2017-01-28T08:45:57.011Z",
+      "negativeFeedbackCount": 0,
+      "positiveFeedbackCount": 0,
+      "replyId": "createArticleReply2",
+      "replyType": "RUMOR",
+      "status": "BLOCKED",
+      "updatedAt": "2017-01-28T08:45:57.011Z",
+      "userId": "iamBlocked",
+    },
+  ],
+  "normalArticleReplyCount": 0,
   "references": Array [
     Object {
       "type": "LINE",

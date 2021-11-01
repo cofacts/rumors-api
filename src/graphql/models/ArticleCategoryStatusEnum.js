@@ -9,5 +9,8 @@ export default new GraphQLEnumType({
     DELETED: {
       value: 'DELETED',
     },
+    BLOCKED: {
+      value: 'BLOCKED',
+    },
   },
 });

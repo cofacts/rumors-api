@@ -54,9 +54,9 @@ export default {
   async resolve(
     rootValue,
     { articleId, text, type, reference, waitForHyperlinks = false },
-    { userId, appId, loaders }
+    { loaders, user }
   ) {
-    assertUser({ userId, appId });
+    assertUser(user);
 
     if (type !== 'NOT_ARTICLE' && !reference) {
       throw new Error('reference is required for type !== NOT_ARTICLE');
@@ -68,8 +68,8 @@ export default {
     });
 
     const replyBody = {
-      userId,
-      appId,
+      userId: user.id,
+      appId: user.appId,
       type,
       text,
       reference,
@@ -110,8 +110,7 @@ export default {
       createArticleReply({
         article,
         reply: { ...replyBody, id },
-        userId,
-        appId,
+        user,
       })
     );
 

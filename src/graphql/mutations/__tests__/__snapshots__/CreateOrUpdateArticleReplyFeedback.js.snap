@@ -1,5 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`CreateOrUpdateArticleReplyFeedback creates blocked feedback without updating numbers 1`] = `
+Object {
+  "CreateOrUpdateArticleReplyFeedback": Object {
+    "articleId": "article1",
+    "feedbackCount": 11,
+    "feedbacks": Array [
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": "ads content",
+        "vote": "UPVOTE",
+      },
+    ],
+    "negativeFeedbackCount": 0,
+    "ownVote": "UPVOTE",
+    "positiveFeedbackCount": 11,
+    "replyId": "reply1",
+  },
+}
+`;
+
 exports[`CreateOrUpdateArticleReplyFeedback creates feedback on given article reply 1`] = `
 Object {
   "CreateOrUpdateArticleReplyFeedback": Object {
@@ -63,29 +126,6 @@ Object {
 }
 `;
 
-exports[`CreateOrUpdateArticleReplyFeedback creates feedback on given article reply 2`] = `
-Object {
-  "appId": "test",
-  "articleId": "article1",
-  "comment": "comment1",
-  "createdAt": "2017-01-28T08:45:57.011Z",
-  "replyId": "reply1",
-  "score": 1,
-  "updatedAt": "2017-01-28T08:45:57.011Z",
-  "userId": "test",
-}
-`;
-
-exports[`CreateOrUpdateArticleReplyFeedback creates feedback on given article reply 3`] = `
-Array [
-  Object {
-    "negativeFeedbackCount": 0,
-    "positiveFeedbackCount": 12,
-    "replyId": "reply1",
-  },
-]
-`;
-
 exports[`CreateOrUpdateArticleReplyFeedback updates existing feedback 1`] = `
 Object {
   "CreateOrUpdateArticleReplyFeedback": Object {
@@ -142,17 +182,5 @@ Object {
     "positiveFeedbackCount": 10,
     "replyId": "reply1",
   },
-}
-`;
-
-exports[`CreateOrUpdateArticleReplyFeedback updates existing feedback 2`] = `
-Object {
-  "appId": "testClient",
-  "articleId": "article1",
-  "createdAt": "2017-01-01T00:00:00.000Z",
-  "replyId": "reply1",
-  "score": -1,
-  "updatedAt": "2017-01-28T08:45:57.011Z",
-  "userId": "testUser",
 }
 `;

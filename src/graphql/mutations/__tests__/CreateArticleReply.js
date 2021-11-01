@@ -17,9 +17,8 @@ describe('CreateArticleReply', () => {
         CreateArticleReply(articleId: $articleId, replyId: $replyId) {
           positiveFeedbackCount
           negativeFeedbackCount
-          user {
-            id
-          }
+          userId
+          appId
           status
           article {
             id
@@ -34,7 +33,7 @@ describe('CreateArticleReply', () => {
         articleId,
         replyId,
       },
-      { userId: 'test', appId: 'test' }
+      { user: { id: 'test', appId: 'test' } }
     );
     MockDate.reset();
 
@@ -50,6 +49,7 @@ describe('CreateArticleReply', () => {
     });
     expect(_source).toMatchSnapshot();
 
+    // Cleanup
     await resetFrom(fixtures, '/articles/doc/createArticleReply1');
   });
 
@@ -63,7 +63,7 @@ describe('CreateArticleReply', () => {
           replyId
         }
       }
-    `({ articleId, replyId }, { userId: 'test', appId: 'test' });
+    `({ articleId, replyId }, { user: { id: 'test', appId: 'test' } });
 
     const { errors } = await gql`
       mutation($articleId: String!, $replyId: String!) {
@@ -71,9 +71,50 @@ describe('CreateArticleReply', () => {
           replyId
         }
       }
-    `({ articleId, replyId }, { userId: 'anotherUser', appId: 'test' });
+    `({ articleId, replyId }, { user: { id: 'anotherUser', appId: 'test' } });
 
     expect('' + errors[0]).toMatch(/Cannot add articleReply/);
+
+    // Cleanup
+    await resetFrom(fixtures, '/articles/doc/createArticleReply1');
+  });
+
+  it('inserts blocked article and reply without updating normal count', async () => {
+    MockDate.set(1485593157011);
+    const articleId = 'createArticleReply1';
+    const replyId = 'createArticleReply2';
+
+    const { errors } = await gql`
+      mutation($articleId: String!, $replyId: String!) {
+        CreateArticleReply(articleId: $articleId, replyId: $replyId) {
+          replyId
+        }
+      }
+    `(
+      {
+        articleId,
+        replyId,
+      },
+      {
+        user: {
+          id: 'iamBlocked',
+          appId: 'test',
+          blockedReason: 'announcement-url',
+        },
+      }
+    );
+    MockDate.reset();
+
+    expect(errors).toBeUndefined();
+
+    const {
+      body: { _source },
+    } = await client.get({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+    });
+    expect(_source).toMatchSnapshot();
 
     // Cleanup
     await resetFrom(fixtures, '/articles/doc/createArticleReply1');

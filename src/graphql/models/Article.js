@@ -144,15 +144,18 @@ const Article = new GraphQLObjectType({
       type: GraphQLBoolean,
       description:
         'If the current user has requested for reply for this article. Null if not logged in.',
-      resolve: async ({ id }, args, { userId, appId, loaders }) => {
-        if (!userId || !appId) return null;
+      resolve: async ({ id }, args, { user, loaders }) => {
+        if (!user) return null;
 
         const userReplyRequests = await loaders.searchResultLoader.load({
           index: 'replyrequests',
           body: {
             query: {
               bool: {
-                must: [{ term: { userId } }, { term: { articleId: id } }],
+                must: [
+                  { term: { userId: user.id } },
+                  { term: { articleId: id } },
+                ],
               },
             },
           },

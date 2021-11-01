@@ -53,6 +53,9 @@ const ArticleCategory = new GraphQLObjectType({
       resolve: userFieldResolver,
     },
 
+    userId: { type: GraphQLNonNull(GraphQLString) },
+    appId: { type: GraphQLNonNull(GraphQLString) },
+
     canUpdateStatus: {
       type: GraphQLBoolean,
       resolve: (
@@ -83,19 +86,16 @@ const ArticleCategory = new GraphQLObjectType({
       type: FeedbackVote,
       description:
         'The feedback of current user. null when not logged in or not voted yet.',
-      resolve: async (
-        { articleId, categoryId },
-        args,
-        { userId, appId, loaders }
-      ) => {
-        if (!userId || !appId) return null;
+      resolve: async ({ articleId, categoryId }, args, { user, loaders }) => {
+        if (!user) return null;
         const feedbacks = await loaders.articleCategoryFeedbacksLoader.load({
           articleId,
           categoryId,
         });
 
         const ownFeedback = feedbacks.find(
-          feedback => feedback.userId === userId && feedback.appId === appId
+          feedback =>
+            feedback.userId === user.id && feedback.appId === user.appId
         );
         if (!ownFeedback) return null;
         return ownFeedback.score;

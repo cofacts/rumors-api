@@ -412,7 +412,7 @@ Object {
             "text": "Lorum ipsum",
           },
           "articleId": "foo",
-          "canUpdateStatus": true,
+          "canUpdateStatus": false,
         },
       ],
       "reference": "barbar",

@@ -41,6 +41,8 @@ describe('user utils', () => {
     it('should throw error if userId is not present', () => {
       expect(() => assertUser({})).toThrow(AUTH_ERROR_MSG);
       expect(() => assertUser({ appId: 'appId' })).toThrow(AUTH_ERROR_MSG);
+      expect(() => assertUser(null)).toThrow(AUTH_ERROR_MSG);
+      expect(() => assertUser()).toThrow(AUTH_ERROR_MSG);
     });
 
     it('should throw error if appId is not present', () => {
@@ -53,6 +55,17 @@ describe('user utils', () => {
       expect(() =>
         assertUser({ appId: 'appId', userId: 'userId' })
       ).not.toThrow();
+    });
+
+    it('should not throw error for user doc', async () => {
+      const { user } = await createOrUpdateUser({
+        userId: 'foo',
+        appId: 'bar',
+      });
+      expect(() => assertUser(user)).not.toThrow();
+
+      // Cleanup
+      await client.delete({ index: 'users', type: 'doc', id: user.id });
     });
   });
 

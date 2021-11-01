@@ -25,7 +25,7 @@ describe('UpdateArticleReplyStatus', () => {
           updatedAt
         }
       }
-    `({}, { userId, appId });
+    `({}, { user: { id: userId, appId } });
 
     expect(errors).toMatchSnapshot();
   });
@@ -57,7 +57,7 @@ describe('UpdateArticleReplyStatus', () => {
           updatedAt
         }
       }
-    `({}, { userId, appId });
+    `({}, { user: { id: userId, appId } });
 
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
@@ -69,7 +69,17 @@ describe('UpdateArticleReplyStatus', () => {
       type: 'doc',
       id: 'normal',
     });
-    expect(normal.articleReplies).toMatchSnapshot();
+    expect(normal.articleReplies).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "appId": "test",
+          "replyId": "reply",
+          "status": "DELETED",
+          "updatedAt": "2017-01-28T08:45:57.011Z",
+          "userId": "foo",
+        },
+      ]
+    `);
     expect(normal.normalArticleReplyCount).toBe(0);
 
     const {
@@ -79,12 +89,70 @@ describe('UpdateArticleReplyStatus', () => {
       type: 'doc',
       id: 'deleted',
     });
-    expect(deleted.articleReplies).toMatchSnapshot();
+    expect(deleted.articleReplies).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "appId": "test",
+          "replyId": "reply",
+          "status": "NORMAL",
+          "updatedAt": "2017-01-28T08:45:57.011Z",
+          "userId": "foo",
+        },
+      ]
+    `);
     expect(deleted.normalArticleReplyCount).toBe(1);
 
     // Cleanup
     await resetFrom(fixtures, '/articles/doc/normal');
     await resetFrom(fixtures, '/articles/doc/deleted');
+  });
+
+  it('restore delete state to blocked state for blocked users', async () => {
+    const userId = 'iAmBlocked';
+    const appId = 'test';
+
+    const { data, errors } = await gql`
+      mutation {
+        UpdateArticleReplyStatus(
+          articleId: "blocked"
+          replyId: "reply"
+          status: NORMAL
+        ) {
+          articleId
+          replyId
+          status
+          updatedAt
+        }
+      }
+    `({}, { user: { id: userId, appId, blockedReason: 'Announcement URL' } });
+
+    expect(errors).toBeUndefined();
+    expect(data).toMatchSnapshot();
+
+    const {
+      body: { _source },
+    } = await client.get({
+      index: 'articles',
+      type: 'doc',
+      id: 'blocked',
+    });
+    expect(_source).toMatchInlineSnapshot(`
+      Object {
+        "articleReplies": Array [
+          Object {
+            "appId": "test",
+            "replyId": "reply",
+            "status": "BLOCKED",
+            "updatedAt": "2017-01-28T08:45:57.011Z",
+            "userId": "iAmBlocked",
+          },
+        ],
+        "normalArticleReplyCount": 0,
+      }
+    `);
+
+    // Cleanup
+    await resetFrom(fixtures, '/articles/doc/blocked');
   });
 
   afterEach(() => {

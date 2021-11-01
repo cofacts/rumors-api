@@ -43,7 +43,7 @@ describe('GetReplyAndGetArticle', () => {
               requestedForReply
             }
           }
-        `({}, { userId: 'fakeUser', appId: 'LINE' })
+        `({}, { user: { id: 'fakeUser', appId: 'LINE' } })
       ).toMatchSnapshot();
     });
 

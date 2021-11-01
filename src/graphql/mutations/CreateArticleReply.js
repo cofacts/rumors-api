@@ -1,7 +1,7 @@
 import { GraphQLString, GraphQLNonNull, GraphQLList } from 'graphql';
 
 import client from 'util/client';
-import { assertUser } from 'util/user';
+import { assertUser, getContentDefaultStatus } from 'util/user';
 import ArticleReply from 'graphql/models/ArticleReply';
 
 /**
@@ -9,12 +9,11 @@ import ArticleReply from 'graphql/models/ArticleReply';
  * @param {object} param
  * @param {object} param.article - The article instance to attach reply to
  * @param {object} param.reply - The reply instance to attach to article
- * @param {string} userId - The user adding this article-reply connection
- * @param {string} appId
+ * @param {object} user - The user adding this article-reply connection
  * @returns {[ArticleReply]} The article replies after creation
  */
-export async function createArticleReply({ article, reply, userId, appId }) {
-  assertUser({ userId, appId });
+export async function createArticleReply({ article, reply, user }) {
+  assertUser(user);
   if (!article || !reply) {
     throw new Error(
       'articleId and replyId are mandatory when creating ArticleReplies.'
@@ -24,13 +23,13 @@ export async function createArticleReply({ article, reply, userId, appId }) {
   const now = new Date().toISOString();
 
   const articleReply = {
-    userId,
-    appId,
+    userId: user.id,
+    appId: user.appId,
     positiveFeedbackCount: 0,
     negativeFeedbackCount: 0,
     replyId: reply.id,
     replyType: reply.type,
-    status: 'NORMAL',
+    status: getContentDefaultStatus(user),
     createdAt: now,
     updatedAt: now,
   };
@@ -90,7 +89,7 @@ export default {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
     replyId: { type: new GraphQLNonNull(GraphQLString) },
   },
-  async resolve(rootValue, { articleId, replyId }, { userId, appId, loaders }) {
+  async resolve(rootValue, { articleId, replyId }, { user, loaders }) {
     const [article, reply] = await loaders.docLoader.loadMany([
       { index: 'articles', id: articleId },
       { index: 'replies', id: replyId },
@@ -99,8 +98,7 @@ export default {
     const articleReplies = await createArticleReply({
       article,
       reply,
-      userId,
-      appId,
+      user,
     });
 
     // When returning, insert articleId so that ArticleReply object type can resolve article.

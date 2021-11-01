@@ -133,13 +133,13 @@ export default {
         'The reason why the user want to submit this article. Mandatory for 1st sender',
     },
   },
-  resolve(rootValue, { text, reference, reason }, { appId, userId, loaders }) {
-    assertUser({ appId, userId });
+  resolve(rootValue, { text, reference, reason }, { user, loaders }) {
+    assertUser(user);
     const newArticlePromise = createNewArticle({
       text,
       reference,
-      userId,
-      appId,
+      userId: user.id,
+      appId: user.appId,
     });
 
     const scrapPromise = scrapUrls(text, {
@@ -157,7 +157,7 @@ export default {
     //
 
     const replyRequestPromise = newArticlePromise.then(articleId =>
-      createOrUpdateReplyRequest({ articleId, userId, appId, reason })
+      createOrUpdateReplyRequest({ articleId, user, reason })
     );
 
     const hyperlinkPromise = Promise.all([

@@ -4,6 +4,7 @@ import {
   GraphQLInt,
   GraphQLString,
   GraphQLBoolean,
+  GraphQLNonNull,
 } from 'graphql';
 
 import Article from './Article';
@@ -45,14 +46,13 @@ export default new GraphQLObjectType({
       resolve: userFieldResolver,
     },
 
+    userId: { type: GraphQLNonNull(GraphQLString) },
+    appId: { type: GraphQLNonNull(GraphQLString) },
+
     canUpdateStatus: {
       type: GraphQLBoolean,
-      resolve: (
-        { userId, appId },
-        args,
-        { userId: currentUserId, appId: currentAppId }
-      ) => {
-        return userId === currentUserId && appId === currentAppId;
+      resolve: ({ userId, appId }, args, { user }) => {
+        return !!user && userId === user.id && appId === user.appId;
       },
     },
 
@@ -75,19 +75,16 @@ export default new GraphQLObjectType({
       type: FeedbackVote,
       description:
         'The feedback of current user. null when not logged in or not voted yet.',
-      resolve: async (
-        { articleId, replyId },
-        args,
-        { userId, appId, loaders }
-      ) => {
-        if (!userId || !appId) return null;
+      resolve: async ({ articleId, replyId }, args, { user, loaders }) => {
+        if (!user) return null;
         const feedbacks = await loaders.articleReplyFeedbacksLoader.load({
           articleId,
           replyId,
         });
 
         const ownFeedback = feedbacks.find(
-          feedback => feedback.userId === userId && feedback.appId === appId
+          feedback =>
+            feedback.userId === user.id && feedback.appId === user.appId
         );
         if (!ownFeedback) return null;
         return ownFeedback.score;

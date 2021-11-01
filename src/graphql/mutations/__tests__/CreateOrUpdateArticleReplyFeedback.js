@@ -42,7 +42,9 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
         replyId,
         comment,
       },
-      { userId, appId, comment }
+      {
+        user: { id: userId, appId },
+      }
     );
     MockDate.reset();
 
@@ -61,14 +63,34 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
       type: 'doc',
       id,
     });
-    expect(conn._source).toMatchSnapshot();
+    expect(conn._source).toMatchInlineSnapshot(`
+      Object {
+        "appId": "test",
+        "articleId": "article1",
+        "comment": "comment1",
+        "createdAt": "2017-01-28T08:45:57.011Z",
+        "replyId": "reply1",
+        "score": 1,
+        "status": "NORMAL",
+        "updatedAt": "2017-01-28T08:45:57.011Z",
+        "userId": "test",
+      }
+    `);
 
     const { body: article } = await client.get({
       index: 'articles',
       type: 'doc',
       id: articleId,
     });
-    expect(article._source.articleReplies).toMatchSnapshot();
+    expect(article._source.articleReplies).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 12,
+          "replyId": "reply1",
+        },
+      ]
+    `);
 
     // Cleanup
     await client.delete({
@@ -110,7 +132,7 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
         articleId,
         replyId,
       },
-      { userId, appId }
+      { user: { id: userId, appId } }
     );
     MockDate.reset();
 
@@ -127,10 +149,114 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     expect(
       (await client.get({ index: 'articlereplyfeedbacks', type: 'doc', id }))
         .body._source
-    ).toMatchSnapshot();
+    ).toMatchInlineSnapshot(`
+      Object {
+        "appId": "testClient",
+        "articleId": "article1",
+        "createdAt": "2017-01-01T00:00:00.000Z",
+        "replyId": "reply1",
+        "score": -1,
+        "status": "NORMAL",
+        "updatedAt": "2017-01-28T08:45:57.011Z",
+        "userId": "testUser",
+      }
+    `);
 
     // Cleanup
     await resetFrom(fixtures, `/articlereplyfeedbacks/doc/${id}`);
+  });
+
+  it('creates blocked feedback without updating numbers', async () => {
+    MockDate.set(1485593157011);
+    const userId = 'blockedUser';
+    const appId = 'test';
+    const articleId = 'article1';
+    const replyId = 'reply1';
+    const comment = 'ads content';
+
+    const { data, errors } = await gql`
+      mutation($articleId: String!, $replyId: String!, $comment: String!) {
+        CreateOrUpdateArticleReplyFeedback(
+          articleId: $articleId
+          replyId: $replyId
+          vote: UPVOTE
+          comment: $comment
+        ) {
+          articleId
+          replyId
+          feedbackCount
+          positiveFeedbackCount
+          negativeFeedbackCount
+          ownVote
+          feedbacks {
+            vote
+            comment
+          }
+        }
+      }
+    `(
+      {
+        articleId,
+        replyId,
+        comment,
+      },
+      {
+        user: { id: userId, appId, blockedReason: 'announcement-url' },
+      }
+    );
+    MockDate.reset();
+
+    expect(errors).toBeUndefined();
+    expect(data).toMatchSnapshot();
+
+    const id = getArticleReplyFeedbackId({
+      articleId,
+      replyId,
+      userId,
+      appId,
+    });
+
+    const { body: conn } = await client.get({
+      index: 'articlereplyfeedbacks',
+      type: 'doc',
+      id,
+    });
+    expect(conn._source).toMatchInlineSnapshot(`
+      Object {
+        "appId": "test",
+        "articleId": "article1",
+        "comment": "ads content",
+        "createdAt": "2017-01-28T08:45:57.011Z",
+        "replyId": "reply1",
+        "score": 1,
+        "status": "BLOCKED",
+        "updatedAt": "2017-01-28T08:45:57.011Z",
+        "userId": "blockedUser",
+      }
+    `);
+
+    const { body: article } = await client.get({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+    });
+    expect(article._source.articleReplies).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 11,
+          "replyId": "reply1",
+        },
+      ]
+    `);
+
+    // Cleanup
+    await client.delete({
+      index: 'articlereplyfeedbacks',
+      type: 'doc',
+      id,
+    });
+    await resetFrom(fixtures, '/articles/doc/article1');
   });
 
   afterAll(() => unloadFixtures(fixtures));

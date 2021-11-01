@@ -63,27 +63,65 @@ Object {
 }
 `;
 
-exports[`CreateOrUpdateArticleCategoryFeedback creates feedback on given article category 2`] = `
+exports[`CreateOrUpdateArticleCategoryFeedback generates blocked feedback for blocked users 1`] = `
 Object {
-  "appId": "test",
-  "articleId": "article1",
-  "categoryId": "category1",
-  "comment": "comment1",
-  "createdAt": "2017-01-28T08:45:57.011Z",
-  "score": 1,
-  "updatedAt": "2017-01-28T08:45:57.011Z",
-  "userId": "test",
-}
-`;
-
-exports[`CreateOrUpdateArticleCategoryFeedback creates feedback on given article category 3`] = `
-Array [
-  Object {
-    "categoryId": "category1",
+  "CreateOrUpdateArticleCategoryFeedback": Object {
+    "feedbackCount": 11,
+    "feedbacks": Array [
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": null,
+        "vote": "UPVOTE",
+      },
+      Object {
+        "comment": "Some ads comment",
+        "vote": "UPVOTE",
+      },
+    ],
     "negativeFeedbackCount": 0,
-    "positiveFeedbackCount": 12,
+    "ownVote": "UPVOTE",
+    "positiveFeedbackCount": 11,
   },
-]
+}
 `;
 
 exports[`CreateOrUpdateArticleCategoryFeedback updates existing feedback 1`] = `
@@ -142,17 +180,5 @@ Object {
     "ownVote": "DOWNVOTE",
     "positiveFeedbackCount": 10,
   },
-}
-`;
-
-exports[`CreateOrUpdateArticleCategoryFeedback updates existing feedback 2`] = `
-Object {
-  "appId": "testClient",
-  "articleId": "article1",
-  "categoryId": "category1",
-  "createdAt": "2017-01-01T00:00:00.000Z",
-  "score": -1,
-  "updatedAt": "2017-01-28T08:45:57.011Z",
-  "userId": "testUser",
 }
 `;

@@ -1,6 +1,6 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
-import { assertUser } from 'util/user';
+import { assertUser, getContentDefaultStatus } from 'util/user';
 import FeedbackVote from 'graphql/models/FeedbackVote';
 import ArticleReply from 'graphql/models/ArticleReply';
 
@@ -27,9 +27,9 @@ export default {
   async resolve(
     rootValue,
     { articleId, replyId, vote, comment },
-    { appId, userId, loaders }
+    { user, loaders }
   ) {
-    assertUser({ appId, userId });
+    assertUser(user);
 
     const now = new Date().toISOString();
 
@@ -38,8 +38,8 @@ export default {
     const id = getArticleReplyFeedbackId({
       articleId,
       replyId,
-      userId,
-      appId,
+      userId: user.id,
+      appId: user.appId,
     });
 
     await client.update({
@@ -55,12 +55,13 @@ export default {
         upsert: {
           articleId,
           replyId,
-          userId,
-          appId,
+          userId: user.id,
+          appId: user.appId,
           score: vote,
           createdAt: now,
           updatedAt: now,
           comment: comment,
+          status: getContentDefaultStatus(user),
         },
       },
       refresh: 'true', // We are searching for articlereplyfeedbacks immediately
@@ -71,17 +72,19 @@ export default {
       replyId,
     });
 
-    const [positiveFeedbackCount, negativeFeedbackCount] = feedbacks.reduce(
-      (agg, { score }) => {
-        if (score === 1) {
-          agg[0] += 1;
-        } else if (score === -1) {
-          agg[1] += 1;
-        }
-        return agg;
-      },
-      [0, 0]
-    );
+    const [positiveFeedbackCount, negativeFeedbackCount] = feedbacks
+      .filter(({ status }) => status === 'NORMAL')
+      .reduce(
+        (agg, { score }) => {
+          if (score === 1) {
+            agg[0] += 1;
+          } else if (score === -1) {
+            agg[1] += 1;
+          }
+          return agg;
+        },
+        [0, 0]
+      );
 
     const { body: articleReplyUpdateResult } = await client.update({
       index: 'articles',
