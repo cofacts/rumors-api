@@ -236,7 +236,7 @@ export async function createOrUpdateUser({ userId, appId }) {
   }
 
   return {
-    user,
+    user: { appId /* fill in appId for website users */, ...user },
     isCreated,
   };
 }

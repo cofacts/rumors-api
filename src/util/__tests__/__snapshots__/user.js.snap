@@ -31,6 +31,19 @@ Object {
 }
 `;
 
+exports[`user utils CreateOrUpdateUser fills appId for website users 1`] = `
+Object {
+  "_cursor": undefined,
+  "_score": undefined,
+  "appId": "WEBSITE",
+  "highlight": undefined,
+  "id": "web-user",
+  "inner_hits": undefined,
+  "lastActiveAt": "2020-10-10T01:00:00.000Z",
+  "name": "Web user",
+}
+`;
+
 exports[`user utils CreateOrUpdateUser logs error if collision occurs 1`] = `
 Object {
   "_cursor": undefined,
