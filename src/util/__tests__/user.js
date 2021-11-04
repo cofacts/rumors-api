@@ -291,5 +291,20 @@ describe('user utils', () => {
       expect(rollbar.error.mock.calls).toMatchSnapshot();
       rollbar.error.mockClear();
     });
+
+    it('fills appId for website users', async () => {
+      MockDate.set(1602291600000);
+
+      const userId = 'web-user';
+      const appId = 'WEBSITE';
+
+      const { user, isCreated } = await createOrUpdateUser({
+        userId,
+        appId,
+      });
+
+      expect(isCreated).toBe(false);
+      expect(user).toMatchSnapshot();
+    });
   });
 });
