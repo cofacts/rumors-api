@@ -1,9 +1,11 @@
 import 'dotenv/config';
 import yargs from 'yargs';
+import XLSX from 'xlsx';
 import client from 'util/client';
 
 const SCROLL_TIMEOUT = '30s';
 const BATCH_SIZE = 100;
+const OUTPUT = 'review.xlsx';
 
 /**
  * A generator that fetches all docs in the specified index.
@@ -40,16 +42,59 @@ async function* getAllDocs(indexName, query = { match_all: {} }) {
   }
 }
 
+const ARTICLE_CATEGORY_HEADER = [
+  'Article ID',
+  'Article Text',
+  'Existing Categories',
+  'Action',
+  'Category to Review',
+  'Reasons',
+  'Adopt?',
+];
+
 async function main({ startFrom } = {}) {
+  const ws = XLSX.utils.aoa_to_sheet([ARTICLE_CATEGORY_HEADER]);
+
   for await (const { _id, _source } of getAllDocs('articles')) {
-    if (
-      // All article categories are after the given `startFrom`
-      _source.articleCategories.every(({ createdAt }) => createdAt < startFrom)
-    ) {
+    const { existingArticleCategories, newArticleCategories } = (
+      _source.articleCategories || []
+    ).reduce(
+      (agg, { createdAt, status, aiModel, categoryId }) => {
+        if (status === 'NORMAL' && !aiModel) {
+          if (createdAt < startFrom)
+            agg.existingArticleCategories.push(categoryId);
+          else agg.newArticleCategories.push(categoryId);
+        }
+        return agg;
+      },
+      { existingArticleCategories: [], newArticleCategories: [] }
+    );
+
+    if (newArticleCategories.length === 0) {
       continue;
     }
-    console.log('article', _id);
+
+    XLSX.utils.sheet_add_json(
+      ws,
+      newArticleCategories.map(categoryId => ({
+        'Article ID': _id,
+        'Article Text': _source.text,
+        'Existing Categories': existingArticleCategories.join(', '),
+        Action: 'ADD',
+        'Category to Review': categoryId,
+        Reasons: '',
+        'Adopt?': false,
+      })),
+      {
+        header: ARTICLE_CATEGORY_HEADER,
+        skipHeader: true,
+        origin: -1,
+      }
+    );
   }
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Article categories');
+  XLSX.writeFile(wb, OUTPUT);
 }
 
 export default main;
