@@ -1,8 +1,8 @@
 import XLSX from 'xlsx';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import fixtures from '../__fixtures__/genArticleReviews';
+import fixtures from '../__fixtures__/genCategoryReview';
 
-import genArticleReview from '../genArticleReview';
+import genArticleReview from '../genCategoryReview';
 
 beforeEach(() => loadFixtures(fixtures));
 

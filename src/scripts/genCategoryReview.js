@@ -1,3 +1,7 @@
+/**
+ * Generates an XLSX file with article categories to review.
+ */
+
 import 'dotenv/config';
 import yargs from 'yargs';
 import XLSX from 'xlsx';
