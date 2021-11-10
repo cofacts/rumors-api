@@ -43,30 +43,49 @@ async function* getAllDocs(indexName, query = { match_all: {} }) {
   }
 }
 
-const ARTICLE_CATEGORY_HEADER = [
-  'Article ID',
-  'Article Text',
-  'Existing Categories',
-  'Action',
-  'Category to Review',
-  'Reasons',
-  'Adopt?',
+// List of [Object key, XLSX sheet title]
+//
+const ARTICLE_CATEGORY_HEADER_ENTRIES = [
+  ['articleId', 'Article ID'],
+  ['articleText', 'Article Text'],
+  ['existingCategories', 'Existing Categories'],
+  ['action', 'Action'],
+  ['category', 'Category to Review'],
+
+  // articleCategory fields
+  ['categoryId', 'Category ID'],
+  ['userId', 'User ID'],
+  ['appId', 'App ID'],
+  ['createdAt', 'Connected At'],
+
+  // Other fields
+  ['reasons', 'Reasons'],
+  ['adopt', 'Adopt?'],
 ];
 
+/**
+ * @returns {{[categoryId: string]: object}} A map of category ID to the doc
+ */
 async function getCategoryIdMap() {
   const map = {};
 
   for await (const { _id, _source } of getAllDocs('categories')) {
-    map[_id] = _source.title;
+    map[_id] = _source;
   }
 
   return map;
 }
 
+/**
+ * Generates a workbook from given args
+ *
+ * @param {object} args
+ * @returns {XLSX.WorkBook}
+ */
 async function main({ startFrom } = {}) {
   const bar = new SingleBar({ stopOnComplete: true });
   const articleCategoryWorksheet = XLSX.utils.aoa_to_sheet([
-    ARTICLE_CATEGORY_HEADER,
+    ARTICLE_CATEGORY_HEADER_ENTRIES.map(([, title]) => title),
   ]);
   const categoryId2Title = await getCategoryIdMap();
 
@@ -81,55 +100,76 @@ async function main({ startFrom } = {}) {
 
   for await (const { _id, _source } of getAllDocs('articles')) {
     bar.increment();
+
+    // Collect all NORMAL article-categories that is not added by AI models.
+    //
     const { existingArticleCategories, newArticleCategories } = (
       _source.articleCategories || []
     ).reduce(
-      (agg, { createdAt, status, aiModel, categoryId }) => {
-        if (status === 'NORMAL' && !aiModel) {
-          const category = categoryId2Title[categoryId];
-          if (createdAt < startFrom)
-            agg.existingArticleCategories.push(category);
-          else agg.newArticleCategories.push(category);
+      (agg, articleCategory) => {
+        if (articleCategory.status === 'NORMAL' && !articleCategory.aiModel) {
+          if (articleCategory.createdAt < startFrom)
+            agg.existingArticleCategories.push(articleCategory);
+          else agg.newArticleCategories.push(articleCategory);
         }
         return agg;
       },
       { existingArticleCategories: [], newArticleCategories: [] }
     );
 
+    // Skip if no new article categries added after the specified timestamp
+    //
     if (newArticleCategories.length === 0) {
       continue;
     }
 
-    XLSX.utils.sheet_add_json(
-      articleCategoryWorksheet,
-      newArticleCategories.map(categoryId => ({
-        'Article ID': _id,
-        'Article Text': _source.text,
-        'Existing Categories': existingArticleCategories.join(', '),
-        Action: 'ADD',
-        'Category to Review': categoryId,
-        Reasons: '',
+    // Generate rows with exactly the columns in ARTICLE_CATEGORY_HEADER_ENTRIES
+    //
+    const rows = newArticleCategories.map(articleCategory => {
+      const rawRowData = {
+        articleId: _id,
+        articleText: _source.text,
+        existingCategories: existingArticleCategories
+          .map(({ categoryId }) => categoryId2Title[categoryId].title)
+          .join(', '),
+        action: 'ADD',
+        category: categoryId2Title[articleCategory.categoryId].title,
         'Adopt?': false,
-      })),
-      {
-        header: ARTICLE_CATEGORY_HEADER,
-        skipHeader: true,
-        origin: -1,
-      }
-    );
+        // Fill in article category fields
+        ...articleCategory,
+      };
+
+      // Include only the fields defined inside ARTICLE_CATEGORY_HEADER_ENTRIES
+      return ARTICLE_CATEGORY_HEADER_ENTRIES.reduce((row, [key]) => {
+        row[key] = rawRowData[key];
+        return row;
+      }, {});
+    });
+
+    XLSX.utils.sheet_add_json(articleCategoryWorksheet, rows, {
+      header: ARTICLE_CATEGORY_HEADER_ENTRIES.map(([key]) => key),
+      skipHeader: true,
+      origin: -1,
+    });
   }
 
   const workbook = XLSX.utils.book_new();
+
+  // Article categories sheet
   XLSX.utils.book_append_sheet(
     workbook,
     articleCategoryWorksheet,
     'Article categories'
   );
+
+  // Mappings sheet
   XLSX.utils.book_append_sheet(
     workbook,
     XLSX.utils.aoa_to_sheet([
-      ['Category ID', 'Category Title'],
-      ...Object.entries(categoryId2Title),
+      ['Category ID', 'Title', 'Description'],
+      ...Object.entries(categoryId2Title).map(
+        ([id, { title, description }]) => [id, title, description]
+      ),
     ]),
     'Mappings'
   );
