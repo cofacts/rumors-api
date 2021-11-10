@@ -108,9 +108,9 @@ async function main({ startFrom } = {}) {
     ).reduce(
       (agg, articleCategory) => {
         if (articleCategory.status === 'NORMAL' && !articleCategory.aiModel) {
-          if (articleCategory.createdAt < startFrom)
-            agg.existingArticleCategories.push(articleCategory);
-          else agg.newArticleCategories.push(articleCategory);
+          if (new Date(articleCategory.createdAt) >= new Date(startFrom))
+            agg.newArticleCategories.push(articleCategory);
+          else agg.existingArticleCategories.push(articleCategory);
         }
         return agg;
       },
