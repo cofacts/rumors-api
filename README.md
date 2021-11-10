@@ -143,7 +143,7 @@ Run the docker image on local machine, then visit `http://localhost:5000`.
 $ docker run --rm -it -p 5000:5000 --env-file .env cofacts/rumors-api
 ```
 
-## Cronjob scripts
+## Cronjob / management scripts
 
 ### Clean up old `urls` entries that are not referenced by any article & reply
 
@@ -182,6 +182,13 @@ $ node build/scripts/blockUser.js --userId=<userId> --blockedReason=<Announcemen
 
 -  For more options, run the above script with `--help` or see the file level comments.
 
+### Generating a spreadsheet of new article-categories for human review
+-  To retrieve a spreadsheet of new article categories & downvoted categories after a specific timestamp, run:
+```
+$ node build/scripts/genCategoryReview.js -t=<ISO Timestamp>
+```
+
+-  For more options, run the above script with `--help` or see the file level comments.
 
 ## One-off migration scripts
 
