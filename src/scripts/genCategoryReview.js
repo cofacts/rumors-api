@@ -47,6 +47,14 @@ async function* getAllDocs(indexName, query = { match_all: {} }) {
   }
 }
 
+/**
+ * @param {ReadonlyArray<*>} array
+ * @returns {ReadonlyArray<*>} new array without duplicated child.
+ */
+function dedup(array) {
+  return Array.from(new Set(array));
+}
+
 // List of [Object key, XLSX sheet title]
 //
 const ARTICLE_CATEGORY_HEADER_ENTRIES = [
@@ -56,7 +64,7 @@ const ARTICLE_CATEGORY_HEADER_ENTRIES = [
   ['action', 'Action'],
   ['category', 'Category to Review'],
 
-  // articleCategory fields
+  // articleCategory or articleCategoryFeedback fields
   ['categoryId', 'Category ID'],
   ['userId', 'User ID'],
   ['appId', 'App ID'],
@@ -67,14 +75,58 @@ const ARTICLE_CATEGORY_HEADER_ENTRIES = [
   ['adopt', 'Adopt?'],
 ];
 
+// Include only the fields defined inside ARTICLE_CATEGORY_HEADER_ENTRIES
+//
+function getArticleCategoryRow(obj) {
+  return ARTICLE_CATEGORY_HEADER_ENTRIES.reduce((row, [key]) => {
+    row[key] = obj[key];
+    return row;
+  }, {});
+}
+
 /**
  * @returns {{[categoryId: string]: object}} A map of category ID to the doc
  */
-async function getCategoryIdMap() {
+async function getCategoryMap() {
   const map = {};
 
   for await (const { _id, _source } of getAllDocs('categories')) {
     map[_id] = _source;
+  }
+
+  return map;
+}
+
+async function getArticleIdFeedbacksMap(startFrom) {
+  const FEEDBACK_QUERY = {
+    bool: {
+      must: [
+        { term: { status: 'NORMAL' } },
+        { range: { score: { lt: 0 } } },
+        { range: { createdAt: { gte: new Date(startFrom).toISOString() } } },
+      ],
+    },
+  };
+
+  const feedbackBar = new SingleBar({ stopOnComplete: true });
+  const {
+    body: { count: feedbackCount },
+  } = await client.count({
+    index: 'articlecategoryfeedbacks',
+    body: { query: FEEDBACK_QUERY },
+  });
+  console.log('Scanning new article category feedbacks...');
+  feedbackBar.start(feedbackCount, 0);
+
+  const map = {};
+  for await (const { _source } of getAllDocs(
+    'articlecategoryfeedbacks',
+    FEEDBACK_QUERY
+  )) {
+    feedbackBar.increment();
+
+    map[_source.articleId] = map[_source.articleId] || [];
+    map[_source.articleId].push(_source);
   }
 
   return map;
@@ -87,11 +139,12 @@ async function getCategoryIdMap() {
  * @returns {XLSX.WorkBook}
  */
 async function main({ startFrom } = {}) {
-  const bar = new SingleBar({ stopOnComplete: true });
   const articleCategoryWorksheet = XLSX.utils.aoa_to_sheet([
     ARTICLE_CATEGORY_HEADER_ENTRIES.map(([, title]) => title),
   ]);
-  const categoryId2Title = await getCategoryIdMap();
+  const categoryMap = await getCategoryMap();
+
+  const articleFeedbacksMap = await getArticleIdFeedbacksMap(startFrom);
 
   const {
     body: { count: articleCount },
@@ -100,10 +153,11 @@ async function main({ startFrom } = {}) {
     body: { query: { match_all: {} } },
   });
 
-  bar.start(articleCount, 0);
+  const articleBar = new SingleBar({ stopOnComplete: true });
+  articleBar.start(articleCount, 0);
 
   for await (const { _id, _source } of getAllDocs('articles')) {
-    bar.increment();
+    articleBar.increment();
 
     // Collect all NORMAL article-categories that is not added by AI models.
     //
@@ -121,40 +175,67 @@ async function main({ startFrom } = {}) {
       { existingArticleCategories: [], newArticleCategories: [] }
     );
 
-    // Skip if no new article categries added after the specified timestamp
-    //
-    if (newArticleCategories.length === 0) {
-      continue;
-    }
+    const articleDataInRow = {
+      articleId: _id,
+      articleText: _source.text,
+      existingCategories: existingArticleCategories
+        .map(({ categoryId }) => categoryMap[categoryId].title)
+        .join(', '),
+    };
 
-    // Generate rows with exactly the columns in ARTICLE_CATEGORY_HEADER_ENTRIES
+    // Generate 'ADD' rows with exactly the columns in ARTICLE_CATEGORY_HEADER_ENTRIES from articleCategories
     //
-    const rows = newArticleCategories.map(articleCategory => {
-      const rawRowData = {
-        articleId: _id,
-        articleText: _source.text,
-        existingCategories: existingArticleCategories
-          .map(({ categoryId }) => categoryId2Title[categoryId].title)
-          .join(', '),
+    const articleCategoryRows = newArticleCategories.map(articleCategory =>
+      getArticleCategoryRow({
+        ...articleDataInRow,
         action: 'ADD',
-        category: categoryId2Title[articleCategory.categoryId].title,
+        category: categoryMap[articleCategory.categoryId].title,
         'Adopt?': false,
         // Fill in article category fields
         ...articleCategory,
-      };
+      })
+    );
 
-      // Include only the fields defined inside ARTICLE_CATEGORY_HEADER_ENTRIES
-      return ARTICLE_CATEGORY_HEADER_ENTRIES.reduce((row, [key]) => {
-        row[key] = rawRowData[key];
-        return row;
-      }, {});
-    });
+    const categoryIdToFeedbacksMap = (articleFeedbacksMap[_id] || []).reduce(
+      (categoryMap, feedback) => {
+        // Group feedbacks by categoryId
+        categoryMap[feedback.categoryId] =
+          categoryMap[feedback.categoryId] || [];
+        categoryMap[feedback.categoryId].push(feedback);
 
-    XLSX.utils.sheet_add_json(articleCategoryWorksheet, rows, {
-      header: ARTICLE_CATEGORY_HEADER_ENTRIES.map(([key]) => key),
-      skipHeader: true,
-      origin: -1,
-    });
+        return categoryMap;
+      },
+      {}
+    );
+
+    // Generate 'DELETE' rows with exactly the columns in ARTICLE_CATEGORY_HEADER_ENTRIES from articleCategoryFeedbacks
+    //
+    const feedbackRows = Object.entries(categoryIdToFeedbacksMap).map(
+      ([categoryId, feedbacks]) =>
+        getArticleCategoryRow({
+          ...articleDataInRow,
+          action: 'DELETE',
+          category: categoryMap[categoryId].title,
+          categoryId,
+          userId: dedup(feedbacks.map(({ userId }) => userId)).join('／'),
+          appId: dedup(feedbacks.map(({ appId }) => appId)).join('／'),
+          createdAt: dedup(feedbacks.map(({ createdAt }) => createdAt)).join(
+            '／'
+          ),
+          reasons: dedup(feedbacks.map(({ comment }) => comment)).join('／'),
+          'Adopt?': false,
+        })
+    );
+
+    XLSX.utils.sheet_add_json(
+      articleCategoryWorksheet,
+      [...articleCategoryRows, ...feedbackRows],
+      {
+        header: ARTICLE_CATEGORY_HEADER_ENTRIES.map(([key]) => key),
+        skipHeader: true,
+        origin: -1,
+      }
+    );
   }
 
   const workbook = XLSX.utils.book_new();
@@ -171,9 +252,11 @@ async function main({ startFrom } = {}) {
     workbook,
     XLSX.utils.aoa_to_sheet([
       ['Category ID', 'Title', 'Description'],
-      ...Object.entries(categoryId2Title).map(
-        ([id, { title, description }]) => [id, title, description]
-      ),
+      ...Object.entries(categoryMap).map(([id, { title, description }]) => [
+        id,
+        title,
+        description,
+      ]),
     ]),
     'Mappings'
   );
