@@ -97,6 +97,11 @@ async function getCategoryMap() {
   return map;
 }
 
+/**
+ *
+ * @param {string|Date} startFrom
+ * @returns {[articleId: string]: object[]}
+ */
 async function getArticleIdFeedbacksMap(startFrom) {
   const FEEDBACK_QUERY = {
     bool: {
