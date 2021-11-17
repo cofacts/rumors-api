@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import yargs from 'yargs';
 import XLSX from 'xlsx';
+import { SingleBar } from 'cli-progress';
 import client from 'util/client';
 
 const SCROLL_TIMEOUT = '30s';
@@ -52,18 +53,43 @@ const ARTICLE_CATEGORY_HEADER = [
   'Adopt?',
 ];
 
+async function getCategoryIdMap() {
+  const map = {};
+
+  for await (const { _id, _source } of getAllDocs('categories')) {
+    map[_id] = _source.title;
+  }
+
+  return map;
+}
+
 async function main({ startFrom } = {}) {
-  const ws = XLSX.utils.aoa_to_sheet([ARTICLE_CATEGORY_HEADER]);
+  const bar = new SingleBar({ stopOnComplete: true });
+  const articleCategoryWorksheet = XLSX.utils.aoa_to_sheet([
+    ARTICLE_CATEGORY_HEADER,
+  ]);
+  const categoryId2Title = await getCategoryIdMap();
+
+  const {
+    body: { count: articleCount },
+  } = await client.count({
+    index: 'articles',
+    body: { query: { match_all: {} } },
+  });
+
+  bar.start(articleCount, 0);
 
   for await (const { _id, _source } of getAllDocs('articles')) {
+    bar.increment();
     const { existingArticleCategories, newArticleCategories } = (
       _source.articleCategories || []
     ).reduce(
       (agg, { createdAt, status, aiModel, categoryId }) => {
         if (status === 'NORMAL' && !aiModel) {
+          const category = categoryId2Title[categoryId];
           if (createdAt < startFrom)
-            agg.existingArticleCategories.push(categoryId);
-          else agg.newArticleCategories.push(categoryId);
+            agg.existingArticleCategories.push(category);
+          else agg.newArticleCategories.push(category);
         }
         return agg;
       },
@@ -75,7 +101,7 @@ async function main({ startFrom } = {}) {
     }
 
     XLSX.utils.sheet_add_json(
-      ws,
+      articleCategoryWorksheet,
       newArticleCategories.map(categoryId => ({
         'Article ID': _id,
         'Article Text': _source.text,
@@ -92,9 +118,23 @@ async function main({ startFrom } = {}) {
       }
     );
   }
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Article categories');
-  XLSX.writeFile(wb, OUTPUT);
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(
+    workbook,
+    articleCategoryWorksheet,
+    'Article categories'
+  );
+  XLSX.utils.book_append_sheet(
+    workbook,
+    XLSX.utils.aoa_to_sheet([
+      ['Category ID', 'Category Title'],
+      ...Object.entries(categoryId2Title),
+    ]),
+    'Mappings'
+  );
+
+  return workbook;
 }
 
 export default main;
@@ -113,5 +153,10 @@ if (require.main === module) {
     })
     .help('help').argv;
 
-  main(argv).catch(console.error);
+  main(argv)
+    .then(workbook => {
+      XLSX.writeFile(workbook, OUTPUT);
+      console.log('Result written to:', OUTPUT);
+    })
+    .catch(console.error);
 }
