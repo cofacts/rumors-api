@@ -5,8 +5,9 @@
 
 import 'dotenv/config';
 import yargs from 'yargs';
-// import { SingleBar } from 'cli-progress';
+import { SingleBar } from 'cli-progress';
 import client from 'util/client';
+import getAllDocs from 'util/getAllDocs';
 
 /**
  * Update user to write blockedReason. Throws if user does not exist.
@@ -43,18 +44,100 @@ async function writeBlockedReasonToUser(userId, blockedReason) {
 }
 
 /**
+ * Convert all reply requests with NORMAL status by the user to BLOCKED status.
+ *
+ * @param {userId} userId
+ */
+async function processReplyRequests(userId) {
+  const NORMAL_REPLY_REQUEST_QUERY = {
+    bool: {
+      must: [{ term: { status: 'NORMAL' } }, { term: { userId } }],
+    },
+  };
+
+  const articleIdsWithNormalReplyRequests = [];
+
+  for await (const { _id } of getAllDocs(
+    'articles',
+    NORMAL_REPLY_REQUEST_QUERY
+  )) {
+    articleIdsWithNormalReplyRequests.push(_id);
+  }
+
+  /* Bulk update reply reqeuests status */
+  const { body: updateByQueryResult } = await client.updateByQuery({
+    index: 'replyrequests',
+    type: 'doc',
+    body: {
+      query: NORMAL_REPLY_REQUEST_QUERY,
+      script: {
+        lang: 'painless',
+        source: `ctx._source.status = 'BLOCKED';`,
+      },
+    },
+    refresh: true,
+  });
+
+  console.log('Reply request status update result', updateByQueryResult);
+
+  /* Bulk update articles' replyRequestCount & lastRequestedAt */
+  console.log(
+    `Updating ${articleIdsWithNormalReplyRequests.length} articles...`
+  );
+  const bar = new SingleBar({ stopOnComplete: true });
+  bar.start(articleIdsWithNormalReplyRequests.length, 0);
+
+  for (const articleId of articleIdsWithNormalReplyRequests) {
+    const {
+      body: {
+        hits: { total },
+        aggregations: { lastRequestedAt },
+      },
+    } = await client.search({
+      index: 'articlerequests',
+      size: 0,
+      body: {
+        query: {
+          bool: {
+            must: [{ term: { status: 'NORMAL' } }, { term: { articleId } }],
+          },
+        },
+        aggs: {
+          lastRequestedAt: { max: { field: 'createdAt' } },
+        },
+      },
+    });
+
+    await client.update({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+      body: {
+        doc: {
+          lastRequestedAt,
+          replyRequestCount: total,
+        },
+      },
+    });
+
+    bar.increment();
+  }
+}
+
+/**
  * Convert all article replies with NORMAL status by the user to BLOCKED status.
  *
  * @param {userId} userId
  */
-async function processArticleReplies(/* userId */) {}
+// async function processArticleReplies(/* userId */) {}
 
 /**
  * @param {object} args
  */
 async function main({ userId, blockedReason } = {}) {
   await writeBlockedReasonToUser(userId, blockedReason);
-  await processArticleReplies(userId);
+  await processReplyRequests(userId);
+  // await processArticleReplies(userId);
 }
 
 export default main;
