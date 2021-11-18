@@ -34,6 +34,8 @@ import ReplyRequestStatusEnum from './ReplyRequestStatusEnum';
 import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
+import ArticleTypeEnum from './ArticleTypeEnum';
+import Attachment from './Attachment';
 
 const Article = new GraphQLObjectType({
   name: 'Article',
@@ -326,6 +328,14 @@ const Article = new GraphQLObjectType({
           dateRange,
         });
       },
+    },
+    articleType: {
+      type: ArticleTypeEnum,
+      description: 'LINE message event type',
+    },
+    attachment: {
+      type: Attachment,
+      description: 'Attachment of this article',
     },
   }),
 });
