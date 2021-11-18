@@ -21,8 +21,12 @@ async function main({ userId, blockedReason } = {}) {
         doc: { blockedReason },
       },
     });
+
+    /* istanbul ignore if */
     if (setBlockedReasonResult === 'noop') {
-      throw new Error(`Cannot set user ${userId}'s blocked reason'`);
+      console.log(
+        `Info: user ID ${userId} already has set the same blocked reason.`
+      );
     }
   } catch (e) {
     if (e.message === 'document_missing_exception') {
