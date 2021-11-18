@@ -34,6 +34,7 @@
 
 import 'dotenv/config';
 import client from 'util/client';
+import getAllDocs from 'util/getAllDocs';
 import Bulk from 'util/bulk';
 import rollbar from 'rollbarInstance';
 import {
@@ -295,30 +296,15 @@ export default class CreateBackendUsers {
    * @yields {Object} the document
    */
   async *getAllDocs(indexName, hasAdditionalUserFields = false) {
-    let resp = await client.search({
-      index: indexName,
-      scroll: SCROLL_TIMEOUT,
-      size: this.batchSize,
-      body: {
-        query: hasAdditionalUserFields ? matchAllQuery : backendUserQuery,
-      },
-    });
-
-    while (true) {
-      const docs = resp.body.hits.hits;
-      if (docs.length === 0) break;
-      for (const doc of docs) {
-        yield doc;
-      }
-
-      if (!resp.body._scroll_id) {
-        break;
-      }
-
-      resp = await client.scroll({
+    for await (const doc of getAllDocs(
+      indexName,
+      hasAdditionalUserFields ? matchAllQuery : backendUserQuery,
+      {
         scroll: SCROLL_TIMEOUT,
-        scrollId: resp.body._scroll_id,
-      });
+        size: this.batchSize,
+      }
+    )) {
+      yield doc;
     }
   }
 
