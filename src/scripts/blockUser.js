@@ -1,15 +1,20 @@
+/**
+ * Given userId & block reason, blocks the user and marks all their existing ArticleReply,
+ * ArticleReplyFeedback, ReplyRequest, ArticleCategory, ArticleCategoryFeedback as BLOCKED.
+ */
+
 import 'dotenv/config';
 import yargs from 'yargs';
 // import { SingleBar } from 'cli-progress';
 import client from 'util/client';
 
 /**
- * Given userId & block reason, blocks the user and marks all their existing ArticleReply,
- * ArticleReplyFeedback, ReplyRequest, ArticleCategory, ArticleCategoryFeedback as BLOCKED.
+ * Update user to write blockedReason. Throws if user does not exist.
  *
- * @param {object} args
+ * @param {string} userId
+ * @param {string} blockedReason
  */
-async function main({ userId, blockedReason } = {}) {
+async function writeBlockedReasonToUser(userId, blockedReason) {
   try {
     const {
       body: { result: setBlockedReasonResult },
@@ -35,6 +40,21 @@ async function main({ userId, blockedReason } = {}) {
 
     throw e;
   }
+}
+
+/**
+ * Convert all article replies with NORMAL status by the user to BLOCKED status.
+ *
+ * @param {userId} userId
+ */
+async function processArticleReplies(/* userId */) {}
+
+/**
+ * @param {object} args
+ */
+async function main({ userId, blockedReason } = {}) {
+  await writeBlockedReasonToUser(userId, blockedReason);
+  await processArticleReplies(userId);
 }
 
 export default main;
