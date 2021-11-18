@@ -10,20 +10,26 @@ import client from 'util/client';
  * @param {object} args
  */
 async function main({ userId, blockedReason } = {}) {
-  const {
-    body: { result: setBlockedReasonResult },
-  } = await client.update({
-    index: 'users',
-    type: 'doc',
-    id: userId,
-    body: {
-      doc: { blockedReason },
-    },
-  });
+  try {
+    const {
+      body: { result: setBlockedReasonResult },
+    } = await client.update({
+      index: 'users',
+      type: 'doc',
+      id: userId,
+      body: {
+        doc: { blockedReason },
+      },
+    });
+    if (setBlockedReasonResult === 'noop') {
+      throw new Error(`Cannot set user ${userId}'s blocked reason'`);
+    }
+  } catch (e) {
+    if (e.message === 'document_missing_exception') {
+      throw new Error(`User with ID=${userId} does not exist`);
+    }
 
-  /* istanbul ignore if */
-  if (setBlockedReasonResult === 'noop') {
-    throw new Error(`Cannot set user ${userId}'s blocked reason'`);
+    throw e;
   }
 }
 
