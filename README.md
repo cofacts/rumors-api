@@ -173,6 +173,15 @@ $ node build/scripts/removeArticleReply.js --userId=<userId> --articleId=<articl
 
 -  For more options, run the above script with `--help` or see the file level comments.
 
+### Block a user
+- Please announce that the user will be blocked openly with a URL first.
+- To block a user, execute the following:
+```
+$ node build/scripts/blockUser.js --userId=<userId> --blockedReason=<Announcement URL>
+```
+
+-  For more options, run the above script with `--help` or see the file level comments.
+
 
 ## One-off migration scripts
 
