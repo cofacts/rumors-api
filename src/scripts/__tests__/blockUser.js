@@ -35,6 +35,47 @@ it('correctly sets the block reason and updates status of their works', async ()
       "name": "Naughty spammer",
     }
   `);
+
+  //
+  // Check reply requests
+  //
+
+  // Assert reply requests that is already blocked are not selected to update
+  //
+  const {
+    body: { _source: someArticleWithAlreadyBlockedReplyRequest },
+  } = await client.get({
+    index: 'articles',
+    type: 'doc',
+    id: 'some-article',
+  });
+  expect(someArticleWithAlreadyBlockedReplyRequest).toMatchObject(
+    fixtures['/articles/doc/some-article']
+  );
+
+  // Assert normal reply requests being blocked and article being updated
+  //
+  const {
+    body: { _source: replyRequestToBlock },
+  } = await client.get({
+    index: 'replyrequests',
+    type: 'doc',
+    id: 'replyrequest-to-block',
+  });
+  expect(replyRequestToBlock.status).toEqual('BLOCKED');
+  const {
+    body: { _source: modifiedArticle },
+  } = await client.get({
+    index: 'articles',
+    type: 'doc',
+    id: 'modified-article',
+  });
+  expect(modifiedArticle).toMatchObject({
+    // Only replyrequests/doc/valid-reply-request
+    replyRequestCount: 1,
+    lastRequestedAt:
+      fixtures['/replyrequests/doc/valid-reply-request'].createdAt,
+  });
 });
 
 // it('still updates statuses of blocked user even if they are blocked previously')

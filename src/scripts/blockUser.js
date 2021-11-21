@@ -5,7 +5,6 @@
 
 import 'dotenv/config';
 import yargs from 'yargs';
-import { SingleBar } from 'cli-progress';
 import client from 'util/client';
 import getAllDocs from 'util/getAllDocs';
 
@@ -57,11 +56,10 @@ async function processReplyRequests(userId) {
 
   const articleIdsWithNormalReplyRequests = [];
 
-  for await (const { _id } of getAllDocs(
-    'articles',
-    NORMAL_REPLY_REQUEST_QUERY
-  )) {
-    articleIdsWithNormalReplyRequests.push(_id);
+  for await (const {
+    _source: { articleId },
+  } of getAllDocs('replyrequests', NORMAL_REPLY_REQUEST_QUERY)) {
+    articleIdsWithNormalReplyRequests.push(articleId);
   }
 
   /* Bulk update reply reqeuests status */
@@ -84,17 +82,19 @@ async function processReplyRequests(userId) {
   console.log(
     `Updating ${articleIdsWithNormalReplyRequests.length} articles...`
   );
-  const bar = new SingleBar({ stopOnComplete: true });
-  bar.start(articleIdsWithNormalReplyRequests.length, 0);
 
-  for (const articleId of articleIdsWithNormalReplyRequests) {
+  for (let i = 0; i < articleIdsWithNormalReplyRequests.length; i += 1) {
+    const articleId = articleIdsWithNormalReplyRequests[i];
+
     const {
       body: {
         hits: { total },
-        aggregations: { lastRequestedAt },
+        aggregations: {
+          lastRequestedAt: { value_as_string: lastRequestedAt },
+        },
       },
     } = await client.search({
-      index: 'articlerequests',
+      index: 'replyrequests',
       size: 0,
       body: {
         query: {
@@ -120,7 +120,11 @@ async function processReplyRequests(userId) {
       },
     });
 
-    bar.increment();
+    console.log(
+      `[${i + 1}/${
+        articleIdsWithNormalReplyRequests.length
+      }] article ${articleId}: changed to ${total} reply requests, last requested at ${lastRequestedAt}`
+    );
   }
 }
 
