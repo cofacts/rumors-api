@@ -34,6 +34,7 @@ async function writeBlockedReasonToUser(userId, blockedReason) {
       );
     }
   } catch (e) {
+    /* istanbul ignore else */
     if (e.message === 'document_missing_exception') {
       throw new Error(`User with ID=${userId} does not exist`);
     }
