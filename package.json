@@ -37,6 +37,7 @@
     "googleapis": "^55.0.0",
     "graphql": "^15.3.0",
     "grpc": "^1.11.0",
+    "image-hash": "^4.0.1",
     "kcors": "^2.2.1",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.0.0",
