@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListBlockedUsers lists all blocked users 1`] = `
+Object {
+  "data": Object {
+    "ListBlockedUsers": Object {
+      "edges": Array [
+        Object {
+          "cursor": "WyJibG9ja2VkVXNlcjMiXQ==",
+          "node": Object {
+            "blockedReason": "Some announcement",
+            "id": "blockedUser3",
+          },
+        },
+        Object {
+          "cursor": "WyJibG9ja2VkVXNlcjIiXQ==",
+          "node": Object {
+            "blockedReason": "Some announcement",
+            "id": "blockedUser2",
+          },
+        },
+        Object {
+          "cursor": "WyJibG9ja2VkVXNlcjEiXQ==",
+          "node": Object {
+            "blockedReason": "Some announcement",
+            "id": "blockedUser1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJibG9ja2VkVXNlcjMiXQ==",
+        "lastCursor": "WyJibG9ja2VkVXNlcjEiXQ==",
+      },
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListBlockedUsers sorts 1`] = `
+Object {
+  "data": Object {
+    "ListBlockedUsers": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "createdAt": "2017-01-05T00:00:00.000Z",
+            "id": "blockedUser1",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2017-01-04T00:00:00.000Z",
+            "id": "blockedUser2",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2017-01-03T00:00:00.000Z",
+            "id": "blockedUser3",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WzE0ODM1NzQ0MDAwMDAsImJsb2NrZWRVc2VyMSJd",
+        "lastCursor": "WzE0ODM0MDE2MDAwMDAsImJsb2NrZWRVc2VyMyJd",
+      },
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListBlockedUsers supports after 1`] = `
+Object {
+  "data": Object {
+    "ListBlockedUsers": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "blockedUser1",
+          },
+        },
+      ],
+      "totalCount": 3,
+    },
+  },
+}
+`;
+
+exports[`ListBlockedUsers supports before 1`] = `
+Object {
+  "data": Object {
+    "ListBlockedUsers": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "blockedUser3",
+          },
+        },
+      ],
+      "totalCount": 3,
+    },
+  },
+}
+`;
