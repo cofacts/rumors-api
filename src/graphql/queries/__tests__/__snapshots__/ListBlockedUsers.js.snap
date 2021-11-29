@@ -1,5 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ListBlockedUsers filters by createdAt 1`] = `
+Object {
+  "data": Object {
+    "ListBlockedUsers": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "createdAt": "2017-01-04T00:00:00.000Z",
+            "id": "blockedUser2",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2017-01-05T00:00:00.000Z",
+            "id": "blockedUser1",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
 exports[`ListBlockedUsers lists all blocked users 1`] = `
 Object {
   "data": Object {

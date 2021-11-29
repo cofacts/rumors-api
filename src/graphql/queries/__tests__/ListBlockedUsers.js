@@ -29,6 +29,26 @@ describe('ListBlockedUsers', () => {
     ).toMatchSnapshot();
   });
 
+  it('filters by createdAt', async () => {
+    expect(
+      await gql`
+        {
+          ListBlockedUsers(
+            filter: { createdAt: { GTE: "2017-01-04T00:00:00.000Z" } }
+          ) {
+            edges {
+              node {
+                id
+                createdAt
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot();
+  });
+
   it('sorts', async () => {
     expect(
       await gql`
