@@ -4,6 +4,7 @@ import {
   GraphQLInt,
   GraphQLNonNull,
   GraphQLList,
+  GraphQLID,
 } from 'graphql';
 import {
   AvatarTypes,
@@ -13,7 +14,8 @@ import {
 } from 'util/user';
 import AvatarTypeEnum from './AvatarTypeEnum';
 import Contribution from './Contribution';
-import { timeRangeInput } from 'graphql/util';
+import Node from '../interfaces/Node';
+import { timeRangeInput, createConnectionType } from 'graphql/util';
 
 /**
  * Field config helper for current user only field.
@@ -34,8 +36,9 @@ export const currentUserOnlyField = (type, resolver) => ({
 
 const User = new GraphQLObjectType({
   name: 'User',
+  interfaces: [Node],
   fields: () => ({
-    id: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLID) },
     slug: { type: GraphQLString },
     email: currentUserOnlyField(GraphQLString),
     name: { type: GraphQLString },
@@ -149,6 +152,12 @@ const User = new GraphQLObjectType({
         });
       },
     },
+
+    blockedReason: {
+      description:
+        'If not null, the user is blocked with the announcement in this string.',
+      type: GraphQLString,
+    },
   }),
 });
 
@@ -179,3 +188,5 @@ export const userFieldResolver = async (
   //
   return null;
 };
+
+export const UserConnection = createConnectionType('UserConnection', User);
