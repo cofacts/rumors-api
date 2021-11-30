@@ -16,8 +16,6 @@ const OUTPUT = 'review.xlsx';
 const ARTICLE_CATEGORY_HEADER_ENTRIES = [
   ['articleId', 'Article ID'],
   ['articleText', 'Article Text'],
-  ['existingCategories', 'Existing Categories'],
-  ['action', 'Action'],
   ['category', 'Category to Review'],
 
   // articleCategory or articleCategoryFeedback fields
@@ -27,12 +25,13 @@ const ARTICLE_CATEGORY_HEADER_ENTRIES = [
   ['createdAt', 'Connected At'],
 
   // Other fields
-  ['reasons', 'Reasons'],
+  ['reasons', "Other's deny reasons"],
   ['adopt', 'Adopt?'],
+  ['denyReason', 'Deny reason'],
 ];
 
-// const REVIEWER_APP_ID = 'rumors-ai';
-// const REVIEWER_USER_ID = 'category-reviewer';
+const REVIEWER_APP_ID = 'rumors-ai';
+const REVIEWER_USER_ID = 'category-reviewer';
 
 /**
  * @param {ReadonlyArray<*>} array
@@ -51,6 +50,12 @@ function getArticleCategoryRow(obj) {
   }, {});
 }
 
+function isReviewerFeedback(feedback) {
+  return (
+    feedback.userId === REVIEWER_USER_ID && feedback.appId === REVIEWER_APP_ID
+  );
+}
+
 /**
  * @returns {{[categoryId: string]: object}} A map of category ID to the doc
  */
@@ -65,21 +70,12 @@ async function getCategoryMap() {
 }
 
 /**
- *
- * @param {string|Date} startFrom
- * @returns {[articleId: string]: object[]}
+ * @returns {[articleId: string]: {[categoryId: string]: Object[]}}
  */
-async function getArticleIdFeedbacksMap(startFrom) {
+async function getArticleCategoryFeedbacksMap() {
   const FEEDBACK_QUERY = {
-    bool: {
-      must: [
-        { term: { status: 'NORMAL' } },
-        { range: { score: { lt: 0 } } },
-        { range: { createdAt: { gte: new Date(startFrom).toISOString() } } },
-      ],
-    },
+    term: { status: 'NORMAL' },
   };
-
   const feedbackBar = new SingleBar({ stopOnComplete: true });
   const {
     body: { count: feedbackCount },
@@ -87,7 +83,8 @@ async function getArticleIdFeedbacksMap(startFrom) {
     index: 'articlecategoryfeedbacks',
     body: { query: FEEDBACK_QUERY },
   });
-  console.log('Scanning new article category feedbacks...');
+
+  console.log('Scanning all valid article category feedbacks...');
   feedbackBar.start(feedbackCount, 0);
 
   const map = {};
@@ -97,8 +94,10 @@ async function getArticleIdFeedbacksMap(startFrom) {
   )) {
     feedbackBar.increment();
 
-    map[_source.articleId] = map[_source.articleId] || [];
-    map[_source.articleId].push(_source);
+    map[_source.articleId] = map[_source.articleId] || {};
+    map[_source.articleId][_source.categoryId] =
+      map[_source.articleId][_source.categoryId] || [];
+    map[_source.articleId][_source.categoryId].push(_source);
   }
 
   return map;
@@ -115,99 +114,99 @@ async function main({ startFrom } = {}) {
     ARTICLE_CATEGORY_HEADER_ENTRIES.map(([, title]) => title),
   ]);
   const categoryMap = await getCategoryMap();
-
-  const articleFeedbacksMap = await getArticleIdFeedbacksMap(startFrom);
+  const articleCategoryFeedbacksMap = await getArticleCategoryFeedbacksMap();
+  const ARTICLE_QUERY = {
+    range: { normalArticleCategoryCount: { lt: 0 } },
+  };
 
   const {
     body: { count: articleCount },
   } = await client.count({
     index: 'articles',
-    body: { query: { match_all: {} } },
+    body: { query: ARTICLE_QUERY },
   });
 
   const articleBar = new SingleBar({ stopOnComplete: true });
   articleBar.start(articleCount, 0);
 
-  for await (const { _id, _source } of getAllDocs('articles')) {
+  const startFromInMilliSeconds = +new Date(startFrom);
+  for await (const { _id: articleId, _source } of getAllDocs(
+    'articles',
+    ARTICLE_QUERY
+  )) {
     articleBar.increment();
 
-    // Collect all NORMAL article-categories that is not added by AI models.
-    //
-    const { existingArticleCategories, newArticleCategories } = (
+    /**
+     * Collect article-categories of interest, which is defined as:
+     * - date criteria
+     *      - creation date >= input date, or
+     *      - latest feedback date by others (not we the reviewers) >= input date
+     *  - created by website user, or created by AI (has `aiModel`) with positive total score
+     */
+    const articleCategoriesOfInterest = (
       _source.articleCategories || []
-    ).reduce(
-      (agg, articleCategory) => {
-        if (articleCategory.status === 'NORMAL' && !articleCategory.aiModel) {
-          if (new Date(articleCategory.createdAt) >= new Date(startFrom))
-            agg.newArticleCategories.push(articleCategory);
-          else agg.existingArticleCategories.push(articleCategory);
-        }
-        return agg;
-      },
-      { existingArticleCategories: [], newArticleCategories: [] }
-    );
+    ).filter(articleCategory => {
+      const feedbacks =
+        articleCategoryFeedbacksMap[articleId]?.[articleCategory.categoryId] ||
+        [];
+      const latestFeedbackDateInMilliSeconds = feedbacks
+        .filter(feedback => !isReviewerFeedback(feedback))
+        .reduce(
+          (maxCreatedAt, { createdAt }) =>
+            Math.max(maxCreatedAt, +new Date(createdAt)),
+          0
+        );
+      // Reject those does not match date criteria
+      if (
+        articleCategory.createdAt < startFrom &&
+        latestFeedbackDateInMilliSeconds < startFromInMilliSeconds
+      )
+        return false;
 
-    const articleDataInRow = {
-      articleId: _id,
-      articleText: _source.text,
-      existingCategories: existingArticleCategories
-        .map(({ categoryId }) => categoryMap[categoryId].title)
-        .join(', '),
-    };
+      const createdByAI = !!articleCategory.aiModel;
+      const score = feedbacks.reduce((sum, { score }) => sum + score, 0);
+      return !createdByAI || score > 0;
+    });
 
-    // Generate 'ADD' rows with exactly the columns in ARTICLE_CATEGORY_HEADER_ENTRIES from articleCategories
-    //
-    const articleCategoryRows = newArticleCategories.map(articleCategory =>
-      getArticleCategoryRow({
-        ...articleDataInRow,
-        action: 'ADD',
-        category: categoryMap[articleCategory.categoryId].title,
-        'Adopt?': false,
-        // Fill in article category fields
-        ...articleCategory,
-      })
-    );
+    if (articleCategoriesOfInterest.length === 0) continue;
 
-    const categoryIdToFeedbacksMap = (articleFeedbacksMap[_id] || []).reduce(
-      (categoryMap, feedback) => {
-        // Group feedbacks by categoryId
-        categoryMap[feedback.categoryId] =
-          categoryMap[feedback.categoryId] || [];
-        categoryMap[feedback.categoryId].push(feedback);
+    const articleCategoryRows = articleCategoriesOfInterest.map(
+      articleCategory => {
+        const feedbacks =
+          articleCategoryFeedbacksMap[articleId]?.[
+            articleCategory.categoryId
+          ] || [];
 
-        return categoryMap;
-      },
-      {}
-    );
+        const reasons = dedup(
+          feedbacks
+            .filter(
+              feedback =>
+                !isReviewerFeedback(feedback) &&
+                feedback.score === -1 &&
+                !!feedback.comment
+            )
+            .map(({ comment }) => comment)
+        ).join(', ');
+        const reviewerFeedback = feedbacks.find(isReviewerFeedback);
 
-    // Generate 'DELETE' rows with exactly the columns in ARTICLE_CATEGORY_HEADER_ENTRIES from articleCategoryFeedbacks
-    //
-    const feedbackRows = Object.entries(categoryIdToFeedbacksMap).map(
-      ([categoryId, feedbacks]) =>
-        getArticleCategoryRow({
-          ...articleDataInRow,
-          action: 'DELETE',
-          category: categoryMap[categoryId].title,
-          categoryId,
-          userId: dedup(feedbacks.map(({ userId }) => userId)).join('／'),
-          appId: dedup(feedbacks.map(({ appId }) => appId)).join('／'),
-          createdAt: dedup(feedbacks.map(({ createdAt }) => createdAt)).join(
-            '／'
-          ),
-          reasons: dedup(feedbacks.map(({ comment }) => comment)).join('／'),
-          'Adopt?': false,
-        })
-    );
-
-    XLSX.utils.sheet_add_json(
-      articleCategoryWorksheet,
-      [...articleCategoryRows, ...feedbackRows],
-      {
-        header: ARTICLE_CATEGORY_HEADER_ENTRIES.map(([key]) => key),
-        skipHeader: true,
-        origin: -1,
+        return getArticleCategoryRow({
+          articleId,
+          articleText: _source.text,
+          category: categoryMap[articleCategory.categoryId].title,
+          reasons,
+          // Fill in article category fields
+          ...articleCategory,
+          adopt: (reviewerFeedback && reviewerFeedback.score === 1) || false,
+          denyReason: (reviewerFeedback && reviewerFeedback.comment) || '',
+        });
       }
     );
+
+    XLSX.utils.sheet_add_json(articleCategoryWorksheet, articleCategoryRows, {
+      header: ARTICLE_CATEGORY_HEADER_ENTRIES.map(([key]) => key),
+      skipHeader: true,
+      origin: -1,
+    });
   }
 
   const workbook = XLSX.utils.book_new();
