@@ -10,6 +10,18 @@ For development, copy `.env.sample` to `.env` and make necessary changes.
 
 For production via [rumors-deploy](http://github.com/cofacts/rumors-deploy), do setups in `docker-compose.yml`.
 
+### App settings
+
+The "client apps" of this API includes:
+- [cofacts/rumors-site](https://github.com/cofacts/rumors-site), the Cofacts web app for visitors & editors
+- [cofacts/rumors-line-bot](https://github.com/cofacts/rumors-line-bot), the Cofacts LINE chatbot
+- [cofacts/rumors-ai-bert](https://github.com/cofacts/rumors-ai-bert), the BERT classifier for article categories
+- Other third-party applications
+
+Except rumors-site, API will identify each app using the shared secret sent via the HTTP header set in `HTTP_HEADER_APP_SECRET` (`x-app-secret` by default).
+
+The mapping of app secrets to the `appId`s used in the database is documented in the YAML file in `APP_SETTINGS_PATH`. See `app-settings.sample.yaml` for example.
+
 ## Development
 
 ### Prerequisite
