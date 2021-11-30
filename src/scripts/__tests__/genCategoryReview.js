@@ -25,7 +25,7 @@ it('generates mapping sheet as expected', async () => {
   // Expect this to be empty
   const articleCategorySheet = workBook.Sheets['Article categories'];
   expect(XLSX.utils.sheet_to_csv(articleCategorySheet)).toMatchInlineSnapshot(`
-    "Article ID,Article Text,Existing Categories,Action,Category to Review,Category ID,User ID,App ID,Connected At,Reasons,Adopt?
+    "Article ID,Article Text,Category to Review,Category ID,User ID,App ID,Connected At,Other's deny reasons,Adopt?,Deny reason
     "
   `);
 });

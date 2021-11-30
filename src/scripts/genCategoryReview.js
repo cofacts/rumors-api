@@ -194,8 +194,11 @@ async function main({ startFrom } = {}) {
           articleText: _source.text,
           category: categoryMap[articleCategory.categoryId].title,
           reasons,
+
           // Fill in article category fields
           ...articleCategory,
+
+          // Pre-fill previous reviewer feedback if already reviewed
           adopt: (reviewerFeedback && reviewerFeedback.score === 1) || false,
           denyReason: (reviewerFeedback && reviewerFeedback.comment) || '',
         });
