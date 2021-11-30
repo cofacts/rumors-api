@@ -7,53 +7,9 @@ import yargs from 'yargs';
 import XLSX from 'xlsx';
 import { SingleBar } from 'cli-progress';
 import client from 'util/client';
+import getAllDocs from 'util/getAllDocs';
 
-const SCROLL_TIMEOUT = '30s';
-const BATCH_SIZE = 100;
 const OUTPUT = 'review.xlsx';
-
-/**
- * A generator that fetches all docs in the specified index.
- *
- * @param {String} indexName The name of the index to fetch
- * @param {Object} query The elasticsearch query
- * @yields {Object} the document
- */
-async function* getAllDocs(indexName, query = { match_all: {} }) {
-  let resp = await client.search({
-    index: indexName,
-    scroll: SCROLL_TIMEOUT,
-    size: BATCH_SIZE,
-    body: {
-      query,
-    },
-  });
-
-  while (true) {
-    const docs = resp.body.hits.hits;
-    if (docs.length === 0) break;
-    for (const doc of docs) {
-      yield doc;
-    }
-
-    if (!resp.body._scroll_id) {
-      break;
-    }
-
-    resp = await client.scroll({
-      scroll: SCROLL_TIMEOUT,
-      scrollId: resp.body._scroll_id,
-    });
-  }
-}
-
-/**
- * @param {ReadonlyArray<*>} array
- * @returns {ReadonlyArray<*>} new array without duplicated child.
- */
-function dedup(array) {
-  return Array.from(new Set(array));
-}
 
 // List of [Object key, XLSX sheet title]
 //
@@ -74,6 +30,17 @@ const ARTICLE_CATEGORY_HEADER_ENTRIES = [
   ['reasons', 'Reasons'],
   ['adopt', 'Adopt?'],
 ];
+
+// const REVIEWER_APP_ID = 'rumors-ai';
+// const REVIEWER_USER_ID = 'category-reviewer';
+
+/**
+ * @param {ReadonlyArray<*>} array
+ * @returns {ReadonlyArray<*>} new array without duplicated child.
+ */
+function dedup(array) {
+  return Array.from(new Set(array));
+}
 
 // Include only the fields defined inside ARTICLE_CATEGORY_HEADER_ENTRIES
 //
