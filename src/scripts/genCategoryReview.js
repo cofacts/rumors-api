@@ -164,7 +164,9 @@ async function main({ startFrom } = {}) {
         return false;
 
       const createdByAI = !!articleCategory.aiModel;
-      const score = feedbacks.reduce((sum, { score }) => sum + score, 0);
+      const score =
+        articleCategory.positiveFeedbackCount -
+        articleCategory.negativeFeedbackCount;
       return !createdByAI || score > 0;
     });
 
