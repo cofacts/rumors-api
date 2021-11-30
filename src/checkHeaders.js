@@ -1,13 +1,21 @@
 import cors from 'kcors';
+import { loadAppSettings } from 'util/appSettings';
+
+const appSettings = loadAppSettings();
+const secretToDbAppId = appSettings.reduce(
+  (map, { dbAppId, headerAppSecrets }) => {
+    for (const secret of headerAppSecrets) {
+      map[secret] = dbAppId;
+    }
+    return map;
+  },
+  {}
+);
 
 async function checkSecret(ctx, next) {
   const secret = ctx.get(process.env.HTTP_HEADER_APP_SECRET);
-  if (secret === process.env.RUMORS_LINE_BOT_SECRET) {
-    // Shortcut for official rumors-line-bot -- no DB queries
-    ctx.appId = 'RUMORS_LINE_BOT';
-
-    // else if(secret) { ...
-    // TODO: Fill up ctx.appId with app id after looking up DB with secret
+  if (secretToDbAppId[secret]) {
+    ctx.appId = secretToDbAppId[secret];
   } else {
     // secret do not match anything
     ctx.appId = 'DEVELOPMENT_BACKEND'; // FIXME: Remove this after developer key function rolls out.

@@ -1,0 +1,7 @@
+---
+- # secret sent in HTTP header.
+  # Can have multiple secrets, but should not duplicate with other apps.
+  headerAppSecrets: ["secret"]
+
+  # The appId that will be written to each entry (articles, replies, ...) in the database
+  dbAppId: RUMORS_LINE_BOT
