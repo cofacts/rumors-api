@@ -30,7 +30,7 @@ const ARTICLE_CATEGORY_HEADER_ENTRIES = [
   ['denyReason', 'Deny reason'],
 ];
 
-const REVIEWER_APP_ID = 'rumors-ai';
+const REVIEWER_APP_ID = 'RUMORS_AI';
 const REVIEWER_USER_ID = 'category-reviewer';
 
 /**
@@ -76,7 +76,6 @@ async function getArticleCategoryFeedbacksMap() {
   const FEEDBACK_QUERY = {
     term: { status: 'NORMAL' },
   };
-  const feedbackBar = new SingleBar({ stopOnComplete: true });
   const {
     body: { count: feedbackCount },
   } = await client.count({
@@ -84,7 +83,8 @@ async function getArticleCategoryFeedbacksMap() {
     body: { query: FEEDBACK_QUERY },
   });
 
-  console.log('Scanning all valid article category feedbacks...');
+  console.log(`Scanning ${feedbackCount} valid article category feedbacks...`);
+  const feedbackBar = new SingleBar({ stopOnComplete: true });
   feedbackBar.start(feedbackCount, 0);
 
   const map = {};
@@ -99,6 +99,8 @@ async function getArticleCategoryFeedbacksMap() {
       map[_source.articleId][_source.categoryId] || [];
     map[_source.articleId][_source.categoryId].push(_source);
   }
+
+  feedbackBar.stop();
 
   return map;
 }
@@ -116,7 +118,7 @@ async function main({ startFrom } = {}) {
   const categoryMap = await getCategoryMap();
   const articleCategoryFeedbacksMap = await getArticleCategoryFeedbacksMap();
   const ARTICLE_QUERY = {
-    range: { normalArticleCategoryCount: { lt: 0 } },
+    range: { normalArticleCategoryCount: { gt: 0 } },
   };
 
   const {
@@ -126,10 +128,10 @@ async function main({ startFrom } = {}) {
     body: { query: ARTICLE_QUERY },
   });
 
+  console.log(`Scanning ${articleCount} categorized articles...`);
   const articleBar = new SingleBar({ stopOnComplete: true });
   articleBar.start(articleCount, 0);
 
-  const startFromInMilliSeconds = +new Date(startFrom);
   for await (const { _id: articleId, _source } of getAllDocs(
     'articles',
     ARTICLE_QUERY
@@ -146,20 +148,38 @@ async function main({ startFrom } = {}) {
     const articleCategoriesOfInterest = (
       _source.articleCategories || []
     ).filter(articleCategory => {
+      // Skip deleted & blocked article categories
+      if (articleCategory.status !== 'NORMAL') return false;
+
       const feedbacks =
         articleCategoryFeedbacksMap[articleId]?.[articleCategory.categoryId] ||
         [];
-      const latestFeedbackDateInMilliSeconds = feedbacks
-        .filter(feedback => !isReviewerFeedback(feedback))
+      const latestFeedbackDate = feedbacks
+        .filter(
+          feedback =>
+            !isReviewerFeedback(feedback) && feedback.status === 'NORMAL'
+        )
         .reduce(
           (maxCreatedAt, { createdAt }) =>
-            Math.max(maxCreatedAt, +new Date(createdAt)),
+            Math.max(maxCreatedAt, new Date(createdAt)),
           0
         );
+
+      console.log({
+        articleId,
+        categoryId: articleCategory.categoryId,
+        createdAt: articleCategory.createdAt,
+        latestFeedbackDate,
+        startFrom,
+        createdEarlierThanStartFrom:
+          new Date(articleCategory.createdAt) < startFrom,
+        feedbackEalierThanStartFrom: latestFeedbackDate < startFrom,
+      });
+
       // Reject those does not match date criteria
       if (
-        articleCategory.createdAt < startFrom &&
-        latestFeedbackDateInMilliSeconds < startFromInMilliSeconds
+        new Date(articleCategory.createdAt) < startFrom &&
+        latestFeedbackDate < startFrom
       )
         return false;
 
@@ -184,6 +204,7 @@ async function main({ startFrom } = {}) {
             .filter(
               feedback =>
                 !isReviewerFeedback(feedback) &&
+                feedback.status === 'NORMAL' &&
                 feedback.score === -1 &&
                 !!feedback.comment
             )
@@ -213,6 +234,8 @@ async function main({ startFrom } = {}) {
       origin: -1,
     });
   }
+
+  articleBar.stop();
 
   const workbook = XLSX.utils.book_new();
 
@@ -251,12 +274,19 @@ if (require.main === module) {
           'Include article categories & article category feedbacks from this time. Should be an ISO time string.',
         type: 'string',
         demandOption: true,
-        coerce: Date.parse,
       },
     })
     .help('help').argv;
 
-  main(argv)
+  const startFrom = new Date(argv.startFrom);
+
+  if (isNaN(startFrom)) {
+    throw new Error(
+      'Please provide valid timestamp via --startFrom (see --help)'
+    );
+  }
+
+  main({ startFrom })
     .then(workbook => {
       XLSX.writeFile(workbook, OUTPUT);
       console.log('Result written to:', OUTPUT);
