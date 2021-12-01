@@ -165,17 +165,6 @@ async function main({ startFrom } = {}) {
           0
         );
 
-      console.log({
-        articleId,
-        categoryId: articleCategory.categoryId,
-        createdAt: articleCategory.createdAt,
-        latestFeedbackDate,
-        startFrom,
-        createdEarlierThanStartFrom:
-          new Date(articleCategory.createdAt) < startFrom,
-        feedbackEalierThanStartFrom: latestFeedbackDate < startFrom,
-      });
-
       // Reject those does not match date criteria
       if (
         new Date(articleCategory.createdAt) < startFrom &&
