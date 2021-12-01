@@ -26,7 +26,7 @@ it('generates mapping sheet as expected', async () => {
   // Expect this to be empty
   const articleCategorySheet = workBook.Sheets['Article categories'];
   expect(XLSX.utils.sheet_to_csv(articleCategorySheet)).toMatchInlineSnapshot(`
-    "Article ID,Article Text,Category to Review,Category ID,User ID,App ID,Connected At,Other's deny reasons,Adopt?,Deny reason
+    "Article ID,Article Text,Category to Review,Category ID,User ID,App ID,Connected At,+1s,-1s,Other's deny reasons,Adopt?,Deny reason
     "
   `);
 });
@@ -49,11 +49,11 @@ it('collects categories of interest after a timestamp', async () => {
    *    - c2 (old user category with new 1 negative feedback & reviewer upvote)
    */
   expect(XLSX.utils.sheet_to_csv(categorySheet)).toMatchInlineSnapshot(`
-    "Article ID,Article Text,Category to Review,Category ID,User ID,App ID,Connected At,Other's deny reasons,Adopt?,Deny reason
-    a2,Content of rumor article a2,Category 1,c1,bert,RUMORS_AI,2021-01-01T00:00:00.000Z,,FALSE,
-    a2,Content of rumor article a2,Category 4,c4,some-user,WEBSITE,2021-01-01T00:00:00.000Z,,FALSE,
-    a3,Content of rumor article a3,Category 1,c1,bert,RUMORS_AI,2019-01-01T00:00:00.000Z,,FALSE,Reviewer comment: a3 is not c1
-    a3,Content of rumor article a3,Category 2,c2,an-user,WEBSITE,2021-01-01T00:00:00.000Z,,TRUE,
+    "Article ID,Article Text,Category to Review,Category ID,User ID,App ID,Connected At,+1s,-1s,Other's deny reasons,Adopt?,Deny reason
+    a2,Content of rumor article a2,Category 1,c1,bert,RUMORS_AI,2021-01-01T00:00:00.000Z,1,0,,FALSE,
+    a2,Content of rumor article a2,Category 4,c4,some-user,WEBSITE,2021-01-01T00:00:00.000Z,0,0,,FALSE,
+    a3,Content of rumor article a3,Category 1,c1,bert,RUMORS_AI,2019-01-01T00:00:00.000Z,2,1,,FALSE,Reviewer comment: a3 is not c1
+    a3,Content of rumor article a3,Category 2,c2,an-user,WEBSITE,2021-01-01T00:00:00.000Z,1,1,,TRUE,
     "
   `);
 });

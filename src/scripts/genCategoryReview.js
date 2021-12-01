@@ -18,11 +18,13 @@ const ARTICLE_CATEGORY_HEADER_ENTRIES = [
   ['articleText', 'Article Text'],
   ['category', 'Category to Review'],
 
-  // articleCategory or articleCategoryFeedback fields
+  // articleCategory fields
   ['categoryId', 'Category ID'],
   ['userId', 'User ID'],
   ['appId', 'App ID'],
   ['createdAt', 'Connected At'],
+  ['positiveFeedbackCount', '+1s'],
+  ['negativeFeedbackCount', '-1s'],
 
   // Other fields
   ['reasons', "Other's deny reasons"],
