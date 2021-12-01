@@ -183,9 +183,9 @@ $ node build/scripts/blockUser.js --userId=<userId> --blockedReason=<Announcemen
 -  For more options, run the above script with `--help` or see the file level comments.
 
 ### Generating a spreadsheet of new article-categories for human review
--  To retrieve a spreadsheet of new article categories & downvoted categories after a specific timestamp, run:
+-  To retrieve a spreadsheet of article categories of interest after a specific timestamp, run:
 ```
-$ node build/scripts/genCategoryReview.js -t=<ISO Timestamp>
+$ node build/scripts/genCategoryReview.js -f <ISO Timestamp>
 ```
 
 -  For more options, run the above script with `--help` or see the file level comments.
