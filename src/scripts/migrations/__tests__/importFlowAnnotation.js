@@ -86,22 +86,16 @@ it('adds article category and feedbacks as expected', async () => {
   const articleCategoryFeedback = articleCategoryFeedbacks.find(
     ({ _source }) => _source.categoryId === 'kz3c7XEBrIRcahlYxAp6'
   );
-  expect(articleCategoryFeedback).toMatchInlineSnapshot(`
+  expect(articleCategoryFeedback._source).toMatchInlineSnapshot(`
     Object {
-      "_id": "a1__kz3c7XEBrIRcahlYxAp6__category-reviewer__RUMORS_AI",
-      "_index": "articlecategoryfeedbacks_v1_1_1",
-      "_score": 0.24116206,
-      "_source": Object {
-        "appId": "RUMORS_AI",
-        "articleId": "a1",
-        "categoryId": "kz3c7XEBrIRcahlYxAp6",
-        "comment": "若水標記之分類",
-        "score": 1,
-        "status": "NORMAL",
-        "updatedAt": "1989-06-04T00:00:00.000Z",
-        "userId": "category-reviewer",
-      },
-      "_type": "doc",
+      "appId": "RUMORS_AI",
+      "articleId": "a1",
+      "categoryId": "kz3c7XEBrIRcahlYxAp6",
+      "comment": "若水標記之分類",
+      "score": 1,
+      "status": "NORMAL",
+      "updatedAt": "1989-06-04T00:00:00.000Z",
+      "userId": "category-reviewer",
     }
   `);
 
