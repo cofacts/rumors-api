@@ -14,7 +14,7 @@ import path from 'path';
 import { createArticleCategory } from 'graphql/mutations/CreateArticleCategory';
 import { createOrUpdateArticleCategoryFeedback } from 'graphql/mutations/CreateOrUpdateArticleCategoryFeedback';
 
-const INPUT_DIRECTORY = '../20200324_14908';
+const INPUT_DIRECTORY = '../ground-truth/20211204_14859';
 const RUMORS_AI_APPID = 'RUMORS_AI';
 const FLOW_USER_ID = 'flow-annotator';
 const REVIEWER_USER_ID = 'category-reviewer';
@@ -127,14 +127,14 @@ async function main() {
   let createdArticleCategoryFeedbackSum = 0;
 
   for await (const dirent of dir) {
-    if (!dirent.isFile()) continue;
+    if (!dirent.isFile() || !dirent.name.endsWith('.json')) continue;
     idx += 1;
 
     const entry = require(path.resolve(INPUT_DIRECTORY, dirent.name));
     const {
       createdArticleCategoryCount,
       createdArticleCategoryFeedbackCount,
-    } = processEntry(entry);
+    } = await processEntry(entry);
 
     createdArticleCategorySum += createdArticleCategoryCount;
     createdArticleCategoryFeedbackSum += createdArticleCategoryFeedbackCount;
