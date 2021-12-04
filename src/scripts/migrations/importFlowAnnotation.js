@@ -1,12 +1,20 @@
 /**
  * Import annotations by Flow AI Data Annotators.
  * Ground truth: https://github.com/cofacts/ground-truth/blob/main/20200324_14908.zip
+ *
+ * Usage:
+ * 1. Connect to production DB via SSH tunnel
+ * 2. Specify INPUT_DIRECTORY in code
+ * 3. Run: node_modules/.bin/babel-node src/scripts/migrations/importFlowAnnotation.js
  */
 
+import 'dotenv/config';
+import fs from 'fs';
+import path from 'path';
 import { createArticleCategory } from 'graphql/mutations/CreateArticleCategory';
 import { createOrUpdateArticleCategoryFeedback } from 'graphql/mutations/CreateOrUpdateArticleCategoryFeedback';
 
-// const INPUT_DIRECTORY = '20200324_14908';
+const INPUT_DIRECTORY = '../20200324_14908';
 const RUMORS_AI_APPID = 'RUMORS_AI';
 const FLOW_USER_ID = 'flow-annotator';
 const REVIEWER_USER_ID = 'category-reviewer';
@@ -111,7 +119,36 @@ export async function processEntry({ id, tags }) {
 /**
  * Go through all files and process one by one
  */
-async function main() {}
+async function main() {
+  const dir = await fs.promises.opendir(INPUT_DIRECTORY);
+  let idx = 0;
+  let createdArticleCategorySum = 0;
+  let createdArticleCategoryFeedbackSum = 0;
+
+  for await (const dirent of dir) {
+    if (!dirent.isFile()) continue;
+    idx += 1;
+
+    const entry = require(path.resolve(INPUT_DIRECTORY, dirent.name));
+    const {
+      createdArticleCategoryCount,
+      createdArticleCategoryFeedbackCount,
+    } = processEntry(entry);
+
+    createdArticleCategorySum += createdArticleCategoryCount;
+    createdArticleCategoryFeedbackSum += createdArticleCategoryFeedbackCount;
+
+    console.log(
+      `[${idx.toString().padStart(5)}] ${
+        entry.id
+      }\t: + ${createdArticleCategoryCount} categories & ${createdArticleCategoryFeedbackCount} feedbacks`
+    );
+  }
+
+  console.log('------');
+  console.log('Created article-categories: ', createdArticleCategorySum);
+  console.log('Created feedbacks: ', createdArticleCategoryFeedbackSum);
+}
 
 if (require.main === module) {
   main().catch(console.error);
