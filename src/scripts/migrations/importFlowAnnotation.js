@@ -105,7 +105,8 @@ export async function processEntry({ id, tags }) {
         // Rethrow unexpected error
         throw e;
       }
-      // Someone else already added this category; do nothing
+      // Reviewer already upvnoted this article category (maybe during code rerun after error?).
+      // Can just ignore.
     }
   }
 
