@@ -11,6 +11,7 @@
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
+import { createOrUpdateUser } from 'util/user';
 import { createArticleCategory } from 'graphql/mutations/CreateArticleCategory';
 import { createOrUpdateArticleCategoryFeedback } from 'graphql/mutations/CreateOrUpdateArticleCategoryFeedback';
 
@@ -60,9 +61,11 @@ const FLOW_ID_TO_CAT_ID = [
  * Process one article entry by adding article-category and add positive feedback to it
  *
  * @param {object} entry One article entry (parsed json file content) in ground truth
+ * @param {object} annotator User instance for flow annotators
+ * @param {object} reviewer User instance of an reviewer
  * @return {{tagCount: number; createdArticleCategoryCount: number; createdArticleCategoryFeedbackCount: number}}
  */
-export async function processEntry({ id, tags }) {
+export async function processEntry({ id, tags }, annotator, reviewer) {
   let createdArticleCategoryCount = 0;
   let createdArticleCategoryFeedbackCount = 0;
 
@@ -73,10 +76,7 @@ export async function processEntry({ id, tags }) {
       await createArticleCategory({
         articleId: id,
         categoryId,
-        user: {
-          id: FLOW_USER_ID,
-          appId: RUMORS_AI_APPID,
-        },
+        user: annotator,
       });
 
       createdArticleCategoryCount += 1;
@@ -94,10 +94,7 @@ export async function processEntry({ id, tags }) {
         categoryId,
         vote: 1,
         comment: '若水標記之分類',
-        user: {
-          id: REVIEWER_USER_ID,
-          appId: RUMORS_AI_APPID,
-        },
+        user: reviewer,
       });
       createdArticleCategoryFeedbackCount += 1;
     } catch (e) {
@@ -125,6 +122,14 @@ async function main() {
   let idx = 0;
   let createdArticleCategorySum = 0;
   let createdArticleCategoryFeedbackSum = 0;
+  const { user: annotator } = await createOrUpdateUser({
+    userId: FLOW_USER_ID,
+    appId: RUMORS_AI_APPID,
+  });
+  const { user: reviewer } = await createOrUpdateUser({
+    userId: REVIEWER_USER_ID,
+    appId: RUMORS_AI_APPID,
+  });
 
   for await (const dirent of dir) {
     if (!dirent.isFile() || !dirent.name.endsWith('.json')) continue;
@@ -134,7 +139,7 @@ async function main() {
     const {
       createdArticleCategoryCount,
       createdArticleCategoryFeedbackCount,
-    } = await processEntry(entry);
+    } = await processEntry(entry, annotator, reviewer);
 
     createdArticleCategorySum += createdArticleCategoryCount;
     createdArticleCategoryFeedbackSum += createdArticleCategoryFeedbackCount;
