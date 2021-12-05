@@ -1,3 +1,11 @@
+import { convertAppUserIdToUserId } from 'util/user';
+import { getArticleCategoryFeedbackId } from 'graphql/mutations/CreateOrUpdateArticleCategoryFeedback';
+
+export const reviewerUserId = convertAppUserIdToUserId({
+  appUserId: 'category-reviewer',
+  appId: 'RUMORS_AI',
+});
+
 export default {
   '/articles/doc/a1': {
     text: 'No interesting article categories',
@@ -137,11 +145,16 @@ export default {
     status: 'NORMAL',
     createdAt: '2021-01-01T00:00:00.000Z',
   },
-  '/articlecategoryfeedbacks/doc/a3c1-reviewer': {
+  [`/articlecategoryfeedbacks/doc/${getArticleCategoryFeedbackId({
+    articleId: 'a3',
+    categoryId: 'c1',
+    userId: reviewerUserId,
+    appId: 'RUMORS_AI',
+  })}`]: {
     articleId: 'a3',
     categoryId: 'c1',
     appId: 'RUMORS_AI',
-    userId: 'category-reviewer',
+    userId: reviewerUserId,
     score: -1,
     comment: 'Reviewer comment: a3 is not c1',
     status: 'NORMAL',
@@ -156,11 +169,16 @@ export default {
     status: 'NORMAL',
     createdAt: '2021-01-01T00:00:00.000Z',
   },
-  '/articlecategoryfeedbacks/doc/a3c2-reviewer': {
+  [`/articlecategoryfeedbacks/doc/${getArticleCategoryFeedbackId({
+    articleId: 'a3',
+    categoryId: 'c2',
+    userId: reviewerUserId,
+    appId: 'RUMORS_AI',
+  })}`]: {
     articleId: 'a3',
     categoryId: 'c2',
     appId: 'RUMORS_AI',
-    userId: 'category-reviewer',
+    userId: reviewerUserId,
     score: 1,
     status: 'NORMAL',
     createdAt: '2021-01-01T00:00:00.000Z',

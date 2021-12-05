@@ -54,7 +54,7 @@ function getArticleCategoryRow(obj) {
 }
 
 function isReviewerFeedback(reviewer, feedback) {
-  return feedback.userId === reviewer._id && feedback.appId === reviewer.appId;
+  return feedback.userId === reviewer.id && feedback.appId === reviewer.appId;
 }
 
 /**
