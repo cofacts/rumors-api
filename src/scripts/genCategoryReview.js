@@ -262,6 +262,7 @@ async function main({ startFrom } = {}) {
 
 export default main;
 
+/* istanbul ignore if */
 if (require.main === module) {
   const argv = yargs
     .options({

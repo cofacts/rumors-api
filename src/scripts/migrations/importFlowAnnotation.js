@@ -101,6 +101,7 @@ export async function processEntry({ id, tags }, annotator, reviewer) {
 
       createdArticleCategoryCount += 1;
     } catch (e) {
+      /* istanbul ignore if */
       if (!e?.message?.startsWith('Cannot add articleCategory')) {
         // Rethrow unexpected error
         throw e;
@@ -118,6 +119,7 @@ export async function processEntry({ id, tags }, annotator, reviewer) {
       });
       createdArticleCategoryFeedbackCount += 1;
     } catch (e) {
+      /* istanbul ignore if */
       if (!e?.message?.startsWith('Cannot article')) {
         // Rethrow unexpected error
         throw e;
@@ -137,6 +139,7 @@ export async function processEntry({ id, tags }, annotator, reviewer) {
 /**
  * Go through all files and process one by one
  */
+/* istanbul ignore next */
 async function main() {
   const dir = await fs.promises.opendir(INPUT_DIRECTORY);
   let idx = 0;
@@ -169,6 +172,7 @@ async function main() {
   console.log('Created feedbacks: ', createdArticleCategoryFeedbackSum);
 }
 
+/* istanbul ignore if */
 if (require.main === module) {
   main().catch(console.error);
 }
