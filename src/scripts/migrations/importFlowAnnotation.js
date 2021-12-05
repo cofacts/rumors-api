@@ -58,6 +58,26 @@ const FLOW_ID_TO_CAT_ID = [
 ];
 
 /**
+ *
+ * @returns {{annotator: Object, reviewer: Object}}
+ */
+export async function prepareUsers() {
+  const { user: annotator } = await createOrUpdateUser({
+    userId: FLOW_USER_ID,
+    appId: RUMORS_AI_APPID,
+  });
+  const { user: reviewer } = await createOrUpdateUser({
+    userId: REVIEWER_USER_ID,
+    appId: RUMORS_AI_APPID,
+  });
+
+  return {
+    annotator,
+    reviewer,
+  };
+}
+
+/**
  * Process one article entry by adding article-category and add positive feedback to it
  *
  * @param {object} entry One article entry (parsed json file content) in ground truth
@@ -122,14 +142,7 @@ async function main() {
   let idx = 0;
   let createdArticleCategorySum = 0;
   let createdArticleCategoryFeedbackSum = 0;
-  const { user: annotator } = await createOrUpdateUser({
-    userId: FLOW_USER_ID,
-    appId: RUMORS_AI_APPID,
-  });
-  const { user: reviewer } = await createOrUpdateUser({
-    userId: REVIEWER_USER_ID,
-    appId: RUMORS_AI_APPID,
-  });
+  const { annotator, reviewer } = await prepareUsers();
 
   for await (const dirent of dir) {
     if (!dirent.isFile() || !dirent.name.endsWith('.json')) continue;

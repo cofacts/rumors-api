@@ -1,4 +1,10 @@
+import { convertAppUserIdToUserId } from 'util/user';
 import { getArticleCategoryFeedbackId } from 'graphql/mutations/CreateOrUpdateArticleCategoryFeedback';
+
+const reviewerUserId = convertAppUserIdToUserId({
+  appUserId: 'category-reviewer',
+  appId: 'RUMORS_AI',
+});
 
 export default {
   '/articles/doc/a1': {
@@ -46,13 +52,13 @@ export default {
   [`/articlecategoryfeedbacks/doc/${getArticleCategoryFeedbackId({
     articleId: 'a1',
     categoryId: 'kz3c7XEBrIRcahlYxAp6',
-    userId: 'category-reviewer',
+    userId: reviewerUserId,
     appId: 'RUMORS_AI',
   })}`]: {
     articleId: 'a1',
     categoryId: 'kz3c7XEBrIRcahlYxAp6',
     appId: 'RUMORS_AI',
-    userId: 'category-reviewer',
+    userId: reviewerUserId,
     score: -1,
     status: 'NORMAL',
   },
