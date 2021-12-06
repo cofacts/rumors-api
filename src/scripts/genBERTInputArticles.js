@@ -56,6 +56,9 @@ export async function writeFeedbacks(articleCategories) {
   console.log('Writing feedbacks to database');
   const bar = new SingleBar({ stopOnComplete: true });
   bar.start(articleCategories.length, 0);
+  let positiveCount = 0;
+  let negativeCount = 0;
+
   for (const {
     'Category ID': categoryId,
     'Article ID': articleId,
@@ -69,6 +72,7 @@ export async function writeFeedbacks(articleCategories) {
         vote: 1,
         user: reviewer,
       });
+      positiveCount += 1;
     } else if (denyReason) {
       await createOrUpdateArticleCategoryFeedback({
         articleId,
@@ -77,6 +81,7 @@ export async function writeFeedbacks(articleCategories) {
         comment: denyReason,
         user: reviewer,
       });
+      negativeCount += 1;
     } else {
       // Do nothing if both "Adopt?" and "Deny reason" are empty
     }
@@ -84,6 +89,9 @@ export async function writeFeedbacks(articleCategories) {
     bar.increment();
   }
   bar.stop;
+  console.log(
+    `${positiveCount} positive feedbacks & ${negativeCount} negative feedbacks have been written.`
+  );
 }
 
 const ARTICLE_QUERY = {
