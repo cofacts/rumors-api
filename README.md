@@ -190,6 +190,14 @@ $ node build/scripts/genCategoryReview.js -f <ISO Timestamp>
 
 -  For more options, run the above script with `--help` or see the file level comments.
 
+### Write article-categories result back to DB and generate ground truth files
+First, fill in GOOGLE_SHEETS_API_KEY in `.env`. The API key can be created from [credentials](https://console.cloud.google.com/apis/credentials) page of Google Cloud Platform. We will only access Google Sheets API using this key.
+
+Then, run:
+```
+$ node build/scripts/genBERTInputArticles.js -s <Google spreadsheet ID>
+```
+
 ## One-off migration scripts
 
 ### Fill in `urls` index and `hyperlinks` field for all articles & replies

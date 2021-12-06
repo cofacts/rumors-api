@@ -1,5 +1,11 @@
 import 'dotenv/config';
+import { SingleBar } from 'cli-progress';
+import { createOrUpdateArticleCategoryFeedback } from 'graphql/mutations/CreateOrUpdateArticleCategoryFeedback';
+import { createOrUpdateUser } from 'util/user';
 import fetch from 'node-fetch';
+
+const RUMORS_AI_APPID = 'RUMORS_AI';
+const REVIEWER_USER_ID = 'category-reviewer';
 
 /**
  * @param {string[][]} range - Spreadsheet range data with 1st row being the column names
@@ -36,6 +42,45 @@ async function readFromGoogleSheet(googleSheetId) {
     mappings: range2Objects(mappingsRange),
     articleCategories: range2Objects(articleCategoriesRange),
   };
+}
+
+export async function writeFeedbacks(articleCategories) {
+  const { user: reviewer } = await createOrUpdateUser({
+    userId: REVIEWER_USER_ID,
+    appId: RUMORS_AI_APPID,
+  });
+
+  console.log('Writing feedbacks to database');
+  const bar = new SingleBar({ stopOnComplete: true });
+  bar.start(articleCategories.length, 0);
+  for (const {
+    'Category ID': categoryId,
+    'Article ID': articleId,
+    'Adopt?': shouldAdopt,
+    'Deny reason': denyReason,
+  } of articleCategories) {
+    if (shouldAdopt) {
+      await createOrUpdateArticleCategoryFeedback({
+        articleId,
+        categoryId,
+        vote: 1,
+        user: reviewer,
+      });
+    } else if (denyReason) {
+      await createOrUpdateArticleCategoryFeedback({
+        articleId,
+        categoryId,
+        vote: -1,
+        comment: denyReason,
+        user: reviewer,
+      });
+    } else {
+      // Do nothing if both "Adopt?" and "Deny reason" are empty
+    }
+
+    bar.increment();
+  }
+  bar.stop;
 }
 
 async function main() {
