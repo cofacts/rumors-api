@@ -2,7 +2,9 @@ import 'dotenv/config';
 import { SingleBar } from 'cli-progress';
 import { createOrUpdateArticleCategoryFeedback } from 'graphql/mutations/CreateOrUpdateArticleCategoryFeedback';
 import { createOrUpdateUser } from 'util/user';
+import client from 'util/client';
 import fetch from 'node-fetch';
+import getAllDocs from 'util/getAllDocs';
 
 const RUMORS_AI_APPID = 'RUMORS_AI';
 const REVIEWER_USER_ID = 'category-reviewer';
@@ -82,6 +84,64 @@ export async function writeFeedbacks(articleCategories) {
     bar.increment();
   }
   bar.stop;
+}
+
+const ARTICLE_QUERY = {
+  nested: {
+    path: 'articleCategories',
+    query: {
+      bool: {
+        must: [
+          { term: { 'articleCategories.status': 'NORMAL' } },
+          {
+            script: {
+              script: {
+                source:
+                  "doc['articleCategories.positiveFeedbackCount'].value > doc['articleCategories.negativeFeedbackCount'].value",
+                lang: 'painless',
+              },
+            },
+          },
+        ],
+      },
+    },
+  },
+};
+
+export async function* getDocToExport() {
+  const {
+    body: { count },
+  } = await client.count({
+    index: 'articles',
+    body: { query: ARTICLE_QUERY },
+  });
+  console.log(`Scanning through ${count} articles`);
+  const articleBar = new SingleBar({ stopOnComplete: true });
+  articleBar.start(count, 0);
+
+  for await (const {
+    _id: id,
+    _source: { createdAt, text, articleCategories },
+  } of getAllDocs('articles', ARTICLE_QUERY)) {
+    const tags = articleCategories
+      .filter(
+        ({ status, positiveFeedbackCount, negativeFeedbackCount }) =>
+          status === 'NORMAL' && positiveFeedbackCount > negativeFeedbackCount
+      )
+      .map(({ categoryId }) => categoryId);
+
+    yield {
+      id,
+      createdAt,
+      tags,
+      text,
+      url: `https://cofacts.tw/article/${id}`,
+    };
+
+    articleBar.increment();
+  }
+
+  articleBar.stop();
 }
 
 /* istanbul ignore next */
