@@ -26,6 +26,7 @@ export function range2Objects(range) {
  * @param {string} googleSheetId
  * @param {{ mappings: object[], articleCategories: object[] }}
  */
+/* istanbul ignore next */
 async function readFromGoogleSheet(googleSheetId) {
   const {
     valueRanges: [
@@ -83,6 +84,7 @@ export async function writeFeedbacks(articleCategories) {
   bar.stop;
 }
 
+/* istanbul ignore next */
 async function main() {
   console.log(
     await readFromGoogleSheet('1Y9FrI01in2hz5eiveGknH0HE081sr7gVuk0a7hqqKuc')
