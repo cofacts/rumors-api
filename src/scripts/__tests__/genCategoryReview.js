@@ -1,7 +1,7 @@
 import XLSX from 'xlsx';
+import client from 'util/client';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import fixtures from '../__fixtures__/genCategoryReview';
-
+import fixtures, { reviewerUserId } from '../__fixtures__/genCategoryReview';
 import genArticleReview from '../genCategoryReview';
 
 beforeEach(() => loadFixtures(fixtures));
@@ -56,6 +56,9 @@ it('collects categories of interest after a timestamp', async () => {
     a3,Content of rumor article a3,Category 2,c2,an-user,WEBSITE,2021-01-01T00:00:00.000Z,1,1,,TRUE,
     "
   `);
+
+  // Cleanup
+  await client.delete({ index: 'users', type: 'doc', id: reviewerUserId });
 });
 
 afterEach(() => unloadFixtures(fixtures));

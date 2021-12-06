@@ -12,20 +12,20 @@ import ArticleCategory from 'graphql/models/ArticleCategory';
 /**
  *
  * @param {object} param
- * @param {object} param.article - The article instance to attach category to
+ * @param {object} param.articleId - The articleId to attach category to
  * @param {object} param.categoryId - The categoryId to attach to article
  * @param {string} param.user - The user adding this article-reply connection
  * @returns {ArticleCategory[]} The article categories after creation
  */
 export async function createArticleCategory({
-  article,
+  articleId,
   categoryId,
   user,
   aiModel,
   aiConfidence,
 }) {
   assertUser(user);
-  if (!article || !categoryId) {
+  if (!articleId || !categoryId) {
     throw new Error(
       'articleId and categoryId are mandatory when creating ArticleCategory.'
     );
@@ -55,7 +55,7 @@ export async function createArticleCategory({
   } = await client.update({
     index: 'articles',
     type: 'doc',
-    id: article.id,
+    id: articleId,
     body: {
       script: {
         /**
@@ -97,7 +97,7 @@ export async function createArticleCategory({
     throw new Error(
       `Cannot add articleCategory ${JSON.stringify(
         articleCategory
-      )} to article ${article.id}`
+      )} to article ${articleId}`
     );
   }
 
@@ -116,15 +116,10 @@ export default {
   async resolve(
     rootValue,
     { articleId, categoryId, aiModel, aiConfidence },
-    { user, loaders }
+    { user }
   ) {
-    const article = await loaders.docLoader.load({
-      index: 'articles',
-      id: articleId,
-    });
-
     const articleCategories = await createArticleCategory({
-      article,
+      articleId,
       categoryId,
       user,
       aiModel,

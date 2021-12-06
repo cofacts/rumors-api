@@ -8,6 +8,7 @@ import XLSX from 'xlsx';
 import { SingleBar } from 'cli-progress';
 import client from 'util/client';
 import getAllDocs from 'util/getAllDocs';
+import { createOrUpdateUser } from 'util/user';
 
 const OUTPUT = 'review.xlsx';
 
@@ -52,10 +53,8 @@ function getArticleCategoryRow(obj) {
   }, {});
 }
 
-function isReviewerFeedback(feedback) {
-  return (
-    feedback.userId === REVIEWER_USER_ID && feedback.appId === REVIEWER_APP_ID
-  );
+function isReviewerFeedback(reviewer, feedback) {
+  return feedback.userId === reviewer.id && feedback.appId === reviewer.appId;
 }
 
 /**
@@ -122,6 +121,10 @@ async function main({ startFrom } = {}) {
   const ARTICLE_QUERY = {
     range: { normalArticleCategoryCount: { gt: 0 } },
   };
+  const { user: reviewer } = await createOrUpdateUser({
+    userId: REVIEWER_USER_ID,
+    appId: REVIEWER_APP_ID,
+  });
 
   const {
     body: { count: articleCount },
@@ -159,7 +162,8 @@ async function main({ startFrom } = {}) {
       const latestFeedbackDate = feedbacks
         .filter(
           feedback =>
-            !isReviewerFeedback(feedback) && feedback.status === 'NORMAL'
+            !isReviewerFeedback(reviewer, feedback) &&
+            feedback.status === 'NORMAL'
         )
         .reduce(
           (maxCreatedAt, { createdAt }) =>
@@ -194,14 +198,16 @@ async function main({ startFrom } = {}) {
           feedbacks
             .filter(
               feedback =>
-                !isReviewerFeedback(feedback) &&
+                !isReviewerFeedback(reviewer, feedback) &&
                 feedback.status === 'NORMAL' &&
                 feedback.score === -1 &&
                 !!feedback.comment
             )
             .map(({ comment }) => comment)
         ).join(', ');
-        const reviewerFeedback = feedbacks.find(isReviewerFeedback);
+        const reviewerFeedback = feedbacks.find(fb =>
+          isReviewerFeedback(reviewer, fb)
+        );
 
         return getArticleCategoryRow({
           articleId,
@@ -256,6 +262,7 @@ async function main({ startFrom } = {}) {
 
 export default main;
 
+/* istanbul ignore if */
 if (require.main === module) {
   const argv = yargs
     .options({
