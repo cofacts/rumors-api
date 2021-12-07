@@ -2,7 +2,11 @@ import MockDate from 'mockdate';
 import client from 'util/client';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import { convertAppUserIdToUserId } from 'util/user';
-import { range2Objects, writeFeedbacks } from '../genBERTInputArticles';
+import {
+  getDocToExport,
+  range2Objects,
+  writeFeedbacks,
+} from '../genBERTInputArticles';
 import fixtures from '../__fixtures__/genBERTInputArticles';
 
 const FIXED_DATE = 612921600000;
@@ -169,5 +173,37 @@ describe('writeFeedbacks', () => {
       },
     });
     await client.delete({ index: 'users', type: 'doc', id: reviewerUserId });
+  });
+});
+
+describe('getDocToExport', () => {
+  beforeEach(() => loadFixtures(fixtures));
+  afterEach(() => unloadFixtures(fixtures));
+
+  it('iterates through articles with matching article-categories', async () => {
+    const articles = [];
+    for await (const article of getDocToExport()) {
+      articles.push(article);
+    }
+
+    // Expect only include article a2
+    //
+    expect(articles.length).toBe(1);
+
+    // Expect only include category c2 in article a2 as tags
+    //
+    expect(articles).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "createdAt": "2020-11-01T00:00:00.000Z",
+          "id": "a2",
+          "tags": Array [
+            "c2",
+          ],
+          "text": "The exported article",
+          "url": "https://cofacts.tw/article/a2",
+        },
+      ]
+    `);
   });
 });

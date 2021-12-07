@@ -113,6 +113,7 @@ const ARTICLE_QUERY = {
         ],
       },
     },
+    inner_hits: {},
   },
 };
 
@@ -123,20 +124,21 @@ export async function* getDocToExport() {
     index: 'articles',
     body: { query: ARTICLE_QUERY },
   });
-  console.log(`Scanning through ${count} articles`);
+  console.log(`Scanning through ${count} matching articles`);
   const articleBar = new SingleBar({ stopOnComplete: true });
   articleBar.start(count, 0);
 
   for await (const {
     _id: id,
-    _source: { createdAt, text, articleCategories },
+    _source: { createdAt, text },
+    inner_hits: {
+      // only includes articleCategories that matches the nested query conditions
+      articleCategories: {
+        hits: { hits: articleCategories },
+      },
+    },
   } of getAllDocs('articles', ARTICLE_QUERY)) {
-    const tags = articleCategories
-      .filter(
-        ({ status, positiveFeedbackCount, negativeFeedbackCount }) =>
-          status === 'NORMAL' && positiveFeedbackCount > negativeFeedbackCount
-      )
-      .map(({ categoryId }) => categoryId);
+    const tags = articleCategories.map(({ _source }) => _source.categoryId);
 
     yield {
       id,
