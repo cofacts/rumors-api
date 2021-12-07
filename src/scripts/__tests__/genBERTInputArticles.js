@@ -183,13 +183,13 @@ describe('getDocToExport', () => {
         'Category ID': 'c1',
         'Article ID': 'a1',
         'Adopt?': true,
-        'Connected At': '2021-01-16T12:26:18.395Z',
+        'Connected At': '2021-01-21T12:56:00.381Z',
       },
       {
         'Category ID': 'c2',
         'Article ID': 'a1',
         'Adopt?': false,
-        'Connected At': '2021-01-21T12:56:00.381Z',
+        'Connected At': '2021-01-16T12:26:18.395Z',
       },
     ];
 
