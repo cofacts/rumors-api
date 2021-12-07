@@ -68,7 +68,7 @@ export async function writeFeedbacks(articleCategories) {
     'Adopt?': shouldAdopt,
     'Deny reason': denyReason,
   } of articleCategories) {
-    if (shouldAdopt) {
+    if (shouldAdopt === 'TRUE') {
       await createOrUpdateArticleCategoryFeedback({
         articleId,
         categoryId,

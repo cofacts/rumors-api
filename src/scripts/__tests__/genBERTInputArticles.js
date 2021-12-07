@@ -42,12 +42,12 @@ describe('writeFeedbacks', () => {
     // c3 negative feedback
     //
     const articleCategories = [
-      { 'Category ID': 'c1', 'Article ID': 'a1', 'Adopt?': true },
-      { 'Category ID': 'c2', 'Article ID': 'a1', 'Adopt?': false },
+      { 'Category ID': 'c1', 'Article ID': 'a1', 'Adopt?': 'TRUE' },
+      { 'Category ID': 'c2', 'Article ID': 'a1', 'Adopt?': 'FALSE' },
       {
         'Category ID': 'c3',
         'Article ID': 'a1',
-        'Adopt?': false,
+        'Adopt?': 'FALSE',
         'Deny reason': 'The reason to deny',
       },
     ];
@@ -182,13 +182,13 @@ describe('getDocToExport', () => {
       {
         'Category ID': 'c1',
         'Article ID': 'a1',
-        'Adopt?': true,
+        'Adopt?': 'TRUE',
         'Connected At': '2021-01-21T12:56:00.381Z',
       },
       {
         'Category ID': 'c2',
         'Article ID': 'a1',
-        'Adopt?': false,
+        'Adopt?': 'FALSE',
         'Connected At': '2021-01-16T12:26:18.395Z',
       },
     ];
