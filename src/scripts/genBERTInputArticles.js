@@ -78,12 +78,12 @@ export async function writeFeedbacks(articleCategories) {
         comment: '',
       });
       positiveCount += 1;
-    } else if (denyReason) {
+    } else if (denyReason && denyReason.trim()) {
       await createOrUpdateArticleCategoryFeedback({
         articleId,
         categoryId,
         vote: -1,
-        comment: denyReason,
+        comment: denyReason.trim(),
         user: reviewer,
       });
       negativeCount += 1;
