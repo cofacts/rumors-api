@@ -99,30 +99,47 @@ export async function writeFeedbacks(articleCategories) {
   );
 }
 
-const ARTICLE_QUERY = {
-  nested: {
-    path: 'articleCategories',
-    query: {
-      bool: {
-        must: [
-          { term: { 'articleCategories.status': 'NORMAL' } },
-          {
-            script: {
-              script: {
-                source:
-                  "doc['articleCategories.positiveFeedbackCount'].value > doc['articleCategories.negativeFeedbackCount'].value",
-                lang: 'painless',
+export async function* getDocToExport(articleCategories) {
+  const latestArticleCategoryCreatedAt = articleCategories.reduce(
+    (latestCreatedAt, { 'Connected At': createdAt }) => {
+      const date = new Date(createdAt);
+      return latestCreatedAt < date ? date : latestCreatedAt;
+    },
+    new Date(0)
+  );
+
+  const ARTICLE_QUERY = {
+    nested: {
+      path: 'articleCategories',
+      query: {
+        bool: {
+          must: [
+            { term: { 'articleCategories.status': 'NORMAL' } },
+            {
+              // Skip new article-categories with createdAt > latestArticleCategoryCreatedAt.
+              // These article-categories are created after Script 1 is run and is not reviewed yet.
+              range: {
+                'articleCategories.createdAt': {
+                  lte: latestArticleCategoryCreatedAt.toISOString(),
+                },
               },
             },
-          },
-        ],
+            {
+              script: {
+                script: {
+                  source:
+                    "doc['articleCategories.positiveFeedbackCount'].value > doc['articleCategories.negativeFeedbackCount'].value",
+                  lang: 'painless',
+                },
+              },
+            },
+          ],
+        },
       },
+      inner_hits: {},
     },
-    inner_hits: {},
-  },
-};
+  };
 
-export async function* getDocToExport() {
   const {
     body: { count },
   } = await client.count({
@@ -170,7 +187,7 @@ async function main({ sheetId, outputDir }) {
 
   const { articleCategories } = await readFromGoogleSheet(sheetId);
   await writeFeedbacks(articleCategories);
-  for await (const articleDoc of getDocToExport()) {
+  for await (const articleDoc of getDocToExport(articleCategories)) {
     fs.writeFileSync(
       path.join(outputDir, `${articleDoc.id}.json`),
       JSON.stringify(articleDoc, null, '  ')

@@ -76,6 +76,16 @@ export default {
         createdAt: '2021-01-01T00:00:00.000Z',
         status: 'DELETED',
       },
+      // Not included because it is too new
+      {
+        categoryId: 'c3',
+        userId: 'some-user',
+        appId: 'WEBSITE',
+        positiveFeedbackCount: 1,
+        negativeFeedbackCount: 0,
+        createdAt: '2021-10-01T00:00:00.000Z',
+        status: 'NORMAL',
+      },
     ],
   },
   [`/articlecategoryfeedbacks/doc/${getArticleCategoryFeedbackId({
@@ -104,5 +114,9 @@ export default {
   '/categories/doc/c3': {
     title: 'Category 3',
     description: 'Description for category 3',
+  },
+  '/categories/doc/c4': {
+    title: 'Category 4',
+    description: 'Description for category 4',
   },
 };

@@ -178,8 +178,23 @@ describe('getDocToExport', () => {
   afterEach(() => unloadFixtures(fixtures));
 
   it('iterates through articles with matching article-categories', async () => {
+    const articleCategories = [
+      {
+        'Category ID': 'c1',
+        'Article ID': 'a1',
+        'Adopt?': true,
+        'Connected At': '2021-01-16T12:26:18.395Z',
+      },
+      {
+        'Category ID': 'c2',
+        'Article ID': 'a1',
+        'Adopt?': false,
+        'Connected At': '2021-01-21T12:56:00.381Z',
+      },
+    ];
+
     const articles = [];
-    for await (const article of getDocToExport()) {
+    for await (const article of getDocToExport(articleCategories)) {
       articles.push(article);
     }
 
