@@ -1,3 +1,11 @@
+import { convertAppUserIdToUserId } from 'util/user';
+import { getArticleCategoryFeedbackId } from 'graphql/mutations/CreateOrUpdateArticleCategoryFeedback';
+
+export const reviewerUserId = convertAppUserIdToUserId({
+  appUserId: 'category-reviewer',
+  appId: 'RUMORS_AI',
+});
+
 export default {
   '/articles/doc/a1': {
     text: 'The article content',
@@ -8,7 +16,8 @@ export default {
         userId: 'one-user',
         appId: 'WEBSITE',
         positiveFeedbackCount: 0,
-        negativeFeedbackCount: 0,
+        // Previously reviewer gives negative feedback
+        negativeFeedbackCount: 1,
         createdAt: '2021-01-01T00:00:00.000Z',
         status: 'NORMAL',
       },
@@ -68,6 +77,21 @@ export default {
         status: 'DELETED',
       },
     ],
+  },
+  [`/articlecategoryfeedbacks/doc/${getArticleCategoryFeedbackId({
+    articleId: 'a1',
+    categoryId: 'c1',
+    userId: reviewerUserId,
+    appId: 'RUMORS_AI',
+  })}`]: {
+    articleId: 'a1',
+    categoryId: 'c1',
+    appId: 'RUMORS_AI',
+    userId: reviewerUserId,
+    score: -1,
+    comment: 'Previous deny reason',
+    status: 'NORMAL',
+    createdAt: '2019-01-01T00:00:00.000Z',
   },
   '/categories/doc/c1': {
     title: 'Category 1',

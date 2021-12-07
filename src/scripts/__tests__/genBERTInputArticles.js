@@ -1,20 +1,14 @@
 import MockDate from 'mockdate';
 import client from 'util/client';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import { convertAppUserIdToUserId } from 'util/user';
 import {
   getDocToExport,
   range2Objects,
   writeFeedbacks,
 } from '../genBERTInputArticles';
-import fixtures from '../__fixtures__/genBERTInputArticles';
+import fixtures, { reviewerUserId } from '../__fixtures__/genBERTInputArticles';
 
 const FIXED_DATE = 612921600000;
-
-const reviewerUserId = convertAppUserIdToUserId({
-  appUserId: 'category-reviewer',
-  appId: 'RUMORS_AI',
-});
 
 describe('range2Objects', () => {
   it('converts range data to array of objects', () => {
@@ -70,7 +64,7 @@ describe('writeFeedbacks', () => {
       id: 'a1',
     });
 
-    // Check if c1 & c3 has 1 positive feedback each
+    // Check if c1 & c3 has 1 feedback each
     //
     expect(articleDoc.articleCategories).toMatchInlineSnapshot(`
       Array [
@@ -128,13 +122,16 @@ describe('writeFeedbacks', () => {
     const { _source: positiveFeedback } = articleCategoryFeedbacks.find(
       ({ _source }) => _source.score === 1
     );
+
+    // Assert the feedback has turn positive
     expect(positiveFeedback.userId).toBe(reviewerUserId);
     expect(positiveFeedback).toMatchInlineSnapshot(`
       Object {
         "appId": "RUMORS_AI",
         "articleId": "a1",
         "categoryId": "c1",
-        "createdAt": "1989-06-04T00:00:00.000Z",
+        "comment": "",
+        "createdAt": "2019-01-01T00:00:00.000Z",
         "score": 1,
         "status": "NORMAL",
         "updatedAt": "1989-06-04T00:00:00.000Z",

@@ -74,6 +74,8 @@ export async function writeFeedbacks(articleCategories) {
         categoryId,
         vote: 1,
         user: reviewer,
+        // Overwrite the previous comment
+        comment: '',
       });
       positiveCount += 1;
     } else if (denyReason) {
