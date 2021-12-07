@@ -195,8 +195,10 @@ First, fill in GOOGLE_SHEETS_API_KEY in `.env`. The API key can be created from 
 
 Then, run:
 ```
-$ node build/scripts/genBERTInputArticles.js -s <Google spreadsheet ID>
+$ node build/scripts/genBERTInputArticles.js -s <Google spreadsheet ID> -o <Output directory>
 ```
+
+The ground truth files in JSON will be written to output directory
 
 ## One-off migration scripts
 

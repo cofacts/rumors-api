@@ -1,4 +1,7 @@
 import 'dotenv/config';
+import fs from 'fs';
+import path from 'path';
+import yargs from 'yargs';
 import { SingleBar } from 'cli-progress';
 import { createOrUpdateArticleCategoryFeedback } from 'graphql/mutations/CreateOrUpdateArticleCategoryFeedback';
 import { createOrUpdateUser } from 'util/user';
@@ -155,13 +158,42 @@ export async function* getDocToExport() {
 }
 
 /* istanbul ignore next */
-async function main() {
-  console.log(
-    await readFromGoogleSheet('1Y9FrI01in2hz5eiveGknH0HE081sr7gVuk0a7hqqKuc')
-  );
+async function main({ sheetId, outputDir }) {
+  try {
+    fs.accessSync(outputDir, fs.constants.W_OK);
+  } catch (e) {
+    console.error(`Cannot access output directory ${outputDir}. Aborting.`);
+    return;
+  }
+
+  const { articleCategories } = await readFromGoogleSheet(sheetId);
+  await writeFeedbacks(articleCategories);
+  for await (const articleDoc of getDocToExport()) {
+    fs.writeFileSync(
+      path.join(outputDir, `${articleDoc.id}.json`),
+      JSON.stringify(articleDoc, null, '  ')
+    );
+  }
 }
 
 /* istanbul ignore if */
 if (require.main === module) {
-  main().catch(console.error);
+  const argv = yargs
+    .options({
+      sheetId: {
+        alias: 's',
+        description: 'Google sheet ID to get feedback review',
+        type: 'string',
+        demandOption: true,
+      },
+      outputDir: {
+        alias: 'o',
+        description: 'Path to output directory',
+        type: 'string',
+        demandOption: true,
+      },
+    })
+    .help('help').argv;
+
+  main(argv).catch(console.error);
 }
