@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /*
  * The lists of towns, names and adjectives come from PlatoForum:
  * https://github.com/PlatoForum/PlatoForum/tree/master/utils/pseudonym_gen
