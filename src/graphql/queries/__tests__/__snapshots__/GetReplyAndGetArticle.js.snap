@@ -16,13 +16,6 @@ Object {
     "GetArticle": Object {
       "articleReplies": Array [
         Object {
-          "createdAt": "2015-01-01T12:10:33Z",
-          "feedbackCount": 1,
-          "feedbacks": Array [],
-          "negativeFeedbackCount": 1,
-          "positiveFeedbackCount": 0,
-        },
-        Object {
           "createdAt": "2015-01-01T12:10:30Z",
           "feedbackCount": 1,
           "feedbacks": Array [
@@ -33,20 +26,6 @@ Object {
           ],
           "negativeFeedbackCount": 0,
           "positiveFeedbackCount": 1,
-        },
-        Object {
-          "createdAt": "2015-01-01T12:10:32Z",
-          "feedbackCount": 0,
-          "feedbacks": Array [],
-          "negativeFeedbackCount": 0,
-          "positiveFeedbackCount": 0,
-        },
-        Object {
-          "createdAt": "2015-01-01T12:10:31Z",
-          "feedbackCount": 0,
-          "feedbacks": Array [],
-          "negativeFeedbackCount": 0,
-          "positiveFeedbackCount": 0,
         },
       ],
     },
@@ -253,13 +232,6 @@ Object {
           "replyId": "fofo",
           "status": "NORMAL",
         },
-        Object {
-          "reply": Object {
-            "id": "bar2",
-          },
-          "replyId": "bar2",
-          "status": "DELETED",
-        },
       ],
       "deletedReplies": Array [
         Object {
@@ -352,24 +324,10 @@ Object {
       "articleReplies": Array [
         Object {
           "article": Object {
-            "id": "foo",
-          },
-          "articleId": "foo",
-          "status": "DELETED",
-        },
-        Object {
-          "article": Object {
             "id": "foo2",
           },
           "articleId": "foo2",
           "status": "NORMAL",
-        },
-        Object {
-          "article": Object {
-            "id": "foo3",
-          },
-          "articleId": "foo3",
-          "status": "DELETED",
         },
       ],
       "deletedReplies": Array [

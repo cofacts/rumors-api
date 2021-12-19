@@ -145,12 +145,14 @@ export default {
     appId: 'LINE',
     reason: 'Reason foo',
     feedbacks: [{ score: 1 }, { score: -1 }],
+    status: 'NORMAL',
   },
   '/replyrequests/doc/articleTest2': {
     // Legacy reply request that has no feedbacks[] nor reason.
     articleId: 'foo',
     userId: 'fakeUser',
     appId: 'LINE',
+    status: 'NORMAL',
   },
   [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId({
     articleId: 'foo',
@@ -163,6 +165,7 @@ export default {
     userId: 'test-user',
     appId: 'test-app',
     score: 1,
+    status: 'NORMAL',
   },
   '/categories/doc/c1': {
     title: '性少數與愛滋病',
@@ -179,6 +182,7 @@ export default {
       userId: `fakeUser ${i}`,
       appId: 'LINE',
       reason: `Reason ${i}`,
+      status: 'NORMAL',
     };
     return mockMap;
   }, {}),
