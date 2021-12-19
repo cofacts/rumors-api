@@ -169,7 +169,7 @@ describe('CreateOrUpdateReplyRequest', () => {
         ) {
           id
           replyRequestCount
-          replyRequests {
+          replyRequests(statuses: [BLOCKED, NORMAL]) {
             userId
             reason
           }
