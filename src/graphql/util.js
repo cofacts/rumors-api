@@ -423,22 +423,11 @@ export function createConnectionType(
  * @param {T[]} statuses - list of status to keep
  * @returns {Object[]}
  */
-function filterByStatuses(entriesWithStatus, statuses) {
+export function filterByStatuses(entriesWithStatus, statuses) {
   return entriesWithStatus.filter(({ status }) => statuses.includes(status));
 }
 
 export const DEFAULT_ARTICLE_REPLY_STATUSES = ['NORMAL'];
-export const filterArticleRepliesByStatuses = (
-  articleReplies,
-  statuses = DEFAULT_ARTICLE_REPLY_STATUSES
-) => filterByStatuses(articleReplies, statuses);
-
 export const DEFAULT_ARTICLE_CATEGORY_STATUSES = ['NORMAL'];
-export const filterArticleCategoriesByStatus = (
-  articleCategories,
-  statuses = DEFAULT_ARTICLE_CATEGORY_STATUSES
-) => filterByStatuses(articleCategories, statuses);
-
 export const DEFAULT_REPLY_REQUEST_STATUSES = ['NORMAL'];
-
 export const DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES = ['NORMAL'];

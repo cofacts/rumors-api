@@ -7,7 +7,7 @@ import {
 } from 'graphql';
 
 import {
-  filterArticleRepliesByStatuses,
+  filterByStatuses,
   pagingArgs,
   getSortArgs,
   createSortType,
@@ -57,10 +57,7 @@ const Reply = new GraphQLObjectType({
         const articleReplies = await loaders.articleRepliesByReplyIdLoader.load(
           id
         );
-        return filterArticleRepliesByStatuses(
-          articleReplies,
-          status ? [status] : statuses
-        );
+        return filterByStatuses(articleReplies, status ? [status] : statuses);
       },
     },
     hyperlinks: {

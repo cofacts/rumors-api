@@ -184,6 +184,20 @@ export default {
     score: 1,
     status: 'NORMAL',
   },
+  [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId({
+    articleId: 'foo',
+    replyId: 'bar',
+    userId: 'spammer',
+    appId: 'test-app',
+  })}`]: {
+    articleId: 'foo',
+    replyId: 'bar',
+    userId: 'test-user',
+    appId: 'test-app',
+    comment: 'Spam ad content here',
+    score: 1,
+    status: 'BLOCKED',
+  },
   '/categories/doc/c1': {
     title: '性少數與愛滋病',
     description: '對同性婚姻的恐懼、愛滋病的誤解與的防疫相關釋疑。',

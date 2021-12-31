@@ -14,6 +14,12 @@ import ReplyTypeEnum from './ReplyTypeEnum';
 import ArticleReplyFeedback from './ArticleReplyFeedback';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import FeedbackVote from './FeedbackVote';
+import ArticleReplyFeedbackStatusEnum from './ArticleReplyFeedbackStatusEnum';
+
+import {
+  DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES,
+  filterByStatuses,
+} from 'graphql/util';
 
 export default new GraphQLObjectType({
   name: 'ArticleReply',
@@ -67,8 +73,28 @@ export default new GraphQLObjectType({
 
     feedbacks: {
       type: new GraphQLList(ArticleReplyFeedback),
-      resolve: ({ articleId, replyId }, args, { loaders }) =>
-        loaders.articleReplyFeedbacksLoader.load({ articleId, replyId }),
+      args: {
+        statuses: {
+          type: new GraphQLList(
+            new GraphQLNonNull(ArticleReplyFeedbackStatusEnum)
+          ),
+          defaultValue: DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES,
+          description:
+            'Returns only aricle reply feedbacks with the specified statuses',
+        },
+      },
+      resolve: async (
+        { articleId, replyId },
+        { statuses = DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES },
+        { loaders }
+      ) =>
+        filterByStatuses(
+          await loaders.articleReplyFeedbacksLoader.load({
+            articleId,
+            replyId,
+          }),
+          statuses
+        ),
     },
 
     ownVote: {

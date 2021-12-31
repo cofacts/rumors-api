@@ -16,8 +16,7 @@ import {
   createFilterType,
   createSortType,
   createConnectionType,
-  filterArticleRepliesByStatuses,
-  filterArticleCategoriesByStatus,
+  filterByStatuses,
   timeRangeInput,
   DEFAULT_ARTICLE_REPLY_STATUSES,
   DEFAULT_ARTICLE_CATEGORY_STATUSES,
@@ -73,7 +72,7 @@ const Article = new GraphQLObjectType({
       ) => {
         // Sort by usefulness (= positive - negative feedbacks)
         // then use latest first
-        const sortedArticleReplies = filterArticleRepliesByStatuses(
+        const sortedArticleReplies = filterByStatuses(
           // Inject articleId to each articleReply
           articleReplies.map(articleReply => {
             articleReply.articleId = id;
@@ -129,7 +128,7 @@ const Article = new GraphQLObjectType({
         { status, statuses = DEFAULT_ARTICLE_CATEGORY_STATUSES }
       ) => {
         // sort by created
-        const sortedArticleCategories = filterArticleCategoriesByStatus(
+        const sortedArticleCategories = filterByStatuses(
           // Inject articleId to each articleCategory
           articleCategories.map(articleCategory => {
             articleCategory.articleId = id;
