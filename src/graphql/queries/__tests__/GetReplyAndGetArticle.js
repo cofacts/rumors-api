@@ -212,7 +212,8 @@ describe('GetReplyAndGetArticle', () => {
           {
             GetArticle(id: "foo") {
               text
-              articleCategories(status: NORMAL) {
+              categoryCount
+              articleCategories {
                 id
                 categoryId
                 category {
@@ -269,7 +270,7 @@ describe('GetReplyAndGetArticle', () => {
               text
               type
               reference
-              articleReplies(status: NORMAL) {
+              articleReplies {
                 canUpdateStatus
                 articleId
                 article {

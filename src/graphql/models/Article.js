@@ -140,7 +140,6 @@ const Article = new GraphQLObjectType({
           return +new Date(b.createdAt) - +new Date(a.createdAt);
         });
 
-        if (sortedArticleCategories.length === 0) return [];
         return sortedArticleCategories;
       },
     },

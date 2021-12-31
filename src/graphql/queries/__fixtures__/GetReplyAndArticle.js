@@ -36,24 +36,33 @@ export default {
         positiveFeedbackCount: 0,
         negativeFeedbackCount: 1,
       },
+      {
+        replyId: 'bar5',
+        createdAt: '2015-01-01T12:10:33Z',
+        updatedAt: '2015-01-02T12:10:30Z',
+        status: 'BLOCKED',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 1,
+      },
     ],
     normalArticleReplyCount: 1,
     references: [{ type: 'LINE' }],
     replyRequestCount: 2,
-
-    /**
-     * Added for tests:
-     * 'get specified article and articleCategories with NORMAL status'
-     * 'get specified article and articleCategories with DELETED status'
-     */
     articleCategories: [
       {
         categoryId: 'c1',
         status: 'NORMAL',
+        createdAt: '2015-01-01T12:10:33Z',
       },
       {
         categoryId: 'c2',
         status: 'DELETED',
+        createdAt: '2015-01-01T12:11:33Z',
+      },
+      {
+        categoryId: 'c3',
+        status: 'BLOCKED',
+        createdAt: '2015-01-03T12:11:33Z',
       },
     ],
     normalArticleCategoryCount: 1,
@@ -153,6 +162,14 @@ export default {
     userId: 'fakeUser',
     appId: 'LINE',
     status: 'NORMAL',
+  },
+  '/replyrequests/doc/spammerAds': {
+    articleId: 'foo',
+    userId: 'spammer',
+    appId: 'RUMORS_SITE',
+    status: 'BLOCKED',
+    reason: 'Some spam content',
+    feedbacks: [],
   },
   [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId({
     articleId: 'foo',

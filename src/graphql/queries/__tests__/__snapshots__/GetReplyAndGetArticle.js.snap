@@ -114,6 +114,7 @@ Object {
           "id": "foo__c1",
         },
       ],
+      "categoryCount": 1,
       "text": "Lorum ipsum",
     },
   },
