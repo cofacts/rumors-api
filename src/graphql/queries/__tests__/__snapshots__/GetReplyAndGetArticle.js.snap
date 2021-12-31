@@ -288,12 +288,18 @@ Object {
       "replyRequestCount": 2,
       "replyRequests": Array [
         Object {
+          "article": Object {
+            "id": "foo",
+          },
           "feedbackCount": 2,
           "negativeFeedbackCount": 1,
           "positiveFeedbackCount": 1,
           "reason": "Reason foo",
         },
         Object {
+          "article": Object {
+            "id": "foo",
+          },
           "feedbackCount": 0,
           "negativeFeedbackCount": 0,
           "positiveFeedbackCount": 0,

@@ -39,6 +39,9 @@ describe('GetReplyAndGetArticle', () => {
                 feedbackCount
                 positiveFeedbackCount
                 negativeFeedbackCount
+                article {
+                  id
+                }
               }
               requestedForReply
             }
