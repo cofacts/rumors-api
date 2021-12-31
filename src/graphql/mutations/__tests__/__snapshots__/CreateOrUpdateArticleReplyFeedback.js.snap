@@ -50,10 +50,6 @@ Object {
         "comment": null,
         "vote": "UPVOTE",
       },
-      Object {
-        "comment": "ads content",
-        "vote": "UPVOTE",
-      },
     ],
     "negativeFeedbackCount": 0,
     "ownVote": "UPVOTE",
