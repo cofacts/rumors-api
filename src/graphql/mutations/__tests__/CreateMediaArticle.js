@@ -322,7 +322,7 @@ describe('error', () => {
     const userId = 'test';
     const appId = 'foo';
 
-    const { data, errors } = await gql`
+    const { errors } = await gql`
       mutation(
         $mediaUrl: String!
         $articleType: ArticleTypeEnum!
