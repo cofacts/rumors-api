@@ -15,11 +15,61 @@ Object {
 }
 `;
 
+exports[`ListArticles filters by article types: IMAGE and AUDIO articles 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleType": "AUDIO",
+            "id": "listArticleTest7",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleType": "IMAGE",
+            "id": "listArticleTest6",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleType": "IMAGE",
+            "id": "listArticleTest5",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`ListArticles filters by invalid operator 1`] = `
 Object {
   "errors": Array [
     [GraphQLError: Field "INVALID" is not defined by type "RangeInput".],
   ],
+}
+`;
+
+exports[`ListArticles filters by mediaUrl: attachment.hash should be ffff8000 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleType": "IMAGE",
+            "attachment": Object {
+              "hash": "ffff8000",
+              "mediaUrl": "http://foo/image.jpeg",
+            },
+            "id": "listArticleTest5",
+          },
+        },
+      ],
+    },
+  },
 }
 `;
 
