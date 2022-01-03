@@ -736,16 +736,14 @@ describe('ListArticles', () => {
               node {
                 id
                 articleType
-                attachment {
-                  mediaUrl
-                  hash
-                }
+                attachmentUrl
+                attachmentHash
               }
             }
           }
         }
       `({}, { appId: 'WEBSITE' })
-    ).toMatchSnapshot('attachment.hash should be ffff8000');
+    ).toMatchSnapshot('attachmentHash should be ffff8000');
   });
 
   afterAll(() => unloadFixtures(fixtures));

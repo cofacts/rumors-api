@@ -26,7 +26,8 @@ Object {
   "articleCategories": Array [],
   "articleReplies": Array [],
   "articleType": "TEXT",
-  "attachment": Object {},
+  "attachmentHash": "",
+  "attachmentUrl": "",
   "createdAt": "2017-01-28T08:45:57.011Z",
   "hyperlinks": Array [
     Object {

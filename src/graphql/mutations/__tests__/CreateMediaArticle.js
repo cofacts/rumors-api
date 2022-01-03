@@ -85,10 +85,8 @@ describe('creation', () => {
         "articleCategories": Array [],
         "articleReplies": Array [],
         "articleType": "IMAGE",
-        "attachment": Object {
-          "hash": "mock_image_hash",
-          "mediaUrl": "http://foo.com/output_image.jpeg",
-        },
+        "attachmentHash": "mock_image_hash",
+        "attachmentUrl": "http://foo.com/output_image.jpeg",
         "createdAt": "2017-01-28T08:45:57.011Z",
         "hyperlinks": Array [],
         "lastRequestedAt": "2017-01-28T08:45:57.011Z",
@@ -203,10 +201,8 @@ describe('creation', () => {
     // Expects lastRequestedAt, references are updated
     expect(article).toMatchInlineSnapshot(`
       Object {
-        "attachment": Object {
-          "hash": "ffff8000",
-          "mediaUrl": "http://foo/image.jpeg",
-        },
+        "attachmentHash": "ffff8000",
+        "attachmentUrl": "http://foo/image.jpeg",
         "lastRequestedAt": "2017-01-28T08:45:57.011Z",
         "references": Array [
           Object {

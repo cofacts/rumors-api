@@ -46,7 +46,8 @@ export default {
         negativeFeedbackCount: 0,
       },
     ],
-    attachment: {},
+    attachmentUrl: '',
+    attachmentHash: '',
     articleType: 'TEXT',
   },
   '/articles/doc/listArticleTest2': {
@@ -103,7 +104,8 @@ export default {
         negativeFeedbackCount: 0,
       },
     ],
-    attachment: {},
+    attachmentUrl: '',
+    attachmentHash: '',
     articleType: 'TEXT',
   },
   '/articles/doc/listArticleTest3': {
@@ -125,7 +127,8 @@ export default {
         negativeFeedbackCount: 0,
       },
     ],
-    attachment: {},
+    attachmentUrl: '',
+    attachmentHash: '',
     articleType: 'TEXT',
   },
   '/articles/doc/listArticleTest4': {
@@ -192,7 +195,8 @@ export default {
         negativeFeedbackCount: 1,
       },
     ],
-    attachment: {},
+    attachmentUrl: '',
+    attachmentHash: '',
     articleType: 'TEXT',
   },
   '/articles/doc/listArticleTest5': {
@@ -206,10 +210,8 @@ export default {
     text: '',
     articleReplies: [],
     articleCategories: [],
-    attachment: {
-      hash: 'ffff8000',
-      mediaUrl: 'http://foo/image.jpeg',
-    },
+    attachmentUrl: 'http://foo/image.jpeg',
+    attachmentHash: 'ffff8000',
     articleType: 'IMAGE',
   },
   '/articles/doc/listArticleTest6': {
@@ -223,10 +225,8 @@ export default {
     text: '',
     articleReplies: [],
     articleCategories: [],
-    attachment: {
-      hash: 'ffff8001',
-      mediaUrl: 'http://foo/image2.jpeg',
-    },
+    attachmentUrl: 'http://foo/image2.jpeg',
+    attachmentHash: 'ffff8001',
     articleType: 'IMAGE',
   },
   '/articles/doc/listArticleTest7': {
@@ -240,10 +240,8 @@ export default {
     text: '',
     articleReplies: [],
     articleCategories: [],
-    attachment: {
-      hash: 'ffff8002',
-      mediaUrl: 'http://foo/audio.mp3',
-    },
+    attachmentUrl: 'http://foo/audio.mp3',
+    attachmentHash: 'ffff8002',
     articleType: 'AUDIO',
   },
   '/categories/doc/category1': {

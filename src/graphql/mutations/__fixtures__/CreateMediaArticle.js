@@ -1,10 +1,8 @@
 export default {
   [`/articles/doc/image1`]: {
     text: '',
-    attachment: {
-      hash: 'ffff8000',
-      mediaUrl: 'http://foo/image.jpeg',
-    },
+    attachmentUrl: 'http://foo/image.jpeg',
+    attachmentHash: 'ffff8000',
     replyRequestCount: 1,
     references: [{ type: 'LINE' }],
   },

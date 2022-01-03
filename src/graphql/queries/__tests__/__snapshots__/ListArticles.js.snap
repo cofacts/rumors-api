@@ -52,7 +52,7 @@ Object {
 }
 `;
 
-exports[`ListArticles filters by mediaUrl: attachment.hash should be ffff8000 1`] = `
+exports[`ListArticles filters by mediaUrl: attachmentHash should be ffff8000 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
@@ -60,10 +60,8 @@ Object {
         Object {
           "node": Object {
             "articleType": "IMAGE",
-            "attachment": Object {
-              "hash": "ffff8000",
-              "mediaUrl": "http://foo/image.jpeg",
-            },
+            "attachmentHash": "ffff8000",
+            "attachmentUrl": "http://foo/image.jpeg",
             "id": "listArticleTest5",
           },
         },
