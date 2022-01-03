@@ -58,7 +58,10 @@ async function createNewMediaArticle({
   }
 
   const file = await fetch(mediaUrl);
-  const hash = await getMediaFileHash(await file.clone().buffer(), articleType);
+  const attachmentHash = await getMediaFileHash(
+    await file.clone().buffer(),
+    articleType
+  );
   const text = '';
   const now = new Date().toISOString();
   const reference = {
@@ -73,20 +76,19 @@ async function createNewMediaArticle({
     type: 'doc',
     body: {
       query: {
-        nested: {
-          path: 'attachment',
-          query: {
-            term: {
-              'attachment.hash': hash,
-            },
-          },
+        term: {
+          attachmentHash,
         },
       },
     },
   });
 
   if (!matchedArticle.hits.total) {
-    const url = await uploadFile(file.body, hash, articleType);
+    const attachmentUrl = await uploadFile(
+      file.body,
+      attachmentHash,
+      articleType
+    );
 
     // use elasticsearch created id
     const {
@@ -109,10 +111,8 @@ async function createNewMediaArticle({
         tags: [],
         hyperlinks: [],
         articleType,
-        attachment: {
-          hash,
-          mediaUrl: url,
-        },
+        attachmentUrl,
+        attachmentHash,
       },
     });
 

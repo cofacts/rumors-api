@@ -35,7 +35,6 @@ import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
 import ArticleTypeEnum from './ArticleTypeEnum';
-import Attachment from './Attachment';
 
 const Article = new GraphQLObjectType({
   name: 'Article',
@@ -333,9 +332,13 @@ const Article = new GraphQLObjectType({
       type: ArticleTypeEnum,
       description: 'LINE message event type',
     },
-    attachment: {
-      type: Attachment,
+    attachmentUrl: {
+      type: GraphQLString,
       description: 'Attachment of this article',
+    },
+    attachmentHash: {
+      type: GraphQLString,
+      description: 'Attachment hash to search or identify files',
     },
   }),
 });

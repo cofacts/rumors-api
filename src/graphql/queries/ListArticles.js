@@ -445,15 +445,13 @@ export default {
     if (filter.mediaUrl) {
       const file = await fetch(filter.mediaUrl);
       // FIXME: Use mime or binary header to get articleType instead of manual input
-      const hash = await getMediaFileHash(await file.clone().buffer(), 'IMAGE');
+      const attachmentHash = await getMediaFileHash(
+        await file.clone().buffer(),
+        'IMAGE'
+      );
       filterQueries.push({
-        nested: {
-          path: 'attachment',
-          query: {
-            term: {
-              'attachment.hash': hash,
-            },
-          },
+        term: {
+          attachmentHash,
         },
       });
     }
