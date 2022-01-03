@@ -1,4 +1,5 @@
 import { Storage } from '@google-cloud/storage';
+import rollbar from '../rollbarInstance';
 
 const storage = new Storage({
   credentials: JSON.parse(process.env.GCS_CREDENTIALS || '{}'),
@@ -29,7 +30,8 @@ export async function uploadToGCS(fileStream, fileName, contentType) {
     fileStream
       .pipe(file.createWriteStream(options))
       .on('error', function(err) {
-        reject(new Error(`[GCS] ${err}`));
+        rollbar.error('GCS error', err);
+        reject(new Error(`[GCS] faild to upload file`));
       })
       .on('finish', function() {
         // The file upload is complete.
