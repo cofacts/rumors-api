@@ -57,7 +57,7 @@ describe('uploadToGCS', () => {
 
     await expect(
       uploadToGCS(mockReadStream, 'fileName', 'mimeType')
-    ).rejects.toMatchInlineSnapshot(`[Error: [GCS] Mock error]`);
+    ).rejects.toMatchInlineSnapshot(`[Error: [GCS] faild to upload file]`);
   });
 
   it('should throw env error', async () => {
