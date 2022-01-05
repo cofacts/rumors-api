@@ -1,13 +1,10 @@
 import { GraphQLEnumType } from 'graphql';
 
 export default new GraphQLEnumType({
-  name: 'ArticleReplyStatusEnum',
+  name: 'ReplyRequestStatusEnum',
   values: {
     NORMAL: {
       value: 'NORMAL',
-    },
-    DELETED: {
-      value: 'DELETED',
     },
     BLOCKED: {
       value: 'BLOCKED',

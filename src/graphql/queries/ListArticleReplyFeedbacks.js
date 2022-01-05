@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLList } from 'graphql';
+import { GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql';
 import {
   createFilterType,
   createSortType,
@@ -8,8 +8,10 @@ import {
   pagingArgs,
   getSortArgs,
   getRangeFieldParamFromArithmeticExpression,
+  DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES,
 } from 'graphql/util';
 import ArticleReplyFeedback from 'graphql/models/ArticleReplyFeedback';
+import ArticleReplyFeedbackStatusEnum from 'graphql/models/ArticleReplyFeedbackStatusEnum';
 import FeedbackVote from 'graphql/models/FeedbackVote';
 
 export default {
@@ -47,6 +49,14 @@ export default {
           description:
             'List only the article reply feedbacks that were last updated within the specific time range.',
         },
+        statuses: {
+          type: new GraphQLList(
+            new GraphQLNonNull(ArticleReplyFeedbackStatusEnum)
+          ),
+          defaultValue: DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES,
+          description:
+            'List only the article reply feedbacks with the selected statuses',
+        },
       }),
     },
     orderBy: {
@@ -71,7 +81,13 @@ export default {
     };
 
     const shouldQueries = []; // Affects scores
-    const filterQueries = []; // Not affects scores
+    const filterQueries = [
+      {
+        terms: {
+          status: filter.statuses || DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES,
+        },
+      },
+    ]; // Not affects scores
 
     ['userId', 'appId', 'articleId', 'replyId'].forEach(field => {
       if (!filter[field]) return;

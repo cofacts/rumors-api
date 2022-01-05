@@ -6,14 +6,20 @@ import {
   GraphQLNonNull,
 } from 'graphql';
 import User, { userFieldResolver } from './User';
+import Article from './Article';
 import FeedbackVote from './FeedbackVote';
 import Node from '../interfaces/Node';
+import ReplyRequestStatusEnum from './ReplyRequestStatusEnum';
 
 export default new GraphQLObjectType({
   name: 'ReplyRequest',
   interfaces: [Node],
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLID) },
+
+    articleId: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
     userId: { type: GraphQLString },
     appId: { type: GraphQLString },
 
@@ -56,6 +62,14 @@ export default new GraphQLObjectType({
         if (!ownFeedback) return null;
         return ownFeedback.score;
       },
+    },
+    article: {
+      type: new GraphQLNonNull(Article),
+      resolve: ({ articleId }, args, { loaders }) =>
+        loaders.docLoader.load({ index: 'articles', id: articleId }),
+    },
+    status: {
+      type: new GraphQLNonNull(ReplyRequestStatusEnum),
     },
   }),
 });

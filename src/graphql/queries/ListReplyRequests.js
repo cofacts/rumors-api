@@ -1,4 +1,4 @@
-import { GraphQLString } from 'graphql';
+import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
 import {
   createFilterType,
   createSortType,
@@ -7,8 +7,10 @@ import {
   pagingArgs,
   getSortArgs,
   getRangeFieldParamFromArithmeticExpression,
+  DEFAULT_REPLY_REQUEST_STATUSES,
 } from 'graphql/util';
 import ReplyRequest from 'graphql/models/ReplyRequest';
+import ReplyRequestStatusEnum from 'graphql/models/ReplyRequestStatusEnum';
 
 export default {
   args: {
@@ -26,6 +28,11 @@ export default {
         createdAt: {
           type: timeRangeInput,
         },
+        statuses: {
+          type: new GraphQLList(new GraphQLNonNull(ReplyRequestStatusEnum)),
+          defaultValue: DEFAULT_REPLY_REQUEST_STATUSES,
+          description: 'List only reply requests with specified statuses',
+        },
       }),
     },
     orderBy: {
@@ -34,7 +41,13 @@ export default {
     ...pagingArgs,
   },
   async resolve(rootValue, { orderBy = [], filter = {}, ...otherParams }) {
-    const filterQueries = [];
+    const filterQueries = [
+      {
+        terms: {
+          status: filter.statuses || DEFAULT_REPLY_REQUEST_STATUSES,
+        },
+      },
+    ];
 
     ['userId', 'appId', 'articleId'].forEach(field => {
       if (!filter[field]) return;

@@ -12,6 +12,7 @@ import User, { userFieldResolver } from './User';
 import Article from './Article';
 import Reply from './Reply';
 import ArticleReply from './ArticleReply';
+import ArticleReplyFeedbackStatusEnum from './ArticleReplyFeedbackStatusEnum';
 
 export default new GraphQLObjectType({
   name: 'ArticleReplyFeedback',
@@ -32,6 +33,10 @@ export default new GraphQLObjectType({
 
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
+
+    status: {
+      type: new GraphQLNonNull(ArticleReplyFeedbackStatusEnum),
+    },
 
     vote: {
       description: "User's vote on the articleReply",

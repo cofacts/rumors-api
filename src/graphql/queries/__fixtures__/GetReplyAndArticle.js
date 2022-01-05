@@ -36,24 +36,33 @@ export default {
         positiveFeedbackCount: 0,
         negativeFeedbackCount: 1,
       },
+      {
+        replyId: 'bar5',
+        createdAt: '2015-01-01T12:10:33Z',
+        updatedAt: '2015-01-02T12:10:30Z',
+        status: 'BLOCKED',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 1,
+      },
     ],
     normalArticleReplyCount: 1,
     references: [{ type: 'LINE' }],
     replyRequestCount: 2,
-
-    /**
-     * Added for tests:
-     * 'get specified article and articleCategories with NORMAL status'
-     * 'get specified article and articleCategories with DELETED status'
-     */
     articleCategories: [
       {
         categoryId: 'c1',
         status: 'NORMAL',
+        createdAt: '2015-01-01T12:10:33Z',
       },
       {
         categoryId: 'c2',
         status: 'DELETED',
+        createdAt: '2015-01-01T12:11:33Z',
+      },
+      {
+        categoryId: 'c3',
+        status: 'BLOCKED',
+        createdAt: '2015-01-03T12:11:33Z',
       },
     ],
     normalArticleCategoryCount: 1,
@@ -145,12 +154,22 @@ export default {
     appId: 'LINE',
     reason: 'Reason foo',
     feedbacks: [{ score: 1 }, { score: -1 }],
+    status: 'NORMAL',
   },
   '/replyrequests/doc/articleTest2': {
     // Legacy reply request that has no feedbacks[] nor reason.
     articleId: 'foo',
     userId: 'fakeUser',
     appId: 'LINE',
+    status: 'NORMAL',
+  },
+  '/replyrequests/doc/spammerAds': {
+    articleId: 'foo',
+    userId: 'spammer',
+    appId: 'RUMORS_SITE',
+    status: 'BLOCKED',
+    reason: 'Some spam content',
+    feedbacks: [],
   },
   [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId({
     articleId: 'foo',
@@ -163,6 +182,21 @@ export default {
     userId: 'test-user',
     appId: 'test-app',
     score: 1,
+    status: 'NORMAL',
+  },
+  [`/articlereplyfeedbacks/doc/${getArticleReplyFeedbackId({
+    articleId: 'foo',
+    replyId: 'bar',
+    userId: 'spammer',
+    appId: 'test-app',
+  })}`]: {
+    articleId: 'foo',
+    replyId: 'bar',
+    userId: 'test-user',
+    appId: 'test-app',
+    comment: 'Spam ad content here',
+    score: 1,
+    status: 'BLOCKED',
   },
   '/categories/doc/c1': {
     title: '性少數與愛滋病',
@@ -179,6 +213,7 @@ export default {
       userId: `fakeUser ${i}`,
       appId: 'LINE',
       reason: `Reason ${i}`,
+      status: 'NORMAL',
     };
     return mockMap;
   }, {}),
