@@ -3,36 +3,13 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { assertUser } from 'util/user';
 import client from 'util/client';
 import { uploadToGCS } from 'util/gcs';
+import { getMediaFileHash } from 'graphql/util';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
 import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
-import { imageHash } from 'image-hash';
 import fetch from 'node-fetch';
-
-/**
- * @param {Buffer} fileBuffer
- * @param {ArticleTypeEnum} type The article type
- * @returns {string} The hash for identifying if two files are similar
- */
-async function getMediaFileHash(fileBuffer, type) {
-  let hash = '';
-  if (type === 'IMAGE') {
-    hash = await new Promise((resolve, reject) => {
-      imageHash({ data: fileBuffer }, 16, true, (error, data) => {
-        if (error) {
-          console.error(error);
-          reject(error);
-        } else {
-          resolve(data);
-        }
-      });
-    });
-  }
-
-  return hash;
-}
 
 /**
  * @param {NodeJS.ReadableStream} fileStream
