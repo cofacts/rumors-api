@@ -329,8 +329,11 @@ const Article = new GraphQLObjectType({
       },
     },
     articleType: {
-      type: ArticleTypeEnum,
-      description: 'LINE message event type',
+      type: new GraphQLNonNull(ArticleTypeEnum),
+      description: 'Message event type',
+      resolve: async ({ articleType }) => {
+        return articleType || 'TEXT';
+      },
     },
     attachmentUrl: {
       type: GraphQLString,
