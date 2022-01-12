@@ -1,4 +1,3 @@
-// https://storage.googleapis.com/cofacts-media-collection/images/1*TdrXGc6_XNVBvXzElVHVMg.jpeg
 import { uploadToGCS } from '../gcs';
 import { EventEmitter } from 'events';
 
