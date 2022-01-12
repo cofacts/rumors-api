@@ -83,42 +83,43 @@ async function createNewMediaArticle({
     },
   });
 
-  if (!matchedArticle.hits.total) {
-    const attachmentUrl = await uploadFile(
-      file.body,
-      attachmentHash,
-      articleType
-    );
-
-    // use elasticsearch created id
-    const {
-      body: { _id: articleId },
-    } = await client.index({
-      index: 'articles',
-      type: 'doc',
-      body: {
-        text,
-        createdAt: now,
-        updatedAt: now,
-        userId,
-        appId,
-        references: [reference],
-        articleReplies: [],
-        articleCategories: [],
-        normalArticleReplyCount: 0,
-        normalArticleCategoryCount: 0,
-        replyRequestCount: 0,
-        tags: [],
-        hyperlinks: [],
-        articleType,
-        attachmentUrl,
-        attachmentHash,
-      },
-    });
-
-    return articleId;
+  if (matchedArticle.hits.total) {
+    return matchedArticle.hits.hits[0]._id;
   }
-  return matchedArticle.hits.hits[0]._id;
+
+  const attachmentUrl = await uploadFile(
+    file.body,
+    attachmentHash,
+    articleType
+  );
+
+  // use elasticsearch created id
+  const {
+    body: { _id: articleId },
+  } = await client.index({
+    index: 'articles',
+    type: 'doc',
+    body: {
+      text,
+      createdAt: now,
+      updatedAt: now,
+      userId,
+      appId,
+      references: [reference],
+      articleReplies: [],
+      articleCategories: [],
+      normalArticleReplyCount: 0,
+      normalArticleCategoryCount: 0,
+      replyRequestCount: 0,
+      tags: [],
+      hyperlinks: [],
+      articleType,
+      attachmentUrl,
+      attachmentHash,
+    },
+  });
+
+  return articleId;
 }
 
 export default {
@@ -136,9 +137,13 @@ export default {
         'The reason why the user want to submit this article. Mandatory for 1st sender',
     },
   },
-  resolve(rootValue, { mediaUrl, articleType, reference, reason }, { user }) {
+  async resolve(
+    rootValue,
+    { mediaUrl, articleType, reference, reason },
+    { user }
+  ) {
     assertUser(user);
-    const newArticlePromise = createNewMediaArticle({
+    const articleId = await createNewMediaArticle({
       mediaUrl,
       articleType,
       reference,
@@ -146,21 +151,12 @@ export default {
       appId: user.appId,
     });
 
-    // Dependencies
-    //
-    // newArticlePromise* --> replyRequestPromise* --> done
-    //
-    // *: Updates article. Will trigger version_conflict_engine_exception if run in parallel.
-    //
+    await createOrUpdateReplyRequest({
+      articleId,
+      user,
+      reason,
+    });
 
-    const replyRequestPromise = newArticlePromise.then(articleId =>
-      createOrUpdateReplyRequest({ articleId, user, reason })
-    );
-
-    // Wait for all promises
-    return Promise.all([
-      newArticlePromise, // for fetching articleId
-      replyRequestPromise,
-    ]).then(([id]) => ({ id }));
+    return { id: articleId };
   },
 };
