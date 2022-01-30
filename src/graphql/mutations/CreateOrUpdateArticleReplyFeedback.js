@@ -15,6 +15,79 @@ export function getArticleReplyFeedbackId({
   return `${articleId}__${replyId}__${userId}__${appId}`;
 }
 
+/**
+ * Updates the positive and negative feedback count of the article reply with
+ * specified `articleId` and `replyId`.
+ *
+ * @param {string} articleId
+ * @param {string} replyId
+ * @param {object[]} feedbacks
+ * @returns {object} The updated article reply
+ */
+export async function updateArticleReplyByFeedbacks(
+  articleId,
+  replyId,
+  feedbacks
+) {
+  const [positiveFeedbackCount, negativeFeedbackCount] = feedbacks
+    .filter(({ status }) => status === 'NORMAL')
+    .reduce(
+      (agg, { score }) => {
+        if (score === 1) {
+          agg[0] += 1;
+        } else if (score === -1) {
+          agg[1] += 1;
+        }
+        return agg;
+      },
+      [0, 0]
+    );
+
+  const { body: articleReplyUpdateResult } = await client.update({
+    index: 'articles',
+    type: 'doc',
+    id: articleId,
+    body: {
+      script: {
+        source: `
+          int idx = 0;
+          int replyCount = ctx._source.articleReplies.size();
+          for(; idx < replyCount; idx += 1) {
+            HashMap articleReply = ctx._source.articleReplies.get(idx);
+            if( articleReply.get('replyId').equals(params.replyId) ) {
+              break;
+            }
+          }
+
+          if( idx === replyCount ) {
+            ctx.op = 'none';
+          } else {
+            ctx._source.articleReplies.get(idx).put(
+              'positiveFeedbackCount', params.positiveFeedbackCount);
+            ctx._source.articleReplies.get(idx).put(
+              'negativeFeedbackCount', params.negativeFeedbackCount);
+          }
+        `,
+        params: {
+          replyId,
+          positiveFeedbackCount,
+          negativeFeedbackCount,
+        },
+      },
+    },
+    _source: true,
+  });
+
+  /* istanbul ignore if */
+  if (articleReplyUpdateResult.result !== 'updated') {
+    throw new Error(`Cannot article ${articleId}'s feedback count`);
+  }
+
+  return articleReplyUpdateResult.get._source.articleReplies.find(
+    articleReply => articleReply.replyId === replyId
+  );
+}
+
 export default {
   description: 'Create or update a feedback on an article-reply connection',
   type: ArticleReply,
@@ -72,64 +145,10 @@ export default {
       replyId,
     });
 
-    const [positiveFeedbackCount, negativeFeedbackCount] = feedbacks
-      .filter(({ status }) => status === 'NORMAL')
-      .reduce(
-        (agg, { score }) => {
-          if (score === 1) {
-            agg[0] += 1;
-          } else if (score === -1) {
-            agg[1] += 1;
-          }
-          return agg;
-        },
-        [0, 0]
-      );
-
-    const { body: articleReplyUpdateResult } = await client.update({
-      index: 'articles',
-      type: 'doc',
-      id: articleId,
-      body: {
-        script: {
-          source: `
-            int idx = 0;
-            int replyCount = ctx._source.articleReplies.size();
-            for(; idx < replyCount; idx += 1) {
-              HashMap articleReply = ctx._source.articleReplies.get(idx);
-              if( articleReply.get('replyId').equals(params.replyId) ) {
-                break;
-              }
-            }
-
-            if( idx === replyCount ) {
-              ctx.op = 'none';
-            } else {
-              ctx._source.articleReplies.get(idx).put(
-                'positiveFeedbackCount', params.positiveFeedbackCount);
-              ctx._source.articleReplies.get(idx).put(
-                'negativeFeedbackCount', params.negativeFeedbackCount);
-            }
-          `,
-          params: {
-            replyId,
-            positiveFeedbackCount,
-            negativeFeedbackCount,
-          },
-        },
-      },
-      _source: true,
-    });
-
-    /* istanbul ignore if */
-    if (articleReplyUpdateResult.result !== 'updated') {
-      throw new Error(
-        `Cannot article ${articleId}'s feedback count for feedback ID = ${id}`
-      );
-    }
-
-    const updatedArticleReply = articleReplyUpdateResult.get._source.articleReplies.find(
-      articleReply => articleReply.replyId === replyId
+    const updatedArticleReply = await updateArticleReplyByFeedbacks(
+      articleId,
+      replyId,
+      feedbacks
     );
 
     /* istanbul ignore if */
