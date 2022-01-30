@@ -40,7 +40,7 @@ it('correctly sets the block reason and updates status of their works', async ()
   // Check reply requests
   //
 
-  // Assert reply requests that is already blocked are not selected to update
+  // Assert contents that is already blocked are not selected to update
   //
   const {
     body: { _source: someArticleWithAlreadyBlockedReplyRequest },
@@ -53,7 +53,7 @@ it('correctly sets the block reason and updates status of their works', async ()
     fixtures['/articles/doc/some-article']
   );
 
-  // Assert normal reply requests being blocked and article being updated
+  // Assert normal contents being blocked and article being updated
   //
   const {
     body: { _source: replyRequestToBlock },
@@ -63,6 +63,7 @@ it('correctly sets the block reason and updates status of their works', async ()
     id: 'replyrequest-to-block',
   });
   expect(replyRequestToBlock.status).toEqual('BLOCKED');
+
   const {
     body: { _source: modifiedArticle },
   } = await client.get({
@@ -71,10 +72,19 @@ it('correctly sets the block reason and updates status of their works', async ()
     id: 'modified-article',
   });
   expect(modifiedArticle).toMatchObject({
+    // Only the article reply by valid-user
+    normalArticleReplyCount: 1,
+
     // Only replyrequests/doc/valid-reply-request
     replyRequestCount: 1,
     lastRequestedAt:
       fixtures['/replyrequests/doc/valid-reply-request'].createdAt,
+  });
+
+  // Assert article reply being blocked
+  expect(modifiedArticle.articleReplies[1]).toMatchObject({
+    userId: 'user-to-block',
+    status: 'BLOCKED',
   });
 });
 

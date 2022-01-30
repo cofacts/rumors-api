@@ -5,8 +5,10 @@
 
 import 'dotenv/config';
 import yargs from 'yargs';
+import { SingleBar } from 'cli-progress';
 import client from 'util/client';
 import getAllDocs from 'util/getAllDocs';
+import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
 
 /**
  * Update user to write blockedReason. Throws if user does not exist.
@@ -84,9 +86,7 @@ async function processReplyRequests(userId) {
     `Updating ${articleIdsWithNormalReplyRequests.length} articles...`
   );
 
-  for (let i = 0; i < articleIdsWithNormalReplyRequests.length; i += 1) {
-    const articleId = articleIdsWithNormalReplyRequests[i];
-
+  for (const [i, articleId] of articleIdsWithNormalReplyRequests.entries()) {
     const {
       body: {
         hits: { total },
@@ -134,6 +134,71 @@ async function processReplyRequests(userId) {
  *
  * @param {userId} userId
  */
+async function processArticleReplies(userId) {
+  const NORMAL_ARTICLE_REPLY_QUERY = {
+    nested: {
+      path: 'articleReplies',
+      query: {
+        bool: {
+          must: [
+            {
+              term: {
+                'articleReplies.status': 'NORMAL',
+              },
+            },
+            {
+              term: {
+                'articleReplies.userId': userId,
+              },
+            },
+          ],
+        },
+      },
+    },
+  };
+
+  const articleRepliesToProcess = [];
+  for await (const {
+    _id,
+    _source: { articleReplies },
+  } of getAllDocs('articles', NORMAL_ARTICLE_REPLY_QUERY)) {
+    articleRepliesToProcess.push(
+      ...articleReplies
+        .filter(ar => {
+          // All articleReplies of the matching article is included,
+          // here we should only process the article replies to block.
+          return ar.userId === userId;
+        })
+        .map(ar => ({
+          ...ar,
+
+          // Insert articleId for updateArticleReplyStatus() in the following for-loop
+          articleId: _id,
+        }))
+    );
+  }
+
+  console.log('Updating article replies...');
+  const bar = new SingleBar({ stopOnComplete: true });
+  bar.start(articleRepliesToProcess.length, 0);
+  for (const { articleId, replyId, userId, appId } of articleRepliesToProcess) {
+    await updateArticleReplyStatus({
+      articleId,
+      replyId,
+      userId,
+      appId,
+      status: 'BLOCKED',
+    });
+    bar.increment();
+  }
+  bar.stop();
+}
+
+/**
+ * Convert all article replies with NORMAL status by the user to BLOCKED status.
+ *
+ * @param {userId} userId
+ */
 // async function processArticleReplies(/* userId */) {}
 
 /**
@@ -142,7 +207,7 @@ async function processReplyRequests(userId) {
 async function main({ userId, blockedReason } = {}) {
   await writeBlockedReasonToUser(userId, blockedReason);
   await processReplyRequests(userId);
-  // await processArticleReplies(userId);
+  await processArticleReplies(userId);
 }
 
 export default main;
