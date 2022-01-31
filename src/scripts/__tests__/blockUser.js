@@ -107,10 +107,10 @@ it('correctly sets the block reason and updates status of their works', async ()
 
     // the negative feedback given by valid user is still there
     positiveFeedbackCount:
-      fixtures['/articles/doc/modified-article'].replyRequests[1]
+      fixtures['/articles/doc/modified-article'].articleReplies[1]
         .positiveFeedbackCount,
     negativeFeedbackCount:
-      fixtures['/articles/doc/modified-article'].replyRequests[1]
+      fixtures['/articles/doc/modified-article'].articleReplies[1]
         .negativeFeedbackCount,
   });
 
@@ -131,7 +131,7 @@ it('correctly sets the block reason and updates status of their works', async ()
     userId: 'valid-user',
     status: 'NORMAL',
     positiveFeedbackCount:
-      fixtures['/articles/doc/modified-article'].replyRequests[0]
+      fixtures['/articles/doc/modified-article'].articleReplies[0]
         .positiveFeedbackCount,
     negativeFeedbackCount: 0, // Originally 1
   });
