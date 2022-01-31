@@ -245,15 +245,18 @@ async function processArticleReplyFeedbacks(userId) {
     { articleId, replyId },
   ] of articleReplyIdsWithNormalFeedbacks.entries()) {
     const feedbacks = [];
-    for (const feedback of getAllDocs('articlereplyfeedbacks', {
-      bool: {
-        must: [
-          { term: { status: 'NORMAL' } },
-          { term: { articleId } },
-          { term: { replyId } },
-        ],
-      },
-    })) {
+    for await (const { _source: feedback } of getAllDocs(
+      'articlereplyfeedbacks',
+      {
+        bool: {
+          must: [
+            { term: { status: 'NORMAL' } },
+            { term: { articleId } },
+            { term: { replyId } },
+          ],
+        },
+      }
+    )) {
       feedbacks.push(feedback);
     }
 
