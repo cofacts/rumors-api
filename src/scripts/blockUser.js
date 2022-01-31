@@ -9,6 +9,7 @@ import { SingleBar } from 'cli-progress';
 import client from 'util/client';
 import getAllDocs from 'util/getAllDocs';
 import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
+import { updateArticleReplyByFeedbacks } from 'graphql/mutations/CreateOrUpdateArticleReplyFeedback';
 
 /**
  * Update user to write blockedReason. Throws if user does not exist.
@@ -195,11 +196,79 @@ async function processArticleReplies(userId) {
 }
 
 /**
- * Convert all article replies with NORMAL status by the user to BLOCKED status.
+ * Convert all article reply feedbacks with NORMAL status by the user to BLOCKED status.
  *
  * @param {userId} userId
  */
-// async function processArticleReplies(/* userId */) {}
+async function processArticleReplyFeedbacks(userId) {
+  const NORMAL_FEEDBACK_QUERY = {
+    bool: {
+      must: [{ term: { status: 'NORMAL' } }, { term: { userId } }],
+    },
+  };
+
+  /* Array of {articleId, replyId} */
+  const articleReplyIdsWithNormalFeedbacks = [];
+
+  for await (const {
+    _source: { articleId, replyId },
+  } of getAllDocs('articlereplyfeedbacks', NORMAL_FEEDBACK_QUERY)) {
+    articleReplyIdsWithNormalFeedbacks.push({ articleId, replyId });
+  }
+
+  /* Bulk update feedback status */
+  const { body: updateByQueryResult } = await client.updateByQuery({
+    index: 'articlereplyfeedbacks',
+    type: 'doc',
+    body: {
+      query: NORMAL_FEEDBACK_QUERY,
+      script: {
+        lang: 'painless',
+        source: `ctx._source.status = 'BLOCKED';`,
+      },
+    },
+    refresh: true,
+  });
+
+  console.log(
+    'Article reply feedback status update result',
+    updateByQueryResult
+  );
+
+  /* Bulk update articleReply's feedback counts */
+  console.log(
+    `Updating ${articleReplyIdsWithNormalFeedbacks.length} article-replies...`
+  );
+
+  for (const [
+    i,
+    { articleId, replyId },
+  ] of articleReplyIdsWithNormalFeedbacks.entries()) {
+    const feedbacks = [];
+    for (const feedback of getAllDocs('articlereplyfeedbacks', {
+      bool: {
+        must: [
+          { term: { status: 'NORMAL' } },
+          { term: { articleId } },
+          { term: { replyId } },
+        ],
+      },
+    })) {
+      feedbacks.push(feedback);
+    }
+
+    const {
+      positiveFeedbackCount,
+      negativeFeedbackCount,
+    } = await updateArticleReplyByFeedbacks(articleId, replyId, feedbacks);
+
+    console.log(
+      `[${i + 1}/${
+        articleReplyIdsWithNormalFeedbacks.length
+      }] article=${articleId} reply=${replyId}: score changed to +${positiveFeedbackCount}, -${negativeFeedbackCount}`
+    );
+  }
+}
 
 /**
  * @param {object} args
@@ -208,6 +277,7 @@ async function main({ userId, blockedReason } = {}) {
   await writeBlockedReasonToUser(userId, blockedReason);
   await processReplyRequests(userId);
   await processArticleReplies(userId);
+  await processArticleReplyFeedbacks(userId);
 }
 
 export default main;

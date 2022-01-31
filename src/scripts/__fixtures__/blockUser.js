@@ -58,6 +58,8 @@ export default {
         appId: 'APP_ID',
         status: 'NORMAL',
         updatedAt: '2021-11-11T00:00:00.000Z',
+        positiveFeedbackCount: 1,
+        negativeFeedbackCount: 1,
       },
       {
         replyId: 'some-reply',
@@ -65,7 +67,38 @@ export default {
         appId: 'APP_ID',
         status: 'NORMAL',
         updatedAt: '2021-11-11T00:00:00.000Z',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 1,
       },
     ],
+  },
+
+  '/articlereplyfeedbacks/doc/f-normal': {
+    userId: 'valid-user',
+    articleId: 'modified-article',
+    replyId: 'valid-reply',
+    score: 1,
+    status: 'NORMAL',
+  },
+  '/articlereplyfeedbacks/doc/f-normal-2': {
+    userId: 'valid-user',
+    articleId: 'modified-article',
+    replyId: 'some-reply',
+    score: -1,
+    status: 'NORMAL',
+  },
+  '/articlereplyfeedbacks/doc/f-spam': {
+    userId: 'user-to-block',
+    articleId: 'modified-article',
+    replyId: 'valid-reply',
+    score: -1,
+    status: 'NORMAL',
+  },
+  '/articlereplyfeedbacks/doc/f-already-blocked': {
+    userId: 'already-blocked',
+    articleId: 'some-article',
+    replyId: 'some-reply',
+    score: 1,
+    status: 'BLOCKED',
   },
 };
