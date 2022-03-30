@@ -1,12 +1,13 @@
-import { GraphQLBoolean, GraphQLList, GraphQLString } from 'graphql';
+import { GraphQLList } from 'graphql';
 import client from 'util/client';
 
 import {
   createFilterType,
+  createCommonListFilter,
+  attachCommonListFilter,
   createSortType,
   getSortArgs,
   pagingArgs,
-  timeRangeInput,
   moreLikeThisInput,
   getRangeFieldParamFromArithmeticExpression,
 } from 'graphql/util';
@@ -19,18 +20,9 @@ export default {
   args: {
     filter: {
       type: createFilterType('ListReplyFilter', {
-        userId: {
-          type: GraphQLString,
-        },
-        appId: {
-          type: GraphQLString,
-        },
+        ...createCommonListFilter('replies'),
         moreLikeThis: {
           type: moreLikeThisInput,
-        },
-        selfOnly: {
-          type: GraphQLBoolean,
-          description: 'List the replies created by the requester themselves',
         },
         type: {
           type: ReplyTypeEnum,
@@ -41,11 +33,6 @@ export default {
         types: {
           type: new GraphQLList(ReplyTypeEnum),
           description: 'List the replies of certain types',
-        },
-        createdAt: {
-          type: timeRangeInput,
-          description:
-            'List only the replies that were created between the specific time range.',
         },
       }),
     },
@@ -67,6 +54,8 @@ export default {
     // Collecting queries that will be used in bool queries later
     const shouldQueries = []; // Affects scores
     const filterQueries = []; // Not affects scores
+
+    attachCommonListFilter(filterQueries, filter, userId, appId);
 
     if (filter.moreLikeThis) {
       const scrapResults = (await scrapUrls(filter.moreLikeThis.like, {
@@ -163,30 +152,15 @@ export default {
       }
     }
 
-    ['userId', 'appId', 'type' /* deprecated */].forEach(field => {
-      if (!filter[field]) return;
-      filterQueries.push({ term: { [field]: filter[field] } });
-    });
+    /* deprecated */
+    if (filter.type) {
+      filterQueries.push({ term: { type: filter.type } });
+    }
 
     if (filter.types && filter.types.length > 0) {
       filterQueries.push({
         terms: {
           type: filter.types,
-        },
-      });
-    }
-
-    if (filter.selfOnly) {
-      if (!userId) throw new Error('selfOnly can be set only after log in');
-      filterQueries.push({ term: { userId } }, { term: { appId } });
-    }
-
-    if (filter.createdAt) {
-      filterQueries.push({
-        range: {
-          createdAt: getRangeFieldParamFromArithmeticExpression(
-            filter.createdAt
-          ),
         },
       });
     }

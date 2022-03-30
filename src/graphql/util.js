@@ -7,6 +7,8 @@ import {
   GraphQLEnumType,
   GraphQLFloat,
   GraphQLNonNull,
+  GraphQLID,
+  GraphQLBoolean,
 } from 'graphql';
 
 import Connection from './interfaces/Connection';
@@ -431,3 +433,64 @@ export const DEFAULT_ARTICLE_REPLY_STATUSES = ['NORMAL'];
 export const DEFAULT_ARTICLE_CATEGORY_STATUSES = ['NORMAL'];
 export const DEFAULT_REPLY_REQUEST_STATUSES = ['NORMAL'];
 export const DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES = ['NORMAL'];
+
+/**
+ * @param {string} pluralEntityName - the name to display on argument description
+ * @returns {object} GraphQL args for common list filters
+ */
+export function createCommonListFilter(pluralEntityName) {
+  return {
+    appId: {
+      type: GraphQLString,
+      description: `Show only ${pluralEntityName} created by a specific app.`,
+    },
+    userId: {
+      type: GraphQLString,
+      description: `Show only ${pluralEntityName} created by the specific user.`,
+    },
+    createdAt: {
+      type: timeRangeInput,
+      description: `List only the ${pluralEntityName} that were created between the specific time range.`,
+    },
+    ids: {
+      type: new GraphQLList(new GraphQLNonNull(GraphQLID)),
+      description: `If given, only list out ${pluralEntityName} with specific IDs`,
+    },
+    selfOnly: {
+      type: GraphQLBoolean,
+      description: `Only list the ${pluralEntityName} created by the currently logged in user`,
+    },
+  };
+}
+
+/**
+ * Attach (mutates) filterQueries with Elasticsearch query objects by args.filter in GraphQL resolver
+ *
+ * @param {Array<Object>} filterQueries - list of filter queries of Elasticsearch bool query
+ * @param {object} filter - args.filter in resolver
+ * @param {string} userId - userId for the currently logged in user
+ * @param {string} appid - appId for the currently logged in user
+ */
+export function attachCommonListFilter(filterQueries, filter, userId, appId) {
+  ['userId', 'appId'].forEach(field => {
+    if (!filter[field]) return;
+    filterQueries.push({ term: { [field]: filter[field] } });
+  });
+
+  if (filter.createdAt) {
+    filterQueries.push({
+      range: {
+        createdAt: getRangeFieldParamFromArithmeticExpression(filter.createdAt),
+      },
+    });
+  }
+
+  if (filter.ids) {
+    filterQueries.push({ ids: filter.ids });
+  }
+
+  if (filter.selfOnly) {
+    if (!userId) throw new Error('selfOnly can be set only after log in');
+    filterQueries.push({ term: { userId } }, { term: { appId } });
+  }
+}

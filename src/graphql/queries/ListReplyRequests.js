@@ -1,18 +1,12 @@
-import {
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLString,
-  GraphQLBoolean,
-  GraphQLID,
-} from 'graphql';
+import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
 import {
   createFilterType,
   createSortType,
   createConnectionType,
-  timeRangeInput,
+  createCommonListFilter,
+  attachCommonListFilter,
   pagingArgs,
   getSortArgs,
-  getRangeFieldParamFromArithmeticExpression,
   DEFAULT_REPLY_REQUEST_STATUSES,
 } from 'graphql/util';
 import ReplyRequest from 'graphql/models/ReplyRequest';
@@ -22,32 +16,14 @@ export default {
   args: {
     filter: {
       type: createFilterType('ListReplyRequestFilter', {
-        ids: {
-          type: new GraphQLList(new GraphQLNonNull(GraphQLID)),
-          description:
-            'If given, list out reply requests with specific reply request IDs',
-        },
-        userId: {
-          type: GraphQLString,
-        },
-        appId: {
-          type: GraphQLString,
-        },
+        ...createCommonListFilter('reply requests'),
         articleId: {
           type: GraphQLString,
-        },
-        createdAt: {
-          type: timeRangeInput,
         },
         statuses: {
           type: new GraphQLList(new GraphQLNonNull(ReplyRequestStatusEnum)),
           defaultValue: DEFAULT_REPLY_REQUEST_STATUSES,
           description: 'List only reply requests with specified statuses',
-        },
-        selfOnly: {
-          type: GraphQLBoolean,
-          description:
-            'List the reply requests created by the requester themselves',
         },
       }),
     },
@@ -69,28 +45,11 @@ export default {
       },
     ];
 
-    ['userId', 'appId', 'articleId'].forEach(field => {
-      if (!filter[field]) return;
-      filterQueries.push({ term: { [field]: filter[field] } });
-    });
+    attachCommonListFilter(filterQueries, filter, userId, appId);
 
-    if (filter.ids) {
-      filterQueries.push({ ids: filter.ids });
+    if (filter.articleId) {
+      filterQueries.push({ term: { articleId: filter.articleId } });
     }
-
-    if (filter.selfOnly) {
-      if (!userId) throw new Error('selfOnly can be set only after log in');
-      filterQueries.push({ term: { userId } }, { term: { appId } });
-    }
-
-    if (filter.createdAt)
-      filterQueries.push({
-        range: {
-          createdAt: getRangeFieldParamFromArithmeticExpression(
-            filter.createdAt
-          ),
-        },
-      });
 
     const body = {
       sort: getSortArgs(orderBy, {

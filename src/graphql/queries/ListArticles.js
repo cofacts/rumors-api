@@ -16,6 +16,8 @@ import {
   timeRangeInput,
   moreLikeThisInput,
   getRangeFieldParamFromArithmeticExpression,
+  createCommonListFilter,
+  attachCommonListFilter,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
@@ -26,6 +28,7 @@ export default {
   args: {
     filter: {
       type: createFilterType('ListArticleFilter', {
+        ...createCommonListFilter('articles'),
         replyCount: {
           type: intRangeInput,
           description:
@@ -51,23 +54,10 @@ export default {
           description:
             'List only the articles whose number of replies matches the criteria.',
         },
-        createdAt: {
-          type: timeRangeInput,
-          description:
-            'List only the articles that were created between the specific time range.',
-        },
         repliedAt: {
           type: timeRangeInput,
           description:
             'List only the articles that were replied between the specific time range.',
-        },
-        appId: {
-          type: GraphQLString,
-          description: 'Show only articles from a specific user.',
-        },
-        userId: {
-          type: GraphQLString,
-          description: 'Show only articles from a specific user.',
         },
         fromUserOfArticleId: {
           type: GraphQLString,
@@ -126,7 +116,7 @@ export default {
   async resolve(
     rootValue,
     { filter = {}, orderBy = [], ...otherParams },
-    { loaders }
+    { loaders, userId, appId }
   ) {
     const body = {
       sort: getSortArgs(orderBy, {
@@ -153,6 +143,8 @@ export default {
     const shouldQueries = []; // Affects scores
     const filterQueries = []; // Not affects scores
     const mustNotQueries = [];
+
+    attachCommonListFilter(filterQueries, filter, userId, appId);
 
     if (filter.fromUserOfArticleId) {
       let specifiedArticle;
@@ -181,11 +173,6 @@ export default {
       // eslint-disable-next-line require-atomic-updates
       filter.appId = specifiedArticle.appId;
     }
-
-    ['userId', 'appId'].forEach(field => {
-      if (!filter[field]) return;
-      filterQueries.push({ term: { [field]: filter[field] } });
-    });
 
     if (filter.moreLikeThis) {
       const scrapResults = (await scrapUrls(filter.moreLikeThis.like, {
@@ -287,16 +274,6 @@ export default {
         range: {
           replyRequestCount: getRangeFieldParamFromArithmeticExpression(
             filter.replyRequestCount
-          ),
-        },
-      });
-    }
-
-    if (filter.createdAt) {
-      filterQueries.push({
-        range: {
-          createdAt: getRangeFieldParamFromArithmeticExpression(
-            filter.createdAt
           ),
         },
       });
