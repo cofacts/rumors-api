@@ -9,7 +9,6 @@ import {
   getSortArgs,
   pagingArgs,
   moreLikeThisInput,
-  getRangeFieldParamFromArithmeticExpression,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 
