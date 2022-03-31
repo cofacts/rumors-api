@@ -486,7 +486,7 @@ export function attachCommonListFilter(filterQueries, filter, userId, appId) {
   }
 
   if (filter.ids) {
-    filterQueries.push({ ids: filter.ids });
+    filterQueries.push({ ids: { values: filter.ids } });
   }
 
   if (filter.selfOnly) {

@@ -79,6 +79,28 @@ Object {
 }
 `;
 
+exports[`ListReplyRequests filters: by ids 1`] = `
+Object {
+  "data": Object {
+    "ListReplyRequests": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "replyrequests4",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "replyrequests2",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
 exports[`ListReplyRequests filters: by userId 1`] = `
 Object {
   "data": Object {

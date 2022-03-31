@@ -131,6 +131,23 @@ describe('ListReplyRequests', () => {
         }
       `()
     ).toMatchSnapshot('by createdAt');
+
+    expect(
+      await gql`
+        {
+          ListReplyRequests(
+            filter: { ids: ["replyrequests2", "replyrequests4"] }
+          ) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('by ids');
   });
 
   it('filters by mixed query', async () => {
