@@ -61,10 +61,8 @@ export default {
         },
         fromUserOfArticleId: {
           type: GraphQLString,
-          description: `
-            Specify an articleId here to show only articles from the sender of that specified article.
-            When specified, it overrides the settings of appId and userId.
-          `,
+          description:
+            'Specify an articleId here to show only articles from the sender of that specified article.',
         },
         articleRepliesFrom: {
           description:
@@ -166,12 +164,10 @@ export default {
         throw e;
       }
 
-      // Overriding filter's userId and appId, as indicated in the description
-      //
-      // eslint-disable-next-line require-atomic-updates
-      filter.userId = specifiedArticle.userId;
-      // eslint-disable-next-line require-atomic-updates
-      filter.appId = specifiedArticle.appId;
+      filterQueries.push(
+        { term: { userId: specifiedArticle.userId } },
+        { term: { appId: specifiedArticle.appId } }
+      );
     }
 
     if (filter.moreLikeThis) {
