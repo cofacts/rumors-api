@@ -1,6 +1,8 @@
 import { GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql';
 import {
   createFilterType,
+  createCommonListFilter,
+  attachCommonListFilter,
   createSortType,
   createConnectionType,
   timeRangeInput,
@@ -18,12 +20,7 @@ export default {
   args: {
     filter: {
       type: createFilterType('ListArticleReplyFeedbackFilter', {
-        userId: {
-          type: GraphQLString,
-        },
-        appId: {
-          type: GraphQLString,
-        },
+        ...createCommonListFilter('article reply feedbacks'),
         articleId: {
           type: GraphQLString,
         },
@@ -38,11 +35,6 @@ export default {
           type: new GraphQLList(FeedbackVote),
           description:
             'When specified, list only article reply feedbacks with specified vote',
-        },
-        createdAt: {
-          type: timeRangeInput,
-          description:
-            'List only the article reply feedbacks that were created within the specific time range.',
         },
         updatedAt: {
           type: timeRangeInput,
@@ -72,7 +64,11 @@ export default {
     },
     ...pagingArgs,
   },
-  async resolve(rootValue, { orderBy = [], filter = {}, ...otherParams }) {
+  async resolve(
+    rootValue,
+    { orderBy = [], filter = {}, ...otherParams },
+    { userId, appId }
+  ) {
     const body = {
       sort: getSortArgs(orderBy, {
         vote: o => ({ score: { order: o } }),
@@ -89,7 +85,9 @@ export default {
       },
     ]; // Not affects scores
 
-    ['userId', 'appId', 'articleId', 'replyId'].forEach(field => {
+    attachCommonListFilter(filterQueries, filter, userId, appId);
+
+    ['articleId', 'replyId'].forEach(field => {
       if (!filter[field]) return;
       filterQueries.push({ term: { [field]: filter[field] } });
     });
@@ -115,14 +113,15 @@ export default {
       });
     }
 
-    ['createdAt', 'updatedAt'].forEach(field => {
-      if (!filter[field]) return;
+    if (filter.updatedAt) {
       filterQueries.push({
         range: {
-          [field]: getRangeFieldParamFromArithmeticExpression(filter[field]),
+          updatedAt: getRangeFieldParamFromArithmeticExpression(
+            filter.updatedAt
+          ),
         },
       });
-    });
+    }
 
     body.query = {
       bool: {

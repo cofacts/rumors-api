@@ -3,10 +3,10 @@ import {
   createFilterType,
   createSortType,
   createConnectionType,
-  timeRangeInput,
+  createCommonListFilter,
+  attachCommonListFilter,
   pagingArgs,
   getSortArgs,
-  getRangeFieldParamFromArithmeticExpression,
   DEFAULT_REPLY_REQUEST_STATUSES,
 } from 'graphql/util';
 import ReplyRequest from 'graphql/models/ReplyRequest';
@@ -16,17 +16,9 @@ export default {
   args: {
     filter: {
       type: createFilterType('ListReplyRequestFilter', {
-        userId: {
-          type: GraphQLString,
-        },
-        appId: {
-          type: GraphQLString,
-        },
+        ...createCommonListFilter('reply requests'),
         articleId: {
           type: GraphQLString,
-        },
-        createdAt: {
-          type: timeRangeInput,
         },
         statuses: {
           type: new GraphQLList(new GraphQLNonNull(ReplyRequestStatusEnum)),
@@ -40,7 +32,11 @@ export default {
     },
     ...pagingArgs,
   },
-  async resolve(rootValue, { orderBy = [], filter = {}, ...otherParams }) {
+  async resolve(
+    rootValue,
+    { orderBy = [], filter = {}, ...otherParams },
+    { userId, appId }
+  ) {
     const filterQueries = [
       {
         terms: {
@@ -49,19 +45,11 @@ export default {
       },
     ];
 
-    ['userId', 'appId', 'articleId'].forEach(field => {
-      if (!filter[field]) return;
-      filterQueries.push({ term: { [field]: filter[field] } });
-    });
+    attachCommonListFilter(filterQueries, filter, userId, appId);
 
-    if (filter.createdAt)
-      filterQueries.push({
-        range: {
-          createdAt: getRangeFieldParamFromArithmeticExpression(
-            filter.createdAt
-          ),
-        },
-      });
+    if (filter.articleId) {
+      filterQueries.push({ term: { articleId: filter.articleId } });
+    }
 
     const body = {
       sort: getSortArgs(orderBy, {
