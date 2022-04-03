@@ -30,6 +30,12 @@ app.use(async (ctx, next) => {
   }
 });
 
+// Log all requests
+if (process.env.LOG_REQUESTS) {
+  const logger = require('koa-pino-logger');
+  app.use(logger());
+}
+
 app.use(
   koaBody({
     formLimit: '1mb',
@@ -116,6 +122,25 @@ export const apolloServer = new ApolloServer({
     formattedError.authError = err.message === AUTH_ERROR_MSG;
     return formattedError;
   },
+  plugins: !process.env.LOG_REQUESTS
+    ? []
+    : [
+        {
+          requestDidStart({
+            request: { query, variables, operationName },
+            context: { appId, userId, appUserId },
+          }) {
+            console.log({
+              query,
+              variables,
+              operationName,
+              appId,
+              appUserId,
+              userId,
+            });
+          },
+        },
+      ],
 });
 
 apolloServer.applyMiddleware({
