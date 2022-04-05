@@ -31,6 +31,7 @@ app.use(async (ctx, next) => {
 });
 
 // Log all requests
+/* istanbul ignore if */
 if (process.env.LOG_REQUESTS) {
   const logger = require('koa-pino-logger');
   app.use(logger());
@@ -126,6 +127,7 @@ export const apolloServer = new ApolloServer({
     ? []
     : [
         {
+          /* istanbul ignore next */
           requestDidStart({
             request: { query, variables, operationName },
             context: { appId, userId, appUserId },
