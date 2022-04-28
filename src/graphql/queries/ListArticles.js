@@ -19,6 +19,7 @@ import {
   createCommonListFilter,
   attachCommonListFilter,
   getMediaFileHash,
+  MAX_FILE_SIZE,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
@@ -444,10 +445,10 @@ export default {
 
     if (filter.mediaUrl) {
       // FIXME: Use mime or binary header to get articleType instead of manual input
-      const attachmentHash = await getMediaFileHash(
-        await (await fetch(filter.mediaUrl)).buffer(),
-        'IMAGE'
-      );
+      const fileBuffer = await (await fetch(filter.mediaUrl, {
+        size: MAX_FILE_SIZE,
+      })).buffer();
+      const attachmentHash = await getMediaFileHash(fileBuffer, 'IMAGE');
       filterQueries.push({
         term: {
           attachmentHash,

@@ -3,16 +3,13 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { assertUser } from 'util/user';
 import client from 'util/client';
 import { uploadToGCS } from 'util/gcs';
-import { getMediaFileHash } from 'graphql/util';
+import { getMediaFileHash, MAX_FILE_SIZE } from 'graphql/util';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
 import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 import fetch from 'node-fetch';
-
-/** Max downloadable file size */
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // byte
 
 /**
  * @param {Buffer} fileBuffer

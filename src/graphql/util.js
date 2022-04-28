@@ -430,6 +430,9 @@ export function filterByStatuses(entriesWithStatus, statuses) {
   return entriesWithStatus.filter(({ status }) => statuses.includes(status));
 }
 
+/** Max downloadable file size */
+export const MAX_FILE_SIZE = 5 * 1024 * 1024; // byte
+
 /**
  * @param {Buffer} fileBuffer
  * @param {ArticleTypeEnum} type The article type
