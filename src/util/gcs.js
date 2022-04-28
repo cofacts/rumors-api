@@ -1,4 +1,5 @@
 import { Storage } from '@google-cloud/storage';
+import { Readable } from 'stream';
 import rollbar from '../rollbarInstance';
 
 const storage = new Storage({
@@ -9,14 +10,19 @@ const gcsBucket = storage.bucket(process.env.GCS_BUCKET_NAME || 'default');
 /**
  * Generate hash for identifying if two files are similar
  *
- * @param {ReadableStream} fileStream
+ * @param {ReadableStream | Buffer} data
  * @param {string} fileName
  * @param {string} contentType MIME type
  * @returns {string} url
  */
-export async function uploadToGCS(fileStream, fileName, contentType) {
+export async function uploadToGCS(data, fileName, contentType) {
   if (!process.env.GCS_BUCKET_NAME) {
     throw new Error('GCS_BUCKET_NAME is not set, cannot upload file.');
+  }
+
+  // If data is buffer, wrap it to become a readable stream
+  if (!data.pipe) {
+    data = Readable.from(data);
   }
 
   const options = {
@@ -27,7 +33,7 @@ export async function uploadToGCS(fileStream, fileName, contentType) {
 
   const file = gcsBucket.file(fileName);
   const url = await new Promise((resolve, reject) => {
-    fileStream
+    data
       .pipe(file.createWriteStream(options))
       .on('error', function(err) {
         rollbar.error('GCS error', err);
