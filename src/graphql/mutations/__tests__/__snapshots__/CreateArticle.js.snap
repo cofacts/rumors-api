@@ -25,6 +25,9 @@ Object {
   "appId": "foo",
   "articleCategories": Array [],
   "articleReplies": Array [],
+  "articleType": "TEXT",
+  "attachmentHash": "",
+  "attachmentUrl": "",
   "createdAt": "2017-01-28T08:45:57.011Z",
   "hyperlinks": Array [
     Object {

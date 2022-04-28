@@ -2,6 +2,14 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListArticles';
+import fetch from 'node-fetch';
+import { imageHash } from 'image-hash';
+
+jest.mock('node-fetch');
+jest.mock('image-hash', () => ({
+  __esModule: true,
+  imageHash: jest.fn(),
+}));
 
 describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
@@ -687,6 +695,55 @@ describe('ListArticles', () => {
         }
       `()
     ).toMatchSnapshot('articles with stats');
+  });
+
+  it('filters by article types', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(filter: { articleTypes: [IMAGE, AUDIO] }) {
+            edges {
+              node {
+                id
+                articleType
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchSnapshot('IMAGE and AUDIO articles');
+  });
+
+  it('filters by mediaUrl', async () => {
+    fetch.mockImplementation(() =>
+      Promise.resolve({
+        status: 200,
+        body: {},
+        clone: () => ({ buffer: jest.fn() }),
+      })
+    );
+    imageHash.mockImplementation((file, bits, method, callback) =>
+      callback(undefined, 'ffff8000')
+    );
+
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
+          ) {
+            edges {
+              node {
+                id
+                articleType
+                attachmentUrl
+                attachmentHash
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchSnapshot('attachmentHash should be ffff8000');
   });
 
   afterAll(() => unloadFixtures(fixtures));

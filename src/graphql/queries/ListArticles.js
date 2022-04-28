@@ -18,9 +18,12 @@ import {
   getRangeFieldParamFromArithmeticExpression,
   createCommonListFilter,
   attachCommonListFilter,
+  getMediaFileHash,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
+import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
+import fetch from 'node-fetch';
 
 import { ArticleConnection } from 'graphql/models/Article';
 
@@ -95,6 +98,14 @@ export default {
         replyTypes: {
           type: new GraphQLList(ReplyTypeEnum),
           description: 'List the articles with replies of certain types',
+        },
+        articleTypes: {
+          type: new GraphQLList(ArticleTypeEnum),
+          description: 'List the articles with certain types',
+        },
+        mediaUrl: {
+          type: GraphQLString,
+          description: 'Show the media article similar to the input url',
         },
       }),
     },
@@ -412,6 +423,35 @@ export default {
               ],
             },
           },
+        },
+      });
+    }
+
+    // FIXME: Remove else statement after implementing media article on rumor-site
+    if (filter.articleTypes) {
+      filterQueries.push({
+        terms: {
+          articleType: filter.articleTypes,
+        },
+      });
+    } else if (!filter.mediaUrl) {
+      filterQueries.push({
+        term: {
+          articleType: 'TEXT',
+        },
+      });
+    }
+
+    if (filter.mediaUrl) {
+      const file = await fetch(filter.mediaUrl);
+      // FIXME: Use mime or binary header to get articleType instead of manual input
+      const attachmentHash = await getMediaFileHash(
+        await file.clone().buffer(),
+        'IMAGE'
+      );
+      filterQueries.push({
+        term: {
+          attachmentHash,
         },
       });
     }

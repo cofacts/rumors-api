@@ -84,6 +84,9 @@ async function createNewArticle({
         replyRequestCount: 0,
         tags: [],
         hyperlinks: [],
+        articleType: 'TEXT',
+        attachmentUrl: '',
+        attachmentHash: '',
       },
     },
     refresh: 'true', // Make sure the data is indexed when we create ReplyRequest

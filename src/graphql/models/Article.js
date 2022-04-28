@@ -34,6 +34,7 @@ import ReplyRequestStatusEnum from './ReplyRequestStatusEnum';
 import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
+import ArticleTypeEnum from './ArticleTypeEnum';
 
 const Article = new GraphQLObjectType({
   name: 'Article',
@@ -326,6 +327,21 @@ const Article = new GraphQLObjectType({
           dateRange,
         });
       },
+    },
+    articleType: {
+      type: new GraphQLNonNull(ArticleTypeEnum),
+      description: 'Message event type',
+      resolve: async ({ articleType }) => {
+        return articleType || 'TEXT';
+      },
+    },
+    attachmentUrl: {
+      type: GraphQLString,
+      description: 'Attachment of this article',
+    },
+    attachmentHash: {
+      type: GraphQLString,
+      description: 'Attachment hash to search or identify files',
     },
   }),
 });

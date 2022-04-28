@@ -15,6 +15,7 @@ import ValidateSlug from './queries/ValidateSlug';
 
 // Set individual objects
 import CreateArticle from './mutations/CreateArticle';
+import CreateMediaArticle from './mutations/CreateMediaArticle';
 import CreateReply from './mutations/CreateReply';
 import CreateArticleReply from './mutations/CreateArticleReply';
 import CreateCategory from './mutations/CreateCategory';
@@ -48,6 +49,7 @@ export default new GraphQLSchema({
     name: 'Mutation',
     fields: {
       CreateArticle,
+      CreateMediaArticle,
       CreateReply,
       CreateArticleReply,
       CreateCategory,
