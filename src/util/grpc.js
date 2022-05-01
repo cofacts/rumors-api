@@ -1,5 +1,5 @@
 import rollbar from '../rollbarInstance';
-import grpc from 'grpc';
+const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
 const PROTO_PATH = __dirname + '/protobuf/url_resolver.proto';
