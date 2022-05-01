@@ -719,7 +719,7 @@ describe('ListArticles', () => {
       Promise.resolve({
         status: 200,
         body: {},
-        clone: () => ({ buffer: jest.fn() }),
+        buffer: jest.fn(),
       })
     );
     imageHash.mockImplementation((file, bits, method, callback) =>

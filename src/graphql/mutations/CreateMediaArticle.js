@@ -3,7 +3,7 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { assertUser } from 'util/user';
 import client from 'util/client';
 import { uploadToGCS } from 'util/gcs';
-import { getMediaFileHash } from 'graphql/util';
+import { getMediaFileHash, MAX_FILE_SIZE } from 'graphql/util';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
@@ -12,12 +12,12 @@ import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 import fetch from 'node-fetch';
 
 /**
- * @param {NodeJS.ReadableStream} fileStream
+ * @param {Buffer} fileBuffer
  * @param {sring} name File name
  * @param {ArticleTypeEnum} type The article type
  * @returns {string} url
  */
-export async function uploadFile(fileStream, name, type) {
+export async function uploadFile(fileBuffer, name, type) {
   // final file name that combined with folder name.
   let fileName;
   let mimeType = '*/*';
@@ -31,7 +31,7 @@ export async function uploadFile(fileStream, name, type) {
 
     mimeType = 'image/jpeg';
   }
-  return await uploadToGCS(fileStream, fileName, mimeType);
+  return await uploadToGCS(fileBuffer, fileName, mimeType);
 }
 
 /**
@@ -57,11 +57,10 @@ async function createNewMediaArticle({
     throw new Error(`Type ${articleType} is not yet supported.`);
   }
 
-  const file = await fetch(mediaUrl);
-  const attachmentHash = await getMediaFileHash(
-    await file.clone().buffer(),
-    articleType
-  );
+  const fileBuffer = await (await fetch(mediaUrl, {
+    size: MAX_FILE_SIZE,
+  })).buffer();
+  const attachmentHash = await getMediaFileHash(fileBuffer, articleType);
   const text = '';
   const now = new Date().toISOString();
   const reference = {
@@ -88,7 +87,7 @@ async function createNewMediaArticle({
   }
 
   const attachmentUrl = await uploadFile(
-    file.body,
+    fileBuffer,
     attachmentHash,
     articleType
   );

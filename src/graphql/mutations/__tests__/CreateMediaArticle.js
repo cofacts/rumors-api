@@ -26,7 +26,7 @@ describe('creation', () => {
       Promise.resolve({
         status: 200,
         body: {},
-        clone: () => ({ buffer: jest.fn() }),
+        buffer: jest.fn(),
       })
     );
     imageHash.mockImplementation((file, bits, method, callback) =>
@@ -302,7 +302,7 @@ describe('error', () => {
       Promise.resolve({
         status: 200,
         body: {},
-        clone: () => ({ buffer: jest.fn() }),
+        buffer: jest.fn(),
       })
     );
     imageHash.mockImplementation((file, bits, method, callback) =>
