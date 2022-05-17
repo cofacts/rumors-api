@@ -52,7 +52,7 @@ Object {
 }
 `;
 
-exports[`ListArticles filters by mediaUrl: attachmentHash should be ffff8000 1`] = `
+exports[`ListArticles filters by mediaUrl with MEDIA_ARTICLE_SUPPORT env: attachmentHash should be ffff8000 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
@@ -66,6 +66,16 @@ Object {
           },
         },
       ],
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters by mediaUrl, without MEDIA_ARTICLE_SUPPORT env: should return empty 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [],
     },
   },
 }
