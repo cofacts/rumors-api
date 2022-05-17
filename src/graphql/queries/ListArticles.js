@@ -435,7 +435,7 @@ export default {
           articleType: filter.articleTypes,
         },
       });
-    } else if (!filter.mediaUrl) {
+    } else if (!process.env.MEDIA_ARTICLE_SUPPORT) {
       filterQueries.push({
         term: {
           articleType: 'TEXT',
