@@ -714,7 +714,40 @@ describe('ListArticles', () => {
     ).toMatchSnapshot('IMAGE and AUDIO articles');
   });
 
-  it('filters by mediaUrl', async () => {
+  it('filters by mediaUrl, without MEDIA_ARTICLE_SUPPORT env', async () => {
+    fetch.mockImplementation(() =>
+      Promise.resolve({
+        status: 200,
+        body: {},
+        buffer: jest.fn(),
+      })
+    );
+    imageHash.mockImplementation((file, bits, method, callback) =>
+      callback(undefined, 'ffff8000')
+    );
+
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
+          ) {
+            edges {
+              node {
+                id
+                articleType
+                attachmentUrl
+                attachmentHash
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchSnapshot('should return empty');
+  });
+
+  it('filters by mediaUrl with MEDIA_ARTICLE_SUPPORT env', async () => {
+    process.env.MEDIA_ARTICLE_SUPPORT = true;
     fetch.mockImplementation(() =>
       Promise.resolve({
         status: 200,
@@ -744,6 +777,7 @@ describe('ListArticles', () => {
         }
       `({}, { appId: 'WEBSITE' })
     ).toMatchSnapshot('attachmentHash should be ffff8000');
+    delete process.env.MEDIA_ARTICLE_SUPPORT;
   });
 
   afterAll(() => unloadFixtures(fixtures));
