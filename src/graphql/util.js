@@ -430,32 +430,6 @@ export function filterByStatuses(entriesWithStatus, statuses) {
   return entriesWithStatus.filter(({ status }) => statuses.includes(status));
 }
 
-/** Max downloadable file size */
-export const MAX_FILE_SIZE = 5 * 1024 * 1024; // byte
-
-/**
- * @param {Buffer} fileBuffer
- * @param {ArticleTypeEnum} type The article type
- * @returns {string} The hash for identifying if two files are similar
- */
-export async function getMediaFileHash(fileBuffer, type) {
-  let hash = '';
-  if (type === 'IMAGE') {
-    hash = await new Promise((resolve, reject) => {
-      imageHash({ data: fileBuffer }, 16, true, (error, data) => {
-        if (error) {
-          console.error(error);
-          reject(error);
-        } else {
-          resolve(data);
-        }
-      });
-    });
-  }
-
-  return hash;
-}
-
 export const DEFAULT_ARTICLE_REPLY_STATUSES = ['NORMAL'];
 export const DEFAULT_ARTICLE_CATEGORY_STATUSES = ['NORMAL'];
 export const DEFAULT_REPLY_REQUEST_STATUSES = ['NORMAL'];

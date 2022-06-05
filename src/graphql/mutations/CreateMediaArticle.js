@@ -1,38 +1,12 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
-
+import mediaManager from 'util/mediaManager';
 import { assertUser } from 'util/user';
 import client from 'util/client';
-import { uploadToGCS } from 'util/gcs';
-import { getMediaFileHash, MAX_FILE_SIZE } from 'graphql/util';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
 import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
-import fetch from 'node-fetch';
-
-/**
- * @param {Buffer} fileBuffer
- * @param {sring} name File name
- * @param {ArticleTypeEnum} type The article type
- * @returns {string} url
- */
-export async function uploadFile(fileBuffer, name, type) {
-  // final file name that combined with folder name.
-  let fileName;
-  let mimeType = '*/*';
-
-  if (type === 'IMAGE') {
-    if (process.env.GCS_IMAGE_FOLDER) {
-      fileName = `${process.env.GCS_IMAGE_FOLDER}/${name}.jpeg`;
-    } else {
-      fileName = `${name}.jpeg`;
-    }
-
-    mimeType = 'image/jpeg';
-  }
-  return await uploadToGCS(fileBuffer, fileName, mimeType);
-}
 
 /**
  * Creates a new article in ElasticSearch,
@@ -53,14 +27,8 @@ async function createNewMediaArticle({
   userId,
   appId,
 }) {
-  if (articleType !== 'IMAGE') {
-    throw new Error(`Type ${articleType} is not yet supported.`);
-  }
-
-  const fileBuffer = await (await fetch(mediaUrl, {
-    size: MAX_FILE_SIZE,
-  })).buffer();
-  const attachmentHash = await getMediaFileHash(fileBuffer, articleType);
+  const info = await mediaManager.insert({ url: mediaUrl });
+  const attachmentHash = info.id;
   const text = '';
   const now = new Date().toISOString();
   const reference = {
@@ -86,12 +54,6 @@ async function createNewMediaArticle({
     return matchedArticle.hits.hits[0]._id;
   }
 
-  const attachmentUrl = await uploadFile(
-    fileBuffer,
-    attachmentHash,
-    articleType
-  );
-
   // use elasticsearch created id
   const {
     body: { _id: articleId },
@@ -113,7 +75,6 @@ async function createNewMediaArticle({
       tags: [],
       hyperlinks: [],
       articleType,
-      attachmentUrl,
       attachmentHash,
     },
   });

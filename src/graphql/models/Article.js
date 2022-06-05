@@ -27,6 +27,7 @@ import Node from '../interfaces/Node';
 import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
+import mediaManager from 'util/mediaManager';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
@@ -338,6 +339,10 @@ const Article = new GraphQLObjectType({
     attachmentUrl: {
       type: GraphQLString,
       description: 'Attachment of this article',
+      async resolve({ attachmentHash }) {
+        const info = await mediaManager.getInfo(attachmentHash);
+        return info.url;
+      },
     },
     attachmentHash: {
       type: GraphQLString,
