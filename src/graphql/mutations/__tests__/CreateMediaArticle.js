@@ -3,20 +3,10 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateMediaArticle';
-import { uploadFile } from '../CreateMediaArticle';
 import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
-import fetch from 'node-fetch';
-import { uploadToGCS } from 'util/gcs';
-import { imageHash } from 'image-hash';
 
-jest.mock('node-fetch');
-jest.mock('util/gcs', () => ({
-  __esModule: true,
-  uploadToGCS: jest.fn(),
-}));
-jest.mock('image-hash', () => ({
-  __esModule: true,
-  imageHash: jest.fn(),
+jest.mock('mediaManager', () => ({
+  insert: jest.fn(),
 }));
 
 describe('creation', () => {
