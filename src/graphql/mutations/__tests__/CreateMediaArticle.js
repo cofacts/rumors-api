@@ -4,34 +4,44 @@ import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateMediaArticle';
 import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
+import mediaManager from 'util/mediaManager';
 
-jest.mock('mediaManager', () => ({
-  insert: jest.fn(),
-}));
+jest.mock('util/mediaManager');
 
 describe('creation', () => {
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        body: {},
-        buffer: jest.fn(),
-      })
-    );
-    imageHash.mockImplementation((file, bits, method, callback) =>
-      callback(undefined, 'mock_image_hash')
-    );
-    uploadToGCS.mockImplementation(() =>
-      Promise.resolve('http://foo.com/output_image.jpeg')
-    );
+    mediaManager.insert.mockClear();
   });
+  // beforeEach(() => {
+  //   fetch.mockImplementation(() =>
+  //     Promise.resolve({
+  //       status: 200,
+  //       body: {},
+  //       buffer: jest.fn(),
+  //     })
+  //   );
+  //   imageHash.mockImplementation((file, bits, method, callback) =>
+  //     callback(undefined, 'mock_image_hash')
+  //   );
+  //   uploadToGCS.mockImplementation(() =>
+  //     Promise.resolve('http://foo.com/output_image.jpeg')
+  //   );
+  // });
   afterAll(() => unloadFixtures(fixtures));
 
   it('creates a media article and a reply request', async () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'foo';
+
+    mediaManager.insert.mockImplementationOnce(async () => {
+      return {
+        id: 'mock_image_hash',
+        url: 'http://foo.com/output_image.jpeg',
+        type: 'image',
+      };
+    });
 
     const { data, errors } = await gql`
       mutation(
@@ -60,6 +70,17 @@ describe('creation', () => {
 
     expect(errors).toBeUndefined();
 
+    // Expect calls to insert() to match snapshot
+    expect(mediaManager.insert.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Object {
+            "url": "http://foo.com/input_image.jpeg",
+          },
+        ],
+      ]
+    `);
+
     const {
       body: { _source: article },
     } = await client.get({
@@ -76,7 +97,6 @@ describe('creation', () => {
         "articleReplies": Array [],
         "articleType": "IMAGE",
         "attachmentHash": "mock_image_hash",
-        "attachmentUrl": "http://foo.com/output_image.jpeg",
         "createdAt": "2017-01-28T08:45:57.011Z",
         "hyperlinks": Array [],
         "lastRequestedAt": "2017-01-28T08:45:57.011Z",
