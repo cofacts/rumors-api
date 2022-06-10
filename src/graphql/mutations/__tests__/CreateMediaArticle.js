@@ -35,13 +35,11 @@ describe('creation', () => {
     const userId = 'test';
     const appId = 'foo';
 
-    mediaManager.insert.mockImplementationOnce(async () => {
-      return {
-        id: 'mock_image_hash',
-        url: 'http://foo.com/output_image.jpeg',
-        type: 'image',
-      };
-    });
+    mediaManager.insert.mockImplementationOnce(async () => ({
+      id: 'mock_image_hash',
+      url: 'http://foo.com/output_image.jpeg',
+      type: 'image',
+    }));
 
     const { data, errors } = await gql`
       mutation(
@@ -165,9 +163,13 @@ describe('creation', () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'foo';
-    imageHash.mockImplementation((file, bits, method, callback) =>
-      callback(undefined, 'ffff8000')
-    );
+
+    mediaManager.insert.mockImplementationOnce(async () => ({
+      // Duplicate hash
+      id: fixtures['/articles/doc/image1'].attachmentHash,
+      url: fixtures['/articles/doc/image1'].attachmentUrl,
+      type: 'image',
+    }));
 
     const { data, errors } = await gql`
       mutation(
@@ -255,54 +257,6 @@ describe('creation', () => {
       type: 'doc',
       id: replyRequestId,
     });
-  });
-
-  it('should pass correct filename and mime type to uploadToGCS', async () => {
-    uploadToGCS.mockClear();
-    const OLD_ENV = process.env;
-    process.env = { ...OLD_ENV }; // Make a copy
-    delete process.env.GCS_IMAGE_FOLDER;
-    uploadFile({}, 'mock_image', 'IMAGE');
-
-    expect(uploadToGCS.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {},
-          "mock_image.jpeg",
-          "image/jpeg",
-        ],
-      ]
-    `);
-
-    process.env.GCS_IMAGE_FOLDER = 'images';
-    uploadToGCS.mockClear();
-    uploadFile({}, 'mock_image', 'IMAGE');
-
-    expect(uploadToGCS.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {},
-          "images/mock_image.jpeg",
-          "image/jpeg",
-        ],
-      ]
-    `);
-
-    uploadToGCS.mockClear();
-    uploadFile({}, 'mock_video', 'VIDEO');
-
-    expect(uploadToGCS.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {},
-          undefined,
-          "*/*",
-        ],
-      ]
-    `);
-
-    // Restore old environment
-    process.env = OLD_ENV;
   });
 });
 
