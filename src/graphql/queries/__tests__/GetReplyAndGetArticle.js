@@ -96,6 +96,78 @@ describe('GetReplyAndGetArticle', () => {
           }
         `({}, { userId: 'fakeUser', appId: 'LINE' })
       ).toMatchSnapshot();
+
+      // Test articleReplies's common filters
+      expect(
+        await gql`
+          {
+            GetArticle(id: "foo") {
+              user1Replies: articleReplies(
+                statuses: [NORMAL, DELETED]
+                userId: "user1"
+              ) {
+                replyId
+                userId
+                appId
+              }
+              app1Replies: articleReplies(
+                statuses: [NORMAL, DELETED]
+                appId: "app1"
+              ) {
+                replyId
+                userId
+                appId
+              }
+              selfOnlyReplies: articleReplies(
+                statuses: [NORMAL, DELETED]
+                selfOnly: true
+              ) {
+                replyId
+                userId
+                appId
+              }
+            }
+          }
+        `({}, { userId: 'user2', appId: 'app2' })
+      ).toMatchInlineSnapshot(`
+        Object {
+          "data": Object {
+            "GetArticle": Object {
+              "app1Replies": Array [
+                Object {
+                  "appId": "app1",
+                  "replyId": "bar2",
+                  "userId": "user2",
+                },
+                Object {
+                  "appId": "app1",
+                  "replyId": "bar",
+                  "userId": "user1",
+                },
+              ],
+              "selfOnlyReplies": Array [
+                Object {
+                  "appId": "app2",
+                  "replyId": "bar3",
+                  "userId": "user2",
+                },
+              ],
+              "user1Replies": Array [
+                Object {
+                  "appId": "app2",
+                  "replyId": "bar4",
+                  "userId": "user1",
+                },
+                Object {
+                  "appId": "app1",
+                  "replyId": "bar",
+                  "userId": "user1",
+                },
+              ],
+            },
+          },
+        }
+      `);
     });
 
     it('should return empty articleReply when there is none', async () => {
