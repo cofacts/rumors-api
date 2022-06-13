@@ -167,7 +167,7 @@ export default {
     if (filter.articleReply) {
       articleReplyFilterQueries.push({
         terms: {
-          status:
+          'articleReplies.status':
             filter.articleReply.statuses || DEFAULT_ARTICLE_REPLY_STATUSES,
         },
       });
@@ -191,7 +191,7 @@ export default {
       filterQueries.push({
         nested: {
           path: 'articleReplies',
-          filter: {
+          query: {
             bool: {
               must: articleReplyFilterQueries,
             },

@@ -92,6 +92,72 @@ describe('ListArticles', () => {
         }
       `()
     ).toMatchSnapshot('by lastRepliedAt DESC');
+
+    // Should be identical to 'by lastRepliedAt DESC' snapshot,
+    // but excludes articles without any article replies
+    expect(
+      (await gql`
+        {
+          ListArticles(
+            filter: { articleReply: { statuses: [NORMAL] } }
+            orderBy: [{ lastMatchingArticleReplyCreatedAt: DESC }]
+          ) {
+            edges {
+              node {
+                id
+                articleReplies {
+                  createdAt
+                }
+              }
+            }
+          }
+        }
+      `()).data.ListArticles
+    ).toMatchInlineSnapshot(`
+      Object {
+        "edges": Array [
+          Object {
+            "node": Object {
+              "articleReplies": Array [
+                Object {
+                  "createdAt": "2020-02-11T15:11:04.472Z",
+                },
+                Object {
+                  "createdAt": "2020-02-09T15:11:04.472Z",
+                },
+                Object {
+                  "createdAt": "2020-02-10T15:11:04.472Z",
+                },
+              ],
+              "id": "listArticleTest4",
+            },
+          },
+          Object {
+            "node": Object {
+              "articleReplies": Array [
+                Object {
+                  "createdAt": "2020-02-09T15:11:04.472Z",
+                },
+              ],
+              "id": "listArticleTest2",
+            },
+          },
+          Object {
+            "node": Object {
+              "articleReplies": Array [
+                Object {
+                  "createdAt": "2020-02-08T15:11:04.472Z",
+                },
+                Object {
+                  "createdAt": "2020-02-05T14:41:19.044Z",
+                },
+              ],
+              "id": "listArticleTest1",
+            },
+          },
+        ],
+      }
+    `);
   });
 
   const testReplyCount = async expression => {
@@ -400,6 +466,128 @@ describe('ListArticles', () => {
         }
       `()
     ).toMatchSnapshot('between 2020-02-04 and 2020-02-06');
+  });
+
+  it('filters by articleReplies filter', async () => {
+    // This should be identical to "earlier or equal to 2020-02-06" snapshot
+    expect(
+      (await gql`
+        {
+          ListArticles(
+            filter: {
+              articleReply: { createdAt: { GT: "2020-02-06T00:00:00.000Z" } }
+            }
+          ) {
+            edges {
+              node {
+                id
+                articleReplies {
+                  createdAt
+                }
+              }
+            }
+          }
+        }
+      `()).data.ListArticles
+    ).toMatchInlineSnapshot(`
+      Object {
+        "edges": Array [
+          Object {
+            "node": Object {
+              "articleReplies": Array [
+                Object {
+                  "createdAt": "2020-02-11T15:11:04.472Z",
+                },
+                Object {
+                  "createdAt": "2020-02-09T15:11:04.472Z",
+                },
+                Object {
+                  "createdAt": "2020-02-10T15:11:04.472Z",
+                },
+              ],
+              "id": "listArticleTest4",
+            },
+          },
+          Object {
+            "node": Object {
+              "articleReplies": Array [
+                Object {
+                  "createdAt": "2020-02-09T15:11:04.472Z",
+                },
+              ],
+              "id": "listArticleTest2",
+            },
+          },
+          Object {
+            "node": Object {
+              "articleReplies": Array [
+                Object {
+                  "createdAt": "2020-02-08T15:11:04.472Z",
+                },
+                Object {
+                  "createdAt": "2020-02-05T14:41:19.044Z",
+                },
+              ],
+              "id": "listArticleTest1",
+            },
+          },
+        ],
+      }
+    `);
+
+    // Should be identical to replied with NOT_RUMOR and OPINIONATED snapshot
+    expect(
+      (await gql`
+        {
+          ListArticles(
+            filter: { articleReply: { replyTypes: [NOT_RUMOR, OPINIONATED] } }
+          ) {
+            edges {
+              node {
+                id
+                articleReplies {
+                  replyType
+                }
+              }
+            }
+          }
+        }
+      `()).data.ListArticles
+    ).toMatchInlineSnapshot(`
+      Object {
+        "edges": Array [
+          Object {
+            "node": Object {
+              "articleReplies": Array [
+                Object {
+                  "replyType": "OPINIONATED",
+                },
+                Object {
+                  "replyType": "NOT_ARTICLE",
+                },
+                Object {
+                  "replyType": "NOT_ARTICLE",
+                },
+              ],
+              "id": "listArticleTest4",
+            },
+          },
+          Object {
+            "node": Object {
+              "articleReplies": Array [
+                Object {
+                  "replyType": "NOT_RUMOR",
+                },
+                Object {
+                  "replyType": "NOT_ARTICLE",
+                },
+              ],
+              "id": "listArticleTest1",
+            },
+          },
+        ],
+      }
+    `);
   });
 
   it('filters by mixed query', async () => {
