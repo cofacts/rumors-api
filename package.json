@@ -23,6 +23,7 @@
     "rumors-db:test": "cd test/rumors-db && ELASTICSEARCH_URL=http://localhost:62223 npm t"
   },
   "dependencies": {
+    "@cofacts/media-manager": "^0.0.1",
     "@elastic/elasticsearch": "^6.8.6",
     "@grpc/grpc-js": "^1.6.7",
     "@grpc/proto-loader": "^0.5.0",
