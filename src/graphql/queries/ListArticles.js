@@ -188,7 +188,7 @@ export default {
         });
       }
 
-      shouldQueries.push({
+      filterQueries.push({
         nested: {
           path: 'articleReplies',
           filter: {
