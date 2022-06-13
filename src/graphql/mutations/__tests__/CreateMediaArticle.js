@@ -13,21 +13,6 @@ describe('creation', () => {
   beforeEach(() => {
     mediaManager.insert.mockClear();
   });
-  // beforeEach(() => {
-  //   fetch.mockImplementation(() =>
-  //     Promise.resolve({
-  //       status: 200,
-  //       body: {},
-  //       buffer: jest.fn(),
-  //     })
-  //   );
-  //   imageHash.mockImplementation((file, bits, method, callback) =>
-  //     callback(undefined, 'mock_image_hash')
-  //   );
-  //   uploadToGCS.mockImplementation(() =>
-  //     Promise.resolve('http://foo.com/output_image.jpeg')
-  //   );
-  // });
   afterAll(() => unloadFixtures(fixtures));
 
   it('creates a media article and a reply request', async () => {
