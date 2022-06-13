@@ -129,7 +129,7 @@ export default {
               },
 
               replyTypes: {
-                tupe: new GraphQLList(ReplyTypeEnum),
+                type: new GraphQLList(ReplyTypeEnum),
               },
             },
           }),
