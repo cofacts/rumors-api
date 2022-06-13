@@ -52,25 +52,6 @@ Object {
 }
 `;
 
-exports[`ListArticles filters by mediaUrl with MEDIA_ARTICLE_SUPPORT env: attachmentHash should be ffff8000 1`] = `
-Object {
-  "data": Object {
-    "ListArticles": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "articleType": "IMAGE",
-            "attachmentHash": "ffff8000",
-            "attachmentUrl": "http://foo/image.jpeg",
-            "id": "listArticleTest5",
-          },
-        },
-      ],
-    },
-  },
-}
-`;
-
 exports[`ListArticles filters by mediaUrl, without MEDIA_ARTICLE_SUPPORT env: should return empty 1`] = `
 Object {
   "data": Object {
