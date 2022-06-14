@@ -16,7 +16,6 @@ import Edge from './interfaces/Edge';
 import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
-import { imageHash } from 'image-hash';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -428,32 +427,6 @@ export function createConnectionType(
  */
 export function filterByStatuses(entriesWithStatus, statuses) {
   return entriesWithStatus.filter(({ status }) => statuses.includes(status));
-}
-
-/** Max downloadable file size */
-export const MAX_FILE_SIZE = 5 * 1024 * 1024; // byte
-
-/**
- * @param {Buffer} fileBuffer
- * @param {ArticleTypeEnum} type The article type
- * @returns {string} The hash for identifying if two files are similar
- */
-export async function getMediaFileHash(fileBuffer, type) {
-  let hash = '';
-  if (type === 'IMAGE') {
-    hash = await new Promise((resolve, reject) => {
-      imageHash({ data: fileBuffer }, 16, true, (error, data) => {
-        if (error) {
-          console.error(error);
-          reject(error);
-        } else {
-          resolve(data);
-        }
-      });
-    });
-  }
-
-  return hash;
 }
 
 export const DEFAULT_ARTICLE_REPLY_STATUSES = ['NORMAL'];

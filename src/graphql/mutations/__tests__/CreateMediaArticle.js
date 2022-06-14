@@ -3,38 +3,15 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateMediaArticle';
-import { uploadFile } from '../CreateMediaArticle';
 import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
-import fetch from 'node-fetch';
-import { uploadToGCS } from 'util/gcs';
-import { imageHash } from 'image-hash';
+import mediaManager from 'util/mediaManager';
 
-jest.mock('node-fetch');
-jest.mock('util/gcs', () => ({
-  __esModule: true,
-  uploadToGCS: jest.fn(),
-}));
-jest.mock('image-hash', () => ({
-  __esModule: true,
-  imageHash: jest.fn(),
-}));
+jest.mock('util/mediaManager');
 
 describe('creation', () => {
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        body: {},
-        buffer: jest.fn(),
-      })
-    );
-    imageHash.mockImplementation((file, bits, method, callback) =>
-      callback(undefined, 'mock_image_hash')
-    );
-    uploadToGCS.mockImplementation(() =>
-      Promise.resolve('http://foo.com/output_image.jpeg')
-    );
+    mediaManager.insert.mockClear();
   });
   afterAll(() => unloadFixtures(fixtures));
 
@@ -42,6 +19,12 @@ describe('creation', () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'foo';
+
+    mediaManager.insert.mockImplementationOnce(async () => ({
+      id: 'mock_image_hash',
+      url: 'http://foo.com/output_image.jpeg',
+      type: 'image',
+    }));
 
     const { data, errors } = await gql`
       mutation(
@@ -70,6 +53,17 @@ describe('creation', () => {
 
     expect(errors).toBeUndefined();
 
+    // Expect calls to insert() to match snapshot
+    expect(mediaManager.insert.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Object {
+            "url": "http://foo.com/input_image.jpeg",
+          },
+        ],
+      ]
+    `);
+
     const {
       body: { _source: article },
     } = await client.get({
@@ -86,7 +80,6 @@ describe('creation', () => {
         "articleReplies": Array [],
         "articleType": "IMAGE",
         "attachmentHash": "mock_image_hash",
-        "attachmentUrl": "http://foo.com/output_image.jpeg",
         "createdAt": "2017-01-28T08:45:57.011Z",
         "hyperlinks": Array [],
         "lastRequestedAt": "2017-01-28T08:45:57.011Z",
@@ -155,9 +148,13 @@ describe('creation', () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'foo';
-    imageHash.mockImplementation((file, bits, method, callback) =>
-      callback(undefined, 'ffff8000')
-    );
+
+    mediaManager.insert.mockImplementationOnce(async () => ({
+      // Duplicate hash
+      id: fixtures['/articles/doc/image1'].attachmentHash,
+      url: fixtures['/articles/doc/image1'].attachmentUrl,
+      type: 'image',
+    }));
 
     const { data, errors } = await gql`
       mutation(
@@ -247,116 +244,13 @@ describe('creation', () => {
     });
   });
 
-  it('should pass correct filename and mime type to uploadToGCS', async () => {
-    uploadToGCS.mockClear();
-    const OLD_ENV = process.env;
-    process.env = { ...OLD_ENV }; // Make a copy
-    delete process.env.GCS_IMAGE_FOLDER;
-    uploadFile({}, 'mock_image', 'IMAGE');
-
-    expect(uploadToGCS.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {},
-          "mock_image.jpeg",
-          "image/jpeg",
-        ],
-      ]
-    `);
-
-    process.env.GCS_IMAGE_FOLDER = 'images';
-    uploadToGCS.mockClear();
-    uploadFile({}, 'mock_image', 'IMAGE');
-
-    expect(uploadToGCS.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {},
-          "images/mock_image.jpeg",
-          "image/jpeg",
-        ],
-      ]
-    `);
-
-    uploadToGCS.mockClear();
-    uploadFile({}, 'mock_video', 'VIDEO');
-
-    expect(uploadToGCS.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {},
-          undefined,
-          "*/*",
-        ],
-      ]
-    `);
-
-    // Restore old environment
-    process.env = OLD_ENV;
-  });
-});
-
-describe('error', () => {
-  beforeEach(() => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        body: {},
-        buffer: jest.fn(),
-      })
-    );
-    imageHash.mockImplementation((file, bits, method, callback) =>
-      callback(undefined, 'mock_image_hash')
-    );
-    uploadToGCS.mockImplementation(() =>
-      Promise.resolve('http://foo.com/output_image.jpeg')
-    );
-  });
-
-  it('throws type error', async () => {
-    MockDate.set(1485593157011);
+  it('shows mediaManager error', async () => {
     const userId = 'test';
     const appId = 'foo';
 
-    const { errors } = await gql`
-      mutation(
-        $mediaUrl: String!
-        $articleType: ArticleTypeEnum!
-        $reference: ArticleReferenceInput!
-      ) {
-        CreateMediaArticle(
-          mediaUrl: $mediaUrl
-          articleType: $articleType
-          reference: $reference
-          reason: "気になります"
-        ) {
-          id
-        }
-      }
-    `(
-      {
-        mediaUrl: 'http://foo.com/input_image.jpeg',
-        articleType: 'AUDIO',
-        reference: { type: 'LINE' },
-      },
-      { user: { id: userId, appId } }
-    );
-    MockDate.reset();
-
-    expect(errors).toMatchInlineSnapshot(`
-      Array [
-        [GraphQLError: Type AUDIO is not yet supported.],
-      ]
-    `);
-  });
-
-  it('throws imageHash error', async () => {
-    MockDate.set(1485593157011);
-    const userId = 'test';
-    const appId = 'foo';
-    imageHash.mockImplementation((file, bits, method, callback) =>
-      callback('ImageHash error', 'mock_image_hash')
-    );
+    mediaManager.insert.mockImplementationOnce(async () => {
+      throw new Error('Some MediaManager error');
+    });
 
     const { errors } = await gql`
       mutation(
@@ -381,49 +275,10 @@ describe('error', () => {
       },
       { user: { id: userId, appId } }
     );
-    MockDate.reset();
 
     expect(errors).toMatchInlineSnapshot(`
       Array [
-        [GraphQLError: Unexpected error value: "ImageHash error"],
-      ]
-    `);
-  });
-
-  it('throws uploadToGCS error', async () => {
-    MockDate.set(1485593157011);
-    const userId = 'test';
-    const appId = 'foo';
-    uploadToGCS.mockImplementation(() => Promise.reject('UploadToGCS error'));
-
-    const { errors } = await gql`
-      mutation(
-        $mediaUrl: String!
-        $articleType: ArticleTypeEnum!
-        $reference: ArticleReferenceInput!
-      ) {
-        CreateMediaArticle(
-          mediaUrl: $mediaUrl
-          articleType: $articleType
-          reference: $reference
-          reason: "気になります"
-        ) {
-          id
-        }
-      }
-    `(
-      {
-        mediaUrl: 'http://foo.com/input_image.jpeg',
-        articleType: 'IMAGE',
-        reference: { type: 'LINE' },
-      },
-      { user: { id: userId, appId } }
-    );
-    MockDate.reset();
-
-    expect(errors).toMatchInlineSnapshot(`
-      Array [
-        [GraphQLError: Unexpected error value: "UploadToGCS error"],
+        [GraphQLError: Some MediaManager error],
       ]
     `);
   });

@@ -6,6 +6,7 @@ import {
   GraphQLNonNull,
 } from 'graphql';
 import client from 'util/client';
+import mediaManager from 'util/mediaManager';
 
 import {
   createFilterType,
@@ -18,13 +19,10 @@ import {
   getRangeFieldParamFromArithmeticExpression,
   createCommonListFilter,
   attachCommonListFilter,
-  getMediaFileHash,
-  MAX_FILE_SIZE,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
-import fetch from 'node-fetch';
 
 import { ArticleConnection } from 'graphql/models/Article';
 
@@ -150,6 +148,7 @@ export default {
     };
 
     // Collecting queries that will be used in bool queries later
+    const mustQueries = [];
     const shouldQueries = []; // Affects scores
     const filterQueries = []; // Not affects scores
     const mustNotQueries = [];
@@ -444,20 +443,36 @@ export default {
     }
 
     if (filter.mediaUrl) {
-      // FIXME: Use mime or binary header to get articleType instead of manual input
-      const fileBuffer = await (await fetch(filter.mediaUrl, {
-        size: MAX_FILE_SIZE,
-      })).buffer();
-      const attachmentHash = await getMediaFileHash(fileBuffer, 'IMAGE');
-      filterQueries.push({
-        term: {
-          attachmentHash,
+      const queryInfo = await mediaManager.query({ url: filter.mediaUrl });
+      const similarityMap = queryInfo.hits.reduce((map, hit) => {
+        map[hit.info.id] = hit.similarity;
+        return map;
+      }, {});
+
+      // Must be the search result returned by mediaManager.query,
+      // with their score being the similarity returend by mediaManager
+      //
+      mustQueries.push({
+        function_score: {
+          query: {
+            terms: {
+              attachmentHash: queryInfo.hits.map(hit => hit.info.id),
+            },
+          },
+          script_score: {
+            script: {
+              lang: 'painless',
+              params: { similarityMap },
+              source: "params.similarityMap.get(doc['attachmentHash'].value)",
+            },
+          },
         },
       });
     }
 
     body.query = {
       bool: {
+        must: mustQueries,
         should:
           shouldQueries.length === 0 ? [{ match_all: {} }] : shouldQueries,
         filter: filterQueries,

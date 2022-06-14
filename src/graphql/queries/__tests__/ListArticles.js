@@ -2,17 +2,16 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListArticles';
-import fetch from 'node-fetch';
-import { imageHash } from 'image-hash';
+import mediaManager from 'util/mediaManager';
 
-jest.mock('node-fetch');
-jest.mock('image-hash', () => ({
-  __esModule: true,
-  imageHash: jest.fn(),
-}));
+jest.mock('util/mediaManager');
 
 describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
+  beforeEach(() => {
+    mediaManager.insert.mockClear();
+    mediaManager.getInfo.mockClear();
+  });
 
   it('lists all articles', async () => {
     expect(
@@ -715,16 +714,22 @@ describe('ListArticles', () => {
   });
 
   it('filters by mediaUrl, without MEDIA_ARTICLE_SUPPORT env', async () => {
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        body: {},
-        buffer: jest.fn(),
-      })
-    );
-    imageHash.mockImplementation((file, bits, method, callback) =>
-      callback(undefined, 'ffff8000')
-    );
+    mediaManager.query.mockImplementationOnce(async () => ({
+      queryInfo: {
+        type: 'image',
+        id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
+      },
+      hits: [
+        {
+          similarity: 1,
+          info: {
+            id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
+            type: 'image',
+            url: 'https://foo.com/foo.jpg',
+          },
+        },
+      ],
+    }));
 
     expect(
       await gql`
@@ -748,24 +753,47 @@ describe('ListArticles', () => {
 
   it('filters by mediaUrl with MEDIA_ARTICLE_SUPPORT env', async () => {
     process.env.MEDIA_ARTICLE_SUPPORT = true;
-    fetch.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        body: {},
-        buffer: jest.fn(),
-      })
-    );
-    imageHash.mockImplementation((file, bits, method, callback) =>
-      callback(undefined, 'ffff8000')
+    const MOCK_HITS = [
+      // Deliberately swap similarity to see if Elasticsearch sorts by similairty
+      {
+        similarity: 0.5,
+        info: {
+          id: fixtures['/articles/doc/listArticleTest6'].attachmentHash,
+          type: 'image',
+          url: 'http://foo/image2.jpeg',
+        },
+      },
+      {
+        similarity: 1,
+        info: {
+          id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
+          type: 'image',
+          url: 'http://foo/image.jpeg',
+        },
+      },
+    ];
+
+    mediaManager.query.mockImplementationOnce(async () => ({
+      queryInfo: {
+        type: 'image',
+        id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
+      },
+      hits: MOCK_HITS,
+    }));
+
+    mediaManager.getInfo.mockImplementation(
+      async id => MOCK_HITS.find(hit => hit.info.id === id).info
     );
 
     expect(
       await gql`
         {
           ListArticles(
+            orderBy: [{ _score: DESC }]
             filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
           ) {
             edges {
+              score
               node {
                 id
                 articleType
@@ -776,7 +804,34 @@ describe('ListArticles', () => {
           }
         }
       `({}, { appId: 'WEBSITE' })
-    ).toMatchSnapshot('attachmentHash should be ffff8000');
+    ).toMatchInlineSnapshot(`
+      Object {
+        "data": Object {
+          "ListArticles": Object {
+            "edges": Array [
+              Object {
+                "node": Object {
+                  "articleType": "IMAGE",
+                  "attachmentHash": "ffff8000",
+                  "attachmentUrl": "http://foo/image.jpeg",
+                  "id": "listArticleTest5",
+                },
+                "score": 2,
+              },
+              Object {
+                "node": Object {
+                  "articleType": "IMAGE",
+                  "attachmentHash": "ffff8001",
+                  "attachmentUrl": "http://foo/image2.jpeg",
+                  "id": "listArticleTest6",
+                },
+                "score": 1.5,
+              },
+            ],
+          },
+        },
+      }
+    `);
     delete process.env.MEDIA_ARTICLE_SUPPORT;
   });
 
