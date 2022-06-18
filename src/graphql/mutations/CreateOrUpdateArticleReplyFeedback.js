@@ -115,7 +115,9 @@ export default {
       appId: user.appId,
     });
 
-    await client.update({
+    const {
+      body: { result },
+    } = await client.update({
       index: 'articlereplyfeedbacks',
       type: 'doc',
       id,
@@ -139,6 +141,36 @@ export default {
       },
       refresh: 'true', // We are searching for articlereplyfeedbacks immediately
     });
+
+    if (result === 'created') {
+      // Fill in reply & article reply author ID
+      //
+
+      const { userId: replyUserId } = await loaders.docLoader.load({
+        index: 'replies',
+        id: replyId,
+      });
+
+      const article = await loaders.docLoader.load({
+        index: 'articles',
+        id: articleId,
+      });
+      const { userId: articleReplyUserId } = article.articleReplies.find(
+        ar => (ar.replyId = replyId)
+      );
+
+      await client.update({
+        index: 'articlereplyfeedbacks',
+        type: 'doc',
+        id,
+        body: {
+          doc: {
+            replyUserId,
+            articleReplyUserId,
+          },
+        },
+      });
+    }
 
     const feedbacks = await loaders.articleReplyFeedbacksLoader.load({
       articleId,

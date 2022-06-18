@@ -11,10 +11,14 @@ export default {
     articleReplies: [
       {
         replyId: 'reply1',
+        userId: 'articleReply user ID',
         positiveFeedbackCount: 11,
         negativeFeedbackCount: 0,
       },
     ],
+  },
+  '/replies/doc/reply1': {
+    userId: 'reply user ID',
   },
   ...generateEntry({
     score: 1,

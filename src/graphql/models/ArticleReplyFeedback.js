@@ -29,6 +29,15 @@ export default new GraphQLObjectType({
     userId: { type: GraphQLString },
     appId: { type: GraphQLString },
 
+    replyUserId: {
+      description: "User ID of the reply's author",
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    articleReplyUserId: {
+      description: "User ID of the article-reply's author",
+      type: new GraphQLNonNull(GraphQLString),
+    },
+
     comment: { type: GraphQLString },
 
     createdAt: { type: GraphQLString },
