@@ -120,6 +120,32 @@ Object {
 }
 `;
 
+exports[`ListArticleReplyFeedbacks filters by DB fields xxId: by replyUserId=user2 OR articleReplyUserId=user2 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplyUserId": "user2",
+            "id": "f2",
+            "replyUserId": "user3",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplyUserId": "user3",
+            "id": "f1",
+            "replyUserId": "user2",
+          },
+        },
+      ],
+      "totalCount": 2,
+    },
+  },
+}
+`;
+
 exports[`ListArticleReplyFeedbacks filters by DB fields xxId: by userId: user1 1`] = `
 Object {
   "data": Object {

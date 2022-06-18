@@ -59,6 +59,11 @@ export default {
           description:
             'List only the feedbacks to the article-replies created by this user ID',
         },
+        authorId: {
+          type: GraphQLString,
+          description:
+            'List only the feedbacks whose `replyUserId` *or* `articleReplyUserId` is this user ID',
+        },
       }),
     },
     orderBy: {
@@ -131,6 +136,17 @@ export default {
           updatedAt: getRangeFieldParamFromArithmeticExpression(
             filter.updatedAt
           ),
+        },
+      });
+    }
+
+    if (filter.authorId) {
+      filterQueries.push({
+        bool: {
+          should: [
+            { term: { replyUserId: filter.authorId } },
+            { term: { articleReplyUserId: filter.authorId } },
+          ],
         },
       });
     }

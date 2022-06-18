@@ -161,6 +161,23 @@ describe('ListArticleReplyFeedbacks', () => {
         }
       `()
     ).toMatchSnapshot('by articleReplyUserId: user3');
+
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(filter: { authorId: "user2" }) {
+            edges {
+              node {
+                id
+                replyUserId
+                articleReplyUserId
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('by replyUserId=user2 OR articleReplyUserId=user2');
   });
 
   it('filters by moreLikeThis', async () => {
