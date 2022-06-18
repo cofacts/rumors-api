@@ -28,6 +28,8 @@ export default {
     status: 'NORMAL',
     createdAt: '2020-03-06T00:00:00.000Z',
     updatedAt: '2020-04-06T00:00:00.000Z',
+    replyUserId: 'user2',
+    articleReplyUserId: 'user3',
   },
   '/articlereplyfeedbacks/doc/f2': {
     userId: 'user1',
@@ -39,6 +41,8 @@ export default {
     comment: '武漢肺炎',
     createdAt: '2020-02-06T00:00:00.000Z',
     updatedAt: '2020-05-06T00:00:00.000Z',
+    replyUserId: 'user3',
+    articleReplyUserId: 'user2',
   },
   '/articlereplyfeedbacks/doc/f3': {
     userId: 'user2',
@@ -50,5 +54,7 @@ export default {
     comment: 'Thank you for info regarding COVID19.',
     createdAt: '2020-04-06T00:00:00.000Z',
     updatedAt: '2020-06-06T00:00:00.000Z',
+    replyUserId: 'user4',
+    articleReplyUserId: 'user4',
   },
 };

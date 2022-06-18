@@ -49,6 +49,16 @@ export default {
           description:
             'List only the article reply feedbacks with the selected statuses',
         },
+        replyUserId: {
+          type: GraphQLString,
+          description:
+            'List only the feedbacks to the replies created by this user ID',
+        },
+        articleReplyUserId: {
+          type: GraphQLString,
+          description:
+            'List only the feedbacks to the article-replies created by this user ID',
+        },
       }),
     },
     orderBy: {
@@ -87,10 +97,12 @@ export default {
 
     attachCommonListFilter(filterQueries, filter, userId, appId);
 
-    ['articleId', 'replyId'].forEach(field => {
-      if (!filter[field]) return;
-      filterQueries.push({ term: { [field]: filter[field] } });
-    });
+    ['articleId', 'replyId', 'replyUserId', 'articleReplyUserId'].forEach(
+      field => {
+        if (!filter[field]) return;
+        filterQueries.push({ term: { [field]: filter[field] } });
+      }
+    );
 
     if (filter.moreLikeThis) {
       shouldQueries.push({

@@ -54,6 +54,24 @@ Object {
 }
 `;
 
+exports[`ListArticleReplyFeedbacks filters by DB fields xxId: by articleReplyUserId: user3 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplyUserId": "user3",
+            "id": "f1",
+          },
+        },
+      ],
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
 exports[`ListArticleReplyFeedbacks filters by DB fields xxId: by replyId: r2 1`] = `
 Object {
   "data": Object {
@@ -79,6 +97,24 @@ Object {
         },
       ],
       "totalCount": 2,
+    },
+  },
+}
+`;
+
+exports[`ListArticleReplyFeedbacks filters by DB fields xxId: by replyUserId: user2 1`] = `
+Object {
+  "data": Object {
+    "ListArticleReplyFeedbacks": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "f1",
+            "replyUserId": "user2",
+          },
+        },
+      ],
+      "totalCount": 1,
     },
   },
 }

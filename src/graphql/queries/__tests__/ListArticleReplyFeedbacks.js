@@ -131,6 +131,36 @@ describe('ListArticleReplyFeedbacks', () => {
         }
       `()
     ).toMatchSnapshot('by replyId: r2');
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(filter: { replyUserId: "user2" }) {
+            edges {
+              node {
+                id
+                replyUserId
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('by replyUserId: user2');
+    expect(
+      await gql`
+        {
+          ListArticleReplyFeedbacks(filter: { articleReplyUserId: "user3" }) {
+            edges {
+              node {
+                id
+                articleReplyUserId
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchSnapshot('by articleReplyUserId: user3');
   });
 
   it('filters by moreLikeThis', async () => {
