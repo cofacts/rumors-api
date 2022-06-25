@@ -19,12 +19,19 @@ import {
   getRangeFieldParamFromArithmeticExpression,
   createCommonListFilter,
   attachCommonListFilter,
+  DEFAULT_ARTICLE_REPLY_STATUSES,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
+import ArticleReplyStatusEnum from 'graphql/models/ArticleReplyStatusEnum';
 
 import { ArticleConnection } from 'graphql/models/Article';
+
+const {
+  ids: dontcare, // eslint-disable-line no-unused-vars
+  ...articleReplyCommonFilterArgs
+} = createCommonListFilter('articleReplies');
 
 export default {
   args: {
@@ -59,7 +66,7 @@ export default {
         repliedAt: {
           type: timeRangeInput,
           description:
-            'List only the articles that were replied between the specific time range.',
+            '[Deprecated] use articleReply filter instead. List only the articles that were replied between the specific time range.',
         },
         fromUserOfArticleId: {
           type: GraphQLString,
@@ -96,7 +103,8 @@ export default {
         },
         replyTypes: {
           type: new GraphQLList(ReplyTypeEnum),
-          description: 'List the articles with replies of certain types',
+          description:
+            '[Deprecated] use articleReply filter instead. List the articles with replies of certain types',
         },
         articleTypes: {
           type: new GraphQLList(ArticleTypeEnum),
@@ -105,6 +113,26 @@ export default {
         mediaUrl: {
           type: GraphQLString,
           description: 'Show the media article similar to the input url',
+        },
+        articleReply: {
+          description:
+            'Show articles with article replies matching this criteria',
+          type: new GraphQLInputObjectType({
+            name: 'ArticleReplyFilterInput',
+            fields: {
+              ...articleReplyCommonFilterArgs,
+              statuses: {
+                type: new GraphQLList(
+                  new GraphQLNonNull(ArticleReplyStatusEnum)
+                ),
+                defaultValue: DEFAULT_ARTICLE_REPLY_STATUSES,
+              },
+
+              replyTypes: {
+                type: new GraphQLList(ReplyTypeEnum),
+              },
+            },
+          }),
         },
       }),
     },
@@ -117,6 +145,7 @@ export default {
         'replyCount',
         'lastRequestedAt',
         'lastRepliedAt',
+        'lastMatchingArticleReplyCreatedAt',
       ]),
     },
     ...pagingArgs,
@@ -126,6 +155,51 @@ export default {
     { filter = {}, orderBy = [], ...otherParams },
     { loaders, userId, appId }
   ) {
+    // Collecting queries that will be used in bool queries later
+    const mustQueries = [];
+    const shouldQueries = []; // Affects scores
+    const filterQueries = []; // Not affects scores
+    const mustNotQueries = [];
+
+    // Setup article reply filter, which may be used in sort
+    //
+    const articleReplyFilterQueries = [];
+    if (filter.articleReply) {
+      articleReplyFilterQueries.push({
+        terms: {
+          'articleReplies.status':
+            filter.articleReply.statuses || DEFAULT_ARTICLE_REPLY_STATUSES,
+        },
+      });
+
+      attachCommonListFilter(
+        articleReplyFilterQueries,
+        filter.articleReply,
+        userId,
+        appId,
+        'articleReplies.'
+      );
+
+      if (filter.articleReply.replyTypes) {
+        articleReplyFilterQueries.push({
+          terms: {
+            'articleReplies.replyType': filter.articleReply.replyTypes,
+          },
+        });
+      }
+
+      filterQueries.push({
+        nested: {
+          path: 'articleReplies',
+          query: {
+            bool: {
+              must: articleReplyFilterQueries,
+            },
+          },
+        },
+      });
+    }
+
     const body = {
       sort: getSortArgs(orderBy, {
         replyCount: o => ({ normalArticleReplyCount: { order: o } }),
@@ -143,15 +217,23 @@ export default {
             },
           },
         }),
+        lastMatchingArticleReplyCreatedAt: o => ({
+          'articleReplies.createdAt': {
+            order: o,
+            mode: 'max',
+            nested: {
+              path: 'articleReplies',
+              filter: {
+                bool: {
+                  must: articleReplyFilterQueries,
+                },
+              },
+            },
+          },
+        }),
       }),
       track_scores: true, // for _score sorting
     };
-
-    // Collecting queries that will be used in bool queries later
-    const mustQueries = [];
-    const shouldQueries = []; // Affects scores
-    const filterQueries = []; // Not affects scores
-    const mustNotQueries = [];
 
     attachCommonListFilter(filterQueries, filter, userId, appId);
 

@@ -11,6 +11,8 @@ export default {
         status: 'NORMAL',
         positiveFeedbackCount: 1,
         negativeFeedbackCount: 0,
+        userId: 'user1',
+        appId: 'app1',
       },
       {
         replyId: 'bar2',
@@ -19,6 +21,8 @@ export default {
         status: 'DELETED',
         positiveFeedbackCount: 0,
         negativeFeedbackCount: 0,
+        userId: 'user2',
+        appId: 'app1',
       },
       {
         replyId: 'bar4',
@@ -27,6 +31,8 @@ export default {
         status: 'DELETED',
         positiveFeedbackCount: 0,
         negativeFeedbackCount: 0,
+        userId: 'user1',
+        appId: 'app2',
       },
       {
         replyId: 'bar3',
@@ -35,6 +41,8 @@ export default {
         status: 'DELETED',
         positiveFeedbackCount: 0,
         negativeFeedbackCount: 1,
+        userId: 'user2',
+        appId: 'app2',
       },
       {
         replyId: 'bar5',
@@ -43,6 +51,8 @@ export default {
         status: 'BLOCKED',
         positiveFeedbackCount: 0,
         negativeFeedbackCount: 1,
+        userId: 'blocked-user',
+        appId: 'app1',
       },
     ],
     normalArticleReplyCount: 1,

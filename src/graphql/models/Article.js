@@ -16,6 +16,7 @@ import {
   createFilterType,
   createSortType,
   createConnectionType,
+  createCommonListFilter,
   filterByStatuses,
   timeRangeInput,
   DEFAULT_ARTICLE_REPLY_STATUSES,
@@ -36,6 +37,14 @@ import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
 import ArticleTypeEnum from './ArticleTypeEnum';
+
+const {
+  // article replies do not have ids
+  ids: dontcare, // eslint-disable-line no-unused-vars
+  // it is hard to parse timeRangeInput in JS, so don't support this yet.
+  createdAt: dontcare2, // eslint-disable-line no-unused-vars
+  ...articleReplyCommonFilterArgs
+} = createCommonListFilter('articleReplies');
 
 const Article = new GraphQLObjectType({
   name: 'Article',
@@ -67,21 +76,42 @@ const Article = new GraphQLObjectType({
           description:
             'Returns only article replies with the specified statuses',
         },
+        ...articleReplyCommonFilterArgs,
       },
       resolve: async (
         { id, articleReplies = [] },
-        { status, statuses = DEFAULT_ARTICLE_REPLY_STATUSES }
+        { status, statuses = DEFAULT_ARTICLE_REPLY_STATUSES, ...commonFilters },
+        { userId, appId }
       ) => {
-        // Sort by usefulness (= positive - negative feedbacks)
-        // then use latest first
-        const sortedArticleReplies = filterByStatuses(
-          // Inject articleId to each articleReply
-          articleReplies.map(articleReply => {
+        const filteredArticleReplies = filterByStatuses(
+          articleReplies,
+          status ? [status] : statuses
+        )
+          .filter(
+            articleReply =>
+              // Reject if current articleReply does not comply with any of the given `commonFilters`.
+              // If no `commonFilters` is specified, articleReply is not filtered out.
+              !(
+                (commonFilters.appId &&
+                  articleReply.appId !== commonFilters.appId) ||
+                (commonFilters.userId &&
+                  articleReply.userId !== commonFilters.userId) ||
+                (commonFilters.selfOnly &&
+                  (articleReply.userId !== userId ||
+                    articleReply.appId !== appId))
+              )
+          )
+          .map(articleReply => {
+            // Inject articleId to each articleReply
             articleReply.articleId = id;
             return articleReply;
-          }),
-          status ? [status] : statuses
-        ).sort((a, b) => {
+          });
+
+        if (filteredArticleReplies.length === 0) return [];
+
+        // Sort by usefulness (= positive - negative feedbacks)
+        // then use latest first
+        const sortedArticleReplies = filteredArticleReplies.sort((a, b) => {
           const usefulnessDiff =
             b.positiveFeedbackCount -
             b.negativeFeedbackCount -
@@ -91,8 +121,6 @@ const Article = new GraphQLObjectType({
 
           return +new Date(b.createdAt) - +new Date(a.createdAt);
         });
-
-        if (sortedArticleReplies.length === 0) return [];
 
         let latestIdx;
         let latestCreatedAt = ''; // Any iso timestring should be larger than ''

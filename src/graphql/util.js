@@ -470,27 +470,39 @@ export function createCommonListFilter(pluralEntityName) {
  * @param {object} filter - args.filter in resolver
  * @param {string} userId - userId for the currently logged in user
  * @param {string} appid - appId for the currently logged in user
+ * @param {string?} fieldPrefix - If given, filters fields will be prefixed with the given string. Disables handling of `ids`.
  */
-export function attachCommonListFilter(filterQueries, filter, userId, appId) {
+export function attachCommonListFilter(
+  filterQueries,
+  filter,
+  userId,
+  appId,
+  fieldPrefix = ''
+) {
   ['userId', 'appId'].forEach(field => {
     if (!filter[field]) return;
-    filterQueries.push({ term: { [field]: filter[field] } });
+    filterQueries.push({ term: { [`${fieldPrefix}${field}`]: filter[field] } });
   });
 
   if (filter.createdAt) {
     filterQueries.push({
       range: {
-        createdAt: getRangeFieldParamFromArithmeticExpression(filter.createdAt),
+        [`${fieldPrefix}createdAt`]: getRangeFieldParamFromArithmeticExpression(
+          filter.createdAt
+        ),
       },
     });
   }
 
-  if (filter.ids) {
+  if (!fieldPrefix && filter.ids) {
     filterQueries.push({ ids: { values: filter.ids } });
   }
 
   if (filter.selfOnly) {
     if (!userId) throw new Error('selfOnly can be set only after log in');
-    filterQueries.push({ term: { userId } }, { term: { appId } });
+    filterQueries.push(
+      { term: { [`${fieldPrefix}userId`]: userId } },
+      { term: { [`${fieldPrefix}appId`]: appId } }
+    );
   }
 }
