@@ -156,7 +156,7 @@ export default {
         id: articleId,
       });
       const { userId: articleReplyUserId } = article.articleReplies.find(
-        ar => (ar.replyId = replyId)
+        ar => ar.replyId === replyId
       );
 
       await client.update({

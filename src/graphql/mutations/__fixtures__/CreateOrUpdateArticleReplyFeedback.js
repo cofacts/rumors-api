@@ -10,6 +10,12 @@ export default {
   '/articles/doc/article1': {
     articleReplies: [
       {
+        replyId: 'reply2',
+        userId: 'another articleReply user ID',
+        positiveFeedbackCount: 0,
+        negativeFeedbackCount: 0,
+      },
+      {
         replyId: 'reply1',
         userId: 'articleReply user ID',
         positiveFeedbackCount: 11,
