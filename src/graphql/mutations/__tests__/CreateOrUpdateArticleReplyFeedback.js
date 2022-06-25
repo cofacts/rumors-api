@@ -67,9 +67,11 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
       Object {
         "appId": "test",
         "articleId": "article1",
+        "articleReplyUserId": "articleReply user ID",
         "comment": "comment1",
         "createdAt": "2017-01-28T08:45:57.011Z",
         "replyId": "reply1",
+        "replyUserId": "reply user ID",
         "score": 1,
         "status": "NORMAL",
         "updatedAt": "2017-01-28T08:45:57.011Z",
@@ -88,6 +90,7 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
           "negativeFeedbackCount": 0,
           "positiveFeedbackCount": 12,
           "replyId": "reply1",
+          "userId": "articleReply user ID",
         },
       ]
     `);
@@ -225,9 +228,11 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
       Object {
         "appId": "test",
         "articleId": "article1",
+        "articleReplyUserId": "articleReply user ID",
         "comment": "ads content",
         "createdAt": "2017-01-28T08:45:57.011Z",
         "replyId": "reply1",
+        "replyUserId": "reply user ID",
         "score": 1,
         "status": "BLOCKED",
         "updatedAt": "2017-01-28T08:45:57.011Z",
@@ -246,6 +251,7 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
           "negativeFeedbackCount": 0,
           "positiveFeedbackCount": 11,
           "replyId": "reply1",
+          "userId": "articleReply user ID",
         },
       ]
     `);
