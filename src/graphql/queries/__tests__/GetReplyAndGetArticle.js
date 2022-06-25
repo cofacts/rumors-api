@@ -44,6 +44,8 @@ describe('GetReplyAndGetArticle', () => {
                 }
               }
               requestedForReply
+              attachmentHash
+              attachmentUrl
             }
           }
         `({}, { user: { id: 'fakeUser', appId: 'LINE' } })
