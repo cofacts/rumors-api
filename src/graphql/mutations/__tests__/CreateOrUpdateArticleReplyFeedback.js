@@ -88,6 +88,12 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
       Array [
         Object {
           "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 0,
+          "replyId": "reply2",
+          "userId": "another articleReply user ID",
+        },
+        Object {
+          "negativeFeedbackCount": 0,
           "positiveFeedbackCount": 12,
           "replyId": "reply1",
           "userId": "articleReply user ID",
@@ -247,6 +253,12 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     });
     expect(article._source.articleReplies).toMatchInlineSnapshot(`
       Array [
+        Object {
+          "negativeFeedbackCount": 0,
+          "positiveFeedbackCount": 0,
+          "replyId": "reply2",
+          "userId": "another articleReply user ID",
+        },
         Object {
           "negativeFeedbackCount": 0,
           "positiveFeedbackCount": 11,

@@ -146,17 +146,22 @@ export default {
       // Fill in reply & article reply author ID
       //
 
-      const { userId: replyUserId } = await loaders.docLoader.load({
-        index: 'replies',
-        id: replyId,
-      });
+      const [
+        { userId: replyUserId },
+        article,
+      ] = await loaders.docLoader.loadMany([
+        {
+          index: 'replies',
+          id: replyId,
+        },
+        {
+          index: 'articles',
+          id: articleId,
+        },
+      ]);
 
-      const article = await loaders.docLoader.load({
-        index: 'articles',
-        id: articleId,
-      });
       const { userId: articleReplyUserId } = article.articleReplies.find(
-        ar => (ar.replyId = replyId)
+        ar => ar.replyId === replyId
       );
 
       await client.update({

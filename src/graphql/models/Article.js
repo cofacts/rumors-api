@@ -368,6 +368,8 @@ const Article = new GraphQLObjectType({
       type: GraphQLString,
       description: 'Attachment of this article',
       async resolve({ attachmentHash }) {
+        if (!attachmentHash) return null;
+
         const info = await mediaManager.getInfo(attachmentHash);
         return info.url;
       },
