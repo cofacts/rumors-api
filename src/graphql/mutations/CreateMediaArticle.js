@@ -27,8 +27,8 @@ async function createNewMediaArticle({
   userId,
   appId,
 }) {
-  const info = await mediaManager.insert({ url: mediaUrl });
-  const attachmentHash = info.id;
+  const mediaEntry = await mediaManager.insert({ url: mediaUrl });
+  const attachmentHash = mediaEntry.id;
   const text = '';
   const now = new Date().toISOString();
   const reference = {
