@@ -1,6 +1,9 @@
 import sharp from 'sharp';
 import { MediaManager, variants } from '@cofacts/media-manager';
 
+export const IMAGE_PREVIEW = 'webp600w';
+export const IMAGE_THUMBNAIL = 'jpg240h';
+
 const mediaManager = new MediaManager({
   bucketName: process.env.GCS_BUCKET_NAME,
   credentialsJSON: process.env.GCS_CREDENTIALS,
@@ -12,14 +15,14 @@ const mediaManager = new MediaManager({
         return [
           variants.original(contentType),
           {
-            name: 'jpg240h',
+            name: IMAGE_THUMBNAIL,
             contentType: 'image/jpeg',
             transform: sharp()
               .resize({ height: 240, withoutEnlargement: true })
               .jpeg({ quality: 60 }),
           },
           {
-            name: 'webp600w',
+            name: IMAGE_PREVIEW,
             contentType: 'image/webp',
             transform: sharp()
               .resize({ width: 600, withoutEnlargement: true })

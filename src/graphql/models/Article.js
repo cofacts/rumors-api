@@ -6,6 +6,7 @@ import {
   GraphQLList,
   GraphQLInt,
   GraphQLBoolean,
+  GraphQLEnumType,
 } from 'graphql';
 
 import {
@@ -28,7 +29,10 @@ import Node from '../interfaces/Node';
 import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
-import mediaManager from 'util/mediaManager';
+import mediaManager, {
+  IMAGE_PREVIEW,
+  IMAGE_THUMBNAIL,
+} from 'util/mediaManager';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
@@ -37,6 +41,8 @@ import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
 import ArticleTypeEnum from './ArticleTypeEnum';
+
+const ATTACHMENT_URL_DURATION_SEC = 86400;
 
 const {
   // article replies do not have ids
@@ -366,12 +372,65 @@ const Article = new GraphQLObjectType({
     },
     attachmentUrl: {
       type: GraphQLString,
-      description: 'Attachment of this article',
-      async resolve({ attachmentHash }) {
+      description: 'Attachment URL for this article',
+      args: {
+        variant: {
+          type: new GraphQLEnumType({
+            name: 'AttachmentEnum',
+            values: {
+              ORIGINAL: {
+                value: 'ORIGINAL',
+                description:
+                  'The original file. Only available to logged-in users.',
+              },
+              PREVIEW: {
+                value: 'PREVIEW',
+                description:
+                  'Downsized file. Fixed-width webp for images; other type TBD.',
+              },
+              THUMBNAIL: {
+                value: 'THUMBNAIL',
+                description:
+                  'Tiny, static image representing the attachment. Fixed-height jpeg for images; other types TBD.',
+              },
+            },
+          }),
+        },
+      },
+      async resolve(
+        { attachmentHash, articleType },
+        { variant: variantArg },
+        { user, appId }
+      ) {
         if (!attachmentHash) return null;
 
-        const info = await mediaManager.getInfo(attachmentHash);
-        return info.url;
+        const mediaEntry = await mediaManager.get(attachmentHash);
+
+        let variant = 'original';
+        switch (variantArg) {
+          case 'PREVIEW':
+            if (articleType === 'IMAGE') {
+              variant = IMAGE_PREVIEW;
+            }
+            break;
+
+          case 'THUMBNAIL':
+            if (articleType === 'IMAGE') {
+              variant = IMAGE_THUMBNAIL;
+            }
+            break;
+        }
+
+        // Don't return URL to original variant for non-website URLs
+        if (variant === 'original' && !(user && appId === 'WEBSITE'))
+          return null;
+
+        const file = mediaEntry.getFile(variant);
+        // Returns signed URL for the file
+        return file.getSignedUrl({
+          action: 'read',
+          expires: Date.now() + ATTACHMENT_URL_DURATION_SEC * 1000,
+        });
       },
     },
     attachmentHash: {
