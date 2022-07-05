@@ -400,7 +400,7 @@ const Article = new GraphQLObjectType({
       async resolve(
         { attachmentHash, articleType },
         { variant: variantArg },
-        { user, appId }
+        { user }
       ) {
         if (!attachmentHash) return null;
 
@@ -422,7 +422,7 @@ const Article = new GraphQLObjectType({
         }
 
         // Don't return URL to original variant for non-website URLs
-        if (variant === 'original' && !(user && appId === 'WEBSITE'))
+        if (variant === 'original' && !(user && user.appId === 'WEBSITE'))
           return null;
 
         const file = mediaEntry.getFile(variant);
