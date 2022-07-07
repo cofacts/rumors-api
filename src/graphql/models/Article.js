@@ -42,7 +42,7 @@ import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
 import ArticleTypeEnum from './ArticleTypeEnum';
 
-const ATTACHMENT_URL_DURATION_SEC = 86400;
+const ATTACHMENT_URL_DURATION_DAY = 1;
 
 const {
   // article replies do not have ids
@@ -372,7 +372,8 @@ const Article = new GraphQLObjectType({
     },
     attachmentUrl: {
       type: GraphQLString,
-      description: 'Attachment URL for this article',
+      description:
+        'Attachment URL for this article. Possibly null when uploading, or if variant does not exist.',
       args: {
         variant: {
           type: new GraphQLEnumType({
@@ -405,6 +406,7 @@ const Article = new GraphQLObjectType({
         if (!attachmentHash) return null;
 
         const mediaEntry = await mediaManager.get(attachmentHash);
+        if (!mediaEntry) return null;
 
         let variant = 'original';
         switch (variantArg) {
@@ -427,10 +429,14 @@ const Article = new GraphQLObjectType({
 
         const file = mediaEntry.getFile(variant);
         // Returns signed URL for the file
-        return file.getSignedUrl({
+        const [url] = await file.getSignedUrl({
           action: 'read',
-          expires: Date.now() + ATTACHMENT_URL_DURATION_SEC * 1000,
+          expires:
+            (Math.ceil(Date.now() / 86400000) + ATTACHMENT_URL_DURATION_DAY) *
+            86400000,
         });
+
+        return url;
       },
     },
     attachmentHash: {

@@ -4,14 +4,9 @@ import http from 'http';
 import handler from 'serve-handler';
 
 import gql from 'util/GraphQL';
-
-const GCS_PREFIX = `cofacts-api-integration-`;
+import delayForMs from 'util/delayForMs';
 
 if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
-  const originalPrefix = process.env.GCS_MEDIA_FOLDER;
-  // Generates the prefix for this run
-  const prefix = `${GCS_PREFIX}${new Date().toISOString().replace(/:/g, '_')}/`;
-
   // File server serving test input file in ./fixtures
   //
   const server = http.createServer((req, res) =>
@@ -23,10 +18,6 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
   let serverUrl = '';
 
   beforeAll(async () => {
-    // Overwrite GCS_MEDIA_FOLDER env and reload modules (including util/mediaManager)
-    process.env.GCS_MEDIA_FOLDER = prefix;
-    jest.resetModules();
-
     // Start up file server
     serverUrl = await new Promise((resolve, reject) => {
       server.listen(() => {
@@ -41,10 +32,6 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     console.info(`[Media Integration] file server listening at ${serverUrl}`);
   });
   afterAll(async () => {
-    // Restore rewritten env
-    process.env.GCS_MEDIA_FOLDER = originalPrefix;
-    jest.resetModules();
-
     // File server teardown
     await new Promise(resolve => server.close(resolve));
     console.info(`[Media Integration] file server closed.`);
@@ -76,9 +63,11 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     expect(createMediaArticleResult.errors).toBeUndefined();
     const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
 
+    await delayForMs(1000); // Wait until upload complete
+
     const getArticleResult = await gql`
-      query($id: String!) {
-        GetArticle(id: $id) {
+      query($articleId: String!) {
+        GetArticle(id: $articleId) {
           attachmentHash
           originalUrl: attachmentUrl(variant: ORIGINAL)
           previewUrl: attachmentUrl(variant: PREVIEW)
