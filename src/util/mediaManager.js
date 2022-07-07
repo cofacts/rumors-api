@@ -26,7 +26,7 @@ const mediaManager = new MediaManager({
             contentType: 'image/webp',
             transform: sharp()
               .resize({ width: 600, withoutEnlargement: true })
-              .webp({ quality: 60 }),
+              .webp({ quality: 30 }),
           },
         ];
       default:
