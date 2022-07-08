@@ -136,6 +136,8 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
         `"8214"`
       );
 
+      await delayForMs(1000); // Wait for setMetadata operation to finish
+
       // Expect metadata being set
       expect(resp.headers.get('Cache-Control')).toMatchInlineSnapshot(
         `"public, max-age=31536000, immutable"`
