@@ -26,6 +26,10 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run test -- --coverage
+        env:
+          GCS_CREDENTIALS: ${{ secrets.GCS_CREDENTIALS }}
+          GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+          GCS_MEDIA_FOLDER: github/${{ github.run_number }}_${{ github.run_attempt }}/
       - name: Update coveralls
         uses: coverallsapp/github-action@master
         with:
