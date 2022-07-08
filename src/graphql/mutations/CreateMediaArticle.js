@@ -1,5 +1,10 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
-import mediaManager from 'util/mediaManager';
+import sharp from 'sharp';
+import { MediaType, variants } from '@cofacts/media-manager';
+import mediaManager, {
+  IMAGE_PREVIEW,
+  IMAGE_THUMBNAIL,
+} from 'util/mediaManager';
 import { assertUser } from 'util/user';
 import client from 'util/client';
 
@@ -10,6 +15,12 @@ import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 
 const METADATA = {
   cacheControl: 'public, max-age=31536000, immutable',
+};
+
+const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
+  IMAGE: MediaType.image,
+  VIDEO: MediaType.video,
+  AUDIO: MediaType.audio,
 };
 
 /**
@@ -31,8 +42,44 @@ async function createNewMediaArticle({
   userId,
   appId,
 }) {
+  const mappedMediaType = VALID_ARTICLE_TYPE_TO_MEDIA_TYPE[articleType];
   const mediaEntry = await mediaManager.insert({
     url: mediaUrl,
+    getVariantSettings(options) {
+      const { type, contentType } = options;
+
+      // Abort if articleType does not match mediaUrl's file type
+      //
+      if (!mappedMediaType || mappedMediaType !== type) {
+        throw new Error(
+          `Specified article type is "${articleType}", but the media file is a ${type}.`
+        );
+      }
+
+      switch (type) {
+        case MediaType.image:
+          return [
+            variants.original(contentType),
+            {
+              name: IMAGE_THUMBNAIL,
+              contentType: 'image/jpeg',
+              transform: sharp()
+                .resize({ height: 240, withoutEnlargement: true })
+                .jpeg({ quality: 60 }),
+            },
+            {
+              name: IMAGE_PREVIEW,
+              contentType: 'image/webp',
+              transform: sharp()
+                .resize({ width: 600, withoutEnlargement: true })
+                .webp({ quality: 30 }),
+            },
+          ];
+
+        default:
+          return variants.defaultGetVariantSettings(options);
+      }
+    },
     onUploadStop(error) {
       /* istanbul ignore if */
       if (error) {

@@ -40,8 +40,38 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     console.info(`[Media Integration] file server closed.`);
   });
 
+  it('blocks mismatched articleType', async () => {
+    // Simulates user login
+    const context = {
+      user: { id: 'foo', appId: 'WEBSITE' },
+    };
+
+    const createMediaArticleResult = await gql`
+      mutation($mediaUrl: String!) {
+        CreateMediaArticle(
+          mediaUrl: $mediaUrl
+          articleType: VIDEO
+          reference: { type: LINE }
+        ) {
+          id
+        }
+      }
+    `(
+      {
+        mediaUrl: `${serverUrl}/small.jpg`, // An image, does not match VIDEO articleType
+      },
+      context
+    );
+
+    expect(createMediaArticleResult.errors).toMatchInlineSnapshot(`
+      Array [
+        [GraphQLError: Specified article type is "VIDEO", but the media file is a image.],
+      ]
+    `);
+  });
+
   it(
-    'creates media article and can get signed URL',
+    'creates image article and can get signed URL',
     async () => {
       // Simulates user login
       const context = {
