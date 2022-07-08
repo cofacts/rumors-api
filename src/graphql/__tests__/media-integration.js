@@ -2,9 +2,12 @@
 import path from 'path';
 import http from 'http';
 import handler from 'serve-handler';
+import fetch from 'node-fetch';
 
 import gql from 'util/GraphQL';
+import client from 'util/client';
 import delayForMs from 'util/delayForMs';
+import { getReplyRequestId } from 'graphql/mutations/CreateOrUpdateReplyRequest';
 
 if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
   // File server serving test input file in ./fixtures
@@ -63,8 +66,6 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     expect(createMediaArticleResult.errors).toBeUndefined();
     const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
 
-    await delayForMs(1000); // Wait until upload complete
-
     const getArticleResult = await gql`
       query($articleId: String!) {
         GetArticle(id: $articleId) {
@@ -77,6 +78,36 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     `({ articleId }, context);
 
     expect(getArticleResult.errors).toBeUndefined();
-    console.log('getArticleResult', getArticleResult);
+    expect(
+      getArticleResult.data.GetArticle.attachmentHash
+    ).toMatchInlineSnapshot(
+      `"image.vDph4g.__-AD6SDgAebG8cbwifBB-Dj0yPjo8ETgAOAA4P_8_8"`
+    );
+
+    // Test can fetch thumbnail meta data
+
+    await delayForMs(500); // Wait for upload to finish
+    const resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl);
+    expect(resp.headers.get('Content-Type')).toMatchInlineSnapshot(
+      `"image/jpeg"`
+    );
+    expect(resp.headers.get('Content-Length')).toMatchInlineSnapshot(`"8214"`);
+
+    // Cleanup
+    await client.delete({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+    });
+
+    await client.delete({
+      index: 'replyrequests',
+      type: 'doc',
+      id: getReplyRequestId({
+        articleId,
+        userId: context.user.id,
+        appId: context.user.appId,
+      }),
+    });
   });
 }

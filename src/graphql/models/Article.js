@@ -372,12 +372,11 @@ const Article = new GraphQLObjectType({
     },
     attachmentUrl: {
       type: GraphQLString,
-      description:
-        'Attachment URL for this article. Possibly null when uploading, or if variant does not exist.',
+      description: 'Attachment URL for this article.',
       args: {
         variant: {
           type: new GraphQLEnumType({
-            name: 'AttachmentEnum',
+            name: 'AttachmentVariantEnum',
             values: {
               ORIGINAL: {
                 value: 'ORIGINAL',
@@ -405,9 +404,6 @@ const Article = new GraphQLObjectType({
       ) {
         if (!attachmentHash) return null;
 
-        const mediaEntry = await mediaManager.get(attachmentHash);
-        if (!mediaEntry) return null;
-
         let variant = 'original';
         switch (variantArg) {
           case 'PREVIEW':
@@ -427,14 +423,15 @@ const Article = new GraphQLObjectType({
         if (variant === 'original' && !(user && user.appId === 'WEBSITE'))
           return null;
 
-        const file = mediaEntry.getFile(variant);
         // Returns signed URL for the file
-        const [url] = await file.getSignedUrl({
-          action: 'read',
-          expires:
-            (Math.ceil(Date.now() / 86400000) + ATTACHMENT_URL_DURATION_DAY) *
-            86400000,
-        });
+        const [url] = await mediaManager
+          .getFile(attachmentHash, variant)
+          .getSignedUrl({
+            action: 'read',
+            expires:
+              (Math.ceil(Date.now() / 86400000) + ATTACHMENT_URL_DURATION_DAY) *
+              86400000,
+          });
 
         return url;
       },
