@@ -40,74 +40,89 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     console.info(`[Media Integration] file server closed.`);
   });
 
-  it('creates media article and can get signed URL', async () => {
-    // Simulates user login
-    const context = {
-      user: { id: 'foo', appId: 'WEBSITE' },
-    };
+  it(
+    'creates media article and can get signed URL',
+    async () => {
+      // Simulates user login
+      const context = {
+        user: { id: 'foo', appId: 'WEBSITE' },
+      };
 
-    const createMediaArticleResult = await gql`
-      mutation($mediaUrl: String!) {
-        CreateMediaArticle(
-          mediaUrl: $mediaUrl
-          articleType: IMAGE
-          reference: { type: LINE }
-        ) {
-          id
+      const createMediaArticleResult = await gql`
+        mutation($mediaUrl: String!) {
+          CreateMediaArticle(
+            mediaUrl: $mediaUrl
+            articleType: IMAGE
+            reference: { type: LINE }
+          ) {
+            id
+          }
         }
-      }
-    `(
-      {
-        mediaUrl: `${serverUrl}/small.jpg`,
-      },
-      context
-    );
+      `(
+        {
+          mediaUrl: `${serverUrl}/small.jpg`,
+        },
+        context
+      );
 
-    expect(createMediaArticleResult.errors).toBeUndefined();
-    const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
+      expect(createMediaArticleResult.errors).toBeUndefined();
+      const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
 
-    const getArticleResult = await gql`
-      query($articleId: String!) {
-        GetArticle(id: $articleId) {
-          attachmentHash
-          originalUrl: attachmentUrl(variant: ORIGINAL)
-          previewUrl: attachmentUrl(variant: PREVIEW)
-          thumbnailUrl: attachmentUrl(variant: THUMBNAIL)
+      const getArticleResult = await gql`
+        query($articleId: String!) {
+          GetArticle(id: $articleId) {
+            attachmentHash
+            originalUrl: attachmentUrl(variant: ORIGINAL)
+            previewUrl: attachmentUrl(variant: PREVIEW)
+            thumbnailUrl: attachmentUrl(variant: THUMBNAIL)
+          }
         }
+      `({ articleId }, context);
+
+      expect(getArticleResult.errors).toBeUndefined();
+      expect(
+        getArticleResult.data.GetArticle.attachmentHash
+      ).toMatchInlineSnapshot(
+        `"image.vDph4g.__-AD6SDgAebG8cbwifBB-Dj0yPjo8ETgAOAA4P_8_8"`
+      );
+      expect(typeof getArticleResult.data.GetArticle.originalUrl).toBe(
+        'string'
+      );
+
+      // Test can fetch thumbnail meta data
+      let resp;
+      while (
+        !resp ||
+        resp.headers.get('Content-Type').startsWith('application/xml')
+      ) {
+        resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl);
+        await delayForMs(1000); // Wait for upload to finish
       }
-    `({ articleId }, context);
 
-    expect(getArticleResult.errors).toBeUndefined();
-    expect(
-      getArticleResult.data.GetArticle.attachmentHash
-    ).toMatchInlineSnapshot(
-      `"image.vDph4g.__-AD6SDgAebG8cbwifBB-Dj0yPjo8ETgAOAA4P_8_8"`
-    );
+      expect(resp.headers.get('Content-Type')).toMatchInlineSnapshot(
+        `"image/jpeg"`
+      );
+      expect(resp.headers.get('Content-Length')).toMatchInlineSnapshot(
+        `"8214"`
+      );
 
-    // Test can fetch thumbnail meta data
+      // Cleanup
+      await client.delete({
+        index: 'articles',
+        type: 'doc',
+        id: articleId,
+      });
 
-    await delayForMs(1000); // Wait for upload to finish
-    const resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl);
-    expect(resp.headers.get('Content-Type')).toMatchInlineSnapshot(
-      `"image/jpeg"`
-    );
-    expect(resp.headers.get('Content-Length')).toMatchInlineSnapshot(`"8214"`);
-
-    // Cleanup
-    await client.delete({
-      index: 'articles',
-      type: 'doc',
-      id: articleId,
-    });
-
-    await client.delete({
-      index: 'replyrequests',
-      type: 'doc',
-      id: getReplyRequestId({
-        articleId,
-        userId: context.user.id,
-        appId: context.user.appId,
-      }),
-    });
-  });
+      await client.delete({
+        index: 'replyrequests',
+        type: 'doc',
+        id: getReplyRequestId({
+          articleId,
+          userId: context.user.id,
+          appId: context.user.appId,
+        }),
+      });
+    },
+    15000
+  );
 }
