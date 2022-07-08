@@ -10,7 +10,7 @@ import delayForMs from 'util/delayForMs';
 import { getReplyRequestId } from 'graphql/mutations/CreateOrUpdateReplyRequest';
 
 if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
-  // File server serving test input file in ./fixtures
+  // File server serving test input file in __fixtures__/media-integration
   //
   const server = http.createServer((req, res) =>
     handler(req, res, {
@@ -93,7 +93,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
       let resp;
       while (
         !resp ||
-        resp.headers.get('Content-Type').startsWith('application/xml')
+        resp.headers.get('Content-Type').startsWith('application/xml') // GCS returns XML for error
       ) {
         resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl);
         await delayForMs(1000); // Wait for upload to finish

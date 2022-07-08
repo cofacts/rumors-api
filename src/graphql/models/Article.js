@@ -419,7 +419,7 @@ const Article = new GraphQLObjectType({
             break;
         }
 
-        // Don't return URL to original variant for non-website URLs
+        // Don't return URL to original variant for non-website users
         if (variant === 'original' && !(user && user.appId === 'WEBSITE'))
           return null;
 
@@ -429,6 +429,10 @@ const Article = new GraphQLObjectType({
           .getSignedUrl({
             action: 'read',
             expires:
+              // Rounds to start of the day after ATTACHMENT_URL_DURATION_DAY days passed.
+              // This makes URL given from this API stable for at least 24 hours,
+              // which help caching.
+              //
               (Math.ceil(Date.now() / 86400000) + ATTACHMENT_URL_DURATION_DAY) *
               86400000,
           });
