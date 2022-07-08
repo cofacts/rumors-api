@@ -106,6 +106,11 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
         `"8214"`
       );
 
+      // Expect metadata being set
+      expect(resp.headers.get('Cache-Control')).toMatchInlineSnapshot(
+        `"public, max-age=31536000, immutable"`
+      );
+
       // Cleanup
       await client.delete({
         index: 'articles',

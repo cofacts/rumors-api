@@ -8,6 +8,10 @@ import MutationResult from 'graphql/models/MutationResult';
 import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 
+const METADATA = {
+  cacheControl: 'public, max-age=31536000, immutable',
+};
+
 /**
  * Creates a new article in ElasticSearch,
  * or return an article which attachment.hash is similar to mediaUrl
@@ -27,7 +31,21 @@ async function createNewMediaArticle({
   userId,
   appId,
 }) {
-  const mediaEntry = await mediaManager.insert({ url: mediaUrl });
+  const mediaEntry = await mediaManager.insert({
+    url: mediaUrl,
+    onUploadStop(error) {
+      /* istanbul ignore if */
+      if (error) {
+        console.error(`[createNewMediaArticle] onUploadStop error:`, error);
+        return;
+      }
+
+      mediaEntry.variants.forEach(variant =>
+        mediaEntry.getFile(variant).setMetadata(METADATA)
+      );
+    },
+  });
+
   const attachmentHash = mediaEntry.id;
   const text = '';
   const now = new Date().toISOString();
@@ -37,7 +55,6 @@ async function createNewMediaArticle({
     userId: userId,
     appId: appId,
   };
-
   const { body: matchedArticle } = await client.search({
     index: 'articles',
     type: 'doc',
