@@ -86,7 +86,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
 
     // Test can fetch thumbnail meta data
 
-    await delayForMs(500); // Wait for upload to finish
+    await delayForMs(1000); // Wait for upload to finish
     const resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl);
     expect(resp.headers.get('Content-Type')).toMatchInlineSnapshot(
       `"image/jpeg"`
