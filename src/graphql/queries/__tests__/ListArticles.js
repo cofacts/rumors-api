@@ -909,7 +909,7 @@ describe('ListArticles', () => {
       hits: [
         {
           similarity: 1,
-          info: {
+          entry: {
             id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
             type: 'image',
             url: 'https://foo.com/foo.jpg',
@@ -944,7 +944,7 @@ describe('ListArticles', () => {
       // Deliberately swap similarity to see if Elasticsearch sorts by similairty
       {
         similarity: 0.5,
-        info: {
+        entry: {
           id: fixtures['/articles/doc/listArticleTest6'].attachmentHash,
           type: 'image',
           url: 'http://foo/image2.jpeg',
@@ -952,7 +952,7 @@ describe('ListArticles', () => {
       },
       {
         similarity: 1,
-        info: {
+        entry: {
           id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
           type: 'image',
           url: 'http://foo/image.jpeg',

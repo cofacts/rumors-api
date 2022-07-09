@@ -525,9 +525,9 @@ export default {
     }
 
     if (filter.mediaUrl) {
-      const queryInfo = await mediaManager.query({ url: filter.mediaUrl });
-      const similarityMap = queryInfo.hits.reduce((map, hit) => {
-        map[hit.info.id] = hit.similarity;
+      const queryResult = await mediaManager.query({ url: filter.mediaUrl });
+      const similarityMap = queryResult.hits.reduce((map, hit) => {
+        map[hit.entry.id] = hit.similarity;
         return map;
       }, {});
 
@@ -538,7 +538,7 @@ export default {
         function_score: {
           query: {
             terms: {
-              attachmentHash: queryInfo.hits.map(hit => hit.info.id),
+              attachmentHash: queryResult.hits.map(hit => hit.entry.id),
             },
           },
           script_score: {
