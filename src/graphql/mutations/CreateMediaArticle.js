@@ -1,5 +1,10 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
-import mediaManager from 'util/mediaManager';
+import sharp from 'sharp';
+import { MediaType, variants } from '@cofacts/media-manager';
+import mediaManager, {
+  IMAGE_PREVIEW,
+  IMAGE_THUMBNAIL,
+} from 'util/mediaManager';
 import { assertUser } from 'util/user';
 import client from 'util/client';
 
@@ -7,6 +12,16 @@ import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
 import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
+
+const METADATA = {
+  cacheControl: 'public, max-age=31536000, immutable',
+};
+
+const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
+  IMAGE: MediaType.image,
+  VIDEO: MediaType.video,
+  AUDIO: MediaType.audio,
+};
 
 /**
  * Creates a new article in ElasticSearch,
@@ -27,8 +42,58 @@ async function createNewMediaArticle({
   userId,
   appId,
 }) {
-  const info = await mediaManager.insert({ url: mediaUrl });
-  const attachmentHash = info.id;
+  const mappedMediaType = VALID_ARTICLE_TYPE_TO_MEDIA_TYPE[articleType];
+  const mediaEntry = await mediaManager.insert({
+    url: mediaUrl,
+    getVariantSettings(options) {
+      const { type, contentType } = options;
+
+      // Abort if articleType does not match mediaUrl's file type
+      //
+      if (!mappedMediaType || mappedMediaType !== type) {
+        throw new Error(
+          `Specified article type is "${articleType}", but the media file is a ${type}.`
+        );
+      }
+
+      switch (type) {
+        case MediaType.image:
+          return [
+            variants.original(contentType),
+            {
+              name: IMAGE_THUMBNAIL,
+              contentType: 'image/jpeg',
+              transform: sharp()
+                .resize({ height: 240, withoutEnlargement: true })
+                .jpeg({ quality: 60 }),
+            },
+            {
+              name: IMAGE_PREVIEW,
+              contentType: 'image/webp',
+              transform: sharp()
+                .resize({ width: 600, withoutEnlargement: true })
+                .webp({ quality: 30 }),
+            },
+          ];
+
+        default:
+          return variants.defaultGetVariantSettings(options);
+      }
+    },
+    onUploadStop(error) {
+      /* istanbul ignore if */
+      if (error) {
+        console.error(`[createNewMediaArticle] onUploadStop error:`, error);
+        return;
+      }
+
+      mediaEntry.variants.forEach(variant =>
+        mediaEntry.getFile(variant).setMetadata(METADATA)
+      );
+    },
+  });
+
+  const attachmentHash = mediaEntry.id;
   const text = '';
   const now = new Date().toISOString();
   const reference = {
@@ -37,7 +102,6 @@ async function createNewMediaArticle({
     userId: userId,
     appId: appId,
   };
-
   const { body: matchedArticle } = await client.search({
     index: 'articles',
     type: 'doc',

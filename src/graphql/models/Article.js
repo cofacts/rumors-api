@@ -6,6 +6,7 @@ import {
   GraphQLList,
   GraphQLInt,
   GraphQLBoolean,
+  GraphQLEnumType,
 } from 'graphql';
 
 import {
@@ -28,7 +29,10 @@ import Node from '../interfaces/Node';
 import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
-import mediaManager from 'util/mediaManager';
+import mediaManager, {
+  IMAGE_PREVIEW,
+  IMAGE_THUMBNAIL,
+} from 'util/mediaManager';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
@@ -37,6 +41,8 @@ import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
 import ArticleTypeEnum from './ArticleTypeEnum';
+
+const ATTACHMENT_URL_DURATION_DAY = 1;
 
 const {
   // article replies do not have ids
@@ -366,12 +372,72 @@ const Article = new GraphQLObjectType({
     },
     attachmentUrl: {
       type: GraphQLString,
-      description: 'Attachment of this article',
-      async resolve({ attachmentHash }) {
+      description: 'Attachment URL for this article.',
+      args: {
+        variant: {
+          type: new GraphQLEnumType({
+            name: 'AttachmentVariantEnum',
+            values: {
+              ORIGINAL: {
+                value: 'ORIGINAL',
+                description:
+                  'The original file. Only available to logged-in users.',
+              },
+              PREVIEW: {
+                value: 'PREVIEW',
+                description:
+                  'Downsized file. Fixed-width webp for images; other type TBD.',
+              },
+              THUMBNAIL: {
+                value: 'THUMBNAIL',
+                description:
+                  'Tiny, static image representing the attachment. Fixed-height jpeg for images; other types TBD.',
+              },
+            },
+          }),
+        },
+      },
+      async resolve(
+        { attachmentHash, articleType },
+        { variant: variantArg },
+        { user }
+      ) {
         if (!attachmentHash) return null;
 
-        const info = await mediaManager.getInfo(attachmentHash);
-        return info.url;
+        let variant = 'original';
+        switch (variantArg) {
+          case 'PREVIEW':
+            if (articleType === 'IMAGE') {
+              variant = IMAGE_PREVIEW;
+            }
+            break;
+
+          case 'THUMBNAIL':
+            if (articleType === 'IMAGE') {
+              variant = IMAGE_THUMBNAIL;
+            }
+            break;
+        }
+
+        // Don't return URL to original variant for non-website users
+        if (variant === 'original' && !(user && user.appId === 'WEBSITE'))
+          return null;
+
+        // Returns signed URL for the file
+        const [url] = await mediaManager
+          .getFile(attachmentHash, variant)
+          .getSignedUrl({
+            action: 'read',
+            expires:
+              // Rounds to start of the day after ATTACHMENT_URL_DURATION_DAY days passed.
+              // This makes URL given from this API stable for at least 24 hours,
+              // which help caching.
+              //
+              (Math.ceil(Date.now() / 86400000) + ATTACHMENT_URL_DURATION_DAY) *
+              86400000,
+          });
+
+        return url;
       },
     },
     attachmentHash: {

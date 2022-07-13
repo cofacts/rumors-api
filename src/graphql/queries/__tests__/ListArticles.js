@@ -10,7 +10,6 @@ describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
     mediaManager.insert.mockClear();
-    mediaManager.getInfo.mockClear();
   });
 
   it('lists all articles', async () => {
@@ -910,7 +909,7 @@ describe('ListArticles', () => {
       hits: [
         {
           similarity: 1,
-          info: {
+          entry: {
             id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
             type: 'image',
             url: 'https://foo.com/foo.jpg',
@@ -945,7 +944,7 @@ describe('ListArticles', () => {
       // Deliberately swap similarity to see if Elasticsearch sorts by similairty
       {
         similarity: 0.5,
-        info: {
+        entry: {
           id: fixtures['/articles/doc/listArticleTest6'].attachmentHash,
           type: 'image',
           url: 'http://foo/image2.jpeg',
@@ -953,7 +952,7 @@ describe('ListArticles', () => {
       },
       {
         similarity: 1,
-        info: {
+        entry: {
           id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
           type: 'image',
           url: 'http://foo/image.jpeg',
@@ -969,10 +968,6 @@ describe('ListArticles', () => {
       hits: MOCK_HITS,
     }));
 
-    mediaManager.getInfo.mockImplementation(
-      async id => MOCK_HITS.find(hit => hit.info.id === id).info
-    );
-
     expect(
       await gql`
         {
@@ -985,7 +980,7 @@ describe('ListArticles', () => {
               node {
                 id
                 articleType
-                attachmentUrl
+                attachmentUrl # Original but not logged in, expects null
                 attachmentHash
               }
             }
@@ -1001,7 +996,7 @@ describe('ListArticles', () => {
                 "node": Object {
                   "articleType": "IMAGE",
                   "attachmentHash": "ffff8000",
-                  "attachmentUrl": "http://foo/image.jpeg",
+                  "attachmentUrl": null,
                   "id": "listArticleTest5",
                 },
                 "score": 2,
@@ -1010,7 +1005,7 @@ describe('ListArticles', () => {
                 "node": Object {
                   "articleType": "IMAGE",
                   "attachmentHash": "ffff8001",
-                  "attachmentUrl": "http://foo/image2.jpeg",
+                  "attachmentUrl": null,
                   "id": "listArticleTest6",
                 },
                 "score": 1.5,

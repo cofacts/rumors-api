@@ -58,6 +58,8 @@ describe('creation', () => {
       Array [
         Array [
           Object {
+            "getVariantSettings": [Function],
+            "onUploadStop": [Function],
             "url": "http://foo.com/input_image.jpeg",
           },
         ],
