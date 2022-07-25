@@ -517,7 +517,7 @@ async function updateLiffStats(params) {
             fetchedAt: new Date(),
             date: timestamp,
             docId,
-            stats,
+            stats: { liff: stats },
             type: docType,
             ...get(docUsers, docId, {}),
           };

@@ -267,5 +267,20 @@ export default {
         },
       },
     ],
+    fixtures: {
+      '/analytics/doc/article_articleId1_2022-01-01': {
+        // Existing stats
+        stats: {
+          lineVisit: 10,
+          lineUser: 5,
+        },
+        // Others are populated during update. Just to ensure update works & for smaller fixture.
+        // In reality, most fields will be filled-in by first insertion.
+      },
+      '/articles/doc/articleId1': {
+        userId: 'user for articleId1',
+        appId: 'app for articleId1',
+      },
+    },
   },
 };

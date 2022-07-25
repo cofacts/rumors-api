@@ -45,6 +45,26 @@ jest.mock('yargs', () => {
   return yargsMock;
 });
 
+const unloadBody = async bulkBody => {
+  let bulkDeleteBody = [];
+  let prevRow;
+  bulkBody.forEach((row, i) => {
+    if (i % 2 == 0 && row.update._id != prevRow) {
+      bulkDeleteBody.push({ delete: row.update });
+      prevRow = row.update._id;
+    }
+  });
+
+  const { body: result } = await client.bulk({
+    body: bulkDeleteBody,
+    refresh: 'true',
+  });
+
+  if (result.errors) {
+    throw new Error(`unload failed : ${JSON.stringify(result, null, '  ')}`);
+  }
+};
+
 describe('fetchStatsFromGA', () => {
   describe('command line arguments', () => {
     const updateStatsMock = jest.fn(),
@@ -451,29 +471,6 @@ describe('fetchStatsFromGA', () => {
             sort: [{ _id: 'asc' }],
           },
         })).body.hits.hits;
-
-      const unloadBody = async bulkBody => {
-        let bulkDeleteBody = [];
-        let prevRow;
-        bulkBody.forEach((row, i) => {
-          if (i % 2 == 0 && row.update._id != prevRow) {
-            bulkDeleteBody.push({ delete: row.update });
-            prevRow = row.update._id;
-          }
-        });
-
-        const { body: result } = await client.bulk({
-          body: bulkDeleteBody,
-          refresh: 'true',
-        });
-
-        if (result.errors) {
-          throw new Error(
-            `unload failed : ${JSON.stringify(result, null, '  ')}`
-          );
-        }
-      };
-
       beforeAll(async () => {
         MockDate.set(1577836800000);
         FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsSpy);
@@ -573,18 +570,21 @@ describe('fetchStatsFromGA', () => {
   });
 
   describe('updateLiffStats', () => {
-    const upsertDocStatsMock = jest.fn();
+    const upsertDocStatsSpy = jest.spyOn(fetchStatsFromGA, 'upsertDocStats');
     const batchGetMock = google.analyticsreporting().reports.batchGet;
 
-    beforeAll(() => {
+    beforeAll(async () => {
       MockDate.set(1641168000000); // fetchedAt 2022-01-03T00:00:00.000Z
-      FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsMock);
+      FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsSpy);
       FetchGAReWireAPI.__set__('lineViewId', '987654321');
+      await fetchStatsFromGA.storeScriptInDB();
     });
     afterEach(() => {
-      upsertDocStatsMock.mockReset();
+      upsertDocStatsSpy.mockClear();
       batchGetMock.mockReset();
     });
+    afterAll(() =>
+      client.delete_script({ id: fetchStatsFromGA.upsertScriptID }));
 
     it('calls batchGet by param and handles empty results from GA', async () => {
       const emptyRows = { data: { totals: [{ values: [0, 0] }] } };
@@ -598,7 +598,7 @@ describe('fetchStatsFromGA', () => {
       );
 
       // No response from server, thus no updateDoc calls
-      expect(upsertDocStatsMock).not.toHaveBeenCalled();
+      expect(upsertDocStatsSpy).not.toHaveBeenCalled();
 
       batchGetMock.mockClear();
 
@@ -612,6 +612,8 @@ describe('fetchStatsFromGA', () => {
     });
 
     it('processes articles and replies', async () => {
+      await loadFixtures(fixtures.updateLiffStats.fixtures);
+
       // Load batchGet mocks
       fixtures.updateLiffStats.batchGetResponses.forEach(resp =>
         batchGetMock.mockResolvedValueOnce(resp)
@@ -619,20 +621,33 @@ describe('fetchStatsFromGA', () => {
 
       await fetchStatsFromGA.updateLiffStats({});
 
+      // Expect upsertDocStats calls are correctly batched.
       // 2 times for each article batch return; 1 time for the reply.
-      expect(upsertDocStatsMock).toHaveBeenCalledTimes(3);
-
-      expect(upsertDocStatsMock.mock.calls[0][0]).toMatchSnapshot(
+      expect(upsertDocStatsSpy).toHaveBeenCalledTimes(3);
+      expect(upsertDocStatsSpy.mock.calls[0][0]).toMatchSnapshot(
         `updateDocStats() for 20220101/articleId1 only`
       );
-
-      expect(upsertDocStatsMock.mock.calls[1][0]).toMatchSnapshot(
+      expect(upsertDocStatsSpy.mock.calls[1][0]).toMatchSnapshot(
         `updateDocStats() for 20220101/articleId2 and 20220102/articleId2`
       );
-
-      expect(upsertDocStatsMock.mock.calls[2][0]).toMatchSnapshot(
+      expect(upsertDocStatsSpy.mock.calls[2][0]).toMatchSnapshot(
         `updateDocStats() for 20220101/replyId1`
       );
+
+      // Expect documents are being inserted and stats are merged correctly
+      // if analytics doc already exists.
+      expect(
+        (await client.get({
+          index: 'analytics',
+          type: 'doc',
+          id: 'article_articleId1_2022-01-01',
+        })).body._source
+      ).toMatchSnapshot('Merged articleId1');
+
+      // Teardown
+      await unloadBody(upsertDocStatsSpy.mock.calls[1][0]);
+      await unloadBody(upsertDocStatsSpy.mock.calls[2][0]);
+      await unloadFixtures(fixtures.updateLiffStats.fixtures);
     });
   });
 });
