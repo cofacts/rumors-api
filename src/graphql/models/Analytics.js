@@ -54,6 +54,7 @@ export default new GraphQLObjectType({
           )
         )
       ),
+      resolve: ({ liff }) => liff ?? [],
     },
   }),
 });

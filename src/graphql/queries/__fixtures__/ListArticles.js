@@ -283,7 +283,16 @@ export default {
     date: '2020-01-03',
     docId: 'listArticleTest1',
     type: 'article',
-    stats: { webVisit: 26, webUser: 18, lineVisit: 7, lineUser: 1 },
+    stats: {
+      webVisit: 26,
+      webUser: 18,
+      lineVisit: 7,
+      lineUser: 1,
+      liff: [
+        { source: undefined, user: 108, visit: 110 },
+        { source: 'some-bot', user: 50, visit: 51 },
+      ],
+    },
   },
   '/analytics/doc/article_listArticleTest1_2020-01-04': {
     date: '2020-01-04',
