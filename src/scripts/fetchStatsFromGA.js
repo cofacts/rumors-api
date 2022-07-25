@@ -217,6 +217,92 @@ const fetchReports = async function(sourceType, pageTokens = {}, params) {
   return { results, pageTokens: nextPageTokens, hasMore };
 };
 
+/**
+ * Async generator for LIFF report entries of each doc ID in the date range specified by `param`.
+ *
+ * @param {string} docType - One of the values defined by docTypes.
+ * @param {{startDate: string?; endDate: string?}} params
+ * @yields {{
+ *   date: string;
+ *   docId: string;
+ *   stats: {source: string; user: number; visit: number}[]
+ * }[]} - Fetched analytic report entries, in batches. `date` format is `YYYYMMDD`.
+ */
+async function* getLiffReportEntries(docType, params) {
+  const { startDate = 'today', endDate = 'today' } = params;
+
+  let pageToken;
+
+  // The last entry {date, docId, stats} from the last batch.
+  let lastEntry;
+
+  do {
+    const res = await analyticsreporting.reports.batchGet({
+      requestBody: {
+        reportRequests: [
+          {
+            dateRanges: [{ startDate, endDate }],
+            dimensions: [
+              { name: 'ga:date' },
+              { name: 'ga:eventLabel' }, // Doc ID
+              { name: 'ga:source' },
+            ],
+            filtersExpression: `ga:eventCategory==LIFF;ga:eventAction==View${toTitleCase(
+              docType
+            )}`,
+            includeEmptyRows: false,
+            metrics: [{ expression: 'ga:hits' }, { expression: 'ga:users' }],
+            orderBys: [
+              { fieldName: 'ga:date' },
+              { fieldName: 'ga:eventLabel' },
+            ],
+            pageSize,
+            pageToken,
+            viewId: lineViewId,
+          },
+        ],
+      },
+    });
+
+    const [report] = res.data.reports;
+    pageToken = report.nextPageToken;
+
+    const entriesInThisBatch = [];
+
+    for (const { dimensions, metrics } of report.data.rows) {
+      const [date, docId, source] = dimensions;
+
+      const isSameEntry =
+        lastEntry && lastEntry.date === date && lastEntry.docId === docId;
+
+      if (!isSameEntry) {
+        // Send the last entry (if exists) to batch first
+        if (lastEntry) entriesInThisBatch.push(lastEntry);
+
+        // Create new entry
+        lastEntry = {
+          date,
+          docId,
+          stats: [],
+        };
+      }
+
+      lastEntry.stats.push({
+        source,
+        visit: +metrics[0].values[0],
+        user: +metrics[0].values[1],
+      });
+    }
+
+    // Include the lastEntry in batch if no next page
+    if (!pageToken) {
+      entriesInThisBatch.push(lastEntry);
+    }
+
+    yield entriesInThisBatch;
+  } while (pageToken);
+}
+
 const upsertDocStats = async function(body) {
   const res = await client.bulk({
     body,
@@ -229,8 +315,7 @@ const upsertDocStats = async function(body) {
   }
 };
 
-async function fetchDocUsers(index, rows) {
-  const ids = rows.map(row => parseIdFromRow(row));
+async function fetchDocUsers(index, ids) {
   const {
     body: {
       hits: { hits: docs },
@@ -280,7 +365,8 @@ const processReport = async function(
   fetchedAt,
   lastParams
 ) {
-  const docUsers = await fetchDocUsers(docIndices[docType], rows);
+  const ids = rows.map(row => parseIdFromRow(row));
+  const docUsers = await fetchDocUsers(docIndices[docType], ids);
 
   let bulkUpdates = [];
   const sourceName = sourceType.toLowerCase();
@@ -395,6 +481,60 @@ const updateStats = async function(params) {
   }
 };
 
+/**
+ * Fetch LIFF stats for given time period and store in db.
+ *
+ * @param {{startDate: string?; endDate: string?}} params
+ */
+async function updateLiffStats(params) {
+  // Fetch and write LIFF entries
+  //
+  for (const docType of allDocTypes) {
+    const timezone = process.env.TIMEZONE || '+08:00';
+
+    for await (const analyticEntries of getLiffReportEntries(docType, params)) {
+      const ids = analyticEntries.map(({ docId }) => docId);
+      const docUsers = await fetchDocUsers(docIndices[docType], ids);
+
+      const bulkUpdates = analyticEntries.reduce(
+        (cmd, { date, docId, stats }) => {
+          const timestamp = `${formatDate(date)}T00:00:00.000${timezone}`;
+
+          const id = `${docType}_${docId}_${formatDate(date)}`;
+          const params = {
+            fetchedAt: new Date(),
+            date: timestamp,
+            docId,
+            stats,
+            type: docType,
+            ...get(docUsers, docId, {}),
+          };
+
+          cmd.push({
+            update: { _index: 'analytics', _type: 'doc', _id: id },
+          });
+
+          cmd.push({
+            scripted_upsert: true,
+            script: { id: upsertScriptID, params },
+            upsert: {},
+          });
+
+          return cmd;
+        },
+        []
+      );
+
+      try {
+        await upsertDocStats(bulkUpdates);
+      } catch (err) {
+        console.error(err);
+        rollbar.error('fetchGA error', err);
+      }
+    }
+  }
+}
+
 async function main() {
   try {
     const argv = yargs
@@ -441,7 +581,8 @@ async function main() {
     });
     google.options({ auth });
 
-    updateStats(params);
+    await updateStats(params);
+    await updateLiffStats(params);
   } catch (e) {
     console.error(e);
   }
@@ -460,6 +601,7 @@ export default {
   updateStats,
   upsertDocStats,
   upsertScriptID,
+  updateLiffStats,
 };
 if (require.main === module) {
   main();
