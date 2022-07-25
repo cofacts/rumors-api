@@ -265,11 +265,23 @@ async function* getLiffReportEntries(docType, params) {
     });
 
     const [report] = res.data.reports;
+    const rows = report.data.rows ?? [];
+
+    console.log(
+      `fetched ${rows.length} starting at ${pageToken || 0} ` +
+        `out of total ${report.data.rowCount} rows for LIFF ${docType}` +
+        ` ${
+          report.nextPageToken
+            ? `with next pageToken ${report.nextPageToken}`
+            : ''
+        }`
+    );
+
     pageToken = report.nextPageToken;
 
     const entriesInThisBatch = [];
 
-    for (const { dimensions, metrics } of report.data.rows) {
+    for (const { dimensions, metrics } of rows) {
       const [date, docId, source] = dimensions;
 
       const isSameEntry =
@@ -295,7 +307,7 @@ async function* getLiffReportEntries(docType, params) {
     }
 
     // Include the lastEntry in batch if no next page
-    if (!pageToken) {
+    if (!pageToken && lastEntry) {
       entriesInThisBatch.push(lastEntry);
     }
 
@@ -524,6 +536,8 @@ async function updateLiffStats(params) {
         },
         []
       );
+
+      if (bulkUpdates.length === 0) continue;
 
       try {
         await upsertDocStats(bulkUpdates);

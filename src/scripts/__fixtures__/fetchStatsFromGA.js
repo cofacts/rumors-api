@@ -180,4 +180,92 @@ export default {
       { article: 100, reply: 100 },
     ],
   },
+  updateLiffStats: {
+    batchGetResponses: [
+      // Responses for articles
+      //
+      {
+        data: {
+          reports: [
+            {
+              data: {
+                rowCount: 4,
+                rows: [
+                  {
+                    dimensions: ['20220101', 'articleId1', 'utm_source_1'],
+                    metrics: [{ values: [2, 1] }],
+                  },
+                  // New entry triggering entries pushed to batch
+                  {
+                    dimensions: ['20220101', 'articleId2', 'utm_source_1'],
+                    metrics: [{ values: [3, 2] }],
+                  },
+                ],
+              },
+              nextPageToken: 'page_token_here',
+            },
+          ],
+        },
+      },
+      {
+        data: {
+          reports: [
+            {
+              data: {
+                rowCount: 4,
+                rows: [
+                  {
+                    dimensions: ['20220101', 'articleId2', 'utm_source_2'],
+                    metrics: [{ values: [4, 3] }],
+                  },
+                ],
+              },
+              nextPageToken: 'page_token_2_here',
+            },
+          ],
+        },
+      },
+      {
+        data: {
+          reports: [
+            {
+              data: {
+                rowCount: 4,
+                rows: [
+                  // New entry triggered by date at first page.
+                  // But this last entry will be in the same batch in 20220101/articleId2 because it's the last
+                  // entry in batch.
+                  {
+                    dimensions: ['20220102', 'articleId2', 'utm_source_1'],
+                    metrics: [{ values: [5, 4] }],
+                  },
+                ],
+              },
+              // No nextPageToken, thus the end of article responses
+            },
+          ],
+        },
+      },
+
+      // Responses for replies
+      {
+        data: {
+          reports: [
+            {
+              data: {
+                rowCount: 1,
+                rows: [
+                  // test if single page entry is counted
+                  {
+                    dimensions: ['20220101', 'replyId1', 'utm_source_1'],
+                    metrics: [{ values: [2, 1] }],
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
 };

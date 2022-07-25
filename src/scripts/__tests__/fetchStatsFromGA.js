@@ -48,16 +48,19 @@ jest.mock('yargs', () => {
 describe('fetchStatsFromGA', () => {
   describe('command line arguments', () => {
     const updateStatsMock = jest.fn(),
-      storeScriptInDBMock = jest.fn();
+      storeScriptInDBMock = jest.fn(),
+      updateLiffStatsMock = jest.fn();
 
     beforeAll(() => {
       FetchGAReWireAPI.__set__('updateStats', updateStatsMock);
+      FetchGAReWireAPI.__set__('updateLiffStats', updateLiffStatsMock);
       FetchGAReWireAPI.__set__('storeScriptInDB', storeScriptInDBMock);
     });
 
     afterEach(() => {
       updateStatsMock.mockReset();
       storeScriptInDBMock.mockReset();
+      updateLiffStatsMock.mockReset();
       yargs.argvMock.mockReset();
     });
 
@@ -85,6 +88,14 @@ describe('fetchStatsFromGA', () => {
         [
           {
             useContentGroup: true,
+            startDate: '2020-01-01',
+            endDate: '2020-02-01',
+          },
+        ],
+      ]);
+      expect(updateLiffStatsMock.mock.calls).toMatchObject([
+        [
+          {
             startDate: '2020-01-01',
             endDate: '2020-02-01',
           },
@@ -558,6 +569,70 @@ describe('fetchStatsFromGA', () => {
         await unloadBody(bulkUpdateBody);
         await unloadFixtures(fixtures.repliesFixtures);
       });
+    });
+  });
+
+  describe('updateLiffStats', () => {
+    const upsertDocStatsMock = jest.fn();
+    const batchGetMock = google.analyticsreporting().reports.batchGet;
+
+    beforeAll(() => {
+      MockDate.set(1641168000000); // fetchedAt 2022-01-03T00:00:00.000Z
+      FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsMock);
+      FetchGAReWireAPI.__set__('lineViewId', '987654321');
+    });
+    afterEach(() => {
+      upsertDocStatsMock.mockReset();
+      batchGetMock.mockReset();
+    });
+
+    it('calls batchGet by param and handles empty results from GA', async () => {
+      const emptyRows = { data: { totals: [{ values: [0, 0] }] } };
+      const emptyResp = { data: { reports: [emptyRows] } };
+      batchGetMock.mockResolvedValue(emptyResp);
+
+      await fetchStatsFromGA.updateLiffStats({});
+
+      expect(batchGetMock.mock.calls).toMatchSnapshot(
+        'batchGet with no params'
+      );
+
+      // No response from server, thus no updateDoc calls
+      expect(upsertDocStatsMock).not.toHaveBeenCalled();
+
+      batchGetMock.mockClear();
+
+      await fetchStatsFromGA.updateLiffStats({
+        startDate: '2022-12-31',
+        endDate: '2022-12-31',
+      });
+      expect(batchGetMock.mock.calls).toMatchSnapshot(
+        'batchGet with startDate & endDate'
+      );
+    });
+
+    it('processes articles and replies', async () => {
+      // Load batchGet mocks
+      fixtures.updateLiffStats.batchGetResponses.forEach(resp =>
+        batchGetMock.mockResolvedValueOnce(resp)
+      );
+
+      await fetchStatsFromGA.updateLiffStats({});
+
+      // 2 times for each article batch return; 1 time for the reply.
+      expect(upsertDocStatsMock).toHaveBeenCalledTimes(3);
+
+      expect(upsertDocStatsMock.mock.calls[0][0]).toMatchSnapshot(
+        `updateDocStats() for 20220101/articleId1 only`
+      );
+
+      expect(upsertDocStatsMock.mock.calls[1][0]).toMatchSnapshot(
+        `updateDocStats() for 20220101/articleId2 and 20220102/articleId2`
+      );
+
+      expect(upsertDocStatsMock.mock.calls[2][0]).toMatchSnapshot(
+        `updateDocStats() for 20220101/replyId1`
+      );
     });
   });
 });
