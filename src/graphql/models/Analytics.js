@@ -1,4 +1,5 @@
 import {
+  GraphQLID,
   GraphQLInt,
   GraphQLObjectType,
   GraphQLString,
@@ -6,10 +7,26 @@ import {
   GraphQLList,
 } from 'graphql';
 
-export default new GraphQLObjectType({
+import { createConnectionType } from 'graphql/util';
+import AnalyticsDocTypeEnum from './AnalyticsDocTypeEnum';
+
+const Analytics = new GraphQLObjectType({
   name: 'Analytics',
   fields: () => ({
-    date: { type: GraphQLString },
+    id: { type: new GraphQLNonNull(GraphQLID) },
+    docId: {
+      type: new GraphQLNonNull(GraphQLID),
+      description:
+        'The id for the document that this analytic datapoint is for.',
+    },
+    docType: {
+      type: new GraphQLNonNull(AnalyticsDocTypeEnum),
+    },
+    date: {
+      type: new GraphQLNonNull(GraphQLString),
+      description:
+        'The day this analytic datapoint is represented, in YYYY-MM-DD format',
+    },
     lineUser: { type: GraphQLInt },
     lineVisit: { type: GraphQLInt },
     webUser: { type: GraphQLInt },
@@ -56,5 +73,23 @@ export default new GraphQLObjectType({
       ),
       resolve: ({ liff }) => liff ?? [],
     },
+
+    docUserId: {
+      type: GraphQLID,
+      description:
+        'Author of the document that this analytic datapoint measures.',
+    },
+    docAppId: {
+      type: GraphQLID,
+      description:
+        'Authoring app ID of the document that this analytic datapoint measures.',
+    },
   }),
 });
+
+export default Analytics;
+
+export const AnalyticsConnection = createConnectionType(
+  'AnalyticsConnection',
+  Analytics
+);
