@@ -30,22 +30,10 @@ const Analytics = new GraphQLObjectType({
       description:
         'The day this analytic datapoint is represented, in YYYY-MM-DD format',
     },
-    lineUser: {
-      type: new GraphQLNonNull(GraphQLInt),
-      resolve: ({ stats }) => stats.lineUser ?? 0,
-    },
-    lineVisit: {
-      type: new GraphQLNonNull(GraphQLInt),
-      resolve: ({ stats }) => stats.lineVisit ?? 0,
-    },
-    webUser: {
-      type: new GraphQLNonNull(GraphQLInt),
-      resolve: ({ stats }) => stats.webUser ?? 0,
-    },
-    webVisit: {
-      type: new GraphQLNonNull(GraphQLInt),
-      resolve: ({ stats }) => stats.webVisit ?? 0,
-    },
+    lineUser: { type: GraphQLInt, resolve: ({ stats }) => stats.lineUser },
+    lineVisit: { type: GraphQLInt, resolve: ({ stats }) => stats.lineVisit },
+    webUser: { type: GraphQLInt, resolve: ({ stats }) => stats.webUser },
+    webVisit: { type: GraphQLInt, resolve: ({ stats }) => stats.webVisit },
     liffUser: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'Sum of LIFF visitor count from all sources',
