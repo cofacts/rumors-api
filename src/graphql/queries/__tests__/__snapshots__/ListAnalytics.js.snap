@@ -46,6 +46,20 @@ Object {
             "docId": "articleId1",
             "docUserId": "user1",
             "id": "article_articleId1_2020-01-03",
+            "liff": Array [
+              Object {
+                "source": "",
+                "user": 108,
+                "visit": 110,
+              },
+              Object {
+                "source": "some-bot",
+                "user": 50,
+                "visit": 51,
+              },
+            ],
+            "liffUser": 158,
+            "liffVisit": 161,
             "type": "ARTICLE",
           },
         },

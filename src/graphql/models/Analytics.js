@@ -30,22 +30,40 @@ const Analytics = new GraphQLObjectType({
       description:
         'The day this analytic datapoint is represented, in YYYY-MM-DD format',
     },
-    lineUser: { type: GraphQLInt },
-    lineVisit: { type: GraphQLInt },
-    webUser: { type: GraphQLInt },
-    webVisit: { type: GraphQLInt },
+    lineUser: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve: ({ stats }) => stats.lineUser ?? 0,
+    },
+    lineVisit: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve: ({ stats }) => stats.lineVisit ?? 0,
+    },
+    webUser: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve: ({ stats }) => stats.webUser ?? 0,
+    },
+    webVisit: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve: ({ stats }) => stats.webVisit ?? 0,
+    },
     liffUser: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'Sum of LIFF visitor count from all sources',
-      resolve({ liff }) {
-        return (liff ?? []).reduce((sum, { user }) => sum + (user ?? 0), 0);
+      resolve({ stats }) {
+        return (stats.liff ?? []).reduce(
+          (sum, { user }) => sum + (user ?? 0),
+          0
+        );
       },
     },
     liffVisit: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'Sum of LIFF view count from all sources',
-      resolve({ liff }) {
-        return (liff ?? []).reduce((sum, { visit }) => sum + (visit ?? 0), 0);
+      resolve({ stats }) {
+        return (stats.liff ?? []).reduce(
+          (sum, { visit }) => sum + (visit ?? 0),
+          0
+        );
       },
     },
     liff: {
@@ -74,7 +92,7 @@ const Analytics = new GraphQLObjectType({
           )
         )
       ),
-      resolve: ({ liff }) => liff ?? [],
+      resolve: ({ stats }) => stats.liff ?? [],
     },
 
     docUserId: {

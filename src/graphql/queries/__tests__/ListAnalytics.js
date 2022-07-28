@@ -82,6 +82,13 @@ describe('ListAnalytics', () => {
                 docId
                 docUserId
                 docAppId
+                liffUser
+                liffVisit
+                liff {
+                  source
+                  user
+                  visit
+                }
               }
             }
           }

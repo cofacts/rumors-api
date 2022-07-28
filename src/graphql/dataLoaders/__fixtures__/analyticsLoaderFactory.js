@@ -202,7 +202,16 @@ export default {
     date: '2020-01-03T00:00:00.000+08:00',
     docId: 'articleId1',
     type: 'article',
-    stats: { webVisit: 33, webUser: 27, lineVisit: 16, lineUser: 5 },
+    stats: {
+      webVisit: 33,
+      webUser: 27,
+      lineVisit: 16,
+      lineUser: 5,
+      liff: [
+        { source: undefined, user: 108, visit: 110 },
+        { source: 'some-bot', user: 50, visit: 51 },
+      ],
+    },
     docUserId: 'user1',
     docAppId: 'app1',
   },
