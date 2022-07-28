@@ -15,12 +15,12 @@ export default {
   args: {
     filter: {
       type: createFilterType('ListAnalyticsFilter', {
-        dateRange: {
+        date: {
           type: timeRangeInput,
           description:
             'List only the activities between the specific time range.',
         },
-        docType: { type: AnalyticsDocTypeEnum },
+        type: { type: AnalyticsDocTypeEnum },
         docId: { type: GraphQLID },
         docUserId: { type: GraphQLID },
         docAppId: { type: GraphQLID },
@@ -42,17 +42,15 @@ export default {
       },
     };
 
-    if (filter.dateRange) {
+    if (filter.date) {
       body.query.bool.filter.push({
         range: {
-          createdAt: getRangeFieldParamFromArithmeticExpression(
-            filter.dateRange
-          ),
+          date: getRangeFieldParamFromArithmeticExpression(filter.date),
         },
       });
     }
 
-    ['docType', 'docId', 'docUserId', 'docAppId'].forEach(field => {
+    ['type', 'docId', 'docUserId', 'docAppId'].forEach(field => {
       if (!filter[field]) return;
       body.query.bool.filter.push({ term: { [`${field}`]: filter[field] } });
     });

@@ -6,12 +6,14 @@ import {
   GraphQLNonNull,
   GraphQLList,
 } from 'graphql';
+import Node from '../interfaces/Node';
 
 import { createConnectionType } from 'graphql/util';
 import AnalyticsDocTypeEnum from './AnalyticsDocTypeEnum';
 
 const Analytics = new GraphQLObjectType({
   name: 'Analytics',
+  interfaces: [Node],
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLID) },
     docId: {
@@ -19,8 +21,9 @@ const Analytics = new GraphQLObjectType({
       description:
         'The id for the document that this analytic datapoint is for.',
     },
-    docType: {
+    type: {
       type: new GraphQLNonNull(AnalyticsDocTypeEnum),
+      description: 'Type of document that this analytic datapoint is for.',
     },
     date: {
       type: new GraphQLNonNull(GraphQLString),

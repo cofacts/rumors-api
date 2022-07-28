@@ -1,0 +1,249 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListAnalytics filters by date: 2020/1/1 <= date < 2020/1/3 1`] = `
+Object {
+  "data": Object {
+    "ListAnalytics": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "date": "2020-01-02T00:00:00.000+08:00",
+            "id": "reply_replyId2_2020-01-02",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2020-01-01T00:00:00.000+08:00",
+            "id": "reply_replyId2_2020-01-01",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2020-01-02T00:00:00.000+08:00",
+            "id": "article_article0_2020-01-02",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2020-01-01T00:00:00.000+08:00",
+            "id": "article_article0_2020-01-01",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListAnalytics filters by type, docId, docUserId and docAppId: ARTICLE, articleId1, userId, app1 1`] = `
+Object {
+  "data": Object {
+    "ListAnalytics": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "docAppId": "app1",
+            "docId": "articleId1",
+            "docUserId": "user1",
+            "id": "article_articleId1_2020-01-03",
+            "type": "ARTICLE",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListAnalytics lists all analytics 1`] = `
+Object {
+  "data": Object {
+    "ListAnalytics": Object {
+      "edges": Array [
+        Object {
+          "cursor": "WyJyZXBseV9yZXBseUlkMl8yMDIwLTAxLTAzIl0=",
+          "node": Object {
+            "id": "reply_replyId2_2020-01-03",
+          },
+        },
+        Object {
+          "cursor": "WyJyZXBseV9yZXBseUlkMl8yMDIwLTAxLTAyIl0=",
+          "node": Object {
+            "id": "reply_replyId2_2020-01-02",
+          },
+        },
+        Object {
+          "cursor": "WyJyZXBseV9yZXBseUlkMl8yMDIwLTAxLTAxIl0=",
+          "node": Object {
+            "id": "reply_replyId2_2020-01-01",
+          },
+        },
+        Object {
+          "cursor": "WyJyZXBseV9yZXBseUlkMV8yMDIwLTAxLTA2Il0=",
+          "node": Object {
+            "id": "reply_replyId1_2020-01-06",
+          },
+        },
+        Object {
+          "cursor": "WyJhcnRpY2xlX2FydGljbGVJZDFfMjAyMC0wMS0wNSJd",
+          "node": Object {
+            "id": "article_articleId1_2020-01-05",
+          },
+        },
+        Object {
+          "cursor": "WyJhcnRpY2xlX2FydGljbGVJZDFfMjAyMC0wMS0wNCJd",
+          "node": Object {
+            "id": "article_articleId1_2020-01-04",
+          },
+        },
+        Object {
+          "cursor": "WyJhcnRpY2xlX2FydGljbGVJZDFfMjAyMC0wMS0wMyJd",
+          "node": Object {
+            "id": "article_articleId1_2020-01-03",
+          },
+        },
+        Object {
+          "cursor": "WyJhcnRpY2xlX2FydGljbGUwXzIwMjAtMDEtMTEiXQ==",
+          "node": Object {
+            "id": "article_article0_2020-01-11",
+          },
+        },
+        Object {
+          "cursor": "WyJhcnRpY2xlX2FydGljbGUwXzIwMjAtMDEtMTAiXQ==",
+          "node": Object {
+            "id": "article_article0_2020-01-10",
+          },
+        },
+        Object {
+          "cursor": "WyJhcnRpY2xlX2FydGljbGUwXzIwMjAtMDEtMDkiXQ==",
+          "node": Object {
+            "id": "article_article0_2020-01-09",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJyZXBseV9yZXBseUlkMl8yMDIwLTAxLTAzIl0=",
+        "lastCursor": "WyJhcnRpY2xlX2FydGljbGUwXzIwMTktMTItMTAiXQ==",
+      },
+      "totalCount": 40,
+    },
+  },
+}
+`;
+
+exports[`ListAnalytics sorts 1`] = `
+Object {
+  "data": Object {
+    "ListAnalytics": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "date": "2019-12-10T00:00:00.000+08:00",
+            "id": "article_article0_2019-12-10",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2019-12-11T00:00:00.000+08:00",
+            "id": "article_article0_2019-12-11",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2019-12-12T00:00:00.000+08:00",
+            "id": "article_article0_2019-12-12",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2019-12-13T00:00:00.000+08:00",
+            "id": "article_article0_2019-12-13",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2019-12-14T00:00:00.000+08:00",
+            "id": "article_article0_2019-12-14",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2019-12-15T00:00:00.000+08:00",
+            "id": "article_article0_2019-12-15",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2019-12-16T00:00:00.000+08:00",
+            "id": "article_article0_2019-12-16",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2019-12-17T00:00:00.000+08:00",
+            "id": "article_article0_2019-12-17",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2019-12-18T00:00:00.000+08:00",
+            "id": "article_article0_2019-12-18",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2019-12-19T00:00:00.000+08:00",
+            "id": "article_article0_2019-12-19",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListAnalytics supports after, before and first: after article_articleId1_2020-01-05 1`] = `
+Object {
+  "data": Object {
+    "ListAnalytics": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "date": "2020-01-04T00:00:00.000+08:00",
+            "id": "article_articleId1_2020-01-04",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2020-01-03T00:00:00.000+08:00",
+            "id": "article_articleId1_2020-01-03",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListAnalytics supports after, before and first: before article_articleId1_2020-01-05 1`] = `
+Object {
+  "data": Object {
+    "ListAnalytics": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "date": "2020-01-01T00:00:00.000+08:00",
+            "id": "reply_replyId2_2020-01-01",
+          },
+        },
+        Object {
+          "node": Object {
+            "date": "2020-01-06T00:00:00.000+08:00",
+            "id": "reply_replyId1_2020-01-06",
+          },
+        },
+      ],
+    },
+  },
+}
+`;

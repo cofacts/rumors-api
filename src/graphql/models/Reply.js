@@ -13,6 +13,7 @@ import {
   createSortType,
   createConnectionType,
   DEFAULT_ARTICLE_REPLY_STATUSES,
+  timeRangeInput,
 } from 'graphql/util';
 import Node from '../interfaces/Node';
 import ReplyTypeEnum from './ReplyTypeEnum';
@@ -20,6 +21,7 @@ import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
 import User, { userFieldResolver } from './User';
 import Hyperlink from './Hyperlink';
+import Analytics from './Analytics';
 
 const Reply = new GraphQLObjectType({
   name: 'Reply',
@@ -144,6 +146,24 @@ const Reply = new GraphQLObjectType({
       },
       // eslint-disable-next-line no-use-before-define
       type: ReplyConnection,
+    },
+    stats: {
+      type: new GraphQLList(Analytics),
+      description: 'Activities analytics for the given article',
+      args: {
+        dateRange: {
+          type: timeRangeInput,
+          description:
+            'List only the activities between the specific time range.',
+        },
+      },
+      resolve: async ({ id }, { dateRange }, { loaders }) => {
+        return await loaders.analyticsLoader.load({
+          docId: id,
+          docType: 'reply',
+          dateRange,
+        });
+      },
     },
   }),
 });
