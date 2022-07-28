@@ -874,13 +874,6 @@ describe('ListArticles', () => {
                   webVisit
                   lineUser
                   lineVisit
-                  liffUser
-                  liffVisit
-                  liff {
-                    source
-                    user
-                    visit
-                  }
                 }
               }
             }

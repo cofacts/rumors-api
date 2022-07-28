@@ -762,9 +762,6 @@ Object {
             "stats": Array [
               Object {
                 "date": "2020-01-03",
-                "liff": Array [],
-                "liffUser": 0,
-                "liffVisit": 0,
                 "lineUser": 1,
                 "lineVisit": 2,
                 "webUser": 6,
@@ -772,9 +769,6 @@ Object {
               },
               Object {
                 "date": "2020-01-04",
-                "liff": Array [],
-                "liffUser": 0,
-                "liffVisit": 0,
                 "lineUser": 9,
                 "lineVisit": 15,
                 "webUser": 7,
@@ -782,9 +776,6 @@ Object {
               },
               Object {
                 "date": "2020-01-05",
-                "liff": Array [],
-                "liffUser": 0,
-                "liffVisit": 0,
                 "lineUser": null,
                 "lineVisit": null,
                 "webUser": 37,
@@ -799,20 +790,6 @@ Object {
             "stats": Array [
               Object {
                 "date": "2020-01-03",
-                "liff": Array [
-                  Object {
-                    "source": "",
-                    "user": 108,
-                    "visit": 110,
-                  },
-                  Object {
-                    "source": "some-bot",
-                    "user": 50,
-                    "visit": 51,
-                  },
-                ],
-                "liffUser": 158,
-                "liffVisit": 161,
                 "lineUser": 1,
                 "lineVisit": 7,
                 "webUser": 18,
@@ -820,9 +797,6 @@ Object {
               },
               Object {
                 "date": "2020-01-04",
-                "liff": Array [],
-                "liffUser": 0,
-                "liffVisit": 0,
                 "lineUser": null,
                 "lineVisit": null,
                 "webUser": 6,
@@ -830,9 +804,6 @@ Object {
               },
               Object {
                 "date": "2020-01-05",
-                "liff": Array [],
-                "liffUser": 0,
-                "liffVisit": 0,
                 "lineUser": 9,
                 "lineVisit": 15,
                 "webUser": 37,
