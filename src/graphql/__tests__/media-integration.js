@@ -139,6 +139,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
       await delayForMs(1000); // Wait for setMetadata operation to finish
 
       // Expect metadata being set
+      resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl); // Fetch again for latest header
       expect(resp.headers.get('Cache-Control')).toMatchInlineSnapshot(
         `"public, max-age=31536000, immutable"`
       );

@@ -180,4 +180,107 @@ export default {
       { article: 100, reply: 100 },
     ],
   },
+  updateLiffStats: {
+    batchGetResponses: [
+      // Responses for articles
+      //
+      {
+        data: {
+          reports: [
+            {
+              data: {
+                rowCount: 4,
+                rows: [
+                  {
+                    dimensions: ['20220101', 'articleId1', 'utm_source_1'],
+                    metrics: [{ values: [2, 1] }],
+                  },
+                  // New entry triggering entries pushed to batch
+                  {
+                    dimensions: ['20220101', 'articleId2', 'utm_source_1'],
+                    metrics: [{ values: [3, 2] }],
+                  },
+                ],
+              },
+              nextPageToken: 'page_token_here',
+            },
+          ],
+        },
+      },
+      {
+        data: {
+          reports: [
+            {
+              data: {
+                rowCount: 4,
+                rows: [
+                  {
+                    dimensions: ['20220101', 'articleId2', 'utm_source_2'],
+                    metrics: [{ values: [4, 3] }],
+                  },
+                ],
+              },
+              nextPageToken: 'page_token_2_here',
+            },
+          ],
+        },
+      },
+      {
+        data: {
+          reports: [
+            {
+              data: {
+                rowCount: 4,
+                rows: [
+                  // New entry triggered by date at first page.
+                  // But this last entry will be in the same batch in 20220101/articleId2 because it's the last
+                  // entry in batch.
+                  {
+                    dimensions: ['20220102', 'articleId2', 'utm_source_1'],
+                    metrics: [{ values: [5, 4] }],
+                  },
+                ],
+              },
+              // No nextPageToken, thus the end of article responses
+            },
+          ],
+        },
+      },
+
+      // Responses for replies
+      {
+        data: {
+          reports: [
+            {
+              data: {
+                rowCount: 1,
+                rows: [
+                  // test if single page entry is counted
+                  {
+                    dimensions: ['20220101', 'replyId1', 'utm_source_1'],
+                    metrics: [{ values: [2, 1] }],
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+    fixtures: {
+      '/analytics/doc/article_articleId1_2022-01-01': {
+        // Existing stats
+        stats: {
+          lineVisit: 10,
+          lineUser: 5,
+        },
+        // Others are populated during update. Just to ensure update works & for smaller fixture.
+        // In reality, most fields will be filled-in by first insertion.
+      },
+      '/articles/doc/articleId1': {
+        userId: 'user for articleId1',
+        appId: 'app for articleId1',
+      },
+    },
+  },
 };

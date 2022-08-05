@@ -867,6 +867,368 @@ Array [
 ]
 `;
 
+exports[`fetchStatsFromGA updateLiffStats calls batchGet by param and handles empty results from GA: batchGet with no params 1`] = `
+Array [
+  Array [
+    Object {
+      "requestBody": Object {
+        "reportRequests": Array [
+          Object {
+            "dateRanges": Array [
+              Object {
+                "endDate": "today",
+                "startDate": "today",
+              },
+            ],
+            "dimensions": Array [
+              Object {
+                "name": "ga:date",
+              },
+              Object {
+                "name": "ga:eventLabel",
+              },
+              Object {
+                "name": "ga:source",
+              },
+            ],
+            "filtersExpression": "ga:eventCategory==LIFF;ga:eventAction==ViewArticle",
+            "includeEmptyRows": false,
+            "metrics": Array [
+              Object {
+                "expression": "ga:hits",
+              },
+              Object {
+                "expression": "ga:users",
+              },
+            ],
+            "orderBys": Array [
+              Object {
+                "fieldName": "ga:date",
+              },
+              Object {
+                "fieldName": "ga:eventLabel",
+              },
+            ],
+            "pageSize": "10000",
+            "pageToken": undefined,
+            "viewId": "987654321",
+          },
+        ],
+      },
+    },
+  ],
+  Array [
+    Object {
+      "requestBody": Object {
+        "reportRequests": Array [
+          Object {
+            "dateRanges": Array [
+              Object {
+                "endDate": "today",
+                "startDate": "today",
+              },
+            ],
+            "dimensions": Array [
+              Object {
+                "name": "ga:date",
+              },
+              Object {
+                "name": "ga:eventLabel",
+              },
+              Object {
+                "name": "ga:source",
+              },
+            ],
+            "filtersExpression": "ga:eventCategory==LIFF;ga:eventAction==ViewReply",
+            "includeEmptyRows": false,
+            "metrics": Array [
+              Object {
+                "expression": "ga:hits",
+              },
+              Object {
+                "expression": "ga:users",
+              },
+            ],
+            "orderBys": Array [
+              Object {
+                "fieldName": "ga:date",
+              },
+              Object {
+                "fieldName": "ga:eventLabel",
+              },
+            ],
+            "pageSize": "10000",
+            "pageToken": undefined,
+            "viewId": "987654321",
+          },
+        ],
+      },
+    },
+  ],
+]
+`;
+
+exports[`fetchStatsFromGA updateLiffStats calls batchGet by param and handles empty results from GA: batchGet with startDate & endDate 1`] = `
+Array [
+  Array [
+    Object {
+      "requestBody": Object {
+        "reportRequests": Array [
+          Object {
+            "dateRanges": Array [
+              Object {
+                "endDate": "2022-12-31",
+                "startDate": "2022-12-31",
+              },
+            ],
+            "dimensions": Array [
+              Object {
+                "name": "ga:date",
+              },
+              Object {
+                "name": "ga:eventLabel",
+              },
+              Object {
+                "name": "ga:source",
+              },
+            ],
+            "filtersExpression": "ga:eventCategory==LIFF;ga:eventAction==ViewArticle",
+            "includeEmptyRows": false,
+            "metrics": Array [
+              Object {
+                "expression": "ga:hits",
+              },
+              Object {
+                "expression": "ga:users",
+              },
+            ],
+            "orderBys": Array [
+              Object {
+                "fieldName": "ga:date",
+              },
+              Object {
+                "fieldName": "ga:eventLabel",
+              },
+            ],
+            "pageSize": "10000",
+            "pageToken": undefined,
+            "viewId": "987654321",
+          },
+        ],
+      },
+    },
+  ],
+  Array [
+    Object {
+      "requestBody": Object {
+        "reportRequests": Array [
+          Object {
+            "dateRanges": Array [
+              Object {
+                "endDate": "2022-12-31",
+                "startDate": "2022-12-31",
+              },
+            ],
+            "dimensions": Array [
+              Object {
+                "name": "ga:date",
+              },
+              Object {
+                "name": "ga:eventLabel",
+              },
+              Object {
+                "name": "ga:source",
+              },
+            ],
+            "filtersExpression": "ga:eventCategory==LIFF;ga:eventAction==ViewReply",
+            "includeEmptyRows": false,
+            "metrics": Array [
+              Object {
+                "expression": "ga:hits",
+              },
+              Object {
+                "expression": "ga:users",
+              },
+            ],
+            "orderBys": Array [
+              Object {
+                "fieldName": "ga:date",
+              },
+              Object {
+                "fieldName": "ga:eventLabel",
+              },
+            ],
+            "pageSize": "10000",
+            "pageToken": undefined,
+            "viewId": "987654321",
+          },
+        ],
+      },
+    },
+  ],
+]
+`;
+
+exports[`fetchStatsFromGA updateLiffStats processes articles and replies: Merged articleId1 1`] = `
+Object {
+  "date": "2022-01-01T00:00:00.000+08:00",
+  "docAppId": "app for articleId1",
+  "docId": "articleId1",
+  "docUserId": "user for articleId1",
+  "fetchedAt": "2022-01-03T00:00:00.000Z",
+  "stats": Object {
+    "liff": Array [
+      Object {
+        "source": "utm_source_1",
+        "user": 1,
+        "visit": 2,
+      },
+    ],
+    "lineUser": 5,
+    "lineVisit": 10,
+  },
+  "type": "article",
+}
+`;
+
+exports[`fetchStatsFromGA updateLiffStats processes articles and replies: updateDocStats() for 20220101/articleId1 only 1`] = `
+Array [
+  Object {
+    "update": Object {
+      "_id": "article_articleId1_2022-01-01",
+      "_index": "analytics",
+      "_type": "doc",
+    },
+  },
+  Object {
+    "script": Object {
+      "id": "analyticsUpsertScript",
+      "params": Object {
+        "date": "2022-01-01T00:00:00.000+08:00",
+        "docAppId": "app for articleId1",
+        "docId": "articleId1",
+        "docUserId": "user for articleId1",
+        "fetchedAt": 2022-01-03T00:00:00.000Z,
+        "stats": Object {
+          "liff": Array [
+            Object {
+              "source": "utm_source_1",
+              "user": 1,
+              "visit": 2,
+            },
+          ],
+        },
+        "type": "article",
+      },
+    },
+    "scripted_upsert": true,
+    "upsert": Object {},
+  },
+]
+`;
+
+exports[`fetchStatsFromGA updateLiffStats processes articles and replies: updateDocStats() for 20220101/articleId2 and 20220102/articleId2 1`] = `
+Array [
+  Object {
+    "update": Object {
+      "_id": "article_articleId2_2022-01-01",
+      "_index": "analytics",
+      "_type": "doc",
+    },
+  },
+  Object {
+    "script": Object {
+      "id": "analyticsUpsertScript",
+      "params": Object {
+        "date": "2022-01-01T00:00:00.000+08:00",
+        "docId": "articleId2",
+        "fetchedAt": 2022-01-03T00:00:00.000Z,
+        "stats": Object {
+          "liff": Array [
+            Object {
+              "source": "utm_source_1",
+              "user": 2,
+              "visit": 3,
+            },
+            Object {
+              "source": "utm_source_2",
+              "user": 3,
+              "visit": 4,
+            },
+          ],
+        },
+        "type": "article",
+      },
+    },
+    "scripted_upsert": true,
+    "upsert": Object {},
+  },
+  Object {
+    "update": Object {
+      "_id": "article_articleId2_2022-01-02",
+      "_index": "analytics",
+      "_type": "doc",
+    },
+  },
+  Object {
+    "script": Object {
+      "id": "analyticsUpsertScript",
+      "params": Object {
+        "date": "2022-01-02T00:00:00.000+08:00",
+        "docId": "articleId2",
+        "fetchedAt": 2022-01-03T00:00:00.000Z,
+        "stats": Object {
+          "liff": Array [
+            Object {
+              "source": "utm_source_1",
+              "user": 4,
+              "visit": 5,
+            },
+          ],
+        },
+        "type": "article",
+      },
+    },
+    "scripted_upsert": true,
+    "upsert": Object {},
+  },
+]
+`;
+
+exports[`fetchStatsFromGA updateLiffStats processes articles and replies: updateDocStats() for 20220101/replyId1 1`] = `
+Array [
+  Object {
+    "update": Object {
+      "_id": "reply_replyId1_2022-01-01",
+      "_index": "analytics",
+      "_type": "doc",
+    },
+  },
+  Object {
+    "script": Object {
+      "id": "analyticsUpsertScript",
+      "params": Object {
+        "date": "2022-01-01T00:00:00.000+08:00",
+        "docId": "replyId1",
+        "fetchedAt": 2022-01-03T00:00:00.000Z,
+        "stats": Object {
+          "liff": Array [
+            Object {
+              "source": "utm_source_1",
+              "user": 1,
+              "visit": 2,
+            },
+          ],
+        },
+        "type": "reply",
+      },
+    },
+    "scripted_upsert": true,
+    "upsert": Object {},
+  },
+]
+`;
+
 exports[`fetchStatsFromGA updateStats should call right functions with right params: fetchReports calls 1`] = `
 Array [
   Array [

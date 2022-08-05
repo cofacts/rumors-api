@@ -45,7 +45,7 @@ export default () =>
       return (await client.msearch({
         body,
       })).body.responses.map(({ hits: { hits: analytics } }) =>
-        analytics.map(row => ({ date: row._source.date, ...row._source.stats }))
+        analytics.map(row => row._source)
       );
     },
     {

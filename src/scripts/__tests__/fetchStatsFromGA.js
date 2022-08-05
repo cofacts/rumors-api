@@ -45,19 +45,42 @@ jest.mock('yargs', () => {
   return yargsMock;
 });
 
+const unloadBody = async bulkBody => {
+  let bulkDeleteBody = [];
+  let prevRow;
+  bulkBody.forEach((row, i) => {
+    if (i % 2 == 0 && row.update._id != prevRow) {
+      bulkDeleteBody.push({ delete: row.update });
+      prevRow = row.update._id;
+    }
+  });
+
+  const { body: result } = await client.bulk({
+    body: bulkDeleteBody,
+    refresh: 'true',
+  });
+
+  if (result.errors) {
+    throw new Error(`unload failed : ${JSON.stringify(result, null, '  ')}`);
+  }
+};
+
 describe('fetchStatsFromGA', () => {
   describe('command line arguments', () => {
     const updateStatsMock = jest.fn(),
-      storeScriptInDBMock = jest.fn();
+      storeScriptInDBMock = jest.fn(),
+      updateLiffStatsMock = jest.fn();
 
     beforeAll(() => {
       FetchGAReWireAPI.__set__('updateStats', updateStatsMock);
+      FetchGAReWireAPI.__set__('updateLiffStats', updateLiffStatsMock);
       FetchGAReWireAPI.__set__('storeScriptInDB', storeScriptInDBMock);
     });
 
     afterEach(() => {
       updateStatsMock.mockReset();
       storeScriptInDBMock.mockReset();
+      updateLiffStatsMock.mockReset();
       yargs.argvMock.mockReset();
     });
 
@@ -85,6 +108,14 @@ describe('fetchStatsFromGA', () => {
         [
           {
             useContentGroup: true,
+            startDate: '2020-01-01',
+            endDate: '2020-02-01',
+          },
+        ],
+      ]);
+      expect(updateLiffStatsMock.mock.calls).toMatchObject([
+        [
+          {
             startDate: '2020-01-01',
             endDate: '2020-02-01',
           },
@@ -440,29 +471,6 @@ describe('fetchStatsFromGA', () => {
             sort: [{ _id: 'asc' }],
           },
         })).body.hits.hits;
-
-      const unloadBody = async bulkBody => {
-        let bulkDeleteBody = [];
-        let prevRow;
-        bulkBody.forEach((row, i) => {
-          if (i % 2 == 0 && row.update._id != prevRow) {
-            bulkDeleteBody.push({ delete: row.update });
-            prevRow = row.update._id;
-          }
-        });
-
-        const { body: result } = await client.bulk({
-          body: bulkDeleteBody,
-          refresh: 'true',
-        });
-
-        if (result.errors) {
-          throw new Error(
-            `unload failed : ${JSON.stringify(result, null, '  ')}`
-          );
-        }
-      };
-
       beforeAll(async () => {
         MockDate.set(1577836800000);
         FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsSpy);
@@ -558,6 +566,88 @@ describe('fetchStatsFromGA', () => {
         await unloadBody(bulkUpdateBody);
         await unloadFixtures(fixtures.repliesFixtures);
       });
+    });
+  });
+
+  describe('updateLiffStats', () => {
+    const upsertDocStatsSpy = jest.spyOn(fetchStatsFromGA, 'upsertDocStats');
+    const batchGetMock = google.analyticsreporting().reports.batchGet;
+
+    beforeAll(async () => {
+      MockDate.set(1641168000000); // fetchedAt 2022-01-03T00:00:00.000Z
+      FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsSpy);
+      FetchGAReWireAPI.__set__('lineViewId', '987654321');
+      await fetchStatsFromGA.storeScriptInDB();
+    });
+    afterEach(() => {
+      upsertDocStatsSpy.mockClear();
+      batchGetMock.mockReset();
+    });
+    afterAll(() =>
+      client.delete_script({ id: fetchStatsFromGA.upsertScriptID }));
+
+    it('calls batchGet by param and handles empty results from GA', async () => {
+      const emptyRows = { data: { totals: [{ values: [0, 0] }] } };
+      const emptyResp = { data: { reports: [emptyRows] } };
+      batchGetMock.mockResolvedValue(emptyResp);
+
+      await fetchStatsFromGA.updateLiffStats({});
+
+      expect(batchGetMock.mock.calls).toMatchSnapshot(
+        'batchGet with no params'
+      );
+
+      // No response from server, thus no updateDoc calls
+      expect(upsertDocStatsSpy).not.toHaveBeenCalled();
+
+      batchGetMock.mockClear();
+
+      await fetchStatsFromGA.updateLiffStats({
+        startDate: '2022-12-31',
+        endDate: '2022-12-31',
+      });
+      expect(batchGetMock.mock.calls).toMatchSnapshot(
+        'batchGet with startDate & endDate'
+      );
+    });
+
+    it('processes articles and replies', async () => {
+      await loadFixtures(fixtures.updateLiffStats.fixtures);
+
+      // Load batchGet mocks
+      fixtures.updateLiffStats.batchGetResponses.forEach(resp =>
+        batchGetMock.mockResolvedValueOnce(resp)
+      );
+
+      await fetchStatsFromGA.updateLiffStats({});
+
+      // Expect upsertDocStats calls are correctly batched.
+      // 2 times for each article batch return; 1 time for the reply.
+      expect(upsertDocStatsSpy).toHaveBeenCalledTimes(3);
+      expect(upsertDocStatsSpy.mock.calls[0][0]).toMatchSnapshot(
+        `updateDocStats() for 20220101/articleId1 only`
+      );
+      expect(upsertDocStatsSpy.mock.calls[1][0]).toMatchSnapshot(
+        `updateDocStats() for 20220101/articleId2 and 20220102/articleId2`
+      );
+      expect(upsertDocStatsSpy.mock.calls[2][0]).toMatchSnapshot(
+        `updateDocStats() for 20220101/replyId1`
+      );
+
+      // Expect documents are being inserted and stats are merged correctly
+      // if analytics doc already exists.
+      expect(
+        (await client.get({
+          index: 'analytics',
+          type: 'doc',
+          id: 'article_articleId1_2022-01-01',
+        })).body._source
+      ).toMatchSnapshot('Merged articleId1');
+
+      // Teardown
+      await unloadBody(upsertDocStatsSpy.mock.calls[1][0]);
+      await unloadBody(upsertDocStatsSpy.mock.calls[2][0]);
+      await unloadFixtures(fixtures.updateLiffStats.fixtures);
     });
   });
 });
