@@ -148,6 +148,36 @@ const requestBodyBuilder = function(sourceType, docType, pageToken, params) {
 };
 
 /**
+ *
+ * @param {Object} report - The report data resolved by analyticsreporting.reports.batchGet()
+ */
+/* istanbul ignore next */
+function warnIfReportIsSampled(report) {
+  if (!report.data.samplingSpaceSizes && !report.data.samplesReadCounts) return;
+
+  console.warn(
+    '-------------------------------------------------------------------------------'
+  );
+  console.warn(
+    '⚠️ Note: The result contains sampled data, thus the numbers may be inaccurate. ⚠️'
+  );
+  console.warn(
+    `${
+      report.data.samplesReadCounts?.[0]
+    } samples are read out of the sample space of ${
+      report.data.samplingSpaceSizes?.[0]
+    }.`
+  );
+  console.warn('Please consider using a smaller date range.');
+  console.warn(
+    'Document about data sampling: https://support.google.com/analytics/answer/2637192'
+  );
+  console.warn(
+    '-------------------------------------------------------------------------------'
+  );
+}
+
+/**
  * Given a sourceType, fetch stats for all doc types from startDate to endDate (inclusive).
 
  * @param {string} sourceType
@@ -187,12 +217,14 @@ const fetchReports = async function(sourceType, pageTokens = {}, params) {
       reportRequests,
     },
   });
+
   const reports = res.data.reports;
   let results = {};
   let hasMore = false;
 
   requestDocTypes.forEach((docType, i) => {
     let report = reports[i];
+    warnIfReportIsSampled(report);
     const rows = report.data.rows;
     if (rows) {
       console.log(
@@ -265,6 +297,7 @@ async function* getLiffReportEntries(docType, params) {
     });
 
     const [report] = res.data.reports;
+    warnIfReportIsSampled(report);
     const rows = report.data.rows ?? [];
 
     console.log(
