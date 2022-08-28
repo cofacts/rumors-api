@@ -262,7 +262,7 @@ const Article = new GraphQLObjectType({
         ...pagingArgs,
       },
       async resolve(
-        { id },
+        { id, attachmentHash },
         { filter = {}, orderBy = [{ _score: 'DESC' }], ...otherParams }
       ) {
         const body = {
@@ -327,6 +327,49 @@ const Article = new GraphQLObjectType({
                   filter.replyCount
                 ),
               },
+            },
+          ];
+        }
+
+        // If the article has attachment hash, use Media Manager to get similar media entries
+        if (attachmentHash) {
+          // `hits` may include exact match attachmentHash.
+          //
+          // It is possible for 2 articles to have exactly the same attachmentHash
+          // (when created simutaneiously, through a race conditions), and we want these articles
+          // with exact match attachmentHash to be returned as well.
+          // Thus, we cannot simply remove the exact match hit here.
+          //
+          const { hits } = await mediaManager.query({ id: attachmentHash });
+          const similarityMap = hits.reduce((map, hit) => {
+            map[hit.entry.id] = hit.similarity;
+            return map;
+          }, {});
+
+          body.query.bool.should.push({
+            function_score: {
+              query: {
+                terms: {
+                  attachmentHash: hits.map(hit => hit.entry.id),
+                },
+              },
+              script_score: {
+                script: {
+                  lang: 'painless',
+                  params: { similarityMap },
+                  source:
+                    // Boost the score by 10, we want to prioritize media search hits
+                    //
+                    "10 * params.similarityMap.get(doc['attachmentHash'].value)",
+                },
+              },
+            },
+          });
+
+          // Exclude self from function_score query
+          body.query.bool.must_not = [
+            {
+              ids: { values: [id] },
             },
           ];
         }

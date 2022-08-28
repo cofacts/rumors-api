@@ -119,6 +119,13 @@ export default {
     text: 'Popular',
     replyRequestCount: 11,
   },
+  '/articles/doc/mediaArticle': {
+    text: 'Lorum ipsum', // Transcript
+    attachmentHash: 'hash-for-media-article',
+  },
+  '/articles/doc/similarMediaArticle': {
+    attachmentHash: 'hash-for-similar-media-article',
+  },
   '/replies/doc/bar': {
     text: 'bar',
     reference: 'barbar',

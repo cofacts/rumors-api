@@ -121,27 +121,39 @@ Object {
 }
 `;
 
-exports[`GetReplyAndGetArticle GetArticle relatedArticles should work: relatedArticle filter test 1`] = `
+exports[`GetReplyAndGetArticle GetArticle realtedArticles should work for media articles 1`] = `
 Object {
   "data": Object {
     "GetArticle": Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzEuMzg5MjM0OCwiZm9vMyJd",
+            "cursor": "WzcuNSwic2ltaWxhck1lZGlhQXJ0aWNsZSJd",
             "node": Object {
-              "id": "foo3",
-              "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+              "id": "similarMediaArticle",
             },
-            "score": 1.3892348,
+            "score": 7.5,
           },
           Object {
-            "cursor": "WzAuOTIxMDc0OCwiZm9vMiJd",
+            "cursor": "WzAuNzQ0NTg4ODUsImZvbzMiXQ==",
+            "node": Object {
+              "id": "foo3",
+            },
+            "score": 0.74458885,
+          },
+          Object {
+            "cursor": "WzAuNzIzMzE0OTQsImZvbzIiXQ==",
             "node": Object {
               "id": "foo2",
-              "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 0.9210748,
+            "score": 0.72331494,
+          },
+          Object {
+            "cursor": "WzAuNjY2MjExMSwiZm9vIl0=",
+            "node": Object {
+              "id": "foo",
+            },
+            "score": 0.6662111,
           },
         ],
       },
@@ -150,14 +162,43 @@ Object {
 }
 `;
 
-exports[`GetReplyAndGetArticle GetArticle relatedArticles should work: relatedArticle no-param test 1`] = `
+exports[`GetReplyAndGetArticle GetArticle relatedArticles should work for text articles: relatedArticle filter test 1`] = `
 Object {
   "data": Object {
     "GetArticle": Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzEuMzg5MjM0OCwiZm9vMyJd",
+            "cursor": "WzEuMTg0OTAyMywiZm9vMyJd",
+            "node": Object {
+              "id": "foo3",
+              "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
+            },
+            "score": 1.1849023,
+          },
+          Object {
+            "cursor": "WzAuNzIzMzE0OTQsImZvbzIiXQ==",
+            "node": Object {
+              "id": "foo2",
+              "text": "Lorum ipsum Lorum ipsum",
+            },
+            "score": 0.72331494,
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`GetReplyAndGetArticle GetArticle relatedArticles should work for text articles: relatedArticle no-param test 1`] = `
+Object {
+  "data": Object {
+    "GetArticle": Object {
+      "relatedArticles": Object {
+        "edges": Array [
+          Object {
+            "cursor": "WzEuMTg0OTAyMywiZm9vMyJd",
             "highlight": Object {
               "hyperlinks": Array [
                 Object {
@@ -171,10 +212,10 @@ Object {
             "node": Object {
               "id": "foo3",
             },
-            "score": 1.3892348,
+            "score": 1.1849023,
           },
           Object {
-            "cursor": "WzAuOTIxMDc0OCwiZm9vMiJd",
+            "cursor": "WzAuNzIzMzE0OTQsImZvbzIiXQ==",
             "highlight": Object {
               "hyperlinks": Array [],
               "reference": null,
@@ -183,7 +224,19 @@ Object {
             "node": Object {
               "id": "foo2",
             },
-            "score": 0.9210748,
+            "score": 0.72331494,
+          },
+          Object {
+            "cursor": "WzAuNjY2MjExMSwibWVkaWFBcnRpY2xlIl0=",
+            "highlight": Object {
+              "hyperlinks": Array [],
+              "reference": null,
+              "text": "<HIGHLIGHT>Lorum</HIGHLIGHT> <HIGHLIGHT>ipsum</HIGHLIGHT>",
+            },
+            "node": Object {
+              "id": "mediaArticle",
+            },
+            "score": 0.6662111,
           },
         ],
       },
@@ -192,27 +245,35 @@ Object {
 }
 `;
 
-exports[`GetReplyAndGetArticle GetArticle relatedArticles should work: relatedArticle sorting test 1`] = `
+exports[`GetReplyAndGetArticle GetArticle relatedArticles should work for text articles: relatedArticle sorting test 1`] = `
 Object {
   "data": Object {
     "GetArticle": Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuOTIxMDc0OCwiZm9vMiJd",
+            "cursor": "WzAuNjY2MjExMSwibWVkaWFBcnRpY2xlIl0=",
+            "node": Object {
+              "id": "mediaArticle",
+              "text": "Lorum ipsum",
+            },
+            "score": 0.6662111,
+          },
+          Object {
+            "cursor": "WzAuNzIzMzE0OTQsImZvbzIiXQ==",
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 0.9210748,
+            "score": 0.72331494,
           },
           Object {
-            "cursor": "WzEuMzg5MjM0OCwiZm9vMyJd",
+            "cursor": "WzEuMTg0OTAyMywiZm9vMyJd",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 1.3892348,
+            "score": 1.1849023,
           },
         ],
       },
