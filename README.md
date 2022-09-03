@@ -21,14 +21,28 @@ For production via [rumors-deploy](http://github.com/cofacts/rumors-deploy), do 
 After cloning this repository & cd into project directory, then install the dependencies.
 
 ```
-$ git clone --recursive git@github.com:MrOrz/rumors-api.git # --recursive for the submodules
+$ git clone --recursive git@github.com:cofacts/rumors-api.git # --recursive for the submodules
 $ cd rumors-api
 
 # This ensures gRPC binary package are installed under correct platform during development
 $ docker-compose run --rm --entrypoint="npm i" api
 ```
 
+#### OAuth2
 If you want to test OAuth2 authentication, you will need to fill in login credentials in `.env`. Please apply for the keys in Facebook, Twitter and Github respectively.
+
+#### Media
+Cofacts API uses Google cloud storage to store user reported media files (image, audio, video files).
+
+Please populate the following fields in `.env` if you want to test this.
+- `GCS_CREDENTIALS`: Service account's JSON file content.
+- `GCS_BUCKET_NAME`: The Google cloud storage bucket to store files. It must grant the service account the following permission:
+  - `storage.objects.list`: required by [cofacts/media-manager](https://cofacts.github.io/media-manager/types/MediaManagerOptions.html)
+  - `storage.objects.create`: required by [cofacts/media-manager](https://cofacts.github.io/media-manager/types/MediaManagerOptions.html)
+  - `storage.objects.get`: required by [cofacts/media-manager](https://cofacts.github.io/media-manager/types/MediaManagerOptions.html)
+  - `storage.objects.delete`: required by [cofacts/media-manager](https://cofacts.github.io/media-manager/types/MediaManagerOptions.html)
+  - `storage.objects.update`: required to update metadata
+- `GCS_MEDIA_FOLDER`: The prefix for stored files. Trailing `/` is required if you want all root level folders are put under your specified folder.
 
 ### Start development servers
 
