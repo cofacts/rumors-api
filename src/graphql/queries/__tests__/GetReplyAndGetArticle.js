@@ -1,9 +1,15 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/GetReplyAndArticle';
+import mediaManager from 'util/mediaManager';
+
+jest.mock('util/mediaManager');
 
 describe('GetReplyAndGetArticle', () => {
   beforeAll(() => loadFixtures(fixtures));
+  beforeEach(() => {
+    mediaManager.insert.mockClear();
+  });
 
   describe('GetArticle', () => {
     it('should get the specified article & associated replies from ID', async () => {
@@ -187,7 +193,7 @@ describe('GetReplyAndGetArticle', () => {
       ).toMatchSnapshot();
     });
 
-    it('relatedArticles should work', async () => {
+    it('relatedArticles should work for text articles', async () => {
       // No param
       //
       expect(
@@ -257,6 +263,65 @@ describe('GetReplyAndGetArticle', () => {
           }
         `()
       ).toMatchSnapshot('relatedArticle sorting test');
+    });
+
+    it('realtedArticles should work for media articles', async () => {
+      mediaManager.query.mockImplementationOnce(async () => ({
+        queryInfo: {
+          type: 'image',
+          id: fixtures['/articles/doc/mediaArticle'].attachmentHash,
+        },
+        hits: [
+          {
+            similarity: 1,
+            entry: {
+              id: fixtures['/articles/doc/mediaArticle'].attachmentHash,
+            },
+          },
+          {
+            // Simulate the case when Google drive has a media entry,
+            // but no article is in Elasticsearch has that attachmentHash
+            similarity: 0.9,
+            entry: { id: 'exist-on-google-drive-but-not-in-db' },
+          },
+          {
+            similarity: 0.75,
+            entry: {
+              id: fixtures['/articles/doc/similarMediaArticle'].attachmentHash,
+            },
+          },
+        ],
+      }));
+
+      expect(
+        await gql`
+          {
+            GetArticle(id: "mediaArticle") {
+              relatedArticles {
+                edges {
+                  cursor
+                  node {
+                    id
+                  }
+                  score
+                }
+              }
+            }
+          }
+        `()
+      ).toMatchSnapshot();
+
+      // Expect called exactly once with {id: ...}
+      //
+      expect(mediaManager.query.mock.calls).toMatchInlineSnapshot(`
+        Array [
+          Array [
+            Object {
+              "id": "hash-for-media-article",
+            },
+          ],
+        ]
+      `);
     });
 
     it('feedbacks should work', async () => {
