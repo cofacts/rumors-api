@@ -52,16 +52,6 @@ Object {
 }
 `;
 
-exports[`ListArticles filters by mediaUrl, without MEDIA_ARTICLE_SUPPORT env: should return empty 1`] = `
-Object {
-  "data": Object {
-    "ListArticles": Object {
-      "edges": Array [],
-    },
-  },
-}
-`;
-
 exports[`ListArticles filters by mixed query 1`] = `
 Object {
   "data": Object {
@@ -391,6 +381,12 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest5",
+            "replyCount": 2,
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest4",
             "replyCount": 3,
           },
@@ -414,6 +410,18 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest7",
+            "replyCount": 0,
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest6",
+            "replyCount": 0,
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest3",
             "replyCount": 0,
           },
@@ -431,11 +439,16 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest5",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest1",
           },
         },
       ],
-      "totalCount": 1,
+      "totalCount": 2,
     },
   },
 }
@@ -502,12 +515,30 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "createdAt": "2020-02-10T00:00:00.000Z",
+            "id": "listArticleTest7",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-09T00:00:00.000Z",
+            "id": "listArticleTest6",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-02-08T00:00:00.000Z",
+            "id": "listArticleTest5",
+          },
+        },
+        Object {
+          "node": Object {
             "createdAt": "2020-02-07T00:00:00.000Z",
             "id": "listArticleTest4",
           },
         },
       ],
-      "totalCount": 1,
+      "totalCount": 4,
     },
   },
 }
@@ -520,6 +551,21 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest7",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest6",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest5",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest2",
           },
         },
@@ -529,7 +575,7 @@ Object {
           },
         },
       ],
-      "totalCount": 2,
+      "totalCount": 5,
     },
   },
 }
@@ -542,6 +588,21 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest7",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest6",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest5",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest2",
           },
         },
@@ -551,7 +612,7 @@ Object {
           },
         },
       ],
-      "totalCount": 2,
+      "totalCount": 5,
     },
   },
 }
@@ -562,6 +623,24 @@ Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest7",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest6",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest5",
+          },
+        },
         Object {
           "node": Object {
             "articleReplies": Array [
@@ -637,6 +716,24 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest7",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest6",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest5",
+          },
+        },
+        Object {
+          "node": Object {
             "articleReplies": Array [
               Object {
                 "user": null,
@@ -705,6 +802,24 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
+          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q3Il0=",
+          "node": Object {
+            "id": "listArticleTest7",
+          },
+        },
+        Object {
+          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q2Il0=",
+          "node": Object {
+            "id": "listArticleTest6",
+          },
+        },
+        Object {
+          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q1Il0=",
+          "node": Object {
+            "id": "listArticleTest5",
+          },
+        },
+        Object {
           "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
           "node": Object {
             "id": "listArticleTest4",
@@ -730,10 +845,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q3Il0=",
         "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
-      "totalCount": 4,
+      "totalCount": 7,
     },
   },
 }
@@ -744,6 +859,24 @@ Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listArticleTest7",
+            "stats": Array [],
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest6",
+            "stats": Array [],
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest5",
+            "stats": Array [],
+          },
+        },
         Object {
           "node": Object {
             "id": "listArticleTest4",
@@ -876,6 +1009,24 @@ Object {
         Object {
           "node": Object {
             "articleReplies": Array [],
+            "id": "listArticleTest7",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest6",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest5",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
             "id": "listArticleTest3",
           },
         },
@@ -892,6 +1043,12 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest5",
+            "replyRequestCount": 2,
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest1",
             "replyRequestCount": 2,
           },
@@ -900,6 +1057,18 @@ Object {
           "node": Object {
             "id": "listArticleTest2",
             "replyRequestCount": 1,
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest7",
+            "replyRequestCount": 0,
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest6",
+            "replyRequestCount": 0,
           },
         },
         Object {
@@ -916,10 +1085,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzIsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
+        "firstCursor": "WzIsImxpc3RBcnRpY2xlVGVzdDUiXQ==",
         "lastCursor": "WzAsImxpc3RBcnRpY2xlVGVzdDMiXQ==",
       },
-      "totalCount": 4,
+      "totalCount": 7,
     },
   },
 }
@@ -950,6 +1119,24 @@ Object {
         },
         Object {
           "node": Object {
+            "id": "listArticleTest7",
+            "updatedAt": "1",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest6",
+            "updatedAt": "1",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest5",
+            "updatedAt": "1",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest1",
             "updatedAt": "1",
           },
@@ -959,7 +1146,7 @@ Object {
         "firstCursor": "WzQsImxpc3RBcnRpY2xlVGVzdDQiXQ==",
         "lastCursor": "WzEsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
       },
-      "totalCount": 4,
+      "totalCount": 7,
     },
   },
 }
@@ -977,10 +1164,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q3Il0=",
         "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
-      "totalCount": 4,
+      "totalCount": 7,
     },
   },
 }
@@ -993,6 +1180,21 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "listArticleTest7",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest6",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listArticleTest5",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "listArticleTest4",
           },
         },
@@ -1003,10 +1205,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q3Il0=",
         "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
-      "totalCount": 4,
+      "totalCount": 7,
     },
   },
 }

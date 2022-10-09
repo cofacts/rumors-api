@@ -900,46 +900,7 @@ describe('ListArticles', () => {
     ).toMatchSnapshot('IMAGE and AUDIO articles');
   });
 
-  it('filters by mediaUrl, without MEDIA_ARTICLE_SUPPORT env', async () => {
-    mediaManager.query.mockImplementationOnce(async () => ({
-      queryInfo: {
-        type: 'image',
-        id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
-      },
-      hits: [
-        {
-          similarity: 1,
-          entry: {
-            id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
-            type: 'image',
-            url: 'https://foo.com/foo.jpg',
-          },
-        },
-      ],
-    }));
-
-    expect(
-      await gql`
-        {
-          ListArticles(
-            filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
-          ) {
-            edges {
-              node {
-                id
-                articleType
-                attachmentUrl
-                attachmentHash
-              }
-            }
-          }
-        }
-      `({}, { appId: 'WEBSITE' })
-    ).toMatchSnapshot('should return empty');
-  });
-
-  it('filters by mediaUrl with MEDIA_ARTICLE_SUPPORT env', async () => {
-    process.env.MEDIA_ARTICLE_SUPPORT = true;
+  it('filters by mediaUrl', async () => {
     const MOCK_HITS = [
       // Deliberately swap similarity to see if Elasticsearch sorts by similairty
       {
@@ -1015,7 +976,6 @@ describe('ListArticles', () => {
         },
       }
     `);
-    delete process.env.MEDIA_ARTICLE_SUPPORT;
   });
 
   afterAll(() => unloadFixtures(fixtures));
