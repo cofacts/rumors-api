@@ -140,6 +140,7 @@ async function createNewMediaArticle({
       hyperlinks: [],
       articleType,
       attachmentHash,
+      status: 'NORMAL',
     },
   });
 

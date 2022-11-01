@@ -429,6 +429,7 @@ export function filterByStatuses(entriesWithStatus, statuses) {
   return entriesWithStatus.filter(({ status }) => statuses.includes(status));
 }
 
+export const DEFAULT_ARTICLE_STATUSES = ['NORMAL'];
 export const DEFAULT_ARTICLE_REPLY_STATUSES = ['NORMAL'];
 export const DEFAULT_ARTICLE_CATEGORY_STATUSES = ['NORMAL'];
 export const DEFAULT_REPLY_REQUEST_STATUSES = ['NORMAL'];

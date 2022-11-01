@@ -37,6 +37,7 @@ import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 import ReplyRequestStatusEnum from './ReplyRequestStatusEnum';
+import ArticleStatusEnum from './ArticleStatusEnum';
 import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
@@ -60,6 +61,7 @@ const Article = new GraphQLObjectType({
     text: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
+    status: { type: new GraphQLNonNull(ReplyRequestStatusEnum) },
     references: { type: new GraphQLList(ArticleReference) },
     replyCount: {
       type: GraphQLInt,
