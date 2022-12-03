@@ -37,7 +37,6 @@ import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 import ReplyRequestStatusEnum from './ReplyRequestStatusEnum';
-import ArticleStatusEnum from './ArticleStatusEnum';
 import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
@@ -264,9 +263,22 @@ const Article = new GraphQLObjectType({
         ...pagingArgs,
       },
       async resolve(
-        { id, attachmentHash },
+        { id, attachmentHash, status },
         { filter = {}, orderBy = [{ _score: 'DESC' }], ...otherParams }
       ) {
+        /**
+         * Don't show blocked articles if the current article is not blocked.
+         * But we can show related blocked articles for a blocked article for better tracking.
+         */
+        const statusFilter =
+          status === 'NORMAL'
+            ? {
+                term: {
+                  status: 'NORMAL',
+                },
+              }
+            : {};
+
         const body = {
           query: {
             bool: {
@@ -314,6 +326,7 @@ const Article = new GraphQLObjectType({
                   },
                 },
               ],
+              ...statusFilter,
               minimum_should_match: 1,
             },
           },
