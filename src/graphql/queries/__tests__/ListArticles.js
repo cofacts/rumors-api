@@ -589,6 +589,38 @@ describe('ListArticles', () => {
     `);
   });
 
+  it('filters by status', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(filter: { statuses: [BLOCKED] }) {
+            edges {
+              node {
+                id
+              }
+            }
+            totalCount
+          }
+        }
+      `()
+    ).toMatchInlineSnapshot(`
+      Object {
+        "data": Object {
+          "ListArticles": Object {
+            "edges": Array [
+              Object {
+                "node": Object {
+                  "id": "blockedArticle",
+                },
+              },
+            ],
+            "totalCount": 1,
+          },
+        },
+      }
+    `);
+  });
+
   it('filters by mixed query', async () => {
     // Mixes 'should' and 'filter' query. At least 1 'should' must match.
     // Therefore, this query should only match 1 result instead of all that satisfies replyRequestCount: { GT: 0 }

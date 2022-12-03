@@ -49,6 +49,7 @@ Object {
     },
   ],
   "replyRequestCount": 1,
+  "status": "NORMAL",
   "tags": Array [],
   "text": "FOO FOO http://foo.com/article/1",
   "updatedAt": "2017-01-28T08:45:57.011Z",

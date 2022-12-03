@@ -96,6 +96,7 @@ describe('creation', () => {
           },
         ],
         "replyRequestCount": 1,
+        "status": "NORMAL",
         "tags": Array [],
         "text": "",
         "updatedAt": "2017-01-28T08:45:57.011Z",
