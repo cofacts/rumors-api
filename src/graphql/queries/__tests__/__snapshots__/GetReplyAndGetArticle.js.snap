@@ -135,25 +135,25 @@ Object {
             "score": 7.5,
           },
           Object {
-            "cursor": "WzAuNzQ0NTg4ODUsImZvbzMiXQ==",
+            "cursor": "WzAuNTQ2MTgxODYsImZvbzMiXQ==",
             "node": Object {
               "id": "foo3",
             },
-            "score": 0.74458885,
+            "score": 0.54618186,
           },
           Object {
-            "cursor": "WzAuNzIzMzE0OTQsImZvbzIiXQ==",
+            "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
             "node": Object {
               "id": "foo2",
             },
-            "score": 0.72331494,
+            "score": 0.5303296,
           },
           Object {
-            "cursor": "WzAuNjY2MjExMSwiZm9vIl0=",
+            "cursor": "WzAuNDg3ODUxNywiZm9vIl0=",
             "node": Object {
               "id": "foo",
             },
-            "score": 0.6662111,
+            "score": 0.4878517,
           },
         ],
       },
@@ -169,20 +169,20 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzEuMTg0OTAyMywiZm9vMyJd",
+            "cursor": "WzAuOTg2NDk1MywiZm9vMyJd",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 1.1849023,
+            "score": 0.9864953,
           },
           Object {
-            "cursor": "WzAuNzIzMzE0OTQsImZvbzIiXQ==",
+            "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 0.72331494,
+            "score": 0.5303296,
           },
         ],
       },
@@ -198,7 +198,7 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzEuMTg0OTAyMywiZm9vMyJd",
+            "cursor": "WzAuOTg2NDk1MywiZm9vMyJd",
             "highlight": Object {
               "hyperlinks": Array [
                 Object {
@@ -212,10 +212,10 @@ Object {
             "node": Object {
               "id": "foo3",
             },
-            "score": 1.1849023,
+            "score": 0.9864953,
           },
           Object {
-            "cursor": "WzAuNzIzMzE0OTQsImZvbzIiXQ==",
+            "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
             "highlight": Object {
               "hyperlinks": Array [],
               "reference": null,
@@ -224,10 +224,10 @@ Object {
             "node": Object {
               "id": "foo2",
             },
-            "score": 0.72331494,
+            "score": 0.5303296,
           },
           Object {
-            "cursor": "WzAuNjY2MjExMSwibWVkaWFBcnRpY2xlIl0=",
+            "cursor": "WzAuNDg3ODUxNywibWVkaWFBcnRpY2xlIl0=",
             "highlight": Object {
               "hyperlinks": Array [],
               "reference": null,
@@ -236,7 +236,7 @@ Object {
             "node": Object {
               "id": "mediaArticle",
             },
-            "score": 0.6662111,
+            "score": 0.4878517,
           },
         ],
       },
@@ -252,28 +252,28 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuNjY2MjExMSwibWVkaWFBcnRpY2xlIl0=",
+            "cursor": "WzAuNDg3ODUxNywibWVkaWFBcnRpY2xlIl0=",
             "node": Object {
               "id": "mediaArticle",
               "text": "Lorum ipsum",
             },
-            "score": 0.6662111,
+            "score": 0.4878517,
           },
           Object {
-            "cursor": "WzAuNzIzMzE0OTQsImZvbzIiXQ==",
+            "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 0.72331494,
+            "score": 0.5303296,
           },
           Object {
-            "cursor": "WzEuMTg0OTAyMywiZm9vMyJd",
+            "cursor": "WzAuOTg2NDk1MywiZm9vMyJd",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 1.1849023,
+            "score": 0.9864953,
           },
         ],
       },

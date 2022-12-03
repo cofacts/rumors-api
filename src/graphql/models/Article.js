@@ -266,19 +266,6 @@ const Article = new GraphQLObjectType({
         { id, attachmentHash, status },
         { filter = {}, orderBy = [{ _score: 'DESC' }], ...otherParams }
       ) {
-        /**
-         * Don't show blocked articles if the current article is not blocked.
-         * But we can show related blocked articles for a blocked article for better tracking.
-         */
-        const statusFilter =
-          status === 'NORMAL'
-            ? {
-                term: {
-                  status: 'NORMAL',
-                },
-              }
-            : {};
-
         const body = {
           query: {
             bool: {
@@ -326,7 +313,7 @@ const Article = new GraphQLObjectType({
                   },
                 },
               ],
-              ...statusFilter,
+              filter: [],
               minimum_should_match: 1,
             },
           },
@@ -335,7 +322,7 @@ const Article = new GraphQLObjectType({
         };
 
         if (filter.replyCount) {
-          body.query.bool.filter = [
+          body.query.bool.filter.push([
             {
               range: {
                 normalArticleReplyCount: getRangeFieldParamFromArithmeticExpression(
@@ -343,7 +330,19 @@ const Article = new GraphQLObjectType({
                 ),
               },
             },
-          ];
+          ]);
+        }
+
+        /**
+         * Don't show blocked articles if the current article is not blocked.
+         * But we can show related blocked articles for a blocked article for better tracking.
+         */
+        if (status === 'NORMAL') {
+          body.query.bool.filter.push({
+            term: {
+              status: 'NORMAL',
+            },
+          });
         }
 
         // If the article has attachment hash, use Media Manager to get similar media entries

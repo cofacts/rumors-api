@@ -324,6 +324,60 @@ describe('GetReplyAndGetArticle', () => {
       `);
     });
 
+    it('relatedArticle of blocked article can include both normal and blocked articles', async () => {
+      expect(
+        await gql`
+          {
+            GetArticle(id: "blockedArticle1") {
+              relatedArticles {
+                edges {
+                  node {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        `()
+      ).toMatchInlineSnapshot(`
+        Object {
+          "data": Object {
+            "GetArticle": Object {
+              "relatedArticles": Object {
+                "edges": Array [
+                  Object {
+                    "node": Object {
+                      "id": "foo3",
+                    },
+                  },
+                  Object {
+                    "node": Object {
+                      "id": "foo2",
+                    },
+                  },
+                  Object {
+                    "node": Object {
+                      "id": "blockedArticle2",
+                    },
+                  },
+                  Object {
+                    "node": Object {
+                      "id": "mediaArticle",
+                    },
+                  },
+                  Object {
+                    "node": Object {
+                      "id": "foo",
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        }
+      `);
+    });
+
     it('feedbacks should work', async () => {
       expect(
         await gql`
