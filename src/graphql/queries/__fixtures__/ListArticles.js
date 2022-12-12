@@ -49,6 +49,7 @@ export default {
     attachmentUrl: '',
     attachmentHash: '',
     articleType: 'TEXT',
+    status: 'NORMAL',
   },
   '/articles/doc/listArticleTest2': {
     userId: 'user1',
@@ -107,6 +108,7 @@ export default {
     attachmentUrl: '',
     attachmentHash: '',
     articleType: 'TEXT',
+    status: 'NORMAL',
   },
   '/articles/doc/listArticleTest3': {
     userId: 'user2',
@@ -130,6 +132,7 @@ export default {
     attachmentUrl: '',
     attachmentHash: '',
     articleType: 'TEXT',
+    status: 'NORMAL',
   },
   '/articles/doc/listArticleTest4': {
     userId: 'user2',
@@ -198,6 +201,7 @@ export default {
     attachmentUrl: '',
     attachmentHash: '',
     articleType: 'TEXT',
+    status: 'NORMAL',
   },
   '/articles/doc/listArticleTest5': {
     userId: 'user1',
@@ -213,6 +217,7 @@ export default {
     attachmentUrl: 'http://foo/image.jpeg',
     attachmentHash: 'ffff8000',
     articleType: 'IMAGE',
+    status: 'NORMAL',
   },
   '/articles/doc/listArticleTest6': {
     userId: 'user1',
@@ -228,6 +233,7 @@ export default {
     attachmentUrl: 'http://foo/image2.jpeg',
     attachmentHash: 'ffff8001',
     articleType: 'IMAGE',
+    status: 'NORMAL',
   },
   '/articles/doc/listArticleTest7': {
     userId: 'user1',
@@ -243,6 +249,25 @@ export default {
     attachmentUrl: 'http://foo/audio.mp3',
     attachmentHash: 'ffff8002',
     articleType: 'AUDIO',
+    status: 'NORMAL',
+  },
+  // Blocked article, does not appear in ListArticles by default
+  //
+  '/articles/doc/blockedArticle': {
+    userId: 'malicious-user',
+    appId: 'app1',
+    replyRequestCount: 0,
+    normalArticleReplyCount: 0,
+    normalArticleCategoryCount: 0,
+    updatedAt: 1,
+    createdAt: '2020-02-10T00:00:00.000Z',
+    text: '這是一則二次詐騙訊息，由同一位 LINE 使用者不斷推送',
+    articleReplies: [],
+    articleCategories: [],
+    attachmentUrl: 'http://foo/audio.mp3',
+    attachmentHash: 'ffff8002',
+    articleType: 'TEXT',
+    status: 'BLOCKED',
   },
   '/categories/doc/category1': {
     title: '文言文',

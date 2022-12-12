@@ -82,6 +82,7 @@ export default {
         summary: 'summary summary',
       },
     ],
+    status: 'NORMAL',
   },
   '/articles/doc/foo2': {
     text: 'Lorum ipsum Lorum ipsum',
@@ -93,6 +94,7 @@ export default {
     ],
     normalArticleReplyCount: 1,
     references: [{ type: 'LINE' }],
+    status: 'NORMAL',
   },
   '/articles/doc/foo3': {
     text: 'Lorum ipsum Lorum ipsum Lorum ipsum',
@@ -114,17 +116,39 @@ export default {
         summary: 'summary',
       },
     ],
+    status: 'NORMAL',
+  },
+  // These should not appear in the related article of normal articles
+  //
+  '/articles/doc/blockedArticle1': {
+    text: 'Lorum ipsum ipsum',
+    articleReplies: [],
+    normalArticleReplyCount: 1,
+    references: [{ type: 'LINE' }],
+    hyperlinks: [],
+    status: 'BLOCKED',
+  },
+  '/articles/doc/blockedArticle2': {
+    text: 'Lorum lorum ipsum ipsum',
+    articleReplies: [],
+    normalArticleReplyCount: 1,
+    references: [{ type: 'LINE' }],
+    hyperlinks: [],
+    status: 'BLOCKED',
   },
   '/articles/doc/manyRequests': {
     text: 'Popular',
     replyRequestCount: 11,
+    status: 'NORMAL',
   },
   '/articles/doc/mediaArticle': {
     text: 'Lorum ipsum', // Transcript
     attachmentHash: 'hash-for-media-article',
+    status: 'NORMAL',
   },
   '/articles/doc/similarMediaArticle': {
     attachmentHash: 'hash-for-similar-media-article',
+    status: 'NORMAL',
   },
   '/replies/doc/bar': {
     text: 'bar',

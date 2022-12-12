@@ -60,6 +60,7 @@ const Article = new GraphQLObjectType({
     text: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
+    status: { type: new GraphQLNonNull(ReplyRequestStatusEnum) },
     references: { type: new GraphQLList(ArticleReference) },
     replyCount: {
       type: GraphQLInt,
@@ -262,7 +263,7 @@ const Article = new GraphQLObjectType({
         ...pagingArgs,
       },
       async resolve(
-        { id, attachmentHash },
+        { id, attachmentHash, status },
         { filter = {}, orderBy = [{ _score: 'DESC' }], ...otherParams }
       ) {
         const body = {
@@ -312,6 +313,7 @@ const Article = new GraphQLObjectType({
                   },
                 },
               ],
+              filter: [],
               minimum_should_match: 1,
             },
           },
@@ -320,7 +322,7 @@ const Article = new GraphQLObjectType({
         };
 
         if (filter.replyCount) {
-          body.query.bool.filter = [
+          body.query.bool.filter.push([
             {
               range: {
                 normalArticleReplyCount: getRangeFieldParamFromArithmeticExpression(
@@ -328,7 +330,19 @@ const Article = new GraphQLObjectType({
                 ),
               },
             },
-          ];
+          ]);
+        }
+
+        /**
+         * Don't show blocked articles if the current article is not blocked.
+         * But we can show related blocked articles for a blocked article for better tracking.
+         */
+        if (status === 'NORMAL') {
+          body.query.bool.filter.push({
+            term: {
+              status: 'NORMAL',
+            },
+          });
         }
 
         // If the article has attachment hash, use Media Manager to get similar media entries

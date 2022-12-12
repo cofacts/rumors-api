@@ -19,9 +19,11 @@ import {
   getRangeFieldParamFromArithmeticExpression,
   createCommonListFilter,
   attachCommonListFilter,
+  DEFAULT_ARTICLE_STATUSES,
   DEFAULT_ARTICLE_REPLY_STATUSES,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
+import ArticleStatusEnum from 'graphql/models/ArticleStatusEnum';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 import ArticleReplyStatusEnum from 'graphql/models/ArticleReplyStatusEnum';
@@ -134,6 +136,11 @@ export default {
             },
           }),
         },
+        statuses: {
+          type: new GraphQLList(new GraphQLNonNull(ArticleStatusEnum)),
+          defaultValue: DEFAULT_ARTICLE_STATUSES,
+          description: 'Returns only articles with the specified statuses',
+        },
       }),
     },
     orderBy: {
@@ -158,7 +165,13 @@ export default {
     // Collecting queries that will be used in bool queries later
     const mustQueries = [];
     const shouldQueries = []; // Affects scores
-    const filterQueries = []; // Not affects scores
+    const filterQueries = [
+      {
+        terms: {
+          status: filter.statuses || DEFAULT_ARTICLE_STATUSES,
+        },
+      },
+    ]; // Not affects scores
     const mustNotQueries = [];
 
     // Setup article reply filter, which may be used in sort
