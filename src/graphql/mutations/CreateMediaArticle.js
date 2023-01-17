@@ -31,9 +31,9 @@ const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
  * @param {ArticleTypeEnum} param.articleType
  * @returns {Promise<MediaEntry>}
  */
-export function uploadMedia({ mediaUrl, articleType }) {
+export async function uploadMedia({ mediaUrl, articleType }) {
   const mappedMediaType = VALID_ARTICLE_TYPE_TO_MEDIA_TYPE[articleType];
-  const mediaEntry = mediaManager.insert({
+  const mediaEntry = await mediaManager.insert({
     url: mediaUrl,
     getVariantSettings(options) {
       const { type, contentType } = options;
