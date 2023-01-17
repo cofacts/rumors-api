@@ -285,6 +285,7 @@ async function main({ userId, blockedReason } = {}) {
 
 export default main;
 
+/* istanbul ignore if */
 if (require.main === module) {
   const argv = yargs
     .options({

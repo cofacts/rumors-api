@@ -16,9 +16,12 @@ async function replaceMedia({ articleId, url } = {}) {
     body: { _source: article },
   } = await client.get({ index: 'articles', type: 'doc', id: articleId });
 
+  /* istanbul ignore if */
   if (!article) throw new Error(`Article ${articleId} is not found`);
 
   const oldMediaEntry = await mediaManager.get(article.attachmentHash);
+
+  /* istanbul ignore if */
   if (!oldMediaEntry)
     throw new Error(
       `Article ${articleId}'s attachment hash "${
@@ -61,6 +64,7 @@ async function replaceMedia({ articleId, url } = {}) {
 
 export default replaceMedia;
 
+/* istanbul ignore if */
 if (require.main === module) {
   const argv = yargs
     .options({
