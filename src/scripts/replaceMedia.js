@@ -11,7 +11,7 @@ import { uploadMedia } from 'graphql/mutations/CreateMediaArticle';
 /**
  * @param {object} args
  */
-async function main({ articleId, url } = {}) {
+async function replaceMedia({ articleId, url } = {}) {
   const {
     body: { _source: article },
   } = await client.get({ index: 'articles', type: 'doc', id: articleId });
@@ -31,7 +31,7 @@ async function main({ articleId, url } = {}) {
     articleType: article.articleType,
   });
 
-  console.log(
+  console.info(
     `Article ${articleId} attachment hash: ${oldMediaEntry.id} --> ${
       newMediaEntry.id
     }`
@@ -47,17 +47,19 @@ async function main({ articleId, url } = {}) {
     },
   });
 
-  oldMediaEntry.variants.forEach(variant =>
-    oldMediaEntry
-      .getFile(variant)
-      .delete()
-      .then(() => {
-        console.log(`Old media entry variant=${variant} deleted`);
-      })
+  return Promise.all(
+    oldMediaEntry.variants.map(variant =>
+      oldMediaEntry
+        .getFile(variant)
+        .delete()
+        .then(() => {
+          console.info(`Old media entry variant=${variant} deleted`);
+        })
+    )
   );
 }
 
-export default main;
+export default replaceMedia;
 
 if (require.main === module) {
   const argv = yargs
@@ -77,5 +79,5 @@ if (require.main === module) {
     })
     .help('help').argv;
 
-  main(argv).catch(console.error);
+  replaceMedia(argv).catch(console.error);
 }
