@@ -165,58 +165,91 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     15000
   );
 
-  it('can replace media for article', async () => {
-    // Simulates user login
-    const context = {
-      user: { id: 'foo', appId: 'WEBSITE' },
-    };
+  it(
+    'can replace media for article',
+    async () => {
+      // Simulates user login
+      const context = {
+        user: { id: 'foo', appId: 'WEBSITE' },
+      };
 
-    const createMediaArticleResult = await gql`
-      mutation($mediaUrl: String!) {
-        CreateMediaArticle(
-          mediaUrl: $mediaUrl
-          articleType: IMAGE
-          reference: { type: LINE }
-        ) {
-          id
+      const createMediaArticleResult = await gql`
+        mutation($mediaUrl: String!) {
+          CreateMediaArticle(
+            mediaUrl: $mediaUrl
+            articleType: IMAGE
+            reference: { type: LINE }
+          ) {
+            id
+          }
         }
-      }
-    `(
+      `(
+        {
+          mediaUrl: `${serverUrl}/small.jpg`,
+        },
+        context
+      );
+
+      const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
+
+      const articleBeforeReplace = await gql`
+        query($articleId: String!) {
+          GetArticle(id: $articleId) {
+            thumbnailUrl: attachmentUrl(variant: THUMBNAIL)
+          }
+        }
+      `({ articleId }, context);
+
+      // Wait until thumbnail is fully uploaded
       {
-        mediaUrl: `${serverUrl}/small.jpg`,
-      },
-      context
-    );
-
-    const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
-
-    const articleBeforeReplace = await gql`
-      query($articleId: String!) {
-        GetArticle(id: $articleId) {
-          originalUrl: attachmentUrl(variant: ORIGINAL)
-          previewUrl: attachmentUrl(variant: PREVIEW)
-          thumbnailUrl: attachmentUrl(variant: THUMBNAIL)
+        let resp;
+        while (
+          !resp ||
+          resp.headers.get('Content-Type').startsWith('application/xml') // GCS returns XML for error
+        ) {
+          resp = await fetch(articleBeforeReplace.data.GetArticle.thumbnailUrl);
+          await delayForMs(1000); // Wait for upload to finish
         }
       }
-    `({ articleId }, context);
 
-    await replaceMedia({ articleId, url: `${serverUrl}/replaced.jpg` });
+      await replaceMedia({ articleId, url: `${serverUrl}/replaced.jpg` });
 
-    const resp = await fetch(articleBeforeReplace.data.GetArticle.thumbnailUrl);
-    expect(resp.status).toBe(404);
+      const resp = await fetch(
+        articleBeforeReplace.data.GetArticle.thumbnailUrl
+      );
+      expect(resp.status).toBe(404);
 
-    const articleAfterReplace = await gql`
-      query($articleId: String!) {
-        GetArticle(id: $articleId) {
-          attachmentHash
+      const articleAfterReplace = await gql`
+        query($articleId: String!) {
+          GetArticle(id: $articleId) {
+            attachmentHash
+          }
         }
-      }
-    `({ articleId }, context);
+      `({ articleId }, context);
 
-    expect(
-      articleAfterReplace.data.GetArticle.attachmentHash
-    ).toMatchInlineSnapshot(
-      `"image.vDjh4g.__-AD6SDgAeTEcED___AA_Ej8y_Dg8EDgAOAA4P_8_8"`
-    );
-  });
+      expect(
+        articleAfterReplace.data.GetArticle.attachmentHash
+      ).toMatchInlineSnapshot(
+        `"image.vDjh4g.__-AD6SDgAeTEcED___AA_Ej8y_Dg8EDgAOAA4P_8_8"`
+      );
+
+      // Cleanup
+      await client.delete({
+        index: 'articles',
+        type: 'doc',
+        id: articleId,
+      });
+
+      await client.delete({
+        index: 'replyrequests',
+        type: 'doc',
+        id: getReplyRequestId({
+          articleId,
+          userId: context.user.id,
+          appId: context.user.appId,
+        }),
+      });
+    },
+    15000
+  );
 }
