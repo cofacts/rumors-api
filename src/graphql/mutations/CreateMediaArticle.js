@@ -24,24 +24,14 @@ const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
 };
 
 /**
- * Creates a new article in ElasticSearch,
- * or return an article which attachment.hash is similar to mediaUrl
+ * Upload media of specified article type from the given mediaUrl
  *
  * @param {object} param
  * @param {string} param.mediaUrl
  * @param {ArticleTypeEnum} param.articleType
- * @param {ArticleReferenceInput} param.reference
- * @param {string} param.userId
- * @param {string} param.appId
- * @returns {Promise<string>} the new article's ID
+ * @returns {Promise<MediaEntry>}
  */
-async function createNewMediaArticle({
-  mediaUrl,
-  articleType,
-  reference: originalReference,
-  userId,
-  appId,
-}) {
+export async function uploadMedia({ mediaUrl, articleType }) {
   const mappedMediaType = VALID_ARTICLE_TYPE_TO_MEDIA_TYPE[articleType];
   const mediaEntry = await mediaManager.insert({
     url: mediaUrl,
@@ -93,6 +83,28 @@ async function createNewMediaArticle({
     },
   });
 
+  return mediaEntry;
+}
+
+/**
+ * Creates a new article in ElasticSearch,
+ * or return an article which attachment.hash is similar to mediaUrl
+ *
+ * @param {object} param
+ * @param {MediaEntry} param.mediaEntry
+ * @param {ArticleTypeEnum} param.articleType
+ * @param {ArticleReferenceInput} param.reference
+ * @param {string} param.userId
+ * @param {string} param.appId
+ * @returns {Promise<string>} the new article's ID
+ */
+async function createNewMediaArticle({
+  mediaEntry,
+  articleType,
+  reference: originalReference,
+  userId,
+  appId,
+}) {
   const attachmentHash = mediaEntry.id;
   const text = '';
   const now = new Date().toISOString();
@@ -168,8 +180,14 @@ export default {
     { user }
   ) {
     assertUser(user);
-    const articleId = await createNewMediaArticle({
+
+    const mediaEntry = await uploadMedia({
       mediaUrl,
+      articleType,
+    });
+
+    const articleId = await createNewMediaArticle({
+      mediaEntry,
       articleType,
       reference,
       userId: user.id,
