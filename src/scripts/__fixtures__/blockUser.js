@@ -101,4 +101,11 @@ export default {
     score: 1,
     status: 'BLOCKED',
   },
+
+  // articles created by blocked user
+  '/articles/doc/spammers-article': {
+    userId: 'user-to-block',
+    status: 'NORMAL',
+    replyRequestCount: 1,
+  },
 };
