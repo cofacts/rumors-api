@@ -274,10 +274,40 @@ async function processArticleReplyFeedbacks(userId) {
 }
 
 /**
+ * Convert all articles with NORMAL status by the user to BLOCKED status.
+ *
+ * @param {string} userId
+ */
+async function processArticles(userId) {
+  const NORMAL_ARTICLE_QUERY = {
+    bool: {
+      must: [{ term: { status: 'NORMAL' } }, { term: { userId } }],
+    },
+  };
+
+  /* Bulk update reply reqeuests status */
+  const { body: updateByQueryResult } = await client.updateByQuery({
+    index: 'articles',
+    type: 'doc',
+    body: {
+      query: NORMAL_ARTICLE_QUERY,
+      script: {
+        lang: 'painless',
+        source: `ctx._source.status = 'BLOCKED';`,
+      },
+    },
+    refresh: true,
+  });
+
+  console.log('Article status update result', updateByQueryResult);
+}
+
+/**
  * @param {object} args
  */
 async function main({ userId, blockedReason } = {}) {
   await writeBlockedReasonToUser(userId, blockedReason);
+  await processArticles(userId);
   await processReplyRequests(userId);
   await processArticleReplies(userId);
   await processArticleReplyFeedbacks(userId);

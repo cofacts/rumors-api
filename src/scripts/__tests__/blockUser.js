@@ -135,6 +135,16 @@ it('correctly sets the block reason and updates status of their works', async ()
         .positiveFeedbackCount,
     negativeFeedbackCount: 0, // Originally 1
   });
+
+  // Expect spammer's article's status are changed to blocked
+  const {
+    body: { _source: spammerArticle },
+  } = await client.get({
+    index: 'articles',
+    type: 'doc',
+    id: 'spammers-article',
+  });
+  expect(spammerArticle.status).toEqual('BLOCKED');
 });
 
 // it('still updates statuses of blocked user even if they are blocked previously')
