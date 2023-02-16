@@ -285,4 +285,80 @@ describe('creation', () => {
       ]
     `);
   });
+
+  it('sets status to blocked when author is blocked', async () => {
+    MockDate.set(1485593157011);
+    const userId = 'iAmSpammer';
+    const appId = 'foo';
+
+    mediaManager.insert.mockImplementationOnce(async () => ({
+      id: 'mock_image_hash_spam',
+      url: 'http://foo.com/output_image_spam.jpeg',
+      type: 'image',
+    }));
+
+    const { data, errors } = await gql`
+      mutation(
+        $mediaUrl: String!
+        $articleType: ArticleTypeEnum!
+        $reference: ArticleReferenceInput!
+      ) {
+        CreateMediaArticle(
+          mediaUrl: $mediaUrl
+          articleType: $articleType
+          reference: $reference
+          reason: ""
+        ) {
+          id
+        }
+      }
+    `(
+      {
+        mediaUrl: 'http://foo.com/input_image_spam.jpeg',
+        articleType: 'IMAGE',
+        reference: { type: 'LINE' },
+      },
+      { user: { id: userId, appId } }
+    );
+    MockDate.reset();
+
+    const {
+      body: { _source: article },
+    } = await client.get({
+      index: 'articles',
+      type: 'doc',
+      id: data.CreateMediaArticle.id,
+    });
+
+    expect(article).toHaveProperty('status', 'BLOCKED');
+
+    const replyRequestId = getReplyRequestId({
+      articleId: data.CreateMediaArticle.id,
+      userId,
+      appId,
+    });
+
+    const {
+      body: { _source: replyRequest },
+    } = await client.get({
+      index: 'replyrequests',
+      type: 'doc',
+      id: replyRequestId,
+    });
+
+    expect(replyRequest).toHaveProperty('status', 'BLOCKED');
+
+    // // Cleanup
+    await client.delete({
+      index: 'articles',
+      type: 'doc',
+      id: data.CreateMediaArticle.id,
+    });
+
+    await client.delete({
+      index: 'replyrequests',
+      type: 'doc',
+      id: replyRequestId,
+    });
+  });
 });

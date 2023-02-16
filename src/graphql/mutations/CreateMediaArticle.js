@@ -5,7 +5,7 @@ import mediaManager, {
   IMAGE_PREVIEW,
   IMAGE_THUMBNAIL,
 } from 'util/mediaManager';
-import { assertUser } from 'util/user';
+import { assertUser, getContentDefaultStatus } from 'util/user';
 import client from 'util/client';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
@@ -94,16 +94,14 @@ export async function uploadMedia({ mediaUrl, articleType }) {
  * @param {MediaEntry} param.mediaEntry
  * @param {ArticleTypeEnum} param.articleType
  * @param {ArticleReferenceInput} param.reference
- * @param {string} param.userId
- * @param {string} param.appId
+ * @param {object} user - The user submitting this article
  * @returns {Promise<string>} the new article's ID
  */
 async function createNewMediaArticle({
   mediaEntry,
   articleType,
   reference: originalReference,
-  userId,
-  appId,
+  user,
 }) {
   const attachmentHash = mediaEntry.id;
   const text = '';
@@ -111,8 +109,8 @@ async function createNewMediaArticle({
   const reference = {
     ...originalReference,
     createdAt: now,
-    userId: userId,
-    appId: appId,
+    userId: user.id,
+    appId: user.appId,
   };
   const { body: matchedArticle } = await client.search({
     index: 'articles',
@@ -140,8 +138,8 @@ async function createNewMediaArticle({
       text,
       createdAt: now,
       updatedAt: now,
-      userId,
-      appId,
+      userId: user.id,
+      appId: user.appId,
       references: [reference],
       articleReplies: [],
       articleCategories: [],
@@ -152,7 +150,7 @@ async function createNewMediaArticle({
       hyperlinks: [],
       articleType,
       attachmentHash,
-      status: 'NORMAL',
+      status: getContentDefaultStatus(user),
     },
   });
 
@@ -190,8 +188,7 @@ export default {
       mediaEntry,
       articleType,
       reference,
-      userId: user.id,
-      appId: user.appId,
+      user,
     });
 
     await createOrUpdateReplyRequest({
