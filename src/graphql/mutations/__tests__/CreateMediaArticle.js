@@ -297,7 +297,7 @@ describe('creation', () => {
       type: 'image',
     }));
 
-    const { data, errors } = await gql`
+    const { data } = await gql`
       mutation(
         $mediaUrl: String!
         $articleType: ArticleTypeEnum!
