@@ -318,7 +318,7 @@ describe('creation', () => {
         articleType: 'IMAGE',
         reference: { type: 'LINE' },
       },
-      { user: { id: userId, appId } }
+      { user: { id: userId, appId, blockedReason: 'announcement-url' } }
     );
     MockDate.reset();
 

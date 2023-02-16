@@ -169,7 +169,7 @@ describe('creation', () => {
 
     const userId = 'iAmBlocked';
     const appId = 'foo';
-    const { data, errors } = await gql`
+    const { data } = await gql`
       mutation($text: String!, $reference: ArticleReferenceInput!) {
         CreateArticle(text: $text, reference: $reference, reason: "") {
           id
@@ -177,8 +177,7 @@ describe('creation', () => {
       }
     `(
       {
-        text:
-          'This is a scam (and I am actually scam too) http://evil.blog/article/1',
+        text: 'This is a scam (and I am actually scam too)',
         reference: { type: 'LINE' },
       },
       {
@@ -190,8 +189,6 @@ describe('creation', () => {
       }
     );
     MockDate.reset();
-
-    expect(errors).toBeUndefined();
 
     const {
       body: { _source: article },
