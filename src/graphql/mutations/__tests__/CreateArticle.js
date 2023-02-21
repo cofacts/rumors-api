@@ -163,6 +163,72 @@ describe('creation', () => {
       id: replyRequestId,
     });
   });
+
+  it('sets status to blocked when author is blocked', async () => {
+    MockDate.set(1485593157011);
+
+    const userId = 'iAmBlocked';
+    const appId = 'foo';
+    const { data } = await gql`
+      mutation($text: String!, $reference: ArticleReferenceInput!) {
+        CreateArticle(text: $text, reference: $reference, reason: "") {
+          id
+        }
+      }
+    `(
+      {
+        text: 'This is a scam (and I am actually scam too)',
+        reference: { type: 'LINE' },
+      },
+      {
+        user: {
+          id: userId,
+          appId,
+          blockedReason: 'Announcement url',
+        },
+      }
+    );
+    MockDate.reset();
+
+    const {
+      body: { _source: article },
+    } = await client.get({
+      index: 'articles',
+      type: 'doc',
+      id: data.CreateArticle.id,
+    });
+
+    expect(article).toHaveProperty('status', 'BLOCKED');
+
+    const replyRequestId = getReplyRequestId({
+      articleId: data.CreateArticle.id,
+      userId,
+      appId,
+    });
+
+    const {
+      body: { _source: replyRequest },
+    } = await client.get({
+      index: 'replyrequests',
+      type: 'doc',
+      id: replyRequestId,
+    });
+
+    expect(replyRequest).toHaveProperty('status', 'BLOCKED');
+
+    // Cleanup
+    await client.delete({
+      index: 'articles',
+      type: 'doc',
+      id: data.CreateArticle.id,
+    });
+
+    await client.delete({
+      index: 'replyrequests',
+      type: 'doc',
+      id: replyRequestId,
+    });
+  });
 });
 
 const testId = async (userId, appId) => {

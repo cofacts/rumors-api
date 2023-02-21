@@ -1,7 +1,7 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { h64 } from 'xxhashjs';
 
-import { assertUser } from 'util/user';
+import { assertUser, getContentDefaultStatus } from 'util/user';
 import client from 'util/client';
 import scrapUrls from 'util/scrapUrls';
 
@@ -35,23 +35,17 @@ export function getArticleId(text) {
  * @param {object} param
  * @param {string} param.text
  * @param {ArticleReferenceInput} param.reference
- * @param {string} param.userId
- * @param {string} param.appId
+ * @param {object} user - The user submitting this article
  * @returns {Promise<string>} the new article's ID
  */
-async function createNewArticle({
-  text,
-  reference: originalReference,
-  userId,
-  appId,
-}) {
+async function createNewArticle({ text, reference: originalReference, user }) {
   const articleId = getArticleId(text);
   const now = new Date().toISOString();
   const reference = {
     ...originalReference,
     createdAt: now,
-    userId: userId,
-    appId: appId,
+    userId: user.id,
+    appId: user.appId,
   };
 
   await client.update({
@@ -74,8 +68,8 @@ async function createNewArticle({
         text,
         createdAt: now,
         updatedAt: now,
-        userId,
-        appId,
+        userId: user.id,
+        appId: user.appId,
         references: [reference],
         articleReplies: [],
         articleCategories: [],
@@ -87,7 +81,7 @@ async function createNewArticle({
         articleType: 'TEXT',
         attachmentUrl: '',
         attachmentHash: '',
-        status: 'NORMAL',
+        status: getContentDefaultStatus(user),
       },
     },
     refresh: 'true', // Make sure the data is indexed when we create ReplyRequest
@@ -142,8 +136,7 @@ export default {
     const newArticlePromise = createNewArticle({
       text,
       reference,
-      userId: user.id,
-      appId: user.appId,
+      user,
     });
 
     const scrapPromise = scrapUrls(text, {
