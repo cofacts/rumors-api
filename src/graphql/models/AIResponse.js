@@ -4,16 +4,27 @@ import {
   GraphQLNonNull,
   GraphQLID,
   GraphQLInt,
+  GraphQLUnionType,
 } from 'graphql';
 
 import { createConnectionType } from 'graphql/util';
 import Node from '../interfaces/Node';
-import AIResponseDocTypeEnum from './AIResponseDocTypeEnum';
+import AIResponseTypeEnum from './AIResponseTypeEnum';
 import AIResponseStatusEnum from './AIResponseStatusEnum';
 import User, { userFieldResolver } from './User';
 
+const OpenAICompletionUsage = new GraphQLObjectType({
+  name: 'OpenAICompletionUsage',
+  fields: {
+    promptTokens: { type: new GraphQLNonNull(GraphQLInt) },
+    completionTokens: { type: new GraphQLNonNull(GraphQLInt) },
+    totalTokens: { type: new GraphQLNonNull(GraphQLInt) },
+  },
+});
+
 const AIResponse = new GraphQLObjectType({
   name: 'AIResponse',
+  description: 'Denotes an AI processed response and its processing status.',
   interfaces: [Node],
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLID) },
@@ -24,8 +35,8 @@ const AIResponse = new GraphQLObjectType({
     },
 
     type: {
-      description: 'Type of document that this AI response is for.',
-      type: new GraphQLNonNull(AIResponseDocTypeEnum),
+      description: 'AI response type',
+      type: new GraphQLNonNull(AIResponseTypeEnum),
     },
 
     user: {
@@ -46,13 +57,15 @@ const AIResponse = new GraphQLObjectType({
 
     usage: {
       description:
-        'The usage returned from OpenAI API. Populated after status becomes SUCCESS.',
-      type: new GraphQLObjectType({
-        name: 'OpenAIUsage',
-        fields: {
-          promptTokens: { type: new GraphQLNonNull(GraphQLInt) },
-          completionTokens: { type: new GraphQLNonNull(GraphQLInt) },
-          totalTokens: { type: new GraphQLNonNull(GraphQLInt) },
+        'The usage returned from AI API, if the API has such info. Populated after status becomes SUCCESS.',
+      type: new GraphQLUnionType({
+        name: 'AIResponseUsage',
+        types: [OpenAICompletionUsage],
+        resolveType(doc) {
+          switch (doc.type) {
+            case 'AI_REPLY':
+              return OpenAICompletionUsage;
+          }
         },
       }),
     },
