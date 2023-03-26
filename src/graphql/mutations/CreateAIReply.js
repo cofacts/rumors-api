@@ -6,6 +6,12 @@ import { assertUser } from 'util/user';
 import client from 'util/client';
 import AIResponse from 'graphql/models/AIResponse';
 
+const formatter = Intl.DateTimeFormat('zh-TW', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
 export default {
   type: new GraphQLNonNull(AIResponse),
   description:
@@ -42,13 +48,14 @@ export default {
       return aiResponses[0];
     }
 
+    const today = formatter.format(new Date());
+
     const completionRequest = {
       model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
-          content:
-            '你是協助讀者進行媒體識讀的小幫手。有讀者傳了一則網路訊息給你。',
+          content: `今天是${today}。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。`,
         },
         {
           role: 'user',
@@ -57,7 +64,7 @@ export default {
         {
           role: 'user',
           content:
-            '請問作為閱聽人，我應該注意這則訊息的哪些地方呢？\n請節錄訊息中需要特別留意的地方，說明為何閱聽人需要注意它。',
+            '請問作為閱聽人，我應該注意這則訊息的哪些地方呢？\n請節錄訊息中需要特別留意的地方，說明為何閱聽人需要注意它，謝謝。',
         },
       ],
     };
