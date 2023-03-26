@@ -13,7 +13,7 @@ export default dataLoaders =>
           body: {
             query: {
               bool: {
-                should: [{ term: { type } }, { term: { docId } }],
+                must: [{ term: { type } }, { term: { docId } }],
               },
             },
             sort: {
