@@ -322,6 +322,12 @@ exports[`GetReplyAndGetArticle GetArticle should get the specified article & ass
 Object {
   "data": Object {
     "GetArticle": Object {
+      "aiReplies": Array [
+        Object {
+          "status": "SUCCESS",
+          "text": "AI says we should be careful of this message",
+        },
+      ],
       "articleReplies": Array [
         Object {
           "article": Object {

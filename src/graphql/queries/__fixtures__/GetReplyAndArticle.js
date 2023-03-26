@@ -258,4 +258,11 @@ export default {
     };
     return mockMap;
   }, {}),
+
+  '/airesponses/doc/aireply-for-foo': {
+    docId: 'foo',
+    type: 'AI_REPLY',
+    status: 'SUCCESS',
+    text: 'AI says we should be careful of this message',
+  },
 };
