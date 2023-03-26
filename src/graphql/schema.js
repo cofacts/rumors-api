@@ -18,6 +18,7 @@ import ValidateSlug from './queries/ValidateSlug';
 import CreateArticle from './mutations/CreateArticle';
 import CreateMediaArticle from './mutations/CreateMediaArticle';
 import CreateReply from './mutations/CreateReply';
+import CreateAIReply from './mutations/CreateAIReply';
 import CreateArticleReply from './mutations/CreateArticleReply';
 import CreateCategory from './mutations/CreateCategory';
 import CreateArticleCategory from './mutations/CreateArticleCategory';
@@ -53,6 +54,7 @@ export default new GraphQLSchema({
       CreateArticle,
       CreateMediaArticle,
       CreateReply,
+      CreateAIReply,
       CreateArticleReply,
       CreateCategory,
       CreateArticleCategory,

@@ -4,7 +4,7 @@ import rollbar from 'rollbarInstance';
 import openai from 'util/openai';
 import { assertUser } from 'util/user';
 import client from 'util/client';
-import AIResponse from 'graphql/models/AIResponse';
+import { AIReply } from 'graphql/models/AIResponse';
 
 const formatter = Intl.DateTimeFormat('zh-TW', {
   year: 'numeric',
@@ -13,7 +13,7 @@ const formatter = Intl.DateTimeFormat('zh-TW', {
 });
 
 export default {
-  type: new GraphQLNonNull(AIResponse),
+  type: new GraphQLNonNull(AIReply),
   description:
     'Create an AI reply for a specific article. If existed, returns an existing one.',
   args: {
@@ -39,6 +39,9 @@ export default {
 
     if (!article) throw new Error(`Article ${articleId} does not exist.`);
 
+    // Below is a read-and-write operation to airesponses index.
+    // Read and write are put as close as possible to reduce the chance we encounter race conditions.
+    //
     const aiResponses = await loaders.aiResponsesLoader.load({
       type: 'AI_REPLY',
       docId: articleId,
@@ -69,34 +72,37 @@ export default {
       ],
     };
 
+    const newResponse = {
+      userId: user.id,
+      appId: user.appId,
+      docId: articleId,
+      type: 'AI_REPLY',
+      status: 'LOADING',
+      request: JSON.stringify(completionRequest),
+      createdAt: new Date(),
+    };
+
     // Resolves to loading AI Response.
-    const newResponsePromise = client
+    const newResponseIdPromise = client
       .index({
-        index: 'aiResponses',
+        index: 'airesponses',
         type: 'doc',
-        body: {
-          userId: user.id,
-          appId: user.appId,
-          docId: articleId,
-          type: 'AI_REPLY',
-          status: 'LOADING',
-          request: completionRequest,
-          createdAt: new Date(),
-        },
+        body: newResponse,
       })
-      .then(({ body: { result } }) => {
+      .then(({ body: { result, _id } }) => {
         if (result !== 'created') {
           throw new Error(`Cannot create AI reply: ${result}`);
         }
-
-        return result;
+        return _id;
       });
 
     const openAIResponsePromise = openai
-      .createCompletion(completionRequest)
+      .createChatCompletion(completionRequest)
+      .then(({ data }) => data)
       .catch(error => {
-        /* Resolve with Error instance, which will be used to update AI response below */
+        console.error(error);
 
+        /* Resolve with Error instance, which will be used to update AI response below */
         if (error instanceof Error) return error;
         return new Error(error);
       });
@@ -104,14 +110,15 @@ export default {
     // Resolves to completed or errored AI response.
     const updateResponsePromise = Promise.all([
       openAIResponsePromise,
-      newResponsePromise,
+      newResponseIdPromise,
     ])
-      .then(([apiResult, aiResponse]) =>
+      .then(([apiResult, aiResponseId]) =>
         // Update using aiResponse._id according to apiResult
         client.update({
           index: 'airesponses',
           type: 'doc',
-          id: aiResponse._id,
+          id: aiResponseId,
+          _source: true,
           body: {
             doc:
               apiResult instanceof Error
@@ -127,8 +134,8 @@ export default {
                       ? {
                           usage: {
                             promptTokens: apiResult.usage.prompt_tokens,
-                            completionTokens: apiResult.usage.completionTokens,
-                            totalTokens: apiResult.usage.totalTokens,
+                            completionTokens: apiResult.usage.completion_tokens,
+                            totalTokens: apiResult.usage.total_tokens,
                           },
                         }
                       : undefined),
@@ -137,13 +144,8 @@ export default {
           },
         })
       )
-      .then(
-        ({
-          body: {
-            get: { _source },
-          },
-        }) => _source
-      )
+      .then(args => console.log({ args }) || args)
+      .then(({ body: { _id, get: { _source } } }) => ({ id: _id, ..._source }))
       .catch(error => {
         // promise will be passed to resolver;
         // let GraphQL resolver handle the error
@@ -154,6 +156,11 @@ export default {
         rollbar.error(error);
       });
 
-    return waitForCompletion ? updateResponsePromise : newResponsePromise;
+    return waitForCompletion
+      ? updateResponsePromise
+      : newResponseIdPromise.then(id => ({
+          id,
+          ...newResponse,
+        }));
   },
 };
