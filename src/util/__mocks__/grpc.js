@@ -16,7 +16,7 @@
  * })
  */
 
-import delayForMs from 'util/delayForMs';
+import delayForMs from '../delayForMs';
 
 let seq = 0;
 let mockResponses = [];
