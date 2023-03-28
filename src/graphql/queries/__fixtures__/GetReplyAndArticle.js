@@ -265,4 +265,10 @@ export default {
     status: 'SUCCESS',
     text: 'AI says we should be careful of this message',
   },
+  // LOADING ai replies are not shown
+  '/airesponses/doc/aireply-for-foo-loading': {
+    docId: 'foo',
+    type: 'AI_REPLY',
+    status: 'LOADING',
+  },
 };
