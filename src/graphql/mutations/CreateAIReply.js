@@ -4,6 +4,7 @@ import rollbar from 'rollbarInstance';
 import openai from 'util/openai';
 import { assertUser } from 'util/user';
 import client from 'util/client';
+import delayForMs from 'util/delayForMs';
 import { AIReply } from 'graphql/models/AIResponse';
 
 const formatter = Intl.DateTimeFormat('zh-TW', {
@@ -39,18 +40,84 @@ export default {
 
     if (!article) throw new Error(`Article ${articleId} does not exist.`);
 
-    // Below is a read-and-write operation to airesponses index.
-    // Read and write are put as close as possible to reduce the chance we encounter race conditions.
+    // Try reading successful AI response.
+    // Break the loop when there is no latest loading AI response.
     //
-    const aiResponses = await loaders.aiResponsesLoader.load({
-      type: 'AI_REPLY',
-      docId: articleId,
-    });
+    for (;;) {
+      // First, find latest successful airesponse. Return if found.
+      //
+      const {
+        body: {
+          hits: {
+            hits: [successfulAiResponse],
+          },
+        },
+      } = await client.search({
+        index: 'airesponses',
+        type: 'doc',
+        body: {
+          query: {
+            bool: {
+              must: [
+                { term: { type: 'AI_REPLY' } },
+                { term: { docId: articleId } },
+                { term: { status: 'SUCCESS' } },
+              ],
+            },
+          },
+          sort: {
+            createdAt: 'desc',
+          },
+          size: 1,
+        },
+      });
 
-    if (aiResponses.length > 0) {
-      return aiResponses[0];
+      if (successfulAiResponse) {
+        return successfulAiResponse;
+      }
+
+      // If no successful AI responses, find loading responses created within 1 min.
+      //
+      const {
+        body: { count },
+      } = await client.count({
+        index: 'airesponses',
+        type: 'doc',
+        body: {
+          query: {
+            bool: {
+              must: [
+                { term: { type: 'AI_REPLY' } },
+                { term: { docId: articleId } },
+                { term: { status: 'LOADING' } },
+                {
+                  // loading document created within 1 min
+                  range: {
+                    createdAt: {
+                      gte: 'now-1m',
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+
+      // No AI response available now, break the loop and try create.
+      //
+      if (count === 0) {
+        break;
+      }
+
+      // Wait a bit to search for successful AI response again.
+      // If there are any loading AI response becomes successful during the wait,
+      // it will be picked up when the loop is re-entered.
+      await delayForMs(1000);
     }
 
+    // Creating new AI response
+    //
     const today = formatter.format(new Date());
 
     const completionRequest = {
@@ -144,7 +211,6 @@ export default {
           },
         })
       )
-      .then(args => console.log({ args }) || args)
       .then(({ body: { _id, get: { _source } } }) => ({ id: _id, ..._source }))
       .catch(error => {
         // promise will be passed to resolver;

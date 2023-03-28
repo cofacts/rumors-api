@@ -94,8 +94,8 @@ describe('CreateAIReply', () => {
       { user: { id: 'test', appId: 'test' } }
     );
 
-    expect(mockFn).toHaveReturned();
     expect(errors).toBeUndefined();
+    expect(mockFn).toHaveReturned();
 
     const {
       CreateAIReply: { id, ...aiReplyContent },
