@@ -150,12 +150,25 @@ const Article = new GraphQLObjectType({
       description:
         'Automated reply from AI before human fact checkers compose an fact check',
       async resolve({ id }, _, { loaders }) {
-        return (
-          (await loaders.aiResponsesLoader.load({
-            type: 'AI_REPLY',
-            docId: id,
-          })) ?? []
-        );
+        return loaders.searchResultLoader.load({
+          index: 'airesponses',
+          type: 'doc',
+          body: {
+            query: {
+              bool: {
+                must: [
+                  { term: { type: 'AI_REPLY' } },
+                  { term: { docId: id } },
+                  { term: { status: 'SUCCESS' } },
+                ],
+              },
+            },
+            sort: {
+              createdAt: 'desc',
+            },
+            size: 10,
+          },
+        });
       },
     },
 

@@ -11,7 +11,6 @@ import votedArticleReplyCountLoaderFactory from './votedArticleReplyCountLoaderF
 import userLevelLoaderFactory from './userLevelLoaderFactory';
 import userLoaderFactory from './userLoaderFactory';
 import contributionsLoaderFactory from './contributionsLoaderFactory';
-import aiResponsesLoaderFactory from './aiResponsesLoaderFactory';
 
 export default class DataLoaders {
   // List of data loaders
@@ -84,13 +83,6 @@ export default class DataLoaders {
     return this._checkOrSetLoader(
       'contributionsLoader',
       contributionsLoaderFactory
-    );
-  }
-
-  get aiResponsesLoader() {
-    return this._checkOrSetLoader(
-      'aiResponsesLoader',
-      aiResponsesLoaderFactory
     );
   }
 
