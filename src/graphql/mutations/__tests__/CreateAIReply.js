@@ -63,9 +63,9 @@ describe('CreateAIReply', () => {
     `);
   });
 
-  // it('returns loading AI response when not waiting for completion');
+  // it('waits for existing loading AI reply')
 
-  it('returns success AI response when waiting for completion', async () => {
+  it('returns new AI response', async () => {
     // Mocked ChatGPT success response
     //
     const mockFn = openai.createChatCompletion.mockImplementationOnce(
@@ -146,7 +146,5 @@ describe('CreateAIReply', () => {
     });
   });
 
-  // it('returns API error when waiting for completion'); // Mock API key error
-
-  // it('returns API error when not waiting for completion'); // Mock API key error
+  // it('returns API error'); // Mock API key error
 });
