@@ -12,10 +12,8 @@ import client from 'util/client';
 describe('CreateAIReply', () => {
   beforeAll(async () => {
     await loadFixtures(fixtures);
-    MockDate.set(1602288000000);
   });
   afterAll(async () => {
-    MockDate.reset();
     await unloadFixtures(fixtures);
   });
 
@@ -97,6 +95,7 @@ describe('CreateAIReply', () => {
       })
     );
 
+    MockDate.set(1602288000000);
     const { data, errors } = await gql`
       mutation($articleId: String!) {
         CreateAIReply(articleId: $articleId) {
@@ -117,6 +116,7 @@ describe('CreateAIReply', () => {
       },
       { user: { id: 'test', appId: 'test' } }
     );
+    MockDate.reset();
 
     expect(errors).toBeUndefined();
     expect(mockFn).toHaveReturned();
