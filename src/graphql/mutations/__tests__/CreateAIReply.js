@@ -35,9 +35,33 @@ describe('CreateAIReply', () => {
     `);
   });
 
-  // it('returns latests AI reply if one already exists', async () => {
+  it('returns latest successful AI reply if one already exists', async () => {
+    const { data, errors } = await gql`
+      mutation($articleId: String!) {
+        CreateAIReply(articleId: $articleId) {
+          id
+          status
+        }
+      }
+    `(
+      {
+        articleId: 'ai-replied-article',
+      },
+      { user: { id: 'test', appId: 'test' } }
+    );
 
-  // });
+    expect(errors).toBeUndefined();
+
+    // Expect latest successful reply
+    expect(data).toMatchInlineSnapshot(`
+      Object {
+        "CreateAIReply": Object {
+          "id": "ai-reply-latest",
+          "status": "SUCCESS",
+        },
+      }
+    `);
+  });
 
   // it('returns loading AI response when not waiting for completion');
 
@@ -75,7 +99,7 @@ describe('CreateAIReply', () => {
 
     const { data, errors } = await gql`
       mutation($articleId: String!) {
-        CreateAIReply(articleId: $articleId, waitForCompletion: true) {
+        CreateAIReply(articleId: $articleId) {
           id
           text
           status

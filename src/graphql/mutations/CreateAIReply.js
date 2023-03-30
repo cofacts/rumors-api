@@ -1,6 +1,5 @@
-import { GraphQLString, GraphQLNonNull, GraphQLBoolean } from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 
-import rollbar from 'rollbarInstance';
 import openai from 'util/openai';
 import { assertUser } from 'util/user';
 import client from 'util/client';
@@ -19,18 +18,8 @@ export default {
     'Create an AI reply for a specific article. If existed, returns an existing one.',
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
-    waitForCompletion: {
-      type: GraphQLBoolean,
-      description:
-        'If provided, will wait until AI Response completes or errors',
-      defaultValue: false,
-    },
   },
-  async resolve(
-    rootValue,
-    { articleId, waitForCompletion = false },
-    { loaders, user }
-  ) {
+  async resolve(rootValue, { articleId }, { loaders, user }) {
     assertUser(user);
 
     const article = await loaders.docLoader.load({
@@ -73,7 +62,10 @@ export default {
       });
 
       if (successfulAiResponse) {
-        return successfulAiResponse;
+        return {
+          id: successfulAiResponse._id,
+          ...successfulAiResponse._source,
+        };
       }
 
       // If no successful AI responses, find loading responses created within 1 min.
@@ -175,10 +167,7 @@ export default {
       });
 
     // Resolves to completed or errored AI response.
-    const updateResponsePromise = Promise.all([
-      openAIResponsePromise,
-      newResponseIdPromise,
-    ])
+    return Promise.all([openAIResponsePromise, newResponseIdPromise])
       .then(([apiResult, aiResponseId]) =>
         // Update using aiResponse._id according to apiResult
         client.update({
@@ -211,22 +200,6 @@ export default {
           },
         })
       )
-      .then(({ body: { _id, get: { _source } } }) => ({ id: _id, ..._source }))
-      .catch(error => {
-        // promise will be passed to resolver;
-        // let GraphQL resolver handle the error
-        if (waitForCompletion) throw error;
-
-        // Unhandled case
-        console.error(error);
-        rollbar.error(error);
-      });
-
-    return waitForCompletion
-      ? updateResponsePromise
-      : newResponseIdPromise.then(id => ({
-          id,
-          ...newResponse,
-        }));
+      .then(({ body: { _id, get: { _source } } }) => ({ id: _id, ..._source }));
   },
 };
