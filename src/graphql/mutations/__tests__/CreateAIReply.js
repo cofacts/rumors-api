@@ -146,5 +146,49 @@ describe('CreateAIReply', () => {
     });
   });
 
-  // it('returns API error'); // Mock API key error
+  it('returns API error', async () => {
+    // Mocked ChatGPT failed response, simulate API key error
+    //
+    const mockFn = openai.createChatCompletion.mockImplementationOnce(() =>
+      Promise.reject(new Error('Request failed with status code 401'))
+    );
+
+    const { data, errors } = await gql`
+      mutation($articleId: String!) {
+        CreateAIReply(articleId: $articleId) {
+          id
+          status
+          text
+        }
+      }
+    `(
+      {
+        articleId: 'reported-article',
+      },
+      { user: { id: 'test', appId: 'test' } }
+    );
+    MockDate.reset();
+
+    expect(mockFn).toHaveReturned();
+    expect(errors).toBeUndefined;
+
+    const {
+      CreateAIReply: { id, ...aiReplyContent },
+    } = data;
+
+    // Should return an errored AI reply
+    expect(aiReplyContent).toMatchInlineSnapshot(`
+      Object {
+        "status": "ERROR",
+        "text": "Error: Request failed with status code 401",
+      }
+    `);
+
+    // Cleanup
+    await client.delete({
+      index: 'airesponses',
+      type: 'doc',
+      id,
+    });
+  });
 });
