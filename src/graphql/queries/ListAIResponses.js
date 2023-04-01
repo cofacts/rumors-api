@@ -69,7 +69,9 @@ export default {
     if (filter.updatedAt) {
       body.query.bool.filter.push({
         range: {
-          updatedAt: getRangeFieldParamFromArithmeticExpression(filter.updatedAt),
+          updatedAt: getRangeFieldParamFromArithmeticExpression(
+            filter.updatedAt
+          ),
         },
       });
     }
