@@ -4,7 +4,43 @@ exports[`ListAIResponses filters by AI response specific filters: only error and
 Object {
   "data": Object {
     "ListAIResponses": Object {
-      "edges": Array [],
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "expired-loading",
+            "status": "ERROR",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "ai-reply-old",
+            "status": "SUCCESS",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "ai-reply-latest",
+            "status": "SUCCESS",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListAIResponses filters by AI response specific filters: updatedAt <= 2020/1/2 00:00:10 1`] = `
+Object {
+  "data": Object {
+    "ListAIResponses": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "ai-reply-old",
+            "updatedAt": "2020-01-01T00:00:10.000Z",
+          },
+        },
+      ],
     },
   },
 }

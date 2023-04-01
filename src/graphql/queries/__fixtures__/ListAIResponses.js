@@ -4,12 +4,14 @@ export default {
     type: 'AI_REPLY',
     status: 'SUCCESS',
     createdAt: '2020-01-01T00:00:00.000Z',
+    updatedAt: '2020-01-01T00:00:10.000Z',
   },
   '/airesponses/doc/ai-reply-latest': {
     docId: 'ai-replied-article',
     type: 'AI_REPLY',
     status: 'SUCCESS',
     createdAt: '2020-01-02T00:00:00.000Z',
+    updatedAt: '2020-01-02T00:00:15.000Z',
   },
   '/airesponses/doc/expired-loading': {
     docId: 'ai-replied-article',

@@ -80,5 +80,21 @@ describe('ListAIResponses', () => {
         }
       `()
     ).toMatchSnapshot('only error and success');
+    expect(
+      await gql`
+        {
+          ListAIResponses(
+            filter: { updatedAt: { LTE: "2020-01-02T00:00:10.000Z" } }
+          ) {
+            edges {
+              node {
+                id
+                updatedAt
+              }
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot('updatedAt <= 2020/1/2 00:00:10');
   });
 });
