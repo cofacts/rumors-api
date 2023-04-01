@@ -12,6 +12,7 @@ import ListArticleReplyFeedbacks from './queries/ListArticleReplyFeedbacks';
 import ListReplyRequests from './queries/ListReplyRequests';
 import ListBlockedUsers from './queries/ListBlockedUsers';
 import ListAnalytics from './queries/ListAnalytics';
+import ListAIResponses from './queries/ListAIResponses';
 import ValidateSlug from './queries/ValidateSlug';
 
 // Set individual objects
@@ -45,6 +46,7 @@ export default new GraphQLSchema({
       ListReplyRequests,
       ListBlockedUsers,
       ListAnalytics,
+      ListAIResponses,
       ValidateSlug,
     },
   }),
