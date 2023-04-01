@@ -328,6 +328,26 @@ Object {
 }
 `;
 
+exports[`ListReplies filters: userIds = [foo] 1`] = `
+Object {
+  "data": Object {
+    "ListReplies": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "userFoo",
+            "user": Object {
+              "id": "foo",
+            },
+          },
+        },
+      ],
+      "totalCount": 1,
+    },
+  },
+}
+`;
+
 exports[`ListReplies handles selfOnly filter properly if not logged in 1`] = `
 Object {
   "data": Object {

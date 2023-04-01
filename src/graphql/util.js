@@ -449,6 +449,10 @@ export function createCommonListFilter(pluralEntityName) {
       type: GraphQLString,
       description: `Show only ${pluralEntityName} created by the specific user.`,
     },
+    userIds: {
+      type: new GraphQLList(new GraphQLNonNull(GraphQLString)),
+      description: `Show only ${pluralEntityName} created by the specified users.`,
+    },
     createdAt: {
       type: timeRangeInput,
       description: `List only the ${pluralEntityName} that were created between the specific time range.`,
@@ -484,6 +488,10 @@ export function attachCommonListFilter(
     if (!filter[field]) return;
     filterQueries.push({ term: { [`${fieldPrefix}${field}`]: filter[field] } });
   });
+
+  if (filter.userIds) {
+    filterQueries.push({ terms: { [`${fieldPrefix}userId`]: filter.userIds } });
+  }
 
   if (filter.createdAt) {
     filterQueries.push({

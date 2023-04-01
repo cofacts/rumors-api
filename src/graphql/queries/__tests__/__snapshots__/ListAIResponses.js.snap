@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListAIResponses filters by AI response specific filters: only error and success 1`] = `
+Object {
+  "data": Object {
+    "ListAIResponses": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "expired-loading",
+            "status": "ERROR",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "ai-reply-old",
+            "status": "SUCCESS",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "ai-reply-latest",
+            "status": "SUCCESS",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListAIResponses filters by AI response specific filters: updatedAt <= 2020/1/2 00:00:10 1`] = `
+Object {
+  "data": Object {
+    "ListAIResponses": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "ai-reply-old",
+            "updatedAt": "2020-01-01T00:00:10.000Z",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListAIResponses filters by common filters: createdAt <= 2020/01/03 1`] = `
+Object {
+  "data": Object {
+    "ListAIResponses": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "createdAt": "2020-01-01T00:00:00.000Z",
+            "id": "loading",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-01-01T00:00:00.000Z",
+            "id": "ai-reply-old",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-01-02T00:00:00.000Z",
+            "id": "ai-reply-latest",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListAIResponses lists all AI responses 1`] = `
+Object {
+  "data": Object {
+    "ListAIResponses": Object {
+      "edges": Array [
+        Object {
+          "cursor": "WyJsb2FkaW5nIl0=",
+          "node": Object {
+            "id": "loading",
+          },
+        },
+        Object {
+          "cursor": "WyJleHBpcmVkLWxvYWRpbmciXQ==",
+          "node": Object {
+            "id": "expired-loading",
+          },
+        },
+        Object {
+          "cursor": "WyJhaS1yZXBseS1vbGQiXQ==",
+          "node": Object {
+            "id": "ai-reply-old",
+          },
+        },
+        Object {
+          "cursor": "WyJhaS1yZXBseS1sYXRlc3QiXQ==",
+          "node": Object {
+            "id": "ai-reply-latest",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJsb2FkaW5nIl0=",
+        "lastCursor": "WyJhaS1yZXBseS1sYXRlc3QiXQ==",
+      },
+      "totalCount": 4,
+    },
+  },
+}
+`;
+
+exports[`ListAIResponses sorts: by createdAt DESC 1`] = `
+Object {
+  "data": Object {
+    "ListAIResponses": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "createdAt": "2020-01-04T00:00:00.000Z",
+            "id": "expired-loading",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-01-02T00:00:00.000Z",
+            "id": "ai-reply-latest",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-01-01T00:00:00.000Z",
+            "id": "loading",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-01-01T00:00:00.000Z",
+            "id": "ai-reply-old",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
