@@ -149,6 +149,7 @@ export default {
         body: newResponse,
       })
       .then(({ body: { result, _id } }) => {
+        /* istanbul ignore if */
         if (result !== 'created') {
           throw new Error(`Cannot create AI reply: ${result}`);
         }
@@ -162,6 +163,7 @@ export default {
         console.error(error);
 
         /* Resolve with Error instance, which will be used to update AI response below */
+        /* istanbul ignore else */
         if (error instanceof Error) return error;
         return new Error(error);
       });
