@@ -169,6 +169,30 @@ describe('ListReplies', () => {
         }
       )
     ).toMatchSnapshot('userId = foo');
+
+    expect(
+      await gql`
+        {
+          ListReplies(filter: { userIds: ["foo"] }) {
+            edges {
+              node {
+                id
+                user {
+                  id
+                }
+              }
+            }
+            totalCount
+          }
+        }
+      `(
+        {},
+        {
+          userId: 'foo',
+          appId: 'test',
+        }
+      )
+    ).toMatchSnapshot('userIds = [foo]');
   });
 
   it('filters by moreLikeThis and given text, find replies containing hyperlinks with the said text', async () => {
