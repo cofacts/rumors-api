@@ -52,6 +52,11 @@ describe('GetReplyAndGetArticle', () => {
               requestedForReply
               attachmentHash
               attachmentUrl
+
+              aiReplies {
+                text
+                status
+              }
             }
           }
         `({}, { user: { id: 'fakeUser', appId: 'LINE' } })

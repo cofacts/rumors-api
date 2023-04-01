@@ -35,6 +35,7 @@ import mediaManager, {
 } from 'util/mediaManager';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
+import { AIReply } from './AIResponse';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 import ReplyRequestStatusEnum from './ReplyRequestStatusEnum';
 import ArticleCategory from './ArticleCategory';
@@ -141,6 +142,33 @@ const Article = new GraphQLObjectType({
         const [latestArticleReply] = sortedArticleReplies.splice(latestIdx, 1);
 
         return [latestArticleReply, ...sortedArticleReplies];
+      },
+    },
+
+    aiReplies: {
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(AIReply))),
+      description:
+        'Automated reply from AI before human fact checkers compose an fact check',
+      async resolve({ id }, _, { loaders }) {
+        return loaders.searchResultLoader.load({
+          index: 'airesponses',
+          type: 'doc',
+          body: {
+            query: {
+              bool: {
+                must: [
+                  { term: { type: 'AI_REPLY' } },
+                  { term: { docId: id } },
+                  { term: { status: 'SUCCESS' } },
+                ],
+              },
+            },
+            sort: {
+              createdAt: 'desc',
+            },
+            size: 10,
+          },
+        });
       },
     },
 
