@@ -196,70 +196,76 @@ describe('CreateAIReply', () => {
     });
   });
 
-  it(
-    'waits for existing loading AI reply',
-    async () => {
-      // Prepare a recently loading AI reply.
-      // Date cannot be mocked on NodeJS, because CreateAIReply calls Elasticsearch to calculate date.
-      //
-      await client.update({
-        index: 'airesponses',
-        type: 'doc',
-        id: 'loading',
-        body: {
-          doc: {
-            createdAt: new Date(),
-          },
+  it('waits for existing loading AI replies', async () => {
+    // Prepare a recently loading AI reply.
+    // Date cannot be mocked on NodeJS, because CreateAIReply calls Elasticsearch to calculate date.
+    //
+    await client.update({
+      index: 'airesponses',
+      type: 'doc',
+      id: 'loading',
+      body: {
+        doc: {
+          createdAt: new Date(),
         },
-        refresh: 'true',
-      });
+      },
+      refresh: 'true',
+    });
 
-      let isAIReplyPromiseResolved = false;
-      const createAIReplyPromise = await gql`
-        mutation($articleId: String!) {
-          CreateAIReply(articleId: $articleId) {
-            id
-            status
-          }
+    let isAIReplyPromiseResolved = false;
+    const createAIReplyPromise = gql`
+      mutation($articleId: String!) {
+        CreateAIReply(articleId: $articleId) {
+          id
+          status
         }
-      `(
-        {
-          articleId: fixtures['/airesponses/doc/loading'].docId,
+      }
+    `(
+      {
+        articleId: fixtures['/airesponses/doc/loading'].docId,
+      },
+      { user: { id: 'test', appId: 'test' } }
+    ).then(ret => {
+      isAIReplyPromiseResolved = true;
+      return ret;
+    });
+
+    // Wait for some time for the loop in CreateAIReply to repeat itself.
+    // The AI reply promise should not resolve before the AI Reply turns "SUCCESS".
+    delayForMs(2000);
+    expect(isAIReplyPromiseResolved).toBe(false);
+
+    // Simulate that the AI reply turns "SUCCESS" by another process
+    //
+    await client.update({
+      index: 'airesponses',
+      type: 'doc',
+      id: 'loading',
+      body: {
+        doc: {
+          status: 'SUCCESS',
+          updatedAt: new Date(),
         },
-        { user: { id: 'test', appId: 'test' } }
-      ).then(ret => {
-        console.log(JSON.stringify({ ret }));
-        isAIReplyPromiseResolved = true;
-        return ret;
-      });
+      },
+      refresh: 'true',
+    });
 
-      // Wait for some time for the loop in CreateAIReply to repeat itself.
-      delayForMs(2000);
-      expect(isAIReplyPromiseResolved).toBe(false);
-
-      // Simulate that the doc is resolved by another mutation
-      //
-      await client.update({
-        index: 'airesponses',
-        type: 'doc',
-        id: 'loading',
-        body: {
-          doc: {
-            status: 'SUCCESS',
-            updatedAt: new Date(),
+    // Expect the promise to resolve to the successfully loaded AI reply
+    //
+    expect(await createAIReplyPromise).toMatchInlineSnapshot(`
+      Object {
+        "data": Object {
+          "CreateAIReply": Object {
+            "id": "loading",
+            "status": "SUCCESS",
           },
         },
-        refresh: 'true',
-      });
+      }
+    `);
 
-      // Expect the promise to resolve to the already loaded AI reply
-      expect(await createAIReplyPromise).toMatchInlineSnapshot();
-
-      // Cleanup
-      await resetFrom(fixtures, '/airesponses/doc/loading');
-    },
-    10000
-  );
+    // Cleanup
+    await resetFrom(fixtures, '/airesponses/doc/loading');
+  });
 
   it('returns API error', async () => {
     // Mocked ChatGPT failed response, simulate API key error
