@@ -226,7 +226,7 @@ The ground truth files in JSON will be written to output directory
 This command generates a new AI reply even if the article already has an AI reply before.
 Suitable for the scenario when the existing AI reply is not appropriate.
 ```
-$ node build/scripts/genAIReply.js -a <articleId>
+$ node build/scripts/genAIReply.js -a <articleId> --temperature=1
 ```
 
 ## One-off migration scripts
