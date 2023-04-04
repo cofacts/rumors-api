@@ -21,6 +21,7 @@ async function main({ articleId, replyId, userId } = {}) {
 
 export default main;
 
+/* istanbul ignore if */
 if (require.main === module) {
   const argv = yargs
     .options({
