@@ -6,10 +6,9 @@ import client from 'util/client';
 import delayForMs from 'util/delayForMs';
 import { AIReply } from 'graphql/models/AIResponse';
 
-const formatter = Intl.DateTimeFormat('zh-TW', {
+const monthFormatter = Intl.DateTimeFormat('zh-TW', {
   year: 'numeric',
   month: 'long',
-  day: 'numeric',
 });
 
 export default {
@@ -110,14 +109,14 @@ export default {
 
     // Creating new AI response
     //
-    const today = formatter.format(new Date());
+    const thisMonth = monthFormatter.format(new Date());
 
     const completionRequest = {
       model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
-          content: `今天是${today}。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。`,
+          content: `現在是${thisMonth}。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。`,
         },
         {
           role: 'user',
