@@ -21,6 +21,46 @@ export async function createNewAIReply({
   user,
   completionOptions = {},
 }) {
+  // article.hyperlinks deduped by URL.
+  const dedupedHyperlinks = Object.values(
+    (article.hyperlinks ?? []).reduce((map, hyperlink) => {
+      if (
+        !map[hyperlink.url] ||
+        /* hyperlink exists, but fetch failed */ !map[hyperlink.url].title
+      ) {
+        map[hyperlink.url] = hyperlink;
+      }
+      return map;
+    }, {})
+  );
+
+  /**
+   * Determine if article has no content by replacing all URLs with its scrapped content.
+   * This will become empty string if and only if:
+   * - The article only contains URLs, no other text, and
+   * - All URL scrapping results fail (no title, no summary)
+   *
+   * Abort AI reply generation in this case.
+   */
+  const replacedArticleText = dedupedHyperlinks
+    .reduce(
+      (text, { url, title, summary }) =>
+        text.replaceAll(url, `${title} ${summary}`),
+      article.text
+    )
+    .trim();
+
+  if (replacedArticleText.length === 0) return null;
+
+  // Argumenting hyperlinks with summary and titles
+  const argumentedArticleText = dedupedHyperlinks.reduce(
+    (text, { url, title, summary }) =>
+      title
+        ? text.replaceAll(url, `[${title} ${summary}](${url})`)
+        : /* Fetch failed, don't replace */ text,
+    article.text
+  );
+
   const thisMonth = monthFormatter.format(new Date());
   const createdMonth = monthFormatter.format(new Date(article.createdAt));
 
@@ -33,7 +73,7 @@ export async function createNewAIReply({
       },
       {
         role: 'user',
-        content: article.text,
+        content: argumentedArticleText,
       },
       {
         role: 'user',

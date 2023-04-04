@@ -7,7 +7,7 @@ import delayForMs from 'util/delayForMs';
 import gql from 'util/GraphQL';
 
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
-import fixtures from '../__fixtures__/CreateAIReply';
+import fixtures, { SUCCESS_OPENAI_RESP } from '../__fixtures__/CreateAIReply';
 import client from 'util/client';
 
 describe('CreateAIReply', () => {
@@ -16,6 +16,9 @@ describe('CreateAIReply', () => {
   });
   afterAll(async () => {
     await unloadFixtures(fixtures);
+  });
+  afterEach(() => {
+    openai.createChatCompletion.mockReset();
   });
 
   it('throws when specified article does not exist', async () => {
@@ -138,32 +141,7 @@ describe('CreateAIReply', () => {
 
     // Simulates API resolves
     //
-    resolveAPI({
-      data: {
-        id: 'chatcmpl-some-id',
-        object: 'chat.completion',
-        created: 1679847676,
-        model: 'gpt-3.5-turbo-0301',
-        usage: {
-          prompt_tokens: 343,
-          completion_tokens: 64,
-          total_tokens: 407,
-        },
-        choices: [
-          {
-            message: {
-              role: 'assistant',
-              content:
-                '閱聽人應該確保登記網站的正確性和安全性，並記得定期更改密碼和密鑰，以保護自己的資訊安全。',
-            },
-            finish_reason: 'stop',
-            index: 0,
-          },
-        ],
-      },
-      status: 200,
-      statusText: 'OK',
-    });
+    resolveAPI(SUCCESS_OPENAI_RESP);
 
     const { data, errors } = await resp;
     MockDate.reset();
@@ -311,5 +289,88 @@ describe('CreateAIReply', () => {
       type: 'doc',
       id,
     });
+  });
+
+  it('replaces URL with hyperlink info', async () => {
+    const mockFn = openai.createChatCompletion.mockImplementationOnce(
+      async () => SUCCESS_OPENAI_RESP
+    );
+
+    MockDate.set(1602288000000);
+
+    const {
+      data: {
+        CreateAIReply: { id },
+      },
+    } = await gql`
+      mutation($articleId: String!) {
+        CreateAIReply(articleId: $articleId) {
+          id
+        }
+      }
+    `(
+      {
+        articleId: 'with-resolved-urls',
+      },
+      { user: { id: 'test', appId: 'test' } }
+    );
+
+    MockDate.reset();
+
+    // Note the URLs being replaced in the message content
+    //
+    expect(mockFn.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Object {
+            "messages": Array [
+              Object {
+                "content": "現在是2020年10月。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息2020年1月就在網路上流傳。",
+                "role": "system",
+              },
+              Object {
+                "content": "[Foo-title! Foo summary](https://foo.com) [Foo-title! Foo summary](https://foo.com) https://bar.com https://bar.com",
+                "role": "user",
+              },
+              Object {
+                "content": "請問作為閱聽人，我應該注意這則訊息的哪些地方呢？
+      請節錄訊息中需要特別留意的地方，說明為何閱聽人需要注意它，謝謝。",
+                "role": "user",
+              },
+            ],
+            "model": "gpt-3.5-turbo",
+            "temperature": 0,
+            "user": "test",
+          },
+        ],
+      ]
+    `);
+
+    // Cleanup
+    await client.delete({
+      index: 'airesponses',
+      type: 'doc',
+      id,
+    });
+  });
+
+  it('returns null if all URL scrapping are failed', async () => {
+    const {
+      data: { CreateAIReply },
+    } = await gql`
+      mutation($articleId: String!) {
+        CreateAIReply(articleId: $articleId) {
+          id
+        }
+      }
+    `(
+      {
+        articleId: 'with-no-resolved-urls',
+      },
+      { user: { id: 'test', appId: 'test' } }
+    );
+
+    expect(CreateAIReply).toBe(null);
+    expect(openai.createChatCompletion).toBeCalledTimes(0);
   });
 });

@@ -12,6 +12,26 @@ export default {
     text: 'Some article',
     createdAt: '2020-01-01T00:00:00.000Z',
   },
+  '/articles/doc/with-resolved-urls': {
+    text: 'https://foo.com https://foo.com https://bar.com https://bar.com',
+    createdAt: '2020-01-01T00:00:00.000Z',
+    hyperlinks: [
+      { url: 'https://foo.com', title: 'Foo-title!', summary: 'Foo summary' },
+      // Simulate the edge case when there are multiple different entries for 1 URL (should not happen, though...)
+      { url: 'https://foo.com', title: '', summary: '' },
+      // Simulate the case when URL resolution is failed
+      { url: 'https://bar.com', title: '', summary: '' },
+      { url: 'https://bar.com', title: '', summary: '' },
+    ],
+  },
+  '/articles/doc/with-no-resolved-urls': {
+    text: 'https://foo.com\nhttps://bar.com',
+    createdAt: '2020-01-01T00:00:00.000Z',
+    hyperlinks: [
+      { url: 'https://foo.com', title: '', summary: '' },
+      { url: 'https://bar.com', title: '', summary: '' },
+    ],
+  },
   '/airesponses/doc/ai-reply-old': {
     docId: 'ai-replied-article',
     type: 'AI_REPLY',
@@ -36,4 +56,31 @@ export default {
     status: 'LOADING',
     createdAt: '2020-01-01T00:00:00.000Z', // Will be filled during test setup
   },
+};
+
+export const SUCCESS_OPENAI_RESP = {
+  data: {
+    id: 'chatcmpl-some-id',
+    object: 'chat.completion',
+    created: 1679847676,
+    model: 'gpt-3.5-turbo-0301',
+    usage: {
+      prompt_tokens: 343,
+      completion_tokens: 64,
+      total_tokens: 407,
+    },
+    choices: [
+      {
+        message: {
+          role: 'assistant',
+          content:
+            '閱聽人應該確保登記網站的正確性和安全性，並記得定期更改密碼和密鑰，以保護自己的資訊安全。',
+        },
+        finish_reason: 'stop',
+        index: 0,
+      },
+    ],
+  },
+  status: 200,
+  statusText: 'OK',
 };
