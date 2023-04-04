@@ -14,16 +14,22 @@ const monthFormatter = Intl.DateTimeFormat('zh-TW', {
 /**
  * Create an new AIReply, initially in LOADING state, then becomes ERROR or SUCCESS,
  * and returns the AI reply.
+ * If there is no enough content for AI, it resolves to null.
  */
-export async function createNewAIReply({ article, user }) {
+export async function createNewAIReply({
+  article,
+  user,
+  completionOptions = {},
+}) {
   const thisMonth = monthFormatter.format(new Date());
+  const createdMonth = monthFormatter.format(new Date(article.createdAt));
 
   const completionRequest = {
     model: 'gpt-3.5-turbo',
     messages: [
       {
         role: 'system',
-        content: `現在是${thisMonth}。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。`,
+        content: `現在是${thisMonth}。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息${createdMonth}就在網路上流傳。`,
       },
       {
         role: 'user',
@@ -36,6 +42,8 @@ export async function createNewAIReply({ article, user }) {
       },
     ],
     user: user.id,
+    temperature: 0,
+    ...completionOptions,
   };
 
   const newResponse = {
@@ -113,9 +121,9 @@ export async function createNewAIReply({ article, user }) {
 }
 
 export default {
-  type: new GraphQLNonNull(AIReply),
+  type: AIReply,
   description:
-    'Create an AI reply for a specific article. If existed, returns an existing one.',
+    'Create an AI reply for a specific article. If existed, returns an existing one. If information in the article is not sufficient for AI, return null.',
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
   },

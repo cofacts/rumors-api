@@ -13,7 +13,7 @@ import { createOrUpdateUser } from 'util/user';
 const GENERATOR_APP_ID = 'RUMORS_AI';
 export const GENERATOR_USER_ID = 'ai-reply-reviewer';
 
-async function main({ articleId } = {}) {
+async function main({ articleId, ...completionOptions } = {}) {
   if (!articleId) throw new Error('Please specify articleId');
 
   const {
@@ -35,6 +35,7 @@ async function main({ articleId } = {}) {
       id: articleId,
     },
     user,
+    completionOptions,
   });
 }
 
@@ -49,6 +50,11 @@ if (require.main === module) {
         description: 'Article ID to generate AI reply',
         type: 'string',
         demandOption: true,
+      },
+      temperature: {
+        description: 'Open AI chat completion param',
+        type: 'number',
+        demandOption: false,
       },
     })
     .help('help').argv;
