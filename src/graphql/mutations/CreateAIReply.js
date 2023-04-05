@@ -6,16 +6,164 @@ import client from 'util/client';
 import delayForMs from 'util/delayForMs';
 import { AIReply } from 'graphql/models/AIResponse';
 
-const formatter = Intl.DateTimeFormat('zh-TW', {
+const monthFormatter = Intl.DateTimeFormat('zh-TW', {
   year: 'numeric',
   month: 'long',
-  day: 'numeric',
 });
 
+/**
+ * Create an new AIReply, initially in LOADING state, then becomes ERROR or SUCCESS,
+ * and returns the AI reply.
+ * If there is no enough content for AI, it resolves to null.
+ */
+export async function createNewAIReply({
+  article,
+  user,
+  completionOptions = {},
+}) {
+  // article.hyperlinks deduped by URL.
+  const dedupedHyperlinks = Object.values(
+    (article.hyperlinks ?? []).reduce((map, hyperlink) => {
+      if (
+        !map[hyperlink.url] ||
+        /* hyperlink exists, but fetch failed */ !map[hyperlink.url].title
+      ) {
+        map[hyperlink.url] = hyperlink;
+      }
+      return map;
+    }, {})
+  );
+
+  /**
+   * Determine if article has no content by replacing all URLs with its scrapped content.
+   * This will become empty string if and only if:
+   * - The article only contains URLs, no other text, and
+   * - All URL scrapping results fail (no title, no summary)
+   *
+   * Abort AI reply generation in this case.
+   */
+  const replacedArticleText = dedupedHyperlinks
+    .reduce(
+      (text, { url, title, summary }) =>
+        text.replaceAll(url, `${title} ${summary}`),
+      article.text
+    )
+    .trim();
+
+  if (replacedArticleText.length === 0) return null;
+
+  // Argumenting hyperlinks with summary and titles
+  const argumentedArticleText = dedupedHyperlinks.reduce(
+    (text, { url, title, summary }) =>
+      title
+        ? text.replaceAll(url, `[${title} ${summary}](${url})`)
+        : /* Fetch failed, don't replace */ text,
+    article.text
+  );
+
+  const thisMonth = monthFormatter.format(new Date());
+  const createdMonth = monthFormatter.format(new Date(article.createdAt));
+
+  const completionRequest = {
+    model: 'gpt-3.5-turbo',
+    messages: [
+      {
+        role: 'system',
+        content: `現在是${thisMonth}。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息${createdMonth}就在網路上流傳。`,
+      },
+      {
+        role: 'user',
+        content: argumentedArticleText,
+      },
+      {
+        role: 'user',
+        content:
+          '請問作為閱聽人，我應該注意這則訊息的哪些地方呢？\n請節錄訊息中需要特別留意的地方，說明為何閱聽人需要注意它，謝謝。',
+      },
+    ],
+    user: user.id,
+    temperature: 0,
+    ...completionOptions,
+  };
+
+  const newResponse = {
+    userId: user.id,
+    appId: user.appId,
+    docId: article.id,
+    type: 'AI_REPLY',
+    status: 'LOADING',
+    request: JSON.stringify(completionRequest),
+    createdAt: new Date(),
+  };
+
+  // Resolves to loading AI Response.
+  const newResponseIdPromise = client
+    .index({
+      index: 'airesponses',
+      type: 'doc',
+      body: newResponse,
+    })
+    .then(({ body: { result, _id } }) => {
+      /* istanbul ignore if */
+      if (result !== 'created') {
+        throw new Error(`Cannot create AI reply: ${result}`);
+      }
+      return _id;
+    });
+
+  const openAIResponsePromise = openai
+    .createChatCompletion(completionRequest)
+    .then(({ data }) => data)
+    .catch(error => {
+      console.error(error);
+
+      /* Resolve with Error instance, which will be used to update AI response below */
+      /* istanbul ignore else */
+      if (error instanceof Error) return error;
+      return new Error(error);
+    });
+
+  // Resolves to completed or errored AI response.
+  return Promise.all([openAIResponsePromise, newResponseIdPromise])
+    .then(([apiResult, aiResponseId]) =>
+      // Update using aiResponse._id according to apiResult
+      client.update({
+        index: 'airesponses',
+        type: 'doc',
+        id: aiResponseId,
+        _source: true,
+        body: {
+          doc:
+            apiResult instanceof Error
+              ? {
+                  status: 'ERROR',
+                  text: apiResult.toString(),
+                  updatedAt: new Date(),
+                }
+              : {
+                  status: 'SUCCESS',
+                  text: apiResult.choices[0].message.content,
+                  ...(apiResult.usage
+                    ? {
+                        usage: {
+                          promptTokens: apiResult.usage.prompt_tokens,
+                          completionTokens: apiResult.usage.completion_tokens,
+                          totalTokens: apiResult.usage.total_tokens,
+                        },
+                      }
+                    : undefined),
+                  updatedAt: new Date(),
+                },
+        },
+      })
+    )
+    .then(({ body: { _id, get: { _source } } }) => ({ id: _id, ..._source }));
+}
+
 export default {
-  type: new GraphQLNonNull(AIReply),
+  type: AIReply,
   description:
-    'Create an AI reply for a specific article. If existed, returns an existing one.',
+    'Create an AI reply for a specific article. If existed, returns an existing one. If information in the article is not sufficient for AI, return null.',
   args: {
     articleId: { type: new GraphQLNonNull(GraphQLString) },
   },
@@ -108,100 +256,6 @@ export default {
       await delayForMs(1000);
     }
 
-    // Creating new AI response
-    //
-    const today = formatter.format(new Date());
-
-    const completionRequest = {
-      model: 'gpt-3.5-turbo',
-      messages: [
-        {
-          role: 'system',
-          content: `今天是${today}。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。`,
-        },
-        {
-          role: 'user',
-          content: article.text,
-        },
-        {
-          role: 'user',
-          content:
-            '請問作為閱聽人，我應該注意這則訊息的哪些地方呢？\n請節錄訊息中需要特別留意的地方，說明為何閱聽人需要注意它，謝謝。',
-        },
-      ],
-    };
-
-    const newResponse = {
-      userId: user.id,
-      appId: user.appId,
-      docId: articleId,
-      type: 'AI_REPLY',
-      status: 'LOADING',
-      request: JSON.stringify(completionRequest),
-      createdAt: new Date(),
-    };
-
-    // Resolves to loading AI Response.
-    const newResponseIdPromise = client
-      .index({
-        index: 'airesponses',
-        type: 'doc',
-        body: newResponse,
-      })
-      .then(({ body: { result, _id } }) => {
-        /* istanbul ignore if */
-        if (result !== 'created') {
-          throw new Error(`Cannot create AI reply: ${result}`);
-        }
-        return _id;
-      });
-
-    const openAIResponsePromise = openai
-      .createChatCompletion(completionRequest)
-      .then(({ data }) => data)
-      .catch(error => {
-        console.error(error);
-
-        /* Resolve with Error instance, which will be used to update AI response below */
-        /* istanbul ignore else */
-        if (error instanceof Error) return error;
-        return new Error(error);
-      });
-
-    // Resolves to completed or errored AI response.
-    return Promise.all([openAIResponsePromise, newResponseIdPromise])
-      .then(([apiResult, aiResponseId]) =>
-        // Update using aiResponse._id according to apiResult
-        client.update({
-          index: 'airesponses',
-          type: 'doc',
-          id: aiResponseId,
-          _source: true,
-          body: {
-            doc:
-              apiResult instanceof Error
-                ? {
-                    status: 'ERROR',
-                    text: apiResult.toString(),
-                    updatedAt: new Date(),
-                  }
-                : {
-                    status: 'SUCCESS',
-                    text: apiResult.choices[0].message.content,
-                    ...(apiResult.usage
-                      ? {
-                          usage: {
-                            promptTokens: apiResult.usage.prompt_tokens,
-                            completionTokens: apiResult.usage.completion_tokens,
-                            totalTokens: apiResult.usage.total_tokens,
-                          },
-                        }
-                      : undefined),
-                    updatedAt: new Date(),
-                  },
-          },
-        })
-      )
-      .then(({ body: { _id, get: { _source } } }) => ({ id: _id, ..._source }));
+    return createNewAIReply({ article, user });
   },
 };
