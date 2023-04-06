@@ -13,7 +13,7 @@ import { createOrUpdateUser } from 'util/user';
 const GENERATOR_APP_ID = 'RUMORS_AI';
 export const GENERATOR_USER_ID = 'ai-reply-reviewer';
 
-async function main({ articleId, ...completionOptions } = {}) {
+async function main({ articleId, temperature } = {}) {
   if (!articleId) throw new Error('Please specify articleId');
 
   const {
@@ -35,7 +35,9 @@ async function main({ articleId, ...completionOptions } = {}) {
       id: articleId,
     },
     user,
-    completionOptions,
+    completionOptions: {
+      temperature,
+    },
   });
 }
 
