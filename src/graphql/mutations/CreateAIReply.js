@@ -9,6 +9,7 @@ import { AIReply } from 'graphql/models/AIResponse';
 const monthFormatter = Intl.DateTimeFormat('zh-TW', {
   year: 'numeric',
   month: 'long',
+  timeZone: 'Asia/Taipei',
 });
 
 /**
@@ -61,7 +62,10 @@ export async function createNewAIReply({
     article.text
   );
 
-  const thisMonth = monthFormatter.format(new Date());
+  const thisMonthParts = monthFormatter.formatToParts(new Date());
+  const thisYearStr = thisMonthParts.find(p => p.type === 'year').value;
+  const thisROCYearStr = (+thisYearStr - 1911).toString();
+  const thisMonthStr = thisMonthParts.find(p => p.type === 'month').value;
   const createdMonth = monthFormatter.format(new Date(article.createdAt));
 
   const completionRequest = {
@@ -69,7 +73,7 @@ export async function createNewAIReply({
     messages: [
       {
         role: 'system',
-        content: `現在是${thisMonth}。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息${createdMonth}就在網路上流傳。`,
+        content: `現在是${thisYearStr}年（民國${thisROCYearStr}年）${thisMonthStr}月。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息${createdMonth}就在網路上流傳。`,
       },
       {
         role: 'user',
