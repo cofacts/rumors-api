@@ -88,6 +88,7 @@ const LOG_STR_LENGTH = 200;
 /**
  * For JSON.stringify in GraphQL logger
  */
+/* istanbul ignore next */
 function truncatingLogReplacer(key, value) {
   if (typeof value !== 'string' || value.length < LOG_STR_LENGTH) return value;
 
