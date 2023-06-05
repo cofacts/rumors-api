@@ -84,6 +84,16 @@ router.get('/', ctx => {
 app.use(koaStatic(path.join(__dirname, '../static/')));
 app.use(router.routes(), router.allowedMethods());
 
+const LOG_STR_LENGTH = 200;
+/**
+ * For JSON.stringify in GraphQL logger
+ */
+function truncatingLogReplacer(key, value) {
+  if (typeof value !== 'string' || value.length < LOG_STR_LENGTH) return value;
+
+  return value.slice(0, LOG_STR_LENGTH) + '...';
+}
+
 export const apolloServer = new ApolloServer({
   schema,
   introspection: true, // Allow introspection in production as well
@@ -128,18 +138,29 @@ export const apolloServer = new ApolloServer({
     : [
         {
           /* istanbul ignore next */
-          requestDidStart({
-            request: { query, variables, operationName },
-            context: { appId, userId, appUserId },
-          }) {
-            console.log({
-              query,
-              variables,
-              operationName,
-              appId,
-              appUserId,
-              userId,
-            });
+          requestDidStart(...args) {
+            const [
+              {
+                context: { userId, appUserId, appId },
+                request: { operationName, query, variables, http },
+              },
+            ] = args;
+
+            console.log(
+              JSON.stringify(
+                {
+                  msg: 'GraphQL request did start',
+                  operationName,
+                  query,
+                  variables,
+                  userId,
+                  appUserId,
+                  appId,
+                  headers: Object.fromEntries(http.headers.entries()),
+                },
+                truncatingLogReplacer
+              )
+            );
           },
         },
       ],
