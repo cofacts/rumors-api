@@ -200,7 +200,7 @@ $ node build/scripts/blockUser.js --userId=<userId> --blockedReason=<Announcemen
 - This command replaces all the variants of a media article's file on GCS with the variants of the new file.
 
 ```
-$ node build/script/replaceMedia.js --articleId=<articleId> --url=<new-file-url>
+$ node build/scripts/replaceMedia.js --articleId=<articleId> --url=<new-file-url>
 ```
 
 ### Generating a spreadsheet of new article-categories for human review
