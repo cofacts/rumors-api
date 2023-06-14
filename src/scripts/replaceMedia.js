@@ -11,7 +11,7 @@ import { uploadMedia } from 'graphql/mutations/CreateMediaArticle';
 /**
  * @param {object} args
  */
-async function replaceMedia({ articleId, url, skipCheck = false } = {}) {
+async function replaceMedia({ articleId, url, force = false } = {}) {
   const {
     body: { _source: article },
   } = await client.get({ index: 'articles', type: 'doc', id: articleId });
@@ -22,12 +22,27 @@ async function replaceMedia({ articleId, url, skipCheck = false } = {}) {
   const oldMediaEntry = await mediaManager.get(article.attachmentHash);
 
   /* istanbul ignore if */
-  if (!skipCheck && !oldMediaEntry)
+  if (!force && !oldMediaEntry)
     throw new Error(
       `Article ${articleId}'s attachment hash "${
         article.attachmentHash
       }" has no corresponding media entry`
     );
+
+  // Delete old media first, so that new one can be written without worring overwriting existing files
+  //
+  if (oldMediaEntry) {
+    await Promise.all(
+      oldMediaEntry.variants.map(variant =>
+        oldMediaEntry
+          .getFile(variant)
+          .delete()
+          .then(() => {
+            console.info(`Old media entry variant=${variant} deleted`);
+          })
+      )
+    );
+  }
 
   const newMediaEntry = await uploadMedia({
     mediaUrl: url,
@@ -48,19 +63,6 @@ async function replaceMedia({ articleId, url, skipCheck = false } = {}) {
       },
     },
   });
-
-  if (oldMediaEntry) {
-    return Promise.all(
-      oldMediaEntry.variants.map(variant =>
-        oldMediaEntry
-          .getFile(variant)
-          .delete()
-          .then(() => {
-            console.info(`Old media entry variant=${variant} deleted`);
-          })
-      )
-    );
-  }
 }
 
 export default replaceMedia;
@@ -81,7 +83,8 @@ if (require.main === module) {
         type: 'string',
         demandOption: true,
       },
-      skipCheck: {
+      force: {
+        alias: 'f',
         description: 'Skip old media entry check',
         type: 'boolean',
       },
