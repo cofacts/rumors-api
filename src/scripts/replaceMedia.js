@@ -11,7 +11,7 @@ import { uploadMedia } from 'graphql/mutations/CreateMediaArticle';
 /**
  * @param {object} args
  */
-async function replaceMedia({ articleId, url } = {}) {
+async function replaceMedia({ articleId, url, force = false } = {}) {
   const {
     body: { _source: article },
   } = await client.get({ index: 'articles', type: 'doc', id: articleId });
@@ -22,12 +22,27 @@ async function replaceMedia({ articleId, url } = {}) {
   const oldMediaEntry = await mediaManager.get(article.attachmentHash);
 
   /* istanbul ignore if */
-  if (!oldMediaEntry)
+  if (!force && !oldMediaEntry)
     throw new Error(
       `Article ${articleId}'s attachment hash "${
         article.attachmentHash
       }" has no corresponding media entry`
     );
+
+  // Delete old media first, so that new one can be written without worring overwriting existing files
+  //
+  if (oldMediaEntry) {
+    await Promise.all(
+      oldMediaEntry.variants.map(variant =>
+        oldMediaEntry
+          .getFile(variant)
+          .delete()
+          .then(() => {
+            console.info(`Old media entry variant=${variant} deleted`);
+          })
+      )
+    );
+  }
 
   const newMediaEntry = await uploadMedia({
     mediaUrl: url,
@@ -35,9 +50,8 @@ async function replaceMedia({ articleId, url } = {}) {
   });
 
   console.info(
-    `Article ${articleId} attachment hash: ${oldMediaEntry.id} --> ${
-      newMediaEntry.id
-    }`
+    `Article ${articleId} attachment hash: ${oldMediaEntry?.id ??
+      article.attachmentHash} --> ${newMediaEntry.id}`
   );
   await client.update({
     index: 'articles',
@@ -49,17 +63,6 @@ async function replaceMedia({ articleId, url } = {}) {
       },
     },
   });
-
-  return Promise.all(
-    oldMediaEntry.variants.map(variant =>
-      oldMediaEntry
-        .getFile(variant)
-        .delete()
-        .then(() => {
-          console.info(`Old media entry variant=${variant} deleted`);
-        })
-    )
-  );
 }
 
 export default replaceMedia;
@@ -79,6 +82,11 @@ if (require.main === module) {
         description: 'The URL to the content to replace',
         type: 'string',
         demandOption: true,
+      },
+      force: {
+        alias: 'f',
+        description: 'Skip old media entry check',
+        type: 'boolean',
       },
     })
     .help('help').argv;
