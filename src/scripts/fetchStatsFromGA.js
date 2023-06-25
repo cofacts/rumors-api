@@ -18,6 +18,7 @@ import 'dotenv/config';
 import assert from 'assert';
 import { Transform } from 'stream';
 import { pipeline } from 'stream/promises';
+import DataLoader from 'dataloader';
 import client from 'util/client';
 // import rollbar from '../rollbarInstance';
 import { BigQuery } from '@google-cloud/bigquery';
@@ -63,33 +64,48 @@ function createBatchTransform(batchSize) {
   });
 }
 
-// async function fetchDocUsers(index, ids) {
-//   const {
-//     body: {
-//       hits: { hits: docs },
-//     },
-//   } = await client.search({
-//     index,
-//     size: pageSize,
-//     body: {
-//       query: {
-//         ids: { values: ids },
-//       },
-//       _source: {
-//         includes: ['userId', 'appId'],
-//       },
-//     },
-//   });
-//   let docUsers = {};
-//   docs.forEach(
-//     doc =>
-//       (docUsers[doc._id] = {
-//         docUserId: doc._source.userId,
-//         docAppId: doc._source.appId,
-//       })
-//   );
-//   return docUsers;
-// }
+const TYPE_TO_ESIDX = { article: 'articles', reply: 'replies' };
+
+/**
+ * Given the {type, docId} from BigQuery result,
+ * return the author information {docUserId, docAppId} of the given `docId` of `type`.
+ */
+const docUserAppLoader = new DataLoader(
+  /** @param {{type: 'article' | 'reply', docId: string }} typeDocIds */
+  async typeDocIds => {
+    const docs = typeDocIds
+      .map(({ type, docId }) => {
+        const index = TYPE_TO_ESIDX[type];
+        return !index
+          ? null
+          : {
+              _index: index,
+              _type: 'doc',
+              _id: docId,
+            };
+      })
+      .filter(Boolean);
+
+    const docMap = (await client.mget({
+      body: { docs },
+      _source: ['userId', 'appId'],
+    })).body.docs.reduce((map, { _source, _index, _id }) => {
+      const [index] = _index.split('_v'); // take the part before versions
+      map[`${index}/${_id}`] = {
+        docUserId: _source.userId,
+        docAppId: _source.appId,
+      };
+      return map;
+    }, {});
+
+    return typeDocIds.map(
+      ({ type, docId }) => docMap[`${TYPE_TO_ESIDX[type]}/${docId}`]
+    );
+  },
+  {
+    cacheKeyFn: ({ type, docId }) => `${type}/${docId}`,
+  }
+);
 
 /**
  * Fetch GA stats for given time period and store in db.
@@ -212,29 +228,19 @@ export async function fetchStatsFromGA(params) {
       let processedCount = 0;
 
       for await (const docs of source) {
-        // const articleDocUsers = await fetchDocUsers(
-        //   'articles',
-        //   docs
-        //     .filter(({ type }) => type === 'Article')
-        //     .map(({ itemId }) => itemId)
-        // );
-        // const replyDocUsers = await fetchDocUsers(
-        //   'replies',
-        //   docs
-        //     .filter(({ type }) => type === 'Reply')
-        //     .map(({ itemId }) => itemId)
-        // );
-
-        const esBatch = [];
-        for (const doc of docs) {
-          esBatch.push({
-            index: { _index: 'analytics', _type: 'doc', _id: getId(doc) },
-          });
-          esBatch.push({
-            ...doc,
-            docUserId: '', // TODO
-          });
-        }
+        const esBatch = (await Promise.all(
+          docs.map(async doc => {
+            return [
+              {
+                index: { _index: 'analytics', _type: 'doc', _id: getId(doc) },
+              },
+              {
+                ...doc,
+                ...(await docUserAppLoader.load(doc)),
+              },
+            ];
+          })
+        )).flat();
 
         processedCount += docs.length;
 
