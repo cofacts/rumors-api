@@ -2,12 +2,12 @@ import { BigQuery } from '@google-cloud/bigquery';
 import path from 'path';
 import MockDate from 'mockdate';
 
-// import { loadFixtures, unloadFixtures } from 'util/fixtures';
+import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import delayForMs from 'util/delayForMs';
 
-// import fixtures from '../__fixtures__/fetchStatsFromGA';
 import { fetchStatsFromGA } from '../fetchStatsFromGA';
+import fixtures from '../__fixtures__/fetchStatsFromGA';
 
 // The test will run on a fake dataset specified by TEST_DATASET env.
 // Please ensure that application default credential has the [permission to modify the dataset](https://cloud.google.com/bigquery/docs/batch-loading-data?hl=en#permissions-load-data-into-bigquery).
@@ -65,9 +65,11 @@ function loadBqTable(table, jsonlFileName, schema) {
 
 if (process.env.TEST_DATASET) {
   beforeAll(async () => {
-    // Populate TEST_DATASET
-    //
     await Promise.all([
+      loadFixtures(fixtures),
+
+      // Populate TEST_DATASET
+      //
       // GA4 intraday table (Today = 20230604)
       loadBqTable(
         'events_intraday_20230604',
@@ -107,7 +109,8 @@ if (process.env.TEST_DATASET) {
     await delayForMs(5000);
   }, 30000);
 
-  afterAll(() => {
+  afterAll(async () => {
+    await unloadFixtures(fixtures);
     MockDate.reset();
   });
 
@@ -142,6 +145,7 @@ if (process.env.TEST_DATASET) {
 
     // Expect line & web stats are both collected.
     // Also checks if `date`, `docId` etc are correctly filled in.
+    //
     // eslint-disable-next-line no-unused-vars
     const { fetchedAt: dontcare, ...article1At0601 } = (await client.get({
       index: 'analytics',
@@ -151,7 +155,9 @@ if (process.env.TEST_DATASET) {
     expect(article1At0601).toMatchInlineSnapshot(`
       Object {
         "date": "2023-06-01T00:00:00.000+08:00",
+        "docAppId": "articleAuthorApp",
         "docId": "article1",
+        "docUserId": "articleAuthorId",
         "stat": Object {
           "liff": Array [],
           "lineUser": 1,
@@ -164,6 +170,7 @@ if (process.env.TEST_DATASET) {
     `);
 
     // Expect 1 user see reply1 twice on web on 6/1.
+    //
     expect(
       (await client.get({
         index: 'analytics',
@@ -181,6 +188,7 @@ if (process.env.TEST_DATASET) {
     `);
 
     // Expect article counts from different sources are aggregated in LIFF
+    //
     expect(
       (await client.get({
         index: 'analytics',
@@ -207,6 +215,35 @@ if (process.env.TEST_DATASET) {
         "webVisit": null,
       }
     `);
+
+    // Expect existing stats are overwritten with correct stats
+    //
+    expect(
+      (await client.get({
+        index: 'analytics',
+        type: 'doc',
+        id: 'article_article2_2023-06-01',
+      })).body._source.stat
+    ).toMatchInlineSnapshot(`
+      Object {
+        "liff": Array [],
+        "lineUser": null,
+        "lineVisit": null,
+        "webUser": 1,
+        "webVisit": 1,
+      }
+    `);
+
+    // Cleanup
+    for (const id of [
+      // Enumerate newly created article / reply ids in 6/1, 6/2
+      'reply_reply1_2023-06-01',
+      'reply_reply1_2023-06-02',
+      'article_article1_2023-06-01',
+      'article_article1_2023-06-02',
+    ]) {
+      await client.delete({ index: 'analytics', type: 'doc', id });
+    }
   });
 
   // it('works without startDate and endDate', async () => {});
