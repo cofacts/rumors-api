@@ -1,0 +1,2 @@
+{ "event_name": "view_item", "event_date": "20230601", "event_timestamp": "1685618315997928", "user_pseudo_id": "user01", "stream_id": "website", "items": [{ "item_id": "reply1", "item_category": "Reply", }, { "item_id": "article1", "item_category": "Article", }] }
+{ "event_name": "view_item", "event_date": "20230601", "event_timestamp": "1685580882953067", "user_pseudo_id": "user01", "stream_id": "website", "items": [{ "item_id": "reply1", "item_category": "Reply", }, { "item_id": "article2", "item_category": "Article", }] }

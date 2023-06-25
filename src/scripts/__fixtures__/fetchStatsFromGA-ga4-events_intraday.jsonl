@@ -1,0 +1,1 @@
+{ "event_name": "view_item", "event_date": "20230604", "event_timestamp": "1685877515000000", "user_pseudo_id": "user01", "stream_id": "liff", "items": [{ "item_id": "reply1", "item_category": "Reply" }, { "item_id": "article1", "item_category": "Article" }], "collected_traffic_source": { "manual_source": "downstream-bot-1" }}
