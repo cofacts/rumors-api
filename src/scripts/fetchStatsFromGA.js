@@ -113,7 +113,7 @@ const docUserAppLoader = new DataLoader(
  */
 export async function fetchStatsFromGA(params) {
   const today = new Date(
-    new Date().toLocaleString(undefined, { timeZone: process.env.TIMEZONE })
+    new Date().toLocaleString(undefined, { timeZone: params.timezone })
   );
   const todayYYYYMMDD = `${today.getFullYear()}${(today.getMonth() + 1)
     .toString()
@@ -210,6 +210,11 @@ export async function fetchStatsFromGA(params) {
       )
     SELECT
       event_date AS dateStr,
+      CAST(TIMESTAMP(PARSE_DATE("%Y%m%d", event_date), "${
+        params.timezone
+      }") AS STRING FORMAT 'YYYY-MM-DD"T"HH24:MI:SS".000"TZH:TZM' AT TIME ZONE '${
+    params.timezone
+  }') AS date,
       LOWER(item_category) AS type,
       item_id AS docId,
       STRUCT(lineUser, lineVisit, webUser, webVisit, liff) AS stat
@@ -230,13 +235,16 @@ export async function fetchStatsFromGA(params) {
       for await (const docs of source) {
         const esBatch = (await Promise.all(
           docs.map(async doc => {
+            const { dateStr: dontcare, ...analyticsFields } = doc; // eslint-disable-line no-unused-vars
+
             return [
               {
                 index: { _index: 'analytics', _type: 'doc', _id: getId(doc) },
               },
               {
-                ...doc,
+                ...analyticsFields,
                 ...(await docUserAppLoader.load(doc)),
+                fetchedAt: new Date(),
               },
             ];
           })
