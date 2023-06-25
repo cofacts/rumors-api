@@ -89,12 +89,14 @@ const docUserAppLoader = new DataLoader(
     const docMap = (await client.mget({
       body: { docs },
       _source: ['userId', 'appId'],
-    })).body.docs.reduce((map, { _source, _index, _id }) => {
-      const [index] = _index.split('_v'); // take the part before versions
-      map[`${index}/${_id}`] = {
-        docUserId: _source.userId,
-        docAppId: _source.appId,
-      };
+    })).body.docs.reduce((map, { _source, _index, _id, found }) => {
+      if (found) {
+        const [index] = _index.split('_v'); // take the part before versions
+        map[`${index}/${_id}`] = {
+          docUserId: _source.userId,
+          docAppId: _source.appId,
+        };
+      }
       return map;
     }, {});
 

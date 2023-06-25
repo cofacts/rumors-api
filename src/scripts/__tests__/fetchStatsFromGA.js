@@ -105,8 +105,6 @@ if (process.env.TEST_DATASET) {
     // Wait for BQ & ES data to be indexed
     //
     await delayForMs(5000);
-
-    // MockDate.set(1685877545000); // 20230604
   }, 30000);
 
   afterAll(() => {
@@ -123,12 +121,15 @@ if (process.env.TEST_DATASET) {
     await expect(
       fetchStatsFromGA({ startDate: '20240601', endDate: 'haha' })
     ).rejects.toThrow('endDate must be in YYYYMMDD format');
+
+    MockDate.set(1685877545000); // 20230604
     await expect(
       fetchStatsFromGA({ startDate: '20770801', endDate: '20770802' })
     ).rejects.toThrow('startDate must be earlier than 20230604');
     await expect(
       fetchStatsFromGA({ startDate: '20230601', endDate: '20770801' })
     ).rejects.toThrow('endDate must be earlier than 20230604');
+    MockDate.reset();
   });
 
   it.only('works on startDate & endDate', async () => {
@@ -138,6 +139,74 @@ if (process.env.TEST_DATASET) {
       endDate: '20230602',
       ...COMMON_FETCHSTAT_PARAMS,
     });
+
+    // Expect line & web stats are both collected.
+    // Also checks if `date`, `docId` etc are correctly filled in.
+    // eslint-disable-next-line no-unused-vars
+    const { fetchedAt: dontcare, ...article1At0601 } = (await client.get({
+      index: 'analytics',
+      type: 'doc',
+      id: 'article_article1_2023-06-01',
+    })).body._source;
+    expect(article1At0601).toMatchInlineSnapshot(`
+      Object {
+        "date": "2023-06-01T00:00:00.000+08:00",
+        "docId": "article1",
+        "stat": Object {
+          "liff": Array [],
+          "lineUser": 1,
+          "lineVisit": 1,
+          "webUser": 1,
+          "webVisit": 1,
+        },
+        "type": "article",
+      }
+    `);
+
+    // Expect 1 user see reply1 twice on web on 6/1.
+    expect(
+      (await client.get({
+        index: 'analytics',
+        type: 'doc',
+        id: 'reply_reply1_2023-06-01',
+      })).body._source.stat
+    ).toMatchInlineSnapshot(`
+      Object {
+        "liff": Array [],
+        "lineUser": null,
+        "lineVisit": null,
+        "webUser": 1,
+        "webVisit": 2,
+      }
+    `);
+
+    // Expect article counts from different sources are aggregated in LIFF
+    expect(
+      (await client.get({
+        index: 'analytics',
+        type: 'doc',
+        id: 'article_article1_2023-06-02',
+      })).body._source.stat
+    ).toMatchInlineSnapshot(`
+      Object {
+        "liff": Array [
+          Object {
+            "source": "downstream-bot-1",
+            "user": 1,
+            "visit": 1,
+          },
+          Object {
+            "source": "downstream-bot-2",
+            "user": 1,
+            "visit": 1,
+          },
+        ],
+        "lineUser": null,
+        "lineVisit": null,
+        "webUser": null,
+        "webVisit": null,
+      }
+    `);
   });
 
   // it('works without startDate and endDate', async () => {});
