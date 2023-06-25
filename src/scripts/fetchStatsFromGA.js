@@ -252,15 +252,16 @@ export async function fetchStatsFromGA(params) {
 
         processedCount += docs.length;
 
-        console.log(`[fetchStatsFromGA] ${docs.length} item(s) received`);
+        // console.log(esBatch.map(o => JSON.stringify(o)));
 
-        console.log(esBatch.map(o => JSON.stringify(o)));
-
-        // const { body: response } = await client.bulk({ body: esBatch });
-        // if (response.errors) {
-        //   console.error('Elasticsearch Bulk Insert Error:', response.errors);
-        //   process.exit(1);
-        // }
+        const { body: response } = await client.bulk({ body: esBatch });
+        if (response.errors) {
+          console.error('Elasticsearch Bulk Insert Error:', response.errors);
+          process.exit(1);
+        }
+        console.log(
+          `[fetchStatsFromGA] ${response.items.length} item(s) indexed`
+        );
       }
 
       console.log(
