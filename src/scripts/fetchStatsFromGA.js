@@ -273,6 +273,7 @@ export async function fetchStatsFromGA(params) {
   );
 }
 
+/* istanbul ignore next */
 async function main() {
   try {
     const argv = yargs
@@ -297,8 +298,8 @@ async function main() {
       endDate: argv.endDate,
 
       timezone: process.env.TIMEZONE,
-      lineBotEventDataset: process.env.LINE_BOT_EVENT_DATASET,
-      ga4Dataset: process.env.GA4_DATASET,
+      lineBotEventDataset: process.env.LINE_BOT_EVENT_DATASET_ID,
+      ga4Dataset: process.env.GA4_DATASET_ID,
       webStreamId: process.env.GA_WEB_STREAM_ID,
       liffStreamId: process.env.GA_LIFF_STREAM_ID,
     };
@@ -310,6 +311,7 @@ async function main() {
   }
 }
 
+/* istanbul ignore next */
 if (require.main === module) {
   main();
 }

@@ -16,13 +16,17 @@ jobs:
         ports:
           - 62223:9200
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
       - uses: actions/setup-node@v2
         with:
           node-version: '18'
           cache: 'npm'
+      - uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.GC_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GC_SERVICE_ACCOUNT }}
       - run: npm ci
       - run: npm run lint
       - run: npm run test -- --coverage
@@ -30,6 +34,7 @@ jobs:
           GCS_CREDENTIALS: ${{ secrets.GCS_CREDENTIALS }}
           GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
           GCS_MEDIA_FOLDER: github/${{ github.run_number }}_${{ github.run_attempt }}/
+          TEST_DATASET: industrious-eye-145611.rumors_api_test_dataset
       - name: Update coveralls
         uses: coverallsapp/github-action@master
         with:

@@ -142,6 +142,16 @@ When you want to update jest snapshot, run:
 $ npm t -- -u
 ```
 
+### Tests requiring additional env vars
+
+- media-integration
+  - Requires `GCS_CREDENTIALS` and `GCS_BUCKET_NAME` to be set.
+  - will write to the specified bucket.
+- fetchStatsFromGA
+  - Requires `TEST_DATASET` to be set, and the dataset already exists.
+  - Will load data into new tables under the test dataset using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
+  - Please make sure the service account has [enough permissions](https://cloud.google.com/bigquery/docs/batch-loading-data?hl=en#permissions-load-data-into-bigquery).
+
 ## Deploy
 
 Build docker image. The following are basically the same, but with different docker tags.
@@ -177,16 +187,16 @@ $ docker-compose exec api node_modules/.bin/babel-node src/scripts/cleanupUrls.j
   - The separation of table respects "Reporting time zone" on Google Analytics.
 
 -  Make sure the following params are set in `.env`:
-  `LINE_BOT_EVENT_DATASET`, `GA4_DATASET`, `GA_WEB_STREAM_ID`, `GA_LIFF_STREAM_ID`, `TIMEZONE`.
+  `LINE_BOT_EVENT_DATASET_ID`, `GA4_DATASET_ID`, `GA_WEB_STREAM_ID`, `GA_LIFF_STREAM_ID`, `TIMEZONE`.
 
 - Sync script will authenticate to BigQuery using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
   - Please create a service account under the project, download its key and use `GOOGLE_APPLICATION_CREDENTIALS` env var to
 provide the path to your downloaded service account key. See [documentation](https://cloud.google.com/docs/authentication/provide-credentials-adc#local-key) for detail.
-  - Please make sure the service account has read-only access to both `LINE_BOT_EVENT_DATASET` and `GA4_DATASET`.
+  - Please make sure the service account has read-only access to both `LINE_BOT_EVENT_DATASET_ID` and `GA4_DATASET_ID`.
 
 - Make sure the service account behind the key in previous step have the following [minimum roles](https://cloud.google.com/bigquery/docs/running-queries#required_permissions):
   - `BigQuery Job User` on the GCP project
-  - `BigQuery Data Viewer` on the dataset specified by `LINE_BOT_EVENT_DATASET`, and the  dataset specified by `GA4_DATASET`.
+  - `BigQuery Data Viewer` on the dataset specified by `LINE_BOT_EVENT_DATASET_ID`, and the  dataset specified by `GA4_DATASET_ID`.
 
 -  To fetch stats for the current date, run:
 ```
