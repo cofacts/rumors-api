@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "pm2-dev start --timestamp process-dev.json",
     "seed": "cd test/rumors-db && npm run seed",
-    "pretest": "npm run rumors-db:test",
+    "pretest": "npm run rumors-db:test && mkdir -p build",
     "test": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 jest --runInBand",
     "posttest": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 babel-node test/postTest.js",
     "start": "pm2-runtime start ecosystem.config.js --env production",

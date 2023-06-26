@@ -36,6 +36,19 @@ function getId({ dateStr, type, docId }) {
 }
 
 /**
+ * @param {string} timeZone
+ */
+export function getTodayYYYYMMDD(timeZone) {
+  const today = new Date(new Date().toLocaleString(undefined, { timeZone }));
+  return `${today.getFullYear()}${(today.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}${today
+    .getDate()
+    .toString()
+    .padStart(2, '0')}`;
+}
+
+/**
  * Create a transform stream to batch objects
  * @param {number} batchSize
  */
@@ -114,15 +127,7 @@ const docUserAppLoader = new DataLoader(
  * @param {object} params
  */
 export async function fetchStatsFromGA(params) {
-  const today = new Date(
-    new Date().toLocaleString(undefined, { timeZone: params.timezone })
-  );
-  const todayYYYYMMDD = `${today.getFullYear()}${(today.getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}${today
-    .getDate()
-    .toString()
-    .padStart(2, '0')}`;
+  const todayYYYYMMDD = getTodayYYYYMMDD(params.timezone);
 
   const isGrabbingToday = !params.startDate && !params.endDate;
 
