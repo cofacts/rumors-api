@@ -6,7 +6,7 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
 import delayForMs from 'util/delayForMs';
 
-import { fetchStatsFromGA, getTodayYYYYMMDD } from '../fetchStatsFromGA';
+import { fetchStatsFromGA, getTodayYYYYMMDD, getId } from '../fetchStatsFromGA';
 import fixtures, {
   GA4_SCHEMA,
   events_20230601,
@@ -219,5 +219,47 @@ if (process.env.TEST_DATASET) {
     }
   });
 
-  // it('works without startDate and endDate', async () => {});
+  it('works without startDate and endDate', async () => {
+    // Fetch GA stats from BQ and write to analytics
+    await fetchStatsFromGA({
+      ...COMMON_FETCHSTAT_PARAMS,
+    });
+
+    const articleAnalyticsTodayId = getId({
+      dateStr: today,
+      type: 'article',
+      docId: 'article1',
+    });
+
+    // Expect both web stream and LIFF stream visits are read from the intra table
+    //
+    expect(
+      (await client.get({
+        index: 'analytics',
+        type: 'doc',
+        id: articleAnalyticsTodayId,
+      })).body._source.stat
+    ).toMatchInlineSnapshot(`
+      Object {
+        "liff": Array [
+          Object {
+            "source": "downstream-bot-1",
+            "user": 1,
+            "visit": 1,
+          },
+        ],
+        "lineUser": null,
+        "lineVisit": null,
+        "webUser": 1,
+        "webVisit": 1,
+      }
+    `);
+
+    // Cleanup
+    await client.delete({
+      index: 'analytics',
+      type: 'doc',
+      id: articleAnalyticsTodayId,
+    });
+  });
 }

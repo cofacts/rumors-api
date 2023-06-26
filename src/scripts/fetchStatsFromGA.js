@@ -31,7 +31,7 @@ const BATCH_SIZE = 1000;
 const formatDate = date =>
   `${date.substr(0, 4)}-${date.substr(4, 2)}-${date.substr(6, 2)}`;
 
-function getId({ dateStr, type, docId }) {
+export function getId({ dateStr, type, docId }) {
   return `${type}_${docId}_${formatDate(dateStr)}`;
 }
 

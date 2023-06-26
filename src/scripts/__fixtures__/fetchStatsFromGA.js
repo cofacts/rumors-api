@@ -86,11 +86,16 @@ export const events_today = [
     event_timestamp: `${Date.now() * 1000}`,
     user_pseudo_id: 'user01',
     stream_id: 'liff',
-    items: [
-      { item_id: 'reply1', item_category: 'Reply' },
-      { item_id: 'article1', item_category: 'Article' },
-    ],
+    items: [{ item_id: 'article1', item_category: 'Article' }],
     collected_traffic_source: { manual_source: 'downstream-bot-1' },
+  },
+  {
+    event_name: 'view_item',
+    event_date: getTodayYYYYMMDD('Asia/Taipei'),
+    event_timestamp: `${Date.now() * 1000}`,
+    user_pseudo_id: 'user02',
+    stream_id: 'website',
+    items: [{ item_id: 'article1', item_category: 'Article' }],
   },
 ];
 
