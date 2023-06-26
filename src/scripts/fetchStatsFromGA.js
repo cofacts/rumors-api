@@ -52,7 +52,7 @@ export function getTodayYYYYMMDD(timeZone) {
  * Create a transform stream to batch objects
  * @param {number} batchSize
  */
-function createBatchTransform(batchSize) {
+export function createBatchTransform(batchSize) {
   let batch = [];
 
   return new Transform({
@@ -68,7 +68,6 @@ function createBatchTransform(batchSize) {
       callback();
     },
     flush(callback) {
-      /* istanbul ignore else */
       if (batch.length > 0) {
         this.push(batch);
       }
