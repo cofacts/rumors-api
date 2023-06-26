@@ -34,7 +34,7 @@ jobs:
           service_account: ${{ secrets.GC_SERVICE_ACCOUNT }}
       - run: npm ci
       - run: npm run lint
-      - run: npm run test -- src/scripts/__tests__/fetchStatsFromGA.js
+      - run: npm run test -- --coverage
         env:
           GCS_CREDENTIALS: ${{ secrets.GCS_CREDENTIALS }}
           GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
