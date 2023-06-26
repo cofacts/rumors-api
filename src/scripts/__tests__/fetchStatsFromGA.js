@@ -90,21 +90,37 @@ if (process.env.TEST_DATASET) {
   });
 
   it('rejects wrong startDate & endDate settings', async () => {
-    await expect(fetchStatsFromGA({ startDate: '20230601' })).rejects.toThrow(
-      'Please provide both startDate and endDate'
-    );
     await expect(
-      fetchStatsFromGA({ startDate: 'haha', endDate: 'haha' })
+      fetchStatsFromGA({ startDate: '20230601', ...COMMON_FETCHSTAT_PARAMS })
+    ).rejects.toThrow('Please provide both startDate and endDate');
+    await expect(
+      fetchStatsFromGA({
+        startDate: 'haha',
+        endDate: 'haha',
+        ...COMMON_FETCHSTAT_PARAMS,
+      })
     ).rejects.toThrow('startDate must be in YYYYMMDD format');
     await expect(
-      fetchStatsFromGA({ startDate: '20240601', endDate: 'haha' })
+      fetchStatsFromGA({
+        startDate: '20240601',
+        endDate: 'haha',
+        ...COMMON_FETCHSTAT_PARAMS,
+      })
     ).rejects.toThrow('endDate must be in YYYYMMDD format');
 
     await expect(
-      fetchStatsFromGA({ startDate: '20770801', endDate: '20770802' })
+      fetchStatsFromGA({
+        startDate: '20770801',
+        endDate: '20770802',
+        ...COMMON_FETCHSTAT_PARAMS,
+      })
     ).rejects.toThrow(`startDate must be earlier than ${today}`);
     await expect(
-      fetchStatsFromGA({ startDate: '20230601', endDate: '20770801' })
+      fetchStatsFromGA({
+        startDate: '20230601',
+        endDate: '20770801',
+        ...COMMON_FETCHSTAT_PARAMS,
+      })
     ).rejects.toThrow(`endDate must be earlier than ${today}`);
   });
 
