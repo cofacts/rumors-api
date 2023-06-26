@@ -20,7 +20,7 @@ import { Transform } from 'stream';
 import { pipeline } from 'stream/promises';
 import DataLoader from 'dataloader';
 import client from 'util/client';
-// import rollbar from '../rollbarInstance';
+import rollbar from '../rollbarInstance';
 import { BigQuery } from '@google-cloud/bigquery';
 import yargs from 'yargs';
 
@@ -68,6 +68,7 @@ function createBatchTransform(batchSize) {
       callback();
     },
     flush(callback) {
+      /* istanbul ignore else */
       if (batch.length > 0) {
         this.push(batch);
       }
@@ -259,11 +260,15 @@ export async function fetchStatsFromGA(params) {
 
         processedCount += docs.length;
 
-        // console.log(esBatch.map(o => JSON.stringify(o)));
-
         const { body: response } = await client.bulk({ body: esBatch });
+
+        /* istanbul ignore next */
         if (response.errors) {
           console.error('Elasticsearch Bulk Insert Error:', response.errors);
+          rollbar.error(
+            '[fetchStatsFromGA] Elasticsearch Bulk Insert Error',
+            response
+          );
           process.exit(1);
         }
         console.log(
