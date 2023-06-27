@@ -224,7 +224,7 @@ export async function fetchStatsFromGA(params) {
   }') AS date,
       LOWER(item_category) AS type,
       item_id AS docId,
-      STRUCT(lineUser, lineVisit, webUser, webVisit, liff) AS stat
+      STRUCT(lineUser, lineVisit, webUser, webVisit, liff) AS stats
     FROM lineStats
     FULL JOIN webStats USING (event_date, item_category, item_id)
     FULL JOIN liffStats USING (event_date, item_category, item_id)

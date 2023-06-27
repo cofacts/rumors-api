@@ -154,7 +154,7 @@ describe('fetchStatsFromGA', () => {
           "docAppId": "articleAuthorApp",
           "docId": "article1",
           "docUserId": "articleAuthorId",
-          "stat": Object {
+          "stats": Object {
             "liff": Array [],
             "lineUser": 1,
             "lineVisit": 1,
@@ -172,7 +172,7 @@ describe('fetchStatsFromGA', () => {
           index: 'analytics',
           type: 'doc',
           id: 'reply_reply1_2023-06-01',
-        })).body._source.stat
+        })).body._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [],
@@ -190,7 +190,7 @@ describe('fetchStatsFromGA', () => {
           index: 'analytics',
           type: 'doc',
           id: 'article_article1_2023-06-02',
-        })).body._source.stat
+        })).body._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [
@@ -219,7 +219,7 @@ describe('fetchStatsFromGA', () => {
           index: 'analytics',
           type: 'doc',
           id: 'article_article2_2023-06-01',
-        })).body._source.stat
+        })).body._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [],
@@ -261,7 +261,7 @@ describe('fetchStatsFromGA', () => {
           index: 'analytics',
           type: 'doc',
           id: articleAnalyticsTodayId,
-        })).body._source.stat
+        })).body._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [
