@@ -129,33 +129,26 @@ const docUserAppLoader = new DataLoader(
 export async function fetchStatsFromGA(params) {
   const todayYYYYMMDD = getTodayYYYYMMDD(params.timezone);
 
-  const isGrabbingToday = !params.startDate && !params.endDate;
-
-  if (params.startDate && params.endDate) {
-    // Detect startDate and endDate format;
+  if (params.startDate) {
     assert(
       params.startDate.match(/^\d{8}$/),
       'startDate must be in YYYYMMDD format'
     );
+  }
+  const startDate = params.startDate ?? todayYYYYMMDD;
+
+  if (params.endDate) {
     assert(
       params.endDate.match(/^\d{8}$/),
       'endDate must be in YYYYMMDD format'
     );
-    assert(
-      params.startDate < todayYYYYMMDD,
-      `startDate must be earlier than ${todayYYYYMMDD}`
-    );
-    assert(
-      params.endDate < todayYYYYMMDD,
-      `endDate must be earlier than ${todayYYYYMMDD}`
-    );
-  } else if (!isGrabbingToday) {
-    // Only 1 in startDate & endDate is given.
-    throw new Error('Please provide both startDate and endDate');
   }
+  const endDate = params.endDate ?? todayYYYYMMDD;
 
-  const startDate = isGrabbingToday ? todayYYYYMMDD : params.startDate;
-  const endDate = isGrabbingToday ? todayYYYYMMDD : params.endDate;
+  assert(
+    startDate <= endDate,
+    `endDate (${endDate}) should not be earlier than startDate (${startDate})`
+  );
 
   const query = `
     WITH
@@ -187,12 +180,13 @@ export async function fetchStatsFromGA(params) {
           item_id,
           COUNT(*) AS webVisit,
           COUNT(DISTINCT user_pseudo_id) AS webUser
-        FROM \`${params.ga4Dataset}.events_${
-    isGrabbingToday ? 'intraday_' : ''
-  }*\`, UNNEST (items)
+        FROM \`${params.ga4Dataset}.events_*\`, UNNEST (items)
         WHERE event_name = 'view_item'
           AND stream_id = '${params.webStreamId}' -- web stream
-          AND _table_suffix between '${startDate}' and '${endDate}'
+          AND (
+            _table_suffix between '${startDate}' and '${endDate}' OR
+            _table_suffix between 'intraday_${startDate}' and 'intraday_${endDate}'
+          )
         GROUP BY event_date, item_category, item_id
       ),
 
@@ -204,12 +198,13 @@ export async function fetchStatsFromGA(params) {
               collected_traffic_source.manual_source as source,
               count(*) as visit, COUNT(DISTINCT user_pseudo_id) as user
             ) as liffObj
-            FROM \`${params.ga4Dataset}.events_${
-    isGrabbingToday ? 'intraday_' : ''
-  }*\`, UNNEST (items)
+            FROM \`${params.ga4Dataset}.events_*\`, UNNEST (items)
           WHERE event_name = 'view_item'
             AND stream_id = '${params.liffStreamId}' -- LIFF stream
-            AND _table_suffix between '${startDate}' and '${endDate}'
+            AND (
+              _table_suffix between '${startDate}' and '${endDate}' OR
+              _table_suffix between 'intraday_${startDate}' and 'intraday_${endDate}'
+            )
           GROUP BY event_date, item_category, item_id, collected_traffic_source.manual_source
         )
         SELECT event_date, item_category, item_id, ARRAY_AGG(liffObj) AS liff FROM t
@@ -292,13 +287,13 @@ async function main() {
         startDate: {
           alias: 's',
           description:
-            'YYYYMMDD. Must be a date in the past. Must be provided together with `endDate`. Omitting this means fetching stats today.',
+            'YYYYMMDD. Omitting this means fetching stats from today.',
           type: 'string',
         },
         endDate: {
           alias: 'e',
           description:
-            'YYYYMMDD. Must be a date in the past. Must be provided together with `startDate`. Omitting this means fetching stats today.',
+            'YYYYMMDD. Omitting this means fetching stats until today.',
           type: 'string',
         },
       })
