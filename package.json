@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "pm2-dev start --timestamp process-dev.json",
     "seed": "cd test/rumors-db && npm run seed",
-    "pretest": "npm run rumors-db:test",
+    "pretest": "npm run rumors-db:test && mkdir -p build",
     "test": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 jest --runInBand",
     "posttest": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 babel-node test/postTest.js",
     "start": "pm2-runtime start ecosystem.config.js --env production",
@@ -25,6 +25,7 @@
   "dependencies": {
     "@cofacts/media-manager": "^0.3.0",
     "@elastic/elasticsearch": "^6.8.6",
+    "@google-cloud/bigquery": "^6.2.0",
     "@grpc/grpc-js": "^1.6.7",
     "@grpc/proto-loader": "^0.5.0",
     "apollo-server-koa": "^2.11.0",

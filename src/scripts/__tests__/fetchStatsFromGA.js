@@ -1,653 +1,328 @@
-import { google } from 'googleapis';
+import { BigQuery } from '@google-cloud/bigquery';
+import path from 'path';
+import fs from 'fs/promises';
+
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
-/* eslint-disable import/named */
-import fetchStatsFromGA, {
-  __RewireAPI__ as FetchGAReWireAPI,
+import delayForMs from 'util/delayForMs';
+
+import {
+  fetchStatsFromGA,
+  getTodayYYYYMMDD,
+  getId,
+  createBatchTransform,
 } from '../fetchStatsFromGA';
-/* eslint-enable import/named */
-import fixtures from '../__fixtures__/fetchStatsFromGA';
-import MockDate from 'mockdate';
-import yargs from 'yargs';
+import fixtures, {
+  GA4_SCHEMA,
+  events_20230601,
+  events_20230602,
+  events,
+  events_today,
+} from '../__fixtures__/fetchStatsFromGA';
+import { pipeline } from 'stream/promises';
 
-const allDocTypes = fetchStatsFromGA.allDocTypes;
-const allSourceTypes = fetchStatsFromGA.allSourceTypes;
+// The test will run on a fake dataset specified by TEST_DATASET env.
+// Please ensure that application default credential has the [permission to modify the dataset](https://cloud.google.com/bigquery/docs/batch-loading-data?hl=en#permissions-load-data-into-bigquery).
 
-jest.mock('googleapis', () => {
-  const batchGetMock = jest.fn(),
-    authMock = jest.fn(),
-    optionsMock = jest.fn();
-  return {
-    google: {
-      analyticsreporting: () => ({
-        reports: {
-          batchGet: batchGetMock,
-        },
-      }),
-      auth: {
-        GoogleAuth: authMock,
-      },
-      options: optionsMock,
-    },
-  };
-});
+const bigquery = new BigQuery();
 
-jest.mock('yargs', () => {
-  const argvMock = jest.fn();
-  const yargsMock = {
-    options: () => yargsMock,
-    help: () => yargsMock,
-    get argv() {
-      return argvMock();
-    },
-    argvMock: argvMock,
-  };
-  return yargsMock;
-});
-
-const unloadBody = async bulkBody => {
-  let bulkDeleteBody = [];
-  let prevRow;
-  bulkBody.forEach((row, i) => {
-    if (i % 2 == 0 && row.update._id != prevRow) {
-      bulkDeleteBody.push({ delete: row.update });
-      prevRow = row.update._id;
-    }
-  });
-
-  const { body: result } = await client.bulk({
-    body: bulkDeleteBody,
-    refresh: 'true',
-  });
-
-  if (result.errors) {
-    throw new Error(`unload failed : ${JSON.stringify(result, null, '  ')}`);
-  }
+const COMMON_FETCHSTAT_PARAMS = {
+  timezone: 'Asia/Taipei',
+  lineBotEventDataset: process.env.TEST_DATASET,
+  ga4Dataset: process.env.TEST_DATASET,
+  webStreamId: 'website',
+  liffStreamId: 'liff',
 };
 
+/** YYYYMMDD */
+const today = getTodayYYYYMMDD(COMMON_FETCHSTAT_PARAMS.timezone);
+
+/**
+ * Writes rows into build/${table}.jsonl and load it to BigQuery
+ *
+ * @param {string} table
+ * @param {string} jsonlFileName
+ * @returns {Promise<JobMetadataResponse>}
+ */
+async function loadBqTable(table, rows, schema) {
+  const file = path.join(__dirname, '../../../build/', `${table}.jsonl`);
+  await fs.writeFile(file, rows.map(row => JSON.stringify(row)).join('\n'));
+
+  return bigquery
+    .dataset(process.env.TEST_DATASET)
+    .table(table)
+    .load(file, {
+      sourceFormat: 'NEWLINE_DELIMITED_JSON',
+      autodetect: !schema,
+      schema,
+      writeDisposition: 'WRITE_TRUNCATE',
+    });
+}
+
 describe('fetchStatsFromGA', () => {
-  describe('command line arguments', () => {
-    const updateStatsMock = jest.fn(),
-      storeScriptInDBMock = jest.fn(),
-      updateLiffStatsMock = jest.fn();
+  it('rejects wrong startDate & endDate settings', async () => {
+    await expect(
+      fetchStatsFromGA({
+        startDate: 'haha',
+        ...COMMON_FETCHSTAT_PARAMS,
+      })
+    ).rejects.toThrow('startDate must be in YYYYMMDD format');
+    await expect(
+      fetchStatsFromGA({
+        endDate: 'haha',
+        ...COMMON_FETCHSTAT_PARAMS,
+      })
+    ).rejects.toThrow('endDate must be in YYYYMMDD format');
 
-    beforeAll(() => {
-      FetchGAReWireAPI.__set__('updateStats', updateStatsMock);
-      FetchGAReWireAPI.__set__('updateLiffStats', updateLiffStatsMock);
-      FetchGAReWireAPI.__set__('storeScriptInDB', storeScriptInDBMock);
-    });
-
-    afterEach(() => {
-      updateStatsMock.mockReset();
-      storeScriptInDBMock.mockReset();
-      updateLiffStatsMock.mockReset();
-      yargs.argvMock.mockReset();
-    });
-
-    it('without any arguments', async () => {
-      yargs.argvMock.mockReturnValue({
-        useContentGroup: true,
-        loadScript: false,
-      });
-      await fetchStatsFromGA.main();
-      expect(updateStatsMock.mock.calls).toMatchObject([
-        [{ useContentGroup: true }],
-      ]);
-      expect(storeScriptInDBMock).not.toHaveBeenCalled();
-    });
-
-    it('with date arguments', async () => {
-      yargs.argvMock.mockReturnValue({
-        startDate: '2020-01-01',
-        endDate: '2020-02-01',
-        useContentGroup: true,
-        loadScript: false,
-      });
-      await fetchStatsFromGA.main();
-      expect(updateStatsMock.mock.calls).toMatchObject([
-        [
-          {
-            useContentGroup: true,
-            startDate: '2020-01-01',
-            endDate: '2020-02-01',
-          },
-        ],
-      ]);
-      expect(updateLiffStatsMock.mock.calls).toMatchObject([
-        [
-          {
-            startDate: '2020-01-01',
-            endDate: '2020-02-01',
-          },
-        ],
-      ]);
-      expect(storeScriptInDBMock).not.toHaveBeenCalled();
-    });
-
-    it('with loadScript arguments', async () => {
-      yargs.argvMock.mockReturnValue({
-        loadScript: true,
-        useContentGroup: true,
-      });
-      await fetchStatsFromGA.main();
-      expect(updateStatsMock.mock.calls).toMatchObject([
-        [{ useContentGroup: true }],
-      ]);
-      expect(storeScriptInDBMock).toHaveBeenCalled();
-    });
-
-    it('with loadScript and date arguments', async () => {
-      yargs.argvMock.mockReturnValue({
-        loadScript: true,
-        startDate: '2020-01-01',
-        endDate: '2020-02-01',
-        useContentGroup: true,
-      });
-      await fetchStatsFromGA.main();
-      expect(updateStatsMock.mock.calls).toMatchObject([
-        [
-          {
-            useContentGroup: true,
-            startDate: '2020-01-01',
-            endDate: '2020-02-01',
-          },
-        ],
-      ]);
-      expect(storeScriptInDBMock).toHaveBeenCalled();
-    });
-  });
-
-  describe('helper functions', () => {
-    it('parseIdFromRow should extract doc id from a row returned by GA', () => {
-      const parseIdFromRow = fetchStatsFromGA.parseIdFromRow;
-      expect(parseIdFromRow({ dimensions: ['/testId'] })).toBe('testId');
-      expect(
-        parseIdFromRow({ dimensions: ['/testId?param1=1&params2=2'] })
-      ).toBe('testId');
-      expect(parseIdFromRow({ dimensions: ['/_-1234567azAZ'] })).toBe(
-        '_-1234567azAZ'
-      );
-      expect(parseIdFromRow({ dimensions: ['_-1234567azAZ'] })).toBe(
-        '_-1234567azAZ'
-      );
-    });
-
-    it('requestBodyBuilder should return right request body for different source and doc types', () => {
-      fetchStatsFromGA.statsSources.WEB.viewId = '123456789';
-      fetchStatsFromGA.statsSources.LINE.viewId = '987654321';
-
-      allSourceTypes.forEach(sourceType =>
-        allDocTypes.forEach(docType =>
-          [true, false].forEach(useContentGroup => {
-            const params = {
-              useContentGroup,
-              startDate: useContentGroup ? undefined : '2020-07-10',
-              endDate: useContentGroup ? undefined : 'today',
-            };
-            expect(
-              fetchStatsFromGA.requestBodyBuilder(
-                sourceType,
-                docType,
-                '',
-                params
-              )
-            ).toMatchSnapshot(
-              `${sourceType}_${docType}_useContentGroup=${useContentGroup}`
-            );
-          })
-        )
-      );
-    });
-
-    it('storeScriptInDB should store upsert script in db', async () => {
-      await fetchStatsFromGA.storeScriptInDB();
-      expect(
-        (await client.get_script({ id: fetchStatsFromGA.upsertScriptID })).body
-      ).toMatchSnapshot();
-      await client.delete_script({ id: fetchStatsFromGA.upsertScriptID });
-    });
-  });
-
-  describe('updateStats', () => {
-    const fetchReportsMock = jest.fn(),
-      processReportMock = jest.fn();
-    beforeAll(() => {
-      MockDate.set(1577836800000);
-      FetchGAReWireAPI.__set__('fetchReports', fetchReportsMock);
-      FetchGAReWireAPI.__set__('processReport', processReportMock);
-    });
-    afterEach(() => {
-      fetchReportsMock.mockReset();
-      processReportMock.mockReset();
-    });
-
-    it('should call right functions with right params', async () => {
-      fetchReportsMock.mockResolvedValue(
-        fixtures.updateStats.fetchReportsDefaultResolved
-      );
-      processReportMock.mockResolvedValue(null);
-
-      await fetchStatsFromGA.updateStats();
-
-      expect(fetchReportsMock.mock.calls).toMatchSnapshot('fetchReports calls');
-      expect(fetchReportsMock).toHaveBeenCalledTimes(allSourceTypes.length);
-
-      expect(processReportMock.mock.calls).toMatchSnapshot(
-        'processReport calls'
-      );
-      expect(processReportMock).toHaveBeenCalledTimes(
-        allSourceTypes.length * allDocTypes.length
-      );
-
-      fetchReportsMock.mockClear();
-      await fetchStatsFromGA.updateStats({
-        useContentGroup: false,
-        startDate: '2020-07-10',
-        endDate: 'today',
-      });
-      expect(fetchReportsMock.mock.calls).toMatchSnapshot(
-        'fetchReports calls with params'
-      );
-    });
-
-    it('should keep fetching and processing paginated datas until the end', async () => {
-      fixtures.updateStats.fetchReportsMulitpleResolved.forEach(params =>
-        fetchReportsMock.mockResolvedValueOnce(params)
-      );
-
-      processReportMock.mockImplementation((sourceType, docType, rows) => ({
-        sourceType,
-        docType,
-        path: rows[0],
-      }));
-
-      await fetchStatsFromGA.updateStats();
-
-      expect(fetchReportsMock.mock.calls).toMatchSnapshot('fetchReports calls');
-      expect(processReportMock.mock.calls).toMatchSnapshot(
-        'processReport calls'
-      );
-    });
-
-    it('should halt upon error', async () => {
-      fetchReportsMock
-        .mockResolvedValueOnce(fixtures.updateStats.fetchReportsDefaultResolved)
-        .mockRejectedValueOnce(new Error('Async error'));
-
-      await fetchStatsFromGA.updateStats();
-
-      expect(fetchReportsMock).toHaveBeenCalledTimes(allSourceTypes.length);
-      expect(processReportMock).toHaveBeenCalledTimes(allDocTypes.length);
-    });
-  });
-
-  describe('fetchReports', () => {
-    const batchGetMock = google.analyticsreporting().reports.batchGet;
-    const requestBuilderSpy = jest.spyOn(
-      fetchStatsFromGA,
-      'requestBodyBuilder'
+    await expect(
+      fetchStatsFromGA({
+        startDate: '20770802',
+        ...COMMON_FETCHSTAT_PARAMS,
+      })
+    ).rejects.toThrow(
+      `endDate (${today}) should not be earlier than startDate (20770802)`
     );
-    const batchGetResultsBuilder = (pageTokens, nextPageTokens) => {
-      let reports = [];
-      allDocTypes.forEach(docType => {
-        if (pageTokens[docType] !== -1)
-          reports.push({
-            data: { rows: [`${docType}_row`] },
-            nextPageToken: nextPageTokens[docType],
-          });
-      });
-      return { data: { reports } };
-    };
-
-    beforeAll(() => {
-      MockDate.set(1577836800000);
-      FetchGAReWireAPI.__set__('requestBodyBuilder', requestBuilderSpy);
-      requestBuilderSpy.mockClear();
-    });
-    afterEach(() => {
-      batchGetMock.mockReset();
-      requestBuilderSpy.mockClear();
-    });
-
-    it('should handle empty results', async () => {
-      const emptyRows = { data: { totals: [{ values: [0, 0] }] } };
-      const res = { data: { reports: [emptyRows, emptyRows] } };
-      batchGetMock.mockResolvedValueOnce(res);
-
-      const fetchReportsResults = await fetchStatsFromGA.fetchReports(
-        'WEB',
-        {},
-        { useContentGroup: true }
-      );
-
-      expect(fetchReportsResults).toStrictEqual({
-        results: { article: undefined, reply: undefined },
-        pageTokens: { article: -1, reply: -1 },
-        hasMore: false,
-      });
-    });
-
-    it('should send approate batchGet requests and return correct curated results', async () => {
-      const sourceType = 'WEB',
-        params = { useContentGroup: true };
-      let requestBuilderCalledTimes = 1;
-
-      for (const pageTokens of fixtures.fetchReports.allPossiblePageTokens) {
-        for (const nextPageTokens of fixtures.fetchReports
-          .allPossibleNextPageTokens) {
-          batchGetMock.mockResolvedValueOnce(
-            batchGetResultsBuilder(pageTokens, nextPageTokens)
-          );
-
-          const fetchReportsResults = await fetchStatsFromGA.fetchReports(
-            sourceType,
-            pageTokens,
-            params
-          );
-
-          let expectedResults = {};
-          let expectedNextPageTokens = {};
-          let expectedHasMore = false;
-
-          allDocTypes.forEach(docType => {
-            const pageToken = pageTokens[docType];
-            if (pageToken !== -1) {
-              expectedResults[docType] = [`${docType}_row`];
-              expectedNextPageTokens[docType] = nextPageTokens[docType] || -1;
-              expectedHasMore =
-                expectedHasMore || expectedNextPageTokens[docType] !== -1;
-
-              expect(requestBuilderSpy).toHaveBeenNthCalledWith(
-                requestBuilderCalledTimes,
-                sourceType,
-                docType,
-                pageToken || '',
-                params
-              );
-              requestBuilderCalledTimes++;
-            } else {
-              expectedNextPageTokens[docType] = -1;
-            }
-          });
-
-          expect(fetchReportsResults).toStrictEqual({
-            results: expectedResults,
-            pageTokens: expectedNextPageTokens,
-            hasMore: expectedHasMore,
-          });
-        }
-      }
-    });
   });
 
-  describe('processReport', () => {
-    describe('with stubbed upsertDocStats', () => {
-      const upsertDocStatsMock = jest.fn();
-      const cleanUpRows = (row, i) =>
-        i % 2 === 0 ? row.update._id : row.script.params;
+  if (process.env.TEST_DATASET) {
+    beforeAll(async () => {
+      await Promise.all([
+        loadFixtures(fixtures),
 
-      beforeAll(() => {
-        MockDate.set(1577836800000);
-        FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsMock);
-      });
+        // Populate TEST_DATASET
+        //
+        // GA4 daily event tables
+        loadBqTable('events_20230601', events_20230601, GA4_SCHEMA),
+        loadBqTable('events_20230602', events_20230602, GA4_SCHEMA),
+        loadBqTable(`events_intraday_${today}`, events_today, GA4_SCHEMA),
 
-      afterEach(() => {
-        upsertDocStatsMock.mockReset();
-      });
-      it('should call bulkUpdates with right params', async () => {
-        await fetchStatsFromGA.processReport(
-          'WEB',
-          'article',
-          [fixtures.processReport.sameDateRows[0]],
-          new Date(),
-          null
-        );
-        expect(upsertDocStatsMock.mock.calls[0][0]).toMatchSnapshot();
-      });
+        // LINE event table
+        loadBqTable('events', events),
 
-      it('should aggregate rows of data', async () => {
-        const lastRowParams = await fetchStatsFromGA.processReport(
-          'WEB',
-          'article',
-          fixtures.processReport.sameDateRows,
-          new Date(),
-          null
-        );
-
-        expect(lastRowParams).toMatchSnapshot();
-        expect(upsertDocStatsMock).toHaveBeenCalledTimes(1);
-
-        const cleanedUpRows = upsertDocStatsMock.mock.calls[0][0].map(
-          cleanUpRows
-        );
-        expect(cleanedUpRows).toMatchSnapshot();
-      });
-
-      it('should aggregate rows of data cross pages', async () => {
-        const lastRowParams = await fetchStatsFromGA.processReport(
-          'WEB',
-          'article',
-          fixtures.processReport.crossPageRows[0],
-          new Date(),
-          null
-        );
-        const cleanedUpRows = upsertDocStatsMock.mock.calls[0][0].map(
-          cleanUpRows
-        );
-        expect(lastRowParams).toMatchSnapshot();
-        expect(cleanedUpRows).toMatchSnapshot();
-
-        const lastRowParams2 = await fetchStatsFromGA.processReport(
-          'WEB',
-          'article',
-          fixtures.processReport.crossPageRows[1],
-          new Date(),
-          lastRowParams
-        );
-        const cleanedUpRows2 = upsertDocStatsMock.mock.calls[1][0].map(
-          cleanUpRows
-        );
-
-        expect(lastRowParams2).toMatchSnapshot();
-        expect(cleanedUpRows2).toMatchSnapshot();
-      });
-    });
-
-    describe('without stubbing calls to client', () => {
-      const upsertDocStatsSpy = jest.spyOn(fetchStatsFromGA, 'upsertDocStats');
-
-      const fetchAllAnalytics = async () =>
-        (await client.search({
+        // Cleanup analytics index
+        client.deleteByQuery({
           index: 'analytics',
-          filterPath: 'hits.hits._id,hits.hits._source',
           body: {
             query: {
-              query_string: {
-                fields: ['docId'],
-                query: 'testID*',
-              },
+              match_all: {},
             },
-            size: 10000,
-            sort: [{ _id: 'asc' }],
           },
-        })).body.hits.hits;
-      beforeAll(async () => {
-        MockDate.set(1577836800000);
-        FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsSpy);
-        upsertDocStatsSpy.mockClear();
-        await fetchStatsFromGA.storeScriptInDB();
-      });
+          refresh: 'true',
+        }),
+      ]);
 
-      afterEach(() => {
-        upsertDocStatsSpy.mockClear();
-      });
+      // Wait for BQ & ES data to be indexed
+      //
+      await delayForMs(5000);
+    }, 30000);
 
-      afterAll(() =>
-        client.delete_script({ id: fetchStatsFromGA.upsertScriptID }));
-
-      it('should aggregate rows of data', async () => {
-        await fetchStatsFromGA.processReport(
-          'WEB',
-          'article',
-          fixtures.processReport.sameDateRows,
-          new Date(),
-          null
-        );
-        const bulkUpdateBody = upsertDocStatsSpy.mock.calls[0][0];
-
-        expect(await fetchAllAnalytics()).toMatchSnapshot();
-
-        await unloadBody(bulkUpdateBody);
-      });
-
-      it('should aggregate rows of data cross pages', async () => {
-        const lastRowParams = await fetchStatsFromGA.processReport(
-          'WEB',
-          'article',
-          fixtures.processReport.crossPageRows[0],
-          new Date(),
-          null
-        );
-        await fetchStatsFromGA.processReport(
-          'WEB',
-          'article',
-          fixtures.processReport.crossPageRows[1],
-          new Date(),
-          lastRowParams
-        );
-        const bulkUpdateBody = upsertDocStatsSpy.mock.calls[0][0].concat(
-          upsertDocStatsSpy.mock.calls[1][0]
-        );
-
-        expect(await fetchAllAnalytics()).toMatchSnapshot();
-
-        await unloadBody(bulkUpdateBody);
-      });
-
-      it('should upserts stats from different sources', async () => {
-        await fetchStatsFromGA.processReport(
-          'WEB',
-          'article',
-          [fixtures.processReport.sameDateRows[0]],
-          new Date(),
-          null
-        );
-        await fetchStatsFromGA.processReport(
-          'LINE',
-          'article',
-          [fixtures.processReport.crossPageRows[0][0]],
-          new Date(),
-          null
-        );
-
-        const bulkUpdateBody = upsertDocStatsSpy.mock.calls[0][0].concat(
-          upsertDocStatsSpy.mock.calls[1][0]
-        );
-
-        expect(await fetchAllAnalytics()).toMatchSnapshot();
-
-        await unloadBody(bulkUpdateBody);
-      });
-
-      it('should updates docUserId for reply entries that have one', async () => {
-        await loadFixtures(fixtures.repliesFixtures);
-        await fetchStatsFromGA.processReport(
-          'WEB',
-          'reply',
-          fixtures.processReport.sameDateRows,
-          new Date(),
-          null
-        );
-
-        const bulkUpdateBody = upsertDocStatsSpy.mock.calls[0][0];
-
-        expect(await fetchAllAnalytics()).toMatchSnapshot();
-
-        await unloadBody(bulkUpdateBody);
-        await unloadFixtures(fixtures.repliesFixtures);
-      });
-    });
-  });
-
-  describe('updateLiffStats', () => {
-    const upsertDocStatsSpy = jest.spyOn(fetchStatsFromGA, 'upsertDocStats');
-    const batchGetMock = google.analyticsreporting().reports.batchGet;
-
-    beforeAll(async () => {
-      MockDate.set(1641168000000); // fetchedAt 2022-01-03T00:00:00.000Z
-      FetchGAReWireAPI.__set__('upsertDocStats', upsertDocStatsSpy);
-      FetchGAReWireAPI.__set__('lineViewId', '987654321');
-      await fetchStatsFromGA.storeScriptInDB();
-    });
-    afterEach(() => {
-      upsertDocStatsSpy.mockClear();
-      batchGetMock.mockReset();
-    });
-    afterAll(() =>
-      client.delete_script({ id: fetchStatsFromGA.upsertScriptID }));
-
-    it('calls batchGet by param and handles empty results from GA', async () => {
-      const emptyRows = { data: { totals: [{ values: [0, 0] }] } };
-      const emptyResp = { data: { reports: [emptyRows] } };
-      batchGetMock.mockResolvedValue(emptyResp);
-
-      await fetchStatsFromGA.updateLiffStats({});
-
-      expect(batchGetMock.mock.calls).toMatchSnapshot(
-        'batchGet with no params'
-      );
-
-      // No response from server, thus no updateDoc calls
-      expect(upsertDocStatsSpy).not.toHaveBeenCalled();
-
-      batchGetMock.mockClear();
-
-      await fetchStatsFromGA.updateLiffStats({
-        startDate: '2022-12-31',
-        endDate: '2022-12-31',
-      });
-      expect(batchGetMock.mock.calls).toMatchSnapshot(
-        'batchGet with startDate & endDate'
-      );
+    afterAll(async () => {
+      await unloadFixtures(fixtures);
     });
 
-    it('processes articles and replies', async () => {
-      await loadFixtures(fixtures.updateLiffStats.fixtures);
+    it('works on startDate & endDate', async () => {
+      // Fetch GA stats from BQ and write to analytics
+      await fetchStatsFromGA({
+        startDate: '20230601',
+        endDate: '20230602',
+        ...COMMON_FETCHSTAT_PARAMS,
+      });
 
-      // Load batchGet mocks
-      fixtures.updateLiffStats.batchGetResponses.forEach(resp =>
-        batchGetMock.mockResolvedValueOnce(resp)
-      );
+      // Expect line & web stats are both collected.
+      // Also checks if `date`, `docId` etc are correctly filled in.
+      //
+      // eslint-disable-next-line no-unused-vars
+      const { fetchedAt: dontcare, ...article1At0601 } = (await client.get({
+        index: 'analytics',
+        type: 'doc',
+        id: 'article_article1_2023-06-01',
+      })).body._source;
+      expect(article1At0601).toMatchInlineSnapshot(`
+        Object {
+          "date": "2023-06-01T00:00:00.000+08:00",
+          "docAppId": "articleAuthorApp",
+          "docId": "article1",
+          "docUserId": "articleAuthorId",
+          "stats": Object {
+            "liff": Array [],
+            "lineUser": 1,
+            "lineVisit": 1,
+            "webUser": 1,
+            "webVisit": 1,
+          },
+          "type": "article",
+        }
+      `);
 
-      await fetchStatsFromGA.updateLiffStats({});
-
-      // Expect upsertDocStats calls are correctly batched.
-      // 2 times for each article batch return; 1 time for the reply.
-      expect(upsertDocStatsSpy).toHaveBeenCalledTimes(3);
-      expect(upsertDocStatsSpy.mock.calls[0][0]).toMatchSnapshot(
-        `updateDocStats() for 20220101/articleId1 only`
-      );
-      expect(upsertDocStatsSpy.mock.calls[1][0]).toMatchSnapshot(
-        `updateDocStats() for 20220101/articleId2 and 20220102/articleId2`
-      );
-      expect(upsertDocStatsSpy.mock.calls[2][0]).toMatchSnapshot(
-        `updateDocStats() for 20220101/replyId1`
-      );
-
-      // Expect documents are being inserted and stats are merged correctly
-      // if analytics doc already exists.
+      // Expect 1 user see reply1 twice on web on 6/1.
+      //
       expect(
         (await client.get({
           index: 'analytics',
           type: 'doc',
-          id: 'article_articleId1_2022-01-01',
-        })).body._source
-      ).toMatchSnapshot('Merged articleId1');
+          id: 'reply_reply1_2023-06-01',
+        })).body._source.stats
+      ).toMatchInlineSnapshot(`
+        Object {
+          "liff": Array [],
+          "lineUser": null,
+          "lineVisit": null,
+          "webUser": 1,
+          "webVisit": 2,
+        }
+      `);
 
-      // Teardown
-      await unloadBody(upsertDocStatsSpy.mock.calls[1][0]);
-      await unloadBody(upsertDocStatsSpy.mock.calls[2][0]);
-      await unloadFixtures(fixtures.updateLiffStats.fixtures);
+      // Expect article counts from different sources are aggregated in LIFF
+      //
+      expect(
+        (await client.get({
+          index: 'analytics',
+          type: 'doc',
+          id: 'article_article1_2023-06-02',
+        })).body._source.stats
+      ).toMatchInlineSnapshot(`
+        Object {
+          "liff": Array [
+            Object {
+              "source": "downstream-bot-1",
+              "user": 1,
+              "visit": 1,
+            },
+            Object {
+              "source": "downstream-bot-2",
+              "user": 1,
+              "visit": 1,
+            },
+          ],
+          "lineUser": null,
+          "lineVisit": null,
+          "webUser": null,
+          "webVisit": null,
+        }
+      `);
+
+      // Expect existing stats are overwritten with correct stats
+      //
+      expect(
+        (await client.get({
+          index: 'analytics',
+          type: 'doc',
+          id: 'article_article2_2023-06-01',
+        })).body._source.stats
+      ).toMatchInlineSnapshot(`
+        Object {
+          "liff": Array [],
+          "lineUser": null,
+          "lineVisit": null,
+          "webUser": 1,
+          "webVisit": 1,
+        }
+      `);
+
+      // Cleanup
+      for (const id of [
+        // Enumerate newly created article / reply ids in 6/1, 6/2
+        'reply_reply1_2023-06-01',
+        'reply_reply1_2023-06-02',
+        'article_article1_2023-06-01',
+        'article_article1_2023-06-02',
+      ]) {
+        await client.delete({ index: 'analytics', type: 'doc', id });
+      }
     });
+
+    it('works without startDate and endDate', async () => {
+      // Fetch GA stats from BQ and write to analytics
+      await fetchStatsFromGA({
+        ...COMMON_FETCHSTAT_PARAMS,
+      });
+
+      const articleAnalyticsTodayId = getId({
+        dateStr: today,
+        type: 'article',
+        docId: 'article1',
+      });
+
+      // Expect both web stream and LIFF stream visits are read from the intra table
+      //
+      expect(
+        (await client.get({
+          index: 'analytics',
+          type: 'doc',
+          id: articleAnalyticsTodayId,
+        })).body._source.stats
+      ).toMatchInlineSnapshot(`
+        Object {
+          "liff": Array [
+            Object {
+              "source": "downstream-bot-1",
+              "user": 1,
+              "visit": 1,
+            },
+          ],
+          "lineUser": null,
+          "lineVisit": null,
+          "webUser": 1,
+          "webVisit": 1,
+        }
+      `);
+
+      // Cleanup
+      await client.delete({
+        index: 'analytics',
+        type: 'doc',
+        id: articleAnalyticsTodayId,
+      });
+    });
+  }
+});
+
+describe('createBatchTransform', () => {
+  it('groups evenly divisible objects into batches', async () => {
+    const receivedBatches = [];
+    await pipeline(
+      // Generates 1, 2, 3, 4, 5, 6
+      async function*() {
+        for (let i = 1; i <= 6; i += 1) {
+          yield i;
+        }
+      },
+
+      // Group objects by 3
+      createBatchTransform(3),
+
+      // Push to receivedBatches
+      async function(batches) {
+        for await (const batch of batches) {
+          receivedBatches.push(batch);
+        }
+      }
+    );
+
+    expect(receivedBatches).toEqual([[1, 2, 3], [4, 5, 6]]);
+  });
+
+  it('handles not-evenly-divisible batches', async () => {
+    const receivedBatches = [];
+    await pipeline(
+      // Generates 1, 2, 3, 4
+      async function*() {
+        for (let i = 1; i <= 4; i += 1) {
+          yield i;
+        }
+      },
+
+      // Group objects by 3
+      createBatchTransform(3),
+
+      // Push to receivedBatches
+      async function(batches) {
+        for await (const batch of batches) {
+          receivedBatches.push(batch);
+        }
+      }
+    );
+
+    expect(receivedBatches).toEqual([[1, 2, 3], [4]]);
   });
 });

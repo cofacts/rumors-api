@@ -142,6 +142,16 @@ When you want to update jest snapshot, run:
 $ npm t -- -u
 ```
 
+### Tests requiring additional env vars
+
+- media-integration
+  - Requires `GCS_CREDENTIALS` and `GCS_BUCKET_NAME` to be set.
+  - will write to the specified bucket.
+- fetchStatsFromGA
+  - Requires `TEST_DATASET` to be set, and the dataset already exists.
+  - Will load data into new tables under the test dataset using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
+  - Please make sure the service account has [enough permissions](https://cloud.google.com/bigquery/docs/batch-loading-data?hl=en#permissions-load-data-into-bigquery).
+
 ## Deploy
 
 Build docker image. The following are basically the same, but with different docker tags.
@@ -168,9 +178,25 @@ URLs. The following script cleans up those `urls` that no article & reply curren
 $ docker-compose exec api node_modules/.bin/babel-node src/scripts/cleanupUrls.js
 ```
 
-### Fetching user activities from Google Analytics
--  First make sure the following params are set in `.env`:
-  `GOOGLE_OAUTH_KEY_PATH`,  `GA_WEB_VIEW_ID`, `GA_LINE_VIEW_ID`
+### Fetching user activities from BigQuery
+- The user activities of website & chatbot LIFF web views
+  are collected and synced to BigQuery using built-in GA4 BigQuery Links.
+  - LIFF and website should be different web streams on GA4.
+  - Streams are differentiated using `stream_id` on BigQuery.
+  - In GA4 BigQuery Link, both "Daily" (results in `events-YYYYMMDD` tables) and "Streaming" (results in `events_intraday_YYYYMMDD` tables) are used.
+  - The separation of table respects "Reporting time zone" on Google Analytics.
+
+-  Make sure the following params are set in `.env`:
+  `LINE_BOT_EVENT_DATASET_ID`, `GA4_DATASET_ID`, `GA_WEB_STREAM_ID`, `GA_LIFF_STREAM_ID`, `TIMEZONE`.
+
+- Sync script will authenticate to BigQuery using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
+  - Please create a service account under the project, download its key and use `GOOGLE_APPLICATION_CREDENTIALS` env var to
+provide the path to your downloaded service account key. See [documentation](https://cloud.google.com/docs/authentication/provide-credentials-adc#local-key) for detail.
+  - Please make sure the service account has read-only access to both `LINE_BOT_EVENT_DATASET_ID` and `GA4_DATASET_ID`.
+
+- Make sure the service account behind the key in previous step have the following [minimum roles](https://cloud.google.com/bigquery/docs/running-queries#required_permissions):
+  - `BigQuery Job User` on the GCP project
+  - `BigQuery Data Viewer` on the dataset specified by `LINE_BOT_EVENT_DATASET_ID`, and the  dataset specified by `GA4_DATASET_ID`.
 
 -  To fetch stats for the current date, run:
 ```
