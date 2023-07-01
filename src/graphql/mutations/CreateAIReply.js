@@ -119,7 +119,6 @@ export async function createNewAIReply({
 
   const openAIResponsePromise = openai
     .getChatCompletions(...chatCompletionArgs)
-    .then(({ data }) => data)
     .catch(error => {
       console.error(error);
 
