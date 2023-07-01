@@ -18,7 +18,7 @@ describe('CreateAIReply', () => {
     await unloadFixtures(fixtures);
   });
   afterEach(() => {
-    openai.createChatCompletion.mockReset();
+    openai.getChatCompletions.mockReset();
   });
 
   it('throws when specified article does not exist', async () => {
@@ -69,7 +69,7 @@ describe('CreateAIReply', () => {
     // Mocked ChatGPT success response
     //
     let resolveAPI;
-    const mockFn = openai.createChatCompletion.mockImplementationOnce(
+    const mockFn = openai.getChatCompletions.mockImplementationOnce(
       () =>
         new Promise(resolve => {
           resolveAPI = resolve;
@@ -132,7 +132,7 @@ describe('CreateAIReply', () => {
         "appId": "test",
         "createdAt": "2020-10-10T00:00:00.000Z",
         "docId": "reported-article",
-        "request": "{\\"model\\":\\"gpt-3.5-turbo\\",\\"messages\\":[{\\"role\\":\\"system\\",\\"content\\":\\"現在是2020年（民國109年）10月。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息2020年1月就在網路上流傳。\\"},{\\"role\\":\\"user\\",\\"content\\":\\"我優秀的斐陶斐大姐是中央銀行退休，她剛看了一下，上網登記除要身份証號碼，還要健保卡號，健保卡號很少會要求提供，被洩漏機會相對少，但這次登記要一次完整的登入雙證件的號碼有點讓人擔憂，連同銀行帳號一併洩漏後果可怕！ \\"},{\\"role\\":\\"user\\",\\"content\\":\\"請問作為閱聽人，我應該注意這則訊息的哪些地方呢？請節錄訊息中需要特別留意或懷疑的地方，說明為何閱聽人需要注意它。請只就以上內文回應，不要編造。謝謝\\"}],\\"user\\":\\"test\\",\\"temperature\\":0}",
+        "request": "[\\"gpt35\\",[{\\"role\\":\\"system\\",\\"content\\":\\"現在是2020年（民國109年）10月。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息2020年1月就在網路上流傳。\\"},{\\"role\\":\\"user\\",\\"content\\":\\"我優秀的斐陶斐大姐是中央銀行退休，她剛看了一下，上網登記除要身份証號碼，還要健保卡號，健保卡號很少會要求提供，被洩漏機會相對少，但這次登記要一次完整的登入雙證件的號碼有點讓人擔憂，連同銀行帳號一併洩漏後果可怕！ \\"},{\\"role\\":\\"user\\",\\"content\\":\\"請問作為閱聽人，我應該注意這則訊息的哪些地方呢？請節錄訊息中需要特別留意或懷疑的地方，說明為何閱聽人需要注意它。請只就以上內文回應，不要編造。謝謝\\"}],{\\"user\\":\\"test\\",\\"temperature\\":0}]",
         "status": "LOADING",
         "type": "AI_REPLY",
         "userId": "test",
@@ -248,7 +248,7 @@ describe('CreateAIReply', () => {
   it('returns API error', async () => {
     // Mocked ChatGPT failed response, simulate API key error
     //
-    const mockFn = openai.createChatCompletion.mockImplementationOnce(() =>
+    const mockFn = openai.getChatCompletions.mockImplementationOnce(() =>
       Promise.reject(new Error('Request failed with status code 401'))
     );
 
@@ -292,7 +292,7 @@ describe('CreateAIReply', () => {
   });
 
   it('replaces URL with hyperlink info', async () => {
-    const mockFn = openai.createChatCompletion.mockImplementationOnce(
+    const mockFn = openai.getChatCompletions.mockImplementationOnce(
       async () => SUCCESS_OPENAI_RESP
     );
 
@@ -322,22 +322,22 @@ describe('CreateAIReply', () => {
     expect(mockFn.mock.calls).toMatchInlineSnapshot(`
       Array [
         Array [
+          "gpt35",
+          Array [
+            Object {
+              "content": "現在是2020年（民國109年）10月。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息2020年1月就在網路上流傳。",
+              "role": "system",
+            },
+            Object {
+              "content": "[Foo-title! Foo summary](https://foo.com) [Foo-title! Foo summary](https://foo.com) https://bar.com https://bar.com",
+              "role": "user",
+            },
+            Object {
+              "content": "請問作為閱聽人，我應該注意這則訊息的哪些地方呢？請節錄訊息中需要特別留意或懷疑的地方，說明為何閱聽人需要注意它。請只就以上內文回應，不要編造。謝謝",
+              "role": "user",
+            },
+          ],
           Object {
-            "messages": Array [
-              Object {
-                "content": "現在是2020年（民國109年）10月。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息2020年1月就在網路上流傳。",
-                "role": "system",
-              },
-              Object {
-                "content": "[Foo-title! Foo summary](https://foo.com) [Foo-title! Foo summary](https://foo.com) https://bar.com https://bar.com",
-                "role": "user",
-              },
-              Object {
-                "content": "請問作為閱聽人，我應該注意這則訊息的哪些地方呢？請節錄訊息中需要特別留意或懷疑的地方，說明為何閱聽人需要注意它。請只就以上內文回應，不要編造。謝謝",
-                "role": "user",
-              },
-            ],
-            "model": "gpt-3.5-turbo",
             "temperature": 0,
             "user": "test",
           },
@@ -370,6 +370,6 @@ describe('CreateAIReply', () => {
     );
 
     expect(CreateAIReply).toBe(null);
-    expect(openai.createChatCompletion).toBeCalledTimes(0);
+    expect(openai.getChatCompletions).toBeCalledTimes(0);
   });
 });

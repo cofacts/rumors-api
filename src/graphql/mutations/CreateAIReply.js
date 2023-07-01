@@ -68,9 +68,9 @@ export async function createNewAIReply({
   const thisMonthStr = thisMonthParts.find(p => p.type === 'month').value;
   const createdMonth = monthFormatter.format(new Date(article.createdAt));
 
-  const completionRequest = {
-    model: 'gpt-3.5-turbo',
-    messages: [
+  const chatCompletionArgs = [
+    process.env.AZURE_OPENAI_DEPLOYMENT_NAME,
+    [
       {
         role: 'system',
         content: `現在是${thisYearStr}年（民國${thisROCYearStr}年）${thisMonthStr}月。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息${createdMonth}就在網路上流傳。`,
@@ -85,10 +85,12 @@ export async function createNewAIReply({
           '請問作為閱聽人，我應該注意這則訊息的哪些地方呢？請節錄訊息中需要特別留意或懷疑的地方，說明為何閱聽人需要注意它。請只就以上內文回應，不要編造。謝謝',
       },
     ],
-    user: user.id,
-    temperature: 0,
-    ...completionOptions,
-  };
+    {
+      user: user.id,
+      temperature: 0,
+      ...completionOptions,
+    },
+  ];
 
   const newResponse = {
     userId: user.id,
@@ -96,7 +98,7 @@ export async function createNewAIReply({
     docId: article.id,
     type: 'AI_REPLY',
     status: 'LOADING',
-    request: JSON.stringify(completionRequest),
+    request: JSON.stringify(chatCompletionArgs),
     createdAt: new Date(),
   };
 
@@ -116,7 +118,7 @@ export async function createNewAIReply({
     });
 
   const openAIResponsePromise = openai
-    .createChatCompletion(completionRequest)
+    .getChatCompletions(...chatCompletionArgs)
     .then(({ data }) => data)
     .catch(error => {
       console.error(error);
