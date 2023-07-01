@@ -148,15 +148,7 @@ export async function createNewAIReply({
               : {
                   status: 'SUCCESS',
                   text: apiResult.choices[0].message.content,
-                  ...(apiResult.usage
-                    ? {
-                        usage: {
-                          promptTokens: apiResult.usage.prompt_tokens,
-                          completionTokens: apiResult.usage.completion_tokens,
-                          totalTokens: apiResult.usage.total_tokens,
-                        },
-                      }
-                    : undefined),
+                  usage: apiResult.usage,
                   updatedAt: new Date(),
                 },
         },
