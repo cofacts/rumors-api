@@ -1,9 +1,8 @@
-import { Configuration, OpenAIApi } from 'openai';
+import { OpenAIClient, AzureKeyCredential } from '@azure/openai';
 
-const openai = new OpenAIApi(
-  new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-  })
+const openai = new OpenAIClient(
+  process.env.AZURE_OPENAI_ENDPOINT,
+  new AzureKeyCredential(process.env.AZURE_OPENAI_KEY)
 );
 
 export default openai;
