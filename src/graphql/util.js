@@ -16,6 +16,7 @@ import Edge from './interfaces/Edge';
 import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
+import delayForMs from 'util/delayForMs';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -514,4 +515,98 @@ export function attachCommonListFilter(
       { term: { [`${fieldPrefix}appId`]: appId } }
     );
   }
+}
+
+/**
+ * Read a successful AI response of a given `type` and `docId`.
+ * If not, it tries to wait for the latest (within 1min) loading AI response.
+ * Returns null if there is no successful nor latest loading AI response.
+ *
+ * @param {object} param
+ * @param {'AI_REPLY'} param.type
+ * @param {string} param.docId
+ * @returns {AIReponse | null}
+ */
+export async function getAIResponse({ type, docId }) {
+  // Try reading successful AI response.
+  //
+  //
+  for (;;) {
+    // First, find latest successful airesponse. Return if found.
+    //
+    const {
+      body: {
+        hits: {
+          hits: [successfulAiResponse],
+        },
+      },
+    } = await client.search({
+      index: 'airesponses',
+      type: 'doc',
+      body: {
+        query: {
+          bool: {
+            must: [
+              { term: { type } },
+              { term: { docId } },
+              { term: { status: 'SUCCESS' } },
+            ],
+          },
+        },
+        sort: {
+          createdAt: 'desc',
+        },
+        size: 1,
+      },
+    });
+
+    if (successfulAiResponse) {
+      return {
+        id: successfulAiResponse._id,
+        ...successfulAiResponse._source,
+      };
+    }
+
+    // If no successful AI responses, find loading responses created within 1 min.
+    //
+    const {
+      body: { count },
+    } = await client.count({
+      index: 'airesponses',
+      type: 'doc',
+      body: {
+        query: {
+          bool: {
+            must: [
+              { term: { type } },
+              { term: { docId } },
+              { term: { status: 'LOADING' } },
+              {
+                // loading document created within 1 min
+                range: {
+                  createdAt: {
+                    gte: 'now-1m',
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    // No AI response available now, break the loop
+    //
+    if (count === 0) {
+      break;
+    }
+
+    // Wait a bit to search for successful AI response again.
+    // If there are any loading AI response becomes successful during the wait,
+    // it will be picked up when the loop is re-entered.
+    await delayForMs(1000);
+  }
+
+  // Nothing is found
+  return null;
 }

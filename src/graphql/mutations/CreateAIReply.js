@@ -3,8 +3,8 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 import openai from 'util/openai';
 import { assertUser } from 'util/user';
 import client from 'util/client';
-import delayForMs from 'util/delayForMs';
 import { AIReply } from 'graphql/models/AIResponse';
+import { getAIResponse } from 'graphql/util';
 
 const monthFormatter = Intl.DateTimeFormat('zh-TW', {
   year: 'numeric',
@@ -181,85 +181,13 @@ export default {
 
     if (!article) throw new Error(`Article ${articleId} does not exist.`);
 
-    // Try reading successful AI response.
-    // Break the loop when there is no latest loading AI response.
-    //
-    for (;;) {
-      // First, find latest successful airesponse. Return if found.
-      //
-      const {
-        body: {
-          hits: {
-            hits: [successfulAiResponse],
-          },
-        },
-      } = await client.search({
-        index: 'airesponses',
-        type: 'doc',
-        body: {
-          query: {
-            bool: {
-              must: [
-                { term: { type: 'AI_REPLY' } },
-                { term: { docId: articleId } },
-                { term: { status: 'SUCCESS' } },
-              ],
-            },
-          },
-          sort: {
-            createdAt: 'desc',
-          },
-          size: 1,
-        },
-      });
+    const existingAiReply = await getAIResponse({
+      type: 'AI_REPLY',
+      docId: articleId,
+    });
 
-      if (successfulAiResponse) {
-        return {
-          id: successfulAiResponse._id,
-          ...successfulAiResponse._source,
-        };
-      }
-
-      // If no successful AI responses, find loading responses created within 1 min.
-      //
-      const {
-        body: { count },
-      } = await client.count({
-        index: 'airesponses',
-        type: 'doc',
-        body: {
-          query: {
-            bool: {
-              must: [
-                { term: { type: 'AI_REPLY' } },
-                { term: { docId: articleId } },
-                { term: { status: 'LOADING' } },
-                {
-                  // loading document created within 1 min
-                  range: {
-                    createdAt: {
-                      gte: 'now-1m',
-                    },
-                  },
-                },
-              ],
-            },
-          },
-        },
-      });
-
-      // No AI response available now, break the loop and try create.
-      //
-      if (count === 0) {
-        break;
-      }
-
-      // Wait a bit to search for successful AI response again.
-      // If there are any loading AI response becomes successful during the wait,
-      // it will be picked up when the loop is re-entered.
-      await delayForMs(1000);
-    }
-
-    return createNewAIReply({ article, user });
+    return existingAiReply
+      ? existingAiReply
+      : createNewAIReply({ article, user });
   },
 };
