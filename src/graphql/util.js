@@ -610,3 +610,78 @@ export async function getAIResponse({ type, docId }) {
   // Nothing is found
   return null;
 }
+
+/**
+ * Creates a loading AI Response.
+ * Returns an updater function that can be used to record real AI response.
+ *
+ *
+ * @param {object} loadingResponseBody
+ * @param {string} loadingResponseBody.request
+ * @param {string} loadingResponseBody.type
+ * @param {string} loadingResponseBody.docId
+ * @param {object} loadingResponseBody.user
+ *
+ * @returns {(responseBody) => Promise<AIResponse>} updater function that updates the created AI
+ *   response and returns the updated result
+ */
+export function createAIResponse({ user, ...loadingResponseBody }) {
+  const newResponse = {
+    userId: user.id,
+    appId: user.appId,
+    status: 'LOADING',
+    createdAt: new Date(),
+    ...loadingResponseBody,
+  };
+
+  // Resolves to loading AI Response.
+  const newResponseIdPromise = client
+    .index({
+      index: 'airesponses',
+      type: 'doc',
+      body: newResponse,
+    })
+    .then(({ body: { result, _id } }) => {
+      /* istanbul ignore if */
+      if (result !== 'created') {
+        throw new Error(`Cannot create AI response: ${result}`);
+      }
+      return _id;
+    });
+
+  // Update using aiResponse._id according to apiResult
+  async function update(responseBody) {
+    const aiResponseId = await newResponseIdPromise;
+
+    const {
+      body: {
+        get: { _source },
+      },
+    } = await client.update({
+      index: 'airesponses',
+      type: 'doc',
+      id: aiResponseId,
+      _source: true,
+      body: {
+        doc: {
+          updatedAt: new Date(),
+          ...responseBody,
+        },
+      },
+    });
+
+    return {
+      id: aiResponseId,
+      ..._source,
+    };
+  }
+
+  return update;
+}
+
+/**
+ *
+ * @param {*} mediaEntryId
+ * @param {*} fileUrl
+ */
+// async function createTranscript(mediaEntryId, fileUrl) {}

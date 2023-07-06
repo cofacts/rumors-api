@@ -2,9 +2,8 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 import openai from 'util/openai';
 import { assertUser } from 'util/user';
-import client from 'util/client';
 import { AIReply } from 'graphql/models/AIResponse';
-import { getAIResponse } from 'graphql/util';
+import { getAIResponse, createAIResponse } from 'graphql/util';
 
 const monthFormatter = Intl.DateTimeFormat('zh-TW', {
   year: 'numeric',
@@ -90,32 +89,15 @@ export async function createNewAIReply({
     ...completionOptions,
   };
 
-  const newResponse = {
-    userId: user.id,
-    appId: user.appId,
+  const updateAIResponse = createAIResponse({
+    user,
     docId: article.id,
     type: 'AI_REPLY',
-    status: 'LOADING',
     request: JSON.stringify(completionRequest),
-    createdAt: new Date(),
-  };
+  });
 
-  // Resolves to loading AI Response.
-  const newResponseIdPromise = client
-    .index({
-      index: 'airesponses',
-      type: 'doc',
-      body: newResponse,
-    })
-    .then(({ body: { result, _id } }) => {
-      /* istanbul ignore if */
-      if (result !== 'created') {
-        throw new Error(`Cannot create AI reply: ${result}`);
-      }
-      return _id;
-    });
-
-  const openAIResponsePromise = openai
+  // Resolves to completed or errored AI response.
+  const apiResult = await openai
     .createChatCompletion(completionRequest)
     .then(({ data }) => data)
     .catch(error => {
@@ -127,41 +109,26 @@ export async function createNewAIReply({
       return new Error(error);
     });
 
-  // Resolves to completed or errored AI response.
-  return Promise.all([openAIResponsePromise, newResponseIdPromise])
-    .then(([apiResult, aiResponseId]) =>
-      // Update using aiResponse._id according to apiResult
-      client.update({
-        index: 'airesponses',
-        type: 'doc',
-        id: aiResponseId,
-        _source: true,
-        body: {
-          doc:
-            apiResult instanceof Error
-              ? {
-                  status: 'ERROR',
-                  text: apiResult.toString(),
-                  updatedAt: new Date(),
-                }
-              : {
-                  status: 'SUCCESS',
-                  text: apiResult.choices[0].message.content,
-                  ...(apiResult.usage
-                    ? {
-                        usage: {
-                          promptTokens: apiResult.usage.prompt_tokens,
-                          completionTokens: apiResult.usage.completion_tokens,
-                          totalTokens: apiResult.usage.total_tokens,
-                        },
-                      }
-                    : undefined),
-                  updatedAt: new Date(),
+  return updateAIResponse(
+    apiResult instanceof Error
+      ? {
+          status: 'ERROR',
+          text: apiResult.toString(),
+        }
+      : {
+          status: 'SUCCESS',
+          text: apiResult.choices[0].message.content,
+          ...(apiResult.usage
+            ? {
+                usage: {
+                  promptTokens: apiResult.usage.prompt_tokens,
+                  completionTokens: apiResult.usage.completion_tokens,
+                  totalTokens: apiResult.usage.total_tokens,
                 },
-        },
-      })
-    )
-    .then(({ body: { _id, get: { _source } } }) => ({ id: _id, ..._source }));
+              }
+            : undefined),
+        }
+  );
 }
 
 export default {
