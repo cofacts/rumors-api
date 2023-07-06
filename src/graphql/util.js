@@ -680,8 +680,16 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
 }
 
 /**
- *
- * @param {*} mediaEntryId
- * @param {*} fileUrl
+ * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
+ * @param {string} fileUrl - the audio, image or video file to process
  */
-// async function createTranscript(mediaEntryId, fileUrl) {}
+export async function createTranscript(queryInfo, fileUrl, user) {
+  const update = createAIResponse({
+    user,
+    docId: queryInfo.id,
+  });
+
+  // TODO: call respective API
+
+  return update({});
+}
