@@ -27,6 +27,7 @@
     "@cofacts/media-manager": "^0.3.0",
     "@elastic/elasticsearch": "^6.8.6",
     "@google-cloud/bigquery": "^6.2.0",
+    "@google-cloud/vision": "^3.1.4",
     "@grpc/grpc-js": "^1.6.7",
     "@grpc/proto-loader": "^0.5.0",
     "apollo-server-koa": "^2.11.0",

@@ -1,3 +1,4 @@
+import { ImageAnnotatorClient } from '@google-cloud/vision';
 import {
   GraphQLInputObjectType,
   GraphQLObjectType,
@@ -10,6 +11,7 @@ import {
   GraphQLID,
   GraphQLBoolean,
 } from 'graphql';
+import fetch from 'node-fetch';
 
 import Connection from './interfaces/Connection';
 import Edge from './interfaces/Edge';
@@ -17,6 +19,7 @@ import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
 import delayForMs from 'util/delayForMs';
+import openai from 'util/openai';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -679,6 +682,8 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   return update;
 }
 
+const imageAnnotator = new ImageAnnotatorClient();
+
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
  * @param {string} fileUrl - the audio, image or video file to process
@@ -689,7 +694,58 @@ export async function createTranscript(queryInfo, fileUrl, user) {
     docId: queryInfo.id,
   });
 
-  // TODO: call respective API
+  try {
+    switch (queryInfo.type) {
+      case 'image': {
+        const [
+          { fullTextAnnotation },
+        ] = await imageAnnotator.documentTextDetection(fileUrl);
 
-  return update({});
+        console.log('[createTranscript]', queryInfo.id, fullTextAnnotation);
+        return update({
+          status: 'SUCCESS',
+          // Write '' if no text detected
+          text: fullTextAnnotation?.text ?? '',
+        });
+      }
+
+      case 'video':
+      case 'audio': {
+        const fileResp = await fetch(fileUrl);
+
+        const file = fileResp.body;
+        // Hack it to make openai library work
+        // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1455247809
+        file.path = 'file.mp4';
+
+        const { data } = await openai.createTranscription(
+          file,
+          'whisper-1',
+          '這是一則網傳影片口白的逐字稿。若為中文，請使用全形標點符號，段落完整。',
+          'json',
+          0,
+          undefined,
+          // Make axios happy
+          // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
+          //
+          { maxContentLength: Infinity, maxBodyLength: Infinity }
+        );
+
+        console.log('[createTranscript]', queryInfo.id, data);
+
+        return update({
+          status: 'SUCCESS',
+          text: data.text,
+        });
+      }
+      default:
+        throw new Error(`Type ${queryInfo.type} not supported`);
+    }
+  } catch (e) {
+    console.error('[createTranscript]', e);
+    return update({
+      status: 'ERROR',
+      text: e.toString(),
+    });
+  }
 }
