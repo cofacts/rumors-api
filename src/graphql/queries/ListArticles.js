@@ -122,17 +122,20 @@ export default {
           description:
             'Specifies how the transcript of `mediaUrl` can be used to search. Can only specify `transcript` when `mediaUrl` is specified.',
           type: new GraphQLInputObjectType({
-            minimumShouldMatch: {
-              type: GraphQLString,
-              description:
-                'more_like_this query\'s "minimum_should_match" query param for the transcript of `mediaUrl`\n' +
-                'See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html for possible values.',
-            },
-            shouldCreate: {
-              type: GraphQLBoolean,
-              defaultValue: false,
-              description:
-                'Only used when `filter.mediaUrl` is provided. Generates transcript if provided `filter.mediaUrl` is not transcribed previously.',
+            name: 'TranscriptFilter',
+            fields: {
+              minimumShouldMatch: {
+                type: GraphQLString,
+                description:
+                  'more_like_this query\'s "minimum_should_match" query param for the transcript of `mediaUrl`\n' +
+                  'See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html for possible values.',
+              },
+              shouldCreate: {
+                type: GraphQLBoolean,
+                defaultValue: false,
+                description:
+                  'Only used when `filter.mediaUrl` is provided. Generates transcript if provided `filter.mediaUrl` is not transcribed previously.',
+              },
             },
           }),
         },
