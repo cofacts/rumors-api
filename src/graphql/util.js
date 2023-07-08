@@ -12,6 +12,7 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 import fetch from 'node-fetch';
+import ffmpeg from 'fluent-ffmpeg';
 
 import Connection from './interfaces/Connection';
 import Edge from './interfaces/Edge';
@@ -682,6 +683,7 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   return update;
 }
 
+const OPENAI_WHISPER_FILE_LIMIT = 25 * 1000 * 1000; // in bytes
 const imageAnnotator = new ImageAnnotatorClient();
 
 /**
@@ -713,17 +715,28 @@ export async function createTranscript(queryInfo, fileUrl, user) {
       case 'audio': {
         const fileResp = await fetch(fileUrl);
 
-        const file = fileResp.body;
+        const isTooBig =
+          +fileResp.headers.get('content-length') > OPENAI_WHISPER_FILE_LIMIT;
+
+        const audio = isTooBig
+          ? // If too big, extract just audio part.
+            // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
+            ffmpeg(fileResp.body)
+              .noVideo()
+              .format('mp3')
+              .pipe()
+          : fileResp.body;
+
         // Hack it to make openai library work
         // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1455247809
-        file.path = 'file.mp4';
+        audio.path = 'file.mp4';
 
         const { data } = await openai.createTranscription(
-          file,
+          audio,
           'whisper-1',
-          '這是一則網傳影片口白的逐字稿。若為中文，請使用全形標點符號，段落完整。',
+          '若語言為中文，請使用繁體中文。每一個段落不短於 30 秒。網傳影片口白如下：',
           'json',
-          0,
+          0.5,
           undefined,
           // Make axios happy
           // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486

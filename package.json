@@ -34,6 +34,7 @@
     "cli-progress": "^3.9.1",
     "dataloader": "^2.0.0",
     "dotenv": "^8.0.0",
+    "fluent-ffmpeg": "^2.1.2",
     "form-data": "^3.0.0",
     "google-protobuf": "^3.0.0",
     "googleapis": "^55.0.0",
