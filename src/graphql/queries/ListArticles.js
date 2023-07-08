@@ -21,6 +21,8 @@ import {
   attachCommonListFilter,
   DEFAULT_ARTICLE_STATUSES,
   DEFAULT_ARTICLE_REPLY_STATUSES,
+  getAIResponse,
+  createTranscript,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import ArticleStatusEnum from 'graphql/models/ArticleStatusEnum';
@@ -116,6 +118,24 @@ export default {
           type: GraphQLString,
           description: 'Show the media article similar to the input url',
         },
+        transcript: {
+          description:
+            'Specifies how the transcript of `mediaUrl` can be used to search. Can only specify `transcript` when `mediaUrl` is specified.',
+          type: new GraphQLInputObjectType({
+            minimumShouldMatch: {
+              type: GraphQLString,
+              description:
+                'more_like_this query\'s "minimum_should_match" query param for the transcript of `mediaUrl`\n' +
+                'See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html for possible values.',
+            },
+            shouldCreate: {
+              type: GraphQLBoolean,
+              defaultValue: false,
+              description:
+                'Only used when `filter.mediaUrl` is provided. Generates transcript if provided `filter.mediaUrl` is not transcribed previously.',
+            },
+          }),
+        },
         articleReply: {
           description:
             'Show articles with article replies matching this criteria',
@@ -160,10 +180,15 @@ export default {
   async resolve(
     rootValue,
     { filter = {}, orderBy = [], ...otherParams },
-    { loaders, userId, appId }
+    { loaders, userId, appId, user }
   ) {
+    if (filter.transcript && !filter.mediaUrl) {
+      throw new Error(
+        '`filter.mediaUrl` must be provided when `filter.transcript` is true'
+      );
+    }
+
     // Collecting queries that will be used in bool queries later
-    const mustQueries = [];
     const shouldQueries = []; // Affects scores
     const filterQueries = [
       {
@@ -541,7 +566,7 @@ export default {
       // Must be the search result returned by mediaManager.query,
       // with their score being the similarity returend by mediaManager
       //
-      mustQueries.push({
+      shouldQueries.push({
         function_score: {
           query: {
             terms: {
@@ -555,13 +580,68 @@ export default {
               source: "params.similarityMap.get(doc['attachmentHash'].value)",
             },
           },
+          boost: 10, // Make media search prominant
         },
       });
+
+      let transcript = '';
+      // Get the text from most similar article (if there is one)
+      if (queryResult.hits.length > 0) {
+        const similarArticles = (await loaders.searchResultLoader.loadMany(
+          queryResult.hits.map(hit => ({
+            index: 'articles',
+            type: 'doc',
+            body: { query: { term: { attachmentHash: hit.entry.id } } },
+          }))
+        )).flat();
+
+        transcript = similarArticles.reduce(
+          (t, article) => (t ? t : article.text),
+          ''
+        );
+      }
+
+      // When no transcript found from similar articles, try getting it from AI responses.
+      //
+      if (!transcript) {
+        let aiResponse = await getAIResponse({
+          type: 'TRANSCRIPT',
+          docId: queryResult.queryInfo.id,
+        });
+
+        if (!aiResponse && filter.transcript?.shouldCreate) {
+          aiResponse = await createTranscript(
+            queryResult.queryInfo,
+            filter.mediaUrl,
+            user
+          );
+        }
+
+        if (aiResponse && aiResponse.status === 'SUCCESS') {
+          // Note: it is possible for `aiResponses.text` to be '';
+          // it means that the media doesn't have detectable text.
+          transcript = aiResponse.text;
+        }
+      }
+
+      // Add transcript to query
+      //
+      if (transcript) {
+        shouldQueries.push({
+          more_like_this: {
+            fields: ['text'],
+            like: transcript,
+            min_term_freq: 1,
+            min_doc_freq: 1,
+            minimum_should_match:
+              filter.transcript?.minimumShouldMatch || '10<70%',
+          },
+        });
+      }
     }
 
     body.query = {
       bool: {
-        must: mustQueries,
         should:
           shouldQueries.length === 0 ? [{ match_all: {} }] : shouldQueries,
         filter: filterQueries,

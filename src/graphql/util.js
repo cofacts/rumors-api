@@ -693,6 +693,7 @@ const imageAnnotator = new ImageAnnotatorClient();
 export async function createTranscript(queryInfo, fileUrl, user) {
   const update = createAIResponse({
     user,
+    type: 'TRANSCRIPT',
     docId: queryInfo.id,
   });
 
