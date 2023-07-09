@@ -46,3 +46,15 @@ describe('getRangeFieldParamFromArithmeticExpression', () => {
     `);
   });
 });
+
+describe('createTranscript', () => {
+  /* beforeAll(async () => {
+    // Upload file to public GCS bucket so that APIs can access them
+  })
+  */
+
+  // it('creates error when file format is not supported');
+  // it('does OCR')
+  // it('does transcript for small files')
+  // it('does transcript for large files')
+})
