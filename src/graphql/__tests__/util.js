@@ -1,4 +1,11 @@
-import { getRangeFieldParamFromArithmeticExpression } from '../util';
+import { Storage } from '@google-cloud/storage';
+
+import client from 'util/client';
+
+import {
+  createTranscript,
+  getRangeFieldParamFromArithmeticExpression,
+} from '../util';
 
 describe('getRangeFieldParamFromArithmeticExpression', () => {
   it('processes complex range queries', () => {
@@ -47,14 +54,67 @@ describe('getRangeFieldParamFromArithmeticExpression', () => {
   });
 });
 
-describe('createTranscript', () => {
-  /* beforeAll(async () => {
-    // Upload file to public GCS bucket so that APIs can access them
-  })
-  */
+if (process.env.GCS_BUCKET_NAME) {
+  describe('createTranscript', () => {
+    const storage = new Storage();
+    const bucket = storage.bucket(process.env.GCS_BUCKET_NAME);
+    const FIXTURES = ['ocr-testing.jpg'];
+    let FIXTURES_URLS = {};
 
-  // it('creates error when file format is not supported');
-  // it('does OCR')
-  // it('does transcript for small files')
-  // it('does transcript for large files')
-})
+    // Upload file to public GCS bucket so that APIs can access them
+    beforeAll(async () => {
+      FIXTURES_URLS = (await Promise.all(
+        FIXTURES.map(async filename =>
+          bucket
+            .upload(`../__fixtures__/util/${filename}`, {
+              destination: `transcript-test/${filename}`,
+            })
+            .then(([file]) => file.publicUrl())
+        )
+      )).reduce((map, publicUrl, i) => {
+        map[FIXTURES[i]] = publicUrl;
+        return map;
+      }, {});
+    });
+
+    it('creates error when file format is not supported', async () => {
+      const aiResponse = await createTranscript(
+        {
+          id: 'foo',
+          type: 'file',
+        },
+        'https://some-url',
+        { id: 'foo', appId: 'WEBSITE' }
+      );
+      expect(aiResponse).toMatchInlineSnapshot();
+
+      // Cleanup
+      await client.delete({
+        index: 'airesponses',
+        type: 'doc',
+        id: aiResponse.id,
+      });
+    });
+
+    it('does OCR', async () => {
+      const aiResponse = await createTranscript(
+        {
+          id: 'foo',
+          type: 'file',
+        },
+        FIXTURES_URLS['ocr-testing.jpg'],
+        { id: 'foo', appId: 'WEBSITE' }
+      );
+
+      expect(aiResponse).toMatchInlineSnapshot();
+      // Cleanup
+      await client.delete({
+        index: 'airesponses',
+        type: 'doc',
+        id: aiResponse.id,
+      });
+    });
+    // it('does transcript for small files')
+    // it('does transcript for large files')
+  });
+}

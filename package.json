@@ -68,6 +68,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/node": "^7.16.0",
     "@babel/preset-env": "^7.16.11",
+    "@google-cloud/storage": "^6.11.0",
     "apollo-server-testing": "^2.18.2",
     "babel-jest": "^26.0.0",
     "babel-plugin-module-resolver": "^4.0.0",
