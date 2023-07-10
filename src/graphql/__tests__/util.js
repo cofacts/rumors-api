@@ -60,7 +60,7 @@ if (process.env.GCS_BUCKET_NAME) {
   describe('createTranscript', () => {
     const storage = new Storage();
     const bucket = storage.bucket(process.env.GCS_BUCKET_NAME);
-    const FIXTURES = ['ocr-test.jpg'];
+    const FIXTURES = ['ocr-test.jpg', 'audio-test.mp4'];
     let FIXTURES_URLS = {};
 
     // Upload file to public GCS bucket so that APIs can access them
@@ -129,12 +129,12 @@ if (process.env.GCS_BUCKET_NAME) {
           type: 'image',
         },
         FIXTURES_URLS['ocr-test.jpg'],
-        { id: 'foo', appId: 'WEBSITE' }
+        { id: 'user-id', appId: 'app-id' }
       );
 
       expect(aiResponse).toMatchInlineSnapshot(`
         Object {
-          "appId": "WEBSITE",
+          "appId": "app-id",
           "docId": "foo",
           "status": "SUCCESS",
           "text": "排
@@ -172,7 +172,7 @@ if (process.env.GCS_BUCKET_NAME) {
         不但減少體脂肪,還有助於消除肥胖。
         可以先從關掉冷氣做起",
           "type": "TRANSCRIPT",
-          "userId": "foo",
+          "userId": "user-id",
         }
       `);
       // Cleanup
@@ -182,7 +182,44 @@ if (process.env.GCS_BUCKET_NAME) {
         id: aiResponseId,
       });
     });
-    // it('does transcript for small files')
-    // it('does transcript for large files')
+    it(
+      'does transcript for audio',
+      async () => {
+        const {
+          id: aiResponseId,
+          // eslint-disable-next-line no-unused-vars
+          createdAt,
+          // eslint-disable-next-line no-unused-vars
+          updatedAt,
+          ...aiResponse
+        } = await createTranscript(
+          {
+            id: 'foo',
+            type: 'audio',
+          },
+          FIXTURES_URLS['audio-test.mp4'],
+          { id: 'user-id', appId: 'app-id' }
+        );
+
+        expect(aiResponse).toMatchInlineSnapshot(`
+          Object {
+            "appId": "app-id",
+            "docId": "foo",
+            "status": "SUCCESS",
+            "text": "各位鄉親各位里民大家好。 這是電視分教的關心提醒廣播, 在此為各位做一個讓人騙的選擇。 最近在安平地區很多人被人騙, 主要原因是因為電信公司告訴你電話的電話號碼問題, 而且在你不知道發生什麼事的時候, 轉去110號房的警察官和警察, 要求你將存摺提款卡密碼印象放在支持的地點。 要告訴大家,不要將這些東西放在那裡, 這樣就沒有實際的電話號碼。 並保護110號和165號所有人為你服務, 請大家告訴大家, 賺來的薪資共通低價詐騙集團, 這是分教關心的。",
+            "type": "TRANSCRIPT",
+            "userId": "user-id",
+          }
+        `);
+        // Cleanup
+        await client.delete({
+          index: 'airesponses',
+          type: 'doc',
+          id: aiResponseId,
+        });
+      },
+      30000
+    );
+    // it('does transcript for video files')
   });
 }

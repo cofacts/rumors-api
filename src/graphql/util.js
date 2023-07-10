@@ -683,7 +683,6 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   return update;
 }
 
-const OPENAI_WHISPER_FILE_LIMIT = 25 * 1000 * 1000; // in bytes
 const imageAnnotator = new ImageAnnotatorClient();
 
 /**
@@ -716,17 +715,11 @@ export async function createTranscript(queryInfo, fileUrl, user) {
       case 'audio': {
         const fileResp = await fetch(fileUrl);
 
-        const isTooBig =
-          +fileResp.headers.get('content-length') > OPENAI_WHISPER_FILE_LIMIT;
-
-        const audio = isTooBig
-          ? // If too big, extract just audio part.
-            // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
-            ffmpeg(fileResp.body)
-              .noVideo()
-              .format('mp3')
-              .pipe()
-          : fileResp.body;
+        // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
+        const audio = ffmpeg(fileResp.body)
+          .noVideo()
+          .format('mp3')
+          .pipe();
 
         // Hack it to make openai library work
         // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1455247809
