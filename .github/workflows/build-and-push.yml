@@ -23,6 +23,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Setup ffmpeg
+        uses: FedericoCarboni/setup-ffmpeg@v2
+
       - name: Echo RELEASE_TAG
         run: 'echo $RELEASE_TAG'
 
