@@ -992,7 +992,7 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest5",
                 },
-                "score": 2,
+                "score": 10,
               },
               Object {
                 "node": Object {
@@ -1001,7 +1001,7 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest6",
                 },
-                "score": 1.5,
+                "score": 5,
               },
             ],
           },

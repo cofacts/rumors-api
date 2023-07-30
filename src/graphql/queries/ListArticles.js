@@ -566,6 +566,9 @@ export default {
         return map;
       }, {});
 
+      // Make media search prominant
+      const MULTIPLIER = 10;
+
       // Must be the search result returned by mediaManager.query,
       // with their score being the similarity returend by mediaManager
       //
@@ -580,10 +583,9 @@ export default {
             script: {
               lang: 'painless',
               params: { similarityMap },
-              source: "params.similarityMap.get(doc['attachmentHash'].value)",
+              source: `${MULTIPLIER} * params.similarityMap.get(doc['attachmentHash'].value)`,
             },
           },
-          boost: 10, // Make media search prominant
         },
       });
 
