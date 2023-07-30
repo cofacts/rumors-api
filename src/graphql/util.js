@@ -730,7 +730,7 @@ export async function createTranscript(queryInfo, fileUrl, user) {
           'whisper-1',
           '若語言為中文，請使用繁體中文。每一個段落不短於 30 秒。網傳影片口白如下：',
           'json',
-          0.5,
+          0,
           undefined,
           // Make axios happy
           // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486

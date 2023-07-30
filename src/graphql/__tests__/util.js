@@ -78,8 +78,6 @@ if (process.env.GCS_BUCKET_NAME) {
         map[FIXTURES[i]] = publicUrl;
         return map;
       }, {});
-
-      console.log({ FIXTURES_URLS });
     });
 
     it('creates error when file format is not supported', async () => {
@@ -191,6 +189,7 @@ if (process.env.GCS_BUCKET_NAME) {
           createdAt,
           // eslint-disable-next-line no-unused-vars
           updatedAt,
+          text,
           ...aiResponse
         } = await createTranscript(
           {
@@ -206,11 +205,18 @@ if (process.env.GCS_BUCKET_NAME) {
             "appId": "app-id",
             "docId": "foo",
             "status": "SUCCESS",
-            "text": "各位鄉親各位里民大家好。 這是電視分教的關心提醒廣播, 在此為各位做一個讓人騙的選擇。 最近在安平地區很多人被人騙, 主要原因是因為電信公司告訴你電話的電話號碼問題, 而且在你不知道發生什麼事的時候, 轉去110號房的警察官和警察, 要求你將存摺提款卡密碼印象放在支持的地點。 要告訴大家,不要將這些東西放在那裡, 這樣就沒有實際的電話號碼。 並保護110號和165號所有人為你服務, 請大家告訴大家, 賺來的薪資共通低價詐騙集團, 這是分教關心的。",
             "type": "TRANSCRIPT",
             "userId": "user-id",
           }
         `);
+
+        // Expect some keywords are identified.
+        // The whole text are not always 100% identical, but these keywords should be always included.
+        expect(text).toMatch(/^各位鄉親/);
+        expect(text).toMatch(/安平地區/);
+        expect(text).toMatch(/110/);
+        expect(text).toMatch(/165/);
+
         // Cleanup
         await client.delete({
           index: 'airesponses',
