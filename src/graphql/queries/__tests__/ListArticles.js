@@ -3,13 +3,16 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListArticles';
 import mediaManager from 'util/mediaManager';
+import * as graphqlUtil from 'graphql/util';
 
 jest.mock('util/mediaManager');
+const createTranscriptMock = jest.spyOn(graphqlUtil, 'createTranscript');
 
 describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
     mediaManager.insert.mockClear();
+    createTranscriptMock.mockClear();
   });
 
   it('lists all articles', async () => {
@@ -1025,6 +1028,10 @@ describe('ListArticles', () => {
         },
       }
     `);
+
+    // Transcript already fetched from articles, no transcript is generated
+    //
+    expect(createTranscriptMock).toHaveBeenCalledTimes(0);
   });
 
   it('lists all articles with cooccurrences', async () => {
@@ -1054,7 +1061,107 @@ describe('ListArticles', () => {
     ).toMatchSnapshot('articles with cooccurrences');
   });
 
-  // it('filters by mediaUrl with no media manager hits')
+  it('filters by mediaUrl with no media manager hits', async () => {
+    // Assume hits
+    mediaManager.query.mockImplementationOnce(async () => ({
+      queryInfo: {
+        type: 'image',
+        id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
+      },
+      hits: [],
+    }));
+
+    createTranscriptMock.mockImplementationOnce(async () => ({
+      id: 'transcript-id',
+      status: 'SUCCESS',
+      text: '微之，微之！此夕此心，君知之乎！',
+    }));
+
+    expect(
+      await gql`
+        {
+          ListArticles(
+            orderBy: [{ _score: DESC }]
+            filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
+          ) {
+            edges {
+              score
+              node {
+                id
+                articleType
+                attachmentHash
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchInlineSnapshot(`
+      Object {
+        "data": Object {
+          "ListArticles": Object {
+            "edges": Array [
+              Object {
+                "node": Object {
+                  "articleType": "AUDIO",
+                  "attachmentHash": "ffff8002",
+                  "id": "listArticleTest7",
+                },
+                "score": 1,
+              },
+              Object {
+                "node": Object {
+                  "articleType": "IMAGE",
+                  "attachmentHash": "ffff8001",
+                  "id": "listArticleTest6",
+                },
+                "score": 1,
+              },
+              Object {
+                "node": Object {
+                  "articleType": "IMAGE",
+                  "attachmentHash": "ffff8000",
+                  "id": "listArticleTest5",
+                },
+                "score": 1,
+              },
+              Object {
+                "node": Object {
+                  "articleType": "TEXT",
+                  "attachmentHash": "",
+                  "id": "listArticleTest4",
+                },
+                "score": 1,
+              },
+              Object {
+                "node": Object {
+                  "articleType": "TEXT",
+                  "attachmentHash": "",
+                  "id": "listArticleTest3",
+                },
+                "score": 1,
+              },
+              Object {
+                "node": Object {
+                  "articleType": "TEXT",
+                  "attachmentHash": "",
+                  "id": "listArticleTest2",
+                },
+                "score": 1,
+              },
+              Object {
+                "node": Object {
+                  "articleType": "TEXT",
+                  "attachmentHash": "",
+                  "id": "listArticleTest1",
+                },
+                "score": 1,
+              },
+            ],
+          },
+        },
+      }
+    `);
+  });
 
   afterAll(() => unloadFixtures(fixtures));
 });
