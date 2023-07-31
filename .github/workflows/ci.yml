@@ -41,6 +41,7 @@ jobs:
           GCS_CREDENTIALS: ${{ secrets.GCS_CREDENTIALS }}
           GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
           GCS_MEDIA_FOLDER: github/${{ github.run_number }}_${{ github.run_attempt }}/
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           TEST_DATASET: rumors_api_test_dataset
       - name: Update coveralls
         uses: coverallsapp/github-action@master
