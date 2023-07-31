@@ -227,7 +227,7 @@ export default {
     normalArticleCategoryCount: 0,
     updatedAt: 1,
     createdAt: '2020-02-09T00:00:00.000Z',
-    text: '',
+    text: '微之，微之！此夕此心，君知之乎！', // indexed transcript
     articleReplies: [],
     articleCategories: [],
     attachmentUrl: 'http://foo/image2.jpeg',

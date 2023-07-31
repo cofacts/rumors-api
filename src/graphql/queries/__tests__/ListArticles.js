@@ -932,7 +932,7 @@ describe('ListArticles', () => {
     ).toMatchSnapshot('IMAGE and AUDIO articles');
   });
 
-  it('filters by mediaUrl', async () => {
+  it('filters by mediaUrl with mediaManager hits and matching hashes', async () => {
     const MOCK_HITS = [
       // Deliberately swap similarity to see if Elasticsearch sorts by similairty
       {
@@ -961,6 +961,14 @@ describe('ListArticles', () => {
       hits: MOCK_HITS,
     }));
 
+    // Expect matching articles with similar attachment hashes,
+    // as well as including similar transcripts.
+    //
+    // It will match:
+    // 1st - attachment hash 100% similarity
+    // 2nd - attachment hash 50% similarity, but has transcript (adopted in full-text search, raising its score)
+    // 3rd - full text search w/ transcript of the 2nd
+    //
     expect(
       await gql`
         {
@@ -992,7 +1000,7 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest5",
                 },
-                "score": 10,
+                "score": 100,
               },
               Object {
                 "node": Object {
@@ -1001,7 +1009,16 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest6",
                 },
-                "score": 5,
+                "score": 60.03248,
+              },
+              Object {
+                "node": Object {
+                  "articleType": "TEXT",
+                  "attachmentHash": "",
+                  "attachmentUrl": null,
+                  "id": "listArticleTest1",
+                },
+                "score": 5.419564,
               },
             ],
           },
@@ -1036,6 +1053,8 @@ describe('ListArticles', () => {
       `()
     ).toMatchSnapshot('articles with cooccurrences');
   });
+
+  // it('filters by mediaUrl with no media manager hits')
 
   afterAll(() => unloadFixtures(fixtures));
 });
