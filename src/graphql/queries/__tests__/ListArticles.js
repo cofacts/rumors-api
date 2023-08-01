@@ -1,18 +1,27 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import { getCursor } from 'graphql/util';
+import { getCursor, createTranscript } from 'graphql/util';
 import fixtures from '../__fixtures__/ListArticles';
 import mediaManager from 'util/mediaManager';
-import * as graphqlUtil from 'graphql/util';
 
 jest.mock('util/mediaManager');
-const createTranscriptMock = jest.spyOn(graphqlUtil, 'createTranscript');
+
+// Just mock createTranscript, keep others normal
+// Ref: https://jestjs.io/docs/mock-functions#mocking-partials
+jest.mock('graphql/util', () => {
+  const originalGrapQLUtil = jest.requireActual('../../util');
+  return {
+    __esModule: true,
+    ...originalGrapQLUtil,
+    createTranscript: jest.fn(),
+  };
+});
 
 describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
     mediaManager.insert.mockClear();
-    createTranscriptMock.mockClear();
+    createTranscript.mock.mockClear();
   });
 
   it('lists all articles', async () => {
@@ -1031,7 +1040,7 @@ describe('ListArticles', () => {
 
     // Transcript already fetched from articles, no transcript is generated
     //
-    expect(createTranscriptMock).toHaveBeenCalledTimes(0);
+    expect(createTranscript).toHaveBeenCalledTimes(0);
   });
 
   it('lists all articles with cooccurrences', async () => {
@@ -1094,8 +1103,7 @@ describe('ListArticles', () => {
       Object {
         "data": Object {
           "ListArticles": Object {
-            "edges": Array [
-            ],
+            "edges": Array [],
           },
         },
       }
@@ -1112,13 +1120,13 @@ describe('ListArticles', () => {
       hits: [],
     }));
 
-    createTranscriptMock.mockImplementationOnce(async () => ({
+    createTranscript.mockImplementationOnce(async () => ({
       id: 'transcript-id',
       status: 'SUCCESS',
-      text: '微之，微之！此夕此心，君知之乎！',
+      text: '憶昔封書與君夜，金鑾殿後欲明天。微之，微之！此夕此心，君知之乎！',
     }));
 
-    // Expect to return nothing
+    // Expect to return according to created transcript
     expect(
       await gql`
         {
@@ -1136,11 +1144,40 @@ describe('ListArticles', () => {
                 articleType
                 attachmentHash
               }
+              highlight {
+                text
+              }
             }
           }
         }
       `({}, { appId: 'WEBSITE' })
-    ).toMatchInlineSnapshot();
+    ).toMatchInlineSnapshot(`
+      Object {
+        "data": Object {
+          "ListArticles": Object {
+            "edges": Array [
+              Object {
+                "highlight": Object {
+                  "text": "
+            <HIGHLIGHT>憶昔封書與君夜</HIGHLIGHT>，<HIGHLIGHT>金鑾殿後欲明天</HIGHLIGHT>。今夜<HIGHLIGHT>封書</HIGHLIGHT>在何處？廬山庵裏曉燈前。籠鳥檻猿俱未死，人間相見是何年？
+
+            <HIGHLIGHT>微之</HIGHLIGHT>，<HIGHLIGHT>微之</HIGHLIGHT>！<HIGHLIGHT>此夕此心</HIGHLIGHT>，<HIGHLIGHT>君知之乎</HIGHLIGHT>！
+          ",
+                },
+                "node": Object {
+                  "articleType": "TEXT",
+                  "attachmentHash": "",
+                  "id": "listArticleTest1",
+                },
+                "score": 18.921206,
+              },
+            ],
+          },
+        },
+      }
+    `);
+
+    expect(createTranscript).toHaveBeenCalledTimes(1);
   });
 
   afterAll(() => unloadFixtures(fixtures));
