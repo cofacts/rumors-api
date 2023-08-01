@@ -566,31 +566,31 @@ export default {
         return map;
       }, {});
 
-      let transcript = '';
-      if (queryResult.hits.length > 0) {
-        // Make media search dominant text search
-        const MULTIPLIER = 100;
+      // Make media search dominant text search
+      const MULTIPLIER = 100;
 
-        // Match search result returned by mediaManager.query,
-        // with their score being the similarity returend by mediaManager
-        //
-        shouldQueries.push({
-          function_score: {
-            query: {
-              terms: {
-                attachmentHash: queryResult.hits.map(hit => hit.entry.id),
-              },
-            },
-            script_score: {
-              script: {
-                lang: 'painless',
-                params: { similarityMap },
-                source: `${MULTIPLIER} * params.similarityMap.get(doc['attachmentHash'].value)`,
-              },
+      // Match search result returned by mediaManager.query,
+      // with their score being the similarity returend by mediaManager
+      //
+      shouldQueries.push({
+        function_score: {
+          query: {
+            terms: {
+              attachmentHash: queryResult.hits.map(hit => hit.entry.id),
             },
           },
-        });
+          script_score: {
+            script: {
+              lang: 'painless',
+              params: { similarityMap },
+              source: `${MULTIPLIER} * params.similarityMap.get(doc['attachmentHash'].value)`,
+            },
+          },
+        },
+      });
 
+      let transcript = '';
+      if (queryResult.hits.length > 0) {
         // Get the text from most similar article (if there is one)
         //
         const similarArticles = (await loaders.searchResultLoader.loadMany(

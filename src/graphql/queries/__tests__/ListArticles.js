@@ -1061,8 +1061,8 @@ describe('ListArticles', () => {
     ).toMatchSnapshot('articles with cooccurrences');
   });
 
-  it('filters by mediaUrl with no media manager hits', async () => {
-    // Assume hits
+  it('filters by mediaUrl with no media manager hits and no transcripts', async () => {
+    // Assume no hits
     mediaManager.query.mockImplementationOnce(async () => ({
       queryInfo: {
         type: 'image',
@@ -1071,12 +1071,7 @@ describe('ListArticles', () => {
       hits: [],
     }));
 
-    createTranscriptMock.mockImplementationOnce(async () => ({
-      id: 'transcript-id',
-      status: 'SUCCESS',
-      text: '微之，微之！此夕此心，君知之乎！',
-    }));
-
+    // Expect to return nothing
     expect(
       await gql`
         {
@@ -1100,67 +1095,52 @@ describe('ListArticles', () => {
         "data": Object {
           "ListArticles": Object {
             "edges": Array [
-              Object {
-                "node": Object {
-                  "articleType": "AUDIO",
-                  "attachmentHash": "ffff8002",
-                  "id": "listArticleTest7",
-                },
-                "score": 1,
-              },
-              Object {
-                "node": Object {
-                  "articleType": "IMAGE",
-                  "attachmentHash": "ffff8001",
-                  "id": "listArticleTest6",
-                },
-                "score": 1,
-              },
-              Object {
-                "node": Object {
-                  "articleType": "IMAGE",
-                  "attachmentHash": "ffff8000",
-                  "id": "listArticleTest5",
-                },
-                "score": 1,
-              },
-              Object {
-                "node": Object {
-                  "articleType": "TEXT",
-                  "attachmentHash": "",
-                  "id": "listArticleTest4",
-                },
-                "score": 1,
-              },
-              Object {
-                "node": Object {
-                  "articleType": "TEXT",
-                  "attachmentHash": "",
-                  "id": "listArticleTest3",
-                },
-                "score": 1,
-              },
-              Object {
-                "node": Object {
-                  "articleType": "TEXT",
-                  "attachmentHash": "",
-                  "id": "listArticleTest2",
-                },
-                "score": 1,
-              },
-              Object {
-                "node": Object {
-                  "articleType": "TEXT",
-                  "attachmentHash": "",
-                  "id": "listArticleTest1",
-                },
-                "score": 1,
-              },
             ],
           },
         },
       }
     `);
+  });
+
+  it('filters by mediaUrl with no media manager but creates transcripts', async () => {
+    // Assume no hits
+    mediaManager.query.mockImplementationOnce(async () => ({
+      queryInfo: {
+        type: 'image',
+        id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
+      },
+      hits: [],
+    }));
+
+    createTranscriptMock.mockImplementationOnce(async () => ({
+      id: 'transcript-id',
+      status: 'SUCCESS',
+      text: '微之，微之！此夕此心，君知之乎！',
+    }));
+
+    // Expect to return nothing
+    expect(
+      await gql`
+        {
+          ListArticles(
+            orderBy: [{ _score: DESC }]
+            filter: {
+              mediaUrl: "http://foo.com/input_image.jpeg"
+              transcript: { shouldCreate: true }
+            }
+          ) {
+            edges {
+              score
+              node {
+                id
+                articleType
+                attachmentHash
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchInlineSnapshot();
   });
 
   afterAll(() => unloadFixtures(fixtures));
