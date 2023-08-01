@@ -21,7 +21,7 @@ describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
     mediaManager.insert.mockClear();
-    createTranscript.mock.mockClear();
+    createTranscript.mockClear();
   });
 
   it('lists all articles', async () => {
