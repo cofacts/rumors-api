@@ -860,41 +860,6 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q3Il0=",
-          "node": Object {
-            "cooccurrences": Array [],
-            "id": "listArticleTest7",
-          },
-        },
-        Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q2Il0=",
-          "node": Object {
-            "cooccurrences": Array [],
-            "id": "listArticleTest6",
-          },
-        },
-        Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q1Il0=",
-          "node": Object {
-            "cooccurrences": Array [],
-            "id": "listArticleTest5",
-          },
-        },
-        Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
-          "node": Object {
-            "cooccurrences": Array [],
-            "id": "listArticleTest4",
-          },
-        },
-        Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
-          "node": Object {
-            "cooccurrences": Array [],
-            "id": "listArticleTest3",
-          },
-        },
-        Object {
           "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
           "node": Object {
             "cooccurrences": Array [
@@ -918,10 +883,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q3Il0=",
+        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
         "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
       },
-      "totalCount": 7,
+      "totalCount": 2,
     },
   },
 }

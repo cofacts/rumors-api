@@ -1014,7 +1014,9 @@ describe('ListArticles', () => {
     expect(
       await gql`
         {
-          ListArticles {
+          ListArticles(
+            filter: { ids: ["listArticleTest1", "listArticleTest2"] }
+          ) {
             totalCount
             edges {
               node {

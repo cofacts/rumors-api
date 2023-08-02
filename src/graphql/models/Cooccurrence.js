@@ -16,7 +16,7 @@ const Cooccurrence = new GraphQLObjectType({
     userId: { type: GraphQLNonNull(GraphQLString) },
     appId: { type: GraphQLNonNull(GraphQLString) },
     articles: {
-      type: new GraphQLList(Article),
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(Article))),
       resolve: async ({ articleIds }, args, { loaders }) =>
         loaders.searchResultLoader.load({
           index: 'articles',
@@ -31,7 +31,9 @@ const Cooccurrence = new GraphQLObjectType({
         }),
     },
     articleIds: {
-      type: new GraphQLList(new GraphQLNonNull(GraphQLString)),
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(GraphQLString))
+      ),
     },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },

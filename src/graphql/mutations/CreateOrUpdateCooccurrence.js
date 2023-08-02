@@ -57,7 +57,7 @@ export async function createOrUpdateCooccurrence({ articleIds, user }) {
   const isCreated = result === 'created';
 
   return {
-    ..._source,
+    cooccurence: { ..._source },
     isCreated,
   };
 }
@@ -69,9 +69,10 @@ export default {
     articleIds: { type: new GraphQLList(new GraphQLNonNull(GraphQLString)) },
   },
   async resolve(rootValue, { articleIds }, { user }) {
-    return await createOrUpdateCooccurrence({
+    const result = await createOrUpdateCooccurrence({
       articleIds,
       user,
     });
+    return result.cooccurence;
   },
 };

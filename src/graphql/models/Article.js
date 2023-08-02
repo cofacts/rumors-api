@@ -531,15 +531,15 @@ const Article = new GraphQLObjectType({
       description: 'Attachment hash to search or identify files',
     },
     cooccurrences: {
-      type: new GraphQLList(Cooccurrence),
+      type: new GraphQLList(new GraphQLNonNull(Cooccurrence)),
       resolve: async ({ id }, args, { loaders }) =>
         loaders.searchResultLoader.load({
           index: 'cooccurrences',
           type: 'doc',
           body: {
             query: {
-              match: {
-                articleIds: id,
+              bool: {
+                should: [{ term: { articleIds: id } }],
               },
             },
           },
