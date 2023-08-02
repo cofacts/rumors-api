@@ -346,4 +346,9 @@ export default {
     type: 'article',
     stats: { webVisit: 44, webUser: 37 },
   },
+  '/cooccurrences/doc/co1': {
+    userId: 'test',
+    appId: 'test',
+    articleIds: ["listArticleTest1", "listArticleTest2"]
+  },
 };
