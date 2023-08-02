@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListArticles lists all cooccurrences 1`] = `
+Object {
+  "data": Object {
+    "ListCooccurrences": Object {
+      "edges": Array [
+        Object {
+          "cursor": "WyJsaXN0Q29vY2N1cnJlbmNlVGVzdDIiXQ==",
+          "node": Object {
+            "id": "listCooccurrenceTest2",
+          },
+        },
+        Object {
+          "cursor": "WyJsaXN0Q29vY2N1cnJlbmNlVGVzdDEiXQ==",
+          "node": Object {
+            "id": "listCooccurrenceTest1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WyJsaXN0Q29vY2N1cnJlbmNlVGVzdDIiXQ==",
+        "lastCursor": "WyJsaXN0Q29vY2N1cnJlbmNlVGVzdDEiXQ==",
+      },
+      "totalCount": 2,
+    },
+  },
+}
+`;

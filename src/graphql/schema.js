@@ -13,6 +13,7 @@ import ListReplyRequests from './queries/ListReplyRequests';
 import ListBlockedUsers from './queries/ListBlockedUsers';
 import ListAnalytics from './queries/ListAnalytics';
 import ListAIResponses from './queries/ListAIResponses';
+import ListCooccurrences from './queries/ListCooccurrences';
 import ValidateSlug from './queries/ValidateSlug';
 
 // Set individual objects
@@ -27,6 +28,7 @@ import CreateOrUpdateArticleReplyFeedback from './mutations/CreateOrUpdateArticl
 import CreateOrUpdateReplyRequestFeedback from './mutations/CreateOrUpdateReplyRequestFeedback';
 import CreateOrUpdateArticleCategoryFeedback from './mutations/CreateOrUpdateArticleCategoryFeedback';
 import CreateOrUpdateReplyRequest from './mutations/CreateOrUpdateReplyRequest';
+import CreateOrUpdateCooccurrence from './mutations/CreateOrUpdateCooccurrence';
 import UpdateArticleReplyStatus from './mutations/UpdateArticleReplyStatus';
 import UpdateArticleCategoryStatus from './mutations/UpdateArticleCategoryStatus';
 import UpdateUser from './mutations/UpdateUser';
@@ -47,6 +49,7 @@ export default new GraphQLSchema({
       ListBlockedUsers,
       ListAnalytics,
       ListAIResponses,
+      ListCooccurrences,
       ValidateSlug,
     },
   }),
@@ -68,6 +71,7 @@ export default new GraphQLSchema({
       CreateOrUpdateArticleReplyFeedback,
       CreateOrUpdateArticleCategoryFeedback,
       CreateOrUpdateReplyRequestFeedback,
+      CreateOrUpdateCooccurrence,
       UpdateArticleReplyStatus,
       UpdateArticleCategoryStatus,
       UpdateUser,

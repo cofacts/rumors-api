@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateOrUpdateCooccurrence creates cooccurrence 1`] = `
+Object {
+  "appId": "test",
+  "articleIds": Array [
+    "a1",
+    "a2",
+  ],
+  "articles": Array [
+    Object {
+      "text": "i am a1",
+    },
+    Object {
+      "text": "i am a2",
+    },
+  ],
+  "userId": "test",
+}
+`;
