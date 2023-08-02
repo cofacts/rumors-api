@@ -6,7 +6,7 @@ import Cooccurrence from '../models/Cooccurrence';
 import client from 'util/client';
 
 export function getCooccurrenceId({ articleIds, userId, appId }) {
-  const joinedArticleIds = articleIds.join('_');
+  const joinedArticleIds = articleIds.sort().join('_');
   return `${userId}_${appId}_${joinedArticleIds}`;
 }
 
@@ -20,7 +20,6 @@ export async function createOrUpdateCooccurrence({ articleIds, user }) {
   assertUser(user);
 
   const now = new Date().toISOString();
-  articleIds.sort();
   const id = getCooccurrenceId({
     articleIds,
     userId: user.id,
