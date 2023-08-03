@@ -27,3 +27,31 @@ Object {
   },
 }
 `;
+
+exports[`ListArticles sorts: by updatedAt DESC 1`] = `
+Object {
+  "data": Object {
+    "ListCooccurrences": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "listCooccurrenceTest2",
+            "updatedAt": "1",
+          },
+        },
+        Object {
+          "node": Object {
+            "id": "listCooccurrenceTest1",
+            "updatedAt": "1",
+          },
+        },
+      ],
+      "pageInfo": Object {
+        "firstCursor": "WzEsImxpc3RDb29jY3VycmVuY2VUZXN0MiJd",
+        "lastCursor": "WzEsImxpc3RDb29jY3VycmVuY2VUZXN0MSJd",
+      },
+      "totalCount": 2,
+    },
+  },
+}
+`;

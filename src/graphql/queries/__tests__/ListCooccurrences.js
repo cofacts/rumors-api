@@ -27,5 +27,27 @@ describe('ListArticles', () => {
     ).toMatchSnapshot();
   });
 
+  it('sorts', async () => {
+    expect(
+      await gql`
+        {
+          ListCooccurrences(orderBy: [{ updatedAt: DESC }]) {
+            edges {
+              node {
+                id
+                updatedAt
+              }
+            }
+            totalCount
+            pageInfo {
+              firstCursor
+              lastCursor
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot('by updatedAt DESC');
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });
