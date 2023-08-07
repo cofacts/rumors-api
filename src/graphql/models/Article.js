@@ -36,7 +36,7 @@ import mediaManager, {
 } from 'util/mediaManager';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
-import { AIReply } from './AIResponse';
+import { AIReply, AITranscript } from './AIResponse';
 import ArticleCategoryStatusEnum from './ArticleCategoryStatusEnum';
 import ReplyRequestStatusEnum from './ReplyRequestStatusEnum';
 import ArticleCategory from './ArticleCategory';
@@ -161,6 +161,34 @@ const Article = new GraphQLObjectType({
                 must: [
                   { term: { type: 'AI_REPLY' } },
                   { term: { docId: id } },
+                  { term: { status: 'SUCCESS' } },
+                ],
+              },
+            },
+            sort: {
+              createdAt: 'desc',
+            },
+            size: 10,
+          },
+        });
+      },
+    },
+
+    aiTranscripts: {
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(AITranscript))
+      ),
+      description: 'Automated transcript',
+      async resolve({ attachmentHash }, _, { loaders }) {
+        return loaders.searchResultLoader.load({
+          index: 'airesponses',
+          type: 'doc',
+          body: {
+            query: {
+              bool: {
+                must: [
+                  { term: { type: 'TRANSCRIPT' } },
+                  { term: { docId: attachmentHash } },
                   { term: { status: 'SUCCESS' } },
                 ],
               },
