@@ -36,7 +36,6 @@ export default {
       track_scores: true, // for _score sorting
     };
 
-    const shouldQueries = []; // Affects scores
     const filterQueries = [];
 
     if (filter.updatedAt) {
@@ -51,8 +50,6 @@ export default {
 
     body.query = {
       bool: {
-        should:
-          shouldQueries.length === 0 ? [{ match_all: {} }] : shouldQueries,
         filter: filterQueries,
         minimum_should_match: 1, // At least 1 "should" query should present
       },

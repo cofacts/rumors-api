@@ -538,9 +538,7 @@ const Article = new GraphQLObjectType({
           type: 'doc',
           body: {
             query: {
-              bool: {
-                should: [{ term: { articleIds: id } }],
-              },
+              term: { articleIds: id },
             },
           },
         }),

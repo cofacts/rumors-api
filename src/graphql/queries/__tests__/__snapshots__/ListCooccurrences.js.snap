@@ -36,19 +36,19 @@ Object {
         Object {
           "node": Object {
             "id": "listCooccurrenceTest2",
-            "updatedAt": "1",
+            "updatedAt": "2020-02-03T00:02:00.000Z",
           },
         },
         Object {
           "node": Object {
             "id": "listCooccurrenceTest1",
-            "updatedAt": "1",
+            "updatedAt": "2020-02-03T00:01:00.000Z",
           },
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WzEsImxpc3RDb29jY3VycmVuY2VUZXN0MiJd",
-        "lastCursor": "WzEsImxpc3RDb29jY3VycmVuY2VUZXN0MSJd",
+        "firstCursor": "WzE1ODA2ODgxMjAwMDAsImxpc3RDb29jY3VycmVuY2VUZXN0MiJd",
+        "lastCursor": "WzE1ODA2ODgwNjAwMDAsImxpc3RDb29jY3VycmVuY2VUZXN0MSJd",
       },
       "totalCount": 2,
     },

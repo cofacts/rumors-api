@@ -56,7 +56,7 @@ export async function createOrUpdateCooccurrence({ articleIds, user }) {
   const isCreated = result === 'created';
 
   return {
-    cooccurence: { ..._source },
+    cooccurrence: { ..._source },
     isCreated,
   };
 }
@@ -72,6 +72,6 @@ export default {
       articleIds,
       user,
     });
-    return result.cooccurence;
+    return result.cooccurrence;
   },
 };
