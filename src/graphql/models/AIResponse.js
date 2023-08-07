@@ -55,6 +55,9 @@ const AIResponse = new GraphQLInterfaceType({
     switch (doc.type) {
       case 'AI_REPLY':
         return AIReply;
+
+      case 'TRANSCRIPT':
+        return AITranscript;
     }
   },
 });
@@ -77,6 +80,15 @@ export const AIReply = new GraphQLObjectType({
         },
       }),
     },
+  },
+});
+
+export const AITranscript = new GraphQLObjectType({
+  name: 'AITranscript',
+  description: 'Transcript from OCR or speech-to-text AI models.',
+  interfaces: [Node, AIResponse],
+  fields: {
+    ...commonAiResponseFields,
   },
 });
 

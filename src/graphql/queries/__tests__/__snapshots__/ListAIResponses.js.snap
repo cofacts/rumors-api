@@ -7,6 +7,12 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "transcript",
+            "status": "SUCCESS",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "expired-loading",
             "status": "ERROR",
           },
@@ -20,6 +26,23 @@ Object {
         Object {
           "node": Object {
             "id": "ai-reply-latest",
+            "status": "SUCCESS",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListAIResponses filters by AI response specific filters: only transcripts 1`] = `
+Object {
+  "data": Object {
+    "ListAIResponses": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "id": "transcript",
             "status": "SUCCESS",
           },
         },
@@ -54,6 +77,12 @@ Object {
         Object {
           "node": Object {
             "createdAt": "2020-01-01T00:00:00.000Z",
+            "id": "transcript",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-01-01T00:00:00.000Z",
             "id": "loading",
           },
         },
@@ -81,6 +110,12 @@ Object {
     "ListAIResponses": Object {
       "edges": Array [
         Object {
+          "cursor": "WyJ0cmFuc2NyaXB0Il0=",
+          "node": Object {
+            "id": "transcript",
+          },
+        },
+        Object {
           "cursor": "WyJsb2FkaW5nIl0=",
           "node": Object {
             "id": "loading",
@@ -106,10 +141,10 @@ Object {
         },
       ],
       "pageInfo": Object {
-        "firstCursor": "WyJsb2FkaW5nIl0=",
+        "firstCursor": "WyJ0cmFuc2NyaXB0Il0=",
         "lastCursor": "WyJhaS1yZXBseS1sYXRlc3QiXQ==",
       },
-      "totalCount": 4,
+      "totalCount": 5,
     },
   },
 }
@@ -130,6 +165,12 @@ Object {
           "node": Object {
             "createdAt": "2020-01-02T00:00:00.000Z",
             "id": "ai-reply-latest",
+          },
+        },
+        Object {
+          "node": Object {
+            "createdAt": "2020-01-01T00:00:00.000Z",
+            "id": "transcript",
           },
         },
         Object {

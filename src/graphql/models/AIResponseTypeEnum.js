@@ -8,6 +8,10 @@ export default new GraphQLEnumType({
         'The AI Response is an automated analysis / reply of an article.',
       value: 'AI_REPLY',
     },
-    // TBA: speach-to-text result, OCR result, reply review response, etc
+
+    TRANSCRIPT: {
+      description: 'AI transcribed text of the specified article.',
+      value: 'TRANSCRIPT',
+    },
   },
 });
