@@ -1010,5 +1010,32 @@ describe('ListArticles', () => {
     `);
   });
 
+  it('lists all articles with cooccurrences', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { ids: ["listArticleTest1", "listArticleTest2"] }
+          ) {
+            totalCount
+            edges {
+              node {
+                id
+                cooccurrences {
+                  id
+                }
+              }
+              cursor
+            }
+            pageInfo {
+              firstCursor
+              lastCursor
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot('articles with cooccurrences');
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });

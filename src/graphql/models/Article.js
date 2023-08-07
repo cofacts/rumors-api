@@ -42,6 +42,7 @@ import ArticleCategory from './ArticleCategory';
 import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
 import ArticleTypeEnum from './ArticleTypeEnum';
+import Cooccurrence from './Cooccurrence';
 
 const ATTACHMENT_URL_DURATION_DAY = 1;
 
@@ -528,6 +529,19 @@ const Article = new GraphQLObjectType({
     attachmentHash: {
       type: GraphQLString,
       description: 'Attachment hash to search or identify files',
+    },
+    cooccurrences: {
+      type: new GraphQLList(new GraphQLNonNull(Cooccurrence)),
+      resolve: async ({ id }, args, { loaders }) =>
+        loaders.searchResultLoader.load({
+          index: 'cooccurrences',
+          type: 'doc',
+          body: {
+            query: {
+              term: { articleIds: id },
+            },
+          },
+        }),
     },
   }),
 });
