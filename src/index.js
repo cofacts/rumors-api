@@ -84,7 +84,7 @@ router.get('/', ctx => {
 app.use(koaStatic(path.join(__dirname, '../static/')));
 app.use(router.routes(), router.allowedMethods());
 
-const LOG_STR_LENGTH = 200;
+const LOG_STR_LENGTH = 100;
 /**
  * For JSON.stringify in GraphQL logger
  */
@@ -94,6 +94,8 @@ function truncatingLogReplacer(key, value) {
 
   return value.slice(0, LOG_STR_LENGTH) + '...';
 }
+
+const LOGGER_HEADER_KEY_REGEX = /ip|forwarded|address/i;
 
 export const apolloServer = new ApolloServer({
   schema,
@@ -152,12 +154,22 @@ export const apolloServer = new ApolloServer({
                 {
                   msg: 'GraphQL request did start',
                   operationName,
-                  query,
+                  // Remove extra spaces and line breaks to further compress the query
+                  query: (query ?? '')
+                    .split('\n')
+                    .map(line => line.trim())
+                    .join(' '),
                   variables,
                   userId,
                   appUserId,
                   appId,
-                  headers: Object.fromEntries(http.headers.entries()),
+                  // Only include IP & forwarded related headers.
+                  // Other headers are logged by pino-logger.
+                  headers: Object.fromEntries(
+                    Array.from(http.headers.entries()).filter(([key]) =>
+                      LOGGER_HEADER_KEY_REGEX.test(key)
+                    )
+                  ),
                 },
                 truncatingLogReplacer
               )
