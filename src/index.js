@@ -145,21 +145,20 @@ export const apolloServer = new ApolloServer({
             const [
               {
                 context: { userId, appUserId, appId },
-                request: { operationName, query, variables, http },
+                request: { operationName, query, http },
               },
             ] = args;
 
             console.log(
               JSON.stringify(
                 {
-                  msg: 'GraphQL request did start',
+                  msg: 'Apollo#requestDidStart',
                   operationName,
                   // Remove extra spaces and line breaks to further compress the query
                   query: (query ?? '')
                     .split('\n')
                     .map(line => line.trim())
                     .join(' '),
-                  variables,
                   userId,
                   appUserId,
                   appId,
