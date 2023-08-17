@@ -158,6 +158,7 @@ export const apolloServer = new ApolloServer({
                   query: (query ?? '')
                     .split('\n')
                     .map(line => line.trim())
+                    .filter(Boolean)
                     .join(' '),
                   userId,
                   appUserId,
