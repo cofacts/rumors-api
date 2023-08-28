@@ -688,8 +688,11 @@ const imageAnnotator = new ImageAnnotatorClient();
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
  * @param {string} fileUrl - the audio, image or video file to process
+ * @param {object} user - the user who requested the transcription
  */
 export async function createTranscript(queryInfo, fileUrl, user) {
+  if (!user) throw new Error('[createTranscript] user is required');
+
   const update = createAIResponse({
     user,
     type: 'TRANSCRIPT',
