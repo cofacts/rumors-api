@@ -222,16 +222,18 @@ async function defaultResolveTotalCount({
   after, // eslint-disable-line no-unused-vars
   ...searchContext
 }) {
-  return (await client.count({
-    ...searchContext,
-    body: {
-      ...searchContext.body,
-
-      // totalCount cannot support these
-      sort: undefined,
-      track_scores: undefined,
-    },
-  })).body.count;
+  try {
+    return (await client.count({
+      ...searchContext,
+      body: {
+        // count API only supports "query"
+        query: searchContext.body.query,
+      },
+    })).body.count;
+  } catch (e) {
+    console.error('[defaultResolveTotalCount]', JSON.stringify(e));
+    throw e;
+  }
 }
 
 export async function defaultResolveEdges(
