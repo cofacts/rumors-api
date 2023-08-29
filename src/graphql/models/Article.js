@@ -553,8 +553,10 @@ export const ArticleConnection = createConnectionType(
   {
     extraEdgeFields: {
       mediaSimilarity: {
-        type: GraphQLFloat,
-        resolve: ({ node: { mediaSimilarity } }) => mediaSimilarity,
+        type: new GraphQLNonNull(GraphQLFloat),
+        description: `The search hit's similarity with provided mediaUrl.
+          Ranges from 0 to 1. 0 if mediaUrl is not provided, or the hit is not matched by mediaUrl.`,
+        resolve: ({ node }) => node._fields?.mediaSimilarity?.[0] ?? 0,
       },
     },
   }

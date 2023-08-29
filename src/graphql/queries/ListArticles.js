@@ -298,7 +298,14 @@ export default {
     }
 
     const body = {
+      // Source fields are disabled when `script_fields` presets.
+      // Ref: https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-request-source-filtering.html
+      //      https://discuss.elastic.co/t/script-field-along-with-all-the-other-fields-using-painless/296384/2
+      // We need to turn _source back on.
+      //
+      _source: true,
       script_fields: {},
+
       sort: getSortArgs(orderBy, {
         replyCount: o => ({ normalArticleReplyCount: { order: o } }),
         lastRepliedAt: o => ({
@@ -584,11 +591,8 @@ export default {
       body.script_fields.mediaSimilarity = {
         script: {
           lang: 'painless',
-          // Note: params.similarityMap.get(doc['attachmentHash'].value) may be null if no attahmentHash, or when attahmentHash not in similarityMap
-          source: `
-            def similarity = doc.containsKey('attachmentHash') ? params.similarityMap.get(doc['attachmentHash'].value) : null;
-            similarity == null ? 0 : similarity
-          `,
+          // Note: params.similarityMap.get(doc['attachmentHash'].value) may be null if no attahmentHash, or when attahmentHash not in similarityMap.
+          source: `doc.containsKey('attachmentHash') ? params.similarityMap.get(doc['attachmentHash'].value) : null`,
           params: { similarityMap },
         },
       };
@@ -609,7 +613,12 @@ export default {
           script_score: {
             script: {
               lang: 'painless',
-              source: `${MULTIPLIER} * doc['mediaSimilarity'].value`,
+              // Every hit in this query is inside similarityMap, no need for null handling.
+              //
+              // `mediaSimilarity` cannot be used here because it only exists after search complete.
+              //
+              source: `${MULTIPLIER} * params.similarityMap.get(doc['attachmentHash'].value)`,
+              params: { similarityMap },
             },
           },
         },
