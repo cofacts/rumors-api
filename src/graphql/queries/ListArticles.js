@@ -37,6 +37,62 @@ const {
   ...articleReplyCommonFilterArgs
 } = createCommonListFilter('articleReplies');
 
+/**
+ * Create more_like_this query for article index
+ *
+ * @param {string | string[]} like - text(s) to like
+ * @param {string} minimumShouldMatch
+ * @returns {object[]} more_like_this queries
+ */
+function createMoreLikeThisQuery(like, minimumShouldMatch) {
+  return [
+    {
+      more_like_this: {
+        fields: ['text'],
+        like,
+        min_term_freq: 1,
+        min_doc_freq: 1,
+        minimum_should_match: minimumShouldMatch || '10<70%',
+      },
+    },
+    {
+      nested: {
+        path: 'hyperlinks',
+        score_mode: 'sum',
+        query: {
+          more_like_this: {
+            fields: ['hyperlinks.title', 'hyperlinks.summary'],
+            like,
+            min_term_freq: 1,
+            min_doc_freq: 1,
+            minimum_should_match: minimumShouldMatch || '10<70%',
+          },
+        },
+        inner_hits: {
+          highlight: {
+            order: 'score',
+            fields: {
+              'hyperlinks.title': {
+                number_of_fragments: 1, // Return only 1 piece highlight text
+                fragment_size: 200, // word count of highlighted fragment
+                type: 'plain',
+              },
+              'hyperlinks.summary': {
+                number_of_fragments: 1, // Return only 1 piece highlight text
+                fragment_size: 200, // word count of highlighted fragment
+                type: 'plain',
+              },
+            },
+            require_field_match: false,
+            pre_tags: ['<HIGHLIGHT>'],
+            post_tags: ['</HIGHLIGHT>'],
+          },
+        },
+      },
+    },
+  ];
+}
+
 export default {
   args: {
     filter: {
@@ -316,52 +372,10 @@ export default {
       ];
 
       shouldQueries.push(
-        {
-          more_like_this: {
-            fields: ['text'],
-            like: likeQuery,
-            min_term_freq: 1,
-            min_doc_freq: 1,
-            minimum_should_match:
-              filter.moreLikeThis.minimumShouldMatch || '10<70%',
-          },
-        },
-        {
-          nested: {
-            path: 'hyperlinks',
-            score_mode: 'sum',
-            query: {
-              more_like_this: {
-                fields: ['hyperlinks.title', 'hyperlinks.summary'],
-                like: likeQuery,
-                min_term_freq: 1,
-                min_doc_freq: 1,
-                minimum_should_match:
-                  filter.moreLikeThis.minimumShouldMatch || '10<70%',
-              },
-            },
-            inner_hits: {
-              highlight: {
-                order: 'score',
-                fields: {
-                  'hyperlinks.title': {
-                    number_of_fragments: 1, // Return only 1 piece highlight text
-                    fragment_size: 200, // word count of highlighted fragment
-                    type: 'plain',
-                  },
-                  'hyperlinks.summary': {
-                    number_of_fragments: 1, // Return only 1 piece highlight text
-                    fragment_size: 200, // word count of highlighted fragment
-                    type: 'plain',
-                  },
-                },
-                require_field_match: false,
-                pre_tags: ['<HIGHLIGHT>'],
-                post_tags: ['</HIGHLIGHT>'],
-              },
-            },
-          },
-        }
+        ...createMoreLikeThisQuery(
+          likeQuery,
+          filter.moreLikeThis.minimumShouldMatch
+        )
       );
 
       // Additionally, match the scrapped URLs with other article's scrapped urls
@@ -633,16 +647,12 @@ export default {
       // Add transcript to query
       //
       if (transcript) {
-        shouldQueries.push({
-          more_like_this: {
-            fields: ['text'],
-            like: transcript,
-            min_term_freq: 1,
-            min_doc_freq: 1,
-            minimum_should_match:
-              filter.transcript?.minimumShouldMatch || '10<70%',
-          },
-        });
+        shouldQueries.push(
+          ...createMoreLikeThisQuery(
+            transcript,
+            filter.transcript?.minimumShouldMatch
+          )
+        );
       }
     }
 
