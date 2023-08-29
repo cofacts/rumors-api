@@ -21,7 +21,6 @@ import {
   createCommonListFilter,
   filterByStatuses,
   timeRangeInput,
-  defaultResolveEdges,
   DEFAULT_ARTICLE_REPLY_STATUSES,
   DEFAULT_ARTICLE_CATEGORY_STATUSES,
   DEFAULT_REPLY_REQUEST_STATUSES,
