@@ -990,6 +990,7 @@ describe('ListArticles', () => {
           ) {
             edges {
               score
+              mediaSimilarity
               node {
                 id
                 articleType
@@ -1139,6 +1140,7 @@ describe('ListArticles', () => {
           ) {
             edges {
               score
+              mediaSimilarity
               node {
                 id
                 articleType

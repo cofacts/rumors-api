@@ -368,6 +368,7 @@ export function createConnectionType(
     resolveLastCursor = defaultResolveLastCursor,
     resolveFirstCursor = defaultResolveFirstCursor,
     resolveHighlights = defaultResolveHighlights,
+    extraEdgeFields = {},
   } = {}
 ) {
   return new GraphQLObjectType({
@@ -395,6 +396,7 @@ export function createConnectionType(
                     type: Highlights,
                     resolve: resolveHighlights,
                   },
+                  ...extraEdgeFields,
                 },
               })
             )

@@ -298,6 +298,7 @@ export default {
     }
 
     const body = {
+      script_fields: {},
       sort: getSortArgs(orderBy, {
         replyCount: o => ({ normalArticleReplyCount: { order: o } }),
         lastRepliedAt: o => ({
@@ -580,6 +581,18 @@ export default {
         return map;
       }, {});
 
+      body.script_fields.mediaSimilarity = {
+        script: {
+          lang: 'painless',
+          // Note: params.similarityMap.get(doc['attachmentHash'].value) may be null if no attahmentHash, or when attahmentHash not in similarityMap
+          source: `
+            def similarity = doc.containsKey('attachmentHash') ? params.similarityMap.get(doc['attachmentHash'].value) : null;
+            similarity == null ? 0 : similarity
+          `,
+          params: { similarityMap },
+        },
+      };
+
       // Make media search dominant text search
       const MULTIPLIER = 100;
 
@@ -596,8 +609,7 @@ export default {
           script_score: {
             script: {
               lang: 'painless',
-              params: { similarityMap },
-              source: `${MULTIPLIER} * params.similarityMap.get(doc['attachmentHash'].value)`,
+              source: `${MULTIPLIER} * doc['mediaSimilarity'].value`,
             },
           },
         },

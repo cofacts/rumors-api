@@ -7,6 +7,7 @@ import {
   GraphQLInt,
   GraphQLBoolean,
   GraphQLEnumType,
+  GraphQLFloat,
 } from 'graphql';
 
 import {
@@ -20,6 +21,7 @@ import {
   createCommonListFilter,
   filterByStatuses,
   timeRangeInput,
+  defaultResolveEdges,
   DEFAULT_ARTICLE_REPLY_STATUSES,
   DEFAULT_ARTICLE_CATEGORY_STATUSES,
   DEFAULT_REPLY_REQUEST_STATUSES,
@@ -548,7 +550,15 @@ const Article = new GraphQLObjectType({
 
 export const ArticleConnection = createConnectionType(
   'ArticleConnection',
-  Article
+  Article,
+  {
+    extraEdgeFields: {
+      mediaSimilarity: {
+        type: GraphQLFloat,
+        resolve: ({ node: { mediaSimilarity } }) => mediaSimilarity,
+      },
+    },
+  }
 );
 
 export default Article;
