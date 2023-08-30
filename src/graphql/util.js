@@ -230,7 +230,7 @@ async function defaultResolveTotalCount({
         query: searchContext.body.query,
       },
     })).body.count;
-  } catch (e) {
+  } catch (e) /* istanbul ignore next */ {
     console.error('[defaultResolveTotalCount]', JSON.stringify(e));
     throw e;
   }
