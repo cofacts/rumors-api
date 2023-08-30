@@ -3,6 +3,7 @@
 exports[`verifyProfile authenticates user via profile ID 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": 0.2876821,
   "email": "secret@secret.com",
   "facebookId": "secret-fb-id",
@@ -16,6 +17,7 @@ Object {
 exports[`verifyProfile authenticates user via same email of existing user; also updates profile ID 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": undefined,
   "email": "secret@secret.com",
   "facebookId": "secret-fb-id",
@@ -31,6 +33,7 @@ Object {
 exports[`verifyProfile creates new user if user does not exist 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": undefined,
   "avatarUrl": "url-to-photo",
   "createdAt": "1989-06-04T00:00:00.000Z",

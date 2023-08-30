@@ -6,6 +6,7 @@ Array [
     "_cursor": Array [
       1485907200000,
     ],
+    "_fields": undefined,
     "_score": null,
     "canonical": "http://example.com/article/1111",
     "fetchedAt": "2017-02-01T00:00:00.000Z",
@@ -22,6 +23,7 @@ Array [
     "_cursor": Array [
       1485907200000,
     ],
+    "_fields": undefined,
     "_score": null,
     "canonical": "http://example.com/article/1111",
     "fetchedAt": "2017-02-01T00:00:00.000Z",

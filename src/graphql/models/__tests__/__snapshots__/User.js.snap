@@ -3,6 +3,7 @@
 exports[`User model userFieldResolver returns the right backend user given appUserId 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": undefined,
   "appId": "TEST_BACKEND",
   "appUserId": "userTest1",
@@ -16,6 +17,7 @@ Object {
 exports[`User model userFieldResolver returns the right backend user given db userId 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": undefined,
   "appId": "TEST_BACKEND",
   "appUserId": "userTest1",
@@ -29,6 +31,7 @@ Object {
 exports[`User model userFieldResolver returns the right web user given userId 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": undefined,
   "appId": "WEBSITE",
   "highlight": undefined,

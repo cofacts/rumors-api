@@ -3,6 +3,7 @@
 exports[`user utils CreateOrUpdateUser creates backend user if not existed 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": undefined,
   "appId": "TEST_BACKEND",
   "appUserId": "testUser2",
@@ -34,6 +35,7 @@ Object {
 exports[`user utils CreateOrUpdateUser fills appId for website users 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": undefined,
   "appId": "WEBSITE",
   "highlight": undefined,
@@ -47,6 +49,7 @@ Object {
 exports[`user utils CreateOrUpdateUser logs error if collision occurs 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": undefined,
   "appId": "TEST_BACKEND",
   "appUserId": "testUser1",
@@ -78,6 +81,7 @@ Array [
 exports[`user utils CreateOrUpdateUser updates backend users' last active time if user already existed 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": undefined,
   "appId": "TEST_BACKEND",
   "appUserId": "testUser1",
