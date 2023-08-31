@@ -457,6 +457,36 @@ describe('GetReplyAndGetArticle', () => {
         `({}, { appId: 'LINE' })
       ).toMatchSnapshot();
     });
+
+    it('can list AI Transcripts', async () => {
+      expect(
+        await gql`
+          {
+            GetArticle(id: "mediaArticle") {
+              id
+              aiTranscripts {
+                text
+                status
+              }
+            }
+          }
+        `()
+      ).toMatchInlineSnapshot(`
+        Object {
+          "data": Object {
+            "GetArticle": Object {
+              "aiTranscripts": Array [
+                Object {
+                  "status": "SUCCESS",
+                  "text": "Lorum ipsum",
+                },
+              ],
+              "id": "mediaArticle",
+            },
+          },
+        }
+      `);
+    });
   });
 
   describe('GetReply', () => {
