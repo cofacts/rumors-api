@@ -16,6 +16,7 @@ import Edge from './interfaces/Edge';
 import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
+import delayForMs from 'util/delayForMs';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -515,3 +516,172 @@ export function attachCommonListFilter(
     );
   }
 }
+
+/**
+ * Read a successful AI response of a given `type` and `docId`.
+ * If not, it tries to wait for the latest (within 1min) loading AI response.
+ * Returns null if there is no successful nor latest loading AI response.
+ *
+ * @param {object} param
+ * @param {'AI_REPLY'} param.type
+ * @param {string} param.docId
+ * @returns {AIReponse | null}
+ */
+export async function getAIResponse({ type, docId }) {
+  // Try reading successful AI response.
+  //
+  //
+  for (;;) {
+    // First, find latest successful airesponse. Return if found.
+    //
+    const {
+      body: {
+        hits: {
+          hits: [successfulAiResponse],
+        },
+      },
+    } = await client.search({
+      index: 'airesponses',
+      type: 'doc',
+      body: {
+        query: {
+          bool: {
+            must: [
+              { term: { type } },
+              { term: { docId } },
+              { term: { status: 'SUCCESS' } },
+            ],
+          },
+        },
+        sort: {
+          createdAt: 'desc',
+        },
+        size: 1,
+      },
+    });
+
+    if (successfulAiResponse) {
+      return {
+        id: successfulAiResponse._id,
+        ...successfulAiResponse._source,
+      };
+    }
+
+    // If no successful AI responses, find loading responses created within 1 min.
+    //
+    const {
+      body: { count },
+    } = await client.count({
+      index: 'airesponses',
+      type: 'doc',
+      body: {
+        query: {
+          bool: {
+            must: [
+              { term: { type } },
+              { term: { docId } },
+              { term: { status: 'LOADING' } },
+              {
+                // loading document created within 1 min
+                range: {
+                  createdAt: {
+                    gte: 'now-1m',
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    // No AI response available now, break the loop
+    //
+    if (count === 0) {
+      break;
+    }
+
+    // Wait a bit to search for successful AI response again.
+    // If there are any loading AI response becomes successful during the wait,
+    // it will be picked up when the loop is re-entered.
+    await delayForMs(1000);
+  }
+
+  // Nothing is found
+  return null;
+}
+
+/**
+ * Creates a loading AI Response.
+ * Returns an updater function that can be used to record real AI response.
+ *
+ *
+ * @param {object} loadingResponseBody
+ * @param {string} loadingResponseBody.request
+ * @param {string} loadingResponseBody.type
+ * @param {string} loadingResponseBody.docId
+ * @param {object} loadingResponseBody.user
+ *
+ * @returns {(responseBody) => Promise<AIResponse>} updater function that updates the created AI
+ *   response and returns the updated result
+ */
+export function createAIResponse({ user, ...loadingResponseBody }) {
+  const newResponse = {
+    userId: user.id,
+    appId: user.appId,
+    status: 'LOADING',
+    createdAt: new Date(),
+    ...loadingResponseBody,
+  };
+
+  // Resolves to loading AI Response.
+  const newResponseIdPromise = client
+    .index({
+      index: 'airesponses',
+      type: 'doc',
+      body: newResponse,
+    })
+    .then(({ body: { result, _id } }) => {
+      /* istanbul ignore if */
+      if (result !== 'created') {
+        throw new Error(`Cannot create AI response: ${result}`);
+      }
+      return _id;
+    });
+
+  // Update using aiResponse._id according to apiResult
+  async function update(responseBody) {
+    const aiResponseId = await newResponseIdPromise;
+
+    const {
+      body: {
+        get: { _source },
+      },
+    } = await client.update({
+      index: 'airesponses',
+      type: 'doc',
+      id: aiResponseId,
+      _source: true,
+      body: {
+        doc: {
+          updatedAt: new Date(),
+          ...responseBody,
+        },
+      },
+    });
+
+    return {
+      id: aiResponseId,
+      ..._source,
+    };
+  }
+
+  return update;
+}
+
+/**
+ *
+ * @param {*} mediaEntryId
+ * @param {*} fileUrl
+ */
+// async function createTranscript(mediaEntryId, fileUrl) {}
