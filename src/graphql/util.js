@@ -222,16 +222,18 @@ async function defaultResolveTotalCount({
   after, // eslint-disable-line no-unused-vars
   ...searchContext
 }) {
-  return (await client.count({
-    ...searchContext,
-    body: {
-      ...searchContext.body,
-
-      // totalCount cannot support these
-      sort: undefined,
-      track_scores: undefined,
-    },
-  })).body.count;
+  try {
+    return (await client.count({
+      ...searchContext,
+      body: {
+        // count API only supports "query"
+        query: searchContext.body.query,
+      },
+    })).body.count;
+  } catch (e) /* istanbul ignore next */ {
+    console.error('[defaultResolveTotalCount]', JSON.stringify(e));
+    throw e;
+  }
 }
 
 export async function defaultResolveEdges(
@@ -368,6 +370,7 @@ export function createConnectionType(
     resolveLastCursor = defaultResolveLastCursor,
     resolveFirstCursor = defaultResolveFirstCursor,
     resolveHighlights = defaultResolveHighlights,
+    extraEdgeFields = {},
   } = {}
 ) {
   return new GraphQLObjectType({
@@ -395,6 +398,7 @@ export function createConnectionType(
                     type: Highlights,
                     resolve: resolveHighlights,
                   },
+                  ...extraEdgeFields,
                 },
               })
             )

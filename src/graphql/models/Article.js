@@ -7,6 +7,7 @@ import {
   GraphQLInt,
   GraphQLBoolean,
   GraphQLEnumType,
+  GraphQLFloat,
 } from 'graphql';
 
 import {
@@ -548,7 +549,17 @@ const Article = new GraphQLObjectType({
 
 export const ArticleConnection = createConnectionType(
   'ArticleConnection',
-  Article
+  Article,
+  {
+    extraEdgeFields: {
+      mediaSimilarity: {
+        type: new GraphQLNonNull(GraphQLFloat),
+        description: `The search hit's similarity with provided mediaUrl.
+          Ranges from 0 to 1. 0 if mediaUrl is not provided, or the hit is not matched by mediaUrl.`,
+        resolve: ({ node }) => node._fields?.mediaSimilarity?.[0] ?? 0,
+      },
+    },
+  }
 );
 
 export default Article;

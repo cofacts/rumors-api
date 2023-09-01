@@ -19,6 +19,8 @@ export function processMeta({
   inner_hits, // nested query search result highlighting.
 
   sort, // cursor when sorted
+
+  fields, // scripted fields (if any)
 }) {
   if (found || _score !== undefined) {
     return {
@@ -28,6 +30,7 @@ export function processMeta({
       _score,
       highlight,
       inner_hits,
+      _fields: fields,
     };
   }
   return null; // not found

@@ -4,6 +4,7 @@ exports[`should clean up urls 1`] = `
 Array [
   Object {
     "_cursor": undefined,
+    "_fields": undefined,
     "_score": 1,
     "highlight": undefined,
     "id": "new-url",
@@ -11,6 +12,7 @@ Array [
   },
   Object {
     "_cursor": undefined,
+    "_fields": undefined,
     "_score": 1,
     "highlight": undefined,
     "id": "url-processed",
@@ -19,6 +21,7 @@ Array [
   },
   Object {
     "_cursor": undefined,
+    "_fields": undefined,
     "_score": 1,
     "highlight": undefined,
     "id": "url-foo",
@@ -27,6 +30,7 @@ Array [
   },
   Object {
     "_cursor": undefined,
+    "_fields": undefined,
     "_score": 1,
     "highlight": undefined,
     "id": "curl-foo",
@@ -35,6 +39,7 @@ Array [
   },
   Object {
     "_cursor": undefined,
+    "_fields": undefined,
     "_score": 1,
     "highlight": undefined,
     "id": "url-bar",
@@ -43,6 +48,7 @@ Array [
   },
   Object {
     "_cursor": undefined,
+    "_fields": undefined,
     "_score": 1,
     "highlight": undefined,
     "id": "curl-bar",

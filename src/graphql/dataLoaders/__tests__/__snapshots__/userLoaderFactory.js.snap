@@ -3,6 +3,7 @@
 exports[`userLoaderFactory should return correct user with given slug 1`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": 0.6931472,
   "email": "secret@secret.com",
   "highlight": undefined,
@@ -16,6 +17,7 @@ Object {
 exports[`userLoaderFactory should return correct user with given slug 2`] = `
 Object {
   "_cursor": undefined,
+  "_fields": undefined,
   "_score": 0.6931472,
   "email": "hi@me.com",
   "highlight": undefined,

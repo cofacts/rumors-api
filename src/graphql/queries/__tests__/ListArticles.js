@@ -990,6 +990,7 @@ describe('ListArticles', () => {
           ) {
             edges {
               score
+              mediaSimilarity
               node {
                 id
                 articleType
@@ -1006,6 +1007,7 @@ describe('ListArticles', () => {
           "ListArticles": Object {
             "edges": Array [
               Object {
+                "mediaSimilarity": 1,
                 "node": Object {
                   "articleType": "IMAGE",
                   "attachmentHash": "ffff8000",
@@ -1015,6 +1017,7 @@ describe('ListArticles', () => {
                 "score": 100,
               },
               Object {
+                "mediaSimilarity": 0.5,
                 "node": Object {
                   "articleType": "IMAGE",
                   "attachmentHash": "ffff8001",
@@ -1024,6 +1027,7 @@ describe('ListArticles', () => {
                 "score": 60.03248,
               },
               Object {
+                "mediaSimilarity": 0,
                 "node": Object {
                   "articleType": "TEXT",
                   "attachmentHash": "",
@@ -1139,6 +1143,7 @@ describe('ListArticles', () => {
           ) {
             edges {
               score
+              mediaSimilarity
               node {
                 id
                 articleType
@@ -1164,6 +1169,7 @@ describe('ListArticles', () => {
             <HIGHLIGHT>微之</HIGHLIGHT>，<HIGHLIGHT>微之</HIGHLIGHT>！<HIGHLIGHT>此夕此心</HIGHLIGHT>，<HIGHLIGHT>君知之乎</HIGHLIGHT>！
           ",
                 },
+                "mediaSimilarity": 0,
                 "node": Object {
                   "articleType": "TEXT",
                   "attachmentHash": "",
