@@ -21,6 +21,8 @@ import {
   attachCommonListFilter,
   DEFAULT_ARTICLE_STATUSES,
   DEFAULT_ARTICLE_REPLY_STATUSES,
+  getAIResponse,
+  createTranscript,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import ArticleStatusEnum from 'graphql/models/ArticleStatusEnum';
@@ -34,6 +36,62 @@ const {
   ids: dontcare, // eslint-disable-line no-unused-vars
   ...articleReplyCommonFilterArgs
 } = createCommonListFilter('articleReplies');
+
+/**
+ * Create more_like_this query for article index
+ *
+ * @param {string | string[]} like - text(s) to like
+ * @param {string} minimumShouldMatch
+ * @returns {object[]} more_like_this queries
+ */
+function createMoreLikeThisQuery(like, minimumShouldMatch) {
+  return [
+    {
+      more_like_this: {
+        fields: ['text'],
+        like,
+        min_term_freq: 1,
+        min_doc_freq: 1,
+        minimum_should_match: minimumShouldMatch || '10<70%',
+      },
+    },
+    {
+      nested: {
+        path: 'hyperlinks',
+        score_mode: 'sum',
+        query: {
+          more_like_this: {
+            fields: ['hyperlinks.title', 'hyperlinks.summary'],
+            like,
+            min_term_freq: 1,
+            min_doc_freq: 1,
+            minimum_should_match: minimumShouldMatch || '10<70%',
+          },
+        },
+        inner_hits: {
+          highlight: {
+            order: 'score',
+            fields: {
+              'hyperlinks.title': {
+                number_of_fragments: 1, // Return only 1 piece highlight text
+                fragment_size: 200, // word count of highlighted fragment
+                type: 'plain',
+              },
+              'hyperlinks.summary': {
+                number_of_fragments: 1, // Return only 1 piece highlight text
+                fragment_size: 200, // word count of highlighted fragment
+                type: 'plain',
+              },
+            },
+            require_field_match: false,
+            pre_tags: ['<HIGHLIGHT>'],
+            post_tags: ['</HIGHLIGHT>'],
+          },
+        },
+      },
+    },
+  ];
+}
 
 export default {
   args: {
@@ -116,6 +174,27 @@ export default {
           type: GraphQLString,
           description: 'Show the media article similar to the input url',
         },
+        transcript: {
+          description:
+            'Specifies how the transcript of `mediaUrl` can be used to search. Can only specify `transcript` when `mediaUrl` is specified.',
+          type: new GraphQLInputObjectType({
+            name: 'TranscriptFilter',
+            fields: {
+              minimumShouldMatch: {
+                type: GraphQLString,
+                description:
+                  'more_like_this query\'s "minimum_should_match" query param for the transcript of `mediaUrl`\n' +
+                  'See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html for possible values.',
+              },
+              shouldCreate: {
+                type: GraphQLBoolean,
+                defaultValue: false,
+                description:
+                  'Only used when `filter.mediaUrl` is provided. Generates transcript if provided `filter.mediaUrl` is not transcribed previously.',
+              },
+            },
+          }),
+        },
         articleReply: {
           description:
             'Show articles with article replies matching this criteria',
@@ -160,10 +239,15 @@ export default {
   async resolve(
     rootValue,
     { filter = {}, orderBy = [], ...otherParams },
-    { loaders, userId, appId }
+    { loaders, userId, appId, user }
   ) {
+    if (filter.transcript && !filter.mediaUrl) {
+      throw new Error(
+        '`filter.mediaUrl` must be provided when `filter.transcript` is true'
+      );
+    }
+
     // Collecting queries that will be used in bool queries later
-    const mustQueries = [];
     const shouldQueries = []; // Affects scores
     const filterQueries = [
       {
@@ -288,52 +372,10 @@ export default {
       ];
 
       shouldQueries.push(
-        {
-          more_like_this: {
-            fields: ['text'],
-            like: likeQuery,
-            min_term_freq: 1,
-            min_doc_freq: 1,
-            minimum_should_match:
-              filter.moreLikeThis.minimumShouldMatch || '10<70%',
-          },
-        },
-        {
-          nested: {
-            path: 'hyperlinks',
-            score_mode: 'sum',
-            query: {
-              more_like_this: {
-                fields: ['hyperlinks.title', 'hyperlinks.summary'],
-                like: likeQuery,
-                min_term_freq: 1,
-                min_doc_freq: 1,
-                minimum_should_match:
-                  filter.moreLikeThis.minimumShouldMatch || '10<70%',
-              },
-            },
-            inner_hits: {
-              highlight: {
-                order: 'score',
-                fields: {
-                  'hyperlinks.title': {
-                    number_of_fragments: 1, // Return only 1 piece highlight text
-                    fragment_size: 200, // word count of highlighted fragment
-                    type: 'plain',
-                  },
-                  'hyperlinks.summary': {
-                    number_of_fragments: 1, // Return only 1 piece highlight text
-                    fragment_size: 200, // word count of highlighted fragment
-                    type: 'plain',
-                  },
-                },
-                require_field_match: false,
-                pre_tags: ['<HIGHLIGHT>'],
-                post_tags: ['</HIGHLIGHT>'],
-              },
-            },
-          },
-        }
+        ...createMoreLikeThisQuery(
+          likeQuery,
+          filter.moreLikeThis.minimumShouldMatch
+        )
       );
 
       // Additionally, match the scrapped URLs with other article's scrapped urls
@@ -538,10 +580,13 @@ export default {
         return map;
       }, {});
 
-      // Must be the search result returned by mediaManager.query,
+      // Make media search dominant text search
+      const MULTIPLIER = 100;
+
+      // Match search result returned by mediaManager.query,
       // with their score being the similarity returend by mediaManager
       //
-      mustQueries.push({
+      shouldQueries.push({
         function_score: {
           query: {
             terms: {
@@ -552,16 +597,67 @@ export default {
             script: {
               lang: 'painless',
               params: { similarityMap },
-              source: "params.similarityMap.get(doc['attachmentHash'].value)",
+              source: `${MULTIPLIER} * params.similarityMap.get(doc['attachmentHash'].value)`,
             },
           },
         },
       });
+
+      let transcript = '';
+      if (queryResult.hits.length > 0) {
+        // Get the text from most similar article (if there is one)
+        //
+        const similarArticles = (await loaders.searchResultLoader.loadMany(
+          queryResult.hits.map(hit => ({
+            index: 'articles',
+            type: 'doc',
+            body: { query: { term: { attachmentHash: hit.entry.id } } },
+          }))
+        )).flat();
+
+        transcript = similarArticles.reduce(
+          (t, article) => (t ? t : article.text),
+          ''
+        );
+      }
+
+      // When no transcript found from similar articles, try getting it from AI responses.
+      //
+      if (!transcript) {
+        let aiResponse = await getAIResponse({
+          type: 'TRANSCRIPT',
+          docId: queryResult.queryInfo.id,
+        });
+
+        if (!aiResponse && filter.transcript?.shouldCreate) {
+          aiResponse = await createTranscript(
+            queryResult.queryInfo,
+            filter.mediaUrl,
+            user
+          );
+        }
+
+        if (aiResponse && aiResponse.status === 'SUCCESS') {
+          // Note: it is possible for `aiResponses.text` to be '';
+          // it means that the media doesn't have detectable text.
+          transcript = aiResponse.text;
+        }
+      }
+
+      // Add transcript to query
+      //
+      if (transcript) {
+        shouldQueries.push(
+          ...createMoreLikeThisQuery(
+            transcript,
+            filter.transcript?.minimumShouldMatch
+          )
+        );
+      }
     }
 
     body.query = {
       bool: {
-        must: mustQueries,
         should:
           shouldQueries.length === 0 ? [{ match_all: {} }] : shouldQueries,
         filter: filterQueries,

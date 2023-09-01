@@ -1,3 +1,4 @@
+import { ImageAnnotatorClient } from '@google-cloud/vision';
 import {
   GraphQLInputObjectType,
   GraphQLObjectType,
@@ -10,6 +11,8 @@ import {
   GraphQLID,
   GraphQLBoolean,
 } from 'graphql';
+import fetch from 'node-fetch';
+import ffmpeg from 'fluent-ffmpeg';
 
 import Connection from './interfaces/Connection';
 import Edge from './interfaces/Edge';
@@ -17,6 +20,7 @@ import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
 import delayForMs from 'util/delayForMs';
+import openai from 'util/openai';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -679,9 +683,79 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   return update;
 }
 
+const imageAnnotator = new ImageAnnotatorClient();
+
 /**
- *
- * @param {*} mediaEntryId
- * @param {*} fileUrl
+ * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
+ * @param {string} fileUrl - the audio, image or video file to process
+ * @param {object} user - the user who requested the transcription
  */
-// async function createTranscript(mediaEntryId, fileUrl) {}
+export async function createTranscript(queryInfo, fileUrl, user) {
+  if (!user) throw new Error('[createTranscript] user is required');
+
+  const update = createAIResponse({
+    user,
+    type: 'TRANSCRIPT',
+    docId: queryInfo.id,
+  });
+
+  try {
+    switch (queryInfo.type) {
+      case 'image': {
+        const [
+          { fullTextAnnotation },
+        ] = await imageAnnotator.documentTextDetection(fileUrl);
+
+        console.log('[createTranscript]', queryInfo.id, fullTextAnnotation);
+        return update({
+          status: 'SUCCESS',
+          // Write '' if no text detected
+          text: fullTextAnnotation?.text ?? '',
+        });
+      }
+
+      case 'video':
+      case 'audio': {
+        const fileResp = await fetch(fileUrl);
+
+        // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
+        const audio = ffmpeg(fileResp.body)
+          .noVideo()
+          .format('mp3')
+          .pipe();
+
+        // Hack it to make openai library work
+        // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1455247809
+        audio.path = 'file.mp4';
+
+        const { data } = await openai.createTranscription(
+          audio,
+          'whisper-1',
+          '若語言為中文，請使用繁體中文。每一個段落不短於 30 秒。網傳影片口白如下：',
+          'json',
+          0,
+          undefined,
+          // Make axios happy
+          // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
+          //
+          { maxContentLength: Infinity, maxBodyLength: Infinity }
+        );
+
+        console.log('[createTranscript]', queryInfo.id, data);
+
+        return update({
+          status: 'SUCCESS',
+          text: data.text,
+        });
+      }
+      default:
+        throw new Error(`Type ${queryInfo.type} not supported`);
+    }
+  } catch (e) {
+    console.error('[createTranscript]', e);
+    return update({
+      status: 'ERROR',
+      text: e.toString(),
+    });
+  }
+}

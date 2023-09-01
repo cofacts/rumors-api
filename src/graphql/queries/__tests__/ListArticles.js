@@ -1,15 +1,27 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import { getCursor } from 'graphql/util';
+import { getCursor, createTranscript } from 'graphql/util';
 import fixtures from '../__fixtures__/ListArticles';
 import mediaManager from 'util/mediaManager';
 
 jest.mock('util/mediaManager');
 
+// Just mock createTranscript, keep others normal
+// Ref: https://jestjs.io/docs/mock-functions#mocking-partials
+jest.mock('graphql/util', () => {
+  const originalGrapQLUtil = jest.requireActual('../../util');
+  return {
+    __esModule: true,
+    ...originalGrapQLUtil,
+    createTranscript: jest.fn(),
+  };
+});
+
 describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
     mediaManager.insert.mockClear();
+    createTranscript.mockClear();
   });
 
   it('lists all articles', async () => {
@@ -932,7 +944,7 @@ describe('ListArticles', () => {
     ).toMatchSnapshot('IMAGE and AUDIO articles');
   });
 
-  it('filters by mediaUrl', async () => {
+  it('filters by mediaUrl with mediaManager hits and matching hashes', async () => {
     const MOCK_HITS = [
       // Deliberately swap similarity to see if Elasticsearch sorts by similairty
       {
@@ -961,6 +973,14 @@ describe('ListArticles', () => {
       hits: MOCK_HITS,
     }));
 
+    // Expect matching articles with similar attachment hashes,
+    // as well as including similar transcripts.
+    //
+    // It will match:
+    // 1st - attachment hash 100% similarity
+    // 2nd - attachment hash 50% similarity, but has transcript (adopted in full-text search, raising its score)
+    // 3rd - full text search w/ transcript of the 2nd
+    //
     expect(
       await gql`
         {
@@ -992,7 +1012,7 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest5",
                 },
-                "score": 2,
+                "score": 100,
               },
               Object {
                 "node": Object {
@@ -1001,13 +1021,26 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest6",
                 },
-                "score": 1.5,
+                "score": 60.03248,
+              },
+              Object {
+                "node": Object {
+                  "articleType": "TEXT",
+                  "attachmentHash": "",
+                  "attachmentUrl": null,
+                  "id": "listArticleTest1",
+                },
+                "score": 5.419564,
               },
             ],
           },
         },
       }
     `);
+
+    // Transcript already fetched from articles, no transcript is generated
+    //
+    expect(createTranscript).toHaveBeenCalledTimes(0);
   });
 
   it('lists all articles with cooccurrences', async () => {
@@ -1035,6 +1068,116 @@ describe('ListArticles', () => {
         }
       `()
     ).toMatchSnapshot('articles with cooccurrences');
+  });
+
+  it('filters by mediaUrl with no media manager hits and no transcripts', async () => {
+    // Assume no hits
+    mediaManager.query.mockImplementationOnce(async () => ({
+      queryInfo: {
+        type: 'image',
+        id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
+      },
+      hits: [],
+    }));
+
+    // Expect to return nothing
+    expect(
+      await gql`
+        {
+          ListArticles(
+            orderBy: [{ _score: DESC }]
+            filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
+          ) {
+            edges {
+              score
+              node {
+                id
+                articleType
+                attachmentHash
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchInlineSnapshot(`
+      Object {
+        "data": Object {
+          "ListArticles": Object {
+            "edges": Array [],
+          },
+        },
+      }
+    `);
+  });
+
+  it('filters by mediaUrl with no media manager but creates transcripts', async () => {
+    // Assume no hits
+    mediaManager.query.mockImplementationOnce(async () => ({
+      queryInfo: {
+        type: 'image',
+        id: fixtures['/articles/doc/listArticleTest5'].attachmentHash,
+      },
+      hits: [],
+    }));
+
+    createTranscript.mockImplementationOnce(async () => ({
+      id: 'transcript-id',
+      status: 'SUCCESS',
+      text: '憶昔封書與君夜，金鑾殿後欲明天。微之，微之！此夕此心，君知之乎！',
+    }));
+
+    // Expect to return according to created transcript
+    expect(
+      await gql`
+        {
+          ListArticles(
+            orderBy: [{ _score: DESC }]
+            filter: {
+              mediaUrl: "http://foo.com/input_image.jpeg"
+              transcript: { shouldCreate: true }
+            }
+          ) {
+            edges {
+              score
+              node {
+                id
+                articleType
+                attachmentHash
+              }
+              highlight {
+                text
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchInlineSnapshot(`
+      Object {
+        "data": Object {
+          "ListArticles": Object {
+            "edges": Array [
+              Object {
+                "highlight": Object {
+                  "text": "
+            <HIGHLIGHT>憶昔封書與君夜</HIGHLIGHT>，<HIGHLIGHT>金鑾殿後欲明天</HIGHLIGHT>。今夜<HIGHLIGHT>封書</HIGHLIGHT>在何處？廬山庵裏曉燈前。籠鳥檻猿俱未死，人間相見是何年？
+
+            <HIGHLIGHT>微之</HIGHLIGHT>，<HIGHLIGHT>微之</HIGHLIGHT>！<HIGHLIGHT>此夕此心</HIGHLIGHT>，<HIGHLIGHT>君知之乎</HIGHLIGHT>！
+          ",
+                },
+                "node": Object {
+                  "articleType": "TEXT",
+                  "attachmentHash": "",
+                  "id": "listArticleTest1",
+                },
+                "score": 18.921206,
+              },
+            ],
+          },
+        },
+      }
+    `);
+
+    expect(createTranscript).toHaveBeenCalledTimes(1);
   });
 
   afterAll(() => unloadFixtures(fixtures));
