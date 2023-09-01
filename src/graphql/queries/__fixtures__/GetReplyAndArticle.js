@@ -271,4 +271,11 @@ export default {
     type: 'AI_REPLY',
     status: 'LOADING',
   },
+
+  '/airesponses/doc/transcript-for-mediaArticle': {
+    docId: 'hash-for-media-article',
+    type: 'TRANSCRIPT',
+    status: 'SUCCESS',
+    text: 'Lorum ipsum',
+  },
 };

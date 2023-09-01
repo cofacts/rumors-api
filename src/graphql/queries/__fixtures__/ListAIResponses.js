@@ -25,4 +25,10 @@ export default {
     status: 'LOADING',
     createdAt: '2020-01-01T00:00:00.000Z',
   },
+  '/airesponses/doc/transcript': {
+    docId: 'some-article',
+    type: 'TRANSCRIPT',
+    status: 'SUCCESS',
+    createdAt: '2020-01-01T00:00:00.000Z',
+  },
 };

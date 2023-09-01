@@ -96,5 +96,19 @@ describe('ListAIResponses', () => {
         }
       `()
     ).toMatchSnapshot('updatedAt <= 2020/1/2 00:00:10');
+    expect(
+      await gql`
+        {
+          ListAIResponses(filter: { types: [TRANSCRIPT] }) {
+            edges {
+              node {
+                id
+                status
+              }
+            }
+          }
+        }
+      `()
+    ).toMatchSnapshot('only transcripts');
   });
 });
