@@ -7,6 +7,9 @@ import mediaManager, {
 } from 'util/mediaManager';
 import { assertUser, getContentDefaultStatus } from 'util/user';
 import client from 'util/client';
+import { getAIResponse } from 'graphql/util';
+import { schema } from 'prosemirror-schema-basic';
+import { EditorState } from 'prosemirror-state';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
@@ -157,6 +160,67 @@ async function createNewMediaArticle({
   return articleId;
 }
 
+/**
+ * @param {string} articleId
+ * @returns {boolean} if the transcript is written successfully
+ */
+async function writeAITranscriptIfExists(articleId) {
+  const {
+    body: { _source: article },
+  } = await client.get({
+    index: 'articles',
+    type: 'doc',
+    id: articleId,
+  });
+
+  const aiResponse = await getAIResponse({
+    type: 'TRANSCRIPT',
+    docId: article.attachmentHash,
+  });
+
+  if (!aiResponse) return false;
+
+  // Write aiResponse to articles
+  const writeToArticleTextPromise = client.update({
+    index: 'articles',
+    type: 'doc',
+    id: articleId,
+    body: {
+      doc: {
+        text: aiResponse.text,
+      },
+    },
+  });
+
+  // Prosemirror editor state with AI response text
+  const tempState = EditorState.create({ schema });
+  const proseMirrorState = tempState.apply(
+    tempState.tr.insertText(aiResponse.text)
+  );
+
+  console.log('[proseMirrorState]', proseMirrorState.toJSON());
+
+  // Create Y.doc and write to ydoc collection
+  const createYdocPromise = client.index({
+    index: 'articles',
+    type: 'doc',
+    id: article.attachmentHash,
+    body: {
+      doc: {
+        ydoc: '',
+      },
+    },
+  });
+
+  try {
+    await Promise.all([writeToArticleTextPromise, createYdocPromise]);
+  } catch (e) {
+    console.error('[writeAITranscriptIfExists]', e);
+    return false;
+  }
+  return true;
+}
+
 export default {
   type: MutationResult,
   description: 'Create a media article and/or a replyRequest',
@@ -190,6 +254,8 @@ export default {
       reference,
       user,
     });
+
+    writeAITranscriptIfExists();
 
     await createOrUpdateReplyRequest({
       articleId,
