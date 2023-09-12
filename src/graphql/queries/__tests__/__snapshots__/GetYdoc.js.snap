@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GetYdoc should get the specified doc 1`] = `
+Object {
+  "data": Object {
+    "GetYdoc": Object {
+      "data": "mock data1",
+      "versions": Array [
+        Object {
+          "createdAt": "2023-09-07T08:14:14.005Z",
+          "snapshot": "mock snapshot1",
+        },
+        Object {
+          "createdAt": "2023-09-07T08:16:45.613Z",
+          "snapshot": "mock snapshot2",
+        },
+        Object {
+          "createdAt": "2023-09-07T08:18:32.467Z",
+          "snapshot": "mock snapshot3",
+        },
+        Object {
+          "createdAt": "2023-09-07T08:18:49.500Z",
+          "snapshot": "mock snapshot4",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`GetYdoc should return empty versions when there is none 1`] = `
+Object {
+  "data": Object {
+    "GetYdoc": Object {
+      "data": "mock data2",
+      "versions": Array [],
+    },
+  },
+}
+`;

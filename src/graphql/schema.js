@@ -5,6 +5,7 @@ import GetArticle from './queries/GetArticle';
 import GetReply from './queries/GetReply';
 import GetUser from './queries/GetUser';
 import GetCategory from './queries/GetCategory';
+import GetYdoc from './queries/GetYdoc';
 import ListArticles from './queries/ListArticles';
 import ListReplies from './queries/ListReplies';
 import ListCategories from './queries/ListCategories';
@@ -41,6 +42,7 @@ export default new GraphQLSchema({
       GetReply,
       GetUser,
       GetCategory,
+      GetYdoc,
       ListArticles,
       ListReplies,
       ListCategories,
