@@ -161,42 +161,23 @@ async function createNewMediaArticle({
 }
 
 /**
- * @param {string} articleId
+ * @param {string} articleId - For target article
+ * @param {string} attachmentHash - For
+ * @param {string} text
  * @returns {boolean} if the transcript is written successfully
  */
-async function writeAITranscriptIfExists(articleId) {
-  const {
-    body: { _source: article },
-  } = await client.get({
-    index: 'articles',
-    type: 'doc',
-    id: articleId,
-  });
-
-  const aiResponse = await getAIResponse({
-    type: 'TRANSCRIPT',
-    docId: article.attachmentHash,
-  });
-
-  if (!aiResponse) return false;
-
+export async function writeAITranscript(articleId, attachmentHash, text) {
   // Write aiResponse to articles
   const writeToArticleTextPromise = client.update({
     index: 'articles',
     type: 'doc',
     id: articleId,
-    body: {
-      doc: {
-        text: aiResponse.text,
-      },
-    },
+    body: { doc: { text } },
   });
 
   // Prosemirror editor state with AI response text
   const tempState = EditorState.create({ schema });
-  const proseMirrorState = tempState.apply(
-    tempState.tr.insertText(aiResponse.text)
-  );
+  const proseMirrorState = tempState.apply(tempState.tr.insertText(text));
 
   console.log('[proseMirrorState]', proseMirrorState.toJSON());
 
@@ -204,10 +185,10 @@ async function writeAITranscriptIfExists(articleId) {
   const createYdocPromise = client.index({
     index: 'articles',
     type: 'doc',
-    id: article.attachmentHash,
+    id: attachmentHash,
     body: {
       doc: {
-        ydoc: '',
+        ydoc: proseMirrorState.toJSON().toString('base64'),
       },
     },
   });
@@ -215,7 +196,7 @@ async function writeAITranscriptIfExists(articleId) {
   try {
     await Promise.all([writeToArticleTextPromise, createYdocPromise]);
   } catch (e) {
-    console.error('[writeAITranscriptIfExists]', e);
+    console.error('[writeAITranscript]', e);
     return false;
   }
   return true;
@@ -255,7 +236,16 @@ export default {
       user,
     });
 
-    writeAITranscriptIfExists();
+    (async function() {
+      const aiResponse = await getAIResponse({
+        type: 'TRANSCRIPT',
+        docId: mediaEntry.id,
+      });
+
+      if (!aiResponse) return;
+
+      await writeAITranscript(articleId, mediaEntry.id, aiResponse.text);
+    })();
 
     await createOrUpdateReplyRequest({
       articleId,
