@@ -63,7 +63,8 @@
     "url-regex": "^5.0.0",
     "xlsx": "^0.17.3",
     "xxhashjs": "^0.2.2",
-    "y-prosemirror": "^1.2.1"
+    "y-prosemirror": "^1.2.1",
+    "yjs": "^13.6.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.0",

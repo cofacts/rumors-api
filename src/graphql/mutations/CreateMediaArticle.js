@@ -9,7 +9,9 @@ import { assertUser, getContentDefaultStatus } from 'util/user';
 import client from 'util/client';
 import { getAIResponse } from 'graphql/util';
 import { schema } from 'prosemirror-schema-basic';
+import { encodeStateAsUpdate } from 'yjs';
 import { EditorState } from 'prosemirror-state';
+import { prosemirrorToYDoc } from 'y-prosemirror';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
@@ -162,11 +164,10 @@ async function createNewMediaArticle({
 
 /**
  * @param {string} articleId - For target article
- * @param {string} attachmentHash - For
  * @param {string} text
- * @returns {boolean} if the transcript is written successfully
+ * @returns result of article & ydoc operation
  */
-export async function writeAITranscript(articleId, attachmentHash, text) {
+export function writeAITranscript(articleId, text) {
   // Write aiResponse to articles
   const writeToArticleTextPromise = client.update({
     index: 'articles',
@@ -179,27 +180,26 @@ export async function writeAITranscript(articleId, attachmentHash, text) {
   const tempState = EditorState.create({ schema });
   const proseMirrorState = tempState.apply(tempState.tr.insertText(text));
 
-  console.log('[proseMirrorState]', proseMirrorState.toJSON());
+  // Encode ProseMirror doc node into binary in the same way as Hocuspocus
+  // @ref https://tiptap.dev/hocuspocus/guides/persistence#faq-in-what-format-should-i-save-my-document
+  const ydoc = prosemirrorToYDoc(proseMirrorState.doc);
+  const buffer = encodeStateAsUpdate(ydoc);
 
   // Create Y.doc and write to ydoc collection
   const createYdocPromise = client.index({
-    index: 'articles',
+    index: 'ydocs',
     type: 'doc',
-    id: attachmentHash,
+    id: articleId,
     body: {
-      doc: {
-        ydoc: proseMirrorState.toJSON().toString('base64'),
-      },
+      ydoc: buffer.toString('base64'),
     },
   });
 
   try {
-    await Promise.all([writeToArticleTextPromise, createYdocPromise]);
+    return Promise.all([writeToArticleTextPromise, createYdocPromise]);
   } catch (e) {
     console.error('[writeAITranscript]', e);
-    return false;
   }
-  return true;
 }
 
 export default {
@@ -244,7 +244,7 @@ export default {
 
       if (!aiResponse) return;
 
-      await writeAITranscript(articleId, mediaEntry.id, aiResponse.text);
+      await writeAITranscript(articleId, aiResponse.text);
     })();
 
     await createOrUpdateReplyRequest({
