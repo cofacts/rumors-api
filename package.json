@@ -95,7 +95,8 @@
     "snapshotFormat": {
       "printBasicPrototype": true,
       "escapeString": true
-    }
+    },
+    "workerIdleMemoryLimit": 0.8
   },
   "engines": {
     "node": ">=18"
