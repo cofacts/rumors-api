@@ -10,8 +10,6 @@ import client from 'util/client';
 import resolveUrl from '../grpc';
 
 describe('scrapping & storage', () => {
-  let server;
-
   afterAll(async () => {
     await client.deleteByQuery({
       index: 'urls',
@@ -21,7 +19,6 @@ describe('scrapping & storage', () => {
         },
       },
     });
-    server.close();
   });
 
   it(
