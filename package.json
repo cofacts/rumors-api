@@ -93,7 +93,8 @@
     ],
     "testSequencer": "./test/testSequencer.js",
     "snapshotFormat": {
-      "printBasicPrototype": true
+      "printBasicPrototype": true,
+      "escapeString": true
     }
   },
   "engines": {
