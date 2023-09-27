@@ -1,6 +1,6 @@
 export default {
   '/ydocs/doc/foo': {
-    data: 'mock data1',
+    ydoc: 'mock data1',
     versions: [
       {
         createdAt: '2023-09-07T08:14:14.005Z',
@@ -21,6 +21,6 @@ export default {
     ],
   },
   '/ydocs/doc/foo2': {
-    data: 'mock data2',
+    ydoc: 'mock data2',
   },
 };
