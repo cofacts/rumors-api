@@ -195,11 +195,7 @@ export function writeAITranscript(articleId, text) {
     },
   });
 
-  try {
-    return Promise.all([writeToArticleTextPromise, createYdocPromise]);
-  } catch (e) {
-    console.error('[writeAITranscript]', e);
-  }
+  return Promise.all([writeToArticleTextPromise, createYdocPromise]);
 }
 
 export default {
@@ -236,16 +232,30 @@ export default {
       user,
     });
 
-    (async function() {
-      const aiResponse = await getAIResponse({
-        type: 'TRANSCRIPT',
-        docId: mediaEntry.id,
-      });
-
-      if (!aiResponse) return;
-
-      await writeAITranscript(articleId, aiResponse.text);
-    })();
+    // Write AI transcript to article & ydoc without blocking
+    getAIResponse({
+      type: 'TRANSCRIPT',
+      docId: mediaEntry.id,
+    })
+      .then(aiResponse => {
+        if (!aiResponse) {
+          throw new Error('AI transcript not found');
+        }
+        return writeAITranscript(articleId, aiResponse.text);
+      })
+      .then(() => {
+        console.log(
+          `[CreateMediaArticle] AI transcript for ${
+            mediaEntry.id
+          } applied to article ${articleId}`
+        );
+      })
+      .catch(e =>
+        console.warn(
+          `[CreateMediaArticle] ${mediaEntry.id} (article ${articleId})`,
+          e
+        )
+      );
 
     await createOrUpdateReplyRequest({
       articleId,
