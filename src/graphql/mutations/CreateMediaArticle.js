@@ -183,7 +183,7 @@ export function writeAITranscript(articleId, text) {
   // Encode ProseMirror doc node into binary in the same way as Hocuspocus
   // @ref https://tiptap.dev/hocuspocus/guides/persistence#faq-in-what-format-should-i-save-my-document
   const ydoc = prosemirrorToYDoc(proseMirrorState.doc);
-  const buffer = encodeStateAsUpdate(ydoc);
+  const buffer = Buffer.from(encodeStateAsUpdate(ydoc));
 
   // Create Y.doc and write to ydoc collection
   const createYdocPromise = client.index({
