@@ -1,7 +1,9 @@
+import Y from 'yjs';
+import MockDate from 'mockdate';
+
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import client from 'util/client';
-import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateMediaArticle';
 import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
 import mediaManager from 'util/mediaManager';
@@ -15,7 +17,7 @@ describe('creation', () => {
   });
   afterAll(() => unloadFixtures(fixtures));
 
-  it('creates a media article and a reply request', async () => {
+  it('creates a media article, a reply request, a ydoc and fills in OCR result', async () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'foo';
@@ -98,7 +100,7 @@ describe('creation', () => {
         "replyRequestCount": 1,
         "status": "NORMAL",
         "tags": Array [],
-        "text": "",
+        "text": "OCR result of output image",
         "updatedAt": "2017-01-28T08:45:57.011Z",
         "userId": "test",
       }
@@ -133,7 +135,23 @@ describe('creation', () => {
       }
     `);
 
-    // // Cleanup
+    const {
+      body: {
+        _source: { ydoc: encodedYdoc },
+      },
+    } = await client.get({
+      index: 'ydocs',
+      type: 'doc',
+      id: data.CreateMediaArticle.id,
+    });
+
+    const ydoc = new Y.Doc();
+    Y.applyUpdate(ydoc, Buffer.from(encodedYdoc, 'base64'));
+    expect(ydoc.getXmlFragment('prosemirror')).toMatchInlineSnapshot(
+      `"<paragraph>OCR result of output image</paragraph>"`
+    );
+
+    // Cleanup
     await client.delete({
       index: 'articles',
       type: 'doc',
@@ -144,6 +162,12 @@ describe('creation', () => {
       index: 'replyrequests',
       type: 'doc',
       id: replyRequestId,
+    });
+
+    await client.delete({
+      index: 'ydocs',
+      type: 'doc',
+      id: data.CreateMediaArticle.id,
     });
   });
 
