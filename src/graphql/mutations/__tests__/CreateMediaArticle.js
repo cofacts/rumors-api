@@ -137,7 +137,7 @@ describe('creation', () => {
 
     const {
       body: {
-        _source: { ydoc: encodedYdoc },
+        _source: { ydoc: encodedYdoc, versions },
       },
     } = await client.get({
       index: 'ydocs',
@@ -145,10 +145,19 @@ describe('creation', () => {
       id: data.CreateMediaArticle.id,
     });
 
+    // Expect ydoc in Elasticsearch to contain prosemirror, user and snapshot versions
     const ydoc = new Y.Doc();
     Y.applyUpdate(ydoc, Buffer.from(encodedYdoc, 'base64'));
     expect(ydoc.getXmlFragment('prosemirror')).toMatchInlineSnapshot(
       `"<paragraph>OCR result of output image</paragraph>"`
+    );
+    expect(Object.keys(ydoc.getMap('users').toJSON())).toMatchInlineSnapshot(`
+      Array [
+        "{\\"id\\":\\"ai-transcript\\",\\"appId\\":\\"RUMORS_AI\\",\\"name\\":\\"AI Transcript\\"}",
+      ]
+    `);
+    expect(versions[0].createdAt).toMatchInlineSnapshot(
+      `"2017-01-28T08:45:57.011Z"`
     );
 
     // Cleanup

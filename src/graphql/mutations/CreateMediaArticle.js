@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLNonNull, GraphQLBoolean } from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 import sharp from 'sharp';
 import { MediaType, variants } from '@cofacts/media-manager';
 import mediaManager, {
@@ -9,7 +9,7 @@ import { assertUser, getContentDefaultStatus } from 'util/user';
 import client from 'util/client';
 import { getAIResponse } from 'graphql/util';
 import { schema } from 'prosemirror-schema-basic';
-import { encodeStateAsUpdate } from 'yjs';
+import Y from 'yjs';
 import { EditorState } from 'prosemirror-state';
 import { prosemirrorToYDoc } from 'y-prosemirror';
 
@@ -21,6 +21,12 @@ import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 const METADATA = {
   cacheControl: 'public, max-age=31536000, immutable',
 };
+
+const AI_TRANSCRIBER_DESCRIPTION = JSON.stringify({
+  id: 'ai-transcript',
+  appId: 'RUMORS_AI',
+  name: 'AI Transcript',
+});
 
 const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
   IMAGE: MediaType.image,
@@ -183,7 +189,17 @@ export function writeAITranscript(articleId, text) {
   // Encode ProseMirror doc node into binary in the same way as Hocuspocus
   // @ref https://tiptap.dev/hocuspocus/guides/persistence#faq-in-what-format-should-i-save-my-document
   const ydoc = prosemirrorToYDoc(proseMirrorState.doc);
-  const buffer = Buffer.from(encodeStateAsUpdate(ydoc));
+
+  // Setup user mapping
+  const permanentUserData = new Y.PermanentUserData(ydoc);
+  permanentUserData.setUserMapping(
+    ydoc,
+    ydoc.clientID,
+    AI_TRANSCRIBER_DESCRIPTION
+  );
+
+  // Create initial version snapshot
+  const snapshot = Y.snapshot(ydoc);
 
   // Create Y.doc and write to ydoc collection
   const createYdocPromise = client.index({
@@ -191,7 +207,13 @@ export function writeAITranscript(articleId, text) {
     type: 'doc',
     id: articleId,
     body: {
-      ydoc: buffer.toString('base64'),
+      ydoc: Buffer.from(Y.encodeStateAsUpdate(ydoc)).toString('base64'),
+      versions: [
+        {
+          createdAt: new Date().toISOString(),
+          snapshot: Buffer.from(Y.encodeSnapshot(snapshot)).toString('base64'),
+        },
+      ],
     },
   });
 
