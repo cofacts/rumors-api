@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLNonNull } from 'graphql';
+import { GraphQLString, GraphQLNonNull, GraphQLBoolean } from 'graphql';
 import sharp from 'sharp';
 import { MediaType, variants } from '@cofacts/media-manager';
 import mediaManager, {
@@ -206,11 +206,8 @@ export default {
     articleType: { type: new GraphQLNonNull(ArticleTypeEnum) },
     reference: { type: new GraphQLNonNull(ArticleReferenceInput) },
     reason: {
-      // FIXME: Change to required field after LINE bot is implemented
-      // type: new GraphQLNonNull(GraphQLString),
       type: GraphQLString,
-      description:
-        'The reason why the user want to submit this article. Mandatory for 1st sender',
+      description: 'The reason why the user want to submit this article',
     },
   },
   async resolve(
@@ -225,44 +222,45 @@ export default {
       articleType,
     });
 
-    const articleId = await createNewMediaArticle({
+    const aritcleIdPromise = createNewMediaArticle({
       mediaEntry,
       articleType,
       reference,
       user,
     });
 
-    // Write AI transcript to article & ydoc without blocking
-    getAIResponse({
+    const aiResponsePromise = getAIResponse({
       type: 'TRANSCRIPT',
       docId: mediaEntry.id,
-    })
-      .then(aiResponse => {
-        if (!aiResponse) {
-          throw new Error('AI transcript not found');
-        }
-        return writeAITranscript(articleId, aiResponse.text);
-      })
-      .then(() => {
-        console.log(
-          `[CreateMediaArticle] AI transcript for ${
-            mediaEntry.id
-          } applied to article ${articleId}`
-        );
-      })
-      .catch(e =>
-        console.warn(
-          `[CreateMediaArticle] ${mediaEntry.id} (article ${articleId})`,
-          e
-        )
-      );
-
-    await createOrUpdateReplyRequest({
-      articleId,
-      user,
-      reason,
     });
 
-    return { id: articleId };
+    await Promise.all([
+      // Update reply request
+      aritcleIdPromise.then(articleId =>
+        createOrUpdateReplyRequest({
+          articleId,
+          user,
+          reason,
+        })
+      ),
+
+      // Write AI transcript to article & ydoc
+      Promise.all([aritcleIdPromise, aiResponsePromise])
+        .then(([articleId, aiResponse]) => {
+          if (!aiResponse) {
+            throw new Error('AI transcript not found');
+          }
+          return writeAITranscript(articleId, aiResponse.text);
+        })
+        .then(() => {
+          console.log(
+            `[CreateMediaArticle] AI transcript for ${mediaEntry.id} applied`
+          );
+        })
+        // It's OK to fail this promise, just log as warning
+        .catch(e => console.warn(`[CreateMediaArticle] ${mediaEntry.id}:`, e)),
+    ]);
+
+    return { id: await aritcleIdPromise };
   },
 };
