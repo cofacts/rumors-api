@@ -9,7 +9,6 @@
   "plugins": [
     ["module-resolver", {
       "root": ["./src", "./test"]
-    }],
-    "rewire"
+    }]
   ]
 }
