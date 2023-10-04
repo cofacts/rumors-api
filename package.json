@@ -55,12 +55,16 @@
     "passport-instagram-graph": "^1.0.1",
     "passport-twitter": "^1.0.4",
     "pm2": "^4.0.0",
+    "prosemirror-schema-basic": "^1.2.2",
+    "prosemirror-state": "^1.4.3",
     "pug": "^2.0.3",
     "rollbar": "^2.3.7",
     "sharp": "^0.30.7",
     "url-regex": "^5.0.0",
     "xlsx": "^0.17.3",
-    "xxhashjs": "^0.2.2"
+    "xxhashjs": "^0.2.2",
+    "y-prosemirror": "^1.2.1",
+    "yjs": "^13.6.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.0",

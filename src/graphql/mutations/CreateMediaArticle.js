@@ -7,6 +7,11 @@ import mediaManager, {
 } from 'util/mediaManager';
 import { assertUser, getContentDefaultStatus } from 'util/user';
 import client from 'util/client';
+import { getAIResponse } from 'graphql/util';
+import { schema } from 'prosemirror-schema-basic';
+import Y from 'yjs';
+import { EditorState } from 'prosemirror-state';
+import { prosemirrorToYDoc } from 'y-prosemirror';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
@@ -16,6 +21,12 @@ import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 const METADATA = {
   cacheControl: 'public, max-age=31536000, immutable',
 };
+
+const AI_TRANSCRIBER_DESCRIPTION = JSON.stringify({
+  id: 'ai-transcript',
+  appId: 'RUMORS_AI',
+  name: 'AI Transcript',
+});
 
 const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
   IMAGE: MediaType.image,
@@ -157,6 +168,58 @@ async function createNewMediaArticle({
   return articleId;
 }
 
+/**
+ * @param {string} articleId - For target article
+ * @param {string} text
+ * @returns result of article & ydoc operation
+ */
+export function writeAITranscript(articleId, text) {
+  // Write aiResponse to articles
+  const writeToArticleTextPromise = client.update({
+    index: 'articles',
+    type: 'doc',
+    id: articleId,
+    body: { doc: { text } },
+  });
+
+  // Prosemirror editor state with AI response text
+  const tempState = EditorState.create({ schema });
+  const proseMirrorState = tempState.apply(tempState.tr.insertText(text));
+
+  // Encode ProseMirror doc node into binary in the same way as Hocuspocus
+  // @ref https://tiptap.dev/hocuspocus/guides/persistence#faq-in-what-format-should-i-save-my-document
+  const ydoc = prosemirrorToYDoc(proseMirrorState.doc);
+
+  // Setup user mapping
+  const permanentUserData = new Y.PermanentUserData(ydoc);
+  permanentUserData.setUserMapping(
+    ydoc,
+    ydoc.clientID,
+    AI_TRANSCRIBER_DESCRIPTION
+  );
+
+  // Create initial version snapshot
+  const snapshot = Y.snapshot(ydoc);
+
+  // Create Y.doc and write to ydoc collection
+  const createYdocPromise = client.index({
+    index: 'ydocs',
+    type: 'doc',
+    id: articleId,
+    body: {
+      ydoc: Buffer.from(Y.encodeStateAsUpdate(ydoc)).toString('base64'),
+      versions: [
+        {
+          createdAt: new Date().toISOString(),
+          snapshot: Buffer.from(Y.encodeSnapshot(snapshot)).toString('base64'),
+        },
+      ],
+    },
+  });
+
+  return Promise.all([writeToArticleTextPromise, createYdocPromise]);
+}
+
 export default {
   type: MutationResult,
   description: 'Create a media article and/or a replyRequest',
@@ -165,11 +228,8 @@ export default {
     articleType: { type: new GraphQLNonNull(ArticleTypeEnum) },
     reference: { type: new GraphQLNonNull(ArticleReferenceInput) },
     reason: {
-      // FIXME: Change to required field after LINE bot is implemented
-      // type: new GraphQLNonNull(GraphQLString),
       type: GraphQLString,
-      description:
-        'The reason why the user want to submit this article. Mandatory for 1st sender',
+      description: 'The reason why the user want to submit this article',
     },
   },
   async resolve(
@@ -184,19 +244,45 @@ export default {
       articleType,
     });
 
-    const articleId = await createNewMediaArticle({
+    const aritcleIdPromise = createNewMediaArticle({
       mediaEntry,
       articleType,
       reference,
       user,
     });
 
-    await createOrUpdateReplyRequest({
-      articleId,
-      user,
-      reason,
+    const aiResponsePromise = getAIResponse({
+      type: 'TRANSCRIPT',
+      docId: mediaEntry.id,
     });
 
-    return { id: articleId };
+    await Promise.all([
+      // Update reply request
+      aritcleIdPromise.then(articleId =>
+        createOrUpdateReplyRequest({
+          articleId,
+          user,
+          reason,
+        })
+      ),
+
+      // Write AI transcript to article & ydoc
+      Promise.all([aritcleIdPromise, aiResponsePromise])
+        .then(([articleId, aiResponse]) => {
+          if (!aiResponse) {
+            throw new Error('AI transcript not found');
+          }
+          return writeAITranscript(articleId, aiResponse.text);
+        })
+        .then(() => {
+          console.log(
+            `[CreateMediaArticle] AI transcript for ${mediaEntry.id} applied`
+          );
+        })
+        // It's OK to fail this promise, just log as warning
+        .catch(e => console.warn(`[CreateMediaArticle] ${mediaEntry.id}:`, e)),
+    ]);
+
+    return { id: await aritcleIdPromise };
   },
 };
