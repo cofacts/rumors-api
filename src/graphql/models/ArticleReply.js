@@ -25,7 +25,7 @@ export default new GraphQLObjectType({
   name: 'ArticleReply',
   description: 'The linkage between an Article and a Reply',
   fields: () => ({
-    replyId: { type: GraphQLString },
+    replyId: { type: new GraphQLNonNull(GraphQLString) },
 
     reply: {
       type: Reply,
@@ -38,7 +38,7 @@ export default new GraphQLObjectType({
       description: 'Cached reply type value stored in ArticleReply',
     },
 
-    articleId: { type: GraphQLString },
+    articleId: { type: new GraphQLNonNull(GraphQLString) },
 
     article: {
       type: Article,
@@ -56,23 +56,35 @@ export default new GraphQLObjectType({
     appId: { type: GraphQLNonNull(GraphQLString) },
 
     canUpdateStatus: {
-      type: GraphQLBoolean,
+      type: new GraphQLNonNull(GraphQLBoolean),
       resolve: ({ userId, appId }, args, { user }) => {
         return !!user && userId === user.id && appId === user.appId;
       },
     },
 
     feedbackCount: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       resolve: ({ positiveFeedbackCount = 0, negativeFeedbackCount = 0 }) =>
         positiveFeedbackCount + negativeFeedbackCount,
     },
 
-    positiveFeedbackCount: { type: GraphQLInt },
-    negativeFeedbackCount: { type: GraphQLInt },
+    positiveFeedbackCount: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve({ positiveFeedbackCount }) {
+        return positiveFeedbackCount ?? 0;
+      },
+    },
+    negativeFeedbackCount: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve({ negativeFeedbackCount }) {
+        return negativeFeedbackCount ?? 0;
+      },
+    },
 
     feedbacks: {
-      type: new GraphQLList(ArticleReplyFeedback),
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(ArticleReplyFeedback))
+      ),
       args: {
         statuses: {
           type: new GraphQLList(
@@ -118,11 +130,11 @@ export default new GraphQLObjectType({
     },
 
     status: {
-      type: ArticleReplyStatusEnum,
+      type: new GraphQLNonNull(ArticleReplyStatusEnum),
       resolve: ({ status }) => (status === undefined ? 'NORMAL' : status),
     },
 
-    createdAt: { type: GraphQLString },
+    createdAt: { type: new GraphQLNonNull(GraphQLString) },
     updatedAt: { type: GraphQLString },
   }),
 });

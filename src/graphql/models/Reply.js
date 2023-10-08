@@ -31,12 +31,14 @@ const Reply = new GraphQLObjectType({
       description: 'The user submitted this reply version',
       resolve: userFieldResolver,
     },
-    createdAt: { type: GraphQLString },
+    createdAt: { type: new GraphQLNonNull(GraphQLString) },
     text: { type: GraphQLString },
-    type: { type: ReplyTypeEnum },
+    type: { type: new GraphQLNonNull(ReplyTypeEnum) },
     reference: { type: GraphQLString },
     articleReplies: {
-      type: new GraphQLList(ArticleReply),
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(ArticleReply))
+      ),
       args: {
         status: {
           type: ArticleReplyStatusEnum,
@@ -143,7 +145,7 @@ const Reply = new GraphQLObjectType({
         };
       },
       // eslint-disable-next-line no-use-before-define
-      type: ReplyConnection,
+      type: new GraphQLNonNull(ReplyConnection),
     },
   }),
 });

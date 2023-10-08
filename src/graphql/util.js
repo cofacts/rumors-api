@@ -435,7 +435,9 @@ export function createConnectionType(
  * @returns {Object[]}
  */
 export function filterByStatuses(entriesWithStatus, statuses) {
-  return entriesWithStatus.filter(({ status }) => statuses.includes(status));
+  return entriesWithStatus
+    .filter(Boolean) // Ensure no null inside
+    .filter(({ status }) => statuses.includes(status));
 }
 
 export const DEFAULT_ARTICLE_STATUSES = ['NORMAL'];
