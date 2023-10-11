@@ -137,7 +137,6 @@ if (process.env.GCS_BUCKET_NAME) {
           "status": "SUCCESS",
           "text": "排
         汗
-        汗和排尿的差別
         想要健康長壽就要想辦法一天一次大量排汗
         德國醫學博士艾倫斯特發現:所有運動選手中
         唯獨馬拉松選手沒有罹患癌症病例。
@@ -168,7 +167,8 @@ if (process.env.GCS_BUCKET_NAME) {
         與自律神經。
         藉著汗,氣化熱消耗熱量,能夠提升代謝力,
         不但減少體脂肪,還有助於消除肥胖。
-        可以先從關掉冷氣做起",
+        可以先從關掉冷氣做起
+        ",
           "type": "TRANSCRIPT",
           "userId": "user-id",
         }
