@@ -168,7 +168,8 @@ if (process.env.GCS_BUCKET_NAME) {
         與自律神經。
         藉著汗,氣化熱消耗熱量,能夠提升代謝力,
         不但減少體脂肪,還有助於消除肥胖。
-        可以先從關掉冷氣做起",
+        可以先從關掉冷氣做起
+        ",
           "type": "TRANSCRIPT",
           "userId": "user-id",
         }

@@ -690,6 +690,46 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
 }
 
 const imageAnnotator = new ImageAnnotatorClient();
+const OCR_CONFIDENCE_THRESHOLD = 0.75;
+
+/**
+ * @param {ITextAnnotation} fullTextAnnotation - The fullTextAnnotation returned by client.documentTextDetection
+ * @returns {string} The extracted text that is comprised of paragraphs passing OCR_CONFIDENCE_THRESHOLD
+ */
+function extractTextFromFullTextAnnotation(fullTextAnnotation) {
+  const {
+    pages: [{ blocks }],
+  } = fullTextAnnotation;
+
+  // Hierarchy described in https://cloud.google.com/vision/docs/fulltext-annotations#annotating_an_image_using_document_text_ocr
+  //
+  return blocks
+    .flatMap(({ paragraphs }) =>
+      paragraphs
+        .filter(({ confidence }) => confidence >= OCR_CONFIDENCE_THRESHOLD)
+        .flatMap(({ words }) =>
+          words.flatMap(({ symbols }) =>
+            symbols.map(({ text, property }) => {
+              if (!property || !property.detectedBreak) return text;
+
+              // Word break type described in
+              // http://googleapis.github.io/googleapis/java/grpc-google-cloud-vision-v1/0.1.5/apidocs/com/google/cloud/vision/v1/TextAnnotation.DetectedBreak.BreakType.html#UNKNOWN
+              const breakStr = [
+                'EOL_SURE_SPACE',
+                'HYPHEN',
+                'LINE_BREAK',
+              ].includes(property.detectedBreak.type)
+                ? '\n'
+                : ' ';
+              return property.detectedBreak.isPrefix
+                ? `${breakStr}${text}`
+                : `${text}${breakStr}`;
+            })
+          )
+        )
+    )
+    .join('');
+}
 
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
@@ -713,10 +753,25 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         ] = await imageAnnotator.documentTextDetection(fileUrl);
 
         console.log('[createTranscript]', queryInfo.id, fullTextAnnotation);
+
+        // This should not happen, but just in case
+        //
+        if (
+          !fullTextAnnotation ||
+          !fullTextAnnotation.pages ||
+          fullTextAnnotation.pages.length === 0
+        ) {
+          return update({
+            status: 'SUCCESS',
+            // No text detected
+            text: '',
+          });
+        }
+
         return update({
           status: 'SUCCESS',
           // Write '' if no text detected
-          text: fullTextAnnotation?.text ?? '',
+          text: extractTextFromFullTextAnnotation(fullTextAnnotation),
         });
       }
 
