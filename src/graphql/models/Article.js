@@ -61,17 +61,19 @@ const Article = new GraphQLObjectType({
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLID) },
     text: { type: GraphQLString },
-    createdAt: { type: GraphQLString },
+    createdAt: { type: new GraphQLNonNull(GraphQLString) },
     updatedAt: { type: GraphQLString },
     status: { type: new GraphQLNonNull(ReplyRequestStatusEnum) },
     references: { type: new GraphQLList(ArticleReference) },
     replyCount: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: 'Number of normal article replies',
-      resolve: ({ normalArticleReplyCount }) => normalArticleReplyCount,
+      resolve: ({ normalArticleReplyCount }) => normalArticleReplyCount ?? 0,
     },
     articleReplies: {
-      type: new GraphQLList(ArticleReply),
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(ArticleReply))
+      ),
       description:
         'Connections between this article and replies. Sorted by the logic described in https://github.com/cofacts/rumors-line-bot/issues/78.',
       args: {
@@ -203,7 +205,9 @@ const Article = new GraphQLObjectType({
     },
 
     articleCategories: {
-      type: new GraphQLList(ArticleCategory),
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(ArticleCategory))
+      ),
       args: {
         status: {
           type: ArticleCategoryStatusEnum,
@@ -239,9 +243,10 @@ const Article = new GraphQLObjectType({
     },
 
     categoryCount: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLInt),
       description: 'Number of normal article categories',
-      resolve: ({ normalArticleCategoryCount }) => normalArticleCategoryCount,
+      resolve: ({ normalArticleCategoryCount }) =>
+        normalArticleCategoryCount ?? 0,
     },
 
     replyRequests: {
@@ -454,7 +459,7 @@ const Article = new GraphQLObjectType({
         };
       },
       // eslint-disable-next-line no-use-before-define
-      type: ArticleConnection,
+      type: new GraphQLNonNull(ArticleConnection),
     },
     hyperlinks: {
       type: new GraphQLList(Hyperlink),

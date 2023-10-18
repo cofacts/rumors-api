@@ -26,8 +26,8 @@ const ArticleReferenceTypeEnum = new GraphQLEnumType({
 export default new GraphQLObjectType({
   name: 'ArticleReference',
   fields: () => ({
-    createdAt: { type: GraphQLString },
-    type: { type: ArticleReferenceTypeEnum },
+    createdAt: { type: new GraphQLNonNull(GraphQLString) },
+    type: { type: new GraphQLNonNull(ArticleReferenceTypeEnum) },
     permalink: { type: GraphQLString },
   }),
 });
