@@ -792,8 +792,8 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         const { data } = await openai.createTranscription(
           audio,
           'whisper-1',
-          '若語言為中文，請使用繁體中文。每一個段落不短於 30 秒。網傳影片口白如下：',
-          'json',
+          '接下來，是一則在網際網路上傳播的影片的逐字稿。內容如下：',
+          'verbose_json',
           0,
           undefined,
           // Make axios happy
@@ -802,11 +802,49 @@ export async function createTranscript(queryInfo, fileUrl, user) {
           { maxContentLength: Infinity, maxBodyLength: Infinity }
         );
 
-        console.log('[createTranscript]', queryInfo.id, data);
+        // Remove tokens keep only useful fields
+        const dataToLog = data.segments.map(
+          ({
+            start,
+            end,
+            seek,
+            text,
+            avg_logprob,
+            compression_ratio,
+            no_speech_prob,
+          }) => ({
+            start,
+            end,
+            seek,
+            text,
+            avg_logprob,
+            compression_ratio,
+            no_speech_prob,
+          })
+        );
+
+        console.log('[createTranscript]', queryInfo.id, dataToLog);
 
         return update({
           status: 'SUCCESS',
-          text: data.text,
+          text: dataToLog
+            .reduce((allText, segment, idx) => {
+              // Ignore segments with identical text & prob with previous segment.
+              // This is apparently hallucination.
+              if (idx > 0) {
+                const prevSegment = dataToLog[idx - 1];
+
+                if (
+                  prevSegment.text === segment.text &&
+                  prevSegment.avg_logprob === segment.avg_logprob
+                ) {
+                  return allText;
+                }
+              }
+
+              return allText + '\n' + segment.text;
+            }, '')
+            .trim(),
         });
       }
       default:
