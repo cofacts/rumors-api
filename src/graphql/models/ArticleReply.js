@@ -136,7 +136,7 @@ export default new GraphQLObjectType({
 
     createdAt: {
       type: GraphQLString,
-      description: 'May be null for legacy articles',
+      description: 'May be null for legacy article-replies',
     },
     updatedAt: { type: GraphQLString },
   }),

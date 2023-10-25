@@ -33,7 +33,7 @@ const Reply = new GraphQLObjectType({
     },
     createdAt: {
       type: GraphQLString,
-      description: 'May be null for legacy articles',
+      description: 'May be null for legacy replies',
     },
     text: { type: GraphQLString },
     type: { type: new GraphQLNonNull(ReplyTypeEnum) },
