@@ -61,7 +61,10 @@ const Article = new GraphQLObjectType({
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLID) },
     text: { type: GraphQLString },
-    createdAt: { type: new GraphQLNonNull(GraphQLString) },
+    createdAt: {
+      type: GraphQLString,
+      description: 'May be null for legacy articles',
+    },
     updatedAt: { type: GraphQLString },
     status: { type: new GraphQLNonNull(ReplyRequestStatusEnum) },
     references: { type: new GraphQLList(ArticleReference) },
