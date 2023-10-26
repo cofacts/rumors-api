@@ -134,7 +134,10 @@ export default new GraphQLObjectType({
       resolve: ({ status }) => (status === undefined ? 'NORMAL' : status),
     },
 
-    createdAt: { type: new GraphQLNonNull(GraphQLString) },
+    createdAt: {
+      type: GraphQLString,
+      description: 'May be null for legacy article-replies',
+    },
     updatedAt: { type: GraphQLString },
   }),
 });

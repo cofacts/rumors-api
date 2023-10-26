@@ -31,7 +31,10 @@ const Reply = new GraphQLObjectType({
       description: 'The user submitted this reply version',
       resolve: userFieldResolver,
     },
-    createdAt: { type: new GraphQLNonNull(GraphQLString) },
+    createdAt: {
+      type: GraphQLString,
+      description: 'May be null for legacy replies',
+    },
     text: { type: GraphQLString },
     type: { type: new GraphQLNonNull(ReplyTypeEnum) },
     reference: { type: GraphQLString },
