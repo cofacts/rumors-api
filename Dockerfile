@@ -1,6 +1,6 @@
 # Builds production image for rumors-api.
 #
-FROM node:18-alpine AS builder
+FROM node:18-alpine3.18 AS builder
 WORKDIR /srv/www
 
 # make node_modules cached.
@@ -17,7 +17,7 @@ RUN node_modules/.bin/babel src -d build
 RUN npm prune --production
 
 #########################################
-FROM node:18-alpine
+FROM node:18-alpine3.18
 RUN apk update && apk add ffmpeg
 
 WORKDIR /srv/www
