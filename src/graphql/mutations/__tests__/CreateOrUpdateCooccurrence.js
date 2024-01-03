@@ -17,6 +17,7 @@ describe('CreateOrUpdateCooccurrence', () => {
     const { data, errors } = await gql`
       mutation($articleIds: [String!]) {
         CreateOrUpdateCooccurrence(articleIds: $articleIds) {
+          id
           articles {
             text
           }
