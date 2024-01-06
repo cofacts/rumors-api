@@ -55,14 +55,10 @@ it('should abort when article or reply ID is wrong', async () => {
 
 it('successfully deletes article-reply and updates normalArticleReplyCount', async () => {
   MockDate.set(FIXED_DATE);
-
-  const replacedTextValue = 'This is the replaced text';
-
   const result = await removeArticleReply({
     userId: 'current-user',
     articleId: 'article1',
     replyId: 'foo',
-    replacedText: replacedTextValue,
   });
 
   MockDate.reset();
@@ -98,13 +94,4 @@ Array [
     id: 'article1',
   });
   expect(_source.normalArticleReplyCount).toBe(2);
-
-  const {
-    body: { doc },
-  } = await client.get({
-    index: 'replies',
-    type: 'doc',
-    id: 'foo',
-  });
-  expect(doc.text).toBe(replacedTextValue);
 });
