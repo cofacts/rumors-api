@@ -37,13 +37,16 @@ export default {
     if (Object.keys(doc).length === 1)
       throw new Error(`There's nothing to update`);
 
-    // Ensure uniqueness of slug
-    if (slug !== undefined) {
+    // Ensure uniqueness of slug if trimmed slug is not empty
+    if (slug !== undefined && slug !== null) {
       try {
         await assertSlugIsValid(slug, userId);
       } catch (e) {
         if (e !== errors.EMPTY) {
           throw new Error(`Invalid slug: ${e}`);
+        } else {
+          // allow user to update slug to empty
+          doc.slug = '';
         }
       }
     }
