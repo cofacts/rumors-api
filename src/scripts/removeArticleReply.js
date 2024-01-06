@@ -3,8 +3,8 @@
   A script that deletes an article reply
 */
 
-import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
 import client from 'util/client';
+import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
 import yargs from 'yargs';
 
 async function main({ articleId, replyId, userId, replacedText} = {}) {
