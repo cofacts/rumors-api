@@ -4,11 +4,22 @@
 */
 
 import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
+import client from 'util/client';
 import yargs from 'yargs';
 
-async function main({ articleId, replyId, userId } = {}) {
+async function main({ articleId, replyId, userId, replacedText} = {}) {
   if (!articleId || !replyId || !userId)
     throw new Error('Please provide all of articleId, replyId and userId');
+
+  const replyBody = {
+    text:replacedText,
+  };
+  
+  client.update({
+    index: 'replies',
+    type: 'doc',
+    body: replyBody,
+  });
 
   return updateArticleReplyStatus({
     articleId,
@@ -42,6 +53,12 @@ if (require.main === module) {
         description: 'Reply ID of the articleReply',
         type: 'string',
         demandOption: true,
+      },
+      replacedText: {
+        alias: 'rt',
+        description: 'Replaced text for spammer reply',
+        type: 'string',
+        demandOption: false,
       },
     })
     .help('help').argv;
