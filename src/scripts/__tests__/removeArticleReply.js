@@ -60,7 +60,6 @@ it('successfully deletes article-reply and updates normalArticleReplyCount', asy
     articleId: 'article1',
     replyId: 'foo',
   });
-
   MockDate.reset();
 
   expect(result).toMatchInlineSnapshot(`
