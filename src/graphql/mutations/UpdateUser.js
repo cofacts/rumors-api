@@ -3,7 +3,7 @@ import client from 'util/client';
 import User from 'graphql/models/User';
 import { omit, omitBy } from 'lodash';
 import { AvatarTypes } from 'util/user';
-
+import { errors } from 'graphql/models/SlugErrorEnum';
 import { assertSlugIsValid } from 'graphql/queries/ValidateSlug';
 import AvatarTypeEnum from 'graphql/models/AvatarTypeEnum';
 
