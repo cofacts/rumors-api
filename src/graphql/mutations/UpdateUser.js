@@ -42,11 +42,11 @@ export default {
       try {
         await assertSlugIsValid(slug, userId);
       } catch (e) {
-        if (e !== errors.EMPTY) {
-          throw new Error(`Invalid slug: ${e}`);
-        } else {
+        if (e === errors.EMPTY) {
           // allow user to update slug to empty
           doc.slug = '';
+        } else {
+          throw new Error(`Invalid slug: ${e}`);
         }
       }
     }
