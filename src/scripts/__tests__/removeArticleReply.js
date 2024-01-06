@@ -93,4 +93,64 @@ Array [
     id: 'article1',
   });
   expect(_source.normalArticleReplyCount).toBe(2);
+
+  it('successfully deletes article-reply with replacedText and updates normalArticleReplyCount', async () => {
+    MockDate.set(FIXED_DATE);
+
+    // Replace 'replacedTextValue' with the actual replaced text you want to test
+    const replacedTextValue = 'This is the replaced text';
+
+    const result = await removeArticleReply({
+      userId: 'current-user',
+      articleId: 'article1',
+      replyId: 'foo',
+      replacedText: replacedTextValue,
+    });
+
+    MockDate.reset();
+
+    expect(result).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "appId": "WEBSITE",
+        "replyId": "foo",
+        "status": "DELETED",
+        "updatedAt": "1989-06-04T00:00:00.000Z",
+        "userId": "current-user",
+      },
+      Object {
+        "appId": "WEBSITE",
+        "replyId": "bar",
+        "status": "NORMAL",
+        "userId": "current-user",
+      },
+      Object {
+        "appId": "WEBSITE",
+        "replyId": "foo2",
+        "status": "NORMAL",
+        "userId": "other-user",
+      },
+    ]
+    `);
+
+    const {
+      body: { _source },
+    } = await client.get({
+      index: 'articles',
+      type: 'doc',
+      id: 'article1',
+    });
+
+    expect(_source.normalArticleReplyCount).toBe(2);
+
+    const {
+      body: { doc },
+    } = await client.get({
+      index: 'replies',
+      type: 'doc',
+      id: 'foo', // Replace with the actual replyId
+    });
+
+    expect(doc.text).toBe(replacedTextValue);
+  });
 });

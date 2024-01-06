@@ -7,20 +7,21 @@ import client from 'util/client';
 import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
 import yargs from 'yargs';
 
-async function main({ articleId, replyId, userId, replacedText} = {}) {
+async function main({ articleId, replyId, userId, replacedText } = {}) {
   if (!articleId || !replyId || !userId)
     throw new Error('Please provide all of articleId, replyId and userId');
 
-  const replyBody = {
-    text:replacedText,
-  };
-  
-  client.update({
-    index: 'replies',
-    type: 'doc',
-    body: replyBody,
-  });
+  if (replacedText) {
+    const replyBody = {
+      text: replacedText,
+    };
 
+    await client.update({
+      index: 'replies',
+      type: 'doc',
+      body: replyBody,
+    });
+  }
   return updateArticleReplyStatus({
     articleId,
     replyId,
