@@ -39,7 +39,7 @@ export default {
       throw new Error(`There's nothing to update`);
 
     // Ensure uniqueness of slug
-    if (slug !== undefined) {
+    if (slug !== undefined && slug !== null) {
       try {
         await assertSlugIsValid(slug, userId);
       } catch (e) {
