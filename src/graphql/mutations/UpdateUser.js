@@ -42,7 +42,9 @@ export default {
       try {
         await assertSlugIsValid(slug, userId);
       } catch (e) {
-        throw new Error(`Invalid slug: ${e}`);
+        if (e !== errors.EMPTY) {
+          throw new Error(`Invalid slug: ${e}`);
+        }
       }
     }
 
