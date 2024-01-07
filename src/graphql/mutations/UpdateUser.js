@@ -3,6 +3,7 @@ import client from 'util/client';
 import User from 'graphql/models/User';
 import { omit, omitBy } from 'lodash';
 import { AvatarTypes } from 'util/user';
+import { errors } from 'graphql/models/SlugErrorEnum';
 
 import { assertSlugIsValid } from 'graphql/queries/ValidateSlug';
 import AvatarTypeEnum from 'graphql/models/AvatarTypeEnum';
@@ -38,11 +39,16 @@ export default {
       throw new Error(`There's nothing to update`);
 
     // Ensure uniqueness of slug
-    if (slug !== undefined) {
+    if (slug !== undefined && slug !== null) {
       try {
         await assertSlugIsValid(slug, userId);
       } catch (e) {
-        throw new Error(`Invalid slug: ${e}`);
+        if (e === errors.EMPTY) {
+          // allow user to update slug to empty
+          doc.slug = '';
+        } else {
+          throw new Error(`Invalid slug: ${e}`);
+        }
       }
     }
 
