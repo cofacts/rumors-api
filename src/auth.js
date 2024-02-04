@@ -123,7 +123,7 @@ if (process.env.FACEBOOK_APP_ID) {
         clientSecret: process.env.FACEBOOK_SECRET,
         callbackURL: process.env.FACEBOOK_CALLBACK_URL,
         profileFields: ['id', 'displayName', 'photos', 'email'],
-        graphAPIVersion: 'v10.0',
+        graphAPIVersion: 'v19.0',
       },
       (token, tokenSecret, profile, done) =>
         verifyProfile(profile, 'facebookId')
