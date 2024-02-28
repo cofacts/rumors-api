@@ -44,14 +44,13 @@ const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
  */
 function getFFMpegTransform(setupFn = cmd => cmd) {
   const input = new PassThrough();
-  const output = new PassThrough();
-  setupFn(
+  const output = setupFn(
     ffmpeg(input)
       .on('stderr', function(stderrLine) {
         console.log('Stderr output: ' + stderrLine);
       })
       .inputFormat('mp4')
-  ).pipe(output);
+  ).pipe();
 
   return Duplex.from({ readable: output, writable: input });
 }
