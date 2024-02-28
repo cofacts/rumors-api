@@ -167,7 +167,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     15000
   );
 
-  it.only(
+  it(
     'uploads video and can get media entry',
     async () => {
       const mediaEntry = await uploadMedia({
