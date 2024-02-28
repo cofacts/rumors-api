@@ -7,8 +7,10 @@ import fetch from 'node-fetch';
 import gql from 'util/GraphQL';
 import client from 'util/client';
 import delayForMs from 'util/delayForMs';
+import { uploadMedia } from 'graphql/mutations/CreateMediaArticle';
 import { getReplyRequestId } from 'graphql/mutations/CreateOrUpdateReplyRequest';
 import replaceMedia from 'scripts/replaceMedia';
+import { VIDEO_PREVIEW } from 'util/mediaManager';
 
 if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
   // File server serving test input file in __fixtures__/media-integration
@@ -161,6 +163,38 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
           appId: context.user.appId,
         }),
       });
+    },
+    15000
+  );
+
+  it.only(
+    'uploads video and can get media entry',
+    async () => {
+      const mediaEntry = await uploadMedia({
+        // Video credit: Hitokage Production https://hitokageproduction.com/article/83
+        //
+        // Re-encoded with the following ffmpeg options
+        // `-c:a aac -c:v libx264 -vf "scale=-1:720,fps=30,format=yuv420p" -crf 30 -movflags +faststart`
+        mediaUrl: `${serverUrl}/video.mp4`,
+        articleType: 'VIDEO',
+      });
+
+      expect(mediaEntry.variants).toMatchInlineSnapshot(`
+        Array [
+          "original",
+          "av1-240p5s",
+          "av1-0.75x30s",
+        ]
+      `);
+
+      let previewCacheControlHeader;
+      while (!previewCacheControlHeader) {
+        await delayForMs(1000); // Wait for upload to finish
+        const file = mediaEntry.getFile(VIDEO_PREVIEW);
+        if (!(await file.exists())[0]) continue;
+        previewCacheControlHeader = (await file.getMetadata())[0].cacheControl;
+      }
+      console.log('previewCacheControlHeader', previewCacheControlHeader);
     },
     15000
   );
