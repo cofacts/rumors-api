@@ -46,9 +46,9 @@ function getFFMpegTransform(setupFn = cmd => cmd) {
   const input = new PassThrough();
   const output = setupFn(
     ffmpeg(input)
-      .on('stderr', function(stderrLine) {
-        console.log('Stderr output: ' + stderrLine);
-      })
+      // .on('stderr', function(stderrLine) {
+      //   console.log('[ffmpeg]', stderrLine);
+      // })
       .inputFormat('mp4')
   ).pipe();
 
