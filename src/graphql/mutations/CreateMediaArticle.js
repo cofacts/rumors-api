@@ -1,9 +1,13 @@
+import { PassThrough, Duplex } from 'stream';
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 import sharp from 'sharp';
+import ffmpeg from 'fluent-ffmpeg';
 import { MediaType, variants } from '@cofacts/media-manager';
 import mediaManager, {
   IMAGE_PREVIEW,
   IMAGE_THUMBNAIL,
+  VIDEO_PREVIEW,
+  VIDEO_THUMBNAIL,
 } from 'util/mediaManager';
 import { assertUser, getContentDefaultStatus } from 'util/user';
 import client from 'util/client';
@@ -33,6 +37,24 @@ const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
   VIDEO: MediaType.video,
   AUDIO: MediaType.audio,
 };
+
+/**
+ * @param {function} setupFn - A function to setup the ffmpeg command
+ * @returns A transform stream
+ */
+function getFFMpegTransform(setupFn = cmd => cmd) {
+  const input = new PassThrough();
+  const output = new PassThrough();
+  setupFn(
+    ffmpeg(input)
+      .on('stderr', function(stderrLine) {
+        console.log('Stderr output: ' + stderrLine);
+      })
+      .inputFormat('mp4')
+  ).pipe(output);
+
+  return Duplex.from({ readable: output, writable: input });
+}
 
 /**
  * Upload media of specified article type from the given mediaUrl
@@ -74,6 +96,48 @@ export async function uploadMedia({ mediaUrl, articleType }) {
               transform: sharp()
                 .resize({ width: 600, withoutEnlargement: true })
                 .webp({ quality: 30 }),
+            },
+          ];
+
+        case MediaType.video:
+          return [
+            variants.original(contentType),
+            {
+              name: VIDEO_THUMBNAIL,
+              contentType: 'video/mp4',
+              transform: getFFMpegTransform(cmd =>
+                cmd
+                  .size('?x240')
+                  .videoCodec('libsvtav1')
+                  .videoFilters('setpts=0.5*PTS') // 2x speed
+                  .noAudio()
+                  .duration(5)
+                  .outputOptions([
+                    // https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/issues/346#issuecomment-67299526
+                    '-movflags dash',
+                    // Smaller file size
+                    '-crf 40',
+                  ])
+                  .format('mp4')
+              ),
+            },
+            {
+              name: VIDEO_PREVIEW,
+              contentType: 'video/mp4',
+              transform: getFFMpegTransform(cmd =>
+                cmd
+                  .videoCodec('libsvtav1')
+                  .size('75%')
+                  .audioCodec('copy')
+                  .duration(30)
+                  .outputOptions([
+                    // https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/issues/346#issuecomment-67299526
+                    '-movflags dash',
+                    // Slightly better quality
+                    '-crf 38',
+                  ])
+                  .format('mp4')
+              ),
             },
           ];
 
