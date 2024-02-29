@@ -23,9 +23,9 @@ jobs:
     steps:
       - name: Setup ffmpeg built with libsvtav1
         # https://www.reddit.com/r/ffmpeg/comments/tb5frl/comment/i0glb7d/
-        run:
-          wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n6.1-latest-linux64-gpl-6.1.tar.xz && \
-          tar Jxvf ffmpeg-n6.1-latest-linux64-gpl-6.1 && \
+        run: |
+          wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n6.1-latest-linux64-gpl-6.1.tar.xz &&
+          tar Jxvf ffmpeg-n6.1-latest-linux64-gpl-6.1 &&
           sudo cp -r ffmpeg-n6.1-latest-linux64-gpl-6.1/bin/* /usr/local/bin/
       - run: ffmpeg -encoders
       - uses: actions/checkout@v3
