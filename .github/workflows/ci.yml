@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Setup ffmpeg
         uses: FedericoCarboni/setup-ffmpeg@v3
+        with:
+          ffmpeg-version: 6.1.0
       - run: ffmpeg -encoders
       - uses: actions/checkout@v3
         with:
