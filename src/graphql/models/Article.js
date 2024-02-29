@@ -32,7 +32,9 @@ import ArticleReference from 'graphql/models/ArticleReference';
 import User, { userFieldResolver } from 'graphql/models/User';
 import mediaManager, {
   IMAGE_PREVIEW,
+  VIDEO_PREVIEW,
   IMAGE_THUMBNAIL,
+  VIDEO_THUMBNAIL,
 } from 'util/mediaManager';
 import ArticleReplyStatusEnum from './ArticleReplyStatusEnum';
 import ArticleReply from './ArticleReply';
@@ -528,17 +530,18 @@ const Article = new GraphQLObjectType({
         if (!attachmentHash) return null;
 
         let variant = 'original';
-        switch (variantArg) {
-          case 'PREVIEW':
-            if (articleType === 'IMAGE') {
-              variant = IMAGE_PREVIEW;
-            }
+        switch (`${articleType}_${variantArg}`) {
+          case 'IMAGE_PREVIEW':
+            variant = IMAGE_PREVIEW;
             break;
-
-          case 'THUMBNAIL':
-            if (articleType === 'IMAGE') {
-              variant = IMAGE_THUMBNAIL;
-            }
+          case 'VIDEO_PREVIEW':
+            variant = VIDEO_PREVIEW;
+            break;
+          case 'IMAGE_THUMBNAIL':
+            variant = IMAGE_THUMBNAIL;
+            break;
+          case 'VIDEO_THUMBNAIL':
+            variant = VIDEO_THUMBNAIL;
             break;
         }
 
