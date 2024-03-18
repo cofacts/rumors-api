@@ -44,6 +44,7 @@ import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
 import ArticleTypeEnum from './ArticleTypeEnum';
 import Cooccurrence from './Cooccurrence';
+import Contributor from './Contributor';
 
 const ATTACHMENT_URL_DURATION_DAY = 1;
 
@@ -579,6 +580,10 @@ const Article = new GraphQLObjectType({
             },
           },
         }),
+    },
+    contributors: {
+      type: new GraphQLList(Contributor),
+      description: 'Transcript contributors of the article',
     },
   }),
 });
