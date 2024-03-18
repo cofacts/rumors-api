@@ -44,6 +44,7 @@ import Hyperlink from './Hyperlink';
 import ReplyRequest from './ReplyRequest';
 import ArticleTypeEnum from './ArticleTypeEnum';
 import Cooccurrence from './Cooccurrence';
+import Contributor from './Contributor';
 
 const ATTACHMENT_URL_DURATION_DAY = 1;
 
@@ -579,6 +580,25 @@ const Article = new GraphQLObjectType({
             },
           },
         }),
+    },
+    contributors: {
+      type: new GraphQLList(Contributor),
+      description: 'Transcript contributors of the article',
+    },
+    transcribedAt: {
+      type: GraphQLString,
+      description: 'Time when the article was last transcribed',
+      resolve: async ({ contributors }) => {
+        if (!contributors || contributors.length === 0) {
+          return null;
+        }
+        const maxUpdatedAt = contributors.reduce(
+          (max, contributor) =>
+            contributor.updatedAt > max ? contributor.updatedAt : max,
+          contributors[0].updatedAt
+        );
+        return maxUpdatedAt;
+      },
     },
   }),
 });

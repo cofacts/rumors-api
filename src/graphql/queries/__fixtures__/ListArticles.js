@@ -46,6 +46,18 @@ export default {
         negativeFeedbackCount: 0,
       },
     ],
+    contributors: [
+      {
+        userId: 'user1',
+        appId: 'WEBSITE',
+        updatedAt: '2020-02-05T14:41:19.044Z',
+      },
+      {
+        userId: 'user2',
+        appId: 'WEBSITE',
+        updatedAt: '2020-02-05T14:41:19.044Z',
+      },
+    ],
     attachmentUrl: '',
     attachmentHash: '',
     articleType: 'TEXT',
@@ -103,6 +115,23 @@ export default {
         status: 'NORMAL',
         positiveFeedbackCount: 0,
         negativeFeedbackCount: 0,
+      },
+    ],
+    contributors: [
+      {
+        userId: 'user1',
+        appId: 'WEBSITE',
+        updatedAt: '2020-02-04T15:11:04.472Z',
+      },
+      {
+        userId: 'user3',
+        appId: 'WEBSITE',
+        updatedAt: '2020-02-08T14:41:19.044Z',
+      },
+      {
+        userId: 'user4',
+        appId: 'WEBSITE',
+        updatedAt: '2020-02-06T00:00:00.000Z',
       },
     ],
     attachmentUrl: '',

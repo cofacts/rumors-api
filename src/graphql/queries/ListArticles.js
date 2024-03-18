@@ -153,6 +153,18 @@ export default {
             },
           }),
         },
+        articleContributesFrom: {
+          description:
+            'Show only articles with article transcript contributed by specified user',
+          type: new GraphQLInputObjectType({
+            name: 'ArticleContributeInput',
+            fields: {
+              userId: {
+                type: new GraphQLNonNull(GraphQLString),
+              },
+            },
+          }),
+        },
         hasArticleReplyWithMorePositiveFeedback: {
           type: GraphQLBoolean,
           description: `
@@ -539,6 +551,25 @@ export default {
                 {
                   term: {
                     'articleReplies.userId': filter.articleRepliesFrom.userId,
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+    }
+
+    if (filter.articleContributesFrom) {
+      filterQueries.push({
+        nested: {
+          path: 'contributors',
+          query: {
+            bool: {
+              must: [
+                {
+                  term: {
+                    'contributors.userId': filter.articleContributesFrom.userId,
                   },
                 },
               ],

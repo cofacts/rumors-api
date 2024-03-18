@@ -82,6 +82,7 @@ async function createNewArticle({ text, reference: originalReference, user }) {
         attachmentUrl: '',
         attachmentHash: '',
         status: getContentDefaultStatus(user),
+        contributors: [],
       },
     },
     refresh: 'true', // Make sure the data is indexed when we create ReplyRequest

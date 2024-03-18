@@ -885,6 +885,30 @@ describe('ListArticles', () => {
     ).toMatchSnapshot('do not have articleReply from user1');
   });
 
+  it('filters via articleContributesFrom', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { articleContributesFrom: { userId: "user1" } }
+          ) {
+            edges {
+              node {
+                id
+                contributors {
+                  user {
+                    id
+                  }
+                }
+                transcribedAt
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchSnapshot('articleContributesFrom from user1');
+  });
+
   it('filters by reply types', async () => {
     expect(
       await gql`
