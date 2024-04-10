@@ -565,14 +565,8 @@ export default {
         nested: {
           path: 'contributors',
           query: {
-            bool: {
-              must: [
-                {
-                  term: {
-                    'contributors.userId': filter.articleContributesFrom.userId,
-                  },
-                },
-              ],
+            term: {
+              'contributors.userId': filter.articleContributesFrom.userId,
             },
           },
         },
