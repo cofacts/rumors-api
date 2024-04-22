@@ -582,8 +582,11 @@ const Article = new GraphQLObjectType({
         }),
     },
     contributors: {
-      type: new GraphQLList(Contributor),
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(Contributor))
+      ),
       description: 'Transcript contributors of the article',
+      resolve: ({ contributors }) => contributors ?? [],
     },
     transcribedAt: {
       type: GraphQLString,
