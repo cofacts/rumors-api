@@ -595,12 +595,12 @@ const Article = new GraphQLObjectType({
         if (!contributors || contributors.length === 0) {
           return null;
         }
-        const maxUpdatedAt = contributors.reduce(
-          (max, contributor) =>
-            contributor.updatedAt > max ? contributor.updatedAt : max,
-          contributors[0].updatedAt
+        const maxUpdatedAt = new Date(
+          Math.max(
+            ...contributors.map(contributor => new Date(contributor.updatedAt))
+          )
         );
-        return maxUpdatedAt;
+        return maxUpdatedAt.toISOString();
       },
     },
   }),
