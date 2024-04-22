@@ -162,6 +162,7 @@ async function createNewMediaArticle({
       articleType,
       attachmentHash,
       status: getContentDefaultStatus(user),
+      contributors: [],
     },
   });
 
