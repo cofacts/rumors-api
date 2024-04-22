@@ -16,6 +16,7 @@ import {
   intRangeInput,
   timeRangeInput,
   moreLikeThisInput,
+  userAndExistInput,
   getRangeFieldParamFromArithmeticExpression,
   createCommonListFilter,
   attachCommonListFilter,
@@ -136,34 +137,12 @@ export default {
         articleRepliesFrom: {
           description:
             'Show only articles with(out) article replies created by specified user',
-          type: new GraphQLInputObjectType({
-            name: 'UserAndExistInput',
-            fields: {
-              userId: {
-                type: new GraphQLNonNull(GraphQLString),
-              },
-              exists: {
-                type: GraphQLBoolean,
-                defaultValue: true,
-                description: `
-                  When true (or not specified), return only entries with the specified user's involvement.
-                  When false, return only entries that the specified user did not involve.
-                `,
-              },
-            },
-          }),
+          type: userAndExistInput,
         },
-        articleContributesFrom: {
+        transcribedBy: {
           description:
-            'Show only articles with article transcript contributed by specified user',
-          type: new GraphQLInputObjectType({
-            name: 'ArticleContributeInput',
-            fields: {
-              userId: {
-                type: new GraphQLNonNull(GraphQLString),
-              },
-            },
-          }),
+            'Show only articles with(out) article transcript contributed by specified user',
+          type: userAndExistInput,
         },
         hasArticleReplyWithMorePositiveFeedback: {
           type: GraphQLBoolean,
@@ -560,13 +539,16 @@ export default {
       });
     }
 
-    if (filter.articleContributesFrom) {
-      filterQueries.push({
+    if (filter.transcribedBy) {
+      (filter.transcribedBy.exists === false
+        ? mustNotQueries
+        : filterQueries
+      ).push({
         nested: {
           path: 'contributors',
           query: {
             term: {
-              'contributors.userId': filter.articleContributesFrom.userId,
+              'contributors.userId': filter.transcribedBy.userId,
             },
           },
         },

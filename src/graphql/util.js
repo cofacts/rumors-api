@@ -103,6 +103,23 @@ export const moreLikeThisInput = new GraphQLInputObjectType({
   },
 });
 
+export const userAndExistInput = new GraphQLInputObjectType({
+  name: 'UserAndExistInput',
+  fields: {
+    userId: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    exists: {
+      type: GraphQLBoolean,
+      defaultValue: true,
+      description: `
+        When true (or not specified), return only entries with the specified user's involvement.
+        When false, return only entries that the specified user did not involve.
+      `,
+    },
+  },
+});
+
 export function createFilterType(typeName, args) {
   const filterType = new GraphQLInputObjectType({
     name: typeName,
