@@ -84,6 +84,7 @@ describe('creation', () => {
         "articleReplies": Array [],
         "articleType": "IMAGE",
         "attachmentHash": "mock_image_hash",
+        "contributors": Array [],
         "createdAt": "2017-01-28T08:45:57.011Z",
         "hyperlinks": Array [],
         "lastRequestedAt": "2017-01-28T08:45:57.011Z",
