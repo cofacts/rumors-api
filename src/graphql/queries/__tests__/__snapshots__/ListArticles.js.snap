@@ -709,7 +709,53 @@ Object {
 }
 `;
 
-exports[`ListArticles filters via articleContributesFrom: articleContributesFrom from user1 1`] = `
+exports[`ListArticles filters via transcribedBy: is not transcribedBy user1 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "contributors": Array [],
+            "id": "listArticleTest7",
+            "transcribedAt": null,
+          },
+        },
+        Object {
+          "node": Object {
+            "contributors": Array [],
+            "id": "listArticleTest6",
+            "transcribedAt": null,
+          },
+        },
+        Object {
+          "node": Object {
+            "contributors": Array [],
+            "id": "listArticleTest5",
+            "transcribedAt": null,
+          },
+        },
+        Object {
+          "node": Object {
+            "contributors": Array [],
+            "id": "listArticleTest4",
+            "transcribedAt": null,
+          },
+        },
+        Object {
+          "node": Object {
+            "contributors": Array [],
+            "id": "listArticleTest3",
+            "transcribedAt": null,
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters via transcribedBy: transcribedBy user1 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
@@ -722,19 +768,9 @@ Object {
                   "id": "user1",
                 },
               },
-              Object {
-                "user": Object {
-                  "id": "user3",
-                },
-              },
-              Object {
-                "user": Object {
-                  "id": "user4",
-                },
-              },
             ],
             "id": "listArticleTest2",
-            "transcribedAt": "2020-02-08T14:41:19.044Z",
+            "transcribedAt": "2020-02-04T15:11:04.472Z",
           },
         },
         Object {
@@ -750,9 +786,19 @@ Object {
                   "id": "user2",
                 },
               },
+              Object {
+                "user": Object {
+                  "id": "user3",
+                },
+              },
+              Object {
+                "user": Object {
+                  "id": "user4",
+                },
+              },
             ],
             "id": "listArticleTest1",
-            "transcribedAt": "2020-02-05T14:41:19.044Z",
+            "transcribedAt": "2020-02-09T14:41:19.044Z",
           },
         },
       ],
