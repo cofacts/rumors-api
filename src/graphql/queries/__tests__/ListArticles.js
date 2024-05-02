@@ -885,6 +885,50 @@ describe('ListArticles', () => {
     ).toMatchSnapshot('do not have articleReply from user1');
   });
 
+  it('filters via transcribedBy', async () => {
+    expect(
+      await gql`
+        {
+          ListArticles(filter: { transcribedBy: { userId: "user1" } }) {
+            edges {
+              node {
+                id
+                contributors {
+                  user {
+                    id
+                  }
+                }
+                transcribedAt
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchSnapshot('transcribedBy user1');
+
+    expect(
+      await gql`
+        {
+          ListArticles(
+            filter: { transcribedBy: { userId: "user1", exists: false } }
+          ) {
+            edges {
+              node {
+                id
+                contributors {
+                  user {
+                    id
+                  }
+                }
+                transcribedAt
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' })
+    ).toMatchSnapshot('is not transcribedBy user1');
+  });
+
   it('filters by reply types', async () => {
     expect(
       await gql`
