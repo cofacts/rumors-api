@@ -19,6 +19,7 @@
     "start": "pm2-runtime start ecosystem.config.js --env production",
     "lint": "eslint src/.",
     "lint:fix": "eslint --fix src/.",
+    "typecheck": "tsc",
     "rumors-db:pull": "cd test/rumors-db && git pull",
     "rumors-db:test": "cd test/rumors-db && ELASTICSEARCH_URL=http://localhost:62223 npm t",
     "rumors-db:install": "cd test/rumors-db && npm i"
@@ -72,6 +73,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/node": "^7.16.0",
     "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.24.1",
     "@google-cloud/storage": "^6.11.0",
     "apollo-server-testing": "^2.18.2",
     "babel-jest": "^29.0.0",

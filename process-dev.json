@@ -4,5 +4,11 @@
     "script": "src/index.js",
     "watch": ["src", "test"],
     "interpreter": "./node_modules/.bin/babel-node"
+  }, {
+    "name": "command-listener",
+    "script": "src/commandListener.ts",
+    "watch": ["src"],
+    "interpreter": "./node_modules/.bin/babel-node",
+    "interpreter_args": "--extensions .ts,.js"
   }]
 }
