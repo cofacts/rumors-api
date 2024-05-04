@@ -1,3 +1,3 @@
-type T = {foo: number};
+type T = { foo: number };
 
 console.log('commandServer.ts');
