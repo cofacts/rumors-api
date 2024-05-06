@@ -205,6 +205,10 @@ $ node_modules/.bin/babel-node src/scripts/fetchStatsFromGA.js
 
 -  For more options, run the above script with `--help` or see the file level comments.
 
+### Pulling administrative commands from Google Pub/Sub
+
+When API server starts up, it will link to Google Pub/Sub topic if and only if env var `ADMIN_PUBSUB_TOPIC` is set, using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
+
 ### Removing article-reply from database
 -  To set an article-reply to deleted state on production, run:
 ```

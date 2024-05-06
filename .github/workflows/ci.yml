@@ -36,6 +36,7 @@ jobs:
           service_account: ${{ secrets.GC_SERVICE_ACCOUNT }}
       - run: npm ci
       - run: npm run lint
+      - run: npm run typecheck
       - run: npm run test -- --coverage
         env:
           GCS_CREDENTIALS: ${{ secrets.GCS_CREDENTIALS }}
