@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
+    "paths": {
+      "*": ["src/*", "test/*"]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
