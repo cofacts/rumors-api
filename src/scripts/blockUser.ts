@@ -14,10 +14,10 @@ import { updateArticleReplyByFeedbacks } from 'graphql/mutations/CreateOrUpdateA
 /**
  * Update user to write blockedReason. Throws if user does not exist.
  *
- * @param {string} userId
- * @param {string} blockedReason
+ * @param userId
+ * @param blockedReason
  */
-async function writeBlockedReasonToUser(userId, blockedReason) {
+async function writeBlockedReasonToUser(userId: string, blockedReason: string) {
   try {
     const {
       body: { result: setBlockedReasonResult },
@@ -49,9 +49,9 @@ async function writeBlockedReasonToUser(userId, blockedReason) {
 /**
  * Convert all reply requests with NORMAL status by the user to BLOCKED status.
  *
- * @param {userId} userId
+ * @param userId
  */
-async function processReplyRequests(userId) {
+async function processReplyRequests(userId: string) {
   const NORMAL_REPLY_REQUEST_QUERY = {
     bool: {
       must: [{ term: { status: 'NORMAL' } }, { term: { userId } }],
@@ -133,9 +133,9 @@ async function processReplyRequests(userId) {
 /**
  * Convert all article replies with NORMAL status by the user to BLOCKED status.
  *
- * @param {userId} userId
+ * @param userId
  */
-async function processArticleReplies(userId) {
+async function processArticleReplies(userId: string) {
   const NORMAL_ARTICLE_REPLY_QUERY = {
     nested: {
       path: 'articleReplies',
@@ -198,9 +198,9 @@ async function processArticleReplies(userId) {
 /**
  * Convert all article reply feedbacks with NORMAL status by the user to BLOCKED status.
  *
- * @param {userId} userId
+ * @param userId
  */
-async function processArticleReplyFeedbacks(userId) {
+async function processArticleReplyFeedbacks(userId: string) {
   const NORMAL_FEEDBACK_QUERY = {
     bool: {
       must: [{ term: { status: 'NORMAL' } }, { term: { userId } }],

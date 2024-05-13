@@ -14,7 +14,7 @@ async function* getAllDocs<T extends object>(
   index: string,
   query: object = { match_all: {} },
   { scroll = '30s', size = 1000 }: { size?: number; scroll?: string } = {}
-): AsyncGenerator<T> {
+): AsyncGenerator<{ _source: T }> {
   let resp = await client.search({
     index,
     scroll,
