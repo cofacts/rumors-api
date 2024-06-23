@@ -4,7 +4,10 @@ import { assertUser, getContentDefaultStatus } from 'util/user';
 import FeedbackVote from 'graphql/models/FeedbackVote';
 import ArticleReply from 'graphql/models/ArticleReply';
 
-import type { Article, ArticleReply as ArticleReplyType } from 'rumors-db/schema/articles';
+import type {
+  Article,
+  ArticleReply as ArticleReplyType,
+} from 'rumors-db/schema/articles';
 import type { ArticleReplyFeedback } from 'rumors-db/schema/articlereplyfeedbacks';
 import type { Reply } from 'rumors-db/schema/replies';
 
@@ -105,7 +108,17 @@ export default {
   },
   async resolve(
     rootValue,
-    { articleId, replyId, vote, comment },
+    {
+      articleId,
+      replyId,
+      vote,
+      comment,
+    }: {
+      articleId: string;
+      replyId: string;
+      vote: 1 | 0 | -1;
+      comment?: string | null;
+    },
     { user, loaders }
   ) {
     assertUser(user);
@@ -152,23 +165,19 @@ export default {
       // Fill in reply & article reply author ID
       //
 
-      const [
-        { userId: replyUserId },
-        article,
-      ] = await loaders.docLoader.loadMany([
-        {
-          index: 'replies',
-          id: replyId,
-        },
-        {
-          index: 'articles',
-          id: articleId,
-        },
-      ]) as [Reply, Article];
+      const [{ userId: replyUserId }, article] =
+        (await loaders.docLoader.loadMany([
+          {
+            index: 'replies',
+            id: replyId,
+          },
+          {
+            index: 'articles',
+            id: articleId,
+          },
+        ])) as [Reply, Article];
 
-      const ar = article.articleReplies.find(
-        ar => ar.replyId === replyId
-      );
+      const ar = article.articleReplies.find((ar) => ar.replyId === replyId);
 
       // Make typescript happy
       if (!ar) {
