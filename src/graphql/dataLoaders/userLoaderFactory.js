@@ -3,7 +3,7 @@ import client, { processMeta } from 'util/client';
 
 export default () =>
   new DataLoader(
-    async slugs => {
+    async (slugs) => {
       const body = [];
 
       slugs.forEach(({ slug }) => {
@@ -17,9 +17,11 @@ export default () =>
         });
       });
 
-      return (await client.msearch({
-        body,
-      })).body.responses.map(({ hits }) => {
+      return (
+        await client.msearch({
+          body,
+        })
+      ).body.responses.map(({ hits }) => {
         if (!hits || !hits.hits || hits.hits.length == 0) return null;
         return processMeta(hits.hits[0]);
       });

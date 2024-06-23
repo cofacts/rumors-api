@@ -82,7 +82,9 @@ export default new GraphQLObjectType({
           index: 'articles',
           id: articleId,
         });
-        const articleReply = articleReplies.find(ar => ar.replyId === replyId);
+        const articleReply = articleReplies.find(
+          (ar) => ar.replyId === replyId
+        );
         return {
           ...articleReply,
           articleId,

@@ -76,14 +76,16 @@ export default {
       });
     }
 
-    [['types', 'type'], ['docIds', 'docId'], ['statuses', 'status']].forEach(
-      ([filterField, docField]) => {
-        if (!filter[filterField]) return;
-        body.query.bool.filter.push({
-          terms: { [`${docField}`]: filter[filterField] },
-        });
-      }
-    );
+    [
+      ['types', 'type'],
+      ['docIds', 'docId'],
+      ['statuses', 'status'],
+    ].forEach(([filterField, docField]) => {
+      if (!filter[filterField]) return;
+      body.query.bool.filter.push({
+        terms: { [`${docField}`]: filter[filterField] },
+      });
+    });
 
     return {
       index: 'airesponses',

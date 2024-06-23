@@ -3,7 +3,7 @@ import client from 'util/client';
 
 export default () =>
   new DataLoader(
-    async categoryQueries => {
+    async (categoryQueries) => {
       const body = [];
 
       categoryQueries.forEach(({ id, first, before, after }) => {
@@ -31,9 +31,11 @@ export default () =>
         });
       });
 
-      return (await client.msearch({
-        body,
-      })).body.responses.map(({ hits }, idx) => {
+      return (
+        await client.msearch({
+          body,
+        })
+      ).body.responses.map(({ hits }, idx) => {
         if (!hits || !hits.hits) return [];
 
         const categoryId = categoryQueries[idx].id;
@@ -41,7 +43,7 @@ export default () =>
           // Find corresponding articleCategory and insert articleId
           //
           const articleCategory = articleCategories.find(
-            articleCategory => articleCategory.categoryId === categoryId
+            (articleCategory) => articleCategory.categoryId === categoryId
           );
           articleCategory.articleId = _id;
           return articleCategory;

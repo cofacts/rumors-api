@@ -2,10 +2,10 @@ import DataLoader from 'dataloader';
 import client from 'util/client';
 
 export default () =>
-  new DataLoader(async replyIds => {
+  new DataLoader(async (replyIds) => {
     const body = [];
 
-    replyIds.forEach(id => {
+    replyIds.forEach((id) => {
       body.push({ index: 'articles', type: 'doc' });
 
       body.push({
@@ -22,9 +22,11 @@ export default () =>
       });
     });
 
-    return (await client.msearch({
-      body,
-    })).body.responses.map(({ hits }, idx) => {
+    return (
+      await client.msearch({
+        body,
+      })
+    ).body.responses.map(({ hits }, idx) => {
       if (!hits || !hits.hits) return [];
 
       const replyId = replyIds[idx];
@@ -32,7 +34,7 @@ export default () =>
         // Find corresponding articleReply and insert articleId
         //
         const articleReply = articleReplies.find(
-          articleReply => articleReply.replyId === replyId
+          (articleReply) => articleReply.replyId === replyId
         );
         articleReply.articleId = _id;
         return articleReply;

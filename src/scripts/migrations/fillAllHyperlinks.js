@@ -87,7 +87,7 @@ async function fillAllArticleHyperlinks() {
     if (scrapResults.length) {
       await updateArticleHyperlinks(
         _id,
-        scrapResults.filter(result => !!result) /* filter out errors */
+        scrapResults.filter((result) => !!result) /* filter out errors */
       );
       // eslint-disable-next-line no-console
       console.log(`  ...${scrapResults.length} URL(s)`);
@@ -127,7 +127,7 @@ async function fillAllReplyHyperlinks() {
     if (scrapResults.length) {
       await updateReplyHyperlinks(
         _id,
-        scrapResults.filter(result => !!result) /* filter out errors */
+        scrapResults.filter((result) => !!result) /* filter out errors */
       );
       // eslint-disable-next-line no-console
       console.log(`  ...${scrapResults.length} URL(s)`);
@@ -135,6 +135,4 @@ async function fillAllReplyHyperlinks() {
   }
 }
 
-Promise.resolve()
-  .then(fillAllArticleHyperlinks)
-  .then(fillAllReplyHyperlinks);
+Promise.resolve().then(fillAllArticleHyperlinks).then(fillAllReplyHyperlinks);

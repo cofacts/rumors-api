@@ -52,7 +52,7 @@ export const generatePseudonym = () => {
     towns,
     separators,
     decorators,
-  ].map(ary => sample(ary));
+  ].map((ary) => sample(ary));
   return decorator(separator({ adj, name, place }));
 };
 
@@ -66,41 +66,37 @@ export const AvatarTypes = {
 /**
  * Returns avatar url based on avatarType.
  */
-export const avatarUrlResolver = (
-  s = 100,
-  d = 'identicon',
-  r = 'g'
-) => user => {
-  switch (user.avatarType) {
-    case AvatarTypes.OpenPeeps:
-      return null;
-    case AvatarTypes.Facebook:
-      return `https://graph.facebook.com/v9.0/${
-        user.facebookId
-      }/picture?height=${s}`;
-    case AvatarTypes.Github:
-      return `https://avatars2.githubusercontent.com/u/${user.githubId}?s=${s}`;
-    case AvatarTypes.Gravatar:
-    default: {
-      // return hash based on user email for gravatar url
-      const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
-      if (user.email) {
-        const hash = crypto
-          .createHash('md5')
-          .update(user.email.trim().toLocaleLowerCase())
-          .digest('hex');
-        const params = `?s=${s}&d=${d}&r=${r}`;
-        return `${GRAVATAR_URL}${hash}${params}`;
+export const avatarUrlResolver =
+  (s = 100, d = 'identicon', r = 'g') =>
+  (user) => {
+    switch (user.avatarType) {
+      case AvatarTypes.OpenPeeps:
+        return null;
+      case AvatarTypes.Facebook:
+        return `https://graph.facebook.com/v9.0/${user.facebookId}/picture?height=${s}`;
+      case AvatarTypes.Github:
+        return `https://avatars2.githubusercontent.com/u/${user.githubId}?s=${s}`;
+      case AvatarTypes.Gravatar:
+      default: {
+        // return hash based on user email for gravatar url
+        const GRAVATAR_URL = 'https://www.gravatar.com/avatar/';
+        if (user.email) {
+          const hash = crypto
+            .createHash('md5')
+            .update(user.email.trim().toLocaleLowerCase())
+            .digest('hex');
+          const params = `?s=${s}&d=${d}&r=${r}`;
+          return `${GRAVATAR_URL}${hash}${params}`;
+        }
+        return `${GRAVATAR_URL}?s=${s}&d=mp`;
       }
-      return `${GRAVATAR_URL}?s=${s}&d=mp`;
     }
-  }
-};
+  };
 
 /**
  * Returns a list of avatar type options based on information available for a user.
  */
-export const getAvailableAvatarTypes = user => {
+export const getAvailableAvatarTypes = (user) => {
   let types = [AvatarTypes.OpenPeeps];
   if (user?.email) types.push(AvatarTypes.Gravatar);
   if (user?.facebookId) types.push(AvatarTypes.Facebook);
@@ -108,7 +104,7 @@ export const getAvailableAvatarTypes = user => {
   return types;
 };
 
-export const isBackendApp = appId =>
+export const isBackendApp = (appId) =>
   appId !== 'WEBSITE' && appId !== 'DEVELOPMENT_FRONTEND';
 
 // 6 for appId prefix and 43 for 256bit hashed userId with base64 encoding.
@@ -156,7 +152,7 @@ export const isDBUserId = ({ appId, userId }) =>
   userId.length === BACKEND_USER_ID_LEN &&
   userId.substr(0, 6) === `${encodeAppId(appId)}_`;
 
-export const encodeAppId = appId =>
+export const encodeAppId = (appId) =>
   crypto
     .createHash('md5')
     .update(appId)
@@ -164,7 +160,7 @@ export const encodeAppId = appId =>
     .replace(/[+/]/g, '')
     .substr(0, 5);
 
-export const sha256 = value =>
+export const sha256 = (value) =>
   crypto
     .createHash('sha256')
     .update(value)
@@ -228,9 +224,7 @@ export async function createOrUpdateUser({ userId, appId }) {
     isBackendApp(appId) &&
     (user.appId !== appId || user.appUserId !== userId)
   ) {
-    const errorMessage = `collision found! ${
-      user.appUserId
-    } and ${userId} both hash to ${dbUserId}`;
+    const errorMessage = `collision found! ${user.appUserId} and ${userId} both hash to ${dbUserId}`;
     console.log(errorMessage);
     rollbar.error(`createBackendUserError: ${errorMessage}`);
   }

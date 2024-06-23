@@ -39,13 +39,13 @@ export default new GraphQLObjectType({
     positiveFeedbackCount: {
       type: GraphQLInt,
       resolve({ feedbacks = [] }) {
-        return feedbacks.filter(fb => fb.score === 1).length;
+        return feedbacks.filter((fb) => fb.score === 1).length;
       },
     },
     negativeFeedbackCount: {
       type: GraphQLInt,
       resolve({ feedbacks = [] }) {
-        return feedbacks.filter(fb => fb.score === -1).length;
+        return feedbacks.filter((fb) => fb.score === -1).length;
       },
     },
     createdAt: { type: GraphQLString },
@@ -57,7 +57,7 @@ export default new GraphQLObjectType({
       resolve({ feedbacks = [] }, args, { userId, appId }) {
         if (!userId || !appId) return null;
         const ownFeedback = feedbacks.find(
-          feedback => feedback.userId === userId && feedback.appId === appId
+          (feedback) => feedback.userId === userId && feedback.appId === appId
         );
         if (!ownFeedback) return null;
         return ownFeedback.score;

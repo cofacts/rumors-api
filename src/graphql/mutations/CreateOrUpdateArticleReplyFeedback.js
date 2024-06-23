@@ -84,7 +84,7 @@ export async function updateArticleReplyByFeedbacks(
   }
 
   return articleReplyUpdateResult.get._source.articleReplies.find(
-    articleReply => articleReply.replyId === replyId
+    (articleReply) => articleReply.replyId === replyId
   );
 }
 
@@ -146,22 +146,20 @@ export default {
       // Fill in reply & article reply author ID
       //
 
-      const [
-        { userId: replyUserId },
-        article,
-      ] = await loaders.docLoader.loadMany([
-        {
-          index: 'replies',
-          id: replyId,
-        },
-        {
-          index: 'articles',
-          id: articleId,
-        },
-      ]);
+      const [{ userId: replyUserId }, article] =
+        await loaders.docLoader.loadMany([
+          {
+            index: 'replies',
+            id: replyId,
+          },
+          {
+            index: 'articles',
+            id: articleId,
+          },
+        ]);
 
       const { userId: articleReplyUserId } = article.articleReplies.find(
-        ar => ar.replyId === replyId
+        (ar) => ar.replyId === replyId
       );
 
       await client.update({

@@ -152,7 +152,7 @@ async function main({ startFrom } = {}) {
      */
     const articleCategoriesOfInterest = (
       _source.articleCategories || []
-    ).filter(articleCategory => {
+    ).filter((articleCategory) => {
       // Skip deleted & blocked article categories
       if (articleCategory.status !== 'NORMAL') return false;
 
@@ -161,7 +161,7 @@ async function main({ startFrom } = {}) {
         [];
       const latestFeedbackDate = feedbacks
         .filter(
-          feedback =>
+          (feedback) =>
             !isReviewerFeedback(reviewer, feedback) &&
             feedback.status === 'NORMAL'
         )
@@ -188,7 +188,7 @@ async function main({ startFrom } = {}) {
     if (articleCategoriesOfInterest.length === 0) continue;
 
     const articleCategoryRows = articleCategoriesOfInterest.map(
-      articleCategory => {
+      (articleCategory) => {
         const feedbacks =
           articleCategoryFeedbacksMap[articleId]?.[
             articleCategory.categoryId
@@ -197,7 +197,7 @@ async function main({ startFrom } = {}) {
         const reasons = dedup(
           feedbacks
             .filter(
-              feedback =>
+              (feedback) =>
                 !isReviewerFeedback(reviewer, feedback) &&
                 feedback.status === 'NORMAL' &&
                 feedback.score === -1 &&
@@ -205,7 +205,7 @@ async function main({ startFrom } = {}) {
             )
             .map(({ comment }) => comment)
         ).join(', ');
-        const reviewerFeedback = feedbacks.find(fb =>
+        const reviewerFeedback = feedbacks.find((fb) =>
           isReviewerFeedback(reviewer, fb)
         );
 
@@ -285,7 +285,7 @@ if (require.main === module) {
   }
 
   main({ startFrom })
-    .then(workbook => {
+    .then((workbook) => {
       XLSX.writeFile(workbook, OUTPUT);
       console.log('Result written to:', OUTPUT);
     })

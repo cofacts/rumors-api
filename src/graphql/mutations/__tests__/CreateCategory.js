@@ -8,7 +8,7 @@ describe('CreateCategory', () => {
   it('creates a category', async () => {
     MockDate.set(1485593157011);
     const { data, errors } = await gql`
-      mutation($title: String!, $description: String!) {
+      mutation ($title: String!, $description: String!) {
         CreateCategory(title: $title, description: $description) {
           id
         }

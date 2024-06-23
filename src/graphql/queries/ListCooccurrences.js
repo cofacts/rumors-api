@@ -31,7 +31,7 @@ export default {
   async resolve(rootValue, { orderBy = [], filter = {}, ...otherParams }) {
     const body = {
       sort: getSortArgs(orderBy, {
-        vote: o => ({ score: { order: o } }),
+        vote: (o) => ({ score: { order: o } }),
       }),
       track_scores: true, // for _score sorting
     };

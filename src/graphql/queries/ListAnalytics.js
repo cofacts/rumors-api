@@ -50,7 +50,7 @@ export default {
       });
     }
 
-    ['type', 'docId', 'docUserId', 'docAppId'].forEach(field => {
+    ['type', 'docId', 'docUserId', 'docAppId'].forEach((field) => {
       if (!filter[field]) return;
       body.query.bool.filter.push({ term: { [`${field}`]: filter[field] } });
     });

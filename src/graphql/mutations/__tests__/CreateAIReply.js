@@ -39,7 +39,7 @@ describe('CreateAIReply', () => {
 
   it('returns latest successful AI reply if one already exists', async () => {
     const { data, errors } = await gql`
-      mutation($articleId: String!) {
+      mutation ($articleId: String!) {
         CreateAIReply(articleId: $articleId) {
           id
           status
@@ -71,7 +71,7 @@ describe('CreateAIReply', () => {
     let resolveAPI;
     const mockFn = openai.createChatCompletion.mockImplementationOnce(
       () =>
-        new Promise(resolve => {
+        new Promise((resolve) => {
           resolveAPI = resolve;
         })
     );
@@ -79,7 +79,7 @@ describe('CreateAIReply', () => {
     MockDate.set(1602288000000);
 
     const resp = gql`
-      mutation($articleId: String!) {
+      mutation ($articleId: String!) {
         CreateAIReply(articleId: $articleId) {
           id
           text
@@ -192,7 +192,7 @@ describe('CreateAIReply', () => {
 
     let isAIReplyPromiseResolved = false;
     const createAIReplyPromise = gql`
-      mutation($articleId: String!) {
+      mutation ($articleId: String!) {
         CreateAIReply(articleId: $articleId) {
           id
           status
@@ -203,7 +203,7 @@ describe('CreateAIReply', () => {
         articleId: fixtures['/airesponses/doc/loading'].docId,
       },
       { user: { id: 'test', appId: 'test' } }
-    ).then(ret => {
+    ).then((ret) => {
       isAIReplyPromiseResolved = true;
       return ret;
     });
@@ -253,7 +253,7 @@ describe('CreateAIReply', () => {
     );
 
     const { data, errors } = await gql`
-      mutation($articleId: String!) {
+      mutation ($articleId: String!) {
         CreateAIReply(articleId: $articleId) {
           id
           status
@@ -303,7 +303,7 @@ describe('CreateAIReply', () => {
         CreateAIReply: { id },
       },
     } = await gql`
-      mutation($articleId: String!) {
+      mutation ($articleId: String!) {
         CreateAIReply(articleId: $articleId) {
           id
         }
@@ -357,7 +357,7 @@ describe('CreateAIReply', () => {
     const {
       data: { CreateAIReply },
     } = await gql`
-      mutation($articleId: String!) {
+      mutation ($articleId: String!) {
         CreateAIReply(articleId: $articleId) {
           id
         }

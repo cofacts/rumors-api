@@ -48,7 +48,7 @@ async function checkAppId(ctx, next) {
 
   return cors({
     credentials: true,
-    origin: ctx => {
+    origin: (ctx) => {
       const allowedOrigins = origin.split(',');
       if (allowedOrigins.includes(ctx.get('Origin'))) return ctx.get('Origin');
 

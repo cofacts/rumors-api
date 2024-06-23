@@ -4,7 +4,7 @@ import getIn from 'util/getInFactory';
 
 export default () =>
   new DataLoader(
-    async searchContexts => {
+    async (searchContexts) => {
       const mSearchBody = [];
       searchContexts.forEach(({ body, ...otherContext }) => {
         mSearchBody.push(otherContext);
@@ -12,7 +12,7 @@ export default () =>
       });
 
       return (await client.msearch({ body: mSearchBody })).body.responses.map(
-        resp => {
+        (resp) => {
           if (resp.error) throw new Error(JSON.stringify(resp.error));
           return getIn(resp)(['hits', 'hits'], []).map(processMeta);
         }

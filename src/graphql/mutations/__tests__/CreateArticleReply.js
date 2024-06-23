@@ -13,7 +13,7 @@ describe('CreateArticleReply', () => {
     const replyId = 'createArticleReply2';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $replyId: String!) {
+      mutation ($articleId: String!, $replyId: String!) {
         CreateArticleReply(articleId: $articleId, replyId: $replyId) {
           positiveFeedbackCount
           negativeFeedbackCount
@@ -58,7 +58,7 @@ describe('CreateArticleReply', () => {
     const replyId = 'createArticleReply2';
 
     await gql`
-      mutation($articleId: String!, $replyId: String!) {
+      mutation ($articleId: String!, $replyId: String!) {
         CreateArticleReply(articleId: $articleId, replyId: $replyId) {
           replyId
         }
@@ -66,7 +66,7 @@ describe('CreateArticleReply', () => {
     `({ articleId, replyId }, { user: { id: 'test', appId: 'test' } });
 
     const { errors } = await gql`
-      mutation($articleId: String!, $replyId: String!) {
+      mutation ($articleId: String!, $replyId: String!) {
         CreateArticleReply(articleId: $articleId, replyId: $replyId) {
           replyId
         }
@@ -85,7 +85,7 @@ describe('CreateArticleReply', () => {
     const replyId = 'createArticleReply2';
 
     const { errors } = await gql`
-      mutation($articleId: String!, $replyId: String!) {
+      mutation ($articleId: String!, $replyId: String!) {
         CreateArticleReply(articleId: $articleId, replyId: $replyId) {
           replyId
         }

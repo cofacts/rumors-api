@@ -13,7 +13,7 @@ describe('CreateArticleCategory', () => {
     const categoryId = 'createArticleCategory2';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $categoryId: String!) {
+      mutation ($articleId: String!, $categoryId: String!) {
         CreateArticleCategory(articleId: $articleId, categoryId: $categoryId) {
           positiveFeedbackCount
           negativeFeedbackCount
@@ -76,7 +76,7 @@ describe('CreateArticleCategory', () => {
     const aiConfidence = 0.99;
 
     const { data, errors } = await gql`
-      mutation(
+      mutation (
         $articleId: String!
         $categoryId: String!
         $aiModel: String!
@@ -148,7 +148,7 @@ describe('CreateArticleCategory', () => {
     const categoryId = 'createArticleCategory2';
 
     await gql`
-      mutation($articleId: String!, $categoryId: String!) {
+      mutation ($articleId: String!, $categoryId: String!) {
         CreateArticleCategory(articleId: $articleId, categoryId: $categoryId) {
           categoryId
         }
@@ -156,7 +156,7 @@ describe('CreateArticleCategory', () => {
     `({ articleId, categoryId }, { user: { id: 'test', appId: 'test' } });
 
     const { errors } = await gql`
-      mutation($articleId: String!, $categoryId: String!) {
+      mutation ($articleId: String!, $categoryId: String!) {
         CreateArticleCategory(articleId: $articleId, categoryId: $categoryId) {
           categoryId
         }
@@ -178,7 +178,7 @@ describe('CreateArticleCategory', () => {
     const categoryId = 'createArticleCategory2';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $categoryId: String!) {
+      mutation ($articleId: String!, $categoryId: String!) {
         CreateArticleCategory(articleId: $articleId, categoryId: $categoryId) {
           positiveFeedbackCount
           negativeFeedbackCount
@@ -239,7 +239,7 @@ describe('CreateArticleCategory', () => {
     const categoryId = 'createArticleCategory2';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $categoryId: String!) {
+      mutation ($articleId: String!, $categoryId: String!) {
         CreateArticleCategory(articleId: $articleId, categoryId: $categoryId) {
           userId
           status

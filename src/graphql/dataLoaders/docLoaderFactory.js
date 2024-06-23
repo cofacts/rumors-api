@@ -6,16 +6,18 @@ import client, { processMeta } from 'util/client';
 //
 export default () =>
   new DataLoader(
-    async indexTypeIds => {
+    async (indexTypeIds) => {
       const docs = indexTypeIds.map(({ index, id }) => ({
         _index: index,
         _id: id,
         _type: 'doc',
       }));
 
-      return (await client.mget({
-        body: { docs },
-      })).body.docs.map(processMeta);
+      return (
+        await client.mget({
+          body: { docs },
+        })
+      ).body.docs.map(processMeta);
     },
     {
       cacheKeyFn: ({ index, id }) => `/${index}/${id}`,

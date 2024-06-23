@@ -7,7 +7,7 @@ const defaultDuration = 31;
 
 export default () =>
   new DataLoader(
-    async statsQueries => {
+    async (statsQueries) => {
       const body = [];
       const defaultEndDate = new Date();
       const defaultStartDate = subDays(defaultEndDate, defaultDuration);
@@ -42,10 +42,12 @@ export default () =>
         }
       );
 
-      return (await client.msearch({
-        body,
-      })).body.responses.map(({ hits: { hits: analytics } }) =>
-        analytics.map(row => row._source)
+      return (
+        await client.msearch({
+          body,
+        })
+      ).body.responses.map(({ hits: { hits: analytics } }) =>
+        analytics.map((row) => row._source)
       );
     },
     {

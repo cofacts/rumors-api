@@ -88,7 +88,7 @@ export async function uploadMedia({ mediaUrl, articleType }) {
         return;
       }
 
-      mediaEntry.variants.forEach(variant =>
+      mediaEntry.variants.forEach((variant) =>
         mediaEntry.getFile(variant).setMetadata(METADATA)
       );
     },
@@ -259,7 +259,7 @@ export default {
 
     await Promise.all([
       // Update reply request
-      aritcleIdPromise.then(articleId =>
+      aritcleIdPromise.then((articleId) =>
         createOrUpdateReplyRequest({
           articleId,
           user,
@@ -281,7 +281,9 @@ export default {
           );
         })
         // It's OK to fail this promise, just log as warning
-        .catch(e => console.warn(`[CreateMediaArticle] ${mediaEntry.id}:`, e)),
+        .catch((e) =>
+          console.warn(`[CreateMediaArticle] ${mediaEntry.id}:`, e)
+        ),
     ]);
 
     return { id: await aritcleIdPromise };

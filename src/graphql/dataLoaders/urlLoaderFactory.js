@@ -3,10 +3,10 @@ import DataLoader from 'dataloader';
 /**
  * Given list of urls, return their latest fetch respectively
  */
-export default dataLoaders =>
-  new DataLoader(async urls => {
+export default (dataLoaders) =>
+  new DataLoader(async (urls) => {
     const data = await dataLoaders.searchResultLoader.loadMany(
-      urls.map(url => ({
+      urls.map((url) => ({
         index: 'urls',
         type: 'doc',
         body: {
@@ -23,5 +23,5 @@ export default dataLoaders =>
       }))
     );
 
-    return data.map(result => (result && result.length ? result[0] : null));
+    return data.map((result) => (result && result.length ? result[0] : null));
   });

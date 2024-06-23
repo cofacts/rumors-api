@@ -4,7 +4,7 @@ import CreateBackendUsers from '../createBackendUsers';
 import fixtures from '../__fixtures__/createBackendUsers';
 import { sortBy } from 'lodash';
 
-const checkAllDocsForIndex = async index => {
+const checkAllDocsForIndex = async (index) => {
   let res = {};
   const {
     body: {
@@ -21,7 +21,9 @@ const checkAllDocsForIndex = async index => {
     },
   });
 
-  docs.forEach(doc => (res[`/${index}/${doc._type}/${doc._id}`] = doc._source));
+  docs.forEach(
+    (doc) => (res[`/${index}/${doc._type}/${doc._id}`] = doc._source)
+  );
 
   const expected = fixtures.expectedResults[index];
   expect(sortBy(Object.keys(res))).toStrictEqual(sortBy(Object.keys(expected)));

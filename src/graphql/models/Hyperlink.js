@@ -6,14 +6,14 @@ import { GraphQLObjectType, GraphQLString } from 'graphql';
  * @returns {resolveFn} Resolves URL entry using url or normalizedUrl
  */
 function resolveUrl(field) {
-  return async function({ url, normalizedUrl }, args, { loaders }) {
+  return async function ({ url, normalizedUrl }, args, { loaders }) {
     const urls = [url];
     if (normalizedUrl) {
       // Only consider normalizedUrl when there is one
       urls.push(normalizedUrl);
     }
     const urlEnties = await loaders.urlLoader.loadMany(urls);
-    const firstEntry = urlEnties.find(urlEntry => urlEntry) || {};
+    const firstEntry = urlEnties.find((urlEntry) => urlEntry) || {};
     return firstEntry[field];
   };
 }

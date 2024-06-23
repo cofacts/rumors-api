@@ -347,7 +347,7 @@ describe('ListReplies', () => {
   it('supports after', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListReplies(after: $cursor) {
             edges {
               node {
@@ -368,7 +368,7 @@ describe('ListReplies', () => {
   it('supports before', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListReplies(before: $cursor) {
             edges {
               node {

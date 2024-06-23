@@ -121,7 +121,7 @@ export default new GraphQLObjectType({
         });
 
         const ownFeedback = feedbacks.find(
-          feedback =>
+          (feedback) =>
             feedback.userId === user.id && feedback.appId === user.appId
         );
         if (!ownFeedback) return null;

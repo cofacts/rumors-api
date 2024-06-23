@@ -22,10 +22,7 @@ const xxhash64 = h64();
  * @returns {string} generated article ID
  */
 export function getArticleId(text) {
-  return xxhash64
-    .update(text)
-    .digest()
-    .toString(36);
+  return xxhash64.update(text).digest().toString(36);
 }
 
 /**
@@ -154,7 +151,7 @@ export default {
     // *: Updates article. Will trigger version_conflict_engine_exception if run in parallel.
     //
 
-    const replyRequestPromise = newArticlePromise.then(articleId =>
+    const replyRequestPromise = newArticlePromise.then((articleId) =>
       createOrUpdateReplyRequest({ articleId, user, reason })
     );
 

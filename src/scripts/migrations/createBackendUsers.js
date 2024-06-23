@@ -109,12 +109,12 @@ const backendUserQuery = {
 const userReferenceInSchema = {
   articlecategoryfeedbacks: {
     fields: [],
-    genId: doc =>
+    genId: (doc) =>
       `${doc.articleId}__${doc.categoryId}__${doc.userId}__${doc.appId}`,
   },
   articlereplyfeedbacks: {
     fields: [],
-    genId: doc =>
+    genId: (doc) =>
       `${doc.articleId}__${doc.replyId}__${doc.userId}__${doc.appId}`,
   },
   articles: {
@@ -123,13 +123,13 @@ const userReferenceInSchema = {
   replies: { fields: [] },
   replyrequests: {
     fields: ['feedbacks'],
-    genId: doc => `${doc.articleId}__${doc.userId}__${doc.appId}`,
+    genId: (doc) => `${doc.articleId}__${doc.userId}__${doc.appId}`,
   },
 };
 
 const emptyUserIdAllowedFields = { articles: ['articleCategories'] };
 
-const logError = error => {
+const logError = (error) => {
   console.error(`createBackendUserError: ${error}`);
   rollbar.error(`createBackendUserError: ${error}`);
 };
@@ -251,8 +251,8 @@ export default class CreateBackendUsers {
                         script: {
                           id: SCRIPT_ID,
                           params: {
-                            emptyUserIdAllowedFields: this
-                              .emptyUserIdAllowedFields,
+                            emptyUserIdAllowedFields:
+                              this.emptyUserIdAllowedFields,
                             additionalFields:
                               userReferenceInSchema[indexName].fields,
                           },
@@ -330,7 +330,7 @@ export default class CreateBackendUsers {
         newFields = this.getUserIds(appId, userId);
         for (const field of fields) {
           if (doc._source[field]) {
-            newFields[field] = doc._source[field].map(entry => ({
+            newFields[field] = doc._source[field].map((entry) => ({
               ...entry,
               ...this.getUserIds(entry.appId, entry.userId),
             }));
@@ -414,7 +414,7 @@ export default class CreateBackendUsers {
           size: this.analyticsBatchSize,
           body: {
             query: {
-              ids: { values: buckets.map(bucket => bucket.key.docId) },
+              ids: { values: buckets.map((bucket) => bucket.key.docId) },
             },
             _source: {
               includes: ['userId', 'appId'],
@@ -468,9 +468,7 @@ export default class CreateBackendUsers {
           totalUpdated += updated;
         } catch (e) {
           logError(
-            `error trying to update analytics user for doc ${docType} ${
-              doc._id
-            }`
+            `error trying to update analytics user for doc ${docType} ${doc._id}`
           );
           logError(e);
         }

@@ -7,7 +7,7 @@ export default () =>
      * @param {string[]} userIds - list of userIds
      * @returns {Promise<number[]>} - replied article count for the specified user
      */
-    async userIds => {
+    async (userIds) => {
       const body = userIds.reduce(
         (commands, userId) =>
           commands.concat(

@@ -67,7 +67,7 @@ router.use('/login', loginRouter.routes(), loginRouter.allowedMethods());
 router.use('/callback', authRouter.routes(), authRouter.allowedMethods());
 
 router.options('/logout', checkHeaders());
-router.post('/logout', checkHeaders(), ctx => {
+router.post('/logout', checkHeaders(), (ctx) => {
   ctx.logout();
   ctx.body = { success: true };
 });
@@ -77,7 +77,7 @@ router.post('/graphql', checkHeaders());
 
 const schemaStr = printSchema(schema);
 const indexFn = pug.compileFile(path.join(__dirname, 'jade/index.jade'));
-router.get('/', ctx => {
+router.get('/', (ctx) => {
   ctx.body = indexFn({ schemaStr, hostName: ctx.request.origin });
 });
 
@@ -157,7 +157,7 @@ export const apolloServer = new ApolloServer({
                   // Remove extra spaces and line breaks to further compress the query
                   query: (query ?? '')
                     .split('\n')
-                    .map(line => line.trim())
+                    .map((line) => line.trim())
                     .filter(Boolean)
                     .join(' '),
                   userId,

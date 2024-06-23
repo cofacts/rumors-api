@@ -63,7 +63,7 @@ const User = new GraphQLObjectType({
 
     availableAvatarTypes: currentUserOnlyField(
       new GraphQLList(GraphQLString),
-      user => getAvailableAvatarTypes(user)
+      (user) => getAvailableAvatarTypes(user)
     ),
 
     appId: { type: GraphQLString },
@@ -78,7 +78,7 @@ const User = new GraphQLObjectType({
       resolve: (user, args, context) =>
         context.loaders.repliedArticleCountLoader
           .load(user.id)
-          .then(num => num || 0),
+          .then((num) => num || 0),
     },
     votedArticleReplyCount: {
       type: GraphQLNonNull(GraphQLInt),
@@ -86,7 +86,7 @@ const User = new GraphQLObjectType({
       resolve: (user, args, context) =>
         context.loaders.votedArticleReplyCountLoader
           .load(user.id)
-          .then(num => num || 0),
+          .then((num) => num || 0),
     },
 
     level: {

@@ -94,7 +94,7 @@ const ArticleCategory = new GraphQLObjectType({
         });
 
         const ownFeedback = feedbacks.find(
-          feedback =>
+          (feedback) =>
             feedback.userId === user.id && feedback.appId === user.appId
         );
         if (!ownFeedback) return null;
@@ -126,7 +126,7 @@ async function articleCategoryResolveEdges(...params) {
   const edges = await defaultResolveEdges(...params);
   return edges.map(({ node: { articleCategories, id }, ...rest }) => {
     const articleCategory = articleCategories.find(
-      articleCategory => articleCategory.categoryId === categoryId
+      (articleCategory) => articleCategory.categoryId === categoryId
     );
     articleCategory.articleId = id;
 

@@ -152,10 +152,8 @@ async function main() {
     idx += 1;
 
     const entry = require(path.resolve(INPUT_DIRECTORY, dirent.name));
-    const {
-      createdArticleCategoryCount,
-      createdArticleCategoryFeedbackCount,
-    } = await processEntry(entry, annotator, reviewer);
+    const { createdArticleCategoryCount, createdArticleCategoryFeedbackCount } =
+      await processEntry(entry, annotator, reviewer);
 
     createdArticleCategorySum += createdArticleCategoryCount;
     createdArticleCategoryFeedbackSum += createdArticleCategoryFeedbackCount;

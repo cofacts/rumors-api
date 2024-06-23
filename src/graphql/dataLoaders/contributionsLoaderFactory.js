@@ -7,7 +7,7 @@ const defaultDuration = 365;
 
 export default () =>
   new DataLoader(
-    async statsQueries => {
+    async (statsQueries) => {
       const body = [];
       const defaultEndDate = new Date();
       const defaultStartDate = startOfWeek(
@@ -30,9 +30,8 @@ export default () =>
                 { term: { userId } },
                 {
                   range: {
-                    createdAt: getRangeFieldParamFromArithmeticExpression(
-                      dateRange
-                    ),
+                    createdAt:
+                      getRangeFieldParamFromArithmeticExpression(dateRange),
                   },
                 },
               ],
@@ -53,16 +52,18 @@ export default () =>
         });
       });
 
-      return (await client.msearch({
-        body,
-      })).body.responses.map(
+      return (
+        await client.msearch({
+          body,
+        })
+      ).body.responses.map(
         ({
           aggregations: {
             contributions: { buckets },
           },
         }) =>
           buckets
-            ? buckets.map(bucket => ({
+            ? buckets.map((bucket) => ({
                 date: bucket.key_as_string,
                 count: bucket.doc_count,
               }))

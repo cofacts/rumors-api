@@ -3,7 +3,7 @@ import client, { processMeta } from 'util/client';
 
 export default () =>
   new DataLoader(
-    async articleAndCategoryIds => {
+    async (articleAndCategoryIds) => {
       const body = [];
 
       articleAndCategoryIds.forEach(({ articleId, categoryId }) => {
@@ -19,9 +19,11 @@ export default () =>
         });
       });
 
-      return (await client.msearch({
-        body,
-      })).body.responses.map(({ hits }) => {
+      return (
+        await client.msearch({
+          body,
+        })
+      ).body.responses.map(({ hits }) => {
         if (!hits || !hits.hits) return [];
 
         return hits.hits.map(processMeta);

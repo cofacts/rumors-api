@@ -32,7 +32,7 @@ async function scrapUrls(
   //
   const normalizedUrls = removeFBCLIDIfExist(originalUrls);
 
-  const scrapLoader = new DataLoader(async urls => {
+  const scrapLoader = new DataLoader(async (urls) => {
     const urlToIndex = urls.reduce((map, url, i) => {
       map[url] = i;
       return map;
@@ -40,7 +40,7 @@ async function scrapUrls(
     const unorderedFetchResults = await resolveUrl(urls);
     const orderedFetchResults = [];
     unorderedFetchResults.forEach(
-      fetchResult =>
+      (fetchResult) =>
         (orderedFetchResults[urlToIndex[fetchResult.url]] = fetchResult)
     );
     return orderedFetchResults;
@@ -66,7 +66,7 @@ async function scrapUrls(
 
       return normalizedUrl;
     })
-  ).then(results => {
+  ).then((results) => {
     // 2nd pass: scrap when needed
     let scrappingCount = 0;
 
@@ -80,7 +80,7 @@ async function scrapUrls(
 
         if (noFetch || scrappingCount >= scrapLimit) return null;
         scrappingCount += 1;
-        return scrapLoader.load(result).then(scrapped => ({
+        return scrapLoader.load(result).then((scrapped) => ({
           ...scrapped,
           url: originalUrls[i],
           normalizedUrl: scrapped.url,
@@ -152,7 +152,7 @@ async function scrapUrls(
  * @return {string[]} - urls without fbclid query parameter
  */
 export function removeFBCLIDIfExist(inputTexts) {
-  return inputTexts.map(text => {
+  return inputTexts.map((text) => {
     try {
       const myURL = new url.URL(text);
       myURL.searchParams.delete('fbclid');

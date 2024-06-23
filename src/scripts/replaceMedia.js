@@ -24,16 +24,14 @@ async function replaceMedia({ articleId, url, force = false } = {}) {
   /* istanbul ignore if */
   if (!force && !oldMediaEntry)
     throw new Error(
-      `Article ${articleId}'s attachment hash "${
-        article.attachmentHash
-      }" has no corresponding media entry`
+      `Article ${articleId}'s attachment hash "${article.attachmentHash}" has no corresponding media entry`
     );
 
   // Delete old media first, so that new one can be written without worring overwriting existing files
   //
   if (oldMediaEntry) {
     await Promise.all(
-      oldMediaEntry.variants.map(variant =>
+      oldMediaEntry.variants.map((variant) =>
         oldMediaEntry
           .getFile(variant)
           .delete()
@@ -50,8 +48,9 @@ async function replaceMedia({ articleId, url, force = false } = {}) {
   });
 
   console.info(
-    `Article ${articleId} attachment hash: ${oldMediaEntry?.id ??
-      article.attachmentHash} --> ${newMediaEntry.id}`
+    `Article ${articleId} attachment hash: ${
+      oldMediaEntry?.id ?? article.attachmentHash
+    } --> ${newMediaEntry.id}`
   );
   await client.update({
     index: 'articles',

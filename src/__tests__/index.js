@@ -28,7 +28,7 @@ jest.mock('../graphql/queries/GetUser', () => {
 
 describe('apolloServer', () => {
   const actualGraphQLServerOptions = apolloServer.graphQLServerOptions;
-  const mockGraphQLServerOptions = ctx => async () =>
+  const mockGraphQLServerOptions = (ctx) => async () =>
     actualGraphQLServerOptions.call(apolloServer, { ctx });
   let now;
 

@@ -188,256 +188,286 @@ export default {
     '/users/doc/CBUT_user_90': {
       createdAt: '2010-01-01T00:00:00Z',
     },
-    '/articlecategoryfeedbacks/doc/CBUT_article_0__CBUT_category_0__CBUT_user_15__WEBSITE': {
-      articleId: 'CBUT_article_0',
-      categoryId: 'CBUT_category_0',
-      userId: 'CBUT_user_15',
-      appId: 'WEBSITE',
-      createdAt: '2020-09-19T07:07:05.785Z',
-      updatedAt: '2020-09-19T07:07:05.785Z',
-    },
-    '/articlecategoryfeedbacks/doc/CBUT_article_1__CBUT_category_1__CBUT_user_15__WEBSITE': {
-      articleId: 'CBUT_article_1',
-      categoryId: 'CBUT_category_1',
-      userId: 'CBUT_user_15',
-      appId: 'WEBSITE',
-      createdAt: '2020-07-25T03:32:50.190Z',
-      updatedAt: '2020-07-25T03:32:50.190Z',
-      comment: 'irrelevant',
-    },
-    '/articlecategoryfeedbacks/doc/CBUT_article_2__CBUT_category_1__CBUT_user_15__WEBSITE': {
-      articleId: 'CBUT_article_2',
-      categoryId: 'CBUT_category_1',
-      userId: 'CBUT_user_15',
-      appId: 'WEBSITE',
-      createdAt: '2020-07-25T03:31:47.629Z',
-      updatedAt: '2020-07-25T03:31:47.629Z',
-      comment: 'irrelevant',
-    },
-    '/articlecategoryfeedbacks/doc/CBUT_article_3__CBUT_category_1__CBUT_user_15__WEBSITE': {
-      articleId: 'CBUT_article_3',
-      categoryId: 'CBUT_category_1',
-      userId: 'CBUT_user_15',
-      appId: 'WEBSITE',
-      createdAt: '2020-07-25T03:35:36.459Z',
-      updatedAt: '2020-07-25T03:35:36.459Z',
-      comment: 'irrelevant',
-    },
-    '/articlecategoryfeedbacks/doc/CBUT_article_4__CBUT_category_1__CBUT_user_15__WEBSITE': {
-      articleId: 'CBUT_article_4',
-      categoryId: 'CBUT_category_1',
-      userId: 'CBUT_user_15',
-      appId: 'WEBSITE',
-      createdAt: '2020-07-25T04:14:22.278Z',
-      updatedAt: '2020-07-25T04:14:22.278Z',
-      comment: 'irrelevant',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_5__CBUT_reply_0__CBUT_user_16__DEVELOPMENT_FRONTEND': {
-      createdAt: '2017-11-19T09:40:11.292Z',
-      appId: 'DEVELOPMENT_FRONTEND',
-      userId: 'CBUT_user_16',
-      updatedAt: '2017-11-19T09:40:11.292Z',
-      articleId: 'CBUT_article_5',
-      replyId: 'CBUT_reply_0',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_6__CBUT_reply_1__CBUT_user_17__DEVELOPMENT_BACKEND': {
-      createdAt: '2018-01-11T08:29:22.045Z',
-      appId: 'DEVELOPMENT_BACKEND',
-      userId: 'CBUT_user_17',
-      updatedAt: '2018-01-11T08:29:22.045Z',
-      articleId: 'CBUT_article_6',
-      replyId: 'CBUT_reply_1',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_7__CBUT_reply_2__CBUT_user_18__RUMORS_LINE_BOT': {
-      articleId: 'CBUT_article_7',
-      replyId: 'CBUT_reply_2',
-      userId: 'CBUT_user_18',
-      appId: 'RUMORS_LINE_BOT',
-      createdAt: '2018-10-29T14:32:04.786Z',
-      updatedAt: '2018-10-29T14:32:04.786Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_8__CBUT_reply_3__CBUT_user_19__RUMORS_LINE_BOT': {
-      articleId: 'CBUT_article_8',
-      replyId: 'CBUT_reply_3',
-      userId: 'CBUT_user_19',
-      appId: 'RUMORS_LINE_BOT',
-      createdAt: '2019-06-25T02:42:31.105Z',
-      updatedAt: '2019-06-25T02:42:31.636Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_9__CBUT_reply_4__CBUT_user_20__WEBSITE': {
-      articleId: 'CBUT_article_9',
-      replyId: 'CBUT_reply_4',
-      userId: 'CBUT_user_20',
-      appId: 'WEBSITE',
-      createdAt: '2020-09-10T11:45:55.227Z',
-      updatedAt: '2020-09-10T11:45:55.227Z',
-      comment: '',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_10__CBUT_reply_5__CBUT_user_21__DEVELOPMENT_BACKEND': {
-      articleId: 'CBUT_article_10',
-      replyId: 'CBUT_reply_5',
-      userId: 'CBUT_user_21',
-      appId: 'DEVELOPMENT_BACKEND',
-      createdAt: '2020-02-27T09:18:07.301Z',
-      updatedAt: '2020-02-27T09:18:07.301Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_11__CBUT_reply_6__CBUT_user_22__DEVELOPMENT_BACKEND': {
-      createdAt: '2018-01-24T05:28:35.650Z',
-      appId: 'DEVELOPMENT_BACKEND',
-      userId: 'CBUT_user_22',
-      updatedAt: '2018-01-24T05:28:35.650Z',
-      articleId: 'CBUT_article_11',
-      replyId: 'CBUT_reply_6',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_12__CBUT_reply_7__CBUT_user_23__WEBSITE': {
-      articleId: 'CBUT_article_12',
-      replyId: 'CBUT_reply_7',
-      userId: 'CBUT_user_23',
-      appId: 'WEBSITE',
-      createdAt: '2020-06-28T08:33:54.411Z',
-      updatedAt: '2020-06-28T08:33:54.411Z',
-      comment: '',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_13__CBUT_reply_8__CBUT_user_24__RUMORS_LINE_BOT': {
-      articleId: 'CBUT_article_13',
-      replyId: 'CBUT_reply_8',
-      userId: 'CBUT_user_24',
-      appId: 'RUMORS_LINE_BOT',
-      createdAt: '2020-09-26T13:53:15.665Z',
-      updatedAt: '2020-09-26T13:53:24.365Z',
-      comment: '',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_14__CBUT_reply_9__CBUT_user_25__DEVELOPMENT_BACKEND': {
-      articleId: 'CBUT_article_14',
-      replyId: 'CBUT_reply_9',
-      userId: 'CBUT_user_25',
-      appId: 'DEVELOPMENT_BACKEND',
-      createdAt: '2018-03-29T06:42:21.545Z',
-      updatedAt: '2018-03-29T06:42:21.545Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_15__CBUT_reply_10__CBUT_user_15__DEVELOPMENT_FRONTEND': {
-      createdAt: '2018-02-07T18:09:49.594Z',
-      appId: 'DEVELOPMENT_FRONTEND',
-      userId: 'CBUT_user_15',
-      updatedAt: '2018-02-07T18:09:49.594Z',
-      articleId: 'CBUT_article_15',
-      replyId: 'CBUT_reply_10',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_16__CBUT_reply_11__CBUT_user_26__RUMORS_LINE_BOT': {
-      articleId: 'CBUT_article_16',
-      replyId: 'CBUT_reply_11',
-      userId: 'CBUT_user_26',
-      appId: 'RUMORS_LINE_BOT',
-      createdAt: '2020-03-10T12:02:07.419Z',
-      updatedAt: '2020-03-10T12:02:08.394Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_17__CBUT_reply_12__CBUT_user_15__WEBSITE': {
-      articleId: 'CBUT_article_17',
-      replyId: 'CBUT_reply_12',
-      userId: 'CBUT_user_15',
-      appId: 'WEBSITE',
-      createdAt: '2020-04-05T09:33:19.299Z',
-      updatedAt: '2020-04-05T09:33:19.299Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_18__CBUT_reply_13__CBUT_user_27__RUMORS_LINE_BOT': {
-      articleId: 'CBUT_article_18',
-      replyId: 'CBUT_reply_13',
-      userId: 'CBUT_user_27',
-      appId: 'RUMORS_LINE_BOT',
-      createdAt: '2019-02-20T05:11:06.611Z',
-      updatedAt: '2019-02-20T05:11:06.611Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_19__CBUT_reply_14__CBUT_user_20__WEBSITE': {
-      articleId: 'CBUT_article_19',
-      replyId: 'CBUT_reply_14',
-      userId: 'CBUT_user_20',
-      appId: 'WEBSITE',
-      createdAt: '2020-06-27T23:11:24.480Z',
-      updatedAt: '2020-06-27T23:11:24.480Z',
-      comment: '',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_20__CBUT_reply_15__CBUT_user_20__WEBSITE': {
-      articleId: 'CBUT_article_20',
-      replyId: 'CBUT_reply_15',
-      userId: 'CBUT_user_20',
-      appId: 'WEBSITE',
-      createdAt: '2020-09-26T05:54:08.502Z',
-      updatedAt: '2020-09-26T05:54:08.502Z',
-      comment: '',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_21__CBUT_reply_16__CBUT_user_28__RUMORS_LINE_BOT': {
-      articleId: 'CBUT_article_21',
-      replyId: 'CBUT_reply_16',
-      userId: 'CBUT_user_28',
-      appId: 'RUMORS_LINE_BOT',
-      createdAt: '2019-04-06T06:45:23.016Z',
-      updatedAt: '2019-04-06T06:45:23.016Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_22__CBUT_reply_17__CBUT_user_29__RUMORS_LINE_BOT': {
-      articleId: 'CBUT_article_22',
-      replyId: 'CBUT_reply_17',
-      userId: 'CBUT_user_29',
-      appId: 'RUMORS_LINE_BOT',
-      createdAt: '2018-11-11T23:43:02.406Z',
-      updatedAt: '2018-11-11T23:43:02.406Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_23__CBUT_reply_18__CBUT_user_30__RUMORS_LINE_BOT': {
-      articleId: 'CBUT_article_23',
-      replyId: 'CBUT_reply_18',
-      userId: 'CBUT_user_30',
-      appId: 'RUMORS_LINE_BOT',
-      createdAt: '2019-01-22T11:01:54.027Z',
-      updatedAt: '2019-01-22T11:01:54.027Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_24__CBUT_reply_19__CBUT_user_31__DEVELOPMENT_BACKEND': {
-      articleId: 'CBUT_article_24',
-      replyId: 'CBUT_reply_19',
-      userId: 'CBUT_user_31',
-      appId: 'DEVELOPMENT_BACKEND',
-      createdAt: '2019-11-20T22:23:54.285Z',
-      updatedAt: '2019-11-20T22:23:54.285Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_25__CBUT_reply_20__CBUT_user_32__RUMORS_LINE_BOT': {
-      articleId: 'CBUT_article_25',
-      replyId: 'CBUT_reply_20',
-      userId: 'CBUT_user_32',
-      appId: 'RUMORS_LINE_BOT',
-      createdAt: '2018-10-02T04:01:02.366Z',
-      updatedAt: '2018-10-02T04:01:02.366Z',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_26__CBUT_reply_21__CBUT_user_16__DEVELOPMENT_FRONTEND': {
-      createdAt: '2017-11-22T12:27:20.578Z',
-      appId: 'DEVELOPMENT_FRONTEND',
-      userId: 'CBUT_user_16',
-      updatedAt: '2017-11-22T12:27:20.578Z',
-      articleId: 'CBUT_article_26',
-      replyId: 'CBUT_reply_21',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_27__CBUT_reply_22__CBUT_user_17__DEVELOPMENT_BACKEND': {
-      createdAt: '2017-08-11T16:55:48.227Z',
-      appId: 'DEVELOPMENT_BACKEND',
-      userId: 'CBUT_user_17',
-      updatedAt: '2017-08-11T16:55:48.227Z',
-      articleId: 'CBUT_article_27',
-      replyId: 'CBUT_reply_22',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_28__CBUT_reply_23__CBUT_user_33__DEVELOPMENT_BACKEND': {
-      createdAt: '2018-01-31T13:52:33.249Z',
-      appId: 'DEVELOPMENT_BACKEND',
-      userId: 'CBUT_user_33',
-      updatedAt: '2018-01-31T13:52:33.249Z',
-      articleId: 'CBUT_article_28',
-      replyId: 'CBUT_reply_23',
-    },
-    '/articlereplyfeedbacks/doc/CBUT_article_29__CBUT_reply_24__CBUT_user_23__WEBSITE': {
-      articleId: 'CBUT_article_29',
-      replyId: 'CBUT_reply_24',
-      userId: 'CBUT_user_23',
-      appId: 'WEBSITE',
-      createdAt: '2020-09-19T17:04:20.167Z',
-      updatedAt: '2020-09-19T17:04:20.167Z',
-      comment: '',
-    },
+    '/articlecategoryfeedbacks/doc/CBUT_article_0__CBUT_category_0__CBUT_user_15__WEBSITE':
+      {
+        articleId: 'CBUT_article_0',
+        categoryId: 'CBUT_category_0',
+        userId: 'CBUT_user_15',
+        appId: 'WEBSITE',
+        createdAt: '2020-09-19T07:07:05.785Z',
+        updatedAt: '2020-09-19T07:07:05.785Z',
+      },
+    '/articlecategoryfeedbacks/doc/CBUT_article_1__CBUT_category_1__CBUT_user_15__WEBSITE':
+      {
+        articleId: 'CBUT_article_1',
+        categoryId: 'CBUT_category_1',
+        userId: 'CBUT_user_15',
+        appId: 'WEBSITE',
+        createdAt: '2020-07-25T03:32:50.190Z',
+        updatedAt: '2020-07-25T03:32:50.190Z',
+        comment: 'irrelevant',
+      },
+    '/articlecategoryfeedbacks/doc/CBUT_article_2__CBUT_category_1__CBUT_user_15__WEBSITE':
+      {
+        articleId: 'CBUT_article_2',
+        categoryId: 'CBUT_category_1',
+        userId: 'CBUT_user_15',
+        appId: 'WEBSITE',
+        createdAt: '2020-07-25T03:31:47.629Z',
+        updatedAt: '2020-07-25T03:31:47.629Z',
+        comment: 'irrelevant',
+      },
+    '/articlecategoryfeedbacks/doc/CBUT_article_3__CBUT_category_1__CBUT_user_15__WEBSITE':
+      {
+        articleId: 'CBUT_article_3',
+        categoryId: 'CBUT_category_1',
+        userId: 'CBUT_user_15',
+        appId: 'WEBSITE',
+        createdAt: '2020-07-25T03:35:36.459Z',
+        updatedAt: '2020-07-25T03:35:36.459Z',
+        comment: 'irrelevant',
+      },
+    '/articlecategoryfeedbacks/doc/CBUT_article_4__CBUT_category_1__CBUT_user_15__WEBSITE':
+      {
+        articleId: 'CBUT_article_4',
+        categoryId: 'CBUT_category_1',
+        userId: 'CBUT_user_15',
+        appId: 'WEBSITE',
+        createdAt: '2020-07-25T04:14:22.278Z',
+        updatedAt: '2020-07-25T04:14:22.278Z',
+        comment: 'irrelevant',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_5__CBUT_reply_0__CBUT_user_16__DEVELOPMENT_FRONTEND':
+      {
+        createdAt: '2017-11-19T09:40:11.292Z',
+        appId: 'DEVELOPMENT_FRONTEND',
+        userId: 'CBUT_user_16',
+        updatedAt: '2017-11-19T09:40:11.292Z',
+        articleId: 'CBUT_article_5',
+        replyId: 'CBUT_reply_0',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_6__CBUT_reply_1__CBUT_user_17__DEVELOPMENT_BACKEND':
+      {
+        createdAt: '2018-01-11T08:29:22.045Z',
+        appId: 'DEVELOPMENT_BACKEND',
+        userId: 'CBUT_user_17',
+        updatedAt: '2018-01-11T08:29:22.045Z',
+        articleId: 'CBUT_article_6',
+        replyId: 'CBUT_reply_1',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_7__CBUT_reply_2__CBUT_user_18__RUMORS_LINE_BOT':
+      {
+        articleId: 'CBUT_article_7',
+        replyId: 'CBUT_reply_2',
+        userId: 'CBUT_user_18',
+        appId: 'RUMORS_LINE_BOT',
+        createdAt: '2018-10-29T14:32:04.786Z',
+        updatedAt: '2018-10-29T14:32:04.786Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_8__CBUT_reply_3__CBUT_user_19__RUMORS_LINE_BOT':
+      {
+        articleId: 'CBUT_article_8',
+        replyId: 'CBUT_reply_3',
+        userId: 'CBUT_user_19',
+        appId: 'RUMORS_LINE_BOT',
+        createdAt: '2019-06-25T02:42:31.105Z',
+        updatedAt: '2019-06-25T02:42:31.636Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_9__CBUT_reply_4__CBUT_user_20__WEBSITE':
+      {
+        articleId: 'CBUT_article_9',
+        replyId: 'CBUT_reply_4',
+        userId: 'CBUT_user_20',
+        appId: 'WEBSITE',
+        createdAt: '2020-09-10T11:45:55.227Z',
+        updatedAt: '2020-09-10T11:45:55.227Z',
+        comment: '',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_10__CBUT_reply_5__CBUT_user_21__DEVELOPMENT_BACKEND':
+      {
+        articleId: 'CBUT_article_10',
+        replyId: 'CBUT_reply_5',
+        userId: 'CBUT_user_21',
+        appId: 'DEVELOPMENT_BACKEND',
+        createdAt: '2020-02-27T09:18:07.301Z',
+        updatedAt: '2020-02-27T09:18:07.301Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_11__CBUT_reply_6__CBUT_user_22__DEVELOPMENT_BACKEND':
+      {
+        createdAt: '2018-01-24T05:28:35.650Z',
+        appId: 'DEVELOPMENT_BACKEND',
+        userId: 'CBUT_user_22',
+        updatedAt: '2018-01-24T05:28:35.650Z',
+        articleId: 'CBUT_article_11',
+        replyId: 'CBUT_reply_6',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_12__CBUT_reply_7__CBUT_user_23__WEBSITE':
+      {
+        articleId: 'CBUT_article_12',
+        replyId: 'CBUT_reply_7',
+        userId: 'CBUT_user_23',
+        appId: 'WEBSITE',
+        createdAt: '2020-06-28T08:33:54.411Z',
+        updatedAt: '2020-06-28T08:33:54.411Z',
+        comment: '',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_13__CBUT_reply_8__CBUT_user_24__RUMORS_LINE_BOT':
+      {
+        articleId: 'CBUT_article_13',
+        replyId: 'CBUT_reply_8',
+        userId: 'CBUT_user_24',
+        appId: 'RUMORS_LINE_BOT',
+        createdAt: '2020-09-26T13:53:15.665Z',
+        updatedAt: '2020-09-26T13:53:24.365Z',
+        comment: '',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_14__CBUT_reply_9__CBUT_user_25__DEVELOPMENT_BACKEND':
+      {
+        articleId: 'CBUT_article_14',
+        replyId: 'CBUT_reply_9',
+        userId: 'CBUT_user_25',
+        appId: 'DEVELOPMENT_BACKEND',
+        createdAt: '2018-03-29T06:42:21.545Z',
+        updatedAt: '2018-03-29T06:42:21.545Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_15__CBUT_reply_10__CBUT_user_15__DEVELOPMENT_FRONTEND':
+      {
+        createdAt: '2018-02-07T18:09:49.594Z',
+        appId: 'DEVELOPMENT_FRONTEND',
+        userId: 'CBUT_user_15',
+        updatedAt: '2018-02-07T18:09:49.594Z',
+        articleId: 'CBUT_article_15',
+        replyId: 'CBUT_reply_10',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_16__CBUT_reply_11__CBUT_user_26__RUMORS_LINE_BOT':
+      {
+        articleId: 'CBUT_article_16',
+        replyId: 'CBUT_reply_11',
+        userId: 'CBUT_user_26',
+        appId: 'RUMORS_LINE_BOT',
+        createdAt: '2020-03-10T12:02:07.419Z',
+        updatedAt: '2020-03-10T12:02:08.394Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_17__CBUT_reply_12__CBUT_user_15__WEBSITE':
+      {
+        articleId: 'CBUT_article_17',
+        replyId: 'CBUT_reply_12',
+        userId: 'CBUT_user_15',
+        appId: 'WEBSITE',
+        createdAt: '2020-04-05T09:33:19.299Z',
+        updatedAt: '2020-04-05T09:33:19.299Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_18__CBUT_reply_13__CBUT_user_27__RUMORS_LINE_BOT':
+      {
+        articleId: 'CBUT_article_18',
+        replyId: 'CBUT_reply_13',
+        userId: 'CBUT_user_27',
+        appId: 'RUMORS_LINE_BOT',
+        createdAt: '2019-02-20T05:11:06.611Z',
+        updatedAt: '2019-02-20T05:11:06.611Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_19__CBUT_reply_14__CBUT_user_20__WEBSITE':
+      {
+        articleId: 'CBUT_article_19',
+        replyId: 'CBUT_reply_14',
+        userId: 'CBUT_user_20',
+        appId: 'WEBSITE',
+        createdAt: '2020-06-27T23:11:24.480Z',
+        updatedAt: '2020-06-27T23:11:24.480Z',
+        comment: '',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_20__CBUT_reply_15__CBUT_user_20__WEBSITE':
+      {
+        articleId: 'CBUT_article_20',
+        replyId: 'CBUT_reply_15',
+        userId: 'CBUT_user_20',
+        appId: 'WEBSITE',
+        createdAt: '2020-09-26T05:54:08.502Z',
+        updatedAt: '2020-09-26T05:54:08.502Z',
+        comment: '',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_21__CBUT_reply_16__CBUT_user_28__RUMORS_LINE_BOT':
+      {
+        articleId: 'CBUT_article_21',
+        replyId: 'CBUT_reply_16',
+        userId: 'CBUT_user_28',
+        appId: 'RUMORS_LINE_BOT',
+        createdAt: '2019-04-06T06:45:23.016Z',
+        updatedAt: '2019-04-06T06:45:23.016Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_22__CBUT_reply_17__CBUT_user_29__RUMORS_LINE_BOT':
+      {
+        articleId: 'CBUT_article_22',
+        replyId: 'CBUT_reply_17',
+        userId: 'CBUT_user_29',
+        appId: 'RUMORS_LINE_BOT',
+        createdAt: '2018-11-11T23:43:02.406Z',
+        updatedAt: '2018-11-11T23:43:02.406Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_23__CBUT_reply_18__CBUT_user_30__RUMORS_LINE_BOT':
+      {
+        articleId: 'CBUT_article_23',
+        replyId: 'CBUT_reply_18',
+        userId: 'CBUT_user_30',
+        appId: 'RUMORS_LINE_BOT',
+        createdAt: '2019-01-22T11:01:54.027Z',
+        updatedAt: '2019-01-22T11:01:54.027Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_24__CBUT_reply_19__CBUT_user_31__DEVELOPMENT_BACKEND':
+      {
+        articleId: 'CBUT_article_24',
+        replyId: 'CBUT_reply_19',
+        userId: 'CBUT_user_31',
+        appId: 'DEVELOPMENT_BACKEND',
+        createdAt: '2019-11-20T22:23:54.285Z',
+        updatedAt: '2019-11-20T22:23:54.285Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_25__CBUT_reply_20__CBUT_user_32__RUMORS_LINE_BOT':
+      {
+        articleId: 'CBUT_article_25',
+        replyId: 'CBUT_reply_20',
+        userId: 'CBUT_user_32',
+        appId: 'RUMORS_LINE_BOT',
+        createdAt: '2018-10-02T04:01:02.366Z',
+        updatedAt: '2018-10-02T04:01:02.366Z',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_26__CBUT_reply_21__CBUT_user_16__DEVELOPMENT_FRONTEND':
+      {
+        createdAt: '2017-11-22T12:27:20.578Z',
+        appId: 'DEVELOPMENT_FRONTEND',
+        userId: 'CBUT_user_16',
+        updatedAt: '2017-11-22T12:27:20.578Z',
+        articleId: 'CBUT_article_26',
+        replyId: 'CBUT_reply_21',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_27__CBUT_reply_22__CBUT_user_17__DEVELOPMENT_BACKEND':
+      {
+        createdAt: '2017-08-11T16:55:48.227Z',
+        appId: 'DEVELOPMENT_BACKEND',
+        userId: 'CBUT_user_17',
+        updatedAt: '2017-08-11T16:55:48.227Z',
+        articleId: 'CBUT_article_27',
+        replyId: 'CBUT_reply_22',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_28__CBUT_reply_23__CBUT_user_33__DEVELOPMENT_BACKEND':
+      {
+        createdAt: '2018-01-31T13:52:33.249Z',
+        appId: 'DEVELOPMENT_BACKEND',
+        userId: 'CBUT_user_33',
+        updatedAt: '2018-01-31T13:52:33.249Z',
+        articleId: 'CBUT_article_28',
+        replyId: 'CBUT_reply_23',
+      },
+    '/articlereplyfeedbacks/doc/CBUT_article_29__CBUT_reply_24__CBUT_user_23__WEBSITE':
+      {
+        articleId: 'CBUT_article_29',
+        replyId: 'CBUT_reply_24',
+        userId: 'CBUT_user_23',
+        appId: 'WEBSITE',
+        createdAt: '2020-09-19T17:04:20.167Z',
+        updatedAt: '2020-09-19T17:04:20.167Z',
+        comment: '',
+      },
     '/articles/doc/CBUT_article_30': {
       references: [
         {
@@ -528,8 +558,7 @@ export default {
       replyRequestCount: 1,
       appId: 'BOT_LEGACY',
       lastRequestedAt: '2017-01-20T00:58:00.000Z',
-      text:
-        '南投新景點～富寮里動物園，佔地18公頃，內有狐獴、侏儒山羊、兔子、鸚鵡、天鵝、紅環、灰冠鶴、驢、騾、小馬、羊駝.......等，1百多種動物(持續增加ing)，...',
+      text: '南投新景點～富寮里動物園，佔地18公頃，內有狐獴、侏儒山羊、兔子、鸚鵡、天鵝、紅環、灰冠鶴、驢、騾、小馬、羊駝.......等，1百多種動物(持續增加ing)，...',
       hyperlinks: [
         {
           summary:
@@ -584,8 +613,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2018-06-15T07:34:36.502Z',
-      text:
-        '讚！國民黨有史以來打民進黨蔡英文最好的一支廣告.既傳神又生動，大家努力的傳出去https://m.youtube.com/watch?v=VVHf9ni09m4&feature=youtu.be',
+      text: '讚！國民黨有史以來打民進黨蔡英文最好的一支廣告.既傳神又生動，大家努力的傳出去https://m.youtube.com/watch?v=VVHf9ni09m4&feature=youtu.be',
       normalArticleReplycount: 0,
       hyperlinks: [
         {
@@ -690,8 +718,7 @@ export default {
       replyRequestCount: 1,
       appId: 'BOT_LEGACY',
       lastRequestedAt: '2017-01-18T02:58:00.000Z',
-      text:
-        'l  請大家注意！  l\n\n中壢地區的泰豐輪胎廠方失火，燒出來的煙都是戴奧辛，它非常非常毒，請大家及小朋友們出門可以的話戴口罩，下雨的話也不要淋雨，以上請各位長...',
+      text: 'l  請大家注意！  l\n\n中壢地區的泰豐輪胎廠方失火，燒出來的煙都是戴奧辛，它非常非常毒，請大家及小朋友們出門可以的話戴口罩，下雨的話也不要淋雨，以上請各位長...',
       hyperlinks: [],
       updatedAt: '2017-01-18T02:58:00.000Z',
       normalArticleCategoryCount: 1,
@@ -737,16 +764,14 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2018-01-07T16:35:06.599Z',
-      text:
-        'http://health.businessweekly.com.tw/AArticleM.aspx?ID=ARTL000065544&p=2',
+      text: 'http://health.businessweekly.com.tw/AArticleM.aspx?ID=ARTL000065544&p=2',
       hyperlinks: [
         {
           summary:
             '7.「支氣管擴張劑」：有些孩子的咳嗽，是因為病毒感染之後呼吸道過度反應而造成，如果發現孩子咳嗽超過一個星期以上，可以在看病時，跟醫師討論看看是否需要使用「支氣管...',
           title:
             '孩子半夜咳不停？問題可能在冷氣！小兒科醫師建議的冷氣溫度這樣調',
-          url:
-            'http://health.businessweekly.com.tw/AArticleM.aspx?ID=ARTL000065544&p=2',
+          url: 'http://health.businessweekly.com.tw/AArticleM.aspx?ID=ARTL000065544&p=2',
         },
       ],
       updatedAt: '2018-01-07T16:35:06.585Z',
@@ -793,8 +818,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-12-24T23:48:52.805Z',
-      text:
-        '支持手遊 www.yxc8.cn 安全服務交易平臺上來交易！瀏覽器打開網頁先上去註冊個屬於自己的帳戶，然後我去掛單你需要的價格的貨物，使用點數卡在線充值選擇貨物完成下單。',
+      text: '支持手遊 www.yxc8.cn 安全服務交易平臺上來交易！瀏覽器打開網頁先上去註冊個屬於自己的帳戶，然後我去掛單你需要的價格的貨物，使用點數卡在線充值選擇貨物完成下單。',
       hyperlinks: [
         {
           summary: null,
@@ -891,8 +915,7 @@ export default {
       replyRequestCount: 7,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-06-09T03:12:55.885Z',
-      text:
-        '(受傷)\n原來汽車機車強制險不是\n只有賠償意外傷亡200萬, \n這個最重要一定要去了解！這篇報導…您不看是您的損失！\n\nhttps://youtu.be/7BV...',
+      text: '(受傷)\n原來汽車機車強制險不是\n只有賠償意外傷亡200萬, \n這個最重要一定要去了解！這篇報導…您不看是您的損失！\n\nhttps://youtu.be/7BV...',
       hyperlinks: [
         {
           summary:
@@ -946,8 +969,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-08-01T08:45:13.734Z',
-      text:
-        '天啊! 原來只要這個動作，發黑香蕉瞬間變回新鮮香蕉?!! 實在太神奇了!一定要分享出去!!\nhttp://goez1.com/p46719.asp\n',
+      text: '天啊! 原來只要這個動作，發黑香蕉瞬間變回新鮮香蕉?!! 實在太神奇了!一定要分享出去!!\nhttp://goez1.com/p46719.asp\n',
       hyperlinks: [
         {
           summary:
@@ -1056,8 +1078,7 @@ export default {
       replyRequestCount: 7,
       appId: 'BOT_LEGACY',
       lastRequestedAt: '2017-01-16T14:55:00.000Z',
-      text:
-        '昨天ㄧ位媽媽去地檢署按鈴申告，很多家長去聲援，你看看影片， 她小六大兒子被強迫跟另外一個女生練習自慰， 她抗議給小孩上一些亂七八糟的性解放教育，被霸凌，這會不會...',
+      text: '昨天ㄧ位媽媽去地檢署按鈴申告，很多家長去聲援，你看看影片， 她小六大兒子被強迫跟另外一個女生練習自慰， 她抗議給小孩上一些亂七八糟的性解放教育，被霸凌，這會不會...',
       hyperlinks: [],
       updatedAt: '2017-01-16T14:55:00.000Z',
       normalArticleCategoryCount: 1,
@@ -1125,8 +1146,7 @@ export default {
       replyRequestCount: 2,
       appId: 'BOT_LEGACY',
       lastRequestedAt: '2017-01-16T12:47:00.000Z',
-      text:
-        '今晚開始就實施擴大臨檢\n請各位朋友千萬不要酒後駕車\n警察局擴大臨檢日期：\n10/13：19~23時\n10/16：20~24時\n10/20：21~01時\n10/2...',
+      text: '今晚開始就實施擴大臨檢\n請各位朋友千萬不要酒後駕車\n警察局擴大臨檢日期：\n10/13：19~23時\n10/16：20~24時\n10/20：21~01時\n10/2...',
       hyperlinks: [],
       updatedAt: '2017-01-16T12:47:00.000Z',
       normalArticleCategoryCount: 1,
@@ -1172,8 +1192,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-11-14T23:42:12.633Z',
-      text:
-        '眼睛周圍有一粒一粒的要如何改善？非常多人都有！分享出去功德無量！\nhttp://goez1.com/p97252.asp\n',
+      text: '眼睛周圍有一粒一粒的要如何改善？非常多人都有！分享出去功德無量！\nhttp://goez1.com/p97252.asp\n',
       hyperlinks: [
         {
           summary:
@@ -1227,15 +1246,13 @@ export default {
       replyRequestCount: 1,
       appId: 'BOT_LEGACY',
       lastRequestedAt: '2017-01-11T08:52:00.000Z',
-      text:
-        '小兒用藥安全-小兒用藥的一些基本觀念 https://www.parenting.com.tw/article/5059770-小兒用藥安全-小兒用藥的一些基本觀念/',
+      text: '小兒用藥安全-小兒用藥的一些基本觀念 https://www.parenting.com.tw/article/5059770-小兒用藥安全-小兒用藥的一些基本觀念/',
       hyperlinks: [
         {
           summary:
             '不管是中藥或是西藥，沒有任何一種藥是沒有副作用的。如果有少數中藥總是強調天然植物提煉，完全不提其副作用，那麼這是一種欺騙的行為。什麼才是正確的用藥觀念呢？讓黃醫...',
           title: '小兒用藥安全-小兒用藥的一些基本觀念/親子天下',
-          url:
-            'https://www.parenting.com.tw/article/5059770-小兒用藥安全-小兒用藥的一些基本觀念/',
+          url: 'https://www.parenting.com.tw/article/5059770-小兒用藥安全-小兒用藥的一些基本觀念/',
         },
       ],
       updatedAt: '2017-01-11T08:52:00.000Z',
@@ -1334,8 +1351,7 @@ export default {
       replyRequestCount: 4,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2018-12-05T13:22:22.965Z',
-      text:
-        '大法官已釋憲，如果年底公投沒達到500萬票，明年五月台灣將成為亞洲第一個同性可合法結婚的國家。\n\n外國同性戀藉結婚來台治療愛滋病，都是健保支付，全民買單。\n\n學...',
+      text: '大法官已釋憲，如果年底公投沒達到500萬票，明年五月台灣將成為亞洲第一個同性可合法結婚的國家。\n\n外國同性戀藉結婚來台治療愛滋病，都是健保支付，全民買單。\n\n學...',
       normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2018-10-30T01:50:21.966Z',
@@ -1384,8 +1400,7 @@ export default {
       replyRequestCount: 7,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2020-03-04T03:08:52.875Z',
-      text:
-        '各位同事，您可能還記得，當我是加利福尼亞大學聖地亞哥分校的病理學教授時，我是世界上最早研究冠狀病毒的分子病毒學家之一（1970年代）。我是第一個證明該病毒包含的...',
+      text: '各位同事，您可能還記得，當我是加利福尼亞大學聖地亞哥分校的病理學教授時，我是世界上最早研究冠狀病毒的分子病毒學家之一（1970年代）。我是第一個證明該病毒包含的...',
       hyperlinks: [],
       updatedAt: '2020-03-03T15:37:27.556Z',
       normalArticleCategoryCount: 1,
@@ -1444,8 +1459,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2020-02-21T02:02:55.271Z',
-      text:
-        '意大利羅馬周三，下起了從來沒見過，也沒聽說過的石頭雨。這回意大利下的石頭雨就讓人見識了大自然的不可預測，不可控制，不可防範的天災，也再次見識了極端天氣之恐怖！\n...',
+      text: '意大利羅馬周三，下起了從來沒見過，也沒聽說過的石頭雨。這回意大利下的石頭雨就讓人見識了大自然的不可預測，不可控制，不可防範的天災，也再次見識了極端天氣之恐怖！\n...',
       normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2020-02-21T02:02:54.455Z',
@@ -1514,8 +1528,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-08-29T03:38:35.539Z',
-      text:
-        '台北馬偕醫院傳來訊息：\n\n資深醫生（林清風）傳來：「請大家以後千萬不要再吃生魚片了！」\n因為最近已經發現- 好多病人因為吃了生魚片，胃壁附著《海獸胃腺蟲》，大小...',
+      text: '台北馬偕醫院傳來訊息：\n\n資深醫生（林清風）傳來：「請大家以後千萬不要再吃生魚片了！」\n因為最近已經發現- 好多病人因為吃了生魚片，胃壁附著《海獸胃腺蟲》，大小...',
       hyperlinks: [],
       updatedAt: '2017-08-29T03:38:35.524Z',
       normalArticleCategoryCount: 1,
@@ -1584,8 +1597,7 @@ export default {
       replyRequestCount: 3,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2020-04-25T11:34:30.749Z',
-      text:
-        '13:23 金克寧 分享轉傳：\n\n兩位地方公共衛生局局長：Grant Colfax和Sara Cody，分別給他們取個中文名字吧：格蘭特和薩拉。\n\n格蘭特是舊金...',
+      text: '13:23 金克寧 分享轉傳：\n\n兩位地方公共衛生局局長：Grant Colfax和Sara Cody，分別給他們取個中文名字吧：格蘭特和薩拉。\n\n格蘭特是舊金...',
       hyperlinks: [],
       updatedAt: '2020-04-17T13:11:33.426Z',
       normalArticleCategoryCount: 2,
@@ -1643,8 +1655,7 @@ export default {
       replyRequestCount: 15,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2020-04-06T07:42:18.890Z',
-      text:
-        '你有沒有發現今天的記者會、陳時中等所有人都戴上了口罩，這認為意味著什麼？\n\n現在無症狀卻可能有傳染力的隱性感染者，是最讓人驚恐又難以防範的\n真的不要挑戰自己的運...',
+      text: '你有沒有發現今天的記者會、陳時中等所有人都戴上了口罩，這認為意味著什麼？\n\n現在無症狀卻可能有傳染力的隱性感染者，是最讓人驚恐又難以防範的\n真的不要挑戰自己的運...',
       hyperlinks: [],
       updatedAt: '2020-04-06T04:35:45.919Z',
       normalArticleCategoryCount: 2,
@@ -1724,8 +1735,7 @@ export default {
       replyRequestCount: 8,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2019-12-24T02:55:11.261Z',
-      text:
-        '民進黨已經通過了毒品條例了\n\n校園內可以擁有50克的毒品，才被視同販毒。\n\n台灣除了是(同性戀島)\n(愛滋病島)現在又增加了一個(毒品島)了\n校園毒品零容忍遭封...',
+      text: '民進黨已經通過了毒品條例了\n\n校園內可以擁有50克的毒品，才被視同販毒。\n\n台灣除了是(同性戀島)\n(愛滋病島)現在又增加了一個(毒品島)了\n校園毒品零容忍遭封...',
       normalArticleReplycount: 0,
       hyperlinks: [
         {
@@ -1783,8 +1793,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2019-05-30T13:03:09.792Z',
-      text:
-        '(moon)A，戀人\n\n他是愛你的，你在他眼中你是是完美的戀人，你的優點缺點他都能夠接受。\n情人眼裡出西施，說的就是他，你們在一起是他最為榮幸的，他覺得你是他一...',
+      text: '(moon)A，戀人\n\n他是愛你的，你在他眼中你是是完美的戀人，你的優點缺點他都能夠接受。\n情人眼裡出西施，說的就是他，你們在一起是他最為榮幸的，他覺得你是他一...',
       normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-05-30T13:03:09.773Z',
@@ -1845,8 +1854,7 @@ export default {
       replyRequestCount: 2,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2020-04-27T09:34:01.196Z',
-      text:
-        'https://usacra.wordpress.com/2020/04/23/%e6%9c%9d%e9%b2%9c%e5%85%a8%e4%bd%93%e5%...',
+      text: 'https://usacra.wordpress.com/2020/04/23/%e6%9c%9d%e9%b2%9c%e5%85%a8%e4%bd%93%e5%...',
       hyperlinks: [
         {
           normalizedUrl:
@@ -1854,8 +1862,7 @@ export default {
           summary:
             'Skip to content\n\n\t\n\t\n\n\t\n\t\t\n\n\t\t\t\n\n\n\t\n\n\t\n\t\n\t\t\n\n\n\n\n朝鲜全体党员、人民军将领以及人民：\n\n\n\n　　朝鲜劳动党中央委员...',
           title: '朝鲜全体党员、人民军将领以及人民：',
-          url:
-            'https://usacra.wordpress.com/2020/04/23/%e6%9c%9d%e9%b2%9c%e5%85%a8%e4%bd%93%e5%...',
+          url: 'https://usacra.wordpress.com/2020/04/23/%e6%9c%9d%e9%b2%9c%e5%85%a8%e4%bd%93%e5%...',
         },
       ],
       updatedAt: '2020-04-26T07:32:15.732Z',
@@ -1911,8 +1918,7 @@ export default {
       replyRequestCount: 27,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-03-21T15:32:51.522Z',
-      text:
-        '各位朋友請注意，\n\n即日起不可食用泰國製之各類罐頭食品，包含臺灣品牌泰國生産者，尤其是泰國罐裝水果食品。\n泰國200多名愛滋病感染者，在患者的首腦指揮下，湧進泰...',
+      text: '各位朋友請注意，\n\n即日起不可食用泰國製之各類罐頭食品，包含臺灣品牌泰國生産者，尤其是泰國罐裝水果食品。\n泰國200多名愛滋病感染者，在患者的首腦指揮下，湧進泰...',
       hyperlinks: [],
       updatedAt: '2017-03-13T14:12:52.385Z',
       normalArticleCategoryCount: 1,
@@ -1969,8 +1975,7 @@ export default {
       replyRequestCount: 3,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-06-13T13:42:06.389Z',
-      text:
-        '蜂蜜正確吃法 https://youtu.be/6Mh0EKBfGYg               這是一篇很棒的建議。',
+      text: '蜂蜜正確吃法 https://youtu.be/6Mh0EKBfGYg               這是一篇很棒的建議。',
       hyperlinks: [
         {
           summary:
@@ -2047,8 +2052,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2018-12-28T13:18:06.372Z',
-      text:
-        '奇蹟！燙到後趕快用它！連紅印和水泡都不會有！每家廚房都有，比沖水更有效!：https://youtu.be/EI_oExo38fA',
+      text: '奇蹟！燙到後趕快用它！連紅印和水泡都不會有！每家廚房都有，比沖水更有效!：https://youtu.be/EI_oExo38fA',
       normalArticleReplycount: 0,
       hyperlinks: [
         {
@@ -2116,8 +2120,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2020-04-03T01:27:41.997Z',
-      text:
-        '🇮🇹這就是-義大利🇮🇹\n一對*約定今年完婚*的\n情侣.女友感染新冠病毒在醫院搶救.男友探病時断然脱掉防護服⋯他們在3/25日-相繼往生！\n😭看得讓人腸斷心碎😭  ',
+      text: '🇮🇹這就是-義大利🇮🇹\n一對*約定今年完婚*的\n情侣.女友感染新冠病毒在醫院搶救.男友探病時断然脱掉防護服⋯他們在3/25日-相繼往生！\n😭看得讓人腸斷心碎😭  ',
       hyperlinks: [],
       updatedAt: '2020-04-03T01:27:41.969Z',
       normalArticleCategoryCount: 1,
@@ -2165,8 +2168,7 @@ export default {
       replyRequestCount: 2,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2020-02-27T07:50:54.261Z',
-      text:
-        '\n什麼是「中國腳鐐」呢？\n為何全世界會願意套上這個“中國腳鐐”呢？\n一個簡單的答案就是：沒有更好的選擇。\n※※※※※※\n數字是這樣告訴我們的：台灣出口最大的國家...',
+      text: '\n什麼是「中國腳鐐」呢？\n為何全世界會願意套上這個“中國腳鐐”呢？\n一個簡單的答案就是：沒有更好的選擇。\n※※※※※※\n數字是這樣告訴我們的：台灣出口最大的國家...',
       hyperlinks: [],
       updatedAt: '2020-02-27T03:27:49.869Z',
       normalArticleCategoryCount: 1,
@@ -2265,8 +2267,7 @@ export default {
       replyRequestCount: 1,
       appId: 'WEBSITE',
       lastRequestedAt: '2019-04-15T16:38:11.473Z',
-      text:
-        '一名網友在「韓國瑜加油團」臉書社團發文指出，經在高雄市政府工作的朋友告知，韓國瑜此行訪美，川普特別透過秘密管道向高市府傳達求見意願，還強調之所以會找上韓國瑜，是...',
+      text: '一名網友在「韓國瑜加油團」臉書社團發文指出，經在高雄市政府工作的朋友告知，韓國瑜此行訪美，川普特別透過秘密管道向高市府傳達求見意願，還強調之所以會找上韓國瑜，是...',
       normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-04-15T16:38:11.456Z',
@@ -2326,8 +2327,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2019-11-10T06:18:52.860Z',
-      text:
-        '电視新聞報導医生檢查女記者的肺部，發現常使用手機的人，肺部迅速老化，那位女記者才二十多歲，肺部老化，相當四十多歲的人。好恐怖!三C產品盡量少用。',
+      text: '电視新聞報導医生檢查女記者的肺部，發現常使用手機的人，肺部迅速老化，那位女記者才二十多歲，肺部老化，相當四十多歲的人。好恐怖!三C產品盡量少用。',
       normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-11-10T06:18:52.830Z',
@@ -2377,8 +2377,7 @@ export default {
       replyRequestCount: 1,
       appId: 'WEBSITE',
       lastRequestedAt: '2019-11-13T16:17:15.156Z',
-      text:
-        'My experience with burns is this:\nOnce I was cooking some corn and stuck my fork...',
+      text: 'My experience with burns is this:\nOnce I was cooking some corn and stuck my fork...',
       normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-11-13T16:17:15.137Z',
@@ -2495,8 +2494,7 @@ export default {
       replyRequestCount: 5,
       appId: 'BOT_LEGACY',
       lastRequestedAt: '2017-01-10T01:12:00.000Z',
-      text:
-        '*轉po*\n昨天年金改革委員會第14次會議，重點如以下幾點：\n1.各項年金請領年齡皆為65歲（未滿65歲無法請領），不分族群職業類別。\n勞保原為60歲即可領，未...',
+      text: '*轉po*\n昨天年金改革委員會第14次會議，重點如以下幾點：\n1.各項年金請領年齡皆為65歲（未滿65歲無法請領），不分族群職業類別。\n勞保原為60歲即可領，未...',
       hyperlinks: [],
       updatedAt: '2017-01-10T01:12:00.000Z',
       normalArticleCategoryCount: 1,
@@ -2553,16 +2551,14 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-06-24T02:25:38.668Z',
-      text:
-        '連署增設公幼\n\nhttp://join.gov.tw/idea/detail/6a024fc8-ceb3-45cc-a37a-59cbec2d6bd4\n各位夥伴...',
+      text: '連署增設公幼\n\nhttp://join.gov.tw/idea/detail/6a024fc8-ceb3-45cc-a37a-59cbec2d6bd4\n各位夥伴...',
       hyperlinks: [
         {
           summary:
             '提議內容或建議事項\n\t\t\t\t台灣少子化已是全球第一名，目前總生育率約1.175%，日本為1.4%、韓國1.5%，港澳及新加坡為1.2%。目前全國公幼2465園，...',
           title:
             '公共化幼兒園應在4年內達到1000班之政策目標- 提點子-公共政策網路參與平臺',
-          url:
-            'http://join.gov.tw/idea/detail/6a024fc8-ceb3-45cc-a37a-59cbec2d6bd4',
+          url: 'http://join.gov.tw/idea/detail/6a024fc8-ceb3-45cc-a37a-59cbec2d6bd4',
         },
       ],
       updatedAt: '2017-06-24T02:25:38.653Z',
@@ -2620,8 +2616,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-07-10T11:37:00.105Z',
-      text:
-        '轉載：\n以下是一位在臺灣出生在台灣成長的純正台湾人轉來的。\n\n什麼叫「兩蔣時代」？以下就是：\n\n1，是治安良好的時代。\n2，是沒有民粹的時代。\n3，是禮義廉恥、...',
+      text: '轉載：\n以下是一位在臺灣出生在台灣成長的純正台湾人轉來的。\n\n什麼叫「兩蔣時代」？以下就是：\n\n1，是治安良好的時代。\n2，是沒有民粹的時代。\n3，是禮義廉恥、...',
       hyperlinks: [],
       updatedAt: '2017-07-10T11:37:00.087Z',
       normalArticleCategoryCount: 1,
@@ -2689,8 +2684,7 @@ export default {
       replyRequestCount: 2,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-05-21T04:51:51.057Z',
-      text:
-        '(牛奶加一物，三高、痛風、癌症都不見了！姐夫82歲了還活力無窮！轉發出去功德無量！)【快來看】│這篇文不錯分享給你看│ →    http://ezvivi.c...',
+      text: '(牛奶加一物，三高、痛風、癌症都不見了！姐夫82歲了還活力無窮！轉發出去功德無量！)【快來看】│這篇文不錯分享給你看│ →    http://ezvivi.c...',
       hyperlinks: [
         {
           summary:
@@ -2761,8 +2755,7 @@ export default {
       replyRequestCount: 12,
       appId: 'BOT_LEGACY',
       lastRequestedAt: '2017-04-08T08:27:32.840Z',
-      text:
-        '日本醫學博士說:\n\n防失智, 增強記憶力, 不用吃藥, 可以用食療, 他推薦要吃4種食物 :\n\n1, 番茄煮熟防失智。\n2, 蘋果增強記憶力。\n3, 黑巧克力活...',
+      text: '日本醫學博士說:\n\n防失智, 增強記憶力, 不用吃藥, 可以用食療, 他推薦要吃4種食物 :\n\n1, 番茄煮熟防失智。\n2, 蘋果增強記憶力。\n3, 黑巧克力活...',
       hyperlinks: [],
       updatedAt: '2017-01-22T04:05:00.000Z',
       normalArticleCategoryCount: 1,
@@ -2819,8 +2812,7 @@ export default {
       replyRequestCount: 3,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2017-12-31T04:18:42.495Z',
-      text:
-        '舊金山市長李孟賢（Edwin M. Lee）已於12 日凌晨1時11分因心臟病發於舊金山總醫院過世，享年65歲。\n請花幾分鐘閱讀此文：\n\n1. 假設現在是晚上7...',
+      text: '舊金山市長李孟賢（Edwin M. Lee）已於12 日凌晨1時11分因心臟病發於舊金山總醫院過世，享年65歲。\n請花幾分鐘閱讀此文：\n\n1. 假設現在是晚上7...',
       hyperlinks: [],
       updatedAt: '2017-12-30T01:01:44.438Z',
       normalArticleCategoryCount: 1,
@@ -2868,16 +2860,14 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2019-08-15T02:39:39.597Z',
-      text:
-        '運動手錶跟手機互聯，當然手機內所有資料都會進入他們的伺服器（任何品牌都如此）唯獨中國只要發送「詆譭攻擊等圖文」就會鎖定情搜追蹤你。以保護自己及國安角度，供大家參考。',
+      text: '運動手錶跟手機互聯，當然手機內所有資料都會進入他們的伺服器（任何品牌都如此）唯獨中國只要發送「詆譭攻擊等圖文」就會鎖定情搜追蹤你。以保護自己及國安角度，供大家參考。',
       normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-08-15T02:39:39.532Z',
       normalArticleCategoryCount: 1,
     },
     '/articles/doc/CBUT_article_0': {
-      text:
-        '轉貼\n\n中華民族崛起的主要敵人 AngloSaxon 民族\n\n兩百年來，鴉片戰爭開始，中國最主要的敵人就是英國，AngloSaxon 民族，現在隨著中國的崛起​...',
+      text: '轉貼\n\n中華民族崛起的主要敵人 AngloSaxon 民族\n\n兩百年來，鴉片戰爭開始，中國最主要的敵人就是英國，AngloSaxon 民族，現在隨著中國的崛起​...',
       createdAt: '2020-09-08T15:30:44.659Z',
       updatedAt: '2020-09-08T15:30:44.659Z',
       userId: 'CBUT_user_87',
@@ -2953,8 +2943,7 @@ export default {
       replyRequestCount: 1,
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2018-01-26T02:28:32.033Z',
-      text:
-        '不能只有我拿到！現在來家樂福滴血認親"完成會員認證"，免費拿娘家好禮，完成再抽會員點數一千萬點！\r\nhttps://goo.gl/sNbJrY',
+      text: '不能只有我拿到！現在來家樂福滴血認親"完成會員認證"，免費拿娘家好禮，完成再抽會員點數一千萬點！\r\nhttps://goo.gl/sNbJrY',
       hyperlinks: [
         {
           summary: null,
@@ -3006,15 +2995,13 @@ export default {
       replyRequestCount: 3,
       appId: 'BOT_LEGACY',
       lastRequestedAt: '2017-01-13T03:49:00.000Z',
-      text:
-        '太白粉擺上一百年也不長蟲，你相信嗎? \n\n肉羹麵、蚵仔麵線、酸辣湯…勾芡的東西容易引起痛風及糖尿病之慢性病 。 \n喜歡吃燴飯肉羹湯的人請注意！ \n\n烹飪老師是西...',
+      text: '太白粉擺上一百年也不長蟲，你相信嗎? \n\n肉羹麵、蚵仔麵線、酸辣湯…勾芡的東西容易引起痛風及糖尿病之慢性病 。 \n喜歡吃燴飯肉羹湯的人請注意！ \n\n烹飪老師是西...',
       hyperlinks: [],
       updatedAt: '2017-01-13T03:49:00.000Z',
       normalArticleCategoryCount: 1,
     },
     '/articles/doc/CBUT_article_43': {
-      text:
-        '百億離岸風電國產大餅訂單爆肥水外流\n蘋果日報\n離岸風電產業近年因政策利多及多家國際能源大廠來台投資，號稱將帶動八千億產值，其中鋼鐵股王世紀集團被視為民營鋼廠的領...',
+      text: '百億離岸風電國產大餅訂單爆肥水外流\n蘋果日報\n離岸風電產業近年因政策利多及多家國際能源大廠來台投資，號稱將帶動八千億產值，其中鋼鐵股王世紀集團被視為民營鋼廠的領...',
       createdAt: '2020-09-26T07:29:51.676Z',
       updatedAt: '2020-09-26T07:29:51.676Z',
       userId: 'CBUT_user_35',
@@ -3063,8 +3050,7 @@ export default {
       lastRequestedAt: '2020-09-26T07:29:51.708Z',
     },
     '/articles/doc/CBUT_article_44': {
-      text:
-        '柯文哲行程曝光，也讓現場媒體相當質疑，特別是先前曝光的國務院、國防部皆被取消，由於當天柯的行程相當鬆散，加上柯訪美期間每天都安排早上受訪，唯獨華盛頓安排中午，也...',
+      text: '柯文哲行程曝光，也讓現場媒體相當質疑，特別是先前曝光的國務院、國防部皆被取消，由於當天柯的行程相當鬆散，加上柯訪美期間每天都安排早上受訪，唯獨華盛頓安排中午，也...',
       createdAt: '2020-09-26T09:39:48.802Z',
       updatedAt: '2020-09-26T09:39:48.802Z',
       userId: 'CBUT_user_35',
@@ -3116,8 +3102,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'OPINIONATED',
-      text:
-        '陸委會指出，習近平近日再定義「九二共識」是「兩岸同屬一個中國、共同謀求國家統一」，更倡議探索「一國兩制」台灣方案，踐踏民主程序，透過花瓶式的「政治協商」來分化台...',
+      text: '陸委會指出，習近平近日再定義「九二共識」是「兩岸同屬一個中國、共同謀求國家統一」，更倡議探索「一國兩制」台灣方案，踐踏民主程序，透過花瓶式的「政治協商」來分化台...',
       reference:
         'https://www.cna.com.tw/news/aipl/201901090206.aspx\n\n\nhttps://www.rti.org.tw/news/view/id/2007762',
       createdAt: '2019-01-10T07:11:59.378Z',
@@ -3140,8 +3125,7 @@ export default {
       userId: 'CBUT_user_54',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '1.新北市的「老人健保補助」，必須符合年紀和設籍滿一年的要件，社會局會主動寄專函通知符合資格的民眾，並非「帶身分證至區公所辦理」。\n\n2.65歲以上領3224元...',
+      text: '1.新北市的「老人健保補助」，必須符合年紀和設籍滿一年的要件，社會局會主動寄專函通知符合資格的民眾，並非「帶身分證至區公所辦理」。\n\n2.65歲以上領3224元...',
       reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/3737',
       createdAt: '2020-04-28T05:56:52.104Z',
       hyperlinks: [
@@ -3246,8 +3230,7 @@ export default {
       userId: 'CBUT_user_49',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '內政部警政署的輿情回應專區，有特別針對這一則消息製作澄清一覽表：網路流傳「道路交通法規修法加重處罰」謠言澄清一覽表,如附件資料。',
+      text: '內政部警政署的輿情回應專區，有特別針對這一則消息製作澄清一覽表：網路流傳「道路交通法規修法加重處罰」謠言澄清一覽表,如附件資料。',
       reference:
         'https://www.npa.gov.tw/NPAGip/wSite/public/Attachment/f1531122098570.pdf',
       createdAt: '2018-10-01T16:02:38.646Z',
@@ -3255,8 +3238,7 @@ export default {
         {
           summary: null,
           title: null,
-          url:
-            'https://www.npa.gov.tw/NPAGip/wSite/public/Attachment/f1531122098570.pdf',
+          url: 'https://www.npa.gov.tw/NPAGip/wSite/public/Attachment/f1531122098570.pdf',
         },
       ],
     },
@@ -3265,8 +3247,7 @@ export default {
         'http://www.mygopen.com/2017/06/blog-post_26.html\n神奇的地瓜葉？搭配鮮奶遠離三高？謠言讓醫生說：有痛風或是腎臟不好的人要小心！',
       createdAt: '2017-07-09T15:02:23.370Z',
       appId: 'WEBSITE',
-      text:
-        '基本上地瓜葉其實單吃就有效果，牛奶、豆漿可加可不加，民眾不用迷信。 三高或是糖尿病的患者還是要搭配醫生的治療，不能單靠吃地瓜葉就想將身體調養好，民眾千萬要注意。...',
+      text: '基本上地瓜葉其實單吃就有效果，牛奶、豆漿可加可不加，民眾不用迷信。 三高或是糖尿病的患者還是要搭配醫生的治療，不能單靠吃地瓜葉就想將身體調養好，民眾千萬要注意。...',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3284,8 +3265,7 @@ export default {
         'https://www.nownews.com/news/20100519/636359\n藥水比藥錠吸收快？　專業藥師破除網路傳言',
       createdAt: '2017-12-14T04:09:00.110Z',
       appId: 'WEBSITE',
-      text:
-        '針對特殊族群，如兒童或老人，為了讓藥物更容易服用或是給藥劑量精準，可能會將藥物製成藥水。',
+      text: '針對特殊族群，如兒童或老人，為了讓藥物更容易服用或是給藥劑量精準，可能會將藥物製成藥水。',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3302,8 +3282,7 @@ export default {
         'https://kknews.cc/zh-tw/fashion/lznly52.html\n太早用眼霜會長脂肪粒？別再傳這樣的謠言了',
       createdAt: '2017-11-15T05:23:58.752Z',
       appId: 'WEBSITE',
-      text:
-        '眼霜並不是導致脂肪粒產生的原因。脂肪粒大多數情況下指的是粟丘疹，它是一種形成於毛囊皮脂腺的表皮囊腫，內部聚集了角質化的殘留物，通常為白色/淡黃色凸起。',
+      text: '眼霜並不是導致脂肪粒產生的原因。脂肪粒大多數情況下指的是粟丘疹，它是一種形成於毛囊皮脂腺的表皮囊腫，內部聚集了角質化的殘留物，通常為白色/淡黃色凸起。',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3320,8 +3299,7 @@ export default {
         'http://www.mygopen.com/2017/10/14line.html\n【假新聞】年金改革委員會第14次會議？LINE 傳的都假的，不要採信！',
       createdAt: '2017-10-03T03:37:10.740Z',
       appId: 'WEBSITE',
-      text:
-        '純屬謠言一則，年金改革辦公室也做出澄清了，這完全不是事實，事實上年改會在14次針對年金領取資格會中沒有達成任何共識，勞保方面，根據勞保條例規定，勞保老年年金請領...',
+      text: '純屬謠言一則，年金改革辦公室也做出澄清了，這完全不是事實，事實上年改會在14次針對年金領取資格會中沒有達成任何共識，勞保方面，根據勞保條例規定，勞保老年年金請領...',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3339,8 +3317,7 @@ export default {
         'http://www.edu.tw/News_Content.aspx?n=9E⋯&sms=169B8E91BB75571F&s=6DDDD36D6874DB8...',
       createdAt: '2017-07-06T06:44:19.192Z',
       appId: 'WEBSITE',
-      text:
-        '教育部依性別平等教育法等相關規定實施性別平等教育課程，教科書也都經過審定。若家長有具體內容，可提出檢舉，教育部會請教科書業者再做審視及調整。\n目前國小教科書的「...',
+      text: '教育部依性別平等教育法等相關規定實施性別平等教育課程，教科書也都經過審定。若家長有具體內容，可提出檢舉，教育部會請教科書業者再做審視及調整。\n目前國小教科書的「...',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3348,8 +3325,7 @@ export default {
           summary:
             '抱歉！請您再重新檢視輸入的網址是否正確。您也可以回到上一頁或首頁。\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\tSorry. Please check one more ti...',
           title: '教育部全球資訊網',
-          url:
-            'http://www.edu.tw/News_Content.aspx?n=9E⋯&sms=169B8E91BB75571F&s=6DDDD36D6874DB88',
+          url: 'http://www.edu.tw/News_Content.aspx?n=9E⋯&sms=169B8E91BB75571F&s=6DDDD36D6874DB88',
         },
         {
           summary:
@@ -3371,8 +3347,7 @@ export default {
         'https://www.fda.gov.tw/tc/newsContent.aspx?cid=5049&id=22092\n會中毒，所以要少吃勾芡料理？',
       createdAt: '2017-07-07T09:39:54.019Z',
       appId: 'WEBSITE',
-      text:
-        '太白粉的樹薯塊根含有微量具有毒性之氰酸，食用後會引發噁心、嘔吐、下痢、昏眩，甚至會呼吸衰竭而死亡。\n樹薯粉是將樹薯經過浸水、脫汁、壓榨、加熱和乾燥等加工過程後抽...',
+      text: '太白粉的樹薯塊根含有微量具有毒性之氰酸，食用後會引發噁心、嘔吐、下痢、昏眩，甚至會呼吸衰竭而死亡。\n樹薯粉是將樹薯經過浸水、脫汁、壓榨、加熱和乾燥等加工過程後抽...',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3389,8 +3364,7 @@ export default {
       reference: 'http://news.ltn.com.tw/news/life/paper/1060978',
       createdAt: '2017-03-27T14:21:52.619Z',
       appId: 'WEBSITE',
-      text:
-        '教育部昨澄清，目前性平教材是早經公聽及專家修訂而無爭議，是提供教師增加知能，盼外界勿再以訛傳訛。',
+      text: '教育部昨澄清，目前性平教材是早經公聽及專家修訂而無爭議，是提供教師增加知能，盼外界勿再以訛傳訛。',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3407,8 +3381,7 @@ export default {
         'https://www.everydayhealth.com.tw/article/857\nhttps://www.amazon.co.jp/%E8%AA%8D...',
       createdAt: '2017-04-12T11:21:23.414Z',
       appId: 'WEBSITE',
-      text:
-        '文中的日本醫學博士是安田和人，有針對失智症食療出書，內容確實包含文中四項食物。',
+      text: '文中的日本醫學博士是安田和人，有針對失智症食療出書，內容確實包含文中四項食物。',
       type: 'NOT_RUMOR',
       userId: 'CBUT_user_85',
       hyperlinks: [
@@ -3423,8 +3396,7 @@ export default {
             'Prime Video                                                                     ...',
           title:
             '認知症 治った! 助かった! この方法 | 安田 和人 |本 | 通販 | Amazon',
-          url:
-            'https://www.amazon.co.jp/%E8%AA%8D%E7%9F%A5%E7%97%87-%E6%B2%BB%E3%81%A3%E3%81%9F...',
+          url: 'https://www.amazon.co.jp/%E8%AA%8D%E7%9F%A5%E7%97%87-%E6%B2%BB%E3%81%A3%E3%81%9F...',
         },
       ],
     },
@@ -3432,8 +3404,7 @@ export default {
       reference: 'http://www.tada2002.org.tw/tada_know_02.html',
       createdAt: '2017-04-12T11:25:01.484Z',
       appId: 'WEBSITE',
-      text:
-        '失智症的成因多元，如有症狀須儘早就醫對症下藥，食療是好的輔助方式，但文中提到「不用吃藥」有誇大之嫌。',
+      text: '失智症的成因多元，如有症狀須儘早就醫對症下藥，食療是好的輔助方式，但文中提到「不用吃藥」有誇大之嫌。',
       type: 'RUMOR',
       userId: 'CBUT_user_85',
       hyperlinks: [
@@ -3458,8 +3429,7 @@ export default {
           summary: '',
           title:
             '總統府國家年金改革委員會-【澄清稿】年改會第14次會議重點引述非事實',
-          url:
-            'http://pension.president.gov.tw/cp.aspx?n=03E38CC0FF75CFBE&s=FB4868255F8CFFAD',
+          url: 'http://pension.president.gov.tw/cp.aspx?n=03E38CC0FF75CFBE&s=FB4868255F8CFFAD',
         },
       ],
     },
@@ -3468,8 +3438,7 @@ export default {
         'http://news.ltn.com.tw/news/life/paper/111309\n心肌梗塞突襲 咳嗽不能自救 快就醫才對',
       createdAt: '2018-01-23T15:42:02.674Z',
       appId: 'WEBSITE',
-      text:
-        '假的。\n這項處置主要是用於當醫護人員觀測到患者心跳出現異常，為了延長其意識清醒時間，由專業人員指導患者咳嗽；而非一般心臟病患者自救。\n台北榮總急診部主治醫師高偉...',
+      text: '假的。\n這項處置主要是用於當醫護人員觀測到患者心跳出現異常，為了延長其意識清醒時間，由專業人員指導患者咳嗽；而非一般心臟病患者自救。\n台北榮總急診部主治醫師高偉...',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3486,8 +3455,7 @@ export default {
         '\nhttp://www.appledaily.com.tw/realtimenews/article/new/20170614/1139982/\n海獸胃腺蟲」鑽胃壁　專家：過去國內僅１例',
       createdAt: '2017-08-29T04:03:40.178Z',
       appId: 'WEBSITE',
-      text:
-        '過去台灣只有一個海獸胃腺蟲鑽入胃壁的病例，而且僅有一隻蟲。而經查詢，台北馬偕醫院也沒有名為林清風的醫師。',
+      text: '過去台灣只有一個海獸胃腺蟲鑽入胃壁的病例，而且僅有一隻蟲。而經查詢，台北馬偕醫院也沒有名為林清風的醫師。',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3495,8 +3463,7 @@ export default {
           summary:
             '最近有則LINE訊息在網路上廣傳，指好多人因吃生魚片，「胃壁附著「海獸胃腺蟲」，有的病人甚至胃壁上滿滿都是，無法夾出，驅蟲藥也很難治，魚片中的生鮭魚含蟲量是最可...',
           title: '「海獸胃腺蟲」鑽胃壁　專家：過去國內僅１例 | 蘋果日報',
-          url:
-            'http://www.appledaily.com.tw/realtimenews/article/new/20170614/1139982/',
+          url: 'http://www.appledaily.com.tw/realtimenews/article/new/20170614/1139982/',
         },
       ],
     },
@@ -3504,8 +3471,7 @@ export default {
       reference: 'https://zh.wikipedia.org/wiki/李孟贤',
       createdAt: '2018-01-01T12:00:04.036Z',
       appId: 'WEBSITE',
-      text:
-        '舊金山前市長確實因為心臟病去世，但其他部分應該只是想要提醒大家注意心臟疾病。',
+      text: '舊金山前市長確實因為心臟病去世，但其他部分應該只是想要提醒大家注意心臟疾病。',
       type: 'NOT_RUMOR',
       userId: 'CBUT_user_45',
       hyperlinks: [
@@ -3522,16 +3488,14 @@ export default {
         'http://www.appledaily.com.tw/realtimenews/article/new/20150819/672912/',
       createdAt: '2017-01-10T02:42:00.000Z',
       appId: null,
-      text:
-        '公路總局說，這些內容都是錯的，麥擱傳啦！\n公路總局監理組組長林福山表示，這則訊息每隔一段時間就會現身在網路\n\n根據道路交通管理處罰條例第60條規定，汽車駕駛人如...',
+      text: '公路總局說，這些內容都是錯的，麥擱傳啦！\n公路總局監理組組長林福山表示，這則訊息每隔一段時間就會現身在網路\n\n根據道路交通管理處罰條例第60條規定，汽車駕駛人如...',
       type: 'RUMOR',
       hyperlinks: [
         {
           summary:
             '最近不少Line友又開始瘋傳一則已有10年以上年資的網路謠言，內容稱「本月20日起，全國將實施紅燈越線處罰條例，凡是在等待紅燈時，超出白色禁止越線者馬上處以90...',
           title: '本月20日實施紅燈越線處罰條例！假的啦 | 蘋果日報',
-          url:
-            'http://www.appledaily.com.tw/realtimenews/article/new/20150819/672912/',
+          url: 'http://www.appledaily.com.tw/realtimenews/article/new/20150819/672912/',
         },
       ],
     },
@@ -3539,8 +3503,7 @@ export default {
       reference: 'http://www.ettoday.net/news/20130826/261531.htm',
       createdAt: '2017-03-21T16:25:34.315Z',
       appId: 'WEBSITE',
-      text:
-        '愛滋病毒離開活體後，1個小時以內就無法存活。即使愛滋病毒血液被滴入罐頭，接觸後感染機率非常低。\n另外，就算吃進仍存活的愛滋病毒，如果口腔沒有傷口，也不會因此感染愛滋病。',
+      text: '愛滋病毒離開活體後，1個小時以內就無法存活。即使愛滋病毒血液被滴入罐頭，接觸後感染機率非常低。\n另外，就算吃進仍存活的愛滋病毒，如果口腔沒有傷口，也不會因此感染愛滋病。',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3557,8 +3520,7 @@ export default {
         'http://www.traffic.police.ntpc.gov.tw/cp-1084-32629-27.html\n網路流傳「道路交通法規修法加重處罰」謠言澄清一覽表',
       createdAt: '2017-10-15T16:05:28.182Z',
       appId: 'WEBSITE',
-      text:
-        '假的。近來網路、Line瘋狂流傳，自20日起交通違規將大幅調漲，由於調幅頗大，網友互傳時罵聲不斷，均為錯誤訊息，網路謠言希望能止於智者，不要再以訛傳訛混淆視聽。',
+      text: '假的。近來網路、Line瘋狂流傳，自20日起交通違規將大幅調漲，由於調幅頗大，網友互傳時罵聲不斷，均為錯誤訊息，網路謠言希望能止於智者，不要再以訛傳訛混淆視聽。',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3574,8 +3536,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '假的。其實是「違規行為終了日」到「檢舉日期」超過七天，才不予舉發，跟開單日期一點關係都沒有。\n\n根據道路交通管理處罰條例第 7-1 條的解釋：對於違反本條例之行...',
+      text: '假的。其實是「違規行為終了日」到「檢舉日期」超過七天，才不予舉發，跟開單日期一點關係都沒有。\n\n根據道路交通管理處罰條例第 7-1 條的解釋：對於違反本條例之行...',
       reference:
         'https://www.mygopen.com/2018/03/line_27.html\n【假LINE】罰單注意檢舉跟開單日期？超過七日的申訴罰單謠言',
       createdAt: '2018-03-30T14:19:54.455Z',
@@ -3609,8 +3570,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '基本上地瓜葉其實單吃就有效果，牛奶、豆漿可加可不加，民眾不用迷信。 三高或是糖尿病的患者還是要搭配醫生的治療，不能單靠吃地瓜葉就想將身體調養好，民眾千萬要注意。...',
+      text: '基本上地瓜葉其實單吃就有效果，牛奶、豆漿可加可不加，民眾不用迷信。 三高或是糖尿病的患者還是要搭配醫生的治療，不能單靠吃地瓜葉就想將身體調養好，民眾千萬要注意。...',
       reference:
         'http://www.mygopen.com/2017/06/blog-post_26.html\n神奇的地瓜葉？搭配鮮奶遠離三高？謠言讓醫生說：有痛風或是腎臟不好的人要小心！',
       createdAt: '2018-06-10T13:21:16.828Z',
@@ -3629,16 +3589,14 @@ export default {
         'http://sp1.hso.mohw.gov.tw/doctor/Often_question/type_detail.php?PageNo=2&q_type...',
       createdAt: '2018-02-07T17:33:53.022Z',
       appId: 'WEBSITE',
-      text:
-        '在夜間睡眠時，由於活動量降低，會使得體溫下降，倘保暖不足時，就會出現手腳冰冷的現象，甚至連身體都涼；同時吸入冷空氣刺激支氣管黏膜，而引發咳嗽。\n ',
+      text: '在夜間睡眠時，由於活動量降低，會使得體溫下降，倘保暖不足時，就會出現手腳冰冷的現象，甚至連身體都涼；同時吸入冷空氣刺激支氣管黏膜，而引發咳嗽。\n ',
       type: 'NOT_RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
         {
           summary: '提醒您，網路醫療諮詢服務並不能代替就醫。',
           title: '',
-          url:
-            'http://sp1.hso.mohw.gov.tw/doctor/Often_question/type_detail.php?PageNo=2&q_type...',
+          url: 'http://sp1.hso.mohw.gov.tw/doctor/Often_question/type_detail.php?PageNo=2&q_type...',
         },
         {
           summary:
@@ -3676,8 +3634,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '假的。\n1.衛福部回應，外籍人士感染愛滋人數並無增加。婚姻的成立，需要多重步驟，且除了我國，國外許多先進國家，也提供愛滋治療，疫情也已獲控制。因此，入籍台灣享受...',
+      text: '假的。\n1.衛福部回應，外籍人士感染愛滋人數並無增加。婚姻的成立，需要多重步驟，且除了我國，國外許多先進國家，也提供愛滋治療，疫情也已獲控制。因此，入籍台灣享受...',
       reference:
         'http://www.cdc.gov.tw/info.aspx?treeid=4⋯id=1bd193ed6dabaee6&tid=0579D4F36FF0AF9...',
       createdAt: '2018-10-23T17:31:53.634Z',
@@ -3685,8 +3642,7 @@ export default {
         {
           summary: '',
           title: '衛生福利部疾病管制署',
-          url:
-            'http://www.cdc.gov.tw/info.aspx?treeid=4⋯id=1bd193ed6dabaee6&tid=0579D4F36FF0AF94',
+          url: 'http://www.cdc.gov.tw/info.aspx?treeid=4⋯id=1bd193ed6dabaee6&tid=0579D4F36FF0AF94',
         },
         {
           summary:
@@ -3739,8 +3695,7 @@ export default {
           summary:
             '喧騰多時的同性婚姻爭議終於有解，大法官今釋憲宣告《民法》禁止同性結婚違憲。而根據法務部統計資料顯示，目前世界共有23國承認同性婚姻並以法律保障，其中南非、英國另...',
           title: '【同婚釋憲】除了台灣　全球23國承認同婚 | 蘋果日報',
-          url:
-            'http://www.appledaily.com.tw/realtimenews/article/new/20170524/1124709/',
+          url: 'http://www.appledaily.com.tw/realtimenews/article/new/20170524/1124709/',
         },
       ],
     },
@@ -3748,8 +3703,7 @@ export default {
       userId: 'CBUT_user_53',
       appId: 'WEBSITE',
       type: 'NOT_RUMOR',
-      text:
-        '1. 大法官748釋憲確實為「亞洲第1同婚國家」打開了「潘朵拉」盒子！為何呢？因為探究婚姻的「真義」( https://bit.ly/2O2sRAH )，顯然與...',
+      text: '1. 大法官748釋憲確實為「亞洲第1同婚國家」打開了「潘朵拉」盒子！為何呢？因為探究婚姻的「真義」( https://bit.ly/2O2sRAH )，顯然與...',
       reference:
         'https://tw.news.yahoo.com/%E5%90%8C%E6%80%A7%E5%A9%9A%E5%A7%BB%E9%87%8B%E6%86%B2...',
       createdAt: '2018-10-24T13:19:03.710Z',
@@ -3758,8 +3712,7 @@ export default {
       userId: 'CBUT_user_54',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '1. 馬偕醫院沒有「林清風」醫師。\n2. 這謠言連寄生蟲名字都寫錯，正確名稱是「海獸胃線蟲」\n3. 鮭魚被歸類為淡水魚，不容易遭海獸胃腺蟲寄生，反倒白帶魚、青魚...',
+      text: '1. 馬偕醫院沒有「林清風」醫師。\n2. 這謠言連寄生蟲名字都寫錯，正確名稱是「海獸胃線蟲」\n3. 鮭魚被歸類為淡水魚，不容易遭海獸胃腺蟲寄生，反倒白帶魚、青魚...',
       reference: '《泛科學》有文章闢謠：\nhttps://pansci.asia/archives/122243',
       createdAt: '2018-12-12T04:33:27.009Z',
       hyperlinks: [
@@ -3776,8 +3729,7 @@ export default {
       userId: 'CBUT_user_73',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '覆蓋麵粉不但無法冷卻皮膚，還會阻止皮膚散熱，甚至使傷口感染。 燙傷應立刻以流動清水沖洗冷卻，醬油、牙膏、麵粉都不是在無菌的環境下生產的，可能引起傷口感染，而且增...',
+      text: '覆蓋麵粉不但無法冷卻皮膚，還會阻止皮膚散熱，甚至使傷口感染。 燙傷應立刻以流動清水沖洗冷卻，醬油、牙膏、麵粉都不是在無菌的環境下生產的，可能引起傷口感染，而且增...',
       reference:
         '謠言終結站》 燙傷灑麵粉可降溫？ 醫：延誤救治更易留疤http://news.ltn.com.tw/news/life/paper/1101504\n燙傷撒麵粉能...',
       createdAt: '2018-12-28T13:27:11.319Z',
@@ -3793,8 +3745,7 @@ export default {
           summary:
             '一名4歲男童因被熱水燙傷，爺爺奶奶一時心急，搶在第一時間先脫下男童衣服，還撒上麵粉，以為能藉此降溫，結果導致傷口更難散熱。治療燒燙傷的偏方千奇百怪，除了小護士、...',
           title: '燙傷撒麵粉能降溫？醫生：敷藥前得先刮層皮 - 康健雜誌',
-          url:
-            'http://www.commonhealth.com.tw/article/article.action?nid=74762',
+          url: 'http://www.commonhealth.com.tw/article/article.action?nid=74762',
         },
       ],
     },
@@ -3810,8 +3761,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '假的。華府智庫戰略暨國際研究中心（CSIS）亞洲資深顧問葛來儀（Bonnie Glaser）說，有些人在捏造事件，假新聞非常普遍。',
+      text: '假的。華府智庫戰略暨國際研究中心（CSIS）亞洲資深顧問葛來儀（Bonnie Glaser）說，有些人在捏造事件，假新聞非常普遍。',
       reference:
         'https://news.ltn.com.tw/news/politics/breakingnews/2754266\n\nhttps://www.setn.com...',
       createdAt: '2019-04-15T16:40:37.582Z',
@@ -3833,8 +3783,7 @@ export default {
         {
           summary: null,
           title: null,
-          url:
-            'https://www.storm.mg/article/1159024?srcid=gAAAAABctLPDyIyvBIeudem6SegNC_3_JhLhr...',
+          url: 'https://www.storm.mg/article/1159024?srcid=gAAAAABctLPDyIyvBIeudem6SegNC_3_JhLhr...',
         },
       ],
     },
@@ -3842,8 +3791,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'OPINIONATED',
-      text:
-        '日本人砍伐台灣森林總面積：1萬8432公頃 \n國民政府與民間砍伐總面積：34萬4千多公頃 ',
+      text: '日本人砍伐台灣森林總面積：1萬8432公頃 \n國民政府與民間砍伐總面積：34萬4千多公頃 ',
       reference: 'https://www.douban.com/group/topic/60942708/',
       createdAt: '2019-04-18T11:30:15.497Z',
       hyperlinks: [
@@ -3859,8 +3807,7 @@ export default {
       userId: 'CBUT_user_15',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '高中課本裡面只有同志諮詢熱線的電話。影片中手機的網址，是家長自己上網找的同志諮詢熱線官網，教育部審定的課本裡面並沒有網址。\n\n同志諮詢熱線是同志朋友的生命線，2...',
+      text: '高中課本裡面只有同志諮詢熱線的電話。影片中手機的網址，是家長自己上網找的同志諮詢熱線官網，教育部審定的課本裡面並沒有網址。\n\n同志諮詢熱線是同志朋友的生命線，2...',
       reference:
         '尤美女委員臉書貼文：台灣同志諮詢熱線是同志朋友的生命線\nhttps://www.facebook.com/yumeinu/posts/1553089634706...',
       createdAt: '2019-05-13T08:50:36.806Z',
@@ -3897,8 +3844,7 @@ export default {
         'http://news.ltn.com.tw/news/life/breakingnews/1950973\n泰豐大火空氣落塵',
       createdAt: '2017-06-12T11:50:12.535Z',
       appId: 'WEBSITE',
-      text:
-        '衛生局會根據環保局監測結果隨時提醒民眾注意防範事項，呼籲大家不要過度恐慌。',
+      text: '衛生局會根據環保局監測結果隨時提醒民眾注意防範事項，呼籲大家不要過度恐慌。',
       type: 'RUMOR',
       userId: 'CBUT_user_35',
       hyperlinks: [
@@ -3915,8 +3861,7 @@ export default {
         'https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB',
       createdAt: '2017-06-24T07:35:54.955Z',
       appId: 'WEBSITE',
-      text:
-        '目前平台之連署議案僅針對公共化幼稚園，要求政府在特定年度未完成之目標數量，因累加至下一年，確保最終仍為1000間。\n並如原訊息中沒有要求沒開成的非營利幼兒園一定...',
+      text: '目前平台之連署議案僅針對公共化幼稚園，要求政府在特定年度未完成之目標數量，因累加至下一年，確保最終仍為1000間。\n並如原訊息中沒有要求沒開成的非營利幼兒園一定...',
       type: 'RUMOR',
       userId: 'CBUT_user_45',
       hyperlinks: [
@@ -3924,8 +3869,7 @@ export default {
           summary:
             '教育部長潘文忠今(20)日赴行政院報告「擴大幼兒教保公共化」相關規劃，為符膺總統托育政策，提供價格合理、品質有保障的教保服務，減輕家長的經濟負擔，教育部以穩健提...',
           title: '擴大公共化教保服務，教育部規劃增設公共化幼兒園1,000班',
-          url:
-            'https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB',
+          url: 'https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB',
         },
       ],
     },
@@ -3934,8 +3878,7 @@ export default {
         'http://www.appledaily.com.tw/appledaily/article/headline/20151103/36878044/',
       createdAt: '2017-06-20T17:29:47.805Z',
       appId: 'WEBSITE',
-      text:
-        '江守山醫師畢業自陽明大學醫學系，曾任台北榮總腎臟科總醫師、內科主治醫師；新光醫院腎臟科主治醫師、腎臟科主任，專長為腎病、腎衰竭治療。對醫療保健應該有一定專業。但...',
+      text: '江守山醫師畢業自陽明大學醫學系，曾任台北榮總腎臟科總醫師、內科主治醫師；新光醫院腎臟科主治醫師、腎臟科主任，專長為腎病、腎衰竭治療。對醫療保健應該有一定專業。但...',
       type: 'NOT_RUMOR',
       userId: 'CBUT_user_45',
       hyperlinks: [
@@ -3943,8 +3886,7 @@ export default {
           summary:
             '【綜合報導】腎臟科名醫江守山日前撰文，影射他任職的台北市新光醫院營運出狀況、醫療設備長期不更換、用藥較差等，恐吹熄燈號。昨院方反擊，指兩年前就查獲江涉Ａ健保，讓...',
           title: '名醫江守山A健保 醫院開除 | 蘋果日報',
-          url:
-            'http://www.appledaily.com.tw/appledaily/article/headline/20151103/36878044/',
+          url: 'http://www.appledaily.com.tw/appledaily/article/headline/20151103/36878044/',
         },
       ],
     },
@@ -3952,8 +3894,7 @@ export default {
       reference: 'https://my83.com.tw/blogs?p=1338',
       createdAt: '2017-06-19T14:54:52.139Z',
       appId: 'WEBSITE',
-      text:
-        '根據保險資訊網站My83表示，只要非犯罪或過失的汽機車事故，事故的受害者不論有無過失，能迅速獲得理賠，不需在急需就醫時還花時間等待理賠金，所以政府強制汽車、機車及機器腳踏車主投保。',
+      text: '根據保險資訊網站My83表示，只要非犯罪或過失的汽機車事故，事故的受害者不論有無過失，能迅速獲得理賠，不需在急需就醫時還花時間等待理賠金，所以政府強制汽車、機車及機器腳踏車主投保。',
       type: 'NOT_RUMOR',
       userId: 'CBUT_user_45',
       hyperlinks: [
@@ -3970,8 +3911,7 @@ export default {
       userId: 'CBUT_user_15',
       appId: 'WEBSITE',
       type: 'OPINIONATED',
-      text:
-        '「外國同性戀藉結婚來台治療愛滋病，都是健保支付，全民買單」這句話其實並不算錯，但實務上並不會有「拖垮健保」的狀況，也跟同性婚姻關係不大，所以不用太擔心唷。\n\n身...',
+      text: '「外國同性戀藉結婚來台治療愛滋病，都是健保支付，全民買單」這句話其實並不算錯，但實務上並不會有「拖垮健保」的狀況，也跟同性婚姻關係不大，所以不用太擔心唷。\n\n身...',
       reference:
         '衛福部 - 有關網路流傳外國人染愛滋病來台2年後，所有外國人的愛滋病治療費用是由健保署負擔，疾管署特此說明 \nhttps://www.cdc.gov.tw/in...',
       createdAt: '2018-10-25T16:17:06.241Z',
@@ -3981,8 +3921,7 @@ export default {
             '有關網路流傳外國人染愛滋病來台2年後，所有外國人的愛滋病治療費用是由健保署負擔，疾管署特此說明： 外籍人士因工作或其他因素申請在台居留，並合法居留六個月以上，才...',
           title:
             '有關網路流傳外國人染愛滋病來台2年後，所有外國人的愛滋病治療費用是由健保署負擔，疾管署特此說明',
-          url:
-            'https://www.cdc.gov.tw/info.aspx?treeid=45da8e73a81d495d&nowtreeid=1bd193ed6daba...',
+          url: 'https://www.cdc.gov.tw/info.aspx?treeid=45da8e73a81d495d&nowtreeid=1bd193ed6daba...',
         },
         {
           summary:
@@ -4010,8 +3949,7 @@ export default {
       userId: 'CBUT_user_15',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '「小六大兒子被強迫跟另外一個女生練習自慰」是錯的。\n\n影片裡的媽媽在 1:30 的時候說的是：「哥哥在六年級，拿回學習單，哥哥回來問，為什麼學這個東西，要把我和...',
+      text: '「小六大兒子被強迫跟另外一個女生練習自慰」是錯的。\n\n影片裡的媽媽在 1:30 的時候說的是：「哥哥在六年級，拿回學習單，哥哥回來問，為什麼學這個東西，要把我和...',
       reference:
         '學習單影本與教材截圖\nhttp://max-everyday.com/2017/01/masturbation/\n\n2017/1/4 中央社 - 議員爆小學課程...',
       createdAt: '2018-11-03T16:14:49.163Z',
@@ -4035,8 +3973,7 @@ export default {
       userId: 'CBUT_user_15',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '訊息與影片標題的「小六大兒子被強迫跟另外一個女生練習自慰」是錯的。\n\n影片裡的媽媽在 1:30 的時候說的是：「哥哥在六年級，拿回學習單，哥哥回來問，為什麼學這...',
+      text: '訊息與影片標題的「小六大兒子被強迫跟另外一個女生練習自慰」是錯的。\n\n影片裡的媽媽在 1:30 的時候說的是：「哥哥在六年級，拿回學習單，哥哥回來問，為什麼學這...',
       reference:
         '學習單影本與教材截圖\nhttp://max-everyday.com/2017/01/masturbation/\n\n2017/1/4 中央社 - 議員爆小學課程...',
       createdAt: '2018-11-03T16:17:08.155Z',
@@ -4068,8 +4005,7 @@ export default {
       userId: 'CBUT_user_54',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '1. 燙傷的正確處理方式應是「沖、脫、泡、蓋、送」\n2. 奇美醫院急診部副主任許建清則表示，醬油、牙膏、麵粉都不是在無菌的環境下生產的，可能引起傷口感染，而且增...',
+      text: '1. 燙傷的正確處理方式應是「沖、脫、泡、蓋、送」\n2. 奇美醫院急診部副主任許建清則表示，醬油、牙膏、麵粉都不是在無菌的環境下生產的，可能引起傷口感染，而且增...',
       reference:
         'https://www.commonhealth.com.tw/article/article.action?nid=74762',
       createdAt: '2019-07-02T04:09:52.081Z',
@@ -4077,8 +4013,7 @@ export default {
         {
           summary: null,
           title: null,
-          url:
-            'https://www.commonhealth.com.tw/article/article.action?nid=74762',
+          url: 'https://www.commonhealth.com.tw/article/article.action?nid=74762',
         },
       ],
     },
@@ -4101,8 +4036,7 @@ export default {
           summary:
             '以下˙是我的臉友 Pasoa Yang 對26條 “兩蔣時代是布拉布拉的美好時代” 的回應 :   "我很不幸, 能夠親身感受那個悲惨時代。 這是「兩蔣時代」。...',
           title: '段震宇',
-          url:
-            'https://m.facebook.com/story.php?story_fbid=1728483420523821&id=100000865406669',
+          url: 'https://m.facebook.com/story.php?story_fbid=1728483420523821&id=100000865406669',
         },
       ],
     },
@@ -4111,8 +4045,7 @@ export default {
         '比對 join 平台提案內容以及教育部新聞稿 https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB\n',
       createdAt: '2017-06-27T15:25:17.272Z',
       appId: 'WEBSITE',
-      text:
-        '於「擴大幼兒教保公共化」的政府公開說明中，確實沒有指出如果沒有達成預計數字的話會有什麼作為。\n全教總於提案之中，確實提議將少開的班級加入下一年度班級數，而且在提...',
+      text: '於「擴大幼兒教保公共化」的政府公開說明中，確實沒有指出如果沒有達成預計數字的話會有什麼作為。\n全教總於提案之中，確實提議將少開的班級加入下一年度班級數，而且在提...',
       type: 'NOT_RUMOR',
       userId: 'CBUT_user_15',
       hyperlinks: [
@@ -4120,8 +4053,7 @@ export default {
           summary:
             '教育部長潘文忠今(20)日赴行政院報告「擴大幼兒教保公共化」相關規劃，為符膺總統托育政策，提供價格合理、品質有保障的教保服務，減輕家長的經濟負擔，教育部以穩健提...',
           title: '擴大公共化教保服務，教育部規劃增設公共化幼兒園1,000班',
-          url:
-            'https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB',
+          url: 'https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB',
         },
       ],
     },
@@ -4129,8 +4061,7 @@ export default {
       userId: 'CBUT_user_54',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '1. 2017年度使用台灣健保之外籍愛滋病患，僅有 25 人，花費僅佔台灣健保資源之百萬分之五點二。對台灣健保之影響微乎其微。\n2. 我國不禁止外籍愛滋病患入境...',
+      text: '1. 2017年度使用台灣健保之外籍愛滋病患，僅有 25 人，花費僅佔台灣健保資源之百萬分之五點二。對台灣健保之影響微乎其微。\n2. 我國不禁止外籍愛滋病患入境...',
       reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/260',
       createdAt: '2018-11-22T15:55:57.477Z',
       hyperlinks: [
@@ -4147,8 +4078,7 @@ export default {
       userId: 'CBUT_user_47',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '有關外界網路平台及line群組流傳出現：「現在的國小三年級教保險套、國小四年級教自慰、國小五年級教如何許多人一起性行為…」等類似言論，經教育部及國教院查證國小教...',
+      text: '有關外界網路平台及line群組流傳出現：「現在的國小三年級教保險套、國小四年級教自慰、國小五年級教如何許多人一起性行為…」等類似言論，經教育部及國教院查證國小教...',
       reference:
         '教育部澄清網路群組流傳教科書不實性別平等教育內容之回應\nhttps://www.edu.tw/News_Content.aspx?n=FD56C961F1677...',
       createdAt: '2018-11-07T06:17:00.435Z',
@@ -4156,8 +4086,7 @@ export default {
         {
           summary: '',
           title: '教育部澄清網路群組流傳教科書不實性別平等教育內容之回應',
-          url:
-            'https://www.edu.tw/News_Content.aspx?n=FD56C961F1677400&sms=E6059C30DDBD5135&s=FC73C38D12A5F849',
+          url: 'https://www.edu.tw/News_Content.aspx?n=FD56C961F1677400&sms=E6059C30DDBD5135&s=FC73C38D12A5F849',
         },
       ],
     },
@@ -4165,8 +4094,7 @@ export default {
       userId: 'CBUT_user_48',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '有關外界網路平台及line群組流傳出現：「現在的國小三年級教保險套、國小四年級教自慰、國小五年級教如何許多人一起性行為…」等類似言論，經教育部及國教院查證國小教...',
+      text: '有關外界網路平台及line群組流傳出現：「現在的國小三年級教保險套、國小四年級教自慰、國小五年級教如何許多人一起性行為…」等類似言論，經教育部及國教院查證國小教...',
       reference:
         '教育部性別平等教育 資訊網\nhttps://www.gender.edu.tw/web/index.php/home/index',
       createdAt: '2018-11-15T13:54:13.229Z',
@@ -4201,8 +4129,7 @@ export default {
       userId: 'CBUT_user_74',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '至於坊間流傳的撒麵粉、鹽巴、太白粉、沙拉油、豬油等偏方，不但效果差，而且到醫院醫師還要先花時間清潔才能評估傷口，反而延遲救治時間。\n陽光基金會倡導組專案經理莊麗...',
+      text: '至於坊間流傳的撒麵粉、鹽巴、太白粉、沙拉油、豬油等偏方，不但效果差，而且到醫院醫師還要先花時間清潔才能評估傷口，反而延遲救治時間。\n陽光基金會倡導組專案經理莊麗...',
       reference: 'https://news.ltn.com.tw/news/life/paper/1101504',
       createdAt: '2019-07-23T08:06:47.678Z',
       hyperlinks: [
@@ -4219,8 +4146,7 @@ export default {
       userId: 'CBUT_user_54',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '台灣事實查核中心已經證實為【錯誤】訊息囉！\n一、食藥署、疾管署，還有泰國的食藥署早已證實此訊息為網路謠言誤。\n二、專家指出，愛滋病毒離開人體後，短時間內便會失去...',
+      text: '台灣事實查核中心已經證實為【錯誤】訊息囉！\n一、食藥署、疾管署，還有泰國的食藥署早已證實此訊息為網路謠言誤。\n二、專家指出，愛滋病毒離開人體後，短時間內便會失去...',
       reference: 'https://tfc-taiwan.org.tw/articles/740',
       createdAt: '2019-08-14T05:27:33.030Z',
       hyperlinks: [
@@ -4236,8 +4162,7 @@ export default {
       userId: 'CBUT_user_88',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '無論是電子產品或是網站平台，均在註冊會員或啟用裝置時，會有一份資料蒐集同意書，其中會說明資料蒐集範圍，授權公司，去識別化方式等\n因此「手機內所有資料都會進入他們...',
+      text: '無論是電子產品或是網站平台，均在註冊會員或啟用裝置時，會有一份資料蒐集同意書，其中會說明資料蒐集範圍，授權公司，去識別化方式等\n因此「手機內所有資料都會進入他們...',
       reference: ' ',
       createdAt: '2019-08-21T02:10:43.987Z',
     },
@@ -4245,8 +4170,7 @@ export default {
       userId: 'CBUT_user_54',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '台灣事實查核中心已經證實為【錯誤】訊息！\n一、馬偕醫院2017年已於官網澄清，本訊息為網路謠言。\n二、專家指出，海獸胃線蟲寄生在海洋生物體內，人類並非宿主，目前...',
+      text: '台灣事實查核中心已經證實為【錯誤】訊息！\n一、馬偕醫院2017年已於官網澄清，本訊息為網路謠言。\n二、專家指出，海獸胃線蟲寄生在海洋生物體內，人類並非宿主，目前...',
       reference: 'https://tfc-taiwan.org.tw/articles/772',
       createdAt: '2019-08-28T02:48:00.667Z',
       hyperlinks: [
@@ -4263,8 +4187,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        'FAKE.\nThe advice it provides runs contrary to all accepted knowledge about how t...',
+      text: 'FAKE.\nThe advice it provides runs contrary to all accepted knowledge about how t...',
       reference: 'https://www.snopes.com/fact-check/flour-power/',
       createdAt: '2019-11-13T16:18:32.723Z',
       hyperlinks: [
@@ -4289,8 +4212,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '假的。手機導致的疾病包含器官老化為無稽之談，目前手機釋放的射頻輻射（ RF ）被國際癌症研究機構（ International Agency for Resea...',
+      text: '假的。手機導致的疾病包含器官老化為無稽之談，目前手機釋放的射頻輻射（ RF ）被國際癌症研究機構（ International Agency for Resea...',
       reference:
         'https://www.thenewslens.com/article/91387\nhttps://www.medpartner.club/electromag...',
       createdAt: '2019-11-18T13:31:29.656Z',
@@ -4318,8 +4240,7 @@ export default {
           summary:
             '手機致癌嗎？儘管已研究多年，這個問題依然沒有明確的答案。但是衛生官員稱，週五公布的兩項分別在大鼠和小鼠身上進行的相關政府研究表明，即便有風險，也是比較小的。多年...',
           title: '手機輻射致癌嗎？科學家研究十年後有了新發現',
-          url:
-            'https://cn.nytimes.com/health/20180205/cell-phones-cancer/zh-hant/',
+          url: 'https://cn.nytimes.com/health/20180205/cell-phones-cancer/zh-hant/',
         },
       ],
     },
@@ -4327,8 +4248,7 @@ export default {
       userId: 'CBUT_user_54',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '地瓜葉和牛奶的組合含有豐富的營養成分，可以幫助預防骨質疏鬆、延緩血糖上升，但對已罹患的疾病沒有治療效果。傳言所稱「可以治療三高、痛風和癌症」，並不正確。',
+      text: '地瓜葉和牛奶的組合含有豐富的營養成分，可以幫助預防骨質疏鬆、延緩血糖上升，但對已罹患的疾病沒有治療效果。傳言所稱「可以治療三高、痛風和癌症」，並不正確。',
       reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/1481',
       createdAt: '2019-12-06T16:05:05.572Z',
       hyperlinks: [
@@ -4346,8 +4266,7 @@ export default {
       userId: 'CBUT_user_68',
       appId: 'WEBSITE',
       type: 'OPINIONATED',
-      text:
-        '1. 本文出自商周雜誌〈冰封中國關鍵報告〉。\n2. 中國有「世界最大勞動力人口國」的優勢，爆發大型流行病情，固然會影響各產業及國際貿易，若疫情發生在任何一個大型...',
+      text: '1. 本文出自商周雜誌〈冰封中國關鍵報告〉。\n2. 中國有「世界最大勞動力人口國」的優勢，爆發大型流行病情，固然會影響各產業及國際貿易，若疫情發生在任何一個大型...',
       reference:
         '【商周】冰封中國關鍵報告\nhttps://www.businessweekly.com.tw/magazine/article_page.aspx?id=600...',
       createdAt: '2020-02-27T09:11:33.760Z',
@@ -4358,8 +4277,7 @@ export default {
           summary:
             '一個疑似從武漢海鮮市場開始的病毒，現在，造成中國經濟停擺，全世界都地震！當貨出不去，也進不來，中國的冰封效應，正如何在台灣快速擴散？商周兵分5路，從一個乳液的瓶...',
           title: '冰封中國關鍵報告  - 封面摘要 - 商業周刊',
-          url:
-            'https://www.businessweekly.com.tw/magazine/article_page.aspx?id=6001194',
+          url: 'https://www.businessweekly.com.tw/magazine/article_page.aspx?id=6001194',
         },
         {
           normalizedUrl:
@@ -4368,8 +4286,7 @@ export default {
             'The world’s biggest phone show, Mobile World Congress, is no longer taking place...',
           title:
             'The world’s biggest phone show has been canceled due to coronavirus concerns',
-          url:
-            'https://www.theverge.com/2020/2/12/21127754/mwc-2020-canceled-coronavirus-trade-...',
+          url: 'https://www.theverge.com/2020/2/12/21127754/mwc-2020-canceled-coronavirus-trade-...',
         },
         {
           normalizedUrl:
@@ -4378,8 +4295,7 @@ export default {
             'The ultrastructural morphology exhibited by the 2019 Novel Coronavirus (2019-nCo...',
           title:
             'FDA identified 20 drugs with shortage risks due to coronavirus outbreak',
-          url:
-            'https://www.reuters.com/article/us-china-health-fda/fda-identified-20-drugs-with...',
+          url: 'https://www.reuters.com/article/us-china-health-fda/fda-identified-20-drugs-with...',
         },
         {
           normalizedUrl:
@@ -4388,8 +4304,7 @@ export default {
             'HighlightsCrude lowest since January 2019\n  More countries report COVID-19 cases...',
           title:
             'Oil extends losses as coronavirus outbreak accelerates outside China',
-          url:
-            'https://www.spglobal.com/platts/en/market-insights/latest-news/oil/022620-oil-fu...',
+          url: 'https://www.spglobal.com/platts/en/market-insights/latest-news/oil/022620-oil-fu...',
         },
       ],
     },
@@ -4397,8 +4312,7 @@ export default {
       userId: 'CBUT_user_15',
       appId: 'WEBSITE',
       type: 'OPINIONATED',
-      text:
-        '美國闢謠網站 Snopes 向 James Robb 博士本人查證，博士表示這是他寫的信，但那是給家人與親朋好友的信，並沒有預期到會被公開。\n\n關於其中「鋅錠劑...',
+      text: '美國闢謠網站 Snopes 向 James Robb 博士本人查證，博士表示這是他寫的信，但那是給家人與親朋好友的信，並沒有預期到會被公開。\n\n關於其中「鋅錠劑...',
       reference:
         '2020/3/2 Did a Noted Pathologist Write This Viral Coronavirus Advice Letter?\nhtt...',
       createdAt: '2020-03-03T05:10:50.254Z',
@@ -4418,8 +4332,7 @@ export default {
       userId: 'CBUT_user_54',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '1. 12月17日立法院三讀通過《毒品危害防制條例》部分條文修正草案，是把處罰標準加重，而非放寬。\n2. 根據毒品危害防制條例規定，有「販賣」毒品意圖就處以刑罰...',
+      text: '1. 12月17日立法院三讀通過《毒品危害防制條例》部分條文修正草案，是把處罰標準加重，而非放寬。\n2. 根據毒品危害防制條例規定，有「販賣」毒品意圖就處以刑罰...',
       reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/1670',
       createdAt: '2019-12-25T16:46:47.879Z',
       hyperlinks: [
@@ -4436,8 +4349,7 @@ export default {
       userId: 'CBUT_user_57',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '下附影片為羅馬尼亞於2019/5/28拍攝的，可在Youtube上找到，並非義大利\n再根據另一個網頁查證，當日為羅馬尼亞的冰雹',
+      text: '下附影片為羅馬尼亞於2019/5/28拍攝的，可在Youtube上找到，並非義大利\n再根據另一個網頁查證，當日為羅馬尼亞的冰雹',
       reference:
         '羅馬尼亞冰雹查證資料出處：https://www.mygopen.com/2019/07/Romania-hail.html\n羅馬尼亞冰雹影片 https://...',
       createdAt: '2020-02-21T02:49:47.068Z',
@@ -4460,8 +4372,7 @@ export default {
       userId: 'CBUT_user_65',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '是修法更嚴執行：法務部在毒品危害防制條例三讀修正通過的當天也發布新聞稿，說明這次的修法重點，包括重懲毒販，提高製造、販賣、運輸毒品的刑度及罰金；將持有第3級、第...',
+      text: '是修法更嚴執行：法務部在毒品危害防制條例三讀修正通過的當天也發布新聞稿，說明這次的修法重點，包括重懲毒販，提高製造、販賣、運輸毒品的刑度及罰金；將持有第3級、第...',
       reference: 'https://www.cna.com.tw/news/firstnews/201912205004.aspx\n',
       createdAt: '2019-12-24T02:41:34.864Z',
       hyperlinks: [
@@ -4480,8 +4391,7 @@ export default {
       userId: 'CBUT_user_65',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '而有臉書粉絲專頁po文指出，國民黨團當時提出修正動議，持有第3級、第4級毒品的純質淨重，1公克以上就要課予刑責，但被民進黨表決封殺。此外，專頁上還附上一張圖卡，...',
+      text: '而有臉書粉絲專頁po文指出，國民黨團當時提出修正動議，持有第3級、第4級毒品的純質淨重，1公克以上就要課予刑責，但被民進黨表決封殺。此外，專頁上還附上一張圖卡，...',
       reference: 'https://www.cna.com.tw/news/firstnews/201912205004.aspx',
       createdAt: '2019-12-24T02:55:42.325Z',
       hyperlinks: [
@@ -4500,8 +4410,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '影片中男主角實為古巴裔美國演員威廉·列維（William Levy）。其中一幕來自墨西哥電視劇（Triunfo del amor ）。\n',
+      text: '影片中男主角實為古巴裔美國演員威廉·列維（William Levy）。其中一幕來自墨西哥電視劇（Triunfo del amor ）。\n',
       reference:
         'http://ask.kedo.gov.cn/c/2020-04-02/1026409.shtml\n義大利女友感染新冠肺炎，男友脫掉防護服見最後一面後雙雙殉情？謠言！\n',
       createdAt: '2020-04-03T04:24:14.807Z',
@@ -4520,8 +4429,7 @@ export default {
       userId: 'CBUT_user_63',
       appId: 'WEBSITE',
       type: 'OPINIONATED',
-      text:
-        '一個場合當中誰做了什麼、意味什麼，這都是沒有直接證據的推論。此訊息當中可以留意的是“無症狀卻可能有傳染力的隱性感染者”造成的疫情傳染風險。由於本次新型冠狀肺炎疫...',
+      text: '一個場合當中誰做了什麼、意味什麼，這都是沒有直接證據的推論。此訊息當中可以留意的是“無症狀卻可能有傳染力的隱性感染者”造成的疫情傳染風險。由於本次新型冠狀肺炎疫...',
       reference:
         '口罩用途可以參考文章\nhttp://www-o.ntust.edu.tw/h1n1/page16.htm',
       createdAt: '2020-04-06T07:42:40.309Z',
@@ -4539,8 +4447,7 @@ export default {
       userId: 'CBUT_user_54',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '1. 年金改革委員會第14次會議早在2016年9月29日就已舉行，會議為蒐集各方意見，並未做成任何決議。\n2. 軍公教人員退休年齡規定，依年資各有不同，並非一律...',
+      text: '1. 年金改革委員會第14次會議早在2016年9月29日就已舉行，會議為蒐集各方意見，並未做成任何決議。\n2. 軍公教人員退休年齡規定，依年資各有不同，並非一律...',
       reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/3573',
       createdAt: '2020-04-08T13:45:36.390Z',
       hyperlinks: [
@@ -4576,8 +4483,7 @@ export default {
       userId: 'CBUT_user_54',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '1. 網傳影片出處是2019年5月28日羅馬尼亞北部札勒烏（Zalau）市下冰雹的景象，不是義大利羅馬下石頭雨。\n2. 台灣事實查核中心檢索義大利媒體及國際通訊社，並無義大利羅馬下石頭雨的事件。',
+      text: '1. 網傳影片出處是2019年5月28日羅馬尼亞北部札勒烏（Zalau）市下冰雹的景象，不是義大利羅馬下石頭雨。\n2. 台灣事實查核中心檢索義大利媒體及國際通訊社，並無義大利羅馬下石頭雨的事件。',
       reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/3477',
       createdAt: '2020-04-08T14:19:31.619Z',
       hyperlinks: [
@@ -4595,8 +4501,7 @@ export default {
       userId: 'CBUT_user_69',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '此為改編自金正日2011年的訃聞，只有名字和時間有改動，其餘皆相同。\n"朝鲜劳动党中央委员会和朝鲜劳动党中央军事委员会、朝鲜民主主义人民共和国国防委员会和最高人...',
+      text: '此為改編自金正日2011年的訃聞，只有名字和時間有改動，其餘皆相同。\n"朝鲜劳动党中央委员会和朝鲜劳动党中央军事委员会、朝鲜民主主义人民共和国国防委员会和最高人...',
       reference: 'http://world.people.com.cn/GB/16651924.html',
       createdAt: '2020-04-27T09:34:49.512Z',
       hyperlinks: [
@@ -4613,8 +4518,7 @@ export default {
       userId: 'CBUT_user_68',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '此為假冒北韓官方的訊息。北韓官媒《朝鮮中央通訊社》4月23日仍有報導金正恩回電感謝敘利亞阿薩德的新聞，南韓青瓦台4月23日也表示「沒有具體證據顯示金正恩的健康狀...',
+      text: '此為假冒北韓官方的訊息。北韓官媒《朝鮮中央通訊社》4月23日仍有報導金正恩回電感謝敘利亞阿薩德的新聞，南韓青瓦台4月23日也表示「沒有具體證據顯示金正恩的健康狀...',
       reference:
         '命危消息傳出後 北韓官媒曝金正恩最新動態\nhttps://news.ltn.com.tw/news/world/breakingnews/3142735\n\nTh...',
       createdAt: '2020-04-26T15:36:41.541Z',
@@ -4635,8 +4539,7 @@ export default {
             'What’s the story with Kim Jong Un?The North Korean leader missed a high-profile ...',
           title:
             "The mystery surrounding Kim Jong Un: What's going on with the North Korean dictator's health?",
-          url:
-            'https://www.foxnews.com/world/kim-jong-un-mystery-north-korea-dictator-health',
+          url: 'https://www.foxnews.com/world/kim-jong-un-mystery-north-korea-dictator-health',
         },
         {
           normalizedUrl:
@@ -4644,16 +4547,14 @@ export default {
           summary:
             'Photo : YONHAP News\n                \n\n                \n                         ...',
           title: '靑 NSC',
-          url:
-            'http://world.kbs.co.kr/service/news_view.htm?lang=k&Seq_Code=353396',
+          url: 'http://world.kbs.co.kr/service/news_view.htm?lang=k&Seq_Code=353396',
         },
         {
           normalizedUrl:
             'http://www.uriminzokkiri.com/index.php?ptype=cgisas&mtype=view&no=1190981',
           summary: '',
           title: '',
-          url:
-            'http://www.uriminzokkiri.com/index.php?ptype=cgisas&mtype=view&no=1190981',
+          url: 'http://www.uriminzokkiri.com/index.php?ptype=cgisas&mtype=view&no=1190981',
         },
       ],
     },
@@ -4661,8 +4562,7 @@ export default {
       userId: 'CBUT_user_60',
       appId: 'WEBSITE',
       type: 'OPINIONATED',
-      text:
-        '■對不同城市及其官員對疫情處置的評價，屬個人評論；亦有評論從貧困人口、企業靈活度等不同角度分析舊金山與紐約的疫情處置差異。\n\n■文中提及人物資訊、事件時序大抵正...',
+      text: '■對不同城市及其官員對疫情處置的評價，屬個人評論；亦有評論從貧困人口、企業靈活度等不同角度分析舊金山與紐約的疫情處置差異。\n\n■文中提及人物資訊、事件時序大抵正...',
       reference:
         '【疫情處置評論】\n\n布魯金斯學會-Coronavirus lessons from New York and San Francisco\nhttps://www...',
       createdAt: '2020-04-28T13:51:19.413Z',
@@ -4671,8 +4571,7 @@ export default {
       userId: 'CBUT_user_61',
       appId: 'WEBSITE',
       type: 'NOT_ARTICLE',
-      text:
-        '此訊息需要更多數據，不過難以統計，其他關於政策的訂定時間與描述很清楚。',
+      text: '此訊息需要更多數據，不過難以統計，其他關於政策的訂定時間與描述很清楚。',
       reference: '',
       createdAt: '2020-05-05T09:41:19.615Z',
       hyperlinks: [],
@@ -4681,8 +4580,7 @@ export default {
       userId: 'CBUT_user_71',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '影片含有許多不實訊息，例如 2:09 聲稱蜂蜜是二級燙傷首選藥物，有嚴重誤導人之嫌，已有其他急診醫師說醫療級才可，正確做法還是立刻沖水降溫，嚴重時趕快送醫。',
+      text: '影片含有許多不實訊息，例如 2:09 聲稱蜂蜜是二級燙傷首選藥物，有嚴重誤導人之嫌，已有其他急診醫師說醫療級才可，正確做法還是立刻沖水降溫，嚴重時趕快送醫。',
       reference: 'https://www.merit-times.com.tw/NewsPage.aspx?unid=436129',
       createdAt: '2020-07-22T03:51:29.624Z',
       hyperlinks: [
@@ -4700,8 +4598,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '有關報載世紀鋼廠房建置時程落後之情形，世紀鋼公開表示，內容未經查核，顯與事實有違，該公司為國內率先響應離岸風電國產化的本土公司，除了觀音廠廠房擴建產能，投入生產...',
+      text: '有關報載世紀鋼廠房建置時程落後之情形，世紀鋼公開表示，內容未經查核，顯與事實有違，該公司為國內率先響應離岸風電國產化的本土公司，除了觀音廠廠房擴建產能，投入生產...',
       reference:
         'https://www.moea.gov.tw/MNS/populace/news/News.aspx?kind=9&menu_id=22333&news_id=90907',
       createdAt: '2020-09-26T07:30:21.054Z',
@@ -4712,8 +4609,7 @@ export default {
           summary:
             '有關媒體報載「百億離岸風電國產大餅訂單爆肥水外流」一文，指總統蔡英文去(108)年在台北港水下基礎基樁對接儀式中，為世紀集團對水下基礎製造技術、廠房等投資背書，...',
           title: '逐步推動離岸風電產業政策 開發商與在地產業攜手共創雙贏',
-          url:
-            'https://www.moea.gov.tw/MNS/populace/news/News.aspx?kind=9&menu_id=22333&news_id=90907',
+          url: 'https://www.moea.gov.tw/MNS/populace/news/News.aspx?kind=9&menu_id=22333&news_id=90907',
         },
       ],
     },
@@ -4721,8 +4617,7 @@ export default {
       userId: 'CBUT_user_35',
       appId: 'WEBSITE',
       type: 'RUMOR',
-      text:
-        '據外交部瞭解，拜會美國行政部門的相關行程，均由臺北市政府自行洽請美國在台協會（AIT)協助安排，並非由外交部或駐處洽排。相關安排情形外交部均不便評論，宜由臺北市政府自行説明。',
+      text: '據外交部瞭解，拜會美國行政部門的相關行程，均由臺北市政府自行洽請美國在台協會（AIT)協助安排，並非由外交部或駐處洽排。相關安排情形外交部均不便評論，宜由臺北市政府自行説明。',
       reference:
         'https://www.mofa.gov.tw/News_Content_M_2.aspx?n=D6D997396B647A7C&sms=9C41168DD8E...',
       createdAt: '2020-09-26T09:40:02.610Z',
@@ -4732,8 +4627,7 @@ export default {
             'https://www.mofa.gov.tw/News_Content_M_2.aspx?n=D6D997396B647A7C&sms=9C41168DD8E...',
           summary: '',
           title: '',
-          url:
-            'https://www.mofa.gov.tw/News_Content_M_2.aspx?n=D6D997396B647A7C&sms=9C41168DD8E...',
+          url: 'https://www.mofa.gov.tw/News_Content_M_2.aspx?n=D6D997396B647A7C&sms=9C41168DD8E...',
         },
       ],
     },
@@ -9777,279 +9671,308 @@ export default {
       },
     },
     articlecategoryfeedbacks: {
-      '/articlecategoryfeedbacks/doc/CBUT_article_0__CBUT_category_0__CBUT_user_15__WEBSITE': {
-        articleId: 'CBUT_article_0',
-        categoryId: 'CBUT_category_0',
-        userId: 'CBUT_user_15',
-        appId: 'WEBSITE',
-        createdAt: '2020-09-19T07:07:05.785Z',
-        updatedAt: '2020-09-19T07:07:05.785Z',
-      },
-      '/articlecategoryfeedbacks/doc/CBUT_article_1__CBUT_category_1__CBUT_user_15__WEBSITE': {
-        articleId: 'CBUT_article_1',
-        categoryId: 'CBUT_category_1',
-        userId: 'CBUT_user_15',
-        appId: 'WEBSITE',
-        createdAt: '2020-07-25T03:32:50.190Z',
-        updatedAt: '2020-07-25T03:32:50.190Z',
-        comment: 'irrelevant',
-      },
-      '/articlecategoryfeedbacks/doc/CBUT_article_2__CBUT_category_1__CBUT_user_15__WEBSITE': {
-        articleId: 'CBUT_article_2',
-        categoryId: 'CBUT_category_1',
-        userId: 'CBUT_user_15',
-        appId: 'WEBSITE',
-        createdAt: '2020-07-25T03:31:47.629Z',
-        updatedAt: '2020-07-25T03:31:47.629Z',
-        comment: 'irrelevant',
-      },
-      '/articlecategoryfeedbacks/doc/CBUT_article_3__CBUT_category_1__CBUT_user_15__WEBSITE': {
-        articleId: 'CBUT_article_3',
-        categoryId: 'CBUT_category_1',
-        userId: 'CBUT_user_15',
-        appId: 'WEBSITE',
-        createdAt: '2020-07-25T03:35:36.459Z',
-        updatedAt: '2020-07-25T03:35:36.459Z',
-        comment: 'irrelevant',
-      },
-      '/articlecategoryfeedbacks/doc/CBUT_article_4__CBUT_category_1__CBUT_user_15__WEBSITE': {
-        articleId: 'CBUT_article_4',
-        categoryId: 'CBUT_category_1',
-        userId: 'CBUT_user_15',
-        appId: 'WEBSITE',
-        createdAt: '2020-07-25T04:14:22.278Z',
-        updatedAt: '2020-07-25T04:14:22.278Z',
-        comment: 'irrelevant',
-      },
+      '/articlecategoryfeedbacks/doc/CBUT_article_0__CBUT_category_0__CBUT_user_15__WEBSITE':
+        {
+          articleId: 'CBUT_article_0',
+          categoryId: 'CBUT_category_0',
+          userId: 'CBUT_user_15',
+          appId: 'WEBSITE',
+          createdAt: '2020-09-19T07:07:05.785Z',
+          updatedAt: '2020-09-19T07:07:05.785Z',
+        },
+      '/articlecategoryfeedbacks/doc/CBUT_article_1__CBUT_category_1__CBUT_user_15__WEBSITE':
+        {
+          articleId: 'CBUT_article_1',
+          categoryId: 'CBUT_category_1',
+          userId: 'CBUT_user_15',
+          appId: 'WEBSITE',
+          createdAt: '2020-07-25T03:32:50.190Z',
+          updatedAt: '2020-07-25T03:32:50.190Z',
+          comment: 'irrelevant',
+        },
+      '/articlecategoryfeedbacks/doc/CBUT_article_2__CBUT_category_1__CBUT_user_15__WEBSITE':
+        {
+          articleId: 'CBUT_article_2',
+          categoryId: 'CBUT_category_1',
+          userId: 'CBUT_user_15',
+          appId: 'WEBSITE',
+          createdAt: '2020-07-25T03:31:47.629Z',
+          updatedAt: '2020-07-25T03:31:47.629Z',
+          comment: 'irrelevant',
+        },
+      '/articlecategoryfeedbacks/doc/CBUT_article_3__CBUT_category_1__CBUT_user_15__WEBSITE':
+        {
+          articleId: 'CBUT_article_3',
+          categoryId: 'CBUT_category_1',
+          userId: 'CBUT_user_15',
+          appId: 'WEBSITE',
+          createdAt: '2020-07-25T03:35:36.459Z',
+          updatedAt: '2020-07-25T03:35:36.459Z',
+          comment: 'irrelevant',
+        },
+      '/articlecategoryfeedbacks/doc/CBUT_article_4__CBUT_category_1__CBUT_user_15__WEBSITE':
+        {
+          articleId: 'CBUT_article_4',
+          categoryId: 'CBUT_category_1',
+          userId: 'CBUT_user_15',
+          appId: 'WEBSITE',
+          createdAt: '2020-07-25T04:14:22.278Z',
+          updatedAt: '2020-07-25T04:14:22.278Z',
+          comment: 'irrelevant',
+        },
     },
     articlereplyfeedbacks: {
-      '/articlereplyfeedbacks/doc/CBUT_article_10__CBUT_reply_5__qO1C3_lHfjAYn66nWNP7XCDrdY1gaZmJbQ1wYAgzOTT8xsTXc__DEVELOPMENT_BACKEND': {
-        articleId: 'CBUT_article_10',
-        replyId: 'CBUT_reply_5',
-        userId: 'qO1C3_lHfjAYn66nWNP7XCDrdY1gaZmJbQ1wYAgzOTT8xsTXc',
-        appId: 'DEVELOPMENT_BACKEND',
-        createdAt: '2020-02-27T09:18:07.301Z',
-        updatedAt: '2020-02-27T09:18:07.301Z',
-        appUserId: 'CBUT_user_21',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_11__CBUT_reply_6__qO1C3_sYnv5g2wKCqsHcFZh-LocxMbYLn-fPAet_WiV0JRIDE__DEVELOPMENT_BACKEND': {
-        createdAt: '2018-01-24T05:28:35.650Z',
-        appId: 'DEVELOPMENT_BACKEND',
-        userId: 'qO1C3_sYnv5g2wKCqsHcFZh-LocxMbYLn-fPAet_WiV0JRIDE',
-        updatedAt: '2018-01-24T05:28:35.650Z',
-        articleId: 'CBUT_article_11',
-        replyId: 'CBUT_reply_6',
-        appUserId: 'CBUT_user_22',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_12__CBUT_reply_7__CBUT_user_23__WEBSITE': {
-        articleId: 'CBUT_article_12',
-        replyId: 'CBUT_reply_7',
-        userId: 'CBUT_user_23',
-        appId: 'WEBSITE',
-        createdAt: '2020-06-28T08:33:54.411Z',
-        updatedAt: '2020-06-28T08:33:54.411Z',
-        comment: '',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_13__CBUT_reply_8__j4S8C_LY7EIPDC671J6K2uZ9EznQAEDhznt8gUPsK0cwSDbFQ__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_13',
-        replyId: 'CBUT_reply_8',
-        userId: 'j4S8C_LY7EIPDC671J6K2uZ9EznQAEDhznt8gUPsK0cwSDbFQ',
-        appId: 'RUMORS_LINE_BOT',
-        createdAt: '2020-09-26T13:53:15.665Z',
-        updatedAt: '2020-09-26T13:53:24.365Z',
-        comment: '',
-        appUserId: 'CBUT_user_24',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_14__CBUT_reply_9__qO1C3_gGWtOcj9ARqZRT4msCGaXS-Iof7eL3XxmT3AOTTGCVU__DEVELOPMENT_BACKEND': {
-        articleId: 'CBUT_article_14',
-        replyId: 'CBUT_reply_9',
-        userId: 'qO1C3_gGWtOcj9ARqZRT4msCGaXS-Iof7eL3XxmT3AOTTGCVU',
-        appId: 'DEVELOPMENT_BACKEND',
-        createdAt: '2018-03-29T06:42:21.545Z',
-        updatedAt: '2018-03-29T06:42:21.545Z',
-        appUserId: 'CBUT_user_25',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_15__CBUT_reply_10__CBUT_user_15__DEVELOPMENT_FRONTEND': {
-        createdAt: '2018-02-07T18:09:49.594Z',
-        appId: 'DEVELOPMENT_FRONTEND',
-        userId: 'CBUT_user_15',
-        updatedAt: '2018-02-07T18:09:49.594Z',
-        articleId: 'CBUT_article_15',
-        replyId: 'CBUT_reply_10',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_16__CBUT_reply_11__j4S8C_-jyEGNy2w04UVgIb9-imCXweVYP3sniZ-q4Y8JNXL9k__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_16',
-        replyId: 'CBUT_reply_11',
-        userId: 'j4S8C_-jyEGNy2w04UVgIb9-imCXweVYP3sniZ-q4Y8JNXL9k',
-        appId: 'RUMORS_LINE_BOT',
-        createdAt: '2020-03-10T12:02:07.419Z',
-        updatedAt: '2020-03-10T12:02:08.394Z',
-        appUserId: 'CBUT_user_26',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_17__CBUT_reply_12__CBUT_user_15__WEBSITE': {
-        articleId: 'CBUT_article_17',
-        replyId: 'CBUT_reply_12',
-        userId: 'CBUT_user_15',
-        appId: 'WEBSITE',
-        createdAt: '2020-04-05T09:33:19.299Z',
-        updatedAt: '2020-04-05T09:33:19.299Z',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_18__CBUT_reply_13__j4S8C_u7STzSnt-bwqVRc9tCmf47W2LE79MRzNrA-_oxzLIFc__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_18',
-        replyId: 'CBUT_reply_13',
-        userId: 'j4S8C_u7STzSnt-bwqVRc9tCmf47W2LE79MRzNrA-_oxzLIFc',
-        appId: 'RUMORS_LINE_BOT',
-        createdAt: '2019-02-20T05:11:06.611Z',
-        updatedAt: '2019-02-20T05:11:06.611Z',
-        appUserId: 'CBUT_user_27',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_19__CBUT_reply_14__CBUT_user_20__WEBSITE': {
-        articleId: 'CBUT_article_19',
-        replyId: 'CBUT_reply_14',
-        userId: 'CBUT_user_20',
-        appId: 'WEBSITE',
-        createdAt: '2020-06-27T23:11:24.480Z',
-        updatedAt: '2020-06-27T23:11:24.480Z',
-        comment: '',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_20__CBUT_reply_15__CBUT_user_20__WEBSITE': {
-        articleId: 'CBUT_article_20',
-        replyId: 'CBUT_reply_15',
-        userId: 'CBUT_user_20',
-        appId: 'WEBSITE',
-        createdAt: '2020-09-26T05:54:08.502Z',
-        updatedAt: '2020-09-26T05:54:08.502Z',
-        comment: '',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_21__CBUT_reply_16__j4S8C_O3LIyatOUXZjhZqeqQ5whc8glQZy6b-53QrsrO_SFbs__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_21',
-        replyId: 'CBUT_reply_16',
-        userId: 'j4S8C_O3LIyatOUXZjhZqeqQ5whc8glQZy6b-53QrsrO_SFbs',
-        appId: 'RUMORS_LINE_BOT',
-        createdAt: '2019-04-06T06:45:23.016Z',
-        updatedAt: '2019-04-06T06:45:23.016Z',
-        appUserId: 'CBUT_user_28',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_22__CBUT_reply_17__j4S8C_LD7dd370hd6B1O-rTkpX9I_n1AhIlTPD_QmDsGA6WoQ__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_22',
-        replyId: 'CBUT_reply_17',
-        userId: 'j4S8C_LD7dd370hd6B1O-rTkpX9I_n1AhIlTPD_QmDsGA6WoQ',
-        appId: 'RUMORS_LINE_BOT',
-        createdAt: '2018-11-11T23:43:02.406Z',
-        updatedAt: '2018-11-11T23:43:02.406Z',
-        appUserId: 'CBUT_user_29',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_23__CBUT_reply_18__j4S8C_J-qFf2nzWHvRnx3qA2hEhRhp4ASBnYRkq3IA2i7ngg8__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_23',
-        replyId: 'CBUT_reply_18',
-        userId: 'j4S8C_J-qFf2nzWHvRnx3qA2hEhRhp4ASBnYRkq3IA2i7ngg8',
-        appId: 'RUMORS_LINE_BOT',
-        createdAt: '2019-01-22T11:01:54.027Z',
-        updatedAt: '2019-01-22T11:01:54.027Z',
-        appUserId: 'CBUT_user_30',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_24__CBUT_reply_19__qO1C3_86RLd-liEHXfx4M_8H9J7Y0Wb13RIieRp5-2pFxb0Jo__DEVELOPMENT_BACKEND': {
-        articleId: 'CBUT_article_24',
-        replyId: 'CBUT_reply_19',
-        userId: 'qO1C3_86RLd-liEHXfx4M_8H9J7Y0Wb13RIieRp5-2pFxb0Jo',
-        appId: 'DEVELOPMENT_BACKEND',
-        createdAt: '2019-11-20T22:23:54.285Z',
-        updatedAt: '2019-11-20T22:23:54.285Z',
-        appUserId: 'CBUT_user_31',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_25__CBUT_reply_20__j4S8C_ZvTJZB57GHkjobdIGZXOtibZ9PYEmQu8pnG-rYXS85A__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_25',
-        replyId: 'CBUT_reply_20',
-        userId: 'j4S8C_ZvTJZB57GHkjobdIGZXOtibZ9PYEmQu8pnG-rYXS85A',
-        appId: 'RUMORS_LINE_BOT',
-        createdAt: '2018-10-02T04:01:02.366Z',
-        updatedAt: '2018-10-02T04:01:02.366Z',
-        appUserId: 'CBUT_user_32',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_26__CBUT_reply_21__CBUT_user_16__DEVELOPMENT_FRONTEND': {
-        createdAt: '2017-11-22T12:27:20.578Z',
-        appId: 'DEVELOPMENT_FRONTEND',
-        userId: 'CBUT_user_16',
-        updatedAt: '2017-11-22T12:27:20.578Z',
-        articleId: 'CBUT_article_26',
-        replyId: 'CBUT_reply_21',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_27__CBUT_reply_22__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND': {
-        createdAt: '2017-08-11T16:55:48.227Z',
-        appId: 'DEVELOPMENT_BACKEND',
-        userId: 'qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
-        updatedAt: '2017-08-11T16:55:48.227Z',
-        articleId: 'CBUT_article_27',
-        replyId: 'CBUT_reply_22',
-        appUserId: 'CBUT_user_17',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_28__CBUT_reply_23__qO1C3_wR_HXQWSJ2jY6OA3JRGZrIgVXadixeKTQsX1qxuHsKo__DEVELOPMENT_BACKEND': {
-        createdAt: '2018-01-31T13:52:33.249Z',
-        appId: 'DEVELOPMENT_BACKEND',
-        userId: 'qO1C3_wR_HXQWSJ2jY6OA3JRGZrIgVXadixeKTQsX1qxuHsKo',
-        updatedAt: '2018-01-31T13:52:33.249Z',
-        articleId: 'CBUT_article_28',
-        replyId: 'CBUT_reply_23',
-        appUserId: 'CBUT_user_33',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_29__CBUT_reply_24__CBUT_user_23__WEBSITE': {
-        articleId: 'CBUT_article_29',
-        replyId: 'CBUT_reply_24',
-        userId: 'CBUT_user_23',
-        appId: 'WEBSITE',
-        createdAt: '2020-09-19T17:04:20.167Z',
-        updatedAt: '2020-09-19T17:04:20.167Z',
-        comment: '',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_5__CBUT_reply_0__CBUT_user_16__DEVELOPMENT_FRONTEND': {
-        createdAt: '2017-11-19T09:40:11.292Z',
-        appId: 'DEVELOPMENT_FRONTEND',
-        userId: 'CBUT_user_16',
-        updatedAt: '2017-11-19T09:40:11.292Z',
-        articleId: 'CBUT_article_5',
-        replyId: 'CBUT_reply_0',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_6__CBUT_reply_1__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND': {
-        createdAt: '2018-01-11T08:29:22.045Z',
-        appId: 'DEVELOPMENT_BACKEND',
-        userId: 'qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
-        updatedAt: '2018-01-11T08:29:22.045Z',
-        articleId: 'CBUT_article_6',
-        replyId: 'CBUT_reply_1',
-        appUserId: 'CBUT_user_17',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_7__CBUT_reply_2__j4S8C_Imj3cjSxE4ieAND7jCqxBcT1kYMCozfzPqI2CM2B4d4__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_7',
-        replyId: 'CBUT_reply_2',
-        userId: 'j4S8C_Imj3cjSxE4ieAND7jCqxBcT1kYMCozfzPqI2CM2B4d4',
-        appId: 'RUMORS_LINE_BOT',
-        createdAt: '2018-10-29T14:32:04.786Z',
-        updatedAt: '2018-10-29T14:32:04.786Z',
-        appUserId: 'CBUT_user_18',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_8__CBUT_reply_3__j4S8C_pwhC-K1IePUO5xsLr_3CDzSaH1yk7_OfUJoJeG3lVi4__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_8',
-        replyId: 'CBUT_reply_3',
-        userId: 'j4S8C_pwhC-K1IePUO5xsLr_3CDzSaH1yk7_OfUJoJeG3lVi4',
-        appId: 'RUMORS_LINE_BOT',
-        createdAt: '2019-06-25T02:42:31.105Z',
-        updatedAt: '2019-06-25T02:42:31.636Z',
-        appUserId: 'CBUT_user_19',
-      },
-      '/articlereplyfeedbacks/doc/CBUT_article_9__CBUT_reply_4__CBUT_user_20__WEBSITE': {
-        articleId: 'CBUT_article_9',
-        replyId: 'CBUT_reply_4',
-        userId: 'CBUT_user_20',
-        appId: 'WEBSITE',
-        createdAt: '2020-09-10T11:45:55.227Z',
-        updatedAt: '2020-09-10T11:45:55.227Z',
-        comment: '',
-      },
+      '/articlereplyfeedbacks/doc/CBUT_article_10__CBUT_reply_5__qO1C3_lHfjAYn66nWNP7XCDrdY1gaZmJbQ1wYAgzOTT8xsTXc__DEVELOPMENT_BACKEND':
+        {
+          articleId: 'CBUT_article_10',
+          replyId: 'CBUT_reply_5',
+          userId: 'qO1C3_lHfjAYn66nWNP7XCDrdY1gaZmJbQ1wYAgzOTT8xsTXc',
+          appId: 'DEVELOPMENT_BACKEND',
+          createdAt: '2020-02-27T09:18:07.301Z',
+          updatedAt: '2020-02-27T09:18:07.301Z',
+          appUserId: 'CBUT_user_21',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_11__CBUT_reply_6__qO1C3_sYnv5g2wKCqsHcFZh-LocxMbYLn-fPAet_WiV0JRIDE__DEVELOPMENT_BACKEND':
+        {
+          createdAt: '2018-01-24T05:28:35.650Z',
+          appId: 'DEVELOPMENT_BACKEND',
+          userId: 'qO1C3_sYnv5g2wKCqsHcFZh-LocxMbYLn-fPAet_WiV0JRIDE',
+          updatedAt: '2018-01-24T05:28:35.650Z',
+          articleId: 'CBUT_article_11',
+          replyId: 'CBUT_reply_6',
+          appUserId: 'CBUT_user_22',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_12__CBUT_reply_7__CBUT_user_23__WEBSITE':
+        {
+          articleId: 'CBUT_article_12',
+          replyId: 'CBUT_reply_7',
+          userId: 'CBUT_user_23',
+          appId: 'WEBSITE',
+          createdAt: '2020-06-28T08:33:54.411Z',
+          updatedAt: '2020-06-28T08:33:54.411Z',
+          comment: '',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_13__CBUT_reply_8__j4S8C_LY7EIPDC671J6K2uZ9EznQAEDhznt8gUPsK0cwSDbFQ__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_13',
+          replyId: 'CBUT_reply_8',
+          userId: 'j4S8C_LY7EIPDC671J6K2uZ9EznQAEDhznt8gUPsK0cwSDbFQ',
+          appId: 'RUMORS_LINE_BOT',
+          createdAt: '2020-09-26T13:53:15.665Z',
+          updatedAt: '2020-09-26T13:53:24.365Z',
+          comment: '',
+          appUserId: 'CBUT_user_24',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_14__CBUT_reply_9__qO1C3_gGWtOcj9ARqZRT4msCGaXS-Iof7eL3XxmT3AOTTGCVU__DEVELOPMENT_BACKEND':
+        {
+          articleId: 'CBUT_article_14',
+          replyId: 'CBUT_reply_9',
+          userId: 'qO1C3_gGWtOcj9ARqZRT4msCGaXS-Iof7eL3XxmT3AOTTGCVU',
+          appId: 'DEVELOPMENT_BACKEND',
+          createdAt: '2018-03-29T06:42:21.545Z',
+          updatedAt: '2018-03-29T06:42:21.545Z',
+          appUserId: 'CBUT_user_25',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_15__CBUT_reply_10__CBUT_user_15__DEVELOPMENT_FRONTEND':
+        {
+          createdAt: '2018-02-07T18:09:49.594Z',
+          appId: 'DEVELOPMENT_FRONTEND',
+          userId: 'CBUT_user_15',
+          updatedAt: '2018-02-07T18:09:49.594Z',
+          articleId: 'CBUT_article_15',
+          replyId: 'CBUT_reply_10',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_16__CBUT_reply_11__j4S8C_-jyEGNy2w04UVgIb9-imCXweVYP3sniZ-q4Y8JNXL9k__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_16',
+          replyId: 'CBUT_reply_11',
+          userId: 'j4S8C_-jyEGNy2w04UVgIb9-imCXweVYP3sniZ-q4Y8JNXL9k',
+          appId: 'RUMORS_LINE_BOT',
+          createdAt: '2020-03-10T12:02:07.419Z',
+          updatedAt: '2020-03-10T12:02:08.394Z',
+          appUserId: 'CBUT_user_26',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_17__CBUT_reply_12__CBUT_user_15__WEBSITE':
+        {
+          articleId: 'CBUT_article_17',
+          replyId: 'CBUT_reply_12',
+          userId: 'CBUT_user_15',
+          appId: 'WEBSITE',
+          createdAt: '2020-04-05T09:33:19.299Z',
+          updatedAt: '2020-04-05T09:33:19.299Z',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_18__CBUT_reply_13__j4S8C_u7STzSnt-bwqVRc9tCmf47W2LE79MRzNrA-_oxzLIFc__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_18',
+          replyId: 'CBUT_reply_13',
+          userId: 'j4S8C_u7STzSnt-bwqVRc9tCmf47W2LE79MRzNrA-_oxzLIFc',
+          appId: 'RUMORS_LINE_BOT',
+          createdAt: '2019-02-20T05:11:06.611Z',
+          updatedAt: '2019-02-20T05:11:06.611Z',
+          appUserId: 'CBUT_user_27',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_19__CBUT_reply_14__CBUT_user_20__WEBSITE':
+        {
+          articleId: 'CBUT_article_19',
+          replyId: 'CBUT_reply_14',
+          userId: 'CBUT_user_20',
+          appId: 'WEBSITE',
+          createdAt: '2020-06-27T23:11:24.480Z',
+          updatedAt: '2020-06-27T23:11:24.480Z',
+          comment: '',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_20__CBUT_reply_15__CBUT_user_20__WEBSITE':
+        {
+          articleId: 'CBUT_article_20',
+          replyId: 'CBUT_reply_15',
+          userId: 'CBUT_user_20',
+          appId: 'WEBSITE',
+          createdAt: '2020-09-26T05:54:08.502Z',
+          updatedAt: '2020-09-26T05:54:08.502Z',
+          comment: '',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_21__CBUT_reply_16__j4S8C_O3LIyatOUXZjhZqeqQ5whc8glQZy6b-53QrsrO_SFbs__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_21',
+          replyId: 'CBUT_reply_16',
+          userId: 'j4S8C_O3LIyatOUXZjhZqeqQ5whc8glQZy6b-53QrsrO_SFbs',
+          appId: 'RUMORS_LINE_BOT',
+          createdAt: '2019-04-06T06:45:23.016Z',
+          updatedAt: '2019-04-06T06:45:23.016Z',
+          appUserId: 'CBUT_user_28',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_22__CBUT_reply_17__j4S8C_LD7dd370hd6B1O-rTkpX9I_n1AhIlTPD_QmDsGA6WoQ__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_22',
+          replyId: 'CBUT_reply_17',
+          userId: 'j4S8C_LD7dd370hd6B1O-rTkpX9I_n1AhIlTPD_QmDsGA6WoQ',
+          appId: 'RUMORS_LINE_BOT',
+          createdAt: '2018-11-11T23:43:02.406Z',
+          updatedAt: '2018-11-11T23:43:02.406Z',
+          appUserId: 'CBUT_user_29',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_23__CBUT_reply_18__j4S8C_J-qFf2nzWHvRnx3qA2hEhRhp4ASBnYRkq3IA2i7ngg8__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_23',
+          replyId: 'CBUT_reply_18',
+          userId: 'j4S8C_J-qFf2nzWHvRnx3qA2hEhRhp4ASBnYRkq3IA2i7ngg8',
+          appId: 'RUMORS_LINE_BOT',
+          createdAt: '2019-01-22T11:01:54.027Z',
+          updatedAt: '2019-01-22T11:01:54.027Z',
+          appUserId: 'CBUT_user_30',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_24__CBUT_reply_19__qO1C3_86RLd-liEHXfx4M_8H9J7Y0Wb13RIieRp5-2pFxb0Jo__DEVELOPMENT_BACKEND':
+        {
+          articleId: 'CBUT_article_24',
+          replyId: 'CBUT_reply_19',
+          userId: 'qO1C3_86RLd-liEHXfx4M_8H9J7Y0Wb13RIieRp5-2pFxb0Jo',
+          appId: 'DEVELOPMENT_BACKEND',
+          createdAt: '2019-11-20T22:23:54.285Z',
+          updatedAt: '2019-11-20T22:23:54.285Z',
+          appUserId: 'CBUT_user_31',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_25__CBUT_reply_20__j4S8C_ZvTJZB57GHkjobdIGZXOtibZ9PYEmQu8pnG-rYXS85A__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_25',
+          replyId: 'CBUT_reply_20',
+          userId: 'j4S8C_ZvTJZB57GHkjobdIGZXOtibZ9PYEmQu8pnG-rYXS85A',
+          appId: 'RUMORS_LINE_BOT',
+          createdAt: '2018-10-02T04:01:02.366Z',
+          updatedAt: '2018-10-02T04:01:02.366Z',
+          appUserId: 'CBUT_user_32',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_26__CBUT_reply_21__CBUT_user_16__DEVELOPMENT_FRONTEND':
+        {
+          createdAt: '2017-11-22T12:27:20.578Z',
+          appId: 'DEVELOPMENT_FRONTEND',
+          userId: 'CBUT_user_16',
+          updatedAt: '2017-11-22T12:27:20.578Z',
+          articleId: 'CBUT_article_26',
+          replyId: 'CBUT_reply_21',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_27__CBUT_reply_22__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND':
+        {
+          createdAt: '2017-08-11T16:55:48.227Z',
+          appId: 'DEVELOPMENT_BACKEND',
+          userId: 'qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
+          updatedAt: '2017-08-11T16:55:48.227Z',
+          articleId: 'CBUT_article_27',
+          replyId: 'CBUT_reply_22',
+          appUserId: 'CBUT_user_17',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_28__CBUT_reply_23__qO1C3_wR_HXQWSJ2jY6OA3JRGZrIgVXadixeKTQsX1qxuHsKo__DEVELOPMENT_BACKEND':
+        {
+          createdAt: '2018-01-31T13:52:33.249Z',
+          appId: 'DEVELOPMENT_BACKEND',
+          userId: 'qO1C3_wR_HXQWSJ2jY6OA3JRGZrIgVXadixeKTQsX1qxuHsKo',
+          updatedAt: '2018-01-31T13:52:33.249Z',
+          articleId: 'CBUT_article_28',
+          replyId: 'CBUT_reply_23',
+          appUserId: 'CBUT_user_33',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_29__CBUT_reply_24__CBUT_user_23__WEBSITE':
+        {
+          articleId: 'CBUT_article_29',
+          replyId: 'CBUT_reply_24',
+          userId: 'CBUT_user_23',
+          appId: 'WEBSITE',
+          createdAt: '2020-09-19T17:04:20.167Z',
+          updatedAt: '2020-09-19T17:04:20.167Z',
+          comment: '',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_5__CBUT_reply_0__CBUT_user_16__DEVELOPMENT_FRONTEND':
+        {
+          createdAt: '2017-11-19T09:40:11.292Z',
+          appId: 'DEVELOPMENT_FRONTEND',
+          userId: 'CBUT_user_16',
+          updatedAt: '2017-11-19T09:40:11.292Z',
+          articleId: 'CBUT_article_5',
+          replyId: 'CBUT_reply_0',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_6__CBUT_reply_1__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND':
+        {
+          createdAt: '2018-01-11T08:29:22.045Z',
+          appId: 'DEVELOPMENT_BACKEND',
+          userId: 'qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
+          updatedAt: '2018-01-11T08:29:22.045Z',
+          articleId: 'CBUT_article_6',
+          replyId: 'CBUT_reply_1',
+          appUserId: 'CBUT_user_17',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_7__CBUT_reply_2__j4S8C_Imj3cjSxE4ieAND7jCqxBcT1kYMCozfzPqI2CM2B4d4__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_7',
+          replyId: 'CBUT_reply_2',
+          userId: 'j4S8C_Imj3cjSxE4ieAND7jCqxBcT1kYMCozfzPqI2CM2B4d4',
+          appId: 'RUMORS_LINE_BOT',
+          createdAt: '2018-10-29T14:32:04.786Z',
+          updatedAt: '2018-10-29T14:32:04.786Z',
+          appUserId: 'CBUT_user_18',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_8__CBUT_reply_3__j4S8C_pwhC-K1IePUO5xsLr_3CDzSaH1yk7_OfUJoJeG3lVi4__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_8',
+          replyId: 'CBUT_reply_3',
+          userId: 'j4S8C_pwhC-K1IePUO5xsLr_3CDzSaH1yk7_OfUJoJeG3lVi4',
+          appId: 'RUMORS_LINE_BOT',
+          createdAt: '2019-06-25T02:42:31.105Z',
+          updatedAt: '2019-06-25T02:42:31.636Z',
+          appUserId: 'CBUT_user_19',
+        },
+      '/articlereplyfeedbacks/doc/CBUT_article_9__CBUT_reply_4__CBUT_user_20__WEBSITE':
+        {
+          articleId: 'CBUT_article_9',
+          replyId: 'CBUT_reply_4',
+          userId: 'CBUT_user_20',
+          appId: 'WEBSITE',
+          createdAt: '2020-09-10T11:45:55.227Z',
+          updatedAt: '2020-09-10T11:45:55.227Z',
+          comment: '',
+        },
     },
     articles: {
       '/articles/doc/CBUT_article_0': {
-        text:
-          '轉貼\n\n中華民族崛起的主要敵人 AngloSaxon 民族\n\n兩百年來，鴉片戰爭開始，中國最主要的敵人就是英國，AngloSaxon 民族，現在隨著中國的崛起​...',
+        text: '轉貼\n\n中華民族崛起的主要敵人 AngloSaxon 民族\n\n兩百年來，鴉片戰爭開始，中國最主要的敵人就是英國，AngloSaxon 民族，現在隨著中國的崛起​...',
         createdAt: '2020-09-08T15:30:44.659Z',
         updatedAt: '2020-09-08T15:30:44.659Z',
         userId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
@@ -10142,8 +10065,7 @@ export default {
         replyRequestCount: 15,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2020-04-06T07:42:18.890Z',
-        text:
-          '你有沒有發現今天的記者會、陳時中等所有人都戴上了口罩，這認為意味著什麼？\n\n現在無症狀卻可能有傳染力的隱性感染者，是最讓人驚恐又難以防範的\n真的不要挑戰自己的運...',
+        text: '你有沒有發現今天的記者會、陳時中等所有人都戴上了口罩，這認為意味著什麼？\n\n現在無症狀卻可能有傳染力的隱性感染者，是最讓人驚恐又難以防範的\n真的不要挑戰自己的運...',
         hyperlinks: [],
         updatedAt: '2020-04-06T04:35:45.919Z',
         normalArticleCategoryCount: 2,
@@ -10194,8 +10116,7 @@ export default {
         replyRequestCount: 2,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2020-02-27T07:50:54.261Z',
-        text:
-          '\n什麼是「中國腳鐐」呢？\n為何全世界會願意套上這個“中國腳鐐”呢？\n一個簡單的答案就是：沒有更好的選擇。\n※※※※※※\n數字是這樣告訴我們的：台灣出口最大的國家...',
+        text: '\n什麼是「中國腳鐐」呢？\n為何全世界會願意套上這個“中國腳鐐”呢？\n一個簡單的答案就是：沒有更好的選擇。\n※※※※※※\n數字是這樣告訴我們的：台灣出口最大的國家...',
         hyperlinks: [],
         updatedAt: '2020-02-27T03:27:49.869Z',
         normalArticleCategoryCount: 1,
@@ -10254,8 +10175,7 @@ export default {
         replyRequestCount: 3,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-12-31T04:18:42.495Z',
-        text:
-          '舊金山市長李孟賢（Edwin M. Lee）已於12 日凌晨1時11分因心臟病發於舊金山總醫院過世，享年65歲。\n請花幾分鐘閱讀此文：\n\n1. 假設現在是晚上7...',
+        text: '舊金山市長李孟賢（Edwin M. Lee）已於12 日凌晨1時11分因心臟病發於舊金山總醫院過世，享年65歲。\n請花幾分鐘閱讀此文：\n\n1. 假設現在是晚上7...',
         hyperlinks: [],
         updatedAt: '2017-12-30T01:01:44.438Z',
         normalArticleCategoryCount: 1,
@@ -10354,8 +10274,7 @@ export default {
         replyRequestCount: 3,
         appId: 'BOT_LEGACY',
         lastRequestedAt: '2017-01-13T03:49:00.000Z',
-        text:
-          '太白粉擺上一百年也不長蟲，你相信嗎? \n\n肉羹麵、蚵仔麵線、酸辣湯…勾芡的東西容易引起痛風及糖尿病之慢性病 。 \n喜歡吃燴飯肉羹湯的人請注意！ \n\n烹飪老師是西...',
+        text: '太白粉擺上一百年也不長蟲，你相信嗎? \n\n肉羹麵、蚵仔麵線、酸辣湯…勾芡的東西容易引起痛風及糖尿病之慢性病 。 \n喜歡吃燴飯肉羹湯的人請注意！ \n\n烹飪老師是西...',
         hyperlinks: [],
         updatedAt: '2017-01-13T03:49:00.000Z',
         normalArticleCategoryCount: 1,
@@ -10414,8 +10333,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-07-10T11:37:00.105Z',
-        text:
-          '轉載：\n以下是一位在臺灣出生在台灣成長的純正台湾人轉來的。\n\n什麼叫「兩蔣時代」？以下就是：\n\n1，是治安良好的時代。\n2，是沒有民粹的時代。\n3，是禮義廉恥、...',
+        text: '轉載：\n以下是一位在臺灣出生在台灣成長的純正台湾人轉來的。\n\n什麼叫「兩蔣時代」？以下就是：\n\n1，是治安良好的時代。\n2，是沒有民粹的時代。\n3，是禮義廉恥、...',
         hyperlinks: [],
         updatedAt: '2017-07-10T11:37:00.087Z',
         normalArticleCategoryCount: 1,
@@ -10463,16 +10381,14 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2018-01-07T16:35:06.599Z',
-        text:
-          'http://health.businessweekly.com.tw/AArticleM.aspx?ID=ARTL000065544&p=2',
+        text: 'http://health.businessweekly.com.tw/AArticleM.aspx?ID=ARTL000065544&p=2',
         hyperlinks: [
           {
             summary:
               '7.「支氣管擴張劑」：有些孩子的咳嗽，是因為病毒感染之後呼吸道過度反應而造成，如果發現孩子咳嗽超過一個星期以上，可以在看病時，跟醫師討論看看是否需要使用「支氣管...',
             title:
               '孩子半夜咳不停？問題可能在冷氣！小兒科醫師建議的冷氣溫度這樣調',
-            url:
-              'http://health.businessweekly.com.tw/AArticleM.aspx?ID=ARTL000065544&p=2',
+            url: 'http://health.businessweekly.com.tw/AArticleM.aspx?ID=ARTL000065544&p=2',
           },
         ],
         updatedAt: '2018-01-07T16:35:06.585Z',
@@ -10524,8 +10440,7 @@ export default {
         replyRequestCount: 7,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2020-03-04T03:08:52.875Z',
-        text:
-          '各位同事，您可能還記得，當我是加利福尼亞大學聖地亞哥分校的病理學教授時，我是世界上最早研究冠狀病毒的分子病毒學家之一（1970年代）。我是第一個證明該病毒包含的...',
+        text: '各位同事，您可能還記得，當我是加利福尼亞大學聖地亞哥分校的病理學教授時，我是世界上最早研究冠狀病毒的分子病毒學家之一（1970年代）。我是第一個證明該病毒包含的...',
         hyperlinks: [],
         updatedAt: '2020-03-03T15:37:27.556Z',
         normalArticleCategoryCount: 1,
@@ -10587,8 +10502,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2020-04-03T01:27:41.997Z',
-        text:
-          '🇮🇹這就是-義大利🇮🇹\n一對*約定今年完婚*的\n情侣.女友感染新冠病毒在醫院搶救.男友探病時断然脱掉防護服⋯他們在3/25日-相繼往生！\n😭看得讓人腸斷心碎😭  ',
+        text: '🇮🇹這就是-義大利🇮🇹\n一對*約定今年完婚*的\n情侣.女友感染新冠病毒在醫院搶救.男友探病時断然脱掉防護服⋯他們在3/25日-相繼往生！\n😭看得讓人腸斷心碎😭  ',
         hyperlinks: [],
         updatedAt: '2020-04-03T01:27:41.969Z',
         normalArticleCategoryCount: 1,
@@ -10647,8 +10561,7 @@ export default {
         replyRequestCount: 12,
         appId: 'BOT_LEGACY',
         lastRequestedAt: '2017-04-08T08:27:32.840Z',
-        text:
-          '日本醫學博士說:\n\n防失智, 增強記憶力, 不用吃藥, 可以用食療, 他推薦要吃4種食物 :\n\n1, 番茄煮熟防失智。\n2, 蘋果增強記憶力。\n3, 黑巧克力活...',
+        text: '日本醫學博士說:\n\n防失智, 增強記憶力, 不用吃藥, 可以用食療, 他推薦要吃4種食物 :\n\n1, 番茄煮熟防失智。\n2, 蘋果增強記憶力。\n3, 黑巧克力活...',
         hyperlinks: [],
         updatedAt: '2017-01-22T04:05:00.000Z',
         normalArticleCategoryCount: 1,
@@ -10710,8 +10623,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2019-11-10T06:18:52.860Z',
-        text:
-          '电視新聞報導医生檢查女記者的肺部，發現常使用手機的人，肺部迅速老化，那位女記者才二十多歲，肺部老化，相當四十多歲的人。好恐怖!三C產品盡量少用。',
+        text: '电視新聞報導医生檢查女記者的肺部，發現常使用手機的人，肺部迅速老化，那位女記者才二十多歲，肺部老化，相當四十多歲的人。好恐怖!三C產品盡量少用。',
         normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-11-10T06:18:52.830Z',
@@ -10784,8 +10696,7 @@ export default {
         replyRequestCount: 3,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2020-04-25T11:34:30.749Z',
-        text:
-          '13:23 金克寧 分享轉傳：\n\n兩位地方公共衛生局局長：Grant Colfax和Sara Cody，分別給他們取個中文名字吧：格蘭特和薩拉。\n\n格蘭特是舊金...',
+        text: '13:23 金克寧 分享轉傳：\n\n兩位地方公共衛生局局長：Grant Colfax和Sara Cody，分別給他們取個中文名字吧：格蘭特和薩拉。\n\n格蘭特是舊金...',
         hyperlinks: [],
         updatedAt: '2020-04-17T13:11:33.426Z',
         normalArticleCategoryCount: 2,
@@ -10833,8 +10744,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2018-01-26T02:28:32.033Z',
-        text:
-          '不能只有我拿到！現在來家樂福滴血認親"完成會員認證"，免費拿娘家好禮，完成再抽會員點數一千萬點！\r\nhttps://goo.gl/sNbJrY',
+        text: '不能只有我拿到！現在來家樂福滴血認親"完成會員認證"，免費拿娘家好禮，完成再抽會員點數一千萬點！\r\nhttps://goo.gl/sNbJrY',
         hyperlinks: [
           {
             summary: null,
@@ -10898,8 +10808,7 @@ export default {
         replyRequestCount: 27,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-03-21T15:32:51.522Z',
-        text:
-          '各位朋友請注意，\n\n即日起不可食用泰國製之各類罐頭食品，包含臺灣品牌泰國生産者，尤其是泰國罐裝水果食品。\n泰國200多名愛滋病感染者，在患者的首腦指揮下，湧進泰...',
+        text: '各位朋友請注意，\n\n即日起不可食用泰國製之各類罐頭食品，包含臺灣品牌泰國生産者，尤其是泰國罐裝水果食品。\n泰國200多名愛滋病感染者，在患者的首腦指揮下，湧進泰...',
         hyperlinks: [],
         updatedAt: '2017-03-13T14:12:52.385Z',
         normalArticleCategoryCount: 1,
@@ -11002,8 +10911,7 @@ export default {
         replyRequestCount: 7,
         appId: 'BOT_LEGACY',
         lastRequestedAt: '2017-01-16T14:55:00.000Z',
-        text:
-          '昨天ㄧ位媽媽去地檢署按鈴申告，很多家長去聲援，你看看影片， 她小六大兒子被強迫跟另外一個女生練習自慰， 她抗議給小孩上一些亂七八糟的性解放教育，被霸凌，這會不會...',
+        text: '昨天ㄧ位媽媽去地檢署按鈴申告，很多家長去聲援，你看看影片， 她小六大兒子被強迫跟另外一個女生練習自慰， 她抗議給小孩上一些亂七八糟的性解放教育，被霸凌，這會不會...',
         hyperlinks: [],
         updatedAt: '2017-01-16T14:55:00.000Z',
         normalArticleCategoryCount: 1,
@@ -11076,8 +10984,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2018-12-28T13:18:06.372Z',
-        text:
-          '奇蹟！燙到後趕快用它！連紅印和水泡都不會有！每家廚房都有，比沖水更有效!：https://youtu.be/EI_oExo38fA',
+        text: '奇蹟！燙到後趕快用它！連紅印和水泡都不會有！每家廚房都有，比沖水更有效!：https://youtu.be/EI_oExo38fA',
         normalArticleReplycount: 0,
         hyperlinks: [
           {
@@ -11137,8 +11044,7 @@ export default {
         replyRequestCount: 1,
         appId: 'WEBSITE',
         lastRequestedAt: '2019-11-13T16:17:15.156Z',
-        text:
-          'My experience with burns is this:\nOnce I was cooking some corn and stuck my fork...',
+        text: 'My experience with burns is this:\nOnce I was cooking some corn and stuck my fork...',
         normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-11-13T16:17:15.137Z',
@@ -11209,8 +11115,7 @@ export default {
         replyRequestCount: 2,
         appId: 'BOT_LEGACY',
         lastRequestedAt: '2017-01-16T12:47:00.000Z',
-        text:
-          '今晚開始就實施擴大臨檢\n請各位朋友千萬不要酒後駕車\n警察局擴大臨檢日期：\n10/13：19~23時\n10/16：20~24時\n10/20：21~01時\n10/2...',
+        text: '今晚開始就實施擴大臨檢\n請各位朋友千萬不要酒後駕車\n警察局擴大臨檢日期：\n10/13：19~23時\n10/16：20~24時\n10/20：21~01時\n10/2...',
         hyperlinks: [],
         updatedAt: '2017-01-16T12:47:00.000Z',
         normalArticleCategoryCount: 1,
@@ -11317,16 +11222,14 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-06-24T02:25:38.668Z',
-        text:
-          '連署增設公幼\n\nhttp://join.gov.tw/idea/detail/6a024fc8-ceb3-45cc-a37a-59cbec2d6bd4\n各位夥伴...',
+        text: '連署增設公幼\n\nhttp://join.gov.tw/idea/detail/6a024fc8-ceb3-45cc-a37a-59cbec2d6bd4\n各位夥伴...',
         hyperlinks: [
           {
             summary:
               '提議內容或建議事項\n\t\t\t\t台灣少子化已是全球第一名，目前總生育率約1.175%，日本為1.4%、韓國1.5%，港澳及新加坡為1.2%。目前全國公幼2465園，...',
             title:
               '公共化幼兒園應在4年內達到1000班之政策目標- 提點子-公共政策網路參與平臺',
-            url:
-              'http://join.gov.tw/idea/detail/6a024fc8-ceb3-45cc-a37a-59cbec2d6bd4',
+            url: 'http://join.gov.tw/idea/detail/6a024fc8-ceb3-45cc-a37a-59cbec2d6bd4',
           },
         ],
         updatedAt: '2017-06-24T02:25:38.653Z',
@@ -11397,8 +11300,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-08-29T03:38:35.539Z',
-        text:
-          '台北馬偕醫院傳來訊息：\n\n資深醫生（林清風）傳來：「請大家以後千萬不要再吃生魚片了！」\n因為最近已經發現- 好多病人因為吃了生魚片，胃壁附著《海獸胃腺蟲》，大小...',
+        text: '台北馬偕醫院傳來訊息：\n\n資深醫生（林清風）傳來：「請大家以後千萬不要再吃生魚片了！」\n因為最近已經發現- 好多病人因為吃了生魚片，胃壁附著《海獸胃腺蟲》，大小...',
         hyperlinks: [],
         updatedAt: '2017-08-29T03:38:35.524Z',
         normalArticleCategoryCount: 1,
@@ -11449,8 +11351,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2019-08-15T02:39:39.597Z',
-        text:
-          '運動手錶跟手機互聯，當然手機內所有資料都會進入他們的伺服器（任何品牌都如此）唯獨中國只要發送「詆譭攻擊等圖文」就會鎖定情搜追蹤你。以保護自己及國安角度，供大家參考。',
+        text: '運動手錶跟手機互聯，當然手機內所有資料都會進入他們的伺服器（任何品牌都如此）唯獨中國只要發送「詆譭攻擊等圖文」就會鎖定情搜追蹤你。以保護自己及國安角度，供大家參考。',
         normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-08-15T02:39:39.532Z',
@@ -11534,8 +11435,7 @@ export default {
         replyRequestCount: 8,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2019-12-24T02:55:11.261Z',
-        text:
-          '民進黨已經通過了毒品條例了\n\n校園內可以擁有50克的毒品，才被視同販毒。\n\n台灣除了是(同性戀島)\n(愛滋病島)現在又增加了一個(毒品島)了\n校園毒品零容忍遭封...',
+        text: '民進黨已經通過了毒品條例了\n\n校園內可以擁有50克的毒品，才被視同販毒。\n\n台灣除了是(同性戀島)\n(愛滋病島)現在又增加了一個(毒品島)了\n校園毒品零容忍遭封...',
         normalArticleReplycount: 0,
         hyperlinks: [
           {
@@ -11544,8 +11444,7 @@ export default {
             summary:
               '立法委員沈智慧在立法院提案，「毒品危害防制條例第四條、第六條及第三十一條之一條文修正草案」，沈智慧曾兩度上台發言，拜託民進黨支持，能讓法案通過，但結果還是被封殺...',
             title: '校園毒品零容忍遭封殺 藍委提嚴刑峻法被綠委阻攔',
-            url:
-              'https://www.chinatimes.com/realtimenews/20191217002605-260407',
+            url: 'https://www.chinatimes.com/realtimenews/20191217002605-260407',
           },
         ],
         updatedAt: '2019-12-24T02:03:16.857Z',
@@ -11646,8 +11545,7 @@ export default {
         replyRequestCount: 1,
         appId: 'BOT_LEGACY',
         lastRequestedAt: '2017-01-20T00:58:00.000Z',
-        text:
-          '南投新景點～富寮里動物園，佔地18公頃，內有狐獴、侏儒山羊、兔子、鸚鵡、天鵝、紅環、灰冠鶴、驢、騾、小馬、羊駝.......等，1百多種動物(持續增加ing)，...',
+        text: '南投新景點～富寮里動物園，佔地18公頃，內有狐獴、侏儒山羊、兔子、鸚鵡、天鵝、紅環、灰冠鶴、驢、騾、小馬、羊駝.......等，1百多種動物(持續增加ing)，...',
         hyperlinks: [
           {
             summary:
@@ -11705,8 +11603,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2018-06-15T07:34:36.502Z',
-        text:
-          '讚！國民黨有史以來打民進黨蔡英文最好的一支廣告.既傳神又生動，大家努力的傳出去https://m.youtube.com/watch?v=VVHf9ni09m4&feature=youtu.be',
+        text: '讚！國民黨有史以來打民進黨蔡英文最好的一支廣告.既傳神又生動，大家努力的傳出去https://m.youtube.com/watch?v=VVHf9ni09m4&feature=youtu.be',
         normalArticleReplycount: 0,
         hyperlinks: [
           {
@@ -11815,8 +11712,7 @@ export default {
         replyRequestCount: 1,
         appId: 'BOT_LEGACY',
         lastRequestedAt: '2017-01-18T02:58:00.000Z',
-        text:
-          'l  請大家注意！  l\n\n中壢地區的泰豐輪胎廠方失火，燒出來的煙都是戴奧辛，它非常非常毒，請大家及小朋友們出門可以的話戴口罩，下雨的話也不要淋雨，以上請各位長...',
+        text: 'l  請大家注意！  l\n\n中壢地區的泰豐輪胎廠方失火，燒出來的煙都是戴奧辛，它非常非常毒，請大家及小朋友們出門可以的話戴口罩，下雨的話也不要淋雨，以上請各位長...',
         hyperlinks: [],
         updatedAt: '2017-01-18T02:58:00.000Z',
         normalArticleCategoryCount: 1,
@@ -11864,8 +11760,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-12-24T23:48:52.805Z',
-        text:
-          '支持手遊 www.yxc8.cn 安全服務交易平臺上來交易！瀏覽器打開網頁先上去註冊個屬於自己的帳戶，然後我去掛單你需要的價格的貨物，使用點數卡在線充值選擇貨物完成下單。',
+        text: '支持手遊 www.yxc8.cn 安全服務交易平臺上來交易！瀏覽器打開網頁先上去註冊個屬於自己的帳戶，然後我去掛單你需要的價格的貨物，使用點數卡在線充值選擇貨物完成下單。',
         hyperlinks: [
           {
             summary: null,
@@ -11918,8 +11813,7 @@ export default {
         replyRequestCount: 7,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-06-09T03:12:55.885Z',
-        text:
-          '(受傷)\n原來汽車機車強制險不是\n只有賠償意外傷亡200萬, \n這個最重要一定要去了解！這篇報導…您不看是您的損失！\n\nhttps://youtu.be/7BV...',
+        text: '(受傷)\n原來汽車機車強制險不是\n只有賠償意外傷亡200萬, \n這個最重要一定要去了解！這篇報導…您不看是您的損失！\n\nhttps://youtu.be/7BV...',
         hyperlinks: [
           {
             summary:
@@ -11975,15 +11869,13 @@ export default {
         replyRequestCount: 1,
         appId: 'BOT_LEGACY',
         lastRequestedAt: '2017-01-11T08:52:00.000Z',
-        text:
-          '小兒用藥安全-小兒用藥的一些基本觀念 https://www.parenting.com.tw/article/5059770-小兒用藥安全-小兒用藥的一些基本觀念/',
+        text: '小兒用藥安全-小兒用藥的一些基本觀念 https://www.parenting.com.tw/article/5059770-小兒用藥安全-小兒用藥的一些基本觀念/',
         hyperlinks: [
           {
             summary:
               '不管是中藥或是西藥，沒有任何一種藥是沒有副作用的。如果有少數中藥總是強調天然植物提煉，完全不提其副作用，那麼這是一種欺騙的行為。什麼才是正確的用藥觀念呢？讓黃醫...',
             title: '小兒用藥安全-小兒用藥的一些基本觀念/親子天下',
-            url:
-              'https://www.parenting.com.tw/article/5059770-小兒用藥安全-小兒用藥的一些基本觀念/',
+            url: 'https://www.parenting.com.tw/article/5059770-小兒用藥安全-小兒用藥的一些基本觀念/',
           },
         ],
         updatedAt: '2017-01-11T08:52:00.000Z',
@@ -12046,8 +11938,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2020-02-21T02:02:55.271Z',
-        text:
-          '意大利羅馬周三，下起了從來沒見過，也沒聽說過的石頭雨。這回意大利下的石頭雨就讓人見識了大自然的不可預測，不可控制，不可防範的天災，也再次見識了極端天氣之恐怖！\n...',
+        text: '意大利羅馬周三，下起了從來沒見過，也沒聽說過的石頭雨。這回意大利下的石頭雨就讓人見識了大自然的不可預測，不可控制，不可防範的天災，也再次見識了極端天氣之恐怖！\n...',
         normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2020-02-21T02:02:54.455Z',
@@ -12111,8 +12002,7 @@ export default {
         replyRequestCount: 2,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2020-04-27T09:34:01.196Z',
-        text:
-          'https://usacra.wordpress.com/2020/04/23/%e6%9c%9d%e9%b2%9c%e5%85%a8%e4%bd%93%e5%...',
+        text: 'https://usacra.wordpress.com/2020/04/23/%e6%9c%9d%e9%b2%9c%e5%85%a8%e4%bd%93%e5%...',
         hyperlinks: [
           {
             normalizedUrl:
@@ -12120,8 +12010,7 @@ export default {
             summary:
               'Skip to content\n\n\t\n\t\n\n\t\n\t\t\n\n\t\t\t\n\n\n\t\n\n\t\n\t\n\t\t\n\n\n\n\n朝鲜全体党员、人民军将领以及人民：\n\n\n\n　　朝鲜劳动党中央委员...',
             title: '朝鲜全体党员、人民军将领以及人民：',
-            url:
-              'https://usacra.wordpress.com/2020/04/23/%e6%9c%9d%e9%b2%9c%e5%85%a8%e4%bd%93%e5%...',
+            url: 'https://usacra.wordpress.com/2020/04/23/%e6%9c%9d%e9%b2%9c%e5%85%a8%e4%bd%93%e5%...',
           },
         ],
         updatedAt: '2020-04-26T07:32:15.732Z',
@@ -12172,8 +12061,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2019-05-30T13:03:09.792Z',
-        text:
-          '(moon)A，戀人\n\n他是愛你的，你在他眼中你是是完美的戀人，你的優點缺點他都能夠接受。\n情人眼裡出西施，說的就是他，你們在一起是他最為榮幸的，他覺得你是他一...',
+        text: '(moon)A，戀人\n\n他是愛你的，你在他眼中你是是完美的戀人，你的優點缺點他都能夠接受。\n情人眼裡出西施，說的就是他，你們在一起是他最為榮幸的，他覺得你是他一...',
         normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-05-30T13:03:09.773Z',
@@ -12233,8 +12121,7 @@ export default {
         replyRequestCount: 3,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-06-13T13:42:06.389Z',
-        text:
-          '蜂蜜正確吃法 https://youtu.be/6Mh0EKBfGYg               這是一篇很棒的建議。',
+        text: '蜂蜜正確吃法 https://youtu.be/6Mh0EKBfGYg               這是一篇很棒的建議。',
         hyperlinks: [
           {
             summary:
@@ -12345,16 +12232,14 @@ export default {
         replyRequestCount: 1,
         appId: 'WEBSITE',
         lastRequestedAt: '2019-04-15T16:38:11.473Z',
-        text:
-          '一名網友在「韓國瑜加油團」臉書社團發文指出，經在高雄市政府工作的朋友告知，韓國瑜此行訪美，川普特別透過秘密管道向高市府傳達求見意願，還強調之所以會找上韓國瑜，是...',
+        text: '一名網友在「韓國瑜加油團」臉書社團發文指出，經在高雄市政府工作的朋友告知，韓國瑜此行訪美，川普特別透過秘密管道向高市府傳達求見意願，還強調之所以會找上韓國瑜，是...',
         normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-04-15T16:38:11.456Z',
         normalArticleCategoryCount: 1,
       },
       '/articles/doc/CBUT_article_43': {
-        text:
-          '百億離岸風電國產大餅訂單爆肥水外流\n蘋果日報\n離岸風電產業近年因政策利多及多家國際能源大廠來台投資，號稱將帶動八千億產值，其中鋼鐵股王世紀集團被視為民營鋼廠的領...',
+        text: '百億離岸風電國產大餅訂單爆肥水外流\n蘋果日報\n離岸風電產業近年因政策利多及多家國際能源大廠來台投資，號稱將帶動八千億產值，其中鋼鐵股王世紀集團被視為民營鋼廠的領...',
         createdAt: '2020-09-26T07:29:51.676Z',
         updatedAt: '2020-09-26T07:29:51.676Z',
         userId: 'CBUT_user_35',
@@ -12404,8 +12289,7 @@ export default {
         lastRequestedAt: '2020-09-26T07:29:51.708Z',
       },
       '/articles/doc/CBUT_article_44': {
-        text:
-          '柯文哲行程曝光，也讓現場媒體相當質疑，特別是先前曝光的國務院、國防部皆被取消，由於當天柯的行程相當鬆散，加上柯訪美期間每天都安排早上受訪，唯獨華盛頓安排中午，也...',
+        text: '柯文哲行程曝光，也讓現場媒體相當質疑，特別是先前曝光的國務院、國防部皆被取消，由於當天柯的行程相當鬆散，加上柯訪美期間每天都安排早上受訪，唯獨華盛頓安排中午，也...',
         createdAt: '2020-09-26T09:39:48.802Z',
         updatedAt: '2020-09-26T09:39:48.802Z',
         userId: 'CBUT_user_35',
@@ -12496,8 +12380,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-11-14T23:42:12.633Z',
-        text:
-          '眼睛周圍有一粒一粒的要如何改善？非常多人都有！分享出去功德無量！\nhttp://goez1.com/p97252.asp\n',
+        text: '眼睛周圍有一粒一粒的要如何改善？非常多人都有！分享出去功德無量！\nhttp://goez1.com/p97252.asp\n',
         hyperlinks: [
           {
             summary:
@@ -12575,8 +12458,7 @@ export default {
         replyRequestCount: 5,
         appId: 'BOT_LEGACY',
         lastRequestedAt: '2017-01-10T01:12:00.000Z',
-        text:
-          '*轉po*\n昨天年金改革委員會第14次會議，重點如以下幾點：\n1.各項年金請領年齡皆為65歲（未滿65歲無法請領），不分族群職業類別。\n勞保原為60歲即可領，未...',
+        text: '*轉po*\n昨天年金改革委員會第14次會議，重點如以下幾點：\n1.各項年金請領年齡皆為65歲（未滿65歲無法請領），不分族群職業類別。\n勞保原為60歲即可領，未...',
         hyperlinks: [],
         updatedAt: '2017-01-10T01:12:00.000Z',
         normalArticleCategoryCount: 1,
@@ -12678,8 +12560,7 @@ export default {
         replyRequestCount: 4,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2018-12-05T13:22:22.965Z',
-        text:
-          '大法官已釋憲，如果年底公投沒達到500萬票，明年五月台灣將成為亞洲第一個同性可合法結婚的國家。\n\n外國同性戀藉結婚來台治療愛滋病，都是健保支付，全民買單。\n\n學...',
+        text: '大法官已釋憲，如果年底公投沒達到500萬票，明年五月台灣將成為亞洲第一個同性可合法結婚的國家。\n\n外國同性戀藉結婚來台治療愛滋病，都是健保支付，全民買單。\n\n學...',
         normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2018-10-30T01:50:21.966Z',
@@ -12728,8 +12609,7 @@ export default {
         replyRequestCount: 1,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-08-01T08:45:13.734Z',
-        text:
-          '天啊! 原來只要這個動作，發黑香蕉瞬間變回新鮮香蕉?!! 實在太神奇了!一定要分享出去!!\nhttp://goez1.com/p46719.asp\n',
+        text: '天啊! 原來只要這個動作，發黑香蕉瞬間變回新鮮香蕉?!! 實在太神奇了!一定要分享出去!!\nhttp://goez1.com/p46719.asp\n',
         hyperlinks: [
           {
             summary:
@@ -12807,8 +12687,7 @@ export default {
         replyRequestCount: 2,
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2017-05-21T04:51:51.057Z',
-        text:
-          '(牛奶加一物，三高、痛風、癌症都不見了！姐夫82歲了還活力無窮！轉發出去功德無量！)【快來看】│這篇文不錯分享給你看│ →    http://ezvivi.c...',
+        text: '(牛奶加一物，三高、痛風、癌症都不見了！姐夫82歲了還活力無窮！轉發出去功德無量！)【快來看】│這篇文不錯分享給你看│ →    http://ezvivi.c...',
         hyperlinks: [
           {
             summary:
@@ -12835,8 +12714,7 @@ export default {
           'https://kknews.cc/zh-tw/fashion/lznly52.html\n太早用眼霜會長脂肪粒？別再傳這樣的謠言了',
         createdAt: '2017-11-15T05:23:58.752Z',
         appId: 'WEBSITE',
-        text:
-          '眼霜並不是導致脂肪粒產生的原因。脂肪粒大多數情況下指的是粟丘疹，它是一種形成於毛囊皮脂腺的表皮囊腫，內部聚集了角質化的殘留物，通常為白色/淡黃色凸起。',
+        text: '眼霜並不是導致脂肪粒產生的原因。脂肪粒大多數情況下指的是粟丘疹，它是一種形成於毛囊皮脂腺的表皮囊腫，內部聚集了角質化的殘留物，通常為白色/淡黃色凸起。',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -12853,8 +12731,7 @@ export default {
           'http://www.mygopen.com/2017/10/14line.html\n【假新聞】年金改革委員會第14次會議？LINE 傳的都假的，不要採信！',
         createdAt: '2017-10-03T03:37:10.740Z',
         appId: 'WEBSITE',
-        text:
-          '純屬謠言一則，年金改革辦公室也做出澄清了，這完全不是事實，事實上年改會在14次針對年金領取資格會中沒有達成任何共識，勞保方面，根據勞保條例規定，勞保老年年金請領...',
+        text: '純屬謠言一則，年金改革辦公室也做出澄清了，這完全不是事實，事實上年改會在14次針對年金領取資格會中沒有達成任何共識，勞保方面，根據勞保條例規定，勞保老年年金請領...',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -12872,16 +12749,14 @@ export default {
           'http://sp1.hso.mohw.gov.tw/doctor/Often_question/type_detail.php?PageNo=2&q_type...',
         createdAt: '2018-02-07T17:33:53.022Z',
         appId: 'WEBSITE',
-        text:
-          '在夜間睡眠時，由於活動量降低，會使得體溫下降，倘保暖不足時，就會出現手腳冰冷的現象，甚至連身體都涼；同時吸入冷空氣刺激支氣管黏膜，而引發咳嗽。\n ',
+        text: '在夜間睡眠時，由於活動量降低，會使得體溫下降，倘保暖不足時，就會出現手腳冰冷的現象，甚至連身體都涼；同時吸入冷空氣刺激支氣管黏膜，而引發咳嗽。\n ',
         type: 'NOT_RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
           {
             summary: '提醒您，網路醫療諮詢服務並不能代替就醫。',
             title: '',
-            url:
-              'http://sp1.hso.mohw.gov.tw/doctor/Often_question/type_detail.php?PageNo=2&q_type...',
+            url: 'http://sp1.hso.mohw.gov.tw/doctor/Often_question/type_detail.php?PageNo=2&q_type...',
           },
           {
             summary:
@@ -12896,8 +12771,7 @@ export default {
         userId: 'CBUT_user_15',
         appId: 'WEBSITE',
         type: 'OPINIONATED',
-        text:
-          '美國闢謠網站 Snopes 向 James Robb 博士本人查證，博士表示這是他寫的信，但那是給家人與親朋好友的信，並沒有預期到會被公開。\n\n關於其中「鋅錠劑...',
+        text: '美國闢謠網站 Snopes 向 James Robb 博士本人查證，博士表示這是他寫的信，但那是給家人與親朋好友的信，並沒有預期到會被公開。\n\n關於其中「鋅錠劑...',
         reference:
           '2020/3/2 Did a Noted Pathologist Write This Viral Coronavirus Advice Letter?\nhtt...',
         createdAt: '2020-03-03T05:10:50.254Z',
@@ -12917,8 +12791,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '影片中男主角實為古巴裔美國演員威廉·列維（William Levy）。其中一幕來自墨西哥電視劇（Triunfo del amor ）。\n',
+        text: '影片中男主角實為古巴裔美國演員威廉·列維（William Levy）。其中一幕來自墨西哥電視劇（Triunfo del amor ）。\n',
         reference:
           'http://ask.kedo.gov.cn/c/2020-04-02/1026409.shtml\n義大利女友感染新冠肺炎，男友脫掉防護服見最後一面後雙雙殉情？謠言！\n',
         createdAt: '2020-04-03T04:24:14.807Z',
@@ -12937,8 +12810,7 @@ export default {
         reference: 'http://www.tada2002.org.tw/tada_know_02.html',
         createdAt: '2017-04-12T11:25:01.484Z',
         appId: 'WEBSITE',
-        text:
-          '失智症的成因多元，如有症狀須儘早就醫對症下藥，食療是好的輔助方式，但文中提到「不用吃藥」有誇大之嫌。',
+        text: '失智症的成因多元，如有症狀須儘早就醫對症下藥，食療是好的輔助方式，但文中提到「不用吃藥」有誇大之嫌。',
         type: 'RUMOR',
         userId: 'CBUT_user_85',
         hyperlinks: [
@@ -12954,8 +12826,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '假的。手機導致的疾病包含器官老化為無稽之談，目前手機釋放的射頻輻射（ RF ）被國際癌症研究機構（ International Agency for Resea...',
+        text: '假的。手機導致的疾病包含器官老化為無稽之談，目前手機釋放的射頻輻射（ RF ）被國際癌症研究機構（ International Agency for Resea...',
         reference:
           'https://www.thenewslens.com/article/91387\nhttps://www.medpartner.club/electromag...',
         createdAt: '2019-11-18T13:31:29.656Z',
@@ -12975,8 +12846,7 @@ export default {
               '手機電磁波真的會致癌嗎？相關的網路傳言一大堆，到底應該相信哪一個？手機真的對我們身體有這麼大的危害嗎？我平常工作就是需要常常使用手機與客戶聯繫，要怎麼辦？其實這...',
             title:
               '手機電磁波致癌！？專家教你如何降低3C危害保護家人健康！ | 美的好朋友',
-            url:
-              'https://www.medpartner.club/electromagnetic-wave-cancer-myth/',
+            url: 'https://www.medpartner.club/electromagnetic-wave-cancer-myth/',
           },
           {
             normalizedUrl:
@@ -12984,8 +12854,7 @@ export default {
             summary:
               '手機致癌嗎？儘管已研究多年，這個問題依然沒有明確的答案。但是衛生官員稱，週五公布的兩項分別在大鼠和小鼠身上進行的相關政府研究表明，即便有風險，也是比較小的。多年...',
             title: '手機輻射致癌嗎？科學家研究十年後有了新發現',
-            url:
-              'https://cn.nytimes.com/health/20180205/cell-phones-cancer/zh-hant/',
+            url: 'https://cn.nytimes.com/health/20180205/cell-phones-cancer/zh-hant/',
           },
         ],
       },
@@ -13002,8 +12871,7 @@ export default {
         reference: 'http://www.ettoday.net/news/20130826/261531.htm',
         createdAt: '2017-03-21T16:25:34.315Z',
         appId: 'WEBSITE',
-        text:
-          '愛滋病毒離開活體後，1個小時以內就無法存活。即使愛滋病毒血液被滴入罐頭，接觸後感染機率非常低。\n另外，就算吃進仍存活的愛滋病毒，如果口腔沒有傷口，也不會因此感染愛滋病。',
+        text: '愛滋病毒離開活體後，1個小時以內就無法存活。即使愛滋病毒血液被滴入罐頭，接觸後感染機率非常低。\n另外，就算吃進仍存活的愛滋病毒，如果口腔沒有傷口，也不會因此感染愛滋病。',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -13019,8 +12887,7 @@ export default {
         userId: 'CBUT_user_47',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '有關外界網路平台及line群組流傳出現：「現在的國小三年級教保險套、國小四年級教自慰、國小五年級教如何許多人一起性行為…」等類似言論，經教育部及國教院查證國小教...',
+        text: '有關外界網路平台及line群組流傳出現：「現在的國小三年級教保險套、國小四年級教自慰、國小五年級教如何許多人一起性行為…」等類似言論，經教育部及國教院查證國小教...',
         reference:
           '教育部澄清網路群組流傳教科書不實性別平等教育內容之回應\nhttps://www.edu.tw/News_Content.aspx?n=FD56C961F1677...',
         createdAt: '2018-11-07T06:17:00.435Z',
@@ -13028,8 +12895,7 @@ export default {
           {
             summary: '',
             title: '教育部澄清網路群組流傳教科書不實性別平等教育內容之回應',
-            url:
-              'https://www.edu.tw/News_Content.aspx?n=FD56C961F1677400&sms=E6059C30DDBD5135&s=FC73C38D12A5F849',
+            url: 'https://www.edu.tw/News_Content.aspx?n=FD56C961F1677400&sms=E6059C30DDBD5135&s=FC73C38D12A5F849',
           },
         ],
       },
@@ -13037,8 +12903,7 @@ export default {
         userId: 'CBUT_user_73',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '覆蓋麵粉不但無法冷卻皮膚，還會阻止皮膚散熱，甚至使傷口感染。 燙傷應立刻以流動清水沖洗冷卻，醬油、牙膏、麵粉都不是在無菌的環境下生產的，可能引起傷口感染，而且增...',
+        text: '覆蓋麵粉不但無法冷卻皮膚，還會阻止皮膚散熱，甚至使傷口感染。 燙傷應立刻以流動清水沖洗冷卻，醬油、牙膏、麵粉都不是在無菌的環境下生產的，可能引起傷口感染，而且增...',
         reference:
           '謠言終結站》 燙傷灑麵粉可降溫？ 醫：延誤救治更易留疤http://news.ltn.com.tw/news/life/paper/1101504\n燙傷撒麵粉能...',
         createdAt: '2018-12-28T13:27:11.319Z',
@@ -13054,8 +12919,7 @@ export default {
             summary:
               '一名4歲男童因被熱水燙傷，爺爺奶奶一時心急，搶在第一時間先脫下男童衣服，還撒上麵粉，以為能藉此降溫，結果導致傷口更難散熱。治療燒燙傷的偏方千奇百怪，除了小護士、...',
             title: '燙傷撒麵粉能降溫？醫生：敷藥前得先刮層皮 - 康健雜誌',
-            url:
-              'http://www.commonhealth.com.tw/article/article.action?nid=74762',
+            url: 'http://www.commonhealth.com.tw/article/article.action?nid=74762',
           },
         ],
       },
@@ -13063,8 +12927,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          'FAKE.\nThe advice it provides runs contrary to all accepted knowledge about how t...',
+        text: 'FAKE.\nThe advice it provides runs contrary to all accepted knowledge about how t...',
         reference: 'https://www.snopes.com/fact-check/flour-power/',
         createdAt: '2019-11-13T16:18:32.723Z',
         hyperlinks: [
@@ -13081,8 +12944,7 @@ export default {
         userId: 'CBUT_user_15',
         appId: 'WEBSITE',
         type: 'OPINIONATED',
-        text:
-          '「外國同性戀藉結婚來台治療愛滋病，都是健保支付，全民買單」這句話其實並不算錯，但實務上並不會有「拖垮健保」的狀況，也跟同性婚姻關係不大，所以不用太擔心唷。\n\n身...',
+        text: '「外國同性戀藉結婚來台治療愛滋病，都是健保支付，全民買單」這句話其實並不算錯，但實務上並不會有「拖垮健保」的狀況，也跟同性婚姻關係不大，所以不用太擔心唷。\n\n身...',
         reference:
           '衛福部 - 有關網路流傳外國人染愛滋病來台2年後，所有外國人的愛滋病治療費用是由健保署負擔，疾管署特此說明 \nhttps://www.cdc.gov.tw/in...',
         createdAt: '2018-10-25T16:17:06.241Z',
@@ -13092,8 +12954,7 @@ export default {
               '有關網路流傳外國人染愛滋病來台2年後，所有外國人的愛滋病治療費用是由健保署負擔，疾管署特此說明： 外籍人士因工作或其他因素申請在台居留，並合法居留六個月以上，才...',
             title:
               '有關網路流傳外國人染愛滋病來台2年後，所有外國人的愛滋病治療費用是由健保署負擔，疾管署特此說明',
-            url:
-              'https://www.cdc.gov.tw/info.aspx?treeid=45da8e73a81d495d&nowtreeid=1bd193ed6daba...',
+            url: 'https://www.cdc.gov.tw/info.aspx?treeid=45da8e73a81d495d&nowtreeid=1bd193ed6daba...',
           },
           {
             summary:
@@ -13121,8 +12982,7 @@ export default {
         userId: 'CBUT_user_49',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '內政部警政署的輿情回應專區，有特別針對這一則消息製作澄清一覽表：網路流傳「道路交通法規修法加重處罰」謠言澄清一覽表,如附件資料。',
+        text: '內政部警政署的輿情回應專區，有特別針對這一則消息製作澄清一覽表：網路流傳「道路交通法規修法加重處罰」謠言澄清一覽表,如附件資料。',
         reference:
           'https://www.npa.gov.tw/NPAGip/wSite/public/Attachment/f1531122098570.pdf',
         createdAt: '2018-10-01T16:02:38.646Z',
@@ -13130,8 +12990,7 @@ export default {
           {
             summary: null,
             title: null,
-            url:
-              'https://www.npa.gov.tw/NPAGip/wSite/public/Attachment/f1531122098570.pdf',
+            url: 'https://www.npa.gov.tw/NPAGip/wSite/public/Attachment/f1531122098570.pdf',
           },
         ],
       },
@@ -13149,8 +13008,7 @@ export default {
           '比對 join 平台提案內容以及教育部新聞稿 https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB\n',
         createdAt: '2017-06-27T15:25:17.272Z',
         appId: 'WEBSITE',
-        text:
-          '於「擴大幼兒教保公共化」的政府公開說明中，確實沒有指出如果沒有達成預計數字的話會有什麼作為。\n全教總於提案之中，確實提議將少開的班級加入下一年度班級數，而且在提...',
+        text: '於「擴大幼兒教保公共化」的政府公開說明中，確實沒有指出如果沒有達成預計數字的話會有什麼作為。\n全教總於提案之中，確實提議將少開的班級加入下一年度班級數，而且在提...',
         type: 'NOT_RUMOR',
         userId: 'CBUT_user_15',
         hyperlinks: [
@@ -13158,8 +13016,7 @@ export default {
             summary:
               '教育部長潘文忠今(20)日赴行政院報告「擴大幼兒教保公共化」相關規劃，為符膺總統托育政策，提供價格合理、品質有保障的教保服務，減輕家長的經濟負擔，教育部以穩健提...',
             title: '擴大公共化教保服務，教育部規劃增設公共化幼兒園1,000班',
-            url:
-              'https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB',
+            url: 'https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB',
           },
         ],
       },
@@ -13168,8 +13025,7 @@ export default {
           '\nhttp://www.appledaily.com.tw/realtimenews/article/new/20170614/1139982/\n海獸胃腺蟲」鑽胃壁　專家：過去國內僅１例',
         createdAt: '2017-08-29T04:03:40.178Z',
         appId: 'WEBSITE',
-        text:
-          '過去台灣只有一個海獸胃腺蟲鑽入胃壁的病例，而且僅有一隻蟲。而經查詢，台北馬偕醫院也沒有名為林清風的醫師。',
+        text: '過去台灣只有一個海獸胃腺蟲鑽入胃壁的病例，而且僅有一隻蟲。而經查詢，台北馬偕醫院也沒有名為林清風的醫師。',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -13177,8 +13033,7 @@ export default {
             summary:
               '最近有則LINE訊息在網路上廣傳，指好多人因吃生魚片，「胃壁附著「海獸胃腺蟲」，有的病人甚至胃壁上滿滿都是，無法夾出，驅蟲藥也很難治，魚片中的生鮭魚含蟲量是最可...',
             title: '「海獸胃腺蟲」鑽胃壁　專家：過去國內僅１例 | 蘋果日報',
-            url:
-              'http://www.appledaily.com.tw/realtimenews/article/new/20170614/1139982/',
+            url: 'http://www.appledaily.com.tw/realtimenews/article/new/20170614/1139982/',
           },
         ],
       },
@@ -13186,8 +13041,7 @@ export default {
         userId: 'CBUT_user_88',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '無論是電子產品或是網站平台，均在註冊會員或啟用裝置時，會有一份資料蒐集同意書，其中會說明資料蒐集範圍，授權公司，去識別化方式等\n因此「手機內所有資料都會進入他們...',
+        text: '無論是電子產品或是網站平台，均在註冊會員或啟用裝置時，會有一份資料蒐集同意書，其中會說明資料蒐集範圍，授權公司，去識別化方式等\n因此「手機內所有資料都會進入他們...',
         reference: ' ',
         createdAt: '2019-08-21T02:10:43.987Z',
       },
@@ -13220,8 +13074,7 @@ export default {
         userId: 'CBUT_user_15',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '高中課本裡面只有同志諮詢熱線的電話。影片中手機的網址，是家長自己上網找的同志諮詢熱線官網，教育部審定的課本裡面並沒有網址。\n\n同志諮詢熱線是同志朋友的生命線，2...',
+        text: '高中課本裡面只有同志諮詢熱線的電話。影片中手機的網址，是家長自己上網找的同志諮詢熱線官網，教育部審定的課本裡面並沒有網址。\n\n同志諮詢熱線是同志朋友的生命線，2...',
         reference:
           '尤美女委員臉書貼文：台灣同志諮詢熱線是同志朋友的生命線\nhttps://www.facebook.com/yumeinu/posts/1553089634706...',
         createdAt: '2019-05-13T08:50:36.806Z',
@@ -13259,8 +13112,7 @@ export default {
           'http://news.ltn.com.tw/news/life/breakingnews/1950973\n泰豐大火空氣落塵',
         createdAt: '2017-06-12T11:50:12.535Z',
         appId: 'WEBSITE',
-        text:
-          '衛生局會根據環保局監測結果隨時提醒民眾注意防範事項，呼籲大家不要過度恐慌。',
+        text: '衛生局會根據環保局監測結果隨時提醒民眾注意防範事項，呼籲大家不要過度恐慌。',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -13302,8 +13154,7 @@ export default {
         reference: 'https://my83.com.tw/blogs?p=1338',
         createdAt: '2017-06-19T14:54:52.139Z',
         appId: 'WEBSITE',
-        text:
-          '根據保險資訊網站My83表示，只要非犯罪或過失的汽機車事故，事故的受害者不論有無過失，能迅速獲得理賠，不需在急需就醫時還花時間等待理賠金，所以政府強制汽車、機車及機器腳踏車主投保。',
+        text: '根據保險資訊網站My83表示，只要非犯罪或過失的汽機車事故，事故的受害者不論有無過失，能迅速獲得理賠，不需在急需就醫時還花時間等待理賠金，所以政府強制汽車、機車及機器腳踏車主投保。',
         type: 'NOT_RUMOR',
         userId: 'CBUT_user_45',
         hyperlinks: [
@@ -13320,8 +13171,7 @@ export default {
         reference: 'http://news.ltn.com.tw/news/life/paper/1060978',
         createdAt: '2017-03-27T14:21:52.619Z',
         appId: 'WEBSITE',
-        text:
-          '教育部昨澄清，目前性平教材是早經公聽及專家修訂而無爭議，是提供教師增加知能，盼外界勿再以訛傳訛。',
+        text: '教育部昨澄清，目前性平教材是早經公聽及專家修訂而無爭議，是提供教師增加知能，盼外界勿再以訛傳訛。',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -13337,8 +13187,7 @@ export default {
         userId: 'CBUT_user_15',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '「小六大兒子被強迫跟另外一個女生練習自慰」是錯的。\n\n影片裡的媽媽在 1:30 的時候說的是：「哥哥在六年級，拿回學習單，哥哥回來問，為什麼學這個東西，要把我和...',
+        text: '「小六大兒子被強迫跟另外一個女生練習自慰」是錯的。\n\n影片裡的媽媽在 1:30 的時候說的是：「哥哥在六年級，拿回學習單，哥哥回來問，為什麼學這個東西，要把我和...',
         reference:
           '學習單影本與教材截圖\nhttp://max-everyday.com/2017/01/masturbation/\n\n2017/1/4 中央社 - 議員爆小學課程...',
         createdAt: '2018-11-03T16:14:49.163Z',
@@ -13362,8 +13211,7 @@ export default {
         userId: 'CBUT_user_15',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '訊息與影片標題的「小六大兒子被強迫跟另外一個女生練習自慰」是錯的。\n\n影片裡的媽媽在 1:30 的時候說的是：「哥哥在六年級，拿回學習單，哥哥回來問，為什麼學這...',
+        text: '訊息與影片標題的「小六大兒子被強迫跟另外一個女生練習自慰」是錯的。\n\n影片裡的媽媽在 1:30 的時候說的是：「哥哥在六年級，拿回學習單，哥哥回來問，為什麼學這...',
         reference:
           '學習單影本與教材截圖\nhttp://max-everyday.com/2017/01/masturbation/\n\n2017/1/4 中央社 - 議員爆小學課程...',
         createdAt: '2018-11-03T16:17:08.155Z',
@@ -13388,8 +13236,7 @@ export default {
           'http://www.edu.tw/News_Content.aspx?n=9E⋯&sms=169B8E91BB75571F&s=6DDDD36D6874DB8...',
         createdAt: '2017-07-06T06:44:19.192Z',
         appId: 'WEBSITE',
-        text:
-          '教育部依性別平等教育法等相關規定實施性別平等教育課程，教科書也都經過審定。若家長有具體內容，可提出檢舉，教育部會請教科書業者再做審視及調整。\n目前國小教科書的「...',
+        text: '教育部依性別平等教育法等相關規定實施性別平等教育課程，教科書也都經過審定。若家長有具體內容，可提出檢舉，教育部會請教科書業者再做審視及調整。\n目前國小教科書的「...',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -13397,8 +13244,7 @@ export default {
             summary:
               '抱歉！請您再重新檢視輸入的網址是否正確。您也可以回到上一頁或首頁。\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\tSorry. Please check one more ti...',
             title: '教育部全球資訊網',
-            url:
-              'http://www.edu.tw/News_Content.aspx?n=9E⋯&sms=169B8E91BB75571F&s=6DDDD36D6874DB88',
+            url: 'http://www.edu.tw/News_Content.aspx?n=9E⋯&sms=169B8E91BB75571F&s=6DDDD36D6874DB88',
           },
           {
             summary:
@@ -13419,8 +13265,7 @@ export default {
         userId: 'CBUT_user_48',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '有關外界網路平台及line群組流傳出現：「現在的國小三年級教保險套、國小四年級教自慰、國小五年級教如何許多人一起性行為…」等類似言論，經教育部及國教院查證國小教...',
+        text: '有關外界網路平台及line群組流傳出現：「現在的國小三年級教保險套、國小四年級教自慰、國小五年級教如何許多人一起性行為…」等類似言論，經教育部及國教院查證國小教...',
         reference:
           '教育部性別平等教育 資訊網\nhttps://www.gender.edu.tw/web/index.php/home/index',
         createdAt: '2018-11-15T13:54:13.229Z',
@@ -13456,16 +13301,14 @@ export default {
           'http://www.appledaily.com.tw/realtimenews/article/new/20150819/672912/',
         createdAt: '2017-01-10T02:42:00.000Z',
         appId: null,
-        text:
-          '公路總局說，這些內容都是錯的，麥擱傳啦！\n公路總局監理組組長林福山表示，這則訊息每隔一段時間就會現身在網路\n\n根據道路交通管理處罰條例第60條規定，汽車駕駛人如...',
+        text: '公路總局說，這些內容都是錯的，麥擱傳啦！\n公路總局監理組組長林福山表示，這則訊息每隔一段時間就會現身在網路\n\n根據道路交通管理處罰條例第60條規定，汽車駕駛人如...',
         type: 'RUMOR',
         hyperlinks: [
           {
             summary:
               '最近不少Line友又開始瘋傳一則已有10年以上年資的網路謠言，內容稱「本月20日起，全國將實施紅燈越線處罰條例，凡是在等待紅燈時，超出白色禁止越線者馬上處以90...',
             title: '本月20日實施紅燈越線處罰條例！假的啦 | 蘋果日報',
-            url:
-              'http://www.appledaily.com.tw/realtimenews/article/new/20150819/672912/',
+            url: 'http://www.appledaily.com.tw/realtimenews/article/new/20150819/672912/',
           },
         ],
       },
@@ -13474,8 +13317,7 @@ export default {
           'http://www.traffic.police.ntpc.gov.tw/cp-1084-32629-27.html\n網路流傳「道路交通法規修法加重處罰」謠言澄清一覽表',
         createdAt: '2017-10-15T16:05:28.182Z',
         appId: 'WEBSITE',
-        text:
-          '假的。近來網路、Line瘋狂流傳，自20日起交通違規將大幅調漲，由於調幅頗大，網友互傳時罵聲不斷，均為錯誤訊息，網路謠言希望能止於智者，不要再以訛傳訛混淆視聽。',
+        text: '假的。近來網路、Line瘋狂流傳，自20日起交通違規將大幅調漲，由於調幅頗大，網友互傳時罵聲不斷，均為錯誤訊息，網路謠言希望能止於智者，不要再以訛傳訛混淆視聽。',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -13492,8 +13334,7 @@ export default {
           'https://www.nownews.com/news/20100519/636359\n藥水比藥錠吸收快？　專業藥師破除網路傳言',
         createdAt: '2017-12-14T04:09:00.110Z',
         appId: 'WEBSITE',
-        text:
-          '針對特殊族群，如兒童或老人，為了讓藥物更容易服用或是給藥劑量精準，可能會將藥物製成藥水。',
+        text: '針對特殊族群，如兒童或老人，為了讓藥物更容易服用或是給藥劑量精準，可能會將藥物製成藥水。',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -13509,8 +13350,7 @@ export default {
         userId: 'CBUT_user_54',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '地瓜葉和牛奶的組合含有豐富的營養成分，可以幫助預防骨質疏鬆、延緩血糖上升，但對已罹患的疾病沒有治療效果。傳言所稱「可以治療三高、痛風和癌症」，並不正確。',
+        text: '地瓜葉和牛奶的組合含有豐富的營養成分，可以幫助預防骨質疏鬆、延緩血糖上升，但對已罹患的疾病沒有治療效果。傳言所稱「可以治療三高、痛風和癌症」，並不正確。',
         reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/1481',
         createdAt: '2019-12-06T16:05:05.572Z',
         hyperlinks: [
@@ -13543,8 +13383,7 @@ export default {
           {
             summary: null,
             title: null,
-            url:
-              'https://www.chinatimes.com/realtimenews/20180419002190-260407',
+            url: 'https://www.chinatimes.com/realtimenews/20180419002190-260407',
           },
         ],
       },
@@ -13552,8 +13391,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '假的。\n1.衛福部回應，外籍人士感染愛滋人數並無增加。婚姻的成立，需要多重步驟，且除了我國，國外許多先進國家，也提供愛滋治療，疫情也已獲控制。因此，入籍台灣享受...',
+        text: '假的。\n1.衛福部回應，外籍人士感染愛滋人數並無增加。婚姻的成立，需要多重步驟，且除了我國，國外許多先進國家，也提供愛滋治療，疫情也已獲控制。因此，入籍台灣享受...',
         reference:
           'http://www.cdc.gov.tw/info.aspx?treeid=4⋯id=1bd193ed6dabaee6&tid=0579D4F36FF0AF9...',
         createdAt: '2018-10-23T17:31:53.634Z',
@@ -13561,8 +13399,7 @@ export default {
           {
             summary: '',
             title: '衛生福利部疾病管制署',
-            url:
-              'http://www.cdc.gov.tw/info.aspx?treeid=4⋯id=1bd193ed6dabaee6&tid=0579D4F36FF0AF94',
+            url: 'http://www.cdc.gov.tw/info.aspx?treeid=4⋯id=1bd193ed6dabaee6&tid=0579D4F36FF0AF94',
           },
           {
             summary:
@@ -13616,8 +13453,7 @@ export default {
             summary:
               '喧騰多時的同性婚姻爭議終於有解，大法官今釋憲宣告《民法》禁止同性結婚違憲。而根據法務部統計資料顯示，目前世界共有23國承認同性婚姻並以法律保障，其中南非、英國另...',
             title: '【同婚釋憲】除了台灣　全球23國承認同婚 | 蘋果日報',
-            url:
-              'http://www.appledaily.com.tw/realtimenews/article/new/20170524/1124709/',
+            url: 'http://www.appledaily.com.tw/realtimenews/article/new/20170524/1124709/',
           },
         ],
       },
@@ -13625,8 +13461,7 @@ export default {
         userId: 'CBUT_user_53',
         appId: 'WEBSITE',
         type: 'NOT_RUMOR',
-        text:
-          '1. 大法官748釋憲確實為「亞洲第1同婚國家」打開了「潘朵拉」盒子！為何呢？因為探究婚姻的「真義」( https://bit.ly/2O2sRAH )，顯然與...',
+        text: '1. 大法官748釋憲確實為「亞洲第1同婚國家」打開了「潘朵拉」盒子！為何呢？因為探究婚姻的「真義」( https://bit.ly/2O2sRAH )，顯然與...',
         reference:
           'https://tw.news.yahoo.com/%E5%90%8C%E6%80%A7%E5%A9%9A%E5%A7%BB%E9%87%8B%E6%86%B2...',
         createdAt: '2018-10-24T13:19:03.710Z',
@@ -13635,8 +13470,7 @@ export default {
         userId: 'CBUT_user_54',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '1. 2017年度使用台灣健保之外籍愛滋病患，僅有 25 人，花費僅佔台灣健保資源之百萬分之五點二。對台灣健保之影響微乎其微。\n2. 我國不禁止外籍愛滋病患入境...',
+        text: '1. 2017年度使用台灣健保之外籍愛滋病患，僅有 25 人，花費僅佔台灣健保資源之百萬分之五點二。對台灣健保之影響微乎其微。\n2. 我國不禁止外籍愛滋病患入境...',
         reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/260',
         createdAt: '2018-11-22T15:55:57.477Z',
         hyperlinks: [
@@ -13653,8 +13487,7 @@ export default {
         userId: 'CBUT_user_57',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '下附影片為羅馬尼亞於2019/5/28拍攝的，可在Youtube上找到，並非義大利\n再根據另一個網頁查證，當日為羅馬尼亞的冰雹',
+        text: '下附影片為羅馬尼亞於2019/5/28拍攝的，可在Youtube上找到，並非義大利\n再根據另一個網頁查證，當日為羅馬尼亞的冰雹',
         reference:
           '羅馬尼亞冰雹查證資料出處：https://www.mygopen.com/2019/07/Romania-hail.html\n羅馬尼亞冰雹影片 https://...',
         createdAt: '2020-02-21T02:49:47.068Z',
@@ -13677,8 +13510,7 @@ export default {
         userId: 'CBUT_user_54',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '1. 網傳影片出處是2019年5月28日羅馬尼亞北部札勒烏（Zalau）市下冰雹的景象，不是義大利羅馬下石頭雨。\n2. 台灣事實查核中心檢索義大利媒體及國際通訊社，並無義大利羅馬下石頭雨的事件。',
+        text: '1. 網傳影片出處是2019年5月28日羅馬尼亞北部札勒烏（Zalau）市下冰雹的景象，不是義大利羅馬下石頭雨。\n2. 台灣事實查核中心檢索義大利媒體及國際通訊社，並無義大利羅馬下石頭雨的事件。',
         reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/3477',
         createdAt: '2020-04-08T14:19:31.619Z',
         hyperlinks: [
@@ -13696,8 +13528,7 @@ export default {
         userId: 'CBUT_user_54',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '1. 馬偕醫院沒有「林清風」醫師。\n2. 這謠言連寄生蟲名字都寫錯，正確名稱是「海獸胃線蟲」\n3. 鮭魚被歸類為淡水魚，不容易遭海獸胃腺蟲寄生，反倒白帶魚、青魚...',
+        text: '1. 馬偕醫院沒有「林清風」醫師。\n2. 這謠言連寄生蟲名字都寫錯，正確名稱是「海獸胃線蟲」\n3. 鮭魚被歸類為淡水魚，不容易遭海獸胃腺蟲寄生，反倒白帶魚、青魚...',
         reference:
           '《泛科學》有文章闢謠：\nhttps://pansci.asia/archives/122243',
         createdAt: '2018-12-12T04:33:27.009Z',
@@ -13715,8 +13546,7 @@ export default {
         userId: 'CBUT_user_54',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '台灣事實查核中心已經證實為【錯誤】訊息！\n一、馬偕醫院2017年已於官網澄清，本訊息為網路謠言。\n二、專家指出，海獸胃線蟲寄生在海洋生物體內，人類並非宿主，目前...',
+        text: '台灣事實查核中心已經證實為【錯誤】訊息！\n一、馬偕醫院2017年已於官網澄清，本訊息為網路謠言。\n二、專家指出，海獸胃線蟲寄生在海洋生物體內，人類並非宿主，目前...',
         reference: 'https://tfc-taiwan.org.tw/articles/772',
         createdAt: '2019-08-28T02:48:00.667Z',
         hyperlinks: [
@@ -13733,8 +13563,7 @@ export default {
         userId: 'CBUT_user_60',
         appId: 'WEBSITE',
         type: 'OPINIONATED',
-        text:
-          '■對不同城市及其官員對疫情處置的評價，屬個人評論；亦有評論從貧困人口、企業靈活度等不同角度分析舊金山與紐約的疫情處置差異。\n\n■文中提及人物資訊、事件時序大抵正...',
+        text: '■對不同城市及其官員對疫情處置的評價，屬個人評論；亦有評論從貧困人口、企業靈活度等不同角度分析舊金山與紐約的疫情處置差異。\n\n■文中提及人物資訊、事件時序大抵正...',
         reference:
           '【疫情處置評論】\n\n布魯金斯學會-Coronavirus lessons from New York and San Francisco\nhttps://www...',
         createdAt: '2020-04-28T13:51:19.413Z',
@@ -13743,8 +13572,7 @@ export default {
         userId: 'CBUT_user_61',
         appId: 'WEBSITE',
         type: 'NOT_ARTICLE',
-        text:
-          '此訊息需要更多數據，不過難以統計，其他關於政策的訂定時間與描述很清楚。',
+        text: '此訊息需要更多數據，不過難以統計，其他關於政策的訂定時間與描述很清楚。',
         reference: '',
         createdAt: '2020-05-05T09:41:19.615Z',
         hyperlinks: [],
@@ -13753,8 +13581,7 @@ export default {
         userId: 'CBUT_user_68',
         appId: 'WEBSITE',
         type: 'OPINIONATED',
-        text:
-          '1. 本文出自商周雜誌〈冰封中國關鍵報告〉。\n2. 中國有「世界最大勞動力人口國」的優勢，爆發大型流行病情，固然會影響各產業及國際貿易，若疫情發生在任何一個大型...',
+        text: '1. 本文出自商周雜誌〈冰封中國關鍵報告〉。\n2. 中國有「世界最大勞動力人口國」的優勢，爆發大型流行病情，固然會影響各產業及國際貿易，若疫情發生在任何一個大型...',
         reference:
           '【商周】冰封中國關鍵報告\nhttps://www.businessweekly.com.tw/magazine/article_page.aspx?id=600...',
         createdAt: '2020-02-27T09:11:33.760Z',
@@ -13765,8 +13592,7 @@ export default {
             summary:
               '一個疑似從武漢海鮮市場開始的病毒，現在，造成中國經濟停擺，全世界都地震！當貨出不去，也進不來，中國的冰封效應，正如何在台灣快速擴散？商周兵分5路，從一個乳液的瓶...',
             title: '冰封中國關鍵報告  - 封面摘要 - 商業周刊',
-            url:
-              'https://www.businessweekly.com.tw/magazine/article_page.aspx?id=6001194',
+            url: 'https://www.businessweekly.com.tw/magazine/article_page.aspx?id=6001194',
           },
           {
             normalizedUrl:
@@ -13775,8 +13601,7 @@ export default {
               'The world’s biggest phone show, Mobile World Congress, is no longer taking place...',
             title:
               'The world’s biggest phone show has been canceled due to coronavirus concerns',
-            url:
-              'https://www.theverge.com/2020/2/12/21127754/mwc-2020-canceled-coronavirus-trade-...',
+            url: 'https://www.theverge.com/2020/2/12/21127754/mwc-2020-canceled-coronavirus-trade-...',
           },
           {
             normalizedUrl:
@@ -13785,8 +13610,7 @@ export default {
               'The ultrastructural morphology exhibited by the 2019 Novel Coronavirus (2019-nCo...',
             title:
               'FDA identified 20 drugs with shortage risks due to coronavirus outbreak',
-            url:
-              'https://www.reuters.com/article/us-china-health-fda/fda-identified-20-drugs-with...',
+            url: 'https://www.reuters.com/article/us-china-health-fda/fda-identified-20-drugs-with...',
           },
           {
             normalizedUrl:
@@ -13795,8 +13619,7 @@ export default {
               'HighlightsCrude lowest since January 2019\n  More countries report COVID-19 cases...',
             title:
               'Oil extends losses as coronavirus outbreak accelerates outside China',
-            url:
-              'https://www.spglobal.com/platts/en/market-insights/latest-news/oil/022620-oil-fu...',
+            url: 'https://www.spglobal.com/platts/en/market-insights/latest-news/oil/022620-oil-fu...',
           },
         ],
       },
@@ -13804,8 +13627,7 @@ export default {
         userId: 'CBUT_user_63',
         appId: 'WEBSITE',
         type: 'OPINIONATED',
-        text:
-          '一個場合當中誰做了什麼、意味什麼，這都是沒有直接證據的推論。此訊息當中可以留意的是“無症狀卻可能有傳染力的隱性感染者”造成的疫情傳染風險。由於本次新型冠狀肺炎疫...',
+        text: '一個場合當中誰做了什麼、意味什麼，這都是沒有直接證據的推論。此訊息當中可以留意的是“無症狀卻可能有傳染力的隱性感染者”造成的疫情傳染風險。由於本次新型冠狀肺炎疫...',
         reference:
           '口罩用途可以參考文章\nhttp://www-o.ntust.edu.tw/h1n1/page16.htm',
         createdAt: '2020-04-06T07:42:40.309Z',
@@ -13823,8 +13645,7 @@ export default {
         userId: 'CBUT_user_65',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '是修法更嚴執行：法務部在毒品危害防制條例三讀修正通過的當天也發布新聞稿，說明這次的修法重點，包括重懲毒販，提高製造、販賣、運輸毒品的刑度及罰金；將持有第3級、第...',
+        text: '是修法更嚴執行：法務部在毒品危害防制條例三讀修正通過的當天也發布新聞稿，說明這次的修法重點，包括重懲毒販，提高製造、販賣、運輸毒品的刑度及罰金；將持有第3級、第...',
         reference: 'https://www.cna.com.tw/news/firstnews/201912205004.aspx\n',
         createdAt: '2019-12-24T02:41:34.864Z',
         hyperlinks: [
@@ -13843,8 +13664,7 @@ export default {
         userId: 'CBUT_user_65',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '而有臉書粉絲專頁po文指出，國民黨團當時提出修正動議，持有第3級、第4級毒品的純質淨重，1公克以上就要課予刑責，但被民進黨表決封殺。此外，專頁上還附上一張圖卡，...',
+        text: '而有臉書粉絲專頁po文指出，國民黨團當時提出修正動議，持有第3級、第4級毒品的純質淨重，1公克以上就要課予刑責，但被民進黨表決封殺。此外，專頁上還附上一張圖卡，...',
         reference: 'https://www.cna.com.tw/news/firstnews/201912205004.aspx',
         createdAt: '2019-12-24T02:55:42.325Z',
         hyperlinks: [
@@ -13863,8 +13683,7 @@ export default {
         userId: 'CBUT_user_54',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '1. 12月17日立法院三讀通過《毒品危害防制條例》部分條文修正草案，是把處罰標準加重，而非放寬。\n2. 根據毒品危害防制條例規定，有「販賣」毒品意圖就處以刑罰...',
+        text: '1. 12月17日立法院三讀通過《毒品危害防制條例》部分條文修正草案，是把處罰標準加重，而非放寬。\n2. 根據毒品危害防制條例規定，有「販賣」毒品意圖就處以刑罰...',
         reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/1670',
         createdAt: '2019-12-25T16:46:47.879Z',
         hyperlinks: [
@@ -13889,8 +13708,7 @@ export default {
         userId: 'CBUT_user_68',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '此為假冒北韓官方的訊息。北韓官媒《朝鮮中央通訊社》4月23日仍有報導金正恩回電感謝敘利亞阿薩德的新聞，南韓青瓦台4月23日也表示「沒有具體證據顯示金正恩的健康狀...',
+        text: '此為假冒北韓官方的訊息。北韓官媒《朝鮮中央通訊社》4月23日仍有報導金正恩回電感謝敘利亞阿薩德的新聞，南韓青瓦台4月23日也表示「沒有具體證據顯示金正恩的健康狀...',
         reference:
           '命危消息傳出後 北韓官媒曝金正恩最新動態\nhttps://news.ltn.com.tw/news/world/breakingnews/3142735\n\nTh...',
         createdAt: '2020-04-26T15:36:41.541Z',
@@ -13911,8 +13729,7 @@ export default {
               'What’s the story with Kim Jong Un?The North Korean leader missed a high-profile ...',
             title:
               "The mystery surrounding Kim Jong Un: What's going on with the North Korean dictator's health?",
-            url:
-              'https://www.foxnews.com/world/kim-jong-un-mystery-north-korea-dictator-health',
+            url: 'https://www.foxnews.com/world/kim-jong-un-mystery-north-korea-dictator-health',
           },
           {
             normalizedUrl:
@@ -13920,16 +13737,14 @@ export default {
             summary:
               'Photo : YONHAP News\n                \n\n                \n                         ...',
             title: '靑 NSC',
-            url:
-              'http://world.kbs.co.kr/service/news_view.htm?lang=k&Seq_Code=353396',
+            url: 'http://world.kbs.co.kr/service/news_view.htm?lang=k&Seq_Code=353396',
           },
           {
             normalizedUrl:
               'http://www.uriminzokkiri.com/index.php?ptype=cgisas&mtype=view&no=1190981',
             summary: '',
             title: '',
-            url:
-              'http://www.uriminzokkiri.com/index.php?ptype=cgisas&mtype=view&no=1190981',
+            url: 'http://www.uriminzokkiri.com/index.php?ptype=cgisas&mtype=view&no=1190981',
           },
         ],
       },
@@ -13937,8 +13752,7 @@ export default {
         userId: 'CBUT_user_69',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '此為改編自金正日2011年的訃聞，只有名字和時間有改動，其餘皆相同。\n"朝鲜劳动党中央委员会和朝鲜劳动党中央军事委员会、朝鲜民主主义人民共和国国防委员会和最高人...',
+        text: '此為改編自金正日2011年的訃聞，只有名字和時間有改動，其餘皆相同。\n"朝鲜劳动党中央委员会和朝鲜劳动党中央军事委员会、朝鲜民主主义人民共和国国防委员会和最高人...',
         reference: 'http://world.people.com.cn/GB/16651924.html',
         createdAt: '2020-04-27T09:34:49.512Z',
         hyperlinks: [
@@ -13955,8 +13769,7 @@ export default {
         userId: 'CBUT_user_54',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '台灣事實查核中心已經證實為【錯誤】訊息囉！\n一、食藥署、疾管署，還有泰國的食藥署早已證實此訊息為網路謠言誤。\n二、專家指出，愛滋病毒離開人體後，短時間內便會失去...',
+        text: '台灣事實查核中心已經證實為【錯誤】訊息囉！\n一、食藥署、疾管署，還有泰國的食藥署早已證實此訊息為網路謠言誤。\n二、專家指出，愛滋病毒離開人體後，短時間內便會失去...',
         reference: 'https://tfc-taiwan.org.tw/articles/740',
         createdAt: '2019-08-14T05:27:33.030Z',
         hyperlinks: [
@@ -13973,8 +13786,7 @@ export default {
           'http://www.appledaily.com.tw/appledaily/article/headline/20151103/36878044/',
         createdAt: '2017-06-20T17:29:47.805Z',
         appId: 'WEBSITE',
-        text:
-          '江守山醫師畢業自陽明大學醫學系，曾任台北榮總腎臟科總醫師、內科主治醫師；新光醫院腎臟科主治醫師、腎臟科主任，專長為腎病、腎衰竭治療。對醫療保健應該有一定專業。但...',
+        text: '江守山醫師畢業自陽明大學醫學系，曾任台北榮總腎臟科總醫師、內科主治醫師；新光醫院腎臟科主治醫師、腎臟科主任，專長為腎病、腎衰竭治療。對醫療保健應該有一定專業。但...',
         type: 'NOT_RUMOR',
         userId: 'CBUT_user_45',
         hyperlinks: [
@@ -13982,8 +13794,7 @@ export default {
             summary:
               '【綜合報導】腎臟科名醫江守山日前撰文，影射他任職的台北市新光醫院營運出狀況、醫療設備長期不更換、用藥較差等，恐吹熄燈號。昨院方反擊，指兩年前就查獲江涉Ａ健保，讓...',
             title: '名醫江守山A健保 醫院開除 | 蘋果日報',
-            url:
-              'http://www.appledaily.com.tw/appledaily/article/headline/20151103/36878044/',
+            url: 'http://www.appledaily.com.tw/appledaily/article/headline/20151103/36878044/',
           },
         ],
       },
@@ -13991,8 +13802,7 @@ export default {
         userId: 'CBUT_user_71',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '影片含有許多不實訊息，例如 2:09 聲稱蜂蜜是二級燙傷首選藥物，有嚴重誤導人之嫌，已有其他急診醫師說醫療級才可，正確做法還是立刻沖水降溫，嚴重時趕快送醫。',
+        text: '影片含有許多不實訊息，例如 2:09 聲稱蜂蜜是二級燙傷首選藥物，有嚴重誤導人之嫌，已有其他急診醫師說醫療級才可，正確做法還是立刻沖水降溫，嚴重時趕快送醫。',
         reference: 'https://www.merit-times.com.tw/NewsPage.aspx?unid=436129',
         createdAt: '2020-07-22T03:51:29.624Z',
         hyperlinks: [
@@ -14011,8 +13821,7 @@ export default {
           'http://news.ltn.com.tw/news/life/paper/111309\n心肌梗塞突襲 咳嗽不能自救 快就醫才對',
         createdAt: '2018-01-23T15:42:02.674Z',
         appId: 'WEBSITE',
-        text:
-          '假的。\n這項處置主要是用於當醫護人員觀測到患者心跳出現異常，為了延長其意識清醒時間，由專業人員指導患者咳嗽；而非一般心臟病患者自救。\n台北榮總急診部主治醫師高偉...',
+        text: '假的。\n這項處置主要是用於當醫護人員觀測到患者心跳出現異常，為了延長其意識清醒時間，由專業人員指導患者咳嗽；而非一般心臟病患者自救。\n台北榮總急診部主治醫師高偉...',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -14029,8 +13838,7 @@ export default {
         userId: 'CBUT_user_54',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '1. 燙傷的正確處理方式應是「沖、脫、泡、蓋、送」\n2. 奇美醫院急診部副主任許建清則表示，醬油、牙膏、麵粉都不是在無菌的環境下生產的，可能引起傷口感染，而且增...',
+        text: '1. 燙傷的正確處理方式應是「沖、脫、泡、蓋、送」\n2. 奇美醫院急診部副主任許建清則表示，醬油、牙膏、麵粉都不是在無菌的環境下生產的，可能引起傷口感染，而且增...',
         reference:
           'https://www.commonhealth.com.tw/article/article.action?nid=74762',
         createdAt: '2019-07-02T04:09:52.081Z',
@@ -14038,8 +13846,7 @@ export default {
           {
             summary: null,
             title: null,
-            url:
-              'https://www.commonhealth.com.tw/article/article.action?nid=74762',
+            url: 'https://www.commonhealth.com.tw/article/article.action?nid=74762',
           },
         ],
       },
@@ -14047,8 +13854,7 @@ export default {
         userId: 'CBUT_user_74',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '至於坊間流傳的撒麵粉、鹽巴、太白粉、沙拉油、豬油等偏方，不但效果差，而且到醫院醫師還要先花時間清潔才能評估傷口，反而延遲救治時間。\n陽光基金會倡導組專案經理莊麗...',
+        text: '至於坊間流傳的撒麵粉、鹽巴、太白粉、沙拉油、豬油等偏方，不但效果差，而且到醫院醫師還要先花時間清潔才能評估傷口，反而延遲救治時間。\n陽光基金會倡導組專案經理莊麗...',
         reference: 'https://news.ltn.com.tw/news/life/paper/1101504',
         createdAt: '2019-07-23T08:06:47.678Z',
         hyperlinks: [
@@ -14083,8 +13889,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'OPINIONATED',
-        text:
-          '日本人砍伐台灣森林總面積：1萬8432公頃 \n國民政府與民間砍伐總面積：34萬4千多公頃 ',
+        text: '日本人砍伐台灣森林總面積：1萬8432公頃 \n國民政府與民間砍伐總面積：34萬4千多公頃 ',
         reference: 'https://www.douban.com/group/topic/60942708/',
         createdAt: '2019-04-18T11:30:15.497Z',
         hyperlinks: [
@@ -14100,8 +13905,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '假的。華府智庫戰略暨國際研究中心（CSIS）亞洲資深顧問葛來儀（Bonnie Glaser）說，有些人在捏造事件，假新聞非常普遍。',
+        text: '假的。華府智庫戰略暨國際研究中心（CSIS）亞洲資深顧問葛來儀（Bonnie Glaser）說，有些人在捏造事件，假新聞非常普遍。',
         reference:
           'https://news.ltn.com.tw/news/politics/breakingnews/2754266\n\nhttps://www.setn.com...',
         createdAt: '2019-04-15T16:40:37.582Z',
@@ -14123,8 +13927,7 @@ export default {
           {
             summary: null,
             title: null,
-            url:
-              'https://www.storm.mg/article/1159024?srcid=gAAAAABctLPDyIyvBIeudem6SegNC_3_JhLhr...',
+            url: 'https://www.storm.mg/article/1159024?srcid=gAAAAABctLPDyIyvBIeudem6SegNC_3_JhLhr...',
           },
         ],
       },
@@ -14149,8 +13952,7 @@ export default {
             summary: '',
             title:
               '總統府國家年金改革委員會-【澄清稿】年改會第14次會議重點引述非事實',
-            url:
-              'http://pension.president.gov.tw/cp.aspx?n=03E38CC0FF75CFBE&s=FB4868255F8CFFAD',
+            url: 'http://pension.president.gov.tw/cp.aspx?n=03E38CC0FF75CFBE&s=FB4868255F8CFFAD',
           },
         ],
       },
@@ -14158,8 +13960,7 @@ export default {
         userId: 'CBUT_user_54',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '1. 年金改革委員會第14次會議早在2016年9月29日就已舉行，會議為蒐集各方意見，並未做成任何決議。\n2. 軍公教人員退休年齡規定，依年資各有不同，並非一律...',
+        text: '1. 年金改革委員會第14次會議早在2016年9月29日就已舉行，會議為蒐集各方意見，並未做成任何決議。\n2. 軍公教人員退休年齡規定，依年資各有不同，並非一律...',
         reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/3573',
         createdAt: '2020-04-08T13:45:36.390Z',
         hyperlinks: [
@@ -14178,8 +13979,7 @@ export default {
           'https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB',
         createdAt: '2017-06-24T07:35:54.955Z',
         appId: 'WEBSITE',
-        text:
-          '目前平台之連署議案僅針對公共化幼稚園，要求政府在特定年度未完成之目標數量，因累加至下一年，確保最終仍為1000間。\n並如原訊息中沒有要求沒開成的非營利幼兒園一定...',
+        text: '目前平台之連署議案僅針對公共化幼稚園，要求政府在特定年度未完成之目標數量，因累加至下一年，確保最終仍為1000間。\n並如原訊息中沒有要求沒開成的非營利幼兒園一定...',
         type: 'RUMOR',
         userId: 'CBUT_user_45',
         hyperlinks: [
@@ -14187,8 +13987,7 @@ export default {
             summary:
               '教育部長潘文忠今(20)日赴行政院報告「擴大幼兒教保公共化」相關規劃，為符膺總統托育政策，提供價格合理、品質有保障的教保服務，減輕家長的經濟負擔，教育部以穩健提...',
             title: '擴大公共化教保服務，教育部規劃增設公共化幼兒園1,000班',
-            url:
-              'https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB',
+            url: 'https://www.edu.tw/News_Content.aspx?n=9E7AC85F1954DDA8&s=9BD8BE46F97CACFB',
           },
         ],
       },
@@ -14205,8 +14004,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '假的。其實是「違規行為終了日」到「檢舉日期」超過七天，才不予舉發，跟開單日期一點關係都沒有。\n\n根據道路交通管理處罰條例第 7-1 條的解釋：對於違反本條例之行...',
+        text: '假的。其實是「違規行為終了日」到「檢舉日期」超過七天，才不予舉發，跟開單日期一點關係都沒有。\n\n根據道路交通管理處罰條例第 7-1 條的解釋：對於違反本條例之行...',
         reference:
           'https://www.mygopen.com/2018/03/line_27.html\n【假LINE】罰單注意檢舉跟開單日期？超過七日的申訴罰單謠言',
         createdAt: '2018-03-30T14:19:54.455Z',
@@ -14225,8 +14023,7 @@ export default {
           'http://www.mygopen.com/2017/06/blog-post_26.html\n神奇的地瓜葉？搭配鮮奶遠離三高？謠言讓醫生說：有痛風或是腎臟不好的人要小心！',
         createdAt: '2017-07-09T15:02:23.370Z',
         appId: 'WEBSITE',
-        text:
-          '基本上地瓜葉其實單吃就有效果，牛奶、豆漿可加可不加，民眾不用迷信。 三高或是糖尿病的患者還是要搭配醫生的治療，不能單靠吃地瓜葉就想將身體調養好，民眾千萬要注意。...',
+        text: '基本上地瓜葉其實單吃就有效果，牛奶、豆漿可加可不加，民眾不用迷信。 三高或是糖尿病的患者還是要搭配醫生的治療，不能單靠吃地瓜葉就想將身體調養好，民眾千萬要注意。...',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -14243,8 +14040,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '基本上地瓜葉其實單吃就有效果，牛奶、豆漿可加可不加，民眾不用迷信。 三高或是糖尿病的患者還是要搭配醫生的治療，不能單靠吃地瓜葉就想將身體調養好，民眾千萬要注意。...',
+        text: '基本上地瓜葉其實單吃就有效果，牛奶、豆漿可加可不加，民眾不用迷信。 三高或是糖尿病的患者還是要搭配醫生的治療，不能單靠吃地瓜葉就想將身體調養好，民眾千萬要注意。...',
         reference:
           'http://www.mygopen.com/2017/06/blog-post_26.html\n神奇的地瓜葉？搭配鮮奶遠離三高？謠言讓醫生說：有痛風或是腎臟不好的人要小心！',
         createdAt: '2018-06-10T13:21:16.828Z',
@@ -14263,8 +14059,7 @@ export default {
           'https://www.everydayhealth.com.tw/article/857\nhttps://www.amazon.co.jp/%E8%AA%8D...',
         createdAt: '2017-04-12T11:21:23.414Z',
         appId: 'WEBSITE',
-        text:
-          '文中的日本醫學博士是安田和人，有針對失智症食療出書，內容確實包含文中四項食物。',
+        text: '文中的日本醫學博士是安田和人，有針對失智症食療出書，內容確實包含文中四項食物。',
         type: 'NOT_RUMOR',
         userId: 'CBUT_user_85',
         hyperlinks: [
@@ -14279,8 +14074,7 @@ export default {
               'Prime Video                                                                     ...',
             title:
               '認知症 治った! 助かった! この方法 | 安田 和人 |本 | 通販 | Amazon',
-            url:
-              'https://www.amazon.co.jp/%E8%AA%8D%E7%9F%A5%E7%97%87-%E6%B2%BB%E3%81%A3%E3%81%9F...',
+            url: 'https://www.amazon.co.jp/%E8%AA%8D%E7%9F%A5%E7%97%87-%E6%B2%BB%E3%81%A3%E3%81%9F...',
           },
         ],
       },
@@ -14288,8 +14082,7 @@ export default {
         reference: 'https://zh.wikipedia.org/wiki/李孟贤',
         createdAt: '2018-01-01T12:00:04.036Z',
         appId: 'WEBSITE',
-        text:
-          '舊金山前市長確實因為心臟病去世，但其他部分應該只是想要提醒大家注意心臟疾病。',
+        text: '舊金山前市長確實因為心臟病去世，但其他部分應該只是想要提醒大家注意心臟疾病。',
         type: 'NOT_RUMOR',
         userId: 'CBUT_user_45',
         hyperlinks: [
@@ -14305,8 +14098,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '有關報載世紀鋼廠房建置時程落後之情形，世紀鋼公開表示，內容未經查核，顯與事實有違，該公司為國內率先響應離岸風電國產化的本土公司，除了觀音廠廠房擴建產能，投入生產...',
+        text: '有關報載世紀鋼廠房建置時程落後之情形，世紀鋼公開表示，內容未經查核，顯與事實有違，該公司為國內率先響應離岸風電國產化的本土公司，除了觀音廠廠房擴建產能，投入生產...',
         reference:
           'https://www.moea.gov.tw/MNS/populace/news/News.aspx?kind=9&menu_id=22333&news_id=90907',
         createdAt: '2020-09-26T07:30:21.054Z',
@@ -14317,8 +14109,7 @@ export default {
             summary:
               '有關媒體報載「百億離岸風電國產大餅訂單爆肥水外流」一文，指總統蔡英文去(108)年在台北港水下基礎基樁對接儀式中，為世紀集團對水下基礎製造技術、廠房等投資背書，...',
             title: '逐步推動離岸風電產業政策 開發商與在地產業攜手共創雙贏',
-            url:
-              'https://www.moea.gov.tw/MNS/populace/news/News.aspx?kind=9&menu_id=22333&news_id=90907',
+            url: 'https://www.moea.gov.tw/MNS/populace/news/News.aspx?kind=9&menu_id=22333&news_id=90907',
           },
         ],
       },
@@ -14326,8 +14117,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '據外交部瞭解，拜會美國行政部門的相關行程，均由臺北市政府自行洽請美國在台協會（AIT)協助安排，並非由外交部或駐處洽排。相關安排情形外交部均不便評論，宜由臺北市政府自行説明。',
+        text: '據外交部瞭解，拜會美國行政部門的相關行程，均由臺北市政府自行洽請美國在台協會（AIT)協助安排，並非由外交部或駐處洽排。相關安排情形外交部均不便評論，宜由臺北市政府自行説明。',
         reference:
           'https://www.mofa.gov.tw/News_Content_M_2.aspx?n=D6D997396B647A7C&sms=9C41168DD8E...',
         createdAt: '2020-09-26T09:40:02.610Z',
@@ -14337,8 +14127,7 @@ export default {
               'https://www.mofa.gov.tw/News_Content_M_2.aspx?n=D6D997396B647A7C&sms=9C41168DD8E...',
             summary: '',
             title: '',
-            url:
-              'https://www.mofa.gov.tw/News_Content_M_2.aspx?n=D6D997396B647A7C&sms=9C41168DD8E...',
+            url: 'https://www.mofa.gov.tw/News_Content_M_2.aspx?n=D6D997396B647A7C&sms=9C41168DD8E...',
           },
         ],
       },
@@ -14346,8 +14135,7 @@ export default {
         userId: 'CBUT_user_35',
         appId: 'WEBSITE',
         type: 'OPINIONATED',
-        text:
-          '陸委會指出，習近平近日再定義「九二共識」是「兩岸同屬一個中國、共同謀求國家統一」，更倡議探索「一國兩制」台灣方案，踐踏民主程序，透過花瓶式的「政治協商」來分化台...',
+        text: '陸委會指出，習近平近日再定義「九二共識」是「兩岸同屬一個中國、共同謀求國家統一」，更倡議探索「一國兩制」台灣方案，踐踏民主程序，透過花瓶式的「政治協商」來分化台...',
         reference:
           'https://www.cna.com.tw/news/aipl/201901090206.aspx\n\n\nhttps://www.rti.org.tw/news/view/id/2007762',
         createdAt: '2019-01-10T07:11:59.378Z',
@@ -14370,8 +14158,7 @@ export default {
         userId: 'CBUT_user_54',
         appId: 'WEBSITE',
         type: 'RUMOR',
-        text:
-          '1.新北市的「老人健保補助」，必須符合年紀和設籍滿一年的要件，社會局會主動寄專函通知符合資格的民眾，並非「帶身分證至區公所辦理」。\n\n2.65歲以上領3224元...',
+        text: '1.新北市的「老人健保補助」，必須符合年紀和設籍滿一年的要件，社會局會主動寄專函通知符合資格的民眾，並非「帶身分證至區公所辦理」。\n\n2.65歲以上領3224元...',
         reference: '台灣事實查核中心\nhttps://tfc-taiwan.org.tw/articles/3737',
         createdAt: '2020-04-28T05:56:52.104Z',
         hyperlinks: [
@@ -14407,8 +14194,7 @@ export default {
           'https://www.fda.gov.tw/tc/newsContent.aspx?cid=5049&id=22092\n會中毒，所以要少吃勾芡料理？',
         createdAt: '2017-07-07T09:39:54.019Z',
         appId: 'WEBSITE',
-        text:
-          '太白粉的樹薯塊根含有微量具有毒性之氰酸，食用後會引發噁心、嘔吐、下痢、昏眩，甚至會呼吸衰竭而死亡。\n樹薯粉是將樹薯經過浸水、脫汁、壓榨、加熱和乾燥等加工過程後抽...',
+        text: '太白粉的樹薯塊根含有微量具有毒性之氰酸，食用後會引發噁心、嘔吐、下痢、昏眩，甚至會呼吸衰竭而死亡。\n樹薯粉是將樹薯經過浸水、脫汁、壓榨、加熱和乾燥等加工過程後抽...',
         type: 'RUMOR',
         userId: 'CBUT_user_35',
         hyperlinks: [
@@ -14457,48 +14243,51 @@ export default {
             summary:
               '以下˙是我的臉友 Pasoa Yang 對26條 “兩蔣時代是布拉布拉的美好時代” 的回應 :   "我很不幸, 能夠親身感受那個悲惨時代。 這是「兩蔣時代」。...',
             title: '段震宇',
-            url:
-              'https://m.facebook.com/story.php?story_fbid=1728483420523821&id=100000865406669',
+            url: 'https://m.facebook.com/story.php?story_fbid=1728483420523821&id=100000865406669',
           },
         ],
       },
     },
     replyrequests: {
-      '/replyrequests/doc/CBUT_article_35__j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY__RUMORS_LINE_BOT': {
-        createdAt: '2017-12-24T23:48:52.805Z',
-        appId: 'RUMORS_LINE_BOT',
-        userId: 'j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY',
-        updatedAt: '2017-12-24T23:48:52.805Z',
-        articleId: 'CBUT_article_35',
-        appUserId: 'CBUT_user_42',
-      },
-      '/replyrequests/doc/CBUT_article_36__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND': {
-        createdAt: '2017-05-10T13:36:53.795Z',
-        appId: 'DEVELOPMENT_BACKEND',
-        userId: 'qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
-        updatedAt: '2017-05-10T13:36:53.795Z',
-        articleId: 'CBUT_article_36',
-        appUserId: 'CBUT_user_17',
-      },
-      '/replyrequests/doc/CBUT_article_37__Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU__BOT_LEGACY': {
-        createdAt: '2017-01-11T08:52:00.000Z',
-        appId: 'BOT_LEGACY',
-        userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        articleId: 'CBUT_article_37',
-        appUserId: 'CBUT_user_37',
-      },
-      '/replyrequests/doc/CBUT_article_38__j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_38',
-        userId: 'j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M',
-        appId: 'RUMORS_LINE_BOT',
-        reason: '找不到相關訊息  繁簡夾雜',
-        feedbacks: [],
-        positiveFeedbackCount: 0,
-        negativeFeedbackCount: 0,
-        createdAt: '2020-02-21T02:02:55.271Z',
-        updatedAt: '2020-02-21T02:02:55.271Z',
-        appUserId: 'CBUT_user_56',
-      },
+      '/replyrequests/doc/CBUT_article_35__j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY__RUMORS_LINE_BOT':
+        {
+          createdAt: '2017-12-24T23:48:52.805Z',
+          appId: 'RUMORS_LINE_BOT',
+          userId: 'j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY',
+          updatedAt: '2017-12-24T23:48:52.805Z',
+          articleId: 'CBUT_article_35',
+          appUserId: 'CBUT_user_42',
+        },
+      '/replyrequests/doc/CBUT_article_36__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND':
+        {
+          createdAt: '2017-05-10T13:36:53.795Z',
+          appId: 'DEVELOPMENT_BACKEND',
+          userId: 'qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
+          updatedAt: '2017-05-10T13:36:53.795Z',
+          articleId: 'CBUT_article_36',
+          appUserId: 'CBUT_user_17',
+        },
+      '/replyrequests/doc/CBUT_article_37__Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU__BOT_LEGACY':
+        {
+          createdAt: '2017-01-11T08:52:00.000Z',
+          appId: 'BOT_LEGACY',
+          userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
+          articleId: 'CBUT_article_37',
+          appUserId: 'CBUT_user_37',
+        },
+      '/replyrequests/doc/CBUT_article_38__j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_38',
+          userId: 'j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M',
+          appId: 'RUMORS_LINE_BOT',
+          reason: '找不到相關訊息  繁簡夾雜',
+          feedbacks: [],
+          positiveFeedbackCount: 0,
+          negativeFeedbackCount: 0,
+          createdAt: '2020-02-21T02:02:55.271Z',
+          updatedAt: '2020-02-21T02:02:55.271Z',
+          appUserId: 'CBUT_user_56',
+        },
       '/replyrequests/doc/CBUT_article_39__CBUT_user_69__WEBSITE': {
         articleId: 'CBUT_article_39',
         userId: 'CBUT_user_69',
@@ -14511,27 +14300,29 @@ export default {
         createdAt: '2020-04-27T09:34:01.196Z',
         updatedAt: '2020-04-27T09:34:01.196Z',
       },
-      '/replyrequests/doc/CBUT_article_40__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND': {
-        createdAt: '2017-05-30T15:36:48.738Z',
-        appId: 'DEVELOPMENT_BACKEND',
-        userId: 'qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
-        updatedAt: '2017-05-30T15:36:48.738Z',
-        articleId: 'CBUT_article_40',
-        appUserId: 'CBUT_user_17',
-      },
-      '/replyrequests/doc/CBUT_article_41__j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk__RUMORS_LINE_BOT': {
-        articleId: 'CBUT_article_41',
-        userId: 'j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk',
-        appId: 'RUMORS_LINE_BOT',
-        reason:
-          '我用關鍵字找，發現有不一樣的說法 https://m.douban.com/group/topic/60942708/',
-        feedbacks: [],
-        positiveFeedbackCount: 0,
-        negativeFeedbackCount: 0,
-        createdAt: '2019-04-17T06:56:36.153Z',
-        updatedAt: '2019-04-17T06:56:36.153Z',
-        appUserId: 'CBUT_user_77',
-      },
+      '/replyrequests/doc/CBUT_article_40__qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo__DEVELOPMENT_BACKEND':
+        {
+          createdAt: '2017-05-30T15:36:48.738Z',
+          appId: 'DEVELOPMENT_BACKEND',
+          userId: 'qO1C3_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
+          updatedAt: '2017-05-30T15:36:48.738Z',
+          articleId: 'CBUT_article_40',
+          appUserId: 'CBUT_user_17',
+        },
+      '/replyrequests/doc/CBUT_article_41__j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk__RUMORS_LINE_BOT':
+        {
+          articleId: 'CBUT_article_41',
+          userId: 'j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk',
+          appId: 'RUMORS_LINE_BOT',
+          reason:
+            '我用關鍵字找，發現有不一樣的說法 https://m.douban.com/group/topic/60942708/',
+          feedbacks: [],
+          positiveFeedbackCount: 0,
+          negativeFeedbackCount: 0,
+          createdAt: '2019-04-17T06:56:36.153Z',
+          updatedAt: '2019-04-17T06:56:36.153Z',
+          appUserId: 'CBUT_user_77',
+        },
       '/replyrequests/doc/CBUT_article_42__CBUT_user_35__WEBSITE': {
         articleId: 'CBUT_article_42',
         userId: 'CBUT_user_35',

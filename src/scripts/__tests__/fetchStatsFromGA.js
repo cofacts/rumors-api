@@ -46,17 +46,14 @@ const today = getTodayYYYYMMDD(COMMON_FETCHSTAT_PARAMS.timezone);
  */
 async function loadBqTable(table, rows, schema) {
   const file = path.join(__dirname, '../../../build/', `${table}.jsonl`);
-  await fs.writeFile(file, rows.map(row => JSON.stringify(row)).join('\n'));
+  await fs.writeFile(file, rows.map((row) => JSON.stringify(row)).join('\n'));
 
-  return bigquery
-    .dataset(process.env.TEST_DATASET)
-    .table(table)
-    .load(file, {
-      sourceFormat: 'NEWLINE_DELIMITED_JSON',
-      autodetect: !schema,
-      schema,
-      writeDisposition: 'WRITE_TRUNCATE',
-    });
+  return bigquery.dataset(process.env.TEST_DATASET).table(table).load(file, {
+    sourceFormat: 'NEWLINE_DELIMITED_JSON',
+    autodetect: !schema,
+    schema,
+    writeDisposition: 'WRITE_TRUNCATE',
+  });
 }
 
 describe('fetchStatsFromGA', () => {
@@ -132,11 +129,13 @@ describe('fetchStatsFromGA', () => {
       // Also checks if `date`, `docId` etc are correctly filled in.
       //
       // eslint-disable-next-line no-unused-vars
-      const { fetchedAt: dontcare, ...article1At0601 } = (await client.get({
-        index: 'analytics',
-        type: 'doc',
-        id: 'article_article1_2023-06-01',
-      })).body._source;
+      const { fetchedAt: dontcare, ...article1At0601 } = (
+        await client.get({
+          index: 'analytics',
+          type: 'doc',
+          id: 'article_article1_2023-06-01',
+        })
+      ).body._source;
       expect(article1At0601).toMatchInlineSnapshot(`
         Object {
           "date": "2023-06-01T00:00:00.000+08:00",
@@ -157,11 +156,13 @@ describe('fetchStatsFromGA', () => {
       // Expect 1 user see reply1 twice on web on 6/1.
       //
       expect(
-        (await client.get({
-          index: 'analytics',
-          type: 'doc',
-          id: 'reply_reply1_2023-06-01',
-        })).body._source.stats
+        (
+          await client.get({
+            index: 'analytics',
+            type: 'doc',
+            id: 'reply_reply1_2023-06-01',
+          })
+        ).body._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [],
@@ -175,11 +176,13 @@ describe('fetchStatsFromGA', () => {
       // Expect article counts from different sources are aggregated in LIFF
       //
       expect(
-        (await client.get({
-          index: 'analytics',
-          type: 'doc',
-          id: 'article_article1_2023-06-02',
-        })).body._source.stats
+        (
+          await client.get({
+            index: 'analytics',
+            type: 'doc',
+            id: 'article_article1_2023-06-02',
+          })
+        ).body._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [
@@ -204,11 +207,13 @@ describe('fetchStatsFromGA', () => {
       // Expect existing stats are overwritten with correct stats
       //
       expect(
-        (await client.get({
-          index: 'analytics',
-          type: 'doc',
-          id: 'article_article2_2023-06-01',
-        })).body._source.stats
+        (
+          await client.get({
+            index: 'analytics',
+            type: 'doc',
+            id: 'article_article2_2023-06-01',
+          })
+        ).body._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [],
@@ -246,11 +251,13 @@ describe('fetchStatsFromGA', () => {
       // Expect both web stream and LIFF stream visits are read from the intra table
       //
       expect(
-        (await client.get({
-          index: 'analytics',
-          type: 'doc',
-          id: articleAnalyticsTodayId,
-        })).body._source.stats
+        (
+          await client.get({
+            index: 'analytics',
+            type: 'doc',
+            id: articleAnalyticsTodayId,
+          })
+        ).body._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [
@@ -282,7 +289,7 @@ describe('createBatchTransform', () => {
     const receivedBatches = [];
     await pipeline(
       // Generates 1, 2, 3, 4, 5, 6
-      async function*() {
+      async function* () {
         for (let i = 1; i <= 6; i += 1) {
           yield i;
         }
@@ -292,21 +299,24 @@ describe('createBatchTransform', () => {
       createBatchTransform(3),
 
       // Push to receivedBatches
-      async function(batches) {
+      async function (batches) {
         for await (const batch of batches) {
           receivedBatches.push(batch);
         }
       }
     );
 
-    expect(receivedBatches).toEqual([[1, 2, 3], [4, 5, 6]]);
+    expect(receivedBatches).toEqual([
+      [1, 2, 3],
+      [4, 5, 6],
+    ]);
   });
 
   it('handles not-evenly-divisible batches', async () => {
     const receivedBatches = [];
     await pipeline(
       // Generates 1, 2, 3, 4
-      async function*() {
+      async function* () {
         for (let i = 1; i <= 4; i += 1) {
           yield i;
         }
@@ -316,7 +326,7 @@ describe('createBatchTransform', () => {
       createBatchTransform(3),
 
       // Push to receivedBatches
-      async function(batches) {
+      async function (batches) {
         for await (const batch of batches) {
           receivedBatches.push(batch);
         }

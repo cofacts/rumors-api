@@ -104,7 +104,7 @@ const Article = new GraphQLObjectType({
           status ? [status] : statuses
         )
           .filter(
-            articleReply =>
+            (articleReply) =>
               // Reject if current articleReply does not comply with any of the given `commonFilters`.
               // If no `commonFilters` is specified, articleReply is not filtered out.
               !(
@@ -117,7 +117,7 @@ const Article = new GraphQLObjectType({
                     articleReply.appId !== appId))
               )
           )
-          .map(articleReply => {
+          .map((articleReply) => {
             // Inject articleId to each articleReply
             articleReply.articleId = id;
             return articleReply;
@@ -233,7 +233,7 @@ const Article = new GraphQLObjectType({
         // sort by created
         const sortedArticleCategories = filterByStatuses(
           // Inject articleId to each articleCategory
-          articleCategories.map(articleCategory => {
+          articleCategories.map((articleCategory) => {
             articleCategory.articleId = id;
             return articleCategory;
           }),
@@ -392,9 +392,8 @@ const Article = new GraphQLObjectType({
           body.query.bool.filter.push([
             {
               range: {
-                normalArticleReplyCount: getRangeFieldParamFromArithmeticExpression(
-                  filter.replyCount
-                ),
+                normalArticleReplyCount:
+                  getRangeFieldParamFromArithmeticExpression(filter.replyCount),
               },
             },
           ]);
@@ -431,7 +430,7 @@ const Article = new GraphQLObjectType({
             function_score: {
               query: {
                 terms: {
-                  attachmentHash: hits.map(hit => hit.entry.id),
+                  attachmentHash: hits.map((hit) => hit.entry.id),
                 },
               },
               script_score: {
@@ -597,7 +596,9 @@ const Article = new GraphQLObjectType({
         }
         const maxUpdatedAt = new Date(
           Math.max(
-            ...contributors.map(contributor => new Date(contributor.updatedAt))
+            ...contributors.map(
+              (contributor) => new Date(contributor.updatedAt)
+            )
           )
         );
         return maxUpdatedAt.toISOString();

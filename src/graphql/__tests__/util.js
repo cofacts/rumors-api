@@ -65,16 +65,18 @@ if (process.env.GCS_BUCKET_NAME) {
 
     // Upload file to public GCS bucket so that APIs can access them
     beforeAll(async () => {
-      FIXTURES_URLS = (await Promise.all(
-        FIXTURES.map(async filename =>
-          bucket
-            .upload(path.join(__dirname, '../__fixtures__/util/', filename), {
-              destination: `transcript-test/${filename}`,
-              public: true,
-            })
-            .then(([file]) => file.publicUrl())
+      FIXTURES_URLS = (
+        await Promise.all(
+          FIXTURES.map(async (filename) =>
+            bucket
+              .upload(path.join(__dirname, '../__fixtures__/util/', filename), {
+                destination: `transcript-test/${filename}`,
+                public: true,
+              })
+              .then(([file]) => file.publicUrl())
+          )
         )
-      )).reduce((map, publicUrl, i) => {
+      ).reduce((map, publicUrl, i) => {
         map[FIXTURES[i]] = publicUrl;
         return map;
       }, {});
@@ -153,27 +155,25 @@ if (process.env.GCS_BUCKET_NAME) {
         id: aiResponseId,
       });
     });
-    it(
-      'does transcript for audio',
-      async () => {
-        const {
-          id: aiResponseId,
-          // eslint-disable-next-line no-unused-vars
-          createdAt,
-          // eslint-disable-next-line no-unused-vars
-          updatedAt,
-          text,
-          ...aiResponse
-        } = await createTranscript(
-          {
-            id: 'foo',
-            type: 'audio',
-          },
-          FIXTURES_URLS['audio-test.mp4'],
-          { id: 'user-id', appId: 'app-id' }
-        );
+    it('does transcript for audio', async () => {
+      const {
+        id: aiResponseId,
+        // eslint-disable-next-line no-unused-vars
+        createdAt,
+        // eslint-disable-next-line no-unused-vars
+        updatedAt,
+        text,
+        ...aiResponse
+      } = await createTranscript(
+        {
+          id: 'foo',
+          type: 'audio',
+        },
+        FIXTURES_URLS['audio-test.mp4'],
+        { id: 'user-id', appId: 'app-id' }
+      );
 
-        expect(aiResponse).toMatchInlineSnapshot(`
+      expect(aiResponse).toMatchInlineSnapshot(`
           Object {
             "appId": "app-id",
             "docId": "foo",
@@ -183,22 +183,20 @@ if (process.env.GCS_BUCKET_NAME) {
           }
         `);
 
-        // Expect some keywords are identified.
-        // The whole text are not always 100% identical, but these keywords should be always included.
-        expect(text).toMatch(/^各位鄉親/);
-        expect(text).toMatch(/安平地區/);
-        expect(text).toMatch(/110/);
-        expect(text).toMatch(/165/);
+      // Expect some keywords are identified.
+      // The whole text are not always 100% identical, but these keywords should be always included.
+      expect(text).toMatch(/^各位鄉親/);
+      expect(text).toMatch(/安平地區/);
+      expect(text).toMatch(/110/);
+      expect(text).toMatch(/165/);
 
-        // Cleanup
-        await client.delete({
-          index: 'airesponses',
-          type: 'doc',
-          id: aiResponseId,
-        });
-      },
-      30000
-    );
+      // Cleanup
+      await client.delete({
+        index: 'airesponses',
+        type: 'doc',
+        id: aiResponseId,
+      });
+    }, 30000);
     // it('does transcript for video files')
   });
 }

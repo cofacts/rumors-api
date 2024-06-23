@@ -15,7 +15,7 @@ describe('CreateOrUpdateReplyRequest', () => {
     const appId = 'test';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!) {
+      mutation ($articleId: String!) {
         CreateOrUpdateReplyRequest(
           articleId: $articleId
           reason: "気になります"
@@ -85,7 +85,7 @@ describe('CreateOrUpdateReplyRequest', () => {
     const appId = 'test';
 
     await gql`
-      mutation($articleId: String!) {
+      mutation ($articleId: String!) {
         CreateOrUpdateReplyRequest(articleId: $articleId) {
           replyRequestCount
         }
@@ -95,7 +95,7 @@ describe('CreateOrUpdateReplyRequest', () => {
     MockDate.set(1485593257011);
 
     const { data, errors } = await gql`
-      mutation($articleId: String!) {
+      mutation ($articleId: String!) {
         CreateOrUpdateReplyRequest(
           articleId: $articleId
           reason: "New reason"
@@ -162,7 +162,7 @@ describe('CreateOrUpdateReplyRequest', () => {
     const appId = 'test';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!) {
+      mutation ($articleId: String!) {
         CreateOrUpdateReplyRequest(
           articleId: $articleId
           reason: "Some unwelcomed ads here"

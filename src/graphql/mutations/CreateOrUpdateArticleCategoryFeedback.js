@@ -127,7 +127,7 @@ export async function createOrUpdateArticleCategoryFeedback({
   }
 
   return articleCategoryUpdateResult.get._source.articleCategories.find(
-    articleCategory => articleCategory.categoryId === categoryId
+    (articleCategory) => articleCategory.categoryId === categoryId
   );
 }
 

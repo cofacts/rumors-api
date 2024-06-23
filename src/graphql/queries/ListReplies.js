@@ -57,10 +57,12 @@ export default {
     attachCommonListFilter(filterQueries, filter, userId, appId);
 
     if (filter.moreLikeThis) {
-      const scrapResults = (await scrapUrls(filter.moreLikeThis.like, {
-        client,
-        cacheLoader: loaders.urlLoader,
-      })).filter(r => r);
+      const scrapResults = (
+        await scrapUrls(filter.moreLikeThis.like, {
+          client,
+          cacheLoader: loaders.urlLoader,
+        })
+      ).filter((r) => r);
 
       const likeQuery = [
         filter.moreLikeThis.like,
