@@ -167,7 +167,9 @@ async function processArticleReplies(userId: string) {
     },
   };
 
-  const articleRepliesToProcess: Array<Article['articleReplies'][0] & {articleId: string}> = [];
+  const articleRepliesToProcess: Array<
+    Article['articleReplies'][0] & { articleId: string }
+  > = [];
   for await (const {
     _id,
     _source: { articleReplies },
@@ -221,7 +223,10 @@ async function processArticleReplyFeedbacks(userId: string) {
 
   for await (const {
     _source: { articleId, replyId },
-  } of getAllDocs<ArticleReplyFeedback>('articlereplyfeedbacks', NORMAL_FEEDBACK_QUERY)) {
+  } of getAllDocs<ArticleReplyFeedback>(
+    'articlereplyfeedbacks',
+    NORMAL_FEEDBACK_QUERY
+  )) {
     articleReplyIdsWithNormalFeedbacks.push({ articleId, replyId });
   }
 
@@ -309,7 +314,13 @@ async function processArticles(userId: string) {
   console.log('Article status update result', updateByQueryResult);
 }
 
-async function main({ userId, blockedReason }: { userId: string; blockedReason: string }) {
+async function main({
+  userId,
+  blockedReason,
+}: {
+  userId: string;
+  blockedReason: string;
+}) {
   await writeBlockedReasonToUser(userId, blockedReason);
   await processArticles(userId);
   await processReplyRequests(userId);
