@@ -253,8 +253,8 @@ async function processArticleReplyFeedbacks(userId: string) {
     i,
     { articleId, replyId },
   ] of articleReplyIdsWithNormalFeedbacks.entries()) {
-    const feedbacks = [];
-    for await (const { _source: feedback } of getAllDocs(
+    const feedbacks: ArticleReplyFeedback[] = [];
+    for await (const { _source: feedback } of getAllDocs<ArticleReplyFeedback>(
       'articlereplyfeedbacks',
       {
         bool: {
