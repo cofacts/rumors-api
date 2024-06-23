@@ -11,9 +11,9 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": ["es2018"],
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "target": "es2018"
   },
   "include": [
     "src/**/*"
