@@ -4,6 +4,10 @@ import { assertUser, getContentDefaultStatus } from 'util/user';
 import FeedbackVote from 'graphql/models/FeedbackVote';
 import ArticleReply from 'graphql/models/ArticleReply';
 
+import type { Article, ArticleReply as ArticleReplyType } from 'rumors-db/schema/articles';
+import type { ArticleReplyFeedback } from 'rumors-db/schema/articlereplyfeedbacks';
+import type { Reply } from 'rumors-db/schema/replies';
+
 import client from 'util/client';
 
 export function getArticleReplyFeedbackId({
@@ -11,6 +15,11 @@ export function getArticleReplyFeedbackId({
   replyId,
   userId,
   appId,
+}: {
+  articleId: string;
+  replyId: string;
+  userId: string;
+  appId: string;
 }) {
   return `${articleId}__${replyId}__${userId}__${appId}`;
 }
@@ -19,16 +28,13 @@ export function getArticleReplyFeedbackId({
  * Updates the positive and negative feedback count of the article reply with
  * specified `articleId` and `replyId`.
  *
- * @param {string} articleId
- * @param {string} replyId
- * @param {object[]} feedbacks
- * @returns {object} The updated article reply
+ * @returns The updated article reply
  */
 export async function updateArticleReplyByFeedbacks(
-  articleId,
-  replyId,
-  feedbacks
-) {
+  articleId: string,
+  replyId: string,
+  feedbacks: ArticleReplyFeedback[]
+): Promise<ArticleReplyType> {
   const [positiveFeedbackCount, negativeFeedbackCount] = feedbacks
     .filter(({ status }) => status === 'NORMAL')
     .reduce(
@@ -75,7 +81,7 @@ export async function updateArticleReplyByFeedbacks(
         },
       },
     },
-    _source: true,
+    _source: 'true',
   });
 
   /* istanbul ignore if */
@@ -84,7 +90,7 @@ export async function updateArticleReplyByFeedbacks(
   }
 
   return articleReplyUpdateResult.get._source.articleReplies.find(
-    (articleReply) => articleReply.replyId === replyId
+    (articleReply: ArticleReplyType) => articleReply.replyId === replyId
   );
 }
 
@@ -146,21 +152,32 @@ export default {
       // Fill in reply & article reply author ID
       //
 
-      const [{ userId: replyUserId }, article] =
-        await loaders.docLoader.loadMany([
-          {
-            index: 'replies',
-            id: replyId,
-          },
-          {
-            index: 'articles',
-            id: articleId,
-          },
-        ]);
+      const [
+        { userId: replyUserId },
+        article,
+      ] = await loaders.docLoader.loadMany([
+        {
+          index: 'replies',
+          id: replyId,
+        },
+        {
+          index: 'articles',
+          id: articleId,
+        },
+      ]) as [Reply, Article];
 
-      const { userId: articleReplyUserId } = article.articleReplies.find(
-        (ar) => ar.replyId === replyId
+      const ar = article.articleReplies.find(
+        ar => ar.replyId === replyId
       );
+
+      // Make typescript happy
+      if (!ar) {
+        throw new Error(
+          `Cannot find article-reply with article ID = ${articleId} and reply ID = ${replyId}`
+        );
+      }
+
+      const { userId: articleReplyUserId } = ar;
 
       await client.update({
         index: 'articlereplyfeedbacks',
