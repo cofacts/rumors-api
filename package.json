@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "pm2-dev start --timestamp process-dev.json",
-    "seed": "cd test/rumors-db && npm run seed",
+    "seed": "cd src/rumors-db && npm run seed",
     "pretest": "npm run rumors-db:install && npm run rumors-db:test && mkdir -p build",
     "test": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 jest --runInBand",
     "posttest": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 babel-node test/postTest.js",
@@ -20,9 +20,9 @@
     "lint": "eslint src/.",
     "lint:fix": "eslint --fix src/.",
     "typecheck": "tsc",
-    "rumors-db:pull": "cd test/rumors-db && git pull",
-    "rumors-db:test": "cd test/rumors-db && ELASTICSEARCH_URL=http://localhost:62223 npm t",
-    "rumors-db:install": "cd test/rumors-db && npm i"
+    "rumors-db:pull": "cd src/rumors-db && git pull",
+    "rumors-db:test": "cd src/rumors-db && ELASTICSEARCH_URL=http://localhost:62223 npm t",
+    "rumors-db:install": "cd src/rumors-db && npm i"
   },
   "dependencies": {
     "@cofacts/media-manager": "^0.3.0",

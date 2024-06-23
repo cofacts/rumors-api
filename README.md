@@ -93,7 +93,7 @@ $ docker-compose logs api     # `api' can also be `db', `kibana'.
 $ docker-compose logs -f api  # Tail mode
 ```
 
-### About `test/rumors-db`
+### About `src/rumors-db`
 
 This directory is managed by git submodule. Use the following command to update:
 
