@@ -1,4 +1,4 @@
-/* 
+/*
  * The lists of props options for open peeps avatar:
  * https://github.com/CeamKrier/react-peeps
  */

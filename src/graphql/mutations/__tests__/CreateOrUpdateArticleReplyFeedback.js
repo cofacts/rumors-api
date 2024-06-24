@@ -17,7 +17,7 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     const comment = 'comment1';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $replyId: String!, $comment: String!) {
+      mutation ($articleId: String!, $replyId: String!, $comment: String!) {
         CreateOrUpdateArticleReplyFeedback(
           articleId: $articleId
           replyId: $replyId
@@ -118,7 +118,7 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     const replyId = 'reply1';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $replyId: String!) {
+      mutation ($articleId: String!, $replyId: String!) {
         CreateOrUpdateArticleReplyFeedback(
           articleId: $articleId
           replyId: $replyId
@@ -184,7 +184,7 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     const comment = 'ads content';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $replyId: String!, $comment: String!) {
+      mutation ($articleId: String!, $replyId: String!, $comment: String!) {
         CreateOrUpdateArticleReplyFeedback(
           articleId: $articleId
           replyId: $replyId

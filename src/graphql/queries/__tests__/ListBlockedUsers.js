@@ -74,7 +74,7 @@ describe('ListBlockedUsers', () => {
   it('supports after', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListBlockedUsers(after: $cursor) {
             edges {
               node {
@@ -91,7 +91,7 @@ describe('ListBlockedUsers', () => {
   it('supports before', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListBlockedUsers(before: $cursor) {
             edges {
               node {

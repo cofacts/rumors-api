@@ -49,7 +49,7 @@ describe('ListAnalytics', () => {
   it('filters by date', async () => {
     expect(
       await gql`
-        query($filter: ListAnalyticsFilter) {
+        query ($filter: ListAnalyticsFilter) {
           ListAnalytics(filter: $filter) {
             edges {
               node {
@@ -73,7 +73,7 @@ describe('ListAnalytics', () => {
   it('filters by type, docId, docUserId and docAppId', async () => {
     expect(
       await gql`
-        query($filter: ListAnalyticsFilter) {
+        query ($filter: ListAnalyticsFilter) {
           ListAnalytics(filter: $filter) {
             edges {
               node {
@@ -107,7 +107,7 @@ describe('ListAnalytics', () => {
   it('supports after, before and first', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListAnalytics(after: $cursor, first: 2) {
             edges {
               node {
@@ -122,7 +122,7 @@ describe('ListAnalytics', () => {
 
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListAnalytics(before: $cursor, first: 2) {
             edges {
               node {

@@ -86,11 +86,13 @@ export async function createOrUpdateReplyRequest({
   //
   const article = await (async () => {
     if (replyRequestStatus !== 'NORMAL') {
-      return (await client.get({
-        index: 'articles',
-        type: 'doc',
-        id: articleId,
-      })).body;
+      return (
+        await client.get({
+          index: 'articles',
+          type: 'doc',
+          id: articleId,
+        })
+      ).body;
     }
 
     const { body: articleUpdateResult } = await client.update({

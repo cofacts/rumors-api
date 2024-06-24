@@ -127,6 +127,6 @@ export default {
     });
 
     // When returning, insert articleId so that ArticleReply object type can resolve article.
-    return articleCategories.map(ac => ({ ...ac, articleId }));
+    return articleCategories.map((ac) => ({ ...ac, articleId }));
   },
 };

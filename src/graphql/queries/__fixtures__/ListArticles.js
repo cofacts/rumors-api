@@ -81,8 +81,7 @@ export default {
     normalArticleCategoryCount: 2,
     updatedAt: 2,
     createdAt: '2020-02-05T00:00:00.000Z',
-    text:
-      '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',
+    text: '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。',
     articleReplies: [
       {
         replyType: 'RUMOR',
@@ -146,8 +145,7 @@ export default {
     normalArticleReplyCount: 0,
     updatedAt: 3,
     createdAt: '2020-02-06T00:00:00.000Z',
-    text:
-      '人生幾何，離闊如此！況以膠漆之心，置於胡越之身，進不得相合，退不能相忘，牽攣乖隔，各欲白首。',
+    text: '人生幾何，離闊如此！況以膠漆之心，置於胡越之身，進不得相合，退不能相忘，牽攣乖隔，各欲白首。',
     articleReplies: [],
     articleCategories: [
       {

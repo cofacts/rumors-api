@@ -16,7 +16,7 @@ describe('creation', () => {
     const appId = 'foo';
 
     const { data, errors } = await gql`
-      mutation($text: String!, $reference: ArticleReferenceInput!) {
+      mutation ($text: String!, $reference: ArticleReferenceInput!) {
         CreateArticle(
           text: $text
           reference: $reference
@@ -97,7 +97,7 @@ describe('creation', () => {
     const articleId = getArticleId(fixture1Text);
 
     const { data, errors } = await gql`
-      mutation($text: String!, $reference: ArticleReferenceInput!) {
+      mutation ($text: String!, $reference: ArticleReferenceInput!) {
         CreateArticle(
           text: $text
           reference: $reference
@@ -170,7 +170,7 @@ describe('creation', () => {
     const userId = 'iAmBlocked';
     const appId = 'foo';
     const { data } = await gql`
-      mutation($text: String!, $reference: ArticleReferenceInput!) {
+      mutation ($text: String!, $reference: ArticleReferenceInput!) {
         CreateArticle(text: $text, reference: $reference, reason: "") {
           id
         }
@@ -234,7 +234,7 @@ describe('creation', () => {
 const testId = async (userId, appId) => {
   MockDate.set(1485593157011);
   const { errors } = await gql`
-    mutation($text: String!, $reference: ArticleReferenceInput!) {
+    mutation ($text: String!, $reference: ArticleReferenceInput!) {
       CreateArticle(
         text: $text
         reference: $reference

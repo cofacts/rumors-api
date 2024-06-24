@@ -298,8 +298,8 @@ export default {
       script_fields: {},
 
       sort: getSortArgs(orderBy, {
-        replyCount: o => ({ normalArticleReplyCount: { order: o } }),
-        lastRepliedAt: o => ({
+        replyCount: (o) => ({ normalArticleReplyCount: { order: o } }),
+        lastRepliedAt: (o) => ({
           'articleReplies.createdAt': {
             order: o,
             mode: 'max',
@@ -313,7 +313,7 @@ export default {
             },
           },
         }),
-        lastMatchingArticleReplyCreatedAt: o => ({
+        lastMatchingArticleReplyCreatedAt: (o) => ({
           'articleReplies.createdAt': {
             order: o,
             mode: 'max',
@@ -336,12 +336,14 @@ export default {
     if (filter.fromUserOfArticleId) {
       let specifiedArticle;
       try {
-        specifiedArticle = (await client.get({
-          index: 'articles',
-          type: 'doc',
-          id: filter.fromUserOfArticleId,
-          _source: ['userId', 'appId'],
-        })).body._source;
+        specifiedArticle = (
+          await client.get({
+            index: 'articles',
+            type: 'doc',
+            id: filter.fromUserOfArticleId,
+            _source: ['userId', 'appId'],
+          })
+        ).body._source;
       } catch (e) {
         if (e.statusCode && e.statusCode === 404) {
           throw new Error(
@@ -360,10 +362,12 @@ export default {
     }
 
     if (filter.moreLikeThis) {
-      const scrapResults = (await scrapUrls(filter.moreLikeThis.like, {
-        client,
-        cacheLoader: loaders.urlLoader,
-      })).filter(r => r);
+      const scrapResults = (
+        await scrapUrls(filter.moreLikeThis.like, {
+          client,
+          cacheLoader: loaders.urlLoader,
+        })
+      ).filter((r) => r);
 
       const likeQuery = [
         filter.moreLikeThis.like,
@@ -432,9 +436,10 @@ export default {
                 { match: { 'articleReplies.status': 'NORMAL' } },
                 {
                   range: {
-                    'articleReplies.createdAt': getRangeFieldParamFromArithmeticExpression(
-                      filter.repliedAt
-                    ),
+                    'articleReplies.createdAt':
+                      getRangeFieldParamFromArithmeticExpression(
+                        filter.repliedAt
+                      ),
                   },
                 },
               ],
@@ -447,7 +452,7 @@ export default {
     if (filter.categoryIds && filter.categoryIds.length) {
       filterQueries.push({
         bool: {
-          should: filter.categoryIds.map(categoryId => ({
+          should: filter.categoryIds.map((categoryId) => ({
             nested: {
               path: 'articleCategories',
               query: {
@@ -614,7 +619,7 @@ export default {
         function_score: {
           query: {
             terms: {
-              attachmentHash: queryResult.hits.map(hit => hit.entry.id),
+              attachmentHash: queryResult.hits.map((hit) => hit.entry.id),
             },
           },
           script_score: {
@@ -635,13 +640,15 @@ export default {
       if (queryResult.hits.length > 0) {
         // Get the text from most similar article (if there is one)
         //
-        const similarArticles = (await loaders.searchResultLoader.loadMany(
-          queryResult.hits.map(hit => ({
-            index: 'articles',
-            type: 'doc',
-            body: { query: { term: { attachmentHash: hit.entry.id } } },
-          }))
-        )).flat();
+        const similarArticles = (
+          await loaders.searchResultLoader.loadMany(
+            queryResult.hits.map((hit) => ({
+              index: 'articles',
+              type: 'doc',
+              body: { query: { term: { attachmentHash: hit.entry.id } } },
+            }))
+          )
+        ).flat();
 
         transcript = similarArticles.reduce(
           (t, article) => (t ? t : article.text),

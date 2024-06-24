@@ -2,9 +2,8 @@ import { getArticleCategoryFeedbackId } from '../CreateOrUpdateArticleCategoryFe
 
 function generateEntry(data) {
   return {
-    [`/articlecategoryfeedbacks/doc/${getArticleCategoryFeedbackId(
-      data
-    )}`]: data,
+    [`/articlecategoryfeedbacks/doc/${getArticleCategoryFeedbackId(data)}`]:
+      data,
   };
 }
 

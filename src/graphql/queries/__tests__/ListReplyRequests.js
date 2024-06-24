@@ -175,7 +175,7 @@ describe('ListReplyRequests', () => {
   it('supports after', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListReplyRequests(after: $cursor) {
             edges {
               node {
@@ -196,7 +196,7 @@ describe('ListReplyRequests', () => {
   it('supports before', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListReplyRequests(before: $cursor) {
             edges {
               node {

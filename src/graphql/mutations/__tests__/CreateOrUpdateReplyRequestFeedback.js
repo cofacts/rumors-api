@@ -14,7 +14,7 @@ describe('CreateOrUpdateReplyRequestFeedback', () => {
     const replyRequestId = 'foo';
 
     const { data, errors } = await gql`
-      mutation($replyRequestId: String!) {
+      mutation ($replyRequestId: String!) {
         CreateOrUpdateReplyRequestFeedback(
           replyRequestId: $replyRequestId
           vote: UPVOTE
@@ -55,7 +55,7 @@ describe('CreateOrUpdateReplyRequestFeedback', () => {
     const replyRequestId = 'foo';
 
     const { data, errors } = await gql`
-      mutation($replyRequestId: String!) {
+      mutation ($replyRequestId: String!) {
         CreateOrUpdateReplyRequestFeedback(
           replyRequestId: $replyRequestId
           vote: DOWNVOTE

@@ -104,11 +104,13 @@ export async function verifyProfile(profile, fieldName) {
 
   if (createUserResult.result === 'created') {
     return processMeta(
-      (await client.get({
-        index: 'users',
-        type: 'doc',
-        id: createUserResult._id,
-      })).body
+      (
+        await client.get({
+          index: 'users',
+          type: 'doc',
+          id: createUserResult._id,
+        })
+      ).body
     );
   }
 
@@ -127,7 +129,7 @@ if (process.env.FACEBOOK_APP_ID) {
       },
       (token, tokenSecret, profile, done) =>
         verifyProfile(profile, 'facebookId')
-          .then(user => done(null, user))
+          .then((user) => done(null, user))
           .catch(done)
     )
   );
@@ -147,7 +149,7 @@ if (process.env.TWITTER_CONSUMER_KEY) {
       },
       (token, tokenSecret, profile, done) =>
         verifyProfile(profile, 'twitterId')
-          .then(user => done(null, user))
+          .then((user) => done(null, user))
           .catch(done)
     )
   );
@@ -163,7 +165,7 @@ if (process.env.GITHUB_CLIENT_ID) {
       },
       (token, tokenSecret, profile, done) =>
         verifyProfile(profile, 'githubId')
-          .then(user => done(null, user))
+          .then((user) => done(null, user))
           .catch(done)
     )
   );
@@ -179,7 +181,7 @@ if (process.env.GOOGLE_CLIENT_ID) {
       },
       (token, tokenSecret, profile, done) =>
         verifyProfile(profile, 'googleId')
-          .then(user => done(null, user))
+          .then((user) => done(null, user))
           .catch(done)
     )
   );
@@ -197,7 +199,7 @@ if (process.env.INSTAGRAM_CLIENT_ID) {
       },
       (token, tokenSecret, profile, done) =>
         verifyProfile(profile, 'instagramId')
-          .then(user => done(null, user))
+          .then((user) => done(null, user))
           .catch(done)
     )
   );
@@ -231,7 +233,7 @@ export const loginRouter = Router()
     passport.authenticate('instagram', { scope: ['user_profile'] })
   );
 
-const handlePassportCallback = strategy => (ctx, next) =>
+const handlePassportCallback = (strategy) => (ctx, next) =>
   passport.authenticate(strategy, (err, user) => {
     if (!err && !user) err = new Error('No such user');
 
@@ -268,7 +270,7 @@ export const authRouter = Router()
       ).split(',');
 
       basePath =
-        validOrigins.find(o => o === ctx.session.origin) || validOrigins[0];
+        validOrigins.find((o) => o === ctx.session.origin) || validOrigins[0];
     }
 
     // TODO: Get basePath from DB for other client apps

@@ -107,23 +107,25 @@ describe('ListArticles', () => {
     // Should be identical to 'by lastRepliedAt DESC' snapshot,
     // but excludes articles without any article replies
     expect(
-      (await gql`
-        {
-          ListArticles(
-            filter: { articleReply: { statuses: [NORMAL] } }
-            orderBy: [{ lastMatchingArticleReplyCreatedAt: DESC }]
-          ) {
-            edges {
-              node {
-                id
-                articleReplies {
-                  createdAt
+      (
+        await gql`
+          {
+            ListArticles(
+              filter: { articleReply: { statuses: [NORMAL] } }
+              orderBy: [{ lastMatchingArticleReplyCreatedAt: DESC }]
+            ) {
+              edges {
+                node {
+                  id
+                  articleReplies {
+                    createdAt
+                  }
                 }
               }
             }
           }
-        }
-      `()).data.ListArticles
+        `()
+      ).data.ListArticles
     ).toMatchInlineSnapshot(`
       Object {
         "edges": Array [
@@ -171,7 +173,7 @@ describe('ListArticles', () => {
     `);
   });
 
-  const testReplyCount = async expression => {
+  const testReplyCount = async (expression) => {
     // Lists only articles with more than one reply.
     const pair = expression ? `${expression}: 1` : expression;
     expect(
@@ -235,7 +237,7 @@ describe('ListArticles', () => {
   it('filters by moreLikeThis and given text, find articles containing hyperlinks with the said text', async () => {
     expect(
       await gql`
-        query($like: String) {
+        query ($like: String) {
           ListArticles(
             filter: { moreLikeThis: { like: $like, minimumShouldMatch: "5%" } }
           ) {
@@ -271,7 +273,7 @@ describe('ListArticles', () => {
   it("filters by moreLikeThis and given URL, find articles with the said URL's content", async () => {
     expect(
       await gql`
-        query($like: String) {
+        query ($like: String) {
           ListArticles(
             filter: { moreLikeThis: { like: $like, minimumShouldMatch: "5%" } }
           ) {
@@ -482,24 +484,26 @@ describe('ListArticles', () => {
   it('filters by articleReplies filter', async () => {
     // This should be identical to "earlier or equal to 2020-02-06" snapshot
     expect(
-      (await gql`
-        {
-          ListArticles(
-            filter: {
-              articleReply: { createdAt: { GT: "2020-02-06T00:00:00.000Z" } }
-            }
-          ) {
-            edges {
-              node {
-                id
-                articleReplies {
-                  createdAt
+      (
+        await gql`
+          {
+            ListArticles(
+              filter: {
+                articleReply: { createdAt: { GT: "2020-02-06T00:00:00.000Z" } }
+              }
+            ) {
+              edges {
+                node {
+                  id
+                  articleReplies {
+                    createdAt
+                  }
                 }
               }
             }
           }
-        }
-      `()).data.ListArticles
+        `()
+      ).data.ListArticles
     ).toMatchInlineSnapshot(`
       Object {
         "edges": Array [
@@ -548,22 +552,24 @@ describe('ListArticles', () => {
 
     // Should be identical to replied with NOT_RUMOR and OPINIONATED snapshot
     expect(
-      (await gql`
-        {
-          ListArticles(
-            filter: { articleReply: { replyTypes: [NOT_RUMOR, OPINIONATED] } }
-          ) {
-            edges {
-              node {
-                id
-                articleReplies {
-                  replyType
+      (
+        await gql`
+          {
+            ListArticles(
+              filter: { articleReply: { replyTypes: [NOT_RUMOR, OPINIONATED] } }
+            ) {
+              edges {
+                node {
+                  id
+                  articleReplies {
+                    replyType
+                  }
                 }
               }
             }
           }
-        }
-      `()).data.ListArticles
+        `()
+      ).data.ListArticles
     ).toMatchInlineSnapshot(`
       Object {
         "edges": Array [
@@ -686,7 +692,7 @@ describe('ListArticles', () => {
   it('supports after', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListArticles(after: $cursor) {
             edges {
               node {
@@ -707,7 +713,7 @@ describe('ListArticles', () => {
   it('supports before', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListArticles(before: $cursor) {
             edges {
               node {
@@ -728,7 +734,7 @@ describe('ListArticles', () => {
   it('should fail if before and after both exist', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListArticles(before: $cursor, after: $cursor) {
             edges {
               node {

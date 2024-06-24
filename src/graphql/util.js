@@ -195,10 +195,10 @@ export const pagingArgs = {
  */
 export function getSortArgs(orderBy, fieldFnMap = {}) {
   return orderBy
-    .map(item => {
+    .map((item) => {
       const field = Object.keys(item)[0];
       const order = item[field];
-      const defaultFieldFn = o => ({ [field]: { order: o } });
+      const defaultFieldFn = (o) => ({ [field]: { order: o } });
 
       return (fieldFnMap[field] || defaultFieldFn)(order);
     })
@@ -210,7 +210,7 @@ export function getSortArgs(orderBy, fieldFnMap = {}) {
 //
 function reverseSortArgs(sort) {
   if (!sort) return undefined;
-  return sort.map(item => {
+  return sort.map((item) => {
     const field = Object.keys(item)[0];
     const order = item[field].order === 'desc' ? 'asc' : 'desc';
     return {
@@ -240,13 +240,15 @@ async function defaultResolveTotalCount({
   ...searchContext
 }) {
   try {
-    return (await client.count({
-      ...searchContext,
-      body: {
-        // count API only supports "query"
-        query: searchContext.body.query,
-      },
-    })).body.count;
+    return (
+      await client.count({
+        ...searchContext,
+        body: {
+          // count API only supports "query"
+          query: searchContext.body.query,
+        },
+      })
+    ).body.count;
   } catch (e) /* istanbul ignore next */ {
     console.error('[defaultResolveTotalCount]', JSON.stringify(e));
     throw e;
@@ -319,14 +321,16 @@ async function defaultResolveLastCursor(
   args,
   { loaders }
 ) {
-  const lastNode = (await loaders.searchResultLoader.load({
-    ...searchContext,
-    body: {
-      ...searchContext.body,
-      sort: reverseSortArgs(searchContext.body.sort),
-    },
-    size: 1,
-  }))[0];
+  const lastNode = (
+    await loaders.searchResultLoader.load({
+      ...searchContext,
+      body: {
+        ...searchContext.body,
+        sort: reverseSortArgs(searchContext.body.sort),
+      },
+      size: 1,
+    })
+  )[0];
 
   return lastNode && getCursor(lastNode._cursor);
 }
@@ -341,10 +345,12 @@ async function defaultResolveFirstCursor(
   args,
   { loaders }
 ) {
-  const firstNode = (await loaders.searchResultLoader.load({
-    ...searchContext,
-    size: 1,
-  }))[0];
+  const firstNode = (
+    await loaders.searchResultLoader.load({
+      ...searchContext,
+      size: 1,
+    })
+  )[0];
 
   return firstNode && getCursor(firstNode._cursor);
 }
@@ -440,7 +446,7 @@ export function createConnectionType(
             },
           })
         ),
-        resolve: params => params,
+        resolve: (params) => params,
       },
     }),
   });
@@ -512,7 +518,7 @@ export function attachCommonListFilter(
   appId,
   fieldPrefix = ''
 ) {
-  ['userId', 'appId'].forEach(field => {
+  ['userId', 'appId'].forEach((field) => {
     if (!filter[field]) return;
     filterQueries.push({ term: { [`${fieldPrefix}${field}`]: filter[field] } });
   });
@@ -765,9 +771,8 @@ export async function createTranscript(queryInfo, fileUrl, user) {
   try {
     switch (queryInfo.type) {
       case 'image': {
-        const [
-          { fullTextAnnotation },
-        ] = await imageAnnotator.documentTextDetection(fileUrl);
+        const [{ fullTextAnnotation }] =
+          await imageAnnotator.documentTextDetection(fileUrl);
 
         console.log('[createTranscript]', queryInfo.id, fullTextAnnotation);
 
@@ -797,10 +802,7 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         const fileResp = await fetch(fileUrl);
 
         // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
-        const audio = ffmpeg(fileResp.body)
-          .noVideo()
-          .format('mp3')
-          .pipe();
+        const audio = ffmpeg(fileResp.body).noVideo().format('mp3').pipe();
 
         // Hack it to make openai library work
         // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1455247809

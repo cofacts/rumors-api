@@ -53,7 +53,7 @@ export default {
 
     const body = {
       sort: getSortArgs(orderBy, {
-        vote: o => ({
+        vote: (o) => ({
           'feedbacks.score': {
             order: o,
             mode: 'sum',

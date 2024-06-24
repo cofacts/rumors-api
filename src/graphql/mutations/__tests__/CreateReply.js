@@ -24,7 +24,7 @@ describe('CreateReply', () => {
     ]);
 
     const { data, errors } = await gql`
-      mutation(
+      mutation (
         $articleId: String!
         $text: String!
         $type: ReplyTypeEnum!
@@ -100,7 +100,7 @@ describe('CreateReply', () => {
     const articleId = 'setReplyTest1';
 
     const { data, errors } = await gql`
-      mutation(
+      mutation (
         $articleId: String!
         $text: String!
         $type: ReplyTypeEnum!
@@ -147,7 +147,7 @@ describe('CreateReply', () => {
     const articleId = 'setReplyTest1';
 
     const { errors } = await gql`
-      mutation($articleId: String!, $text: String!, $type: ReplyTypeEnum!) {
+      mutation ($articleId: String!, $text: String!, $type: ReplyTypeEnum!) {
         CreateReply(articleId: $articleId, text: $text, type: $type) {
           id
         }

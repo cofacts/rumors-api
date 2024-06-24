@@ -73,6 +73,6 @@ export default {
     }
 
     // When returning, insert articleId so that ArticleCategory object type can resolve article.
-    return _source.articleCategories.map(ar => ({ ...ar, articleId }));
+    return _source.articleCategories.map((ar) => ({ ...ar, articleId }));
   },
 };

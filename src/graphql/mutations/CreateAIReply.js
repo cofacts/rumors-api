@@ -62,9 +62,9 @@ export async function createNewAIReply({
   );
 
   const thisMonthParts = monthFormatter.formatToParts(new Date());
-  const thisYearStr = thisMonthParts.find(p => p.type === 'year').value;
+  const thisYearStr = thisMonthParts.find((p) => p.type === 'year').value;
   const thisROCYearStr = (+thisYearStr - 1911).toString();
-  const thisMonthStr = thisMonthParts.find(p => p.type === 'month').value;
+  const thisMonthStr = thisMonthParts.find((p) => p.type === 'month').value;
   const createdMonth = monthFormatter.format(new Date(article.createdAt));
 
   const completionRequest = {
@@ -100,7 +100,7 @@ export async function createNewAIReply({
   const apiResult = await openai
     .createChatCompletion(completionRequest)
     .then(({ data }) => data)
-    .catch(error => {
+    .catch((error) => {
       console.error(error);
 
       /* Resolve with Error instance, which will be used to update AI response below */

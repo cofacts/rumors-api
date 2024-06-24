@@ -17,7 +17,7 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
     const comment = 'comment1';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $categoryId: String!, $comment: String!) {
+      mutation ($articleId: String!, $categoryId: String!, $comment: String!) {
         CreateOrUpdateArticleCategoryFeedback(
           articleId: $articleId
           categoryId: $categoryId
@@ -107,7 +107,7 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
     const categoryId = 'category1';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $categoryId: String!) {
+      mutation ($articleId: String!, $categoryId: String!) {
         CreateOrUpdateArticleCategoryFeedback(
           articleId: $articleId
           categoryId: $categoryId
@@ -173,7 +173,7 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
     const comment = 'Some ads comment';
 
     const { data, errors } = await gql`
-      mutation($articleId: String!, $categoryId: String!, $comment: String!) {
+      mutation ($articleId: String!, $categoryId: String!, $comment: String!) {
         CreateOrUpdateArticleCategoryFeedback(
           articleId: $articleId
           categoryId: $categoryId

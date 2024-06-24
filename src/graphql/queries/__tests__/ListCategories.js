@@ -52,7 +52,7 @@ describe('ListCategories', () => {
   it('supports after', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListCategories(after: $cursor) {
             edges {
               node {
@@ -73,7 +73,7 @@ describe('ListCategories', () => {
   it('supports before', async () => {
     expect(
       await gql`
-        query($cursor: String) {
+        query ($cursor: String) {
           ListCategories(before: $cursor) {
             edges {
               node {

@@ -165,12 +165,12 @@ async function processArticleReplies(userId) {
   } of getAllDocs('articles', NORMAL_ARTICLE_REPLY_QUERY)) {
     articleRepliesToProcess.push(
       ...articleReplies
-        .filter(ar => {
+        .filter((ar) => {
           // All articleReplies of the matching article is included,
           // here we should only process the article replies to block.
           return ar.userId === userId;
         })
-        .map(ar => ({
+        .map((ar) => ({
           ...ar,
 
           // Insert articleId for updateArticleReplyStatus() in the following for-loop
@@ -260,10 +260,8 @@ async function processArticleReplyFeedbacks(userId) {
       feedbacks.push(feedback);
     }
 
-    const {
-      positiveFeedbackCount,
-      negativeFeedbackCount,
-    } = await updateArticleReplyByFeedbacks(articleId, replyId, feedbacks);
+    const { positiveFeedbackCount, negativeFeedbackCount } =
+      await updateArticleReplyByFeedbacks(articleId, replyId, feedbacks);
 
     console.log(
       `[${i + 1}/${

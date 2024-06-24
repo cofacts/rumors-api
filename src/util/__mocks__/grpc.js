@@ -33,8 +33,8 @@ function resolveUrl(urls) {
   return delayForMs(delayMs).then(() => mockResponses[seq++]);
 }
 
-resolveUrl.__addMockResponse = resp => mockResponses.push(resp);
-resolveUrl.__setDelay = delay => (delayMs = delay);
+resolveUrl.__addMockResponse = (resp) => mockResponses.push(resp);
+resolveUrl.__setDelay = (delay) => (delayMs = delay);
 resolveUrl.__getRequests = () => requests;
 resolveUrl.__reset = () => {
   seq = 0;

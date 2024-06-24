@@ -37,7 +37,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
   });
   afterAll(async () => {
     // File server teardown
-    await new Promise(resolve => server.close(resolve));
+    await new Promise((resolve) => server.close(resolve));
     console.info(`[Media Integration] file server closed.`);
   });
 
@@ -48,7 +48,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     };
 
     const createMediaArticleResult = await gql`
-      mutation($mediaUrl: String!) {
+      mutation ($mediaUrl: String!) {
         CreateMediaArticle(
           mediaUrl: $mediaUrl
           articleType: VIDEO
@@ -71,185 +71,171 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     `);
   });
 
-  it(
-    'creates image article and can get signed URL',
-    async () => {
-      // Simulates user login
-      const context = {
-        user: { id: 'foo', appId: 'WEBSITE' },
-      };
+  it('creates image article and can get signed URL', async () => {
+    // Simulates user login
+    const context = {
+      user: { id: 'foo', appId: 'WEBSITE' },
+    };
 
-      const createMediaArticleResult = await gql`
-        mutation($mediaUrl: String!) {
-          CreateMediaArticle(
-            mediaUrl: $mediaUrl
-            articleType: IMAGE
-            reference: { type: LINE }
-          ) {
-            id
-          }
+    const createMediaArticleResult = await gql`
+      mutation ($mediaUrl: String!) {
+        CreateMediaArticle(
+          mediaUrl: $mediaUrl
+          articleType: IMAGE
+          reference: { type: LINE }
+        ) {
+          id
         }
-      `(
-        {
-          mediaUrl: `${serverUrl}/small.jpg`,
-        },
-        context
-      );
+      }
+    `(
+      {
+        mediaUrl: `${serverUrl}/small.jpg`,
+      },
+      context
+    );
 
-      expect(createMediaArticleResult.errors).toBeUndefined();
-      const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
+    expect(createMediaArticleResult.errors).toBeUndefined();
+    const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
 
-      const getArticleResult = await gql`
-        query($articleId: String!) {
-          GetArticle(id: $articleId) {
-            attachmentHash
-            originalUrl: attachmentUrl(variant: ORIGINAL)
-            previewUrl: attachmentUrl(variant: PREVIEW)
-            thumbnailUrl: attachmentUrl(variant: THUMBNAIL)
-          }
+    const getArticleResult = await gql`
+      query ($articleId: String!) {
+        GetArticle(id: $articleId) {
+          attachmentHash
+          originalUrl: attachmentUrl(variant: ORIGINAL)
+          previewUrl: attachmentUrl(variant: PREVIEW)
+          thumbnailUrl: attachmentUrl(variant: THUMBNAIL)
         }
-      `({ articleId }, context);
+      }
+    `({ articleId }, context);
 
-      expect(getArticleResult.errors).toBeUndefined();
-      expect(
-        getArticleResult.data.GetArticle.attachmentHash
-      ).toMatchInlineSnapshot(
-        `"image.vDph4g.__-AD6SDgAebG8cbwifBB-Dj0yPjo8ETgAOAA4P_8_8"`
-      );
-      expect(typeof getArticleResult.data.GetArticle.originalUrl).toBe(
-        'string'
-      );
+    expect(getArticleResult.errors).toBeUndefined();
+    expect(
+      getArticleResult.data.GetArticle.attachmentHash
+    ).toMatchInlineSnapshot(
+      `"image.vDph4g.__-AD6SDgAebG8cbwifBB-Dj0yPjo8ETgAOAA4P_8_8"`
+    );
+    expect(typeof getArticleResult.data.GetArticle.originalUrl).toBe('string');
 
-      // Test can fetch thumbnail meta data
+    // Test can fetch thumbnail meta data
+    let resp;
+    while (
+      !resp ||
+      resp.headers.get('Content-Type').startsWith('application/xml') // GCS returns XML for error
+    ) {
+      resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl);
+      await delayForMs(1000); // Wait for upload to finish
+    }
+
+    expect(resp.headers.get('Content-Type')).toMatchInlineSnapshot(
+      `"image/jpeg"`
+    );
+    expect(resp.headers.get('Content-Length')).toMatchInlineSnapshot(`"8214"`);
+
+    await delayForMs(1000); // Wait for setMetadata operation to finish
+
+    // Expect metadata being set
+    resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl); // Fetch again for latest header
+    expect(resp.headers.get('Cache-Control')).toMatchInlineSnapshot(
+      `"public, max-age=31536000, immutable"`
+    );
+
+    // Cleanup
+    await client.delete({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+    });
+
+    await client.delete({
+      index: 'replyrequests',
+      type: 'doc',
+      id: getReplyRequestId({
+        articleId,
+        userId: context.user.id,
+        appId: context.user.appId,
+      }),
+    });
+  }, 15000);
+
+  it('can replace media for article', async () => {
+    // Simulates user login
+    const context = {
+      user: { id: 'foo', appId: 'WEBSITE' },
+    };
+
+    const createMediaArticleResult = await gql`
+      mutation ($mediaUrl: String!) {
+        CreateMediaArticle(
+          mediaUrl: $mediaUrl
+          articleType: IMAGE
+          reference: { type: LINE }
+        ) {
+          id
+        }
+      }
+    `(
+      {
+        mediaUrl: `${serverUrl}/small.jpg`,
+      },
+      context
+    );
+
+    const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
+
+    const articleBeforeReplace = await gql`
+      query ($articleId: String!) {
+        GetArticle(id: $articleId) {
+          thumbnailUrl: attachmentUrl(variant: THUMBNAIL)
+        }
+      }
+    `({ articleId }, context);
+
+    // Wait until thumbnail is fully uploaded
+    {
       let resp;
       while (
         !resp ||
         resp.headers.get('Content-Type').startsWith('application/xml') // GCS returns XML for error
       ) {
-        resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl);
+        resp = await fetch(articleBeforeReplace.data.GetArticle.thumbnailUrl);
         await delayForMs(1000); // Wait for upload to finish
       }
+    }
 
-      expect(resp.headers.get('Content-Type')).toMatchInlineSnapshot(
-        `"image/jpeg"`
-      );
-      expect(resp.headers.get('Content-Length')).toMatchInlineSnapshot(
-        `"8214"`
-      );
+    await replaceMedia({ articleId, url: `${serverUrl}/replaced.jpg` });
 
-      await delayForMs(1000); // Wait for setMetadata operation to finish
+    const resp = await fetch(articleBeforeReplace.data.GetArticle.thumbnailUrl);
+    expect(resp.status).toBe(404);
 
-      // Expect metadata being set
-      resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl); // Fetch again for latest header
-      expect(resp.headers.get('Cache-Control')).toMatchInlineSnapshot(
-        `"public, max-age=31536000, immutable"`
-      );
-
-      // Cleanup
-      await client.delete({
-        index: 'articles',
-        type: 'doc',
-        id: articleId,
-      });
-
-      await client.delete({
-        index: 'replyrequests',
-        type: 'doc',
-        id: getReplyRequestId({
-          articleId,
-          userId: context.user.id,
-          appId: context.user.appId,
-        }),
-      });
-    },
-    15000
-  );
-
-  it(
-    'can replace media for article',
-    async () => {
-      // Simulates user login
-      const context = {
-        user: { id: 'foo', appId: 'WEBSITE' },
-      };
-
-      const createMediaArticleResult = await gql`
-        mutation($mediaUrl: String!) {
-          CreateMediaArticle(
-            mediaUrl: $mediaUrl
-            articleType: IMAGE
-            reference: { type: LINE }
-          ) {
-            id
-          }
-        }
-      `(
-        {
-          mediaUrl: `${serverUrl}/small.jpg`,
-        },
-        context
-      );
-
-      const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
-
-      const articleBeforeReplace = await gql`
-        query($articleId: String!) {
-          GetArticle(id: $articleId) {
-            thumbnailUrl: attachmentUrl(variant: THUMBNAIL)
-          }
-        }
-      `({ articleId }, context);
-
-      // Wait until thumbnail is fully uploaded
-      {
-        let resp;
-        while (
-          !resp ||
-          resp.headers.get('Content-Type').startsWith('application/xml') // GCS returns XML for error
-        ) {
-          resp = await fetch(articleBeforeReplace.data.GetArticle.thumbnailUrl);
-          await delayForMs(1000); // Wait for upload to finish
+    const articleAfterReplace = await gql`
+      query ($articleId: String!) {
+        GetArticle(id: $articleId) {
+          attachmentHash
         }
       }
+    `({ articleId }, context);
 
-      await replaceMedia({ articleId, url: `${serverUrl}/replaced.jpg` });
+    expect(
+      articleAfterReplace.data.GetArticle.attachmentHash
+    ).toMatchInlineSnapshot(
+      `"image.vDjh4g.__-AD6SDgAeTEcED___AA_Ej8y_Dg8EDgAOAA4P_8_8"`
+    );
 
-      const resp = await fetch(
-        articleBeforeReplace.data.GetArticle.thumbnailUrl
-      );
-      expect(resp.status).toBe(404);
+    // Cleanup
+    await client.delete({
+      index: 'articles',
+      type: 'doc',
+      id: articleId,
+    });
 
-      const articleAfterReplace = await gql`
-        query($articleId: String!) {
-          GetArticle(id: $articleId) {
-            attachmentHash
-          }
-        }
-      `({ articleId }, context);
-
-      expect(
-        articleAfterReplace.data.GetArticle.attachmentHash
-      ).toMatchInlineSnapshot(
-        `"image.vDjh4g.__-AD6SDgAeTEcED___AA_Ej8y_Dg8EDgAOAA4P_8_8"`
-      );
-
-      // Cleanup
-      await client.delete({
-        index: 'articles',
-        type: 'doc',
-        id: articleId,
-      });
-
-      await client.delete({
-        index: 'replyrequests',
-        type: 'doc',
-        id: getReplyRequestId({
-          articleId,
-          userId: context.user.id,
-          appId: context.user.appId,
-        }),
-      });
-    },
-    15000
-  );
+    await client.delete({
+      index: 'replyrequests',
+      type: 'doc',
+      id: getReplyRequestId({
+        articleId,
+        userId: context.user.id,
+        appId: context.user.appId,
+      }),
+    });
+  }, 15000);
 }

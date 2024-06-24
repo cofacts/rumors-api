@@ -29,7 +29,7 @@ describe('creation', () => {
     }));
 
     const { data, errors } = await gql`
-      mutation(
+      mutation (
         $mediaUrl: String!
         $articleType: ArticleTypeEnum!
         $reference: ArticleReferenceInput!
@@ -194,7 +194,7 @@ describe('creation', () => {
     }));
 
     const { data, errors } = await gql`
-      mutation(
+      mutation (
         $mediaUrl: String!
         $articleType: ArticleTypeEnum!
         $reference: ArticleReferenceInput!
@@ -290,7 +290,7 @@ describe('creation', () => {
     });
 
     const { errors } = await gql`
-      mutation(
+      mutation (
         $mediaUrl: String!
         $articleType: ArticleTypeEnum!
         $reference: ArticleReferenceInput!
@@ -332,7 +332,7 @@ describe('creation', () => {
     }));
 
     const { data } = await gql`
-      mutation(
+      mutation (
         $mediaUrl: String!
         $articleType: ArticleTypeEnum!
         $reference: ArticleReferenceInput!

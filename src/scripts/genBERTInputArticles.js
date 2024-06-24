@@ -18,7 +18,7 @@ const REVIEWER_USER_ID = 'category-reviewer';
  */
 export function range2Objects(range) {
   const [columnNames, ...dataRows] = range;
-  return dataRows.map(row =>
+  return dataRows.map((row) =>
     row.reduce((obj, cell, colIdx) => {
       obj[columnNames[colIdx]] = cell;
       return obj;
@@ -38,11 +38,11 @@ async function readFromGoogleSheet(googleSheetId) {
       { values: articleCategoriesRange },
       { values: mappingsRange },
     ],
-  } = await (await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${googleSheetId}/values:batchGet?key=${
-      process.env.GOOGLE_SHEETS_API_KEY
-    }&ranges=Article categories!A1:L&ranges=Mappings!A1:C`
-  )).json();
+  } = await (
+    await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${googleSheetId}/values:batchGet?key=${process.env.GOOGLE_SHEETS_API_KEY}&ranges=Article categories!A1:L&ranges=Mappings!A1:C`
+    )
+  ).json();
 
   return {
     mappings: range2Objects(mappingsRange),

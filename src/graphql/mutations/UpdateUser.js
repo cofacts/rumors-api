@@ -32,7 +32,7 @@ export default {
         avatarData,
         bio,
       },
-      v => v === undefined || v === null || v === ''
+      (v) => v === undefined || v === null || v === ''
     );
 
     if (Object.keys(doc).length === 1)

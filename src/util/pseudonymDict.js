@@ -1448,15 +1448,15 @@ export const separators = Array(16)
   ]);
 
 export const decorators = Array(36)
-  .fill(joinedName => `${joinedName}`)
+  .fill((joinedName) => `${joinedName}`)
   .concat([
-    joinedName => `${joinedName}®`,
-    joinedName => `${joinedName}™`,
-    joinedName => `↖${joinedName}↗`,
-    joinedName => `☞${joinedName}☜`,
-    joinedName => `卍${joinedName}卍`,
-    joinedName => `${joinedName}♡`,
-    joinedName => `㊣${joinedName}㊣`,
-    joinedName => `Oo${joinedName}oO`,
-    joinedName => `乂${joinedName}乂`,
+    (joinedName) => `${joinedName}®`,
+    (joinedName) => `${joinedName}™`,
+    (joinedName) => `↖${joinedName}↗`,
+    (joinedName) => `☞${joinedName}☜`,
+    (joinedName) => `卍${joinedName}卍`,
+    (joinedName) => `${joinedName}♡`,
+    (joinedName) => `㊣${joinedName}㊣`,
+    (joinedName) => `Oo${joinedName}oO`,
+    (joinedName) => `乂${joinedName}乂`,
   ]);

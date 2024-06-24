@@ -86,7 +86,7 @@ export default {
   ) {
     const body = {
       sort: getSortArgs(orderBy, {
-        vote: o => ({ score: { order: o } }),
+        vote: (o) => ({ score: { order: o } }),
       }),
       track_scores: true, // for _score sorting
     };
@@ -103,7 +103,7 @@ export default {
     attachCommonListFilter(filterQueries, filter, userId, appId);
 
     ['articleId', 'replyId', 'replyUserId', 'articleReplyUserId'].forEach(
-      field => {
+      (field) => {
         if (!filter[field]) return;
         filterQueries.push({ term: { [field]: filter[field] } });
       }

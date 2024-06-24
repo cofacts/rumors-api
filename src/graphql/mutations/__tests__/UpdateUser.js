@@ -23,7 +23,7 @@ const updateUser = (variableString, userId) =>
       }
     `({}, { userId });
 
-const getUser = async userId => {
+const getUser = async (userId) => {
   const {
     body: { _source: user },
   } = await client.get({

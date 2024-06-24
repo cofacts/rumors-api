@@ -17,7 +17,7 @@ export default () =>
      * @param {string[]} userIds - list of userIds
      * @returns {Promise<LevelInfo[]>} - LevelInfo of each user
      */
-    async userIds => {
+    async (userIds) => {
       // Currently "point" is defined as number of authored article replies.
       const body = userIds.reduce(
         (commands, userId) =>

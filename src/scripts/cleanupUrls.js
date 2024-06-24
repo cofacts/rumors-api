@@ -87,7 +87,7 @@ async function processFn(docs) {
           path: 'hyperlinks',
           query: {
             terms: {
-              'hyperlinks.url': [canonical, url].filter(u => u), // canonical may be empty...
+              'hyperlinks.url': [canonical, url].filter((u) => u), // canonical may be empty...
             },
           },
         },

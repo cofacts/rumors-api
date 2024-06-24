@@ -21,71 +21,67 @@ describe('scrapping & storage', () => {
     });
   });
 
-  it(
-    'scraps from Internet and handles error',
-    async () => {
-      MockDate.set(1485593157011);
+  it('scraps from Internet and handles error', async () => {
+    MockDate.set(1485593157011);
 
-      resolveUrl.__addMockResponse([
-        // Mimics the out-of-order nature of gRPC
-        {
-          url: 'http://example.com/not-found',
-          canonical: 'http://example.com/not-found',
-          title: '',
-          summary: 'Not Found',
-          topImageUrl: '',
-          html: '<html><head></head><body>Not Found</body></html>',
-          status: 404,
-        },
-        {
-          url: 'http://example.com/index.html',
-          canonical: 'http://example.com/index.html',
-          title: 'Some title',
-          summary: 'Some text as summary',
-          topImageUrl: '',
-          html: '<html><head></head><body>Hello world</body></html>',
-          status: 200,
-        },
-      ]);
+    resolveUrl.__addMockResponse([
+      // Mimics the out-of-order nature of gRPC
+      {
+        url: 'http://example.com/not-found',
+        canonical: 'http://example.com/not-found',
+        title: '',
+        summary: 'Not Found',
+        topImageUrl: '',
+        html: '<html><head></head><body>Not Found</body></html>',
+        status: 404,
+      },
+      {
+        url: 'http://example.com/index.html',
+        canonical: 'http://example.com/index.html',
+        title: 'Some title',
+        summary: 'Some text as summary',
+        topImageUrl: '',
+        html: '<html><head></head><body>Hello world</body></html>',
+        status: 200,
+      },
+    ]);
 
-      const [foundResult, notFoundResult] = await scrapUrls(
-        `
+    const [foundResult, notFoundResult] = await scrapUrls(
+      `
           This should work: http://example.com/index.html
           This should be not found: http://example.com/not-found
           This should not match: http://malformedUrl:100000
         `,
-        { client }
-      );
-      MockDate.reset();
+      { client }
+    );
+    MockDate.reset();
 
-      expect(resolveUrl.__getRequests()).toMatchSnapshot('GraphQL requests');
-      resolveUrl.__reset();
+    expect(resolveUrl.__getRequests()).toMatchSnapshot('GraphQL requests');
+    resolveUrl.__reset();
 
-      expect(foundResult).toMatchSnapshot('foundResult');
-      expect(notFoundResult).toMatchSnapshot('notFoundResult');
+    expect(foundResult).toMatchSnapshot('foundResult');
+    expect(notFoundResult).toMatchSnapshot('notFoundResult');
 
-      // scrapUrls() don't wait until refresh, thus refresh on our own
-      await client.indices.refresh({ index: 'urls' });
+    // scrapUrls() don't wait until refresh, thus refresh on our own
+    await client.indices.refresh({ index: 'urls' });
 
-      const {
-        body: {
-          hits: { hits: urls },
+    const {
+      body: {
+        hits: { hits: urls },
+      },
+    } = await client.search({
+      index: 'urls',
+      body: {
+        query: {
+          match_all: {},
         },
-      } = await client.search({
-        index: 'urls',
-        body: {
-          query: {
-            match_all: {},
-          },
-        },
-      });
+      },
+    });
 
-      expect(urls.map(({ _source }) => _source)).toMatchSnapshot(
-        'Docs stored to urls index'
-      );
-    },
-    30000
-  );
+    expect(urls.map(({ _source }) => _source)).toMatchSnapshot(
+      'Docs stored to urls index'
+    );
+  }, 30000);
 });
 
 describe('caching', () => {

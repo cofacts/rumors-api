@@ -28,7 +28,7 @@ const bigquery = new BigQuery();
 
 const BATCH_SIZE = 1000;
 
-const formatDate = date =>
+const formatDate = (date) =>
   `${date.substr(0, 4)}-${date.substr(4, 2)}-${date.substr(6, 2)}`;
 
 export function getId({ dateStr, type, docId }) {
@@ -42,10 +42,7 @@ export function getTodayYYYYMMDD(timeZone) {
   const today = new Date(new Date().toLocaleString(undefined, { timeZone }));
   return `${today.getFullYear()}${(today.getMonth() + 1)
     .toString()
-    .padStart(2, '0')}${today
-    .getDate()
-    .toString()
-    .padStart(2, '0')}`;
+    .padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
 }
 
 /**
@@ -85,7 +82,7 @@ const TYPE_TO_ESIDX = { article: 'articles', reply: 'replies' };
  */
 const docUserAppLoader = new DataLoader(
   /** @param {{type: 'article' | 'reply', docId: string }} typeDocIds */
-  async typeDocIds => {
+  async (typeDocIds) => {
     const docs = typeDocIds
       .map(({ type, docId }) => {
         const index = TYPE_TO_ESIDX[type];
@@ -99,10 +96,12 @@ const docUserAppLoader = new DataLoader(
       })
       .filter(Boolean);
 
-    const docMap = (await client.mget({
-      body: { docs },
-      _source: ['userId', 'appId'],
-    })).body.docs.reduce((map, { _source, _index, _id, found }) => {
+    const docMap = (
+      await client.mget({
+        body: { docs },
+        _source: ['userId', 'appId'],
+      })
+    ).body.docs.reduce((map, { _source, _index, _id, found }) => {
       if (found) {
         const [index] = _index.split('_v'); // take the part before versions
         map[`${index}/${_id}`] = {
@@ -231,26 +230,28 @@ export async function fetchStatsFromGA(params) {
   await pipeline(
     job.getQueryResultsStream(),
     createBatchTransform(BATCH_SIZE),
-    async function(source) {
+    async function (source) {
       let processedCount = 0;
 
       for await (const docs of source) {
-        const esBatch = (await Promise.all(
-          docs.map(async doc => {
-            const { dateStr: dontcare, ...analyticsFields } = doc; // eslint-disable-line no-unused-vars
+        const esBatch = (
+          await Promise.all(
+            docs.map(async (doc) => {
+              const { dateStr: dontcare, ...analyticsFields } = doc; // eslint-disable-line no-unused-vars
 
-            return [
-              {
-                index: { _index: 'analytics', _type: 'doc', _id: getId(doc) },
-              },
-              {
-                ...analyticsFields,
-                ...(await docUserAppLoader.load(doc)),
-                fetchedAt: new Date(),
-              },
-            ];
-          })
-        )).flat();
+              return [
+                {
+                  index: { _index: 'analytics', _type: 'doc', _id: getId(doc) },
+                },
+                {
+                  ...analyticsFields,
+                  ...(await docUserAppLoader.load(doc)),
+                  fetchedAt: new Date(),
+                },
+              ];
+            })
+          )
+        ).flat();
 
         processedCount += docs.length;
 
@@ -271,9 +272,7 @@ export async function fetchStatsFromGA(params) {
       }
 
       console.log(
-        `[fetchStatsFromGA] Finished processing ${processedCount} analytics records for ${startDate} ~ ${endDate} (${
-          params.timezone
-        }).`
+        `[fetchStatsFromGA] Finished processing ${processedCount} analytics records for ${startDate} ~ ${endDate} (${params.timezone}).`
       );
     }
   );

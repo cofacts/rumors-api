@@ -82,7 +82,7 @@ describe('user utils', () => {
         349, // towns
         17, // separators
         42, // decorators
-      ].forEach(index => sample.mockImplementationOnce(ary => ary[index]));
+      ].forEach((index) => sample.mockImplementationOnce((ary) => ary[index]));
 
       expect(generatePseudonym()).toBe(`忠懇的信義區艾達`);
       expect(generatePseudonym()).toBe('㊣來自金城✖一本正經的✖金城武㊣');
@@ -98,7 +98,7 @@ describe('user utils', () => {
         9, // face
         0, // hair
         2, // body
-      ].forEach(index => sample.mockImplementationOnce(ary => ary[index]));
+      ].forEach((index) => sample.mockImplementationOnce((ary) => ary[index]));
       [
         0, // with accessory or not
         0, // with facialHair or not
@@ -108,7 +108,7 @@ describe('user utils', () => {
         1, // with facialHair or not
         0, // to flip image or not
         0.17, // backgroundColorIndex
-      ].forEach(r => random.mockReturnValueOnce(r));
+      ].forEach((r) => random.mockReturnValueOnce(r));
 
       expect(generateOpenPeepsAvatar()).toMatchObject({
         accessory: 'None',

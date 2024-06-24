@@ -8,15 +8,17 @@ it('should clean up urls', async () => {
 
   await cleanupUrls();
 
-  const urlsResult = (await client.search({
-    index: 'urls',
-    body: {
-      query: {
-        match_all: {},
+  const urlsResult = (
+    await client.search({
+      index: 'urls',
+      body: {
+        query: {
+          match_all: {},
+        },
+        _source: [FLAG_FIELD],
       },
-      _source: [FLAG_FIELD],
-    },
-  })).body.hits.hits.map(processMeta);
+    })
+  ).body.hits.hits.map(processMeta);
 
   expect(urlsResult).toMatchSnapshot();
 
