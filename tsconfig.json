@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
+    "paths": {
+      "*": ["src/*", "test/*"]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -9,7 +12,8 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "target": "es2018"
   },
   "include": [
     "src/**/*"
