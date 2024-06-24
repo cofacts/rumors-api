@@ -207,7 +207,30 @@ $ node_modules/.bin/babel-node src/scripts/fetchStatsFromGA.js
 
 ### Pulling administrative commands from Google Pub/Sub
 
+#### Setup
+
+Please use the following command to set up the Pub/Sub topic and subscription, with a Google cloud account with sufficient permissions:
+
+```
+# Setup ADMIN_PUBSUB_TOPIC
+# You can change topic to your need.
+export ADMIN_PUBSUB_TOPIC=rumors-api-commands
+
+# Create a Pub/Sub topic
+gcloud pubsub topics create $ADMIN_PUBSUB_TOPIC --schema=${}
+
+# Create a Pub/Sub subscription
+gcloud pubsub subscriptions create ${ADMIN_PUBSUB_TOPIC}-subscription --topic=${ADMIN_PUBSUB_TOPIC}
+```
+
+Remember to update `ADMIN_PUBSUB_TOPIC` in `.env` and in runtime environment.
+
+#### Runtime config
+
 When API server starts up, it will link to Google Pub/Sub topic if and only if env var `ADMIN_PUBSUB_TOPIC` is set, using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
+
+The service account behind the key in previous step should have the following [minimum roles](https://cloud.google.com/pubsub/docs/access-control#iam_roles):
+  - `Pub/Sub Subscriber` on the GCP project
 
 ### Removing article-reply from database
 -  To set an article-reply to deleted state on production, run:
