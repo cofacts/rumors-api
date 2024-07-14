@@ -116,11 +116,13 @@ export const avatarUrlResolver =
 /**
  * Returns a list of avatar type options based on information available for a user.
  */
-export const getAvailableAvatarTypes = (user: User) => {
+export const getAvailableAvatarTypes = (user: User | undefined) => {
   const types = [AvatarTypes.OpenPeeps];
   if (user?.email) types.push(AvatarTypes.Gravatar);
-  if ('facebookId' in user && user.facebookId) types.push(AvatarTypes.Facebook);
-  if ('githubId' in user && user.githubId) types.push(AvatarTypes.Github);
+  if (user && 'facebookId' in user && user.facebookId)
+    types.push(AvatarTypes.Facebook);
+  if (user && 'githubId' in user && user.githubId)
+    types.push(AvatarTypes.Github);
   return types;
 };
 
