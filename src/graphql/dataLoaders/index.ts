@@ -86,10 +86,13 @@ export default class DataLoaders {
     this._loaders = {};
   }
 
-  _checkOrSetLoader(name: keyof LoaderFactoryMap) {
-    if (this._loaders[name]) return this._loaders[name];
+  _checkOrSetLoader<N extends keyof LoaderFactoryMap>(
+    name: N
+  ): ReturnType<LoaderFactoryMap[N]> {
+    const cached = this._loaders[name];
+    if (cached) return cached;
 
     this._loaders[name] = LOADER_FACTORY_MAP[name](this);
-    return this._loaders[name];
+    return this._loaders[name] as ReturnType<LoaderFactoryMap[N]>;
   }
 }
