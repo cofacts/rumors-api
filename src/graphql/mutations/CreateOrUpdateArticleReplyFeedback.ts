@@ -12,6 +12,7 @@ import type { ArticleReplyFeedback } from 'rumors-db/schema/articlereplyfeedback
 import type { Reply } from 'rumors-db/schema/replies';
 
 import client from 'util/client';
+import { ResolverContext } from 'contextFactory';
 
 export function getArticleReplyFeedbackId({
   articleId,
@@ -107,7 +108,7 @@ export default {
     comment: { type: GraphQLString },
   },
   async resolve(
-    rootValue,
+    rootValue: unknown,
     {
       articleId,
       replyId,
@@ -119,7 +120,7 @@ export default {
       vote: 1 | 0 | -1;
       comment?: string | null;
     },
-    { user, loaders }
+    { user, loaders }: ResolverContext
   ) {
     assertUser(user);
 
