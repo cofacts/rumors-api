@@ -15,7 +15,7 @@
     "seed": "cd src/rumors-db && npm run seed",
     "pretest": "npm run rumors-db:install && npm run rumors-db:test && mkdir -p build",
     "test": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 jest --runInBand",
-    "posttest": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 babel-node test/postTest.js",
+    "posttest": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 babel-node --extensions .ts,.js test/postTest.js",
     "start": "pm2-runtime start ecosystem.config.js --env production",
     "lint": "eslint src/.",
     "lint:fix": "eslint --fix src/.",
