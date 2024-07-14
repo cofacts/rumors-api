@@ -223,7 +223,7 @@ export async function createOrUpdateUser({
 }> {
   assertUser({ appId, userId });
   const now = new Date().toISOString();
-  const dbUserId = getUserId({ appId, userId });
+  const dbUserId = exports.getUserId({ appId, userId }); // For unit test mocking
   const {
     body: { result, get: userFound },
   } = await client.update({
