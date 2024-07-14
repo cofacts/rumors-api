@@ -76,7 +76,7 @@
     "@babel/preset-typescript": "^7.24.1",
     "@google-cloud/storage": "^6.11.0",
     "@types/node": "^18",
-    "@types/cli-progress": "^3.11.5",
+    "@types/cli-progress": "^3.11.6",
     "@types/dotenv": "^8.2.0",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
