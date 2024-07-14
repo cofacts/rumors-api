@@ -39,7 +39,7 @@ export function assertUser(
     | UserInContext /* For user instance */
     | UserAppIdPair /* for legacy {userId, appId} pair */
     | null
-) {
+): asserts userOrIds is UserInContext {
   if (userOrIds === null || typeof userOrIds !== 'object') {
     throw new Error(AUTH_ERROR_MSG);
   }
