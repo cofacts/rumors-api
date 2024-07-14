@@ -13,11 +13,12 @@ import passport from 'koa-passport';
 import { formatError } from 'graphql';
 import checkHeaders from './checkHeaders';
 import schema from './graphql/schema';
-import DataLoaders from './graphql/dataLoaders';
+import contextFactory from './contextFactory';
+
 import CookieStore from './CookieStore';
 import { loginRouter, authRouter } from './auth';
 import rollbar from './rollbarInstance';
-import { AUTH_ERROR_MSG, createOrUpdateUser } from './util/user';
+import { AUTH_ERROR_MSG } from './util/user';
 
 const app = new Koa();
 const router = Router();
@@ -106,34 +107,7 @@ export const apolloServer = new ApolloServer({
   schema,
   introspection: true, // Allow introspection in production as well
   playground: false,
-  context: async ({ ctx }) => {
-    const {
-      appId,
-      query: { userId: queryUserId } = {},
-      state: { user: { userId: sessionUserId } = {} } = {},
-    } = ctx;
-
-    const userId = queryUserId ?? sessionUserId;
-
-    let currentUser = null;
-    if (appId && userId) {
-      ({ user: currentUser } = await createOrUpdateUser({
-        userId,
-        appId,
-      }));
-    }
-
-    return {
-      loaders: new DataLoaders(), // new loaders per request
-      user: currentUser,
-
-      // userId-appId pair
-      //
-      userId: currentUser?.id,
-      appUserId: userId,
-      appId,
-    };
-  },
+  context: contextFactory,
   formatError(err) {
     // make web clients know they should login
     //
