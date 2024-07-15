@@ -287,7 +287,12 @@ export default {
         })
         // It's OK to fail this promise, just log as warning
         .catch((e) =>
-          console.warn(`[CreateMediaArticle] ${mediaEntry.id}:`, 'meta' in e ? e.meta : e)
+          console.warn(
+            `[CreateMediaArticle] ${mediaEntry.id}:`,
+
+            // `meta` is provided by elasticsearch error response 
+            'meta' in e ? e.meta : e
+          )
         ),
     ]);
 
