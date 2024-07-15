@@ -290,7 +290,7 @@ export default {
           console.warn(
             `[CreateMediaArticle] ${mediaEntry.id}:`,
 
-            // `meta` is provided by elasticsearch error response 
+            // `meta` is provided by elasticsearch error response
             'meta' in e ? e.meta : e
           )
         ),
