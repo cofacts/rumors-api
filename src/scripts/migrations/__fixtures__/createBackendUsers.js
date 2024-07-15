@@ -478,7 +478,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_34',
-      tags: [],
       createdAt: '2019-03-18T15:31:50.099Z',
       articleReplies: [
         {
@@ -525,7 +524,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-20T00:58:00.000Z',
       articleReplies: [
         {
@@ -580,7 +578,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_39',
-      tags: [],
       createdAt: '2018-06-15T07:34:36.490Z',
       articleReplies: [
         {
@@ -638,7 +635,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_15',
-      tags: [],
       createdAt: '2019-05-16T15:09:42.254Z',
       articleReplies: [
         {
@@ -685,7 +681,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-18T02:58:00.000Z',
       articleReplies: [
         {
@@ -731,7 +726,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_41',
-      tags: [],
       createdAt: '2018-01-07T16:35:06.585Z',
       articleReplies: [
         {
@@ -785,7 +779,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_42',
-      tags: [],
       createdAt: '2017-12-24T23:48:52.794Z',
       articleReplies: [
         {
@@ -837,7 +830,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_43',
-      tags: [],
       createdAt: '2017-11-19T09:35:45.073Z',
       articleReplies: [
         {
@@ -882,7 +874,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_44',
-      tags: [],
       createdAt: '2017-03-05T00:13:37.379Z',
       articleReplies: [
         {
@@ -936,7 +927,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_46',
-      tags: [],
       createdAt: '2017-08-01T08:45:13.720Z',
       articleReplies: [
         {
@@ -990,7 +980,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-16T14:55:00.000Z',
       articleReplies: [
         {
@@ -1091,7 +1080,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-16T12:47:00.000Z',
       articleReplies: [
         {
@@ -1159,7 +1147,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_50',
-      tags: [],
       createdAt: '2017-11-14T23:42:12.624Z',
       articleReplies: [
         {
@@ -1213,7 +1200,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-11T08:52:00.000Z',
       articleReplies: [
         {
@@ -1274,7 +1260,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_51',
-      tags: [],
       createdAt: '2018-10-23T09:21:35.323Z',
       articleReplies: [
         {
@@ -1367,7 +1352,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_55',
-      tags: [],
       createdAt: '2020-03-03T15:37:27.556Z',
       articleReplies: [
         {
@@ -1415,7 +1399,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_56',
-      tags: [],
       createdAt: '2020-02-21T02:02:54.455Z',
       articleReplies: [
         {
@@ -1473,7 +1456,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_58',
-      tags: [],
       createdAt: '2017-08-29T03:38:35.524Z',
       articleReplies: [
         {
@@ -1543,7 +1525,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_59',
-      tags: [],
       createdAt: '2020-04-17T13:11:33.426Z',
       articleReplies: [
         {
@@ -1612,7 +1593,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_62',
-      tags: [],
       createdAt: '2020-04-06T04:35:45.919Z',
       articleReplies: [
         {
@@ -1670,7 +1650,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_64',
-      tags: [],
       createdAt: '2019-12-24T02:03:16.857Z',
       articleReplies: [
         {
@@ -1760,7 +1739,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_66',
-      tags: [],
       createdAt: '2019-05-30T13:03:09.773Z',
       articleReplies: [
         {
@@ -1809,7 +1787,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_67',
-      tags: [],
       createdAt: '2020-04-26T07:32:15.732Z',
       normalArticleCategoryCount: 1,
       articleReplies: [
@@ -1874,7 +1851,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_70',
-      tags: [],
       createdAt: '2017-03-13T14:12:52.385Z',
       articleReplies: [
         {
@@ -1931,7 +1907,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_17',
-      tags: [],
       createdAt: '2017-05-27T04:06:18.243Z',
       articleReplies: [
         {
@@ -1997,7 +1972,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_72',
-      tags: [],
       createdAt: '2018-12-28T13:18:06.346Z',
       articleReplies: [
         {
@@ -2076,7 +2050,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_75',
-      tags: [],
       createdAt: '2020-04-03T01:27:41.969Z',
       articleReplies: [
         {
@@ -2135,7 +2108,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_76',
-      tags: [],
       createdAt: '2020-02-27T03:27:49.869Z',
       articleReplies: [
         {
@@ -2183,7 +2155,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_77',
-      tags: [],
       createdAt: '2019-04-17T06:56:36.132Z',
       articleReplies: [
         {
@@ -2234,7 +2205,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_35',
-      tags: [],
       createdAt: '2019-04-15T16:38:11.456Z',
       articleReplies: [
         {
@@ -2283,7 +2253,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_78',
-      tags: [],
       createdAt: '2019-11-10T06:18:52.830Z',
       articleReplies: [
         {
@@ -2344,7 +2313,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_35',
-      tags: [],
       createdAt: '2019-11-13T16:17:15.137Z',
       articleReplies: [
         {
@@ -2393,7 +2361,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_80',
-      tags: [],
       createdAt: '2018-03-30T12:13:57.322Z',
       articleReplies: [
         {
@@ -2439,7 +2406,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-10T01:12:00.000Z',
       articleReplies: [
         {
@@ -2507,7 +2473,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_81',
-      tags: [],
       createdAt: '2017-06-24T02:25:38.653Z',
       articleReplies: [
         {
@@ -2572,7 +2537,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_82',
-      tags: [],
       createdAt: '2017-07-10T11:37:00.087Z',
       articleReplies: [
         {
@@ -2629,7 +2593,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_83',
-      tags: [],
       createdAt: '2017-05-14T13:07:55.057Z',
       articleReplies: [
         {
@@ -2711,7 +2674,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-22T04:05:00.000Z',
       articleReplies: [
         {
@@ -2768,7 +2730,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_86',
-      tags: [],
       createdAt: '2017-12-30T01:01:44.438Z',
       articleReplies: [
         {
@@ -2827,7 +2788,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_87',
-      tags: [],
       createdAt: '2019-08-15T02:39:39.532Z',
       articleReplies: [
         {
@@ -2898,7 +2858,6 @@ export default {
       normalArticleReplyCount: 0,
       normalArticleCategoryCount: 1,
       replyRequestCount: 2,
-      tags: [],
       hyperlinks: [],
       lastRequestedAt: '2020-09-17T12:44:47.688Z',
     },
@@ -2910,7 +2869,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_89',
-      tags: [],
       createdAt: '2018-01-26T02:28:32.022Z',
       articleReplies: [
         {
@@ -2962,7 +2920,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-13T03:49:00.000Z',
       articleReplies: [
         {
@@ -3045,7 +3002,6 @@ export default {
       normalArticleReplyCount: 1,
       normalArticleCategoryCount: 1,
       replyRequestCount: 1,
-      tags: [],
       hyperlinks: [],
       lastRequestedAt: '2020-09-26T07:29:51.708Z',
     },
@@ -3094,7 +3050,6 @@ export default {
       normalArticleReplyCount: 1,
       normalArticleCategoryCount: 1,
       replyRequestCount: 1,
-      tags: [],
       hyperlinks: [],
       lastRequestedAt: '2020-09-26T09:39:48.829Z',
     },
@@ -10005,7 +9960,6 @@ export default {
         normalArticleReplyCount: 0,
         normalArticleCategoryCount: 1,
         replyRequestCount: 2,
-        tags: [],
         hyperlinks: [],
         lastRequestedAt: '2020-09-17T12:44:47.688Z',
         appUserId: 'CBUT_user_87',
@@ -10021,7 +9975,6 @@ export default {
           },
         ],
         userId: 'j4S8C_n66M1oaUXCwx_g7G3O5VFjHWL4dbZqq9aiEewD4s8-g',
-        tags: [],
         createdAt: '2020-04-06T04:35:45.919Z',
         articleReplies: [
           {
@@ -10082,7 +10035,6 @@ export default {
           },
         ],
         userId: 'j4S8C_4WVN4mcFb9V8KKu6LT8xXvRud2LWcSa-UjL_qvy0ksw',
-        tags: [],
         createdAt: '2020-02-27T03:27:49.869Z',
         articleReplies: [
           {
@@ -10130,7 +10082,6 @@ export default {
           },
         ],
         userId: 'j4S8C_v8peSS0932LsPFMsF61kNZqh7-ZkQ_2QHV22_C3PXf4',
-        tags: [],
         createdAt: '2017-12-30T01:01:44.438Z',
         articleReplies: [
           {
@@ -10192,7 +10143,6 @@ export default {
           },
         ],
         userId: 'j4S8C_4PNVISSWISKdcDP111lIO_cSmpR1jMjSyzDwLoYDvH4',
-        tags: [],
         createdAt: '2018-03-30T12:13:57.322Z',
         articleReplies: [
           {
@@ -10240,7 +10190,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-13T03:49:00.000Z',
         articleReplies: [
           {
@@ -10288,7 +10237,6 @@ export default {
           },
         ],
         userId: 'j4S8C_4iGkmTeduiI5SrYlHehwmaS3SX4Nszoyb1oyUWvLMEo',
-        tags: [],
         createdAt: '2017-07-10T11:37:00.087Z',
         articleReplies: [
           {
@@ -10347,7 +10295,6 @@ export default {
           },
         ],
         userId: 'j4S8C_pGTVQioRDsflknEcedoVAbKom5K10ipYSV4rWSq2G_4',
-        tags: [],
         createdAt: '2018-01-07T16:35:06.585Z',
         articleReplies: [
           {
@@ -10406,7 +10353,6 @@ export default {
           },
         ],
         userId: 'j4S8C_RW_vDd8lKq4WdfWYxmVh6sJImYM96kix8X4A6FhRJHI',
-        tags: [],
         createdAt: '2020-03-03T15:37:27.556Z',
         articleReplies: [
           {
@@ -10457,7 +10403,6 @@ export default {
           },
         ],
         userId: 'j4S8C_sJtyYDWJm0yBONBKJix3-poQzSELnS-Xyr7WPZdwvvA',
-        tags: [],
         createdAt: '2020-04-03T01:27:41.969Z',
         articleReplies: [
           {
@@ -10516,7 +10461,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-22T04:05:00.000Z',
         articleReplies: [
           {
@@ -10578,7 +10522,6 @@ export default {
           },
         ],
         userId: 'j4S8C_VSYVIlqF4l_puOdN_Pzu64YnjMc-nM5iu0OWcWTt4xk',
-        tags: [],
         createdAt: '2019-11-10T06:18:52.830Z',
         articleReplies: [
           {
@@ -10641,7 +10584,6 @@ export default {
           },
         ],
         userId: 'j4S8C_xhN2O5Ouv6Y6AbEoDULy9Crc1TRdEaQ03ANLtAEJWnY',
-        tags: [],
         createdAt: '2020-04-17T13:11:33.426Z',
         articleReplies: [
           {
@@ -10710,7 +10652,6 @@ export default {
           },
         ],
         userId: 'j4S8C_MKBfQLupvhw4_Pf0ua4s1ag2aNnC7lr88z8Hyx7C31g',
-        tags: [],
         createdAt: '2018-01-26T02:28:32.022Z',
         articleReplies: [
           {
@@ -10763,7 +10704,6 @@ export default {
           },
         ],
         userId: 'j4S8C_nEkrBWbE4FfkBTIV9QMn1exDEGReMdemzfznDgx6nA8',
-        tags: [],
         createdAt: '2017-03-13T14:12:52.385Z',
         articleReplies: [
           {
@@ -10822,7 +10762,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-16T14:55:00.000Z',
         articleReplies: [
           {
@@ -10928,7 +10867,6 @@ export default {
           },
         ],
         userId: 'j4S8C_9V5d6E7GKiGNn1Yv_ifdq_WCxK4GET6BedItZHNN3W0',
-        tags: [],
         createdAt: '2018-12-28T13:18:06.346Z',
         articleReplies: [
           {
@@ -11010,7 +10948,6 @@ export default {
           },
         ],
         userId: 'CBUT_user_35',
-        tags: [],
         createdAt: '2019-11-13T16:17:15.137Z',
         articleReplies: [
           {
@@ -11058,7 +10995,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-16T12:47:00.000Z',
         articleReplies: [
           {
@@ -11129,7 +11065,6 @@ export default {
           },
         ],
         userId: 'j4S8C_uURhRzjSSV6s0wz7Patvy8Fb2hBM46AgZeTSyZ0OUfk',
-        tags: [],
         createdAt: '2017-11-19T09:35:45.073Z',
         articleReplies: [
           {
@@ -11177,7 +11112,6 @@ export default {
           },
         ],
         userId: 'j4S8C_YWVSKKajD6USiTghIEQzrWT_YKdnVVqVI96-cyS6zWA',
-        tags: [],
         createdAt: '2017-06-24T02:25:38.653Z',
         articleReplies: [
           {
@@ -11244,7 +11178,6 @@ export default {
           },
         ],
         userId: 'j4S8C_igegSRiBLdZh9argcdWuKn3cZzYGaSCes5WLJr-9l2s',
-        tags: [],
         createdAt: '2017-08-29T03:38:35.524Z',
         articleReplies: [
           {
@@ -11317,7 +11250,6 @@ export default {
           },
         ],
         userId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        tags: [],
         createdAt: '2019-08-15T02:39:39.532Z',
         articleReplies: [
           {
@@ -11369,7 +11301,6 @@ export default {
           },
         ],
         userId: 'j4S8C_nRWu8ne4K6M1m6ibF8HbOq07hUxK3pvrOD4g7cn-okY',
-        tags: [],
         createdAt: '2019-12-24T02:03:16.857Z',
         articleReplies: [
           {
@@ -11462,7 +11393,6 @@ export default {
           },
         ],
         userId: 'qO1C3_lAgNK9-guL13qEJSGROTsi_UZbF5N5WoQ17vnsOrl6s',
-        tags: [],
         createdAt: '2019-03-18T15:31:50.099Z',
         articleReplies: [
           {
@@ -11511,7 +11441,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-20T00:58:00.000Z',
         articleReplies: [
           {
@@ -11569,7 +11498,6 @@ export default {
           },
         ],
         userId: 'j4S8C_f0pGq97e0_aH_2-8x0BLaj36xzuu2M1W54ZVcAZ4fM0',
-        tags: [],
         createdAt: '2018-06-15T07:34:36.490Z',
         articleReplies: [
           {
@@ -11630,7 +11558,6 @@ export default {
           },
         ],
         userId: 'CBUT_user_15',
-        tags: [],
         createdAt: '2019-05-16T15:09:42.254Z',
         articleReplies: [
           {
@@ -11678,7 +11605,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-18T02:58:00.000Z',
         articleReplies: [
           {
@@ -11726,7 +11652,6 @@ export default {
           },
         ],
         userId: 'j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY',
-        tags: [],
         createdAt: '2017-12-24T23:48:52.794Z',
         articleReplies: [
           {
@@ -11779,7 +11704,6 @@ export default {
           },
         ],
         userId: 'j4S8C_pYR1NvuKvLQfho6HCkJWbMqLYFnDzoATlM4SyqsxdEU',
-        tags: [],
         createdAt: '2017-03-05T00:13:37.379Z',
         articleReplies: [
           {
@@ -11835,7 +11759,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-11T08:52:00.000Z',
         articleReplies: [
           {
@@ -11893,7 +11816,6 @@ export default {
           },
         ],
         userId: 'j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M',
-        tags: [],
         createdAt: '2020-02-21T02:02:54.455Z',
         articleReplies: [
           {
@@ -11956,7 +11878,6 @@ export default {
           },
         ],
         userId: 'j4S8C_AunHFdGqCNC2QRUrQ9PSqkcE49Z4JTrkG9mYcgeogm8',
-        tags: [],
         createdAt: '2020-04-26T07:32:15.732Z',
         normalArticleCategoryCount: 1,
         articleReplies: [
@@ -12027,7 +11948,6 @@ export default {
           },
         ],
         userId: 'j4S8C_fqo4vs7i2gmJi3mc1zlp_YgMi2_xyGiHfOR5_eLeYkE',
-        tags: [],
         createdAt: '2019-05-30T13:03:09.773Z',
         articleReplies: [
           {
@@ -12076,7 +11996,6 @@ export default {
           },
         ],
         userId: 'j4S8C_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
-        tags: [],
         createdAt: '2017-05-27T04:06:18.243Z',
         articleReplies: [
           {
@@ -12145,7 +12064,6 @@ export default {
           },
         ],
         userId: 'j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk',
-        tags: [],
         createdAt: '2019-04-17T06:56:36.132Z',
         articleReplies: [
           {
@@ -12198,7 +12116,6 @@ export default {
           },
         ],
         userId: 'CBUT_user_35',
-        tags: [],
         createdAt: '2019-04-15T16:38:11.456Z',
         articleReplies: [
           {
@@ -12284,7 +12201,6 @@ export default {
         normalArticleReplyCount: 1,
         normalArticleCategoryCount: 1,
         replyRequestCount: 1,
-        tags: [],
         hyperlinks: [],
         lastRequestedAt: '2020-09-26T07:29:51.708Z',
       },
@@ -12334,7 +12250,6 @@ export default {
         normalArticleReplyCount: 1,
         normalArticleCategoryCount: 1,
         replyRequestCount: 1,
-        tags: [],
         hyperlinks: [],
         lastRequestedAt: '2020-09-26T09:39:48.829Z',
       },
@@ -12346,7 +12261,6 @@ export default {
           },
         ],
         userId: 'j4S8C_lQfJ8fARjHNzkXa4s0ZENAkcWbKn_UOARG7VY11af8E',
-        tags: [],
         createdAt: '2017-11-14T23:42:12.624Z',
         articleReplies: [
           {
@@ -12402,7 +12316,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-10T01:12:00.000Z',
         articleReplies: [
           {
@@ -12482,7 +12395,6 @@ export default {
           },
         ],
         userId: 'j4S8C_rjLUCvhHqmYeT37nsWvYMXt7o0r3Mbniqdr7qU5LXgo',
-        tags: [],
         createdAt: '2018-10-23T09:21:35.323Z',
         articleReplies: [
           {
@@ -12575,7 +12487,6 @@ export default {
           },
         ],
         userId: 'j4S8C_Z8nYqKv190EeosqG5O1H8aeTg64m6xLkRyZOTxSYQ7A',
-        tags: [],
         createdAt: '2017-08-01T08:45:13.720Z',
         articleReplies: [
           {
@@ -12631,7 +12542,6 @@ export default {
           },
         ],
         userId: 'j4S8C_Yk4N-rJ2LtcKZc0Wa2smuJQNB5I7mmo-d2j1k-nyfSo',
-        tags: [],
         createdAt: '2017-05-14T13:07:55.057Z',
         articleReplies: [
           {
