@@ -73,7 +73,6 @@ async function createNewArticle({ text, reference: originalReference, user }) {
         normalArticleReplyCount: 0,
         normalArticleCategoryCount: 0,
         replyRequestCount: 0,
-        tags: [],
         hyperlinks: [],
         articleType: 'TEXT',
         attachmentUrl: '',
