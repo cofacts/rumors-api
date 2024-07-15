@@ -12,7 +12,7 @@ import { getContentDefaultStatus } from 'util/user';
  * @param {string} arg.appId
  * @param {string} arg.status
  *
- * @returns {ArticleReply[]} list of article replies after delete
+ * @returns {Promise<ArticleReply[]>} list of article replies after delete
  */
 export async function updateArticleReplyStatus({
   articleId,

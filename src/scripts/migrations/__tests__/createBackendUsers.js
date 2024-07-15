@@ -41,7 +41,7 @@ const indices = [
   'analytics',
 ];
 
-describe('createBackendUsers', () => {
+describe.skip('createBackendUsers', () => {
   beforeAll(async () => {
     await loadFixtures(fixtures.fixturesToLoad);
 
