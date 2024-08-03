@@ -6,6 +6,7 @@ import pug from 'pug';
 import { printSchema } from 'graphql/utilities';
 import { ApolloServer } from 'apollo-server-koa';
 import koaStatic from 'koa-static';
+import koaSend from 'koa-send';
 import koaBody from 'koa-bodyparser';
 import session from 'koa-session2';
 import passport from 'koa-passport';
@@ -75,6 +76,10 @@ router.post('/logout', checkHeaders(), (ctx) => {
 router.options('/graphql', checkHeaders());
 router.post('/graphql', checkHeaders());
 
+router.get('/graphql', (ctx) => {
+  return koaSend(ctx, '/static/graphiql.html');
+});
+
 const schemaStr = printSchema(schema);
 const indexFn = pug.compileFile(path.join(__dirname, 'jade/index.jade'));
 router.get('/', (ctx) => {
@@ -100,7 +105,7 @@ const LOGGER_HEADER_KEY_REGEX = /ip|forwarded|address/i;
 export const apolloServer = new ApolloServer({
   schema,
   introspection: true, // Allow introspection in production as well
-  playground: true,
+  playground: false,
   context: async ({ ctx }) => {
     const {
       appId,
