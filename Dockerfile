@@ -29,3 +29,4 @@ COPY --from=builder /srv/www/build ./build
 COPY src/jade ./build/jade
 COPY src/util/protobuf ./build/util/protobuf
 COPY package.json package-lock.json ecosystem.config.js ./
+COPY static ./static
