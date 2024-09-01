@@ -5,9 +5,15 @@ import MockDate from 'mockdate';
 import fixtures, { fixture1Text } from '../__fixtures__/CreateArticle';
 import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
 import { getArticleId } from 'graphql/mutations/CreateArticle';
+import archiveUrlsFromText from 'util/archiveUrlsFromText';
+
+jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
 
 describe('creation', () => {
-  beforeEach(() => loadFixtures(fixtures));
+  beforeEach(async () => {
+    archiveUrlsFromText.mockClear();
+    await loadFixtures(fixtures);
+  });
   afterEach(() => unloadFixtures(fixtures));
 
   it('creates articles and a reply request and fills in URLs', async () => {
@@ -46,6 +52,15 @@ describe('creation', () => {
 
     expect(article.replyRequestCount).toBe(1);
     expect(article).toMatchSnapshot();
+
+    // Make sure archiveUrlsFromText is called with article text
+    expect(archiveUrlsFromText.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          "FOO FOO http://foo.com/article/1",
+        ],
+      ]
+    `);
 
     const replyRequestId = getReplyRequestId({
       articleId: data.CreateArticle.id,
