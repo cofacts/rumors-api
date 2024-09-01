@@ -4,6 +4,7 @@ import { assertUser } from 'util/user';
 
 import client from 'util/client';
 import scrapUrls from 'util/scrapUrls';
+import archiveUrlsFromText from 'util/archiveUrlsFromText';
 
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 import MutationResult from 'graphql/models/MutationResult';
@@ -89,6 +90,13 @@ export default {
 
         return _id;
       });
+
+    // Archive both text and reference.
+    // No need to wait for the result.
+    //
+    newReplyPromise.then(() =>
+      Promise.all([archiveUrlsFromText(text), archiveUrlsFromText(reference)])
+    );
 
     const scrapPromise = scrapUrls(`${text} ${reference}`, {
       cacheLoader: loaders.urlLoader,

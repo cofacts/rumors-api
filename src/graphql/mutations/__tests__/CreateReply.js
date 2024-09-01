@@ -1,4 +1,5 @@
 jest.mock('util/grpc');
+jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
 
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
@@ -7,9 +8,13 @@ import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/CreateReply';
 import resolveUrl from 'util/grpc';
 import delayForMs from 'util/delayForMs';
+import archiveUrlsFromText from 'util/archiveUrlsFromText';
 
 describe('CreateReply', () => {
   beforeAll(() => loadFixtures(fixtures));
+  beforeEach(() => {
+    archiveUrlsFromText.mockClear();
+  });
 
   it('creates replies and associates itself with specified article', async () => {
     MockDate.set(1485593157011);
@@ -65,6 +70,19 @@ describe('CreateReply', () => {
       id: articleId,
     });
     expect(article._source.articleReplies[0].replyId).toBe(replyId);
+
+    // Make sure archiveUrlsFromText is called with text and reference
+    //
+    expect(archiveUrlsFromText.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          "FOO FOO",
+        ],
+        Array [
+          "http://shouldscrap.com/",
+        ],
+      ]
+    `);
 
     // Wait until urls are resolved
     await delayForMs(1000);
