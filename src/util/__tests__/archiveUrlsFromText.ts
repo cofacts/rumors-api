@@ -1,4 +1,12 @@
-import { jest, describe, beforeAll, afterAll, it, expect } from '@jest/globals';
+import {
+  jest,
+  describe,
+  beforeAll,
+  beforeEach,
+  afterAll,
+  it,
+  expect,
+} from '@jest/globals';
 import archiveUrlsFromText from '../archiveUrlsFromText';
 
 describe('archiveUrlsFromText', () => {
@@ -32,6 +40,10 @@ describe('archiveUrlsFromText', () => {
 
     process.env.INTERNET_ARCHIVE_S3_ACCESS_KEY = 'test-access-key';
     process.env.INTERNET_ARCHIVE_S3_SECRET_KEY = 'test-secret';
+  });
+
+  beforeEach(() => {
+    mockedFetch.mockClear();
   });
 
   afterAll(() => {
@@ -88,5 +100,12 @@ describe('archiveUrlsFromText', () => {
         ],
       ]
     `);
+  });
+
+  it('do nothing if no URL in text', async () => {
+    const text = 'No URL here';
+    const results = await archiveUrlsFromText(text);
+    expect(results).toEqual([]);
+    expect(mockedFetch).not.toBeCalled();
   });
 });
