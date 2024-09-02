@@ -13,19 +13,20 @@ export default async function archiveUrlsFromText(text: string) {
 
   const results = await Promise.all(
     normalizedUrls.map(async (url) => {
-      const params = new URLSearchParams({
-        url,
-        capture_screenshot: '1',
-        skip_first_archive: '1',
-        delay_wb_availability: '1', // Help reduce load on IA servers
-      });
+      const formData = new FormData();
+      formData.append('url', url);
+      formData.append('capture_screenshot', '1');
+      formData.append('skip_first_archive', '1');
+      formData.append('delay_wb_availability', '1'); // Help reduce load on IA servers
+
       return (
-        await fetch(`https://web.archive.org/save?${params.toString()}`, {
+        await fetch('https://web.archive.org/save', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
             Authorization: `LOW ${process.env.INTERNET_ARCHIVE_S3_ACCESS_KEY}:${process.env.INTERNET_ARCHIVE_S3_SECRET_KEY}`,
           },
+          body: formData,
         })
       ).json();
     })
