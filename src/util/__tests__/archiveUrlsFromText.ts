@@ -78,8 +78,28 @@ describe('archiveUrlsFromText', () => {
     expect(mockedFetch.mock.calls).toMatchInlineSnapshot(`
       Array [
         Array [
-          "https://web.archive.org/save?url=https%3A%2F%2Fexample.com%2F&capture_screenshot=1&skip_first_archive=1&delay_wb_availability=1",
+          "https://web.archive.org/save",
           Object {
+            "body": FormData {
+              Symbol(state): Array [
+                Object {
+                  "name": "url",
+                  "value": "https://example.com/",
+                },
+                Object {
+                  "name": "capture_screenshot",
+                  "value": "1",
+                },
+                Object {
+                  "name": "skip_first_archive",
+                  "value": "1",
+                },
+                Object {
+                  "name": "delay_wb_availability",
+                  "value": "1",
+                },
+              ],
+            },
             "headers": Object {
               "Accept": "application/json",
               "Authorization": "LOW test-access-key:test-secret",
@@ -88,8 +108,28 @@ describe('archiveUrlsFromText', () => {
           },
         ],
         Array [
-          "https://web.archive.org/save?url=https%3A%2F%2Fexample2.com%2F%3Ffoo%3Dbar&capture_screenshot=1&skip_first_archive=1&delay_wb_availability=1",
+          "https://web.archive.org/save",
           Object {
+            "body": FormData {
+              Symbol(state): Array [
+                Object {
+                  "name": "url",
+                  "value": "https://example2.com/?foo=bar",
+                },
+                Object {
+                  "name": "capture_screenshot",
+                  "value": "1",
+                },
+                Object {
+                  "name": "skip_first_archive",
+                  "value": "1",
+                },
+                Object {
+                  "name": "delay_wb_availability",
+                  "value": "1",
+                },
+              ],
+            },
             "headers": Object {
               "Accept": "application/json",
               "Authorization": "LOW test-access-key:test-secret",
