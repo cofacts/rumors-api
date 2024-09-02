@@ -15,7 +15,7 @@ describe('archiveUrlsFromText', () => {
   beforeAll(() => {
     // Spy on and mock the global fetch function
     mockedFetch = jest.spyOn(global, 'fetch');
-    mockedFetch.mockImplementation(async (url) => {
+    mockedFetch.mockImplementation(async (url, reqInit) => {
       // Make Tyepscript happy
       if (typeof url !== 'string')
         throw new Error(
@@ -23,8 +23,7 @@ describe('archiveUrlsFromText', () => {
         );
 
       // Extract URL to archive from fetched URL
-      const params = new URL(url).searchParams;
-      const urlToArchive = params.get('url');
+      const urlToArchive = (reqInit?.body as FormData).get('url');
 
       return {
         json: async () => ({ job_id: '123', url: urlToArchive }),
