@@ -17,6 +17,7 @@ import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
 import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
+import archiveUrlsFromText from 'util/archiveUrlsFromText';
 
 const METADATA = {
   cacheControl: 'public, max-age=31536000, immutable',
@@ -273,6 +274,10 @@ export default {
           if (!aiResponse) {
             throw new Error('AI transcript not found');
           }
+
+          // Archive URLs in transcript; don't wait for it
+          archiveUrlsFromText(aiResponse.text);
+
           return writeAITranscript(articleId, aiResponse.text);
         })
         .then(() => {

@@ -7,13 +7,16 @@ import client from 'util/client';
 import fixtures from '../__fixtures__/CreateMediaArticle';
 import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
 import mediaManager from 'util/mediaManager';
+import archiveUrlsFromText from 'util/archiveUrlsFromText';
 
 jest.mock('util/mediaManager');
+jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
 
 describe('creation', () => {
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
     mediaManager.insert.mockClear();
+    archiveUrlsFromText.mockClear();
   });
   afterAll(() => unloadFixtures(fixtures));
 
@@ -64,6 +67,15 @@ describe('creation', () => {
             "onUploadStop": [Function],
             "url": "http://foo.com/input_image.jpeg",
           },
+        ],
+      ]
+    `);
+
+    // Expect archiveUrlsFromText is called with OCR result
+    expect(archiveUrlsFromText.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          "OCR result of output image",
         ],
       ]
     `);

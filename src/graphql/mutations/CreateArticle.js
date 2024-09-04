@@ -8,6 +8,7 @@ import scrapUrls from 'util/scrapUrls';
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
 import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
+import archiveUrlsFromText from 'util/archiveUrlsFromText';
 
 /* Instantiate hash function */
 const xxhash64 = h64();
@@ -45,7 +46,9 @@ async function createNewArticle({ text, reference: originalReference, user }) {
     appId: user.appId,
   };
 
-  await client.update({
+  const {
+    body: { result },
+  } = await client.update({
     index: 'articles',
     type: 'doc',
     id: articleId,
@@ -84,6 +87,11 @@ async function createNewArticle({ text, reference: originalReference, user }) {
     },
     refresh: 'true', // Make sure the data is indexed when we create ReplyRequest
   });
+
+  if (result === 'created') {
+    // Archive URLs in article and don't wait for the result
+    archiveUrlsFromText(text);
+  }
 
   return articleId;
 }
