@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ListArticles lists all cooccurrences 1`] = `
+exports[`ListCooccurrences lists all cooccurrences 1`] = `
 Object {
   "data": Object {
     "ListCooccurrences": Object {
@@ -28,7 +28,7 @@ Object {
 }
 `;
 
-exports[`ListArticles sorts: by updatedAt DESC 1`] = `
+exports[`ListCooccurrences sorts: by updatedAt DESC 1`] = `
 Object {
   "data": Object {
     "ListCooccurrences": Object {
