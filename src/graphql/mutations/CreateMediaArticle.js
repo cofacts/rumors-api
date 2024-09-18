@@ -165,6 +165,7 @@ async function createNewMediaArticle({
       status: getContentDefaultStatus(user),
       contributors: [],
     },
+    refresh: 'true', // Many use cases would search after media creation, thus refresh here
   });
 
   return articleId;
