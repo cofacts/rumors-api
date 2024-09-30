@@ -52,7 +52,7 @@ export default {
         positiveFeedbackCount: 0,
         negativeFeedbackCount: 1,
         userId: 'blocked-user',
-        appId: 'app1',
+        appId: 'WEBSITE',
       },
     ],
     normalArticleReplyCount: 1,
@@ -166,6 +166,12 @@ export default {
     reference: 'barbar2',
     type: 'NOT_ARTICLE',
   },
+  '/replies/doc/bar5': {
+    text: 'spam content',
+    type: 'NOT_ARTICLE',
+    userId: 'blocked-user',
+    appId: 'WEBSITE',
+  },
   '/replies/doc/fofo': {
     text: 'fofo',
     reference: 'barfofo',
@@ -246,6 +252,10 @@ export default {
   '/categories/doc/c2': {
     title: '免費訊息詐騙',
     description: '詐騙貼圖、假行銷手法。',
+  },
+  '/users/doc/blocked-user': {
+    appId: 'WEBSITE',
+    blockedReason: 'https://announcement.url',
   },
 
   ...Array.from(new Array(11)).reduce((mockMap, _, i) => {

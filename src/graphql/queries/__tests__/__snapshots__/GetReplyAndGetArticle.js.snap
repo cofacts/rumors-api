@@ -450,6 +450,7 @@ Object {
         },
       ],
       "reference": "barbar",
+      "status": "NORMAL",
       "text": "bar",
       "type": "NOT_ARTICLE",
     },
@@ -464,7 +465,7 @@ Object {
       "similarReplies": Object {
         "edges": Array [
           Object {
-            "cursor": "WzEuODg5MTY5Mywic2ltaWxhci10by1iYXIiXQ==",
+            "cursor": "WzIuMTE2NjU0LCJzaW1pbGFyLXRvLWJhciJd",
             "highlight": Object {
               "hyperlinks": Array [],
               "reference": "<HIGHLIGHT>barbar</HIGHLIGHT>",
@@ -473,7 +474,7 @@ Object {
             "node": Object {
               "id": "similar-to-bar",
             },
-            "score": 1.8891693,
+            "score": 2.116654,
           },
           Object {
             "cursor": "WzAuNTY2MzE3Miwic2ltaWxhci10by1iYXIyIl0=",
@@ -523,7 +524,7 @@ Object {
             "score": 0.5663172,
           },
           Object {
-            "cursor": "WzEuODg5MTY5Mywic2ltaWxhci10by1iYXIiXQ==",
+            "cursor": "WzIuMTE2NjU0LCJzaW1pbGFyLXRvLWJhciJd",
             "highlight": Object {
               "hyperlinks": Array [],
               "reference": "<HIGHLIGHT>barbar</HIGHLIGHT>",
@@ -532,7 +533,7 @@ Object {
             "node": Object {
               "id": "similar-to-bar",
             },
-            "score": 1.8891693,
+            "score": 2.116654,
           },
         ],
       },

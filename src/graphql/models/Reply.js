@@ -37,6 +37,21 @@ const Reply = new GraphQLObjectType({
     },
     text: { type: GraphQLString },
     type: { type: new GraphQLNonNull(ReplyTypeEnum) },
+    status: {
+      type: new GraphQLNonNull(ArticleReplyStatusEnum),
+      description:
+        'The status of this reply, calculated from its author and article replies.',
+      async resolve(reply, args, context) {
+        const user = await userFieldResolver(reply, args, context);
+        if (user && user.blockedReason) return 'BLOCKED';
+
+        const articleReplies =
+          await context.loaders.articleRepliesByReplyIdLoader.load(reply.id);
+        return articleReplies.every((ar) => ar.status !== 'NORMAL')
+          ? 'DELETED'
+          : 'NORMAL';
+      },
+    },
     reference: { type: GraphQLString },
     articleReplies: {
       type: new GraphQLNonNull(

@@ -505,6 +505,7 @@ describe('GetReplyAndGetArticle', () => {
                   text
                 }
               }
+              status
             }
           }
         `()
@@ -598,6 +599,26 @@ describe('GetReplyAndGetArticle', () => {
           }
         `()
       ).toMatchSnapshot('similarReply sorting test');
+    });
+
+    it('sets status to BLOCKED when the author is blocked', async () => {
+      expect(
+        await gql`
+          {
+            GetReply(id: "bar5") {
+              status
+            }
+          }
+        `()
+      ).toMatchInlineSnapshot(`
+        Object {
+          "data": Object {
+            "GetReply": Object {
+              "status": "BLOCKED",
+            },
+          },
+        }
+      `);
     });
   });
 
