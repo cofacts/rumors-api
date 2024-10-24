@@ -158,7 +158,6 @@ async function createNewMediaArticle({
       normalArticleReplyCount: 0,
       normalArticleCategoryCount: 0,
       replyRequestCount: 0,
-      tags: [],
       hyperlinks: [],
       articleType,
       attachmentHash,
@@ -288,7 +287,12 @@ export default {
         })
         // It's OK to fail this promise, just log as warning
         .catch((e) =>
-          console.warn(`[CreateMediaArticle] ${mediaEntry.id}:`, e)
+          console.warn(
+            `[CreateMediaArticle] ${mediaEntry.id}:`,
+
+            // `meta` is provided by elasticsearch error response
+            'meta' in e ? e.meta : e
+          )
         ),
     ]);
 
