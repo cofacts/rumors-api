@@ -112,7 +112,6 @@ describe('creation', () => {
         ],
         "replyRequestCount": 1,
         "status": "NORMAL",
-        "tags": Array [],
         "text": "OCR result of output image",
         "updatedAt": "2017-01-28T08:45:57.011Z",
         "userId": "test",
