@@ -478,7 +478,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_34',
-      tags: [],
       createdAt: '2019-03-18T15:31:50.099Z',
       articleReplies: [
         {
@@ -512,7 +511,6 @@ export default {
       appId: 'DEVELOPMENT_BACKEND',
       lastRequestedAt: '2019-03-18T15:31:50.146Z',
       text: 'Newsgeist is a horrible event. People are doing nothing here.',
-      normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-03-18T15:31:50.099Z',
       normalArticleCategoryCount: 1,
@@ -525,7 +523,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-20T00:58:00.000Z',
       articleReplies: [
         {
@@ -580,7 +577,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_39',
-      tags: [],
       createdAt: '2018-06-15T07:34:36.490Z',
       articleReplies: [
         {
@@ -614,7 +610,6 @@ export default {
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2018-06-15T07:34:36.502Z',
       text: '讚！國民黨有史以來打民進黨蔡英文最好的一支廣告.既傳神又生動，大家努力的傳出去https://m.youtube.com/watch?v=VVHf9ni09m4&feature=youtu.be',
-      normalArticleReplycount: 0,
       hyperlinks: [
         {
           summary:
@@ -638,7 +633,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_15',
-      tags: [],
       createdAt: '2019-05-16T15:09:42.254Z',
       articleReplies: [
         {
@@ -672,7 +666,6 @@ export default {
       appId: 'WEBSITE',
       lastRequestedAt: '2019-05-16T15:09:42.281Z',
       text: '可惡至極的政府亂搞教育政策！這可以秀出來教嗎？這要禍害下一代！',
-      normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-05-16T15:09:42.254Z',
       normalArticleCategoryCount: 1,
@@ -685,7 +678,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-18T02:58:00.000Z',
       articleReplies: [
         {
@@ -731,7 +723,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_41',
-      tags: [],
       createdAt: '2018-01-07T16:35:06.585Z',
       articleReplies: [
         {
@@ -785,7 +776,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_42',
-      tags: [],
       createdAt: '2017-12-24T23:48:52.794Z',
       articleReplies: [
         {
@@ -837,7 +827,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_43',
-      tags: [],
       createdAt: '2017-11-19T09:35:45.073Z',
       articleReplies: [
         {
@@ -882,7 +871,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_44',
-      tags: [],
       createdAt: '2017-03-05T00:13:37.379Z',
       articleReplies: [
         {
@@ -936,7 +924,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_46',
-      tags: [],
       createdAt: '2017-08-01T08:45:13.720Z',
       articleReplies: [
         {
@@ -990,7 +977,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-16T14:55:00.000Z',
       articleReplies: [
         {
@@ -1091,7 +1077,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-16T12:47:00.000Z',
       articleReplies: [
         {
@@ -1159,7 +1144,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_50',
-      tags: [],
       createdAt: '2017-11-14T23:42:12.624Z',
       articleReplies: [
         {
@@ -1213,7 +1197,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-11T08:52:00.000Z',
       articleReplies: [
         {
@@ -1274,7 +1257,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_51',
-      tags: [],
       createdAt: '2018-10-23T09:21:35.323Z',
       articleReplies: [
         {
@@ -1352,7 +1334,6 @@ export default {
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2018-12-05T13:22:22.965Z',
       text: '大法官已釋憲，如果年底公投沒達到500萬票，明年五月台灣將成為亞洲第一個同性可合法結婚的國家。\n\n外國同性戀藉結婚來台治療愛滋病，都是健保支付，全民買單。\n\n學...',
-      normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2018-10-30T01:50:21.966Z',
       normalArticleCategoryCount: 1,
@@ -1367,7 +1348,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_55',
-      tags: [],
       createdAt: '2020-03-03T15:37:27.556Z',
       articleReplies: [
         {
@@ -1415,7 +1395,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_56',
-      tags: [],
       createdAt: '2020-02-21T02:02:54.455Z',
       articleReplies: [
         {
@@ -1460,7 +1439,6 @@ export default {
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2020-02-21T02:02:55.271Z',
       text: '意大利羅馬周三，下起了從來沒見過，也沒聽說過的石頭雨。這回意大利下的石頭雨就讓人見識了大自然的不可預測，不可控制，不可防範的天災，也再次見識了極端天氣之恐怖！\n...',
-      normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2020-02-21T02:02:54.455Z',
       normalArticleCategoryCount: 1,
@@ -1473,7 +1451,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_58',
-      tags: [],
       createdAt: '2017-08-29T03:38:35.524Z',
       articleReplies: [
         {
@@ -1543,7 +1520,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_59',
-      tags: [],
       createdAt: '2020-04-17T13:11:33.426Z',
       articleReplies: [
         {
@@ -1612,7 +1588,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_62',
-      tags: [],
       createdAt: '2020-04-06T04:35:45.919Z',
       articleReplies: [
         {
@@ -1670,7 +1645,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_64',
-      tags: [],
       createdAt: '2019-12-24T02:03:16.857Z',
       articleReplies: [
         {
@@ -1736,7 +1710,6 @@ export default {
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2019-12-24T02:55:11.261Z',
       text: '民進黨已經通過了毒品條例了\n\n校園內可以擁有50克的毒品，才被視同販毒。\n\n台灣除了是(同性戀島)\n(愛滋病島)現在又增加了一個(毒品島)了\n校園毒品零容忍遭封...',
-      normalArticleReplycount: 0,
       hyperlinks: [
         {
           normalizedUrl:
@@ -1760,7 +1733,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_66',
-      tags: [],
       createdAt: '2019-05-30T13:03:09.773Z',
       articleReplies: [
         {
@@ -1794,7 +1766,6 @@ export default {
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2019-05-30T13:03:09.792Z',
       text: '(moon)A，戀人\n\n他是愛你的，你在他眼中你是是完美的戀人，你的優點缺點他都能夠接受。\n情人眼裡出西施，說的就是他，你們在一起是他最為榮幸的，他覺得你是他一...',
-      normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-05-30T13:03:09.773Z',
       normalArticleCategoryCount: 1,
@@ -1809,7 +1780,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_67',
-      tags: [],
       createdAt: '2020-04-26T07:32:15.732Z',
       normalArticleCategoryCount: 1,
       articleReplies: [
@@ -1874,7 +1844,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_70',
-      tags: [],
       createdAt: '2017-03-13T14:12:52.385Z',
       articleReplies: [
         {
@@ -1931,7 +1900,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_17',
-      tags: [],
       createdAt: '2017-05-27T04:06:18.243Z',
       articleReplies: [
         {
@@ -1997,7 +1965,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_72',
-      tags: [],
       createdAt: '2018-12-28T13:18:06.346Z',
       articleReplies: [
         {
@@ -2053,7 +2020,6 @@ export default {
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2018-12-28T13:18:06.372Z',
       text: '奇蹟！燙到後趕快用它！連紅印和水泡都不會有！每家廚房都有，比沖水更有效!：https://youtu.be/EI_oExo38fA',
-      normalArticleReplycount: 0,
       hyperlinks: [
         {
           summary:
@@ -2076,7 +2042,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_75',
-      tags: [],
       createdAt: '2020-04-03T01:27:41.969Z',
       articleReplies: [
         {
@@ -2135,7 +2100,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_76',
-      tags: [],
       createdAt: '2020-02-27T03:27:49.869Z',
       articleReplies: [
         {
@@ -2183,7 +2147,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_77',
-      tags: [],
       createdAt: '2019-04-17T06:56:36.132Z',
       articleReplies: [
         {
@@ -2217,7 +2180,6 @@ export default {
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2019-04-17T06:56:36.153Z',
       text: '日本人砍台灣樹林比台灣人砍的還要多?',
-      normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-04-17T06:56:36.132Z',
       normalArticleCategoryCount: 1,
@@ -2234,7 +2196,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_35',
-      tags: [],
       createdAt: '2019-04-15T16:38:11.456Z',
       articleReplies: [
         {
@@ -2268,7 +2229,6 @@ export default {
       appId: 'WEBSITE',
       lastRequestedAt: '2019-04-15T16:38:11.473Z',
       text: '一名網友在「韓國瑜加油團」臉書社團發文指出，經在高雄市政府工作的朋友告知，韓國瑜此行訪美，川普特別透過秘密管道向高市府傳達求見意願，還強調之所以會找上韓國瑜，是...',
-      normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-04-15T16:38:11.456Z',
       normalArticleCategoryCount: 1,
@@ -2283,7 +2243,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_78',
-      tags: [],
       createdAt: '2019-11-10T06:18:52.830Z',
       articleReplies: [
         {
@@ -2328,7 +2287,6 @@ export default {
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2019-11-10T06:18:52.860Z',
       text: '电視新聞報導医生檢查女記者的肺部，發現常使用手機的人，肺部迅速老化，那位女記者才二十多歲，肺部老化，相當四十多歲的人。好恐怖!三C產品盡量少用。',
-      normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-11-10T06:18:52.830Z',
       normalArticleCategoryCount: 1,
@@ -2344,7 +2302,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_35',
-      tags: [],
       createdAt: '2019-11-13T16:17:15.137Z',
       articleReplies: [
         {
@@ -2378,7 +2335,6 @@ export default {
       appId: 'WEBSITE',
       lastRequestedAt: '2019-11-13T16:17:15.156Z',
       text: 'My experience with burns is this:\nOnce I was cooking some corn and stuck my fork...',
-      normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-11-13T16:17:15.137Z',
       normalArticleCategoryCount: 1,
@@ -2393,7 +2349,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_80',
-      tags: [],
       createdAt: '2018-03-30T12:13:57.322Z',
       articleReplies: [
         {
@@ -2427,7 +2382,6 @@ export default {
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2018-03-30T12:13:57.363Z',
       text: '民眾檢舉交通罰單籲7日不用繳費',
-      normalArticleReplycount: 0,
       updatedAt: '2018-03-30T12:13:57.322Z',
       normalArticleCategoryCount: 1,
     },
@@ -2439,7 +2393,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-10T01:12:00.000Z',
       articleReplies: [
         {
@@ -2507,7 +2460,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_81',
-      tags: [],
       createdAt: '2017-06-24T02:25:38.653Z',
       articleReplies: [
         {
@@ -2572,7 +2524,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_82',
-      tags: [],
       createdAt: '2017-07-10T11:37:00.087Z',
       articleReplies: [
         {
@@ -2629,7 +2580,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_83',
-      tags: [],
       createdAt: '2017-05-14T13:07:55.057Z',
       articleReplies: [
         {
@@ -2711,7 +2661,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-22T04:05:00.000Z',
       articleReplies: [
         {
@@ -2768,7 +2717,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_86',
-      tags: [],
       createdAt: '2017-12-30T01:01:44.438Z',
       articleReplies: [
         {
@@ -2827,7 +2775,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_87',
-      tags: [],
       createdAt: '2019-08-15T02:39:39.532Z',
       articleReplies: [
         {
@@ -2861,7 +2808,6 @@ export default {
       appId: 'RUMORS_LINE_BOT',
       lastRequestedAt: '2019-08-15T02:39:39.597Z',
       text: '運動手錶跟手機互聯，當然手機內所有資料都會進入他們的伺服器（任何品牌都如此）唯獨中國只要發送「詆譭攻擊等圖文」就會鎖定情搜追蹤你。以保護自己及國安角度，供大家參考。',
-      normalArticleReplycount: 0,
       hyperlinks: [],
       updatedAt: '2019-08-15T02:39:39.532Z',
       normalArticleCategoryCount: 1,
@@ -2898,7 +2844,6 @@ export default {
       normalArticleReplyCount: 0,
       normalArticleCategoryCount: 1,
       replyRequestCount: 2,
-      tags: [],
       hyperlinks: [],
       lastRequestedAt: '2020-09-17T12:44:47.688Z',
     },
@@ -2910,7 +2855,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_89',
-      tags: [],
       createdAt: '2018-01-26T02:28:32.022Z',
       articleReplies: [
         {
@@ -2962,7 +2906,6 @@ export default {
         },
       ],
       userId: 'CBUT_user_37',
-      tags: [],
       createdAt: '2017-01-13T03:49:00.000Z',
       articleReplies: [
         {
@@ -3045,7 +2988,6 @@ export default {
       normalArticleReplyCount: 1,
       normalArticleCategoryCount: 1,
       replyRequestCount: 1,
-      tags: [],
       hyperlinks: [],
       lastRequestedAt: '2020-09-26T07:29:51.708Z',
     },
@@ -3094,7 +3036,6 @@ export default {
       normalArticleReplyCount: 1,
       normalArticleCategoryCount: 1,
       replyRequestCount: 1,
-      tags: [],
       hyperlinks: [],
       lastRequestedAt: '2020-09-26T09:39:48.829Z',
     },
@@ -10005,7 +9946,6 @@ export default {
         normalArticleReplyCount: 0,
         normalArticleCategoryCount: 1,
         replyRequestCount: 2,
-        tags: [],
         hyperlinks: [],
         lastRequestedAt: '2020-09-17T12:44:47.688Z',
         appUserId: 'CBUT_user_87',
@@ -10021,7 +9961,6 @@ export default {
           },
         ],
         userId: 'j4S8C_n66M1oaUXCwx_g7G3O5VFjHWL4dbZqq9aiEewD4s8-g',
-        tags: [],
         createdAt: '2020-04-06T04:35:45.919Z',
         articleReplies: [
           {
@@ -10082,7 +10021,6 @@ export default {
           },
         ],
         userId: 'j4S8C_4WVN4mcFb9V8KKu6LT8xXvRud2LWcSa-UjL_qvy0ksw',
-        tags: [],
         createdAt: '2020-02-27T03:27:49.869Z',
         articleReplies: [
           {
@@ -10130,7 +10068,6 @@ export default {
           },
         ],
         userId: 'j4S8C_v8peSS0932LsPFMsF61kNZqh7-ZkQ_2QHV22_C3PXf4',
-        tags: [],
         createdAt: '2017-12-30T01:01:44.438Z',
         articleReplies: [
           {
@@ -10192,7 +10129,6 @@ export default {
           },
         ],
         userId: 'j4S8C_4PNVISSWISKdcDP111lIO_cSmpR1jMjSyzDwLoYDvH4',
-        tags: [],
         createdAt: '2018-03-30T12:13:57.322Z',
         articleReplies: [
           {
@@ -10227,7 +10163,6 @@ export default {
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2018-03-30T12:13:57.363Z',
         text: '民眾檢舉交通罰單籲7日不用繳費',
-        normalArticleReplycount: 0,
         updatedAt: '2018-03-30T12:13:57.322Z',
         normalArticleCategoryCount: 1,
         appUserId: 'CBUT_user_80',
@@ -10240,7 +10175,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-13T03:49:00.000Z',
         articleReplies: [
           {
@@ -10288,7 +10222,6 @@ export default {
           },
         ],
         userId: 'j4S8C_4iGkmTeduiI5SrYlHehwmaS3SX4Nszoyb1oyUWvLMEo',
-        tags: [],
         createdAt: '2017-07-10T11:37:00.087Z',
         articleReplies: [
           {
@@ -10347,7 +10280,6 @@ export default {
           },
         ],
         userId: 'j4S8C_pGTVQioRDsflknEcedoVAbKom5K10ipYSV4rWSq2G_4',
-        tags: [],
         createdAt: '2018-01-07T16:35:06.585Z',
         articleReplies: [
           {
@@ -10406,7 +10338,6 @@ export default {
           },
         ],
         userId: 'j4S8C_RW_vDd8lKq4WdfWYxmVh6sJImYM96kix8X4A6FhRJHI',
-        tags: [],
         createdAt: '2020-03-03T15:37:27.556Z',
         articleReplies: [
           {
@@ -10457,7 +10388,6 @@ export default {
           },
         ],
         userId: 'j4S8C_sJtyYDWJm0yBONBKJix3-poQzSELnS-Xyr7WPZdwvvA',
-        tags: [],
         createdAt: '2020-04-03T01:27:41.969Z',
         articleReplies: [
           {
@@ -10516,7 +10446,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-22T04:05:00.000Z',
         articleReplies: [
           {
@@ -10578,7 +10507,6 @@ export default {
           },
         ],
         userId: 'j4S8C_VSYVIlqF4l_puOdN_Pzu64YnjMc-nM5iu0OWcWTt4xk',
-        tags: [],
         createdAt: '2019-11-10T06:18:52.830Z',
         articleReplies: [
           {
@@ -10624,7 +10552,6 @@ export default {
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2019-11-10T06:18:52.860Z',
         text: '电視新聞報導医生檢查女記者的肺部，發現常使用手機的人，肺部迅速老化，那位女記者才二十多歲，肺部老化，相當四十多歲的人。好恐怖!三C產品盡量少用。',
-        normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-11-10T06:18:52.830Z',
         normalArticleCategoryCount: 1,
@@ -10641,7 +10568,6 @@ export default {
           },
         ],
         userId: 'j4S8C_xhN2O5Ouv6Y6AbEoDULy9Crc1TRdEaQ03ANLtAEJWnY',
-        tags: [],
         createdAt: '2020-04-17T13:11:33.426Z',
         articleReplies: [
           {
@@ -10710,7 +10636,6 @@ export default {
           },
         ],
         userId: 'j4S8C_MKBfQLupvhw4_Pf0ua4s1ag2aNnC7lr88z8Hyx7C31g',
-        tags: [],
         createdAt: '2018-01-26T02:28:32.022Z',
         articleReplies: [
           {
@@ -10763,7 +10688,6 @@ export default {
           },
         ],
         userId: 'j4S8C_nEkrBWbE4FfkBTIV9QMn1exDEGReMdemzfznDgx6nA8',
-        tags: [],
         createdAt: '2017-03-13T14:12:52.385Z',
         articleReplies: [
           {
@@ -10822,7 +10746,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-16T14:55:00.000Z',
         articleReplies: [
           {
@@ -10928,7 +10851,6 @@ export default {
           },
         ],
         userId: 'j4S8C_9V5d6E7GKiGNn1Yv_ifdq_WCxK4GET6BedItZHNN3W0',
-        tags: [],
         createdAt: '2018-12-28T13:18:06.346Z',
         articleReplies: [
           {
@@ -10985,7 +10907,6 @@ export default {
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2018-12-28T13:18:06.372Z',
         text: '奇蹟！燙到後趕快用它！連紅印和水泡都不會有！每家廚房都有，比沖水更有效!：https://youtu.be/EI_oExo38fA',
-        normalArticleReplycount: 0,
         hyperlinks: [
           {
             summary:
@@ -11010,7 +10931,6 @@ export default {
           },
         ],
         userId: 'CBUT_user_35',
-        tags: [],
         createdAt: '2019-11-13T16:17:15.137Z',
         articleReplies: [
           {
@@ -11045,7 +10965,6 @@ export default {
         appId: 'WEBSITE',
         lastRequestedAt: '2019-11-13T16:17:15.156Z',
         text: 'My experience with burns is this:\nOnce I was cooking some corn and stuck my fork...',
-        normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-11-13T16:17:15.137Z',
         normalArticleCategoryCount: 1,
@@ -11058,7 +10977,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-16T12:47:00.000Z',
         articleReplies: [
           {
@@ -11129,7 +11047,6 @@ export default {
           },
         ],
         userId: 'j4S8C_uURhRzjSSV6s0wz7Patvy8Fb2hBM46AgZeTSyZ0OUfk',
-        tags: [],
         createdAt: '2017-11-19T09:35:45.073Z',
         articleReplies: [
           {
@@ -11177,7 +11094,6 @@ export default {
           },
         ],
         userId: 'j4S8C_YWVSKKajD6USiTghIEQzrWT_YKdnVVqVI96-cyS6zWA',
-        tags: [],
         createdAt: '2017-06-24T02:25:38.653Z',
         articleReplies: [
           {
@@ -11244,7 +11160,6 @@ export default {
           },
         ],
         userId: 'j4S8C_igegSRiBLdZh9argcdWuKn3cZzYGaSCes5WLJr-9l2s',
-        tags: [],
         createdAt: '2017-08-29T03:38:35.524Z',
         articleReplies: [
           {
@@ -11317,7 +11232,6 @@ export default {
           },
         ],
         userId: 'j4S8C_Y1PaNolSaA4JExH8wY1ODwOCa4lNbbsPOtxJts305XU',
-        tags: [],
         createdAt: '2019-08-15T02:39:39.532Z',
         articleReplies: [
           {
@@ -11352,7 +11266,6 @@ export default {
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2019-08-15T02:39:39.597Z',
         text: '運動手錶跟手機互聯，當然手機內所有資料都會進入他們的伺服器（任何品牌都如此）唯獨中國只要發送「詆譭攻擊等圖文」就會鎖定情搜追蹤你。以保護自己及國安角度，供大家參考。',
-        normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-08-15T02:39:39.532Z',
         normalArticleCategoryCount: 1,
@@ -11369,7 +11282,6 @@ export default {
           },
         ],
         userId: 'j4S8C_nRWu8ne4K6M1m6ibF8HbOq07hUxK3pvrOD4g7cn-okY',
-        tags: [],
         createdAt: '2019-12-24T02:03:16.857Z',
         articleReplies: [
           {
@@ -11436,7 +11348,6 @@ export default {
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2019-12-24T02:55:11.261Z',
         text: '民進黨已經通過了毒品條例了\n\n校園內可以擁有50克的毒品，才被視同販毒。\n\n台灣除了是(同性戀島)\n(愛滋病島)現在又增加了一個(毒品島)了\n校園毒品零容忍遭封...',
-        normalArticleReplycount: 0,
         hyperlinks: [
           {
             normalizedUrl:
@@ -11462,7 +11373,6 @@ export default {
           },
         ],
         userId: 'qO1C3_lAgNK9-guL13qEJSGROTsi_UZbF5N5WoQ17vnsOrl6s',
-        tags: [],
         createdAt: '2019-03-18T15:31:50.099Z',
         articleReplies: [
           {
@@ -11497,7 +11407,6 @@ export default {
         appId: 'DEVELOPMENT_BACKEND',
         lastRequestedAt: '2019-03-18T15:31:50.146Z',
         text: 'Newsgeist is a horrible event. People are doing nothing here.',
-        normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-03-18T15:31:50.099Z',
         normalArticleCategoryCount: 1,
@@ -11511,7 +11420,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-20T00:58:00.000Z',
         articleReplies: [
           {
@@ -11569,7 +11477,6 @@ export default {
           },
         ],
         userId: 'j4S8C_f0pGq97e0_aH_2-8x0BLaj36xzuu2M1W54ZVcAZ4fM0',
-        tags: [],
         createdAt: '2018-06-15T07:34:36.490Z',
         articleReplies: [
           {
@@ -11604,7 +11511,6 @@ export default {
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2018-06-15T07:34:36.502Z',
         text: '讚！國民黨有史以來打民進黨蔡英文最好的一支廣告.既傳神又生動，大家努力的傳出去https://m.youtube.com/watch?v=VVHf9ni09m4&feature=youtu.be',
-        normalArticleReplycount: 0,
         hyperlinks: [
           {
             summary:
@@ -11630,7 +11536,6 @@ export default {
           },
         ],
         userId: 'CBUT_user_15',
-        tags: [],
         createdAt: '2019-05-16T15:09:42.254Z',
         articleReplies: [
           {
@@ -11665,7 +11570,6 @@ export default {
         appId: 'WEBSITE',
         lastRequestedAt: '2019-05-16T15:09:42.281Z',
         text: '可惡至極的政府亂搞教育政策！這可以秀出來教嗎？這要禍害下一代！',
-        normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-05-16T15:09:42.254Z',
         normalArticleCategoryCount: 1,
@@ -11678,7 +11582,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-18T02:58:00.000Z',
         articleReplies: [
           {
@@ -11726,7 +11629,6 @@ export default {
           },
         ],
         userId: 'j4S8C_FQn8c8K4i67IISzvXVoOPipzRASqSgeBxPLNjReHVyY',
-        tags: [],
         createdAt: '2017-12-24T23:48:52.794Z',
         articleReplies: [
           {
@@ -11779,7 +11681,6 @@ export default {
           },
         ],
         userId: 'j4S8C_pYR1NvuKvLQfho6HCkJWbMqLYFnDzoATlM4SyqsxdEU',
-        tags: [],
         createdAt: '2017-03-05T00:13:37.379Z',
         articleReplies: [
           {
@@ -11835,7 +11736,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-11T08:52:00.000Z',
         articleReplies: [
           {
@@ -11893,7 +11793,6 @@ export default {
           },
         ],
         userId: 'j4S8C_TthEcGGgLb2we2tKAG98NuJq1KJE6Bd2WbQPK7kqG2M',
-        tags: [],
         createdAt: '2020-02-21T02:02:54.455Z',
         articleReplies: [
           {
@@ -11939,7 +11838,6 @@ export default {
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2020-02-21T02:02:55.271Z',
         text: '意大利羅馬周三，下起了從來沒見過，也沒聽說過的石頭雨。這回意大利下的石頭雨就讓人見識了大自然的不可預測，不可控制，不可防範的天災，也再次見識了極端天氣之恐怖！\n...',
-        normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2020-02-21T02:02:54.455Z',
         normalArticleCategoryCount: 1,
@@ -11956,7 +11854,6 @@ export default {
           },
         ],
         userId: 'j4S8C_AunHFdGqCNC2QRUrQ9PSqkcE49Z4JTrkG9mYcgeogm8',
-        tags: [],
         createdAt: '2020-04-26T07:32:15.732Z',
         normalArticleCategoryCount: 1,
         articleReplies: [
@@ -12027,7 +11924,6 @@ export default {
           },
         ],
         userId: 'j4S8C_fqo4vs7i2gmJi3mc1zlp_YgMi2_xyGiHfOR5_eLeYkE',
-        tags: [],
         createdAt: '2019-05-30T13:03:09.773Z',
         articleReplies: [
           {
@@ -12062,7 +11958,6 @@ export default {
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2019-05-30T13:03:09.792Z',
         text: '(moon)A，戀人\n\n他是愛你的，你在他眼中你是是完美的戀人，你的優點缺點他都能夠接受。\n情人眼裡出西施，說的就是他，你們在一起是他最為榮幸的，他覺得你是他一...',
-        normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-05-30T13:03:09.773Z',
         normalArticleCategoryCount: 1,
@@ -12076,7 +11971,6 @@ export default {
           },
         ],
         userId: 'j4S8C_qmqlhUR3yeWRZcuwPI8CP1A7XREZrNc5h3JtIy4q_Lo',
-        tags: [],
         createdAt: '2017-05-27T04:06:18.243Z',
         articleReplies: [
           {
@@ -12145,7 +12039,6 @@ export default {
           },
         ],
         userId: 'j4S8C_ppZEoc7CPAXLOlzNOj3zwN_re6FKnwtjIiMmzS0_TFk',
-        tags: [],
         createdAt: '2019-04-17T06:56:36.132Z',
         articleReplies: [
           {
@@ -12180,7 +12073,6 @@ export default {
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2019-04-17T06:56:36.153Z',
         text: '日本人砍台灣樹林比台灣人砍的還要多?',
-        normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-04-17T06:56:36.132Z',
         normalArticleCategoryCount: 1,
@@ -12198,7 +12090,6 @@ export default {
           },
         ],
         userId: 'CBUT_user_35',
-        tags: [],
         createdAt: '2019-04-15T16:38:11.456Z',
         articleReplies: [
           {
@@ -12233,7 +12124,6 @@ export default {
         appId: 'WEBSITE',
         lastRequestedAt: '2019-04-15T16:38:11.473Z',
         text: '一名網友在「韓國瑜加油團」臉書社團發文指出，經在高雄市政府工作的朋友告知，韓國瑜此行訪美，川普特別透過秘密管道向高市府傳達求見意願，還強調之所以會找上韓國瑜，是...',
-        normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2019-04-15T16:38:11.456Z',
         normalArticleCategoryCount: 1,
@@ -12284,7 +12174,6 @@ export default {
         normalArticleReplyCount: 1,
         normalArticleCategoryCount: 1,
         replyRequestCount: 1,
-        tags: [],
         hyperlinks: [],
         lastRequestedAt: '2020-09-26T07:29:51.708Z',
       },
@@ -12334,7 +12223,6 @@ export default {
         normalArticleReplyCount: 1,
         normalArticleCategoryCount: 1,
         replyRequestCount: 1,
-        tags: [],
         hyperlinks: [],
         lastRequestedAt: '2020-09-26T09:39:48.829Z',
       },
@@ -12346,7 +12234,6 @@ export default {
           },
         ],
         userId: 'j4S8C_lQfJ8fARjHNzkXa4s0ZENAkcWbKn_UOARG7VY11af8E',
-        tags: [],
         createdAt: '2017-11-14T23:42:12.624Z',
         articleReplies: [
           {
@@ -12402,7 +12289,6 @@ export default {
           },
         ],
         userId: 'Z0k1e_3tpHtWzO6L-HfjoQpFDln3K3YQHkvLIUzCBUhDznwqU',
-        tags: [],
         createdAt: '2017-01-10T01:12:00.000Z',
         articleReplies: [
           {
@@ -12482,7 +12368,6 @@ export default {
           },
         ],
         userId: 'j4S8C_rjLUCvhHqmYeT37nsWvYMXt7o0r3Mbniqdr7qU5LXgo',
-        tags: [],
         createdAt: '2018-10-23T09:21:35.323Z',
         articleReplies: [
           {
@@ -12561,7 +12446,6 @@ export default {
         appId: 'RUMORS_LINE_BOT',
         lastRequestedAt: '2018-12-05T13:22:22.965Z',
         text: '大法官已釋憲，如果年底公投沒達到500萬票，明年五月台灣將成為亞洲第一個同性可合法結婚的國家。\n\n外國同性戀藉結婚來台治療愛滋病，都是健保支付，全民買單。\n\n學...',
-        normalArticleReplycount: 0,
         hyperlinks: [],
         updatedAt: '2018-10-30T01:50:21.966Z',
         normalArticleCategoryCount: 1,
@@ -12575,7 +12459,6 @@ export default {
           },
         ],
         userId: 'j4S8C_Z8nYqKv190EeosqG5O1H8aeTg64m6xLkRyZOTxSYQ7A',
-        tags: [],
         createdAt: '2017-08-01T08:45:13.720Z',
         articleReplies: [
           {
@@ -12631,7 +12514,6 @@ export default {
           },
         ],
         userId: 'j4S8C_Yk4N-rJ2LtcKZc0Wa2smuJQNB5I7mmo-d2j1k-nyfSo',
-        tags: [],
         createdAt: '2017-05-14T13:07:55.057Z',
         articleReplies: [
           {

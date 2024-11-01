@@ -94,12 +94,10 @@ export default {
     updatedAt: '2020-01-01T00:00:00.000Z',
   },
   '/users/doc/user1': {
-    id: 'user1',
     appId: 'WEBSITE',
     name: 'user 1',
   },
   '/users/doc/user2': {
-    id: 'user2',
     appId: 'WEBSITE',
     name: 'user 2',
   },

@@ -4,7 +4,6 @@ import client from 'util/client';
 import MockDate from 'mockdate';
 import fixtures from '../__fixtures__/UpdateUser';
 
-const testUser1 = fixtures['/users/doc/testUser1'];
 const testUser2 = fixtures['/users/doc/testUser2'];
 
 const updateUser = (variableString, userId) =>
@@ -75,77 +74,77 @@ describe('UpdateUser', () => {
   it('should set user slug field correctly', async () => {
     const { data, errors } = await updateUser(
       `slug: "test-user-1"`,
-      testUser1.id
+      'testUser1'
     );
 
     expect(errors).toBe(undefined);
     expect(data).toMatchSnapshot();
 
-    expect(await getUser(testUser1.id)).toMatchSnapshot();
+    expect(await getUser('testUser1')).toMatchSnapshot();
   });
 
   it('cannot set duplicated slug', async () => {
     const { errors } = await updateUser(
       `slug: "${testUser2.slug}"`,
-      testUser1.id
+      'testUser1'
     );
 
     expect(errors).toMatchSnapshot();
 
-    expect(await getUser(testUser1.id)).toMatchSnapshot();
+    expect(await getUser('testUser1')).toMatchSnapshot();
   });
 
   it('should set all provided fields correctly', async () => {
     const { data, errors } = await updateUser(
       `slug: "test-user-3", name: "new name", avatarType: Gravatar, bio: "blahblahblah"`,
-      testUser1.id
+      'testUser1'
     );
 
     expect(errors).toBe(undefined);
     expect(data).toMatchSnapshot();
 
-    expect(await getUser(testUser1.id)).toMatchSnapshot();
+    expect(await getUser('testUser1')).toMatchSnapshot();
   });
 
   it('should not set unsupported fields', async () => {
     const { errors } = await updateUser(
       `email: "newemail@example.com"`,
-      testUser1.id
+      'testUser1'
     );
 
     expect(errors).toMatchSnapshot();
 
-    expect(await getUser(testUser1.id)).toMatchSnapshot();
+    expect(await getUser('testUser1')).toMatchSnapshot();
   });
 
   it('should not unset fields', async () => {
-    const { errors } = await updateUser(`slug: "", name: null`, testUser1.id);
+    const { errors } = await updateUser(`slug: "", name: null`, 'testUser1');
 
     expect(errors).toMatchSnapshot();
 
-    expect(await getUser(testUser1.id)).toMatchSnapshot();
+    expect(await getUser('testUser1')).toMatchSnapshot();
   });
 
   it('should preserve avatarData field for non openpeeps avatar', async () => {
     let { data, errors } = await updateUser(
       `avatarData:"""{"key":"value"}""", avatarType: OpenPeeps`,
-      testUser1.id
+      'testUser1'
     );
     expect(errors).toBe(undefined);
     expect(data).toMatchSnapshot('openpeeps');
 
-    ({ data, errors } = await updateUser(`avatarType: Facebook`, testUser1.id));
+    ({ data, errors } = await updateUser(`avatarType: Facebook`, 'testUser1'));
     expect(errors).toBe(undefined);
     expect(data).toMatchSnapshot('facebook');
 
     ({ data, errors } = await updateUser(
       `avatarType: Github, avatarData:"""{"key":"123"}"""`,
-      testUser1.id
+      'testUser1'
     ));
     expect(errors).toBe(undefined);
     expect(data).toMatchSnapshot('github');
 
-    expect(await getUser(testUser1.id)).toMatchSnapshot();
+    expect(await getUser('testUser1')).toMatchSnapshot();
   });
 
   afterAll(() => {

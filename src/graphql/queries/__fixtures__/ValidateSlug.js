@@ -1,6 +1,5 @@
 export default {
   '/users/doc/test-user': {
-    id: 'test-user',
     slug: 'taken',
     name: 'test user',
     email: 'secret@secret.com',

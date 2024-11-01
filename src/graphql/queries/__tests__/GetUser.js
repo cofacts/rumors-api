@@ -2,8 +2,14 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/GetUser';
 
-const currentUser = fixtures['/users/doc/current-user'];
-const testEmailUser = fixtures['/users/doc/test-email-user'];
+const currentUser = {
+  ...fixtures['/users/doc/current-user'],
+  id: 'current-user',
+};
+const testEmailUser = {
+  ...fixtures['/users/doc/test-email-user'],
+  id: 'test-email-user',
+};
 describe('GetUser', () => {
   beforeAll(() => loadFixtures(fixtures));
 
