@@ -11,13 +11,17 @@ import getAllDocs from 'util/getAllDocs';
 import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
 import { updateArticleReplyByFeedbacks } from 'graphql/mutations/CreateOrUpdateArticleReplyFeedback';
 
+import type { ReplyRequest } from 'rumors-db/schema/replyrequests';
+import type { Article } from 'rumors-db/schema/articles';
+import type { ArticleReplyFeedback } from 'rumors-db/schema/articlereplyfeedbacks';
+
 /**
  * Update user to write blockedReason. Throws if user does not exist.
  *
- * @param {string} userId
- * @param {string} blockedReason
+ * @param userId
+ * @param blockedReason
  */
-async function writeBlockedReasonToUser(userId, blockedReason) {
+async function writeBlockedReasonToUser(userId: string, blockedReason: string) {
   try {
     const {
       body: { result: setBlockedReasonResult },
@@ -38,7 +42,12 @@ async function writeBlockedReasonToUser(userId, blockedReason) {
     }
   } catch (e) {
     /* istanbul ignore else */
-    if (e.message === 'document_missing_exception') {
+    if (
+      e &&
+      typeof e === 'object' &&
+      'message' in e &&
+      e.message === 'document_missing_exception'
+    ) {
       throw new Error(`User with ID=${userId} does not exist`);
     }
 
@@ -49,20 +58,20 @@ async function writeBlockedReasonToUser(userId, blockedReason) {
 /**
  * Convert all reply requests with NORMAL status by the user to BLOCKED status.
  *
- * @param {userId} userId
+ * @param userId
  */
-async function processReplyRequests(userId) {
+async function processReplyRequests(userId: string) {
   const NORMAL_REPLY_REQUEST_QUERY = {
     bool: {
       must: [{ term: { status: 'NORMAL' } }, { term: { userId } }],
     },
   };
 
-  const articleIdsWithNormalReplyRequests = [];
+  const articleIdsWithNormalReplyRequests: string[] = [];
 
   for await (const {
     _source: { articleId },
-  } of getAllDocs('replyrequests', NORMAL_REPLY_REQUEST_QUERY)) {
+  } of getAllDocs<ReplyRequest>('replyrequests', NORMAL_REPLY_REQUEST_QUERY)) {
     articleIdsWithNormalReplyRequests.push(articleId);
   }
 
@@ -133,9 +142,9 @@ async function processReplyRequests(userId) {
 /**
  * Convert all article replies with NORMAL status by the user to BLOCKED status.
  *
- * @param {userId} userId
+ * @param userId
  */
-async function processArticleReplies(userId) {
+async function processArticleReplies(userId: string) {
   const NORMAL_ARTICLE_REPLY_QUERY = {
     nested: {
       path: 'articleReplies',
@@ -158,11 +167,13 @@ async function processArticleReplies(userId) {
     },
   };
 
-  const articleRepliesToProcess = [];
+  const articleRepliesToProcess: Array<
+    Article['articleReplies'][0] & { articleId: string }
+  > = [];
   for await (const {
     _id,
     _source: { articleReplies },
-  } of getAllDocs('articles', NORMAL_ARTICLE_REPLY_QUERY)) {
+  } of getAllDocs<Article>('articles', NORMAL_ARTICLE_REPLY_QUERY)) {
     articleRepliesToProcess.push(
       ...articleReplies
         .filter((ar) => {
@@ -198,9 +209,9 @@ async function processArticleReplies(userId) {
 /**
  * Convert all article reply feedbacks with NORMAL status by the user to BLOCKED status.
  *
- * @param {userId} userId
+ * @param userId
  */
-async function processArticleReplyFeedbacks(userId) {
+async function processArticleReplyFeedbacks(userId: string) {
   const NORMAL_FEEDBACK_QUERY = {
     bool: {
       must: [{ term: { status: 'NORMAL' } }, { term: { userId } }],
@@ -212,7 +223,10 @@ async function processArticleReplyFeedbacks(userId) {
 
   for await (const {
     _source: { articleId, replyId },
-  } of getAllDocs('articlereplyfeedbacks', NORMAL_FEEDBACK_QUERY)) {
+  } of getAllDocs<ArticleReplyFeedback>(
+    'articlereplyfeedbacks',
+    NORMAL_FEEDBACK_QUERY
+  )) {
     articleReplyIdsWithNormalFeedbacks.push({ articleId, replyId });
   }
 
@@ -244,8 +258,8 @@ async function processArticleReplyFeedbacks(userId) {
     i,
     { articleId, replyId },
   ] of articleReplyIdsWithNormalFeedbacks.entries()) {
-    const feedbacks = [];
-    for await (const { _source: feedback } of getAllDocs(
+    const feedbacks: ArticleReplyFeedback[] = [];
+    for await (const { _source: feedback } of getAllDocs<ArticleReplyFeedback>(
       'articlereplyfeedbacks',
       {
         bool: {
@@ -276,7 +290,7 @@ async function processArticleReplyFeedbacks(userId) {
  *
  * @param {string} userId
  */
-async function processArticles(userId) {
+async function processArticles(userId: string) {
   const NORMAL_ARTICLE_QUERY = {
     bool: {
       must: [{ term: { status: 'NORMAL' } }, { term: { userId } }],
@@ -300,10 +314,13 @@ async function processArticles(userId) {
   console.log('Article status update result', updateByQueryResult);
 }
 
-/**
- * @param {object} args
- */
-async function main({ userId, blockedReason } = {}) {
+async function main({
+  userId,
+  blockedReason,
+}: {
+  userId: string;
+  blockedReason: string;
+}) {
   await writeBlockedReasonToUser(userId, blockedReason);
   await processArticles(userId);
   await processReplyRequests(userId);
@@ -315,7 +332,7 @@ export default main;
 
 /* istanbul ignore if */
 if (require.main === module) {
-  const argv = yargs
+  const argv = await yargs
     .options({
       userId: {
         alias: 'u',

@@ -22,6 +22,8 @@ describe('CreateCategory', () => {
       { userId: 'test', appId: 'test' }
     );
 
+    expect(errors).toBeUndefined();
+
     const categoryId = data.CreateCategory.id;
     const { body: category } = await client.get({
       index: 'categories',
@@ -29,7 +31,6 @@ describe('CreateCategory', () => {
       id: categoryId,
     });
 
-    expect(errors).toBeUndefined();
     expect(category._source).toMatchSnapshot('created category');
 
     // Cleanup
