@@ -332,7 +332,7 @@ export default main;
 
 /* istanbul ignore if */
 if (require.main === module) {
-  const argv = await yargs
+  const argv = yargs
     .options({
       userId: {
         alias: 'u',
@@ -349,5 +349,7 @@ if (require.main === module) {
     })
     .help('help').argv;
 
-  main(argv).catch(console.error);
+  // yargs is typed as a  promise for some reason, make Typescript happy here
+  //
+  Promise.resolve(argv).then(main).catch(console.error);
 }
