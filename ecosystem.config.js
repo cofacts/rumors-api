@@ -12,8 +12,8 @@ module.exports = {
       error_file: '/dev/null',
     },
     {
-      name: 'command-listener',
-      script: 'build/commandListener.js',
+      name: 'rumors-admin-api',
+      script: 'build/adm/index.js',
       instances: 1,
       exec_mode: 'cluster',
       out_file: '/dev/null',
