@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import { createServer } from 'node:http';
 import { createRouter, Response } from 'fets';
 
