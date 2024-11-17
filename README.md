@@ -54,6 +54,7 @@ $ docker-compose up
 This will:
 
 * rumors-api server on `http://localhost:5000`. It will be re-started when you update anyfile.
+* rumors-admin-api server on `http://localhost:5500`. It will be re-started when you update anyfile.
 * rumors-site on `http://localhost:3000`. You can populate session cookie by "logging-in" using the site
   (when credentials are in-place in `.env`).
   However, it cannot do server-side rendering properly because rumors-site container cannot access
@@ -164,8 +165,15 @@ Run the docker image on local machine, then visit `http://localhost:5000`.
 (To test functions involving DB, ElasticSearch DB must work as `.env` specified.)
 
 ```
-$ docker run --rm -it -p 5000:5000 --env-file .env cofacts/rumors-api
+$ docker run --rm -it -p 5000:5000 -p 5500:5500 --env-file .env cofacts/rumors-api
 ```
+
+## Admin APIs
+
+The Admin APIs running on `http://localhost:5500` are used for managing the data in the database.
+
+On production environments, the Admin APIs are protected by Cloudflare Zero Trust and should be accessed
+via Cloudflare [Service Tokens](https://developers.cloudflare.com/cloudflare-one/identity/service-tokens/#connect-your-service-to-access).
 
 ## Cronjob / management scripts
 
