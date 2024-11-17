@@ -9,6 +9,7 @@ import { Type } from '@sinclair/typebox';
 import { useAuditLog, useAuth } from './util';
 
 import pingHandler from './handlers/ping';
+import blockUser from './handlers/moderation/blockUser';
 
 const shouldAuth = process.env.NODE_ENV === 'production';
 
@@ -46,10 +47,33 @@ const router = createRouter({
         { additionalProperties: false }
       ),
     },
-    responses: { 200: { type: 'string' } },
-  },
-  handler: async (request) => Response.json(pingHandler(await request.json())),
-});
+    handler: async (request) =>
+      Response.json(pingHandler(await request.json())),
+  })
+  .route({
+    method: 'POST',
+    path: '/moderation/blockUser',
+    description:
+      'Block the specified user by marking all their content as BLOCKED.',
+    schemas: {
+      request: {
+        json: Type.Object(
+          {
+            userId: Type.String({
+              description: 'The user ID to block',
+            }),
+            blockedReason: Type.String({
+              description: 'The URL to the announcement that blocks this user',
+            }),
+          },
+          { additionalProperties: false }
+        ),
+      },
+      responses: { 200: Type.Object({ success: Type.Boolean() }) },
+    },
+    handler: async (request) =>
+      Response.json(await blockUser(await request.json())),
+  });
 
 createServer(router).listen(process.env.ADM_PORT, () => {
   console.log(`[Adm] API is running on port ${process.env.ADM_PORT}`);

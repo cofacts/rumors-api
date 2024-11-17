@@ -1,11 +1,10 @@
 /**
  * Given userId & block reason, blocks the user and marks all their existing ArticleReply,
  * ArticleReplyFeedback, ReplyRequest, ArticleCategory, ArticleCategoryFeedback as BLOCKED.
+ *
+ * Please announce that the user will be blocked openly with a URL first.
  */
 
-import 'dotenv/config';
-import yargs from 'yargs';
-import { SingleBar } from 'cli-progress';
 import client from 'util/client';
 import getAllDocs from 'util/getAllDocs';
 import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
@@ -191,8 +190,6 @@ async function processArticleReplies(userId: string) {
   }
 
   console.log('Updating article replies...');
-  const bar = new SingleBar({ stopOnComplete: true });
-  bar.start(articleRepliesToProcess.length, 0);
   for (const { articleId, replyId, userId, appId } of articleRepliesToProcess) {
     await updateArticleReplyStatus({
       articleId,
@@ -201,9 +198,7 @@ async function processArticleReplies(userId: string) {
       appId,
       status: 'BLOCKED',
     });
-    bar.increment();
   }
-  bar.stop();
 }
 
 /**
@@ -326,30 +321,8 @@ async function main({
   await processReplyRequests(userId);
   await processArticleReplies(userId);
   await processArticleReplyFeedbacks(userId);
+
+  return { success: true };
 }
 
 export default main;
-
-/* istanbul ignore if */
-if (require.main === module) {
-  const argv = yargs
-    .options({
-      userId: {
-        alias: 'u',
-        description: 'The user ID to block',
-        type: 'string',
-        demandOption: true,
-      },
-      blockedReason: {
-        alias: 'r',
-        description: 'The URL to the annoucement that blocks this user',
-        type: 'string',
-        demandOption: true,
-      },
-    })
-    .help('help').argv;
-
-  // yargs is typed as a  promise for some reason, make Typescript happy here
-  //
-  Promise.resolve(argv).then(main).catch(console.error);
-}
