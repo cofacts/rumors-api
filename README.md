@@ -168,12 +168,12 @@ Run the docker image on local machine, then visit `http://localhost:5000`.
 $ docker run --rm -it -p 5000:5000 -p 5500:5500 --env-file .env cofacts/rumors-api
 ```
 
-## Admin APIs
+## Admin API
 
-The Admin APIs running on `http://localhost:5500` are used for managing the data in the database.
+The Admin API running on `http://localhost:5500` is used for managing the data in the database.
 
-On production environments, the Admin APIs are protected by Cloudflare Zero Trust and should be accessed
-via Cloudflare [Service Tokens](https://developers.cloudflare.com/cloudflare-one/identity/service-tokens/#connect-your-service-to-access).
+On production environments, the Admin APIs are protected by Cloudflare Zero Trust.
+Only users and service tokens specified in Cloudflare Access can access the Admin API.
 
 ## Cronjob / management scripts
 
