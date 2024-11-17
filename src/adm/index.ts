@@ -1,27 +1,53 @@
 import 'dotenv/config';
 
 import { createServer } from 'node:http';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { createRouter, Response } from 'fets';
+import { Type } from '@sinclair/typebox';
+
 import { useAuditLog } from './util';
 
+import pingHandler from './handlers/ping';
+
+const shouldAuth = true; // process.env.NODE_ENV === 'production';
+
+const [titleLine, ...readmeLines] = readFileSync(
+  path.resolve(__dirname, 'README.md'),
+  'utf-8'
+).split('\n');
+
 const router = createRouter({
-  // Include audit log plugin and block non-cloudflare requests only in production
-  //
-  plugins: process.env.NODE_ENV === 'production' ? [useAuditLog()] : [],
-}).route({
-  method: 'GET',
-  path: '/greetings',
-  schemas: {
-    responses: {
-      200: {
-        type: 'object',
-        properties: {
-          hello: { type: 'string' },
-        },
-      },
+  openAPI: {
+    info: {
+      title: titleLine.replace(/^#+\s+/, ''),
+      version: '1.0.0',
+      description: shouldAuth ? readmeLines.join('\n').trim() : '',
     },
   },
-  handler: () => Response.json({ hello: 'world' }),
+
+  // Include audit log plugin and block non-cloudflare requests only in production
+  //
+  plugins: shouldAuth ? [useAuditLog()] : [],
+}).route({
+  method: 'POST',
+  path: '/ping',
+  description:
+    'Please use this harmless endpoint to test if your connection with API is wired up correctly.',
+  schemas: {
+    request: {
+      json: Type.Object(
+        {
+          echo: Type.String({
+            description: 'Text that will be included in response message',
+          }),
+        },
+        { additionalProperties: false }
+      ),
+    },
+    responses: { 200: { type: 'string' } },
+  },
+  handler: async (request) => Response.json(pingHandler(await request.json())),
 });
 
 createServer(router).listen(process.env.ADM_PORT, () => {

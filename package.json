@@ -5,10 +5,10 @@
   "description": "GraphQL API server for clients like rumors-site and rumors-line-bot",
   "main": "index.js",
   "repository": {
-    "url": "git@github.com:MrOrz/rumors-api.git",
+    "url": "git@github.com:cofacts/rumors-api.git",
     "type": "git"
   },
-  "author": "MrOrz <johnsonliang7@gmail.com>",
+  "author": "Cofacts WG <hi@cofacts.tw>",
   "license": "MIT",
   "scripts": {
     "dev": "pm2-dev start --timestamp process-dev.json",
@@ -31,6 +31,7 @@
     "@google-cloud/vision": "^3.1.4",
     "@grpc/grpc-js": "^1.6.7",
     "@grpc/proto-loader": "^0.5.0",
+    "@sinclair/typebox": "^0.33.22",
     "apollo-server-koa": "^2.11.0",
     "cli-progress": "^3.9.1",
     "dataloader": "^2.0.0",

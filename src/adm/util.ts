@@ -73,9 +73,14 @@ export function useAuditLog(): RouterPlugin<any, any> {
           })
         ).payload;
       } catch (e) {
-        logger.error(e, 'Cloudflare Access token verification failed');
+        logger.error(e, 'Cloudflare access token verification failed');
         throw new HTTPError(403, 'Unauthorized', {});
       }
+
+      const shouldIncludeBody =
+        'common_name' in payload /* Called via service tokens */ ||
+        request.headers.get('content-type') ===
+          'application/json'; /* Probably from Swagger UI */
 
       logger.info(
         {
@@ -85,20 +90,27 @@ export function useAuditLog(): RouterPlugin<any, any> {
               TOKEN_KEYS_TO_INCLUDE.has(key)
             )
           ),
+          req: shouldIncludeBody ? await request.json() : undefined,
         },
-        'Cloudflare Access token verified'
+        'Req start'
       );
     },
 
     async onResponse({ request, response }) {
+      const shouldIncludeBody =
+        response.ok &&
+        (response.headers.get('content-type') ?? '').startsWith(
+          'application/json'
+        );
+
       logger.info(
         {
           id: request.headers.get('cf-ray'),
           url: request.url,
           status: response.status,
-          res: response.ok ? await response.json() : undefined,
+          res: shouldIncludeBody ? await response.json() : undefined,
         },
-        'Request completed'
+        'Req end'
       );
     },
   };
