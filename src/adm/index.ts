@@ -2,8 +2,13 @@ import 'dotenv/config';
 
 import { createServer } from 'node:http';
 import { createRouter, Response } from 'fets';
+import { useAuditLog } from './util';
 
-const router = createRouter().route({
+const router = createRouter({
+  // Include audit log plugin and block non-cloudflare requests only in production
+  //
+  plugins: process.env.NODE_ENV === 'production' ? [useAuditLog()] : [],
+}).route({
   method: 'GET',
   path: '/greetings',
   schemas: {

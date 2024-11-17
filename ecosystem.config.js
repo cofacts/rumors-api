@@ -14,6 +14,9 @@ module.exports = {
     {
       name: 'rumors-admin-api',
       script: 'build/adm/index.js',
+      env_production: {
+        NODE_ENV: 'production',
+      },
       instances: 1,
       exec_mode: 'cluster',
       out_file: '/dev/null',
