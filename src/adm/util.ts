@@ -33,7 +33,7 @@ const TEAM_DOMAIN = process.env.CLOUDFLARE_ACCESS_TEAM_DOMAIN;
 const CERTS_URL = `${TEAM_DOMAIN}/cdn-cgi/access/certs`;
 const JWKS = createRemoteJWKSet(new URL(CERTS_URL));
 
-const logger = pino();
+const logger = pino({ name: 'Admin API' });
 
 /**
  * Log request, response and user information.
