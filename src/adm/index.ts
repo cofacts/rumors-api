@@ -69,7 +69,9 @@ const router = createRouter({
           { additionalProperties: false }
         ),
       },
-      responses: { 200: Type.Object({ success: Type.Boolean() }) },
+      responses: {
+        200: Type.Object({ success: Type.Boolean() }),
+      },
     },
     handler: async (request) =>
       Response.json(await blockUser(await request.json())),

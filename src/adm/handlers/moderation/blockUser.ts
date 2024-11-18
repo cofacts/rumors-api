@@ -4,6 +4,7 @@
  *
  * Please announce that the user will be blocked openly with a URL first.
  */
+import { HTTPError } from 'fets';
 
 import client from 'util/client';
 import getAllDocs from 'util/getAllDocs';
@@ -47,7 +48,7 @@ async function writeBlockedReasonToUser(userId: string, blockedReason: string) {
       'message' in e &&
       e.message === 'document_missing_exception'
     ) {
-      throw new Error(`User with ID=${userId} does not exist`);
+      throw new HTTPError(400, `User with ID=${userId} does not exist`);
     }
 
     throw e;
