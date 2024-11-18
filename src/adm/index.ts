@@ -10,7 +10,7 @@ import { useAuditLog } from './util';
 
 import pingHandler from './handlers/ping';
 
-const shouldAuth = true; // process.env.NODE_ENV === 'production';
+const shouldAuth = process.env.NODE_ENV === 'production';
 
 const [titleLine, ...readmeLines] = readFileSync(
   path.resolve(__dirname, 'README.md'),
