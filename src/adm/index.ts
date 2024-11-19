@@ -6,7 +6,7 @@ import path from 'node:path';
 import { createRouter, Response } from 'fets';
 import { Type } from '@sinclair/typebox';
 
-import { useAuditLog } from './util';
+import { useAuditLog, useAuth } from './util';
 
 import pingHandler from './handlers/ping';
 
@@ -26,9 +26,10 @@ const router = createRouter({
     },
   },
 
-  // Include audit log plugin and block non-cloudflare requests only in production
-  //
-  plugins: shouldAuth ? [useAuditLog()] : [],
+  plugins: [
+    ...(shouldAuth ? [useAuth()] : []), // block non-cloudflare requests only in production
+    useAuditLog(),
+  ],
 }).route({
   method: 'POST',
   path: '/ping',

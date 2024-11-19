@@ -15,14 +15,34 @@ const HEADERS_TO_INCLUDE = new Set([
  *
  * Ref: https://developers.cloudflare.com/cloudflare-one/identity/authorization-cookie/application-token/
  * */
-const TOKEN_KEYS_TO_INCLUDE = new Set([
+const TOKEN_KEYS = [
   'aud',
   'exp',
   'iat',
   'country',
   'email', // For identity-based auth
   'common_name', // For service token auth
-]);
+] as const;
+const TOKEN_KEY_SET = new Set(TOKEN_KEYS as ReadonlyArray<string>);
+
+type CloudflareJWTPayload = JWTPayload & {
+  country?: string;
+  email?: string;
+  common_name?: string;
+};
+
+/**
+ * Attach user & userId to global Reqest
+ * @ref: https://github.com/ardatan/whatwg-node/blob/master/packages/server-plugin-cookies/src/useCookies.ts
+ */
+declare global {
+  interface Request {
+    /** Currently logged-in admin's token information */
+    user?: Pick<CloudflareJWTPayload, (typeof TOKEN_KEYS)[number]>;
+    /** Currently logged-in admin's user ID for use in Cofacts DB */
+    userId?: string;
+  }
+}
 
 /**
  * Verifying Cloudflare Access token.
@@ -35,26 +55,9 @@ const JWKS = createRemoteJWKSet(new URL(CERTS_URL));
 
 const logger = pino({ name: 'Admin API' });
 
-/**
- * Log request, response and user information.
- *
- * Abort request if it's not coming from Cloudflare Access.
- *
- * Ref: https://the-guild.dev/openapi/fets/server/plugins
- */
-export function useAuditLog(): RouterPlugin<any, any> {
+export function useAuth(): RouterPlugin<any, any> {
   return {
     async onRequest({ request }) {
-      const requestInfo = {
-        id: request.headers.get('cf-ray'),
-        url: request.url,
-        headers: Object.fromEntries(
-          [...request.headers.entries()].filter(([key]) =>
-            HEADERS_TO_INCLUDE.has(key)
-          )
-        ),
-      };
-
       const token = request.headers.get('cf-access-jwt-assertion');
       if (!token) {
         throw new HTTPError(
@@ -65,7 +68,7 @@ export function useAuditLog(): RouterPlugin<any, any> {
         );
       }
 
-      let payload: JWTPayload;
+      let payload: CloudflareJWTPayload;
       try {
         payload = (
           await jwtVerify(token, JWKS, {
@@ -77,17 +80,39 @@ export function useAuditLog(): RouterPlugin<any, any> {
         throw new HTTPError(403, 'Unauthorized', {});
       }
 
+      request.user = Object.fromEntries(
+        Object.entries(payload).filter(([key]) => TOKEN_KEY_SET.has(key))
+      );
+      request.userId = payload.email ?? payload.common_name;
+    },
+  };
+}
+
+/**
+ * Log request, response and user information.
+ *
+ * Abort request if it's not coming from Cloudflare Access.
+ *
+ * Ref: https://the-guild.dev/openapi/fets/server/plugins
+ */
+export function useAuditLog(): RouterPlugin<any, any> {
+  return {
+    async onRequest({ request }) {
+      const { url, user, userId } = request;
       const shouldIncludeBody =
-        'common_name' in payload /* Called via service tokens */ ||
+        'common_name' in (request.user ?? {}) /* Called via service tokens */ ||
         request.headers.get('content-type') ===
           'application/json'; /* Probably from Swagger UI */
 
       logger.info(
         {
-          ...requestInfo,
-          user: Object.fromEntries(
-            Object.entries(payload).filter(([key]) =>
-              TOKEN_KEYS_TO_INCLUDE.has(key)
+          url,
+          user,
+          userId,
+          id: request.headers.get('cf-ray'),
+          headers: Object.fromEntries(
+            [...request.headers.entries()].filter(([key]) =>
+              HEADERS_TO_INCLUDE.has(key)
             )
           ),
           req: shouldIncludeBody ? await request.json() : undefined,
