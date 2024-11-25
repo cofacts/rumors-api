@@ -54,6 +54,7 @@ $ docker-compose up
 This will:
 
 * rumors-api server on `http://localhost:5000`. It will be re-started when you update anyfile.
+* rumors-admin-api server on `http://localhost:5500`. It will be re-started when you update anyfile.
 * rumors-site on `http://localhost:3000`. You can populate session cookie by "logging-in" using the site
   (when credentials are in-place in `.env`).
   However, it cannot do server-side rendering properly because rumors-site container cannot access
@@ -164,8 +165,15 @@ Run the docker image on local machine, then visit `http://localhost:5000`.
 (To test functions involving DB, ElasticSearch DB must work as `.env` specified.)
 
 ```
-$ docker run --rm -it -p 5000:5000 --env-file .env cofacts/rumors-api
+$ docker run --rm -it -p 5000:5000 -p 5500:5500 --env-file .env cofacts/rumors-api
 ```
+
+## Admin API
+
+The Admin API running on `http://localhost:5500` is used for managing the data in the database.
+
+On production environments, the Admin APIs are protected by Cloudflare Zero Trust.
+Only users and service tokens specified in Cloudflare Access can access the Admin API.
 
 ## Cronjob / management scripts
 
@@ -204,10 +212,6 @@ $ node_modules/.bin/babel-node src/scripts/fetchStatsFromGA.js
 ```
 
 -  For more options, run the above script with `--help` or see the file level comments.
-
-### Pulling administrative commands from Google Pub/Sub
-
-When API server starts up, it will link to Google Pub/Sub topic if and only if env var `ADMIN_PUBSUB_TOPIC` is set, using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
 
 ### Removing article-reply from database
 -  To set an article-reply to deleted state on production, run:

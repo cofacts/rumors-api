@@ -3,11 +3,12 @@
     "name": "rumors-api",
     "script": "src/index.js",
     "watch": ["src", "test"],
-    "interpreter": "./node_modules/.bin/babel-node"
+    "interpreter": "./node_modules/.bin/babel-node",
+    "interpreter_args": "--extensions .ts,.js"
   }, {
-    "name": "command-listener",
-    "script": "src/commandListener.ts",
-    "watch": ["src"],
+    "name": "rumors-admin-api",
+    "script": "src/adm/index.ts",
+    "watch": ["src/adm"],
     "interpreter": "./node_modules/.bin/babel-node",
     "interpreter_args": "--extensions .ts,.js"
   }]

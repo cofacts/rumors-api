@@ -40,6 +40,7 @@ services:
       URL_RESOLVER_URL: "url-resolver:4000"
     ports:
       - "5000:5000"
+      - "5500:5500"
 
   site:
     image: cofacts/rumors-site:latest-en

@@ -21,7 +21,7 @@ FROM node:18-alpine3.18
 RUN apk update && apk add ffmpeg
 
 WORKDIR /srv/www
-EXPOSE 5000
+EXPOSE 5000 5500
 ENTRYPOINT NODE_ENV=production npm start
 
 COPY --from=builder /srv/www/node_modules ./node_modules
