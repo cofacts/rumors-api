@@ -31,21 +31,23 @@ const router = createRouter({
     ...(shouldAuth ? [useAuth()] : []), // block non-cloudflare requests only in production
     useAuditLog(),
   ],
-}).route({
-  method: 'POST',
-  path: '/ping',
-  description:
-    'Please use this harmless endpoint to test if your connection with API is wired up correctly.',
-  schemas: {
-    request: {
-      json: Type.Object(
-        {
-          echo: Type.String({
-            description: 'Text that will be included in response message',
-          }),
-        },
-        { additionalProperties: false }
-      ),
+})
+  .route({
+    method: 'POST',
+    path: '/ping',
+    description:
+      'Please use this harmless endpoint to test if your connection with API is wired up correctly.',
+    schemas: {
+      request: {
+        json: Type.Object(
+          {
+            echo: Type.String({
+              description: 'Text that will be included in response message',
+            }),
+          },
+          { additionalProperties: false }
+        ),
+      },
     },
     handler: async (request) =>
       Response.json(pingHandler(await request.json())),
