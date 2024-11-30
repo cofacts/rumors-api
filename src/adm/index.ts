@@ -72,7 +72,12 @@ const router = createRouter({
         ),
       },
       responses: {
-        200: Type.Object({ success: Type.Boolean() }),
+        200: Type.Object({
+          updatedArticles: Type.Number(),
+          updatedReplyRequests: Type.Number(),
+          updatedArticleReplies: Type.Number(),
+          updateArticleReplyFeedbacks: Type.Number(),
+        }),
       },
     },
     handler: async (request) =>
