@@ -10,7 +10,7 @@ it('fails if userId is not valid', async () => {
   expect(
     blockUser({ userId: 'not-exist', blockedReason: 'announcement url' })
   ).rejects.toMatchInlineSnapshot(
-    `[Error: User with ID=not-exist does not exist]`
+    `[HTTPError: User with ID=not-exist does not exist]`
   );
 });
 
