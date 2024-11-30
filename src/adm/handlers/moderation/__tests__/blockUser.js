@@ -7,7 +7,7 @@ beforeEach(() => loadFixtures(fixtures));
 afterEach(() => unloadFixtures(fixtures));
 
 it('fails if userId is not valid', async () => {
-  expect(
+  await expect(
     blockUser({ userId: 'not-exist', blockedReason: 'announcement url' })
   ).rejects.toMatchInlineSnapshot(
     `[HTTPError: User with ID=not-exist does not exist]`
