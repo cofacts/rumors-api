@@ -29,10 +29,19 @@ async function expectSameAsFixture(fixtureKey, clientGetArgs) {
 }
 
 it('correctly sets the block reason and updates status of their works', async () => {
-  await blockUser({
+  const result = await blockUser({
     userId: 'user-to-block',
     blockedReason: 'announcement url',
   });
+
+  expect(result).toMatchInlineSnapshot(`
+    Object {
+      "updateArticleReplyFeedbacks": 1,
+      "updatedArticleReplies": 1,
+      "updatedArticles": 1,
+      "updatedReplyRequests": 1,
+    }
+  `);
 
   const {
     body: { _source: blockedUser },

@@ -137,6 +137,8 @@ async function processReplyRequests(userId: string) {
       }] article ${articleId}: changed to ${total} reply requests, last requested at ${lastRequestedAt}`
     );
   }
+
+  return updateByQueryResult;
 }
 
 /**
@@ -200,6 +202,8 @@ async function processArticleReplies(userId: string) {
       status: 'BLOCKED',
     });
   }
+
+  return articleRepliesToProcess.length;
 }
 
 /**
@@ -279,6 +283,8 @@ async function processArticleReplyFeedbacks(userId: string) {
       }] article=${articleId} reply=${replyId}: score changed to +${positiveFeedbackCount}, -${negativeFeedbackCount}`
     );
   }
+
+  return updateByQueryResult;
 }
 
 /**
@@ -308,7 +314,15 @@ async function processArticles(userId: string) {
   });
 
   console.log('Article status update result', updateByQueryResult);
+  return updateByQueryResult;
 }
+
+type BlockUserReturnValue = {
+  updatedArticles: number;
+  updatedReplyRequests: number;
+  updatedArticleReplies: number;
+  updateArticleReplyFeedbacks: number;
+};
 
 async function main({
   userId,
@@ -316,14 +330,20 @@ async function main({
 }: {
   userId: string;
   blockedReason: string;
-}) {
+}): Promise<BlockUserReturnValue> {
   await writeBlockedReasonToUser(userId, blockedReason);
-  await processArticles(userId);
-  await processReplyRequests(userId);
-  await processArticleReplies(userId);
-  await processArticleReplyFeedbacks(userId);
+  const { updated: updatedArticles } = await processArticles(userId);
+  const { updated: updatedReplyRequests } = await processReplyRequests(userId);
+  const updatedArticleReplies = await processArticleReplies(userId);
+  const { updated: updateArticleReplyFeedbacks } =
+    await processArticleReplyFeedbacks(userId);
 
-  return { success: true };
+  return {
+    updatedArticles,
+    updatedReplyRequests,
+    updatedArticleReplies,
+    updateArticleReplyFeedbacks,
+  };
 }
 
 export default main;
