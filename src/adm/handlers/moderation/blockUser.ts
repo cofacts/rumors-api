@@ -1,11 +1,11 @@
 /**
  * Given userId & block reason, blocks the user and marks all their existing ArticleReply,
  * ArticleReplyFeedback, ReplyRequest, ArticleCategory, ArticleCategoryFeedback as BLOCKED.
+ *
+ * Please announce that the user will be blocked openly with a URL first.
  */
+import { HTTPError } from 'fets';
 
-import 'dotenv/config';
-import yargs from 'yargs';
-import { SingleBar } from 'cli-progress';
 import client from 'util/client';
 import getAllDocs from 'util/getAllDocs';
 import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
@@ -48,7 +48,7 @@ async function writeBlockedReasonToUser(userId: string, blockedReason: string) {
       'message' in e &&
       e.message === 'document_missing_exception'
     ) {
-      throw new Error(`User with ID=${userId} does not exist`);
+      throw new HTTPError(400, `User with ID=${userId} does not exist`);
     }
 
     throw e;
@@ -137,6 +137,8 @@ async function processReplyRequests(userId: string) {
       }] article ${articleId}: changed to ${total} reply requests, last requested at ${lastRequestedAt}`
     );
   }
+
+  return updateByQueryResult;
 }
 
 /**
@@ -191,8 +193,6 @@ async function processArticleReplies(userId: string) {
   }
 
   console.log('Updating article replies...');
-  const bar = new SingleBar({ stopOnComplete: true });
-  bar.start(articleRepliesToProcess.length, 0);
   for (const { articleId, replyId, userId, appId } of articleRepliesToProcess) {
     await updateArticleReplyStatus({
       articleId,
@@ -201,9 +201,9 @@ async function processArticleReplies(userId: string) {
       appId,
       status: 'BLOCKED',
     });
-    bar.increment();
   }
-  bar.stop();
+
+  return articleRepliesToProcess.length;
 }
 
 /**
@@ -283,6 +283,8 @@ async function processArticleReplyFeedbacks(userId: string) {
       }] article=${articleId} reply=${replyId}: score changed to +${positiveFeedbackCount}, -${negativeFeedbackCount}`
     );
   }
+
+  return updateByQueryResult;
 }
 
 /**
@@ -312,7 +314,15 @@ async function processArticles(userId: string) {
   });
 
   console.log('Article status update result', updateByQueryResult);
+  return updateByQueryResult;
 }
+
+type BlockUserReturnValue = {
+  updatedArticles: number;
+  updatedReplyRequests: number;
+  updatedArticleReplies: number;
+  updateArticleReplyFeedbacks: number;
+};
 
 async function main({
   userId,
@@ -320,36 +330,20 @@ async function main({
 }: {
   userId: string;
   blockedReason: string;
-}) {
+}): Promise<BlockUserReturnValue> {
   await writeBlockedReasonToUser(userId, blockedReason);
-  await processArticles(userId);
-  await processReplyRequests(userId);
-  await processArticleReplies(userId);
-  await processArticleReplyFeedbacks(userId);
+  const { updated: updatedArticles } = await processArticles(userId);
+  const { updated: updatedReplyRequests } = await processReplyRequests(userId);
+  const updatedArticleReplies = await processArticleReplies(userId);
+  const { updated: updateArticleReplyFeedbacks } =
+    await processArticleReplyFeedbacks(userId);
+
+  return {
+    updatedArticles,
+    updatedReplyRequests,
+    updatedArticleReplies,
+    updateArticleReplyFeedbacks,
+  };
 }
 
 export default main;
-
-/* istanbul ignore if */
-if (require.main === module) {
-  const argv = yargs
-    .options({
-      userId: {
-        alias: 'u',
-        description: 'The user ID to block',
-        type: 'string',
-        demandOption: true,
-      },
-      blockedReason: {
-        alias: 'r',
-        description: 'The URL to the annoucement that blocks this user',
-        type: 'string',
-        demandOption: true,
-      },
-    })
-    .help('help').argv;
-
-  // yargs is typed as a  promise for some reason, make Typescript happy here
-  //
-  Promise.resolve(argv).then(main).catch(console.error);
-}

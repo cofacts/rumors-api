@@ -7,10 +7,10 @@ beforeEach(() => loadFixtures(fixtures));
 afterEach(() => unloadFixtures(fixtures));
 
 it('fails if userId is not valid', async () => {
-  expect(
+  await expect(
     blockUser({ userId: 'not-exist', blockedReason: 'announcement url' })
   ).rejects.toMatchInlineSnapshot(
-    `[Error: User with ID=not-exist does not exist]`
+    `[HTTPError: User with ID=not-exist does not exist]`
   );
 });
 
@@ -29,10 +29,19 @@ async function expectSameAsFixture(fixtureKey, clientGetArgs) {
 }
 
 it('correctly sets the block reason and updates status of their works', async () => {
-  await blockUser({
+  const result = await blockUser({
     userId: 'user-to-block',
     blockedReason: 'announcement url',
   });
+
+  expect(result).toMatchInlineSnapshot(`
+    Object {
+      "updateArticleReplyFeedbacks": 1,
+      "updatedArticleReplies": 1,
+      "updatedArticles": 1,
+      "updatedReplyRequests": 1,
+    }
+  `);
 
   const {
     body: { _source: blockedUser },
