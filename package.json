@@ -51,6 +51,7 @@
     "koa-router": "^8.0.0",
     "koa-session2": "^2.2.9",
     "koa-static": "^5.0.0",
+    "langfuse": "^3.32.0",
     "node-fetch": "^2.2.0",
     "openai": "^3.2.1",
     "passport-facebook": "^3.0.0",
