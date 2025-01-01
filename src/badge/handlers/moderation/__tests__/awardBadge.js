@@ -59,5 +59,3 @@ it('correctly sets the awarded badge id and updates status of their works', asyn
     }
   `);
 });
-
-// it('still updates statuses of blocked user even if they are blocked previously')
