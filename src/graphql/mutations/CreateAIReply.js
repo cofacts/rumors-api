@@ -97,8 +97,8 @@ export async function createNewAIReply({
   });
 
   // Resolves to completed or errored AI response.
-  const apiResult = await openai
-    .createChatCompletion(completionRequest)
+  const apiResult = await openai.chat.completions
+    .create(completionRequest)
     .then(({ data }) => data)
     .catch((error) => {
       console.error(error);

@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 import { Langfuse } from 'langfuse';
 
 const langfuse = new Langfuse({
@@ -8,11 +8,9 @@ const langfuse = new Langfuse({
 });
 
 const openai = langfuse.observeOpenAI(
-  new OpenAIApi(
-    new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
-    })
-  )
+  new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
 );
 
 export default openai;
