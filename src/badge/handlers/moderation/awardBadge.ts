@@ -1,8 +1,6 @@
 /**
- * Given userId & block reason, blocks the user and marks all their existing ArticleReply,
- * ArticleReplyFeedback, ReplyRequest, ArticleCategory, ArticleCategoryFeedback as BLOCKED.
+ * Given userId & award badge (Id and metadata).
  *
- * Please announce that the user will be blocked openly with a URL first.
  */
 import { HTTPError } from 'fets';
 
