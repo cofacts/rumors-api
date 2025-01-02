@@ -55,8 +55,7 @@ const router = createRouter({
   .route({
     method: 'POST',
     path: '/moderation/awardBadge',
-    description:
-      'Award the badge to the specified user.',
+    description: 'Award the badge to the specified user.',
     schemas: {
       request: {
         json: Type.Object(
@@ -77,7 +76,7 @@ const router = createRouter({
       responses: {
         200: Type.Object({
           badgeId: Type.String(),
-          badgeMetaData: Type.String()
+          badgeMetaData: Type.String(),
         }),
       },
     },
