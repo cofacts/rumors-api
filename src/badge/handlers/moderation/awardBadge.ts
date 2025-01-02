@@ -13,7 +13,15 @@ import client from 'util/client';
  * @param badgeId
  * @param badgeMetaData
  */
-async function awardBadgeIdToUser(userId: string, badgeId: string, badgeMetaData: string) {
+async function appendBadgeToList(
+  userId: string,
+  badgeId: string,
+  badgeMetaData: string
+) {
+  const now = new Date().toISOString();
+
+  const badges: any[] = [];
+
   try {
     const {
       body: { result: setbadgeIdResult },
@@ -22,22 +30,16 @@ async function awardBadgeIdToUser(userId: string, badgeId: string, badgeMetaData
       type: 'doc',
       id: userId,
       body: {
-        script: { source: `
-          ctx._source.badges.add({badgeId,badgeMetaData});
-        `,
-        lang: 'painless',
-        params: { badgeId, badgeMetaData},
-       },
+        doc: { badges },
       },
     });
 
     /* istanbul ignore if */
     if (setbadgeIdResult === 'noop') {
-      console.log(
-        `Info: user ID ${userId} already has set the same badgeId.`
-      );
+      console.log(`Info: user ID ${userId} already has set the same badgeId.`);
     }
   } catch (e) {
+    console.log(e);
     /* istanbul ignore else */
     if (
       e &&
@@ -66,7 +68,7 @@ async function main({
   badgeId: string;
   badgeMetaData: string;
 }): Promise<awardBadgeReturnValue> {
-  await awardBadgeIdToUser(userId, badgeId, badgeMetaData);
+  await appendBadgeToList(userId, badgeId, badgeMetaData);
 
   return {
     badgeId,
