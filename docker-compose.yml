@@ -5,46 +5,46 @@ services:
   db:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.2
     ports:
-      - "62222:9200"
+      - "62223:9200"
     volumes:
       - "./esdata:/usr/share/elasticsearch/data"
     environment:
       - "path.repo=/usr/share/elasticsearch/data"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Prevent elasticsearch eating up too much memory
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana-oss:6.3.2
-    depends_on:
-      - db
-    environment:
-      ELASTICSEARCH_URL: http://db:9200 # Through docker network, not exposed port
-    ports:
-      - "6222:5601"
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana-oss:6.3.2
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     ELASTICSEARCH_URL: http://db:9200 # Through docker network, not exposed port
+  #   ports:
+  #     - "6222:5601"
 
-  url-resolver:
-    image: cofacts/url-resolver
-    ports:
-      - "4000:4000"
+  # url-resolver:
+  #   image: cofacts/url-resolver
+  #   ports:
+  #     - "4000:4000"
 
-  api:
-    image: node:18
-    container_name: rumors-api
-    depends_on:
-      - db
-    working_dir: "/srv/www"
-    entrypoint: npm run dev
-    volumes:
-      - ".:/srv/www"
-    environment:
-      ELASTICSEARCH_URL: "http://db:9200"
-      URL_RESOLVER_URL: "url-resolver:4000"
-    ports:
-      - "5000:5000"
-      - "5500:5500"
+  # api:
+  #   image: node:18
+  #   container_name: rumors-api
+  #   depends_on:
+  #     - db
+  #   working_dir: "/srv/www"
+  #   entrypoint: npm run dev
+  #   volumes:
+  #     - ".:/srv/www"
+  #   environment:
+  #     ELASTICSEARCH_URL: "http://db:9200"
+  #     URL_RESOLVER_URL: "url-resolver:4000"
+  #   ports:
+  #     - "6000:5000"
+  #     - "5500:5500"
 
-  site:
-    image: cofacts/rumors-site:latest-en
-    ports:
-      - "3000:3000"
-    environment:
-      PUBLIC_API_URL: http://localhost:5000
+  # site:
+  #   image: cofacts/rumors-site:latest-en
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     PUBLIC_API_URL: http://localhost:5000

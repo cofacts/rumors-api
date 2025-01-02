@@ -20,8 +20,6 @@ async function appendBadgeToList(
 ) {
   const now = new Date().toISOString();
 
-  const badges: any[] = [];
-
   try {
     const {
       body: { result: setbadgeIdResult },
@@ -30,7 +28,23 @@ async function appendBadgeToList(
       type: 'doc',
       id: userId,
       body: {
-        doc: { badges },
+        script: {
+          source: `
+            if (ctx._source.badges == null) {
+              ctx._source.badges = [];
+            }
+            ctx._source.badges.add(params.badge);
+          `,
+          params: {
+            badge: {
+              badgeId: badgeId,
+              badgeMetaData: badgeMetaData,
+              createdAt: now,
+              isDisplayed: true,
+              updatedAt: now,
+            },
+          },
+        },
       },
     });
 
