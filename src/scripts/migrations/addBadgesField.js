@@ -30,7 +30,7 @@ if (require.main === module) {
       console.log('✅ Users index mapping updated successfully');
       process.exit(0);
     },
-    error => {
+    (error) => {
       console.error('❌ Error updating users index mapping:', error);
       process.exit(1);
     }

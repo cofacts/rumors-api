@@ -11,14 +11,12 @@ import {
   getAvailableAvatarTypes,
   getUserId,
   avatarUrlResolver,
-  badgeUrlResolver,
 } from 'util/user';
 import AvatarTypeEnum from './AvatarTypeEnum';
 import Contribution from './Contribution';
 import Node from '../interfaces/Node';
 import { timeRangeInput, createConnectionType } from 'graphql/util';
-import Badge from './UserBadge';
-
+import Badge from './UserAwardedBadge';
 
 /**
  * Field config helper for current user only field.
@@ -170,13 +168,16 @@ const User = new GraphQLObjectType({
     majorBadgeUrl: {
       type: GraphQLString,
       description: 'returns badge background image url',
-      resolve: async ( user, atgs, { loaders }) => {
+      resolve: async (user, atgs, { loaders }) => {
         const displayItem = user.badges.find({ isDisplay: true });
-        if(displayItem == null) {
+        if (displayItem == null) {
           return null;
         }
         const badgeId = displayItem.id;
-        const badgeInfo = loaders.docLoader.load({index: 'badges', id: badgeId});
+        const badgeInfo = loaders.docLoader.load({
+          index: 'badges',
+          id: badgeId,
+        });
         return badgeInfo.borderImage;
       },
     },
@@ -184,13 +185,16 @@ const User = new GraphQLObjectType({
     majorBadgeName: {
       type: GraphQLString,
       description: 'returns badge background image url',
-      resolve: async ( user, atgs, { loaders }) => {
+      resolve: async (user, atgs, { loaders }) => {
         const displayItem = user.badges.find({ isDisplay: true });
-        if(displayItem == null) {
+        if (displayItem == null) {
           return null;
         }
         const badgeId = displayItem.id;
-        const badgeInfo = loaders.docLoader.load({index: 'badges', id: badgeId});
+        const badgeInfo = loaders.docLoader.load({
+          index: 'badges',
+          id: badgeId,
+        });
         return badgeInfo.name;
       },
     },
