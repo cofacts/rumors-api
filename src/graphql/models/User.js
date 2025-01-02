@@ -161,8 +161,9 @@ const User = new GraphQLObjectType({
     },
 
     badges: {
-      type: new GraphQLList(Badge),
-      description: 'User awarded badges',
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(Badge))),
+      description: 'Badges awarded to the user.',
+      resolve: (user) => user.badges || [],
     },
 
     majorBadgeUrl: {
