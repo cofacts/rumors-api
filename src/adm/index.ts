@@ -10,6 +10,7 @@ import { useAuditLog, useAuth } from './util';
 
 import pingHandler from './handlers/ping';
 import blockUser from './handlers/moderation/blockUser';
+import awardBadge from './handlers/moderation/awardBadge';
 
 const shouldAuth = process.env.NODE_ENV === 'production';
 
@@ -82,6 +83,37 @@ const router = createRouter({
     },
     handler: async (request) =>
       Response.json(await blockUser(await request.json())),
+  })
+  .route({
+    method: 'POST',
+    path: '/moderation/awardBadge',
+    description: 'Award the badge to the specified user.',
+    schemas: {
+      request: {
+        json: Type.Object(
+          {
+            userId: Type.String({
+              description: 'The user ID',
+            }),
+            badgeId: Type.String({
+              description: 'The badge key',
+            }),
+            badgeMetaData: Type.String({
+              description: 'The badge metadata, json in string format',
+            }),
+          },
+          { additionalProperties: false }
+        ),
+      },
+      responses: {
+        200: Type.Object({
+          badgeId: Type.String(),
+          badgeMetaData: Type.String(),
+        }),
+      },
+    },
+    handler: async (request) =>
+      Response.json(await awardBadge(await request.json())),
   });
 
 createServer(router).listen(process.env.ADM_PORT, () => {
