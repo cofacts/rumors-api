@@ -50,7 +50,7 @@ const router = createRouter({
         ),
       },
     },
-    handler: async (request) =>
+    handler: async (request: Request) =>
       Response.json(pingHandler(await request.json())),
   })
   .route({
@@ -81,7 +81,7 @@ const router = createRouter({
         }),
       },
     },
-    handler: async (request) =>
+    handler: async (request: Request) =>
       Response.json(await blockUser(await request.json())),
   })
   .route({
@@ -112,8 +112,15 @@ const router = createRouter({
         }),
       },
     },
-    handler: async (request) =>
-      Response.json(await awardBadge(await request.json())),
+    handler: async (request: Request) => {
+      const body = await request.json();
+      return Response.json(
+        await awardBadge({
+          ...body,
+          request, // Pass the entire request object from feTS
+        })
+      );
+    },
   });
 
 createServer(router).listen(process.env.ADM_PORT, () => {
