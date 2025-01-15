@@ -3,10 +3,10 @@ jest.mock('util/openai', () => ({
   default: {
     chat: {
       completions: {
-        create: jest.fn()
-      }
-    }
-  }
+        create: jest.fn(),
+      },
+    },
+  },
 }));
 import MockDate from 'mockdate';
 
