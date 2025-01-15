@@ -803,17 +803,11 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         const fileResp = await fetch(fileUrl);
 
         // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
-        const audio = ffmpeg(fileResp.body)
-          .noVideo()
-          .format('mp3')
-          .on('error', function (err) {
-            console.error('[createTranscript][ffmpeg]', err);
-          })
-          .pipe();
+        const audio = ffmpeg(fileResp.body).noVideo().format('mp3').pipe();
 
         const data = await openai.audio.transcriptions.create({
           // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-2265072410
-          file: await toFile(audio, 'file.mp3', { contentType: 'audio/mp3' }),
+          file: await toFile(audio, 'file.mp3', { type: 'audio/mp3' }),
           model: 'whisper-1',
           prompt: '接下來，是一則在網際網路上傳播的影片的逐字稿。內容如下：',
           response_format: 'verbose_json',
