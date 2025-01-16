@@ -710,7 +710,7 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
     };
   }
 
-  return update;
+  return { update };
 }
 
 const imageAnnotator = new ImageAnnotatorClient();
@@ -763,7 +763,7 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
 export async function createTranscript(queryInfo, fileUrl, user) {
   if (!user) throw new Error('[createTranscript] user is required');
 
-  const update = createAIResponse({
+  const { update } = createAIResponse({
     user,
     type: 'TRANSCRIPT',
     docId: queryInfo.id,

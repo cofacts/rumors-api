@@ -89,7 +89,7 @@ export async function createNewAIReply({
     ...completionOptions,
   };
 
-  const updateAIResponse = createAIResponse({
+  const { update: updateAIResponse } = createAIResponse({
     user,
     docId: article.id,
     type: 'AI_REPLY',
