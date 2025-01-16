@@ -57,7 +57,7 @@ export default {
   },
 };
 
-// use jsdoc to annontate this to be ChatCompletion in openai package, AI!
+/** @type {import('openai').ChatCompletion} */
 export const SUCCESS_OPENAI_RESP = {
   id: 'chatcmpl-some-id',
   object: 'chat.completion',
