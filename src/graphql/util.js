@@ -711,8 +711,20 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   }
 
   return {
-    // Add JSDoc comments for these two methos, AI!
+    /**
+     * Updates the AI response with new data
+     * @param {Object} responseBody - The response data to update
+     * @param {string} [responseBody.status] - New status (SUCCESS/ERROR)
+     * @param {string} [responseBody.text] - Response text content
+     * @param {Object} [responseBody.usage] - Token usage statistics
+     * @returns {Promise<Object>} Updated AI response object
+     */
     update,
+
+    /**
+     * Gets the ID of the created AI response
+     * @returns {Promise<string>} Promise that resolves to the AI response ID
+     */
     getAIResponseId() {
       return newResponseIdPromise;
     },
