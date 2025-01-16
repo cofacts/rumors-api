@@ -26,7 +26,7 @@ describe('CreateAIReply', () => {
     await unloadFixtures(fixtures);
   });
   afterEach(() => {
-    getOpenAI({}).chat.completions.create.mockReset();
+    getOpenAI().chat.completions.create.mockReset();
   });
 
   it('throws when specified article does not exist', async () => {
@@ -77,7 +77,7 @@ describe('CreateAIReply', () => {
     // Mocked ChatGPT success response
     //
     let resolveAPI;
-    const mockFn = getOpenAI({}).chat.completions.create.mockImplementationOnce(
+    const mockFn = getOpenAI().chat.completions.create.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
           resolveAPI = resolve;
@@ -256,7 +256,7 @@ describe('CreateAIReply', () => {
   it('returns API error', async () => {
     // Mocked ChatGPT failed response, simulate API key error
     //
-    const mockFn = getOpenAI({}).chat.completions.create.mockImplementationOnce(
+    const mockFn = getOpenAI().chat.completions.create.mockImplementationOnce(
       () => Promise.reject(new Error('Request failed with status code 401'))
     );
 
@@ -378,6 +378,6 @@ describe('CreateAIReply', () => {
     );
 
     expect(CreateAIReply).toBe(null);
-    expect(getOpenAI({}).chat.completions.create).toBeCalledTimes(0);
+    expect(getOpenAI().chat.completions.create).toBeCalledTimes(0);
   });
 });
