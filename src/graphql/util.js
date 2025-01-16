@@ -781,7 +781,7 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
 export async function createTranscript(queryInfo, fileUrl, user) {
   if (!user) throw new Error('[createTranscript] user is required');
 
-  const { update } = createAIResponse({
+  const { update, getAIResponseId } = createAIResponse({
     user,
     type: 'TRANSCRIPT',
     docId: queryInfo.id,
@@ -823,7 +823,10 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
         const audio = ffmpeg(fileResp.body).noVideo().format('mp3').pipe();
 
-        const data = await getOpenAI().audio.transcriptions.create({
+        const data = await getOpenAI({
+          traceId: await getAIResponseId(),
+          traceName: `Whisper transcript for media ${queryInfo.id}`,
+        }).audio.transcriptions.create({
           // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-2265072410
           file: await toFile(audio, 'file.mp3', { type: 'audio/mp3' }),
           model: 'whisper-1',

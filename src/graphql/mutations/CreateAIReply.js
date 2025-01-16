@@ -89,7 +89,7 @@ export async function createNewAIReply({
     ...completionOptions,
   };
 
-  const { update: updateAIResponse } = createAIResponse({
+  const { update: updateAIResponse, getAIResponseId } = createAIResponse({
     user,
     docId: article.id,
     type: 'AI_REPLY',
@@ -97,7 +97,10 @@ export async function createNewAIReply({
   });
 
   // Resolves to completed or errored AI response.
-  const apiResult = await getOpenAI()
+  const apiResult = await getOpenAI({
+    traceId: await getAIResponseId(),
+    traceName: `AI Reply for article ${article.id}`,
+  })
     .chat.completions.create(completionRequest)
     .catch((error) => {
       console.error(error);
