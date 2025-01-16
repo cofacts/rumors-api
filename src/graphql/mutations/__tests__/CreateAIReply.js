@@ -256,8 +256,8 @@ describe('CreateAIReply', () => {
   it('returns API error', async () => {
     // Mocked ChatGPT failed response, simulate API key error
     //
-    const mockFn = getOpenAI({}).chat.completions.create.mockImplementationOnce(() =>
-      Promise.reject(new Error('Request failed with status code 401'))
+    const mockFn = getOpenAI({}).chat.completions.create.mockImplementationOnce(
+      () => Promise.reject(new Error('Request failed with status code 401'))
     );
 
     const { data, errors } = await gql`
