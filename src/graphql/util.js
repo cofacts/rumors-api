@@ -710,7 +710,12 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
     };
   }
 
-  return { update };
+  return { 
+    update,
+    getAIResponseId() {
+      return newResponseIdPromise;
+    }
+  };
 }
 
 const imageAnnotator = new ImageAnnotatorClient();
