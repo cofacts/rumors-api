@@ -9,7 +9,7 @@ jest.mock('util/openai', () => ({
   },
 }));
 import MockDate from 'mockdate';
-
+// also update these usage to getOpenAI(), AI!
 import openai from 'util/openai';
 import delayForMs from 'util/delayForMs';
 
