@@ -1,12 +1,12 @@
 jest.mock('util/openai', () => ({
   __esModule: true,
-  default: {
+  default: () => ({
     chat: {
       completions: {
         create: jest.fn(),
       },
     },
-  },
+  }),
 }));
 import MockDate from 'mockdate';
 import getOpenAI from 'util/openai';
