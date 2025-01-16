@@ -1,6 +1,6 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
-import openai from 'util/openai';
+import getOpenAI from 'util/openai';
 import { assertUser } from 'util/user';
 import { AIReply } from 'graphql/models/AIResponse';
 import { getAIResponse, createAIResponse } from 'graphql/util';
@@ -97,7 +97,7 @@ export async function createNewAIReply({
   });
 
   // Resolves to completed or errored AI response.
-  const apiResult = await openai.chat.completions
+  const apiResult = await getOpenAI({}).chat.completions
     .create(completionRequest)
     .catch((error) => {
       console.error(error);
