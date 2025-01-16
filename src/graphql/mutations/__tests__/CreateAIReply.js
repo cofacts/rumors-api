@@ -300,7 +300,7 @@ describe('CreateAIReply', () => {
   });
 
   it('replaces URL with hyperlink info', async () => {
-    const mockFn = getOpenAI({}).chat.completions.create.mockImplementationOnce(
+    const mockFn = getOpenAI().chat.completions.create.mockImplementationOnce(
       async () => SUCCESS_OPENAI_RESP
     );
 
