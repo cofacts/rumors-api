@@ -710,11 +710,12 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
     };
   }
 
-  return { 
+  return {
+    // Add JSDoc comments for these two methos, AI!
     update,
     getAIResponseId() {
       return newResponseIdPromise;
-    }
+    },
   };
 }
 
