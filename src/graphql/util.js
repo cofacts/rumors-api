@@ -805,7 +805,7 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
         const audio = ffmpeg(fileResp.body).noVideo().format('mp3').pipe();
 
-        const data = await getOpenAI({}).audio.transcriptions.create({
+        const data = await getOpenAI().audio.transcriptions.create({
           // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-2265072410
           file: await toFile(audio, 'file.mp3', { type: 'audio/mp3' }),
           model: 'whisper-1',
