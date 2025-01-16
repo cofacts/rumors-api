@@ -57,7 +57,7 @@ export default {
   },
 };
 
-/** @type {import('openai').ChatCompletion} */
+/** @type {import('openai/src/resources/chat/completions').ChatCompletion} */
 export const SUCCESS_OPENAI_RESP = {
   id: 'chatcmpl-some-id',
   object: 'chat.completion',
