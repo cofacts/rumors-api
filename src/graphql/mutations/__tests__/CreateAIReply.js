@@ -1,7 +1,18 @@
-jest.mock('util/openai');
+jest.mock('util/openai', () => {
+  const mockCreate = jest.fn();
+  return {
+    __esModule: true,
+    default: () => ({
+      chat: {
+        completions: {
+          create: mockCreate,
+        },
+      },
+    }),
+  };
+});
 import MockDate from 'mockdate';
-
-import openai from 'util/openai';
+import getOpenAI from 'util/openai';
 import delayForMs from 'util/delayForMs';
 
 import gql from 'util/GraphQL';
@@ -18,7 +29,7 @@ describe('CreateAIReply', () => {
     await unloadFixtures(fixtures);
   });
   afterEach(() => {
-    openai.createChatCompletion.mockReset();
+    getOpenAI().chat.completions.create.mockReset();
   });
 
   it('throws when specified article does not exist', async () => {
@@ -69,7 +80,7 @@ describe('CreateAIReply', () => {
     // Mocked ChatGPT success response
     //
     let resolveAPI;
-    const mockFn = openai.createChatCompletion.mockImplementationOnce(
+    const mockFn = getOpenAI().chat.completions.create.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
           resolveAPI = resolve;
@@ -248,8 +259,8 @@ describe('CreateAIReply', () => {
   it('returns API error', async () => {
     // Mocked ChatGPT failed response, simulate API key error
     //
-    const mockFn = openai.createChatCompletion.mockImplementationOnce(() =>
-      Promise.reject(new Error('Request failed with status code 401'))
+    const mockFn = getOpenAI().chat.completions.create.mockImplementationOnce(
+      () => Promise.reject(new Error('Request failed with status code 401'))
     );
 
     const { data, errors } = await gql`
@@ -292,7 +303,7 @@ describe('CreateAIReply', () => {
   });
 
   it('replaces URL with hyperlink info', async () => {
-    const mockFn = openai.createChatCompletion.mockImplementationOnce(
+    const mockFn = getOpenAI().chat.completions.create.mockImplementationOnce(
       async () => SUCCESS_OPENAI_RESP
     );
 
@@ -370,6 +381,6 @@ describe('CreateAIReply', () => {
     );
 
     expect(CreateAIReply).toBe(null);
-    expect(openai.createChatCompletion).toBeCalledTimes(0);
+    expect(getOpenAI().chat.completions.create).toBeCalledTimes(0);
   });
 });

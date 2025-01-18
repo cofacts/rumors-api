@@ -1,9 +1,15 @@
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
+import { observeOpenAI } from 'langfuse';
 
-const openai = new OpenAIApi(
-  new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-  })
-);
+const getOpenAI = (langfuseConfig = {}) =>
+  observeOpenAI(
+    new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    }),
+    {
+      tags: [process.env.ROLLBAR_ENV],
+      ...langfuseConfig,
+    }
+  );
 
-export default openai;
+export default getOpenAI;

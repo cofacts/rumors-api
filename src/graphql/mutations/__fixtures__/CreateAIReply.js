@@ -57,29 +57,26 @@ export default {
   },
 };
 
+/** @type {import('openai/src/resources/chat/completions').ChatCompletion} */
 export const SUCCESS_OPENAI_RESP = {
-  data: {
-    id: 'chatcmpl-some-id',
-    object: 'chat.completion',
-    created: 1679847676,
-    model: 'gpt-3.5-turbo-0301',
-    usage: {
-      prompt_tokens: 343,
-      completion_tokens: 64,
-      total_tokens: 407,
-    },
-    choices: [
-      {
-        message: {
-          role: 'assistant',
-          content:
-            '閱聽人應該確保登記網站的正確性和安全性，並記得定期更改密碼和密鑰，以保護自己的資訊安全。',
-        },
-        finish_reason: 'stop',
-        index: 0,
-      },
-    ],
+  id: 'chatcmpl-some-id',
+  object: 'chat.completion',
+  created: 1679847676,
+  model: 'gpt-3.5-turbo-0301',
+  usage: {
+    prompt_tokens: 343,
+    completion_tokens: 64,
+    total_tokens: 407,
   },
-  status: 200,
-  statusText: 'OK',
+  choices: [
+    {
+      message: {
+        role: 'assistant',
+        content:
+          '閱聽人應該確保登記網站的正確性和安全性，並記得定期更改密碼和密鑰，以保護自己的資訊安全。',
+      },
+      finish_reason: 'stop',
+      index: 0,
+    },
+  ],
 };

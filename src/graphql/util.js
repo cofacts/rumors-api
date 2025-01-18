@@ -13,6 +13,7 @@ import {
 } from 'graphql';
 import fetch from 'node-fetch';
 import ffmpeg from 'fluent-ffmpeg';
+import { toFile } from 'openai';
 
 import Connection from './interfaces/Connection';
 import Edge from './interfaces/Edge';
@@ -20,7 +21,7 @@ import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
 import delayForMs from 'util/delayForMs';
-import openai from 'util/openai';
+import getOpenAI from 'util/openai';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -709,7 +710,25 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
     };
   }
 
-  return update;
+  return {
+    /**
+     * Updates the AI response with new data
+     * @param {Object} responseBody - The response data to update
+     * @param {string} [responseBody.status] - New status (SUCCESS/ERROR)
+     * @param {string} [responseBody.text] - Response text content
+     * @param {Object} [responseBody.usage] - Token usage statistics
+     * @returns {Promise<Object>} Updated AI response object
+     */
+    update,
+
+    /**
+     * Gets the ID of the created AI response
+     * @returns {Promise<string>} Promise that resolves to the AI response ID
+     */
+    getAIResponseId() {
+      return newResponseIdPromise;
+    },
+  };
 }
 
 const imageAnnotator = new ImageAnnotatorClient();
@@ -762,7 +781,7 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
 export async function createTranscript(queryInfo, fileUrl, user) {
   if (!user) throw new Error('[createTranscript] user is required');
 
-  const update = createAIResponse({
+  const { update, getAIResponseId } = createAIResponse({
     user,
     type: 'TRANSCRIPT',
     docId: queryInfo.id,
@@ -804,22 +823,17 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
         const audio = ffmpeg(fileResp.body).noVideo().format('mp3').pipe();
 
-        // Hack it to make openai library work
-        // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1455247809
-        audio.path = 'file.mp4';
-
-        const { data } = await openai.createTranscription(
-          audio,
-          'whisper-1',
-          '接下來，是一則在網際網路上傳播的影片的逐字稿。內容如下：',
-          'verbose_json',
-          0,
-          undefined,
-          // Make axios happy
-          // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
-          //
-          { maxContentLength: Infinity, maxBodyLength: Infinity }
-        );
+        const data = await getOpenAI({
+          traceId: await getAIResponseId(),
+          traceName: `Transcript for ${queryInfo.id}`,
+        }).audio.transcriptions.create({
+          // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-2265072410
+          file: await toFile(audio, 'file.mp3', { type: 'audio/mp3' }),
+          model: 'whisper-1',
+          prompt: '接下來，是一則在網際網路上傳播的影片的逐字稿。內容如下：',
+          response_format: 'verbose_json',
+          temperature: 0,
+        });
 
         // Remove tokens keep only useful fields
         const dataToLog = data.segments.map(

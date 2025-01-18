@@ -1,6 +1,6 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 
-import openai from 'util/openai';
+import getOpenAI from 'util/openai';
 import { assertUser } from 'util/user';
 import { AIReply } from 'graphql/models/AIResponse';
 import { getAIResponse, createAIResponse } from 'graphql/util';
@@ -89,7 +89,7 @@ export async function createNewAIReply({
     ...completionOptions,
   };
 
-  const updateAIResponse = createAIResponse({
+  const { update: updateAIResponse, getAIResponseId } = createAIResponse({
     user,
     docId: article.id,
     type: 'AI_REPLY',
@@ -97,9 +97,11 @@ export async function createNewAIReply({
   });
 
   // Resolves to completed or errored AI response.
-  const apiResult = await openai
-    .createChatCompletion(completionRequest)
-    .then(({ data }) => data)
+  const apiResult = await getOpenAI({
+    traceId: await getAIResponseId(),
+    traceName: `AI Reply for article ${article.id}`,
+  })
+    .chat.completions.create(completionRequest)
     .catch((error) => {
       console.error(error);
 
