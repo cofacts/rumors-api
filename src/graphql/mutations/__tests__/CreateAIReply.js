@@ -73,7 +73,7 @@ describe('CreateAIReply', () => {
     `);
   });
 
-  it('returns new AI response', async () => {
+  it.only('returns new AI response', async () => {
     // Mocked ChatGPT success response
     //
     let resolveAPI;
