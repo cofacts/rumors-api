@@ -1,13 +1,16 @@
-jest.mock('util/openai', () => ({
-  __esModule: true,
-  default: () => ({
-    chat: {
-      completions: {
-        create: jest.fn(),
+jest.mock('util/openai', () => {
+  const mockCreate = jest.fn();
+  return {
+    __esModule: true,
+    default: () => ({
+      chat: {
+        completions: {
+          create: mockCreate,
+        },
       },
-    },
-  }),
-}));
+    }),
+  };
+});
 import MockDate from 'mockdate';
 import getOpenAI from 'util/openai';
 import delayForMs from 'util/delayForMs';
