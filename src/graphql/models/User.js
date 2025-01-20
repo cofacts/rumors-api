@@ -166,7 +166,7 @@ const User = new GraphQLObjectType({
       resolve: (user) => user.badges || [],
     },
 
-    majorBadgeUrl: {
+    majorBadgeBorderUrl: {
       type: GraphQLString,
       description: 'returns badge background image url',
       resolve: async (user, atgs, { loaders }) => {
@@ -180,6 +180,23 @@ const User = new GraphQLObjectType({
           id: badgeId,
         });
         return badgeInfo.borderImage;
+      },
+    },
+
+    majorBadgeImageUrl: {
+      type: GraphQLString,
+      description: 'returns badge background image url',
+      resolve: async (user, atgs, { loaders }) => {
+        const displayItem = user.badges.find({ isDisplay: true });
+        if (displayItem == null) {
+          return null;
+        }
+        const badgeId = displayItem.id;
+        const badgeInfo = loaders.docLoader.load({
+          index: 'badges',
+          id: badgeId,
+        });
+        return badgeInfo.icon;
       },
     },
 
