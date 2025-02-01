@@ -1,4 +1,6 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
+import { VertexAI } from '@google-cloud/vertexai';
+
 import sharp from 'sharp';
 import {
   GraphQLInputObjectType,
@@ -17,9 +19,6 @@ import mediaManager, {
   IMAGE_PREVIEW,
   IMAGE_THUMBNAIL,
 } from 'util/mediaManager';
-import fetch from 'node-fetch';
-import ffmpeg from 'fluent-ffmpeg';
-import { toFile } from 'openai';
 
 import Connection from './interfaces/Connection';
 import Edge from './interfaces/Edge';
@@ -27,7 +26,6 @@ import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
 import delayForMs from 'util/delayForMs';
-import getOpenAI from 'util/openai';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -852,6 +850,10 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
     .join('');
 }
 
+const geminiModel = new VertexAI().getGenerativeModel({
+  model: 'gemini-2.0-flash-exp',
+});
+
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
  * @param {string} fileUrl - the audio, image or video file to process
@@ -897,66 +899,76 @@ export async function createTranscript(queryInfo, fileUrl, user) {
 
       case 'video':
       case 'audio': {
-        const fileResp = await fetch(fileUrl);
-
-        // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
-        const audio = ffmpeg(fileResp.body).noVideo().format('mp3').pipe();
-
-        const data = await getOpenAI({
-          traceId: await getAIResponseId(),
-          traceName: `Transcript for ${queryInfo.id}`,
-        }).audio.transcriptions.create({
-          // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-2265072410
-          file: await toFile(audio, 'file.mp3', { type: 'audio/mp3' }),
-          model: 'whisper-1',
-          prompt: '接下來，是一則在網際網路上傳播的影片的逐字稿。內容如下：',
-          response_format: 'verbose_json',
-          temperature: 0,
+        // Upload to GCS first and get the file
+        const mediaEntry = await uploadMedia({
+          mediaUrl: fileUrl,
+          articleType: queryInfo.type.toUpperCase(),
         });
 
-        // Remove tokens keep only useful fields
-        const dataToLog = data.segments.map(
-          ({
-            start,
-            end,
-            seek,
-            text,
-            avg_logprob,
-            compression_ratio,
-            no_speech_prob,
-          }) => ({
-            start,
-            end,
-            seek,
-            text,
-            avg_logprob,
-            compression_ratio,
-            no_speech_prob,
-          })
-        );
+        // The URI starting with gs://
+        const fileUri = mediaEntry.getFile().cloudStorageURI.href;
 
-        console.log('[createTranscript]', queryInfo.id, dataToLog);
+        const { response } = await geminiModel.generateContent({
+          systemInstruction:
+            'You are a transcriber that provide precise transcript to video and audio content.',
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { fileData: { fileUri, mimeType: queryInfo.type } },
+                {
+                  text: `
+                    Your job is to transcribe the given video file accurately. When the video does not contain voice to transcribe, output for subtitles visually displayed in the video.
+
+                    The text will be used for indexing these media files, so please only output the exact text that appears on the video visually or said verbally.
+
+                    If the video contains subtitle, please make sure your transcript matches the subtitle whenever possible.
+
+                    Your output text should follow the language used in the video.
+                  `,
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            responseModalities: ['TEXT'],
+            maxOutputTokens: 8192,
+            temperature: 1,
+            topP: 0.95,
+          },
+          safetySettings: [
+            {
+              category: 'HARM_CATEGORY_HATE_SPEECH',
+              threshold: 'OFF',
+            },
+            {
+              category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+              threshold: 'OFF',
+            },
+            {
+              category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+              threshold: 'OFF',
+            },
+            {
+              category: 'HARM_CATEGORY_HARASSMENT',
+              threshold: 'OFF',
+            },
+          ],
+        });
+
+        console.log('[createTranscript]', queryInfo.id, response);
+        const usage = {
+          prompt_tokens: response.usageMetadata?.promptTokenCount || 0,
+          completion_tokens: response.usageMetadata?.candidatesTokenCount || 0,
+          total_tokens:
+            (response.usageMetadata?.promptTokenCount || 0) +
+            (response.usageMetadata?.candidatesTokenCount || 0),
+        };
 
         return update({
           status: 'SUCCESS',
-          text: dataToLog
-            .reduce((allText, segment, idx) => {
-              // Ignore segments with identical text & prob with previous segment.
-              // This is apparently hallucination.
-              if (idx > 0) {
-                const prevSegment = dataToLog[idx - 1];
-
-                if (
-                  prevSegment.text === segment.text &&
-                  prevSegment.avg_logprob === segment.avg_logprob
-                ) {
-                  return allText;
-                }
-              }
-
-              return allText + '\n' + segment.text;
-            }, '')
-            .trim(),
+          text: response.candidates[0].content.parts[0].text,
+          usage,
         });
       }
       default:
