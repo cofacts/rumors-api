@@ -14,21 +14,11 @@ import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 import archiveUrlsFromText from 'util/archiveUrlsFromText';
 
-const METADATA = {
-  cacheControl: 'public, max-age=31536000, immutable',
-};
-
 const AI_TRANSCRIBER_DESCRIPTION = JSON.stringify({
   id: 'ai-transcript',
   appId: 'RUMORS_AI',
   name: 'AI Transcript',
 });
-
-const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
-  IMAGE: MediaType.image,
-  VIDEO: MediaType.video,
-  AUDIO: MediaType.audio,
-};
 
 /**
  * Creates a new article in ElasticSearch,

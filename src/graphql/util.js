@@ -743,6 +743,12 @@ const METADATA = {
   cacheControl: 'public, max-age=31536000, immutable',
 };
 
+const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
+  IMAGE: MediaType.image,
+  VIDEO: MediaType.video,
+  AUDIO: MediaType.audio,
+};
+
 /**
  * Upload media of specified article type from the given mediaUrl
  *
