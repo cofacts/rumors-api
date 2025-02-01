@@ -737,8 +737,6 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   };
 }
 
-const imageAnnotator = new ImageAnnotatorClient();
-const OCR_CONFIDENCE_THRESHOLD = 0.75;
 const METADATA = {
   cacheControl: 'public, max-age=31536000, immutable',
 };
@@ -811,6 +809,9 @@ export async function uploadMedia({ mediaUrl, articleType }) {
 
   return mediaEntry;
 }
+
+const imageAnnotator = new ImageAnnotatorClient();
+const OCR_CONFIDENCE_THRESHOLD = 0.75;
 
 /**
  * @param {ITextAnnotation} fullTextAnnotation - The fullTextAnnotation returned by client.documentTextDetection
