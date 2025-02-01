@@ -1,5 +1,4 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
-import { MediaType } from '@cofacts/media-manager';
 import { assertUser, getContentDefaultStatus } from 'util/user';
 import { uploadMedia, getAIResponse } from 'graphql/util';
 import client from 'util/client';
