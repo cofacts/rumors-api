@@ -142,6 +142,34 @@ describe('archiveUrlsFromText', () => {
     `);
   });
 
+  it.only('expect errors can be handled', async () => {
+    mockedFetch.mockImplementation(
+      async () =>
+        ({
+          json: async () => ({
+            message: 'You need to be logged in to use Save Page Now.',
+          }),
+        } as Response)
+    );
+
+    const text =
+      'Please check https://example.com and https://example2.com?foo=bar&fbclid=123';
+    const results = await archiveUrlsFromText(text);
+
+    // Check if result is passed
+    //
+    expect(results).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "message": "You need to be logged in to use Save Page Now.",
+        },
+        Object {
+          "message": "You need to be logged in to use Save Page Now.",
+        },
+      ]
+    `);
+  });
+
   it('do nothing if no URL in text', async () => {
     const text = 'No URL here';
     const results = await archiveUrlsFromText(text);
