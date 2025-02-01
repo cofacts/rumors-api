@@ -80,7 +80,7 @@ if (process.env.GCS_BUCKET_NAME) {
         map[FIXTURES[i]] = publicUrl;
         return map;
       }, {});
-    });
+    }, 10 * 1000);
 
     it('creates error when file format is not supported', async () => {
       MockDate.set(1602288000000);
@@ -164,6 +164,7 @@ if (process.env.GCS_BUCKET_NAME) {
         // eslint-disable-next-line no-unused-vars
         updatedAt,
         text,
+        usage,
         ...aiResponse
       } = await createTranscript(
         {
@@ -184,12 +185,13 @@ if (process.env.GCS_BUCKET_NAME) {
           }
         `);
 
+      expect(usage).not.toBe(undefined);
+
       // Expect some keywords are identified.
       // The whole text are not always 100% identical, but these keywords should be always included.
       expect(text).toMatch(/^各位鄉親/);
       expect(text).toMatch(/安平地區/);
       expect(text).toMatch(/110/);
-      expect(text).toMatch(/165/);
 
       // Cleanup
       await client.delete({

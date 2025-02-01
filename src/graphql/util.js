@@ -1,5 +1,6 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
 import { VertexAI } from '@google-cloud/vertexai';
+import fetch from 'node-fetch';
 
 import sharp from 'sharp';
 import {
@@ -850,7 +851,9 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
     .join('');
 }
 
-const geminiModel = new VertexAI().getGenerativeModel({
+const geminiModel = new VertexAI({
+  project: 'industrious-eye-145611',
+}).getGenerativeModel({
   model: 'gemini-2.0-flash-exp',
 });
 
@@ -908,6 +911,12 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         // The URI starting with gs://
         const fileUri = mediaEntry.getFile().cloudStorageURI.href;
 
+        const mimeType = await fetch(fileUrl)
+          .then((res) => res.headers.get('content-type'))
+          .catch(() =>
+            queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
+          );
+
         const { response } = await geminiModel.generateContent({
           systemInstruction:
             'You are a transcriber that provide precise transcript to video and audio content.',
@@ -915,16 +924,15 @@ export async function createTranscript(queryInfo, fileUrl, user) {
             {
               role: 'user',
               parts: [
-                { fileData: { fileUri, mimeType: queryInfo.type } },
+                { fileData: { fileUri, mimeType } },
                 {
                   text: `
-                    Your job is to transcribe the given video file accurately. When the video does not contain voice to transcribe, output for subtitles visually displayed in the video.
-
-                    The text will be used for indexing these media files, so please only output the exact text that appears on the video visually or said verbally.
-
-                    If the video contains subtitle, please make sure your transcript matches the subtitle whenever possible.
-
-                    Your output text should follow the language used in the video.
+                    Your job is to transcribe the given media file accurately.
+                    Please watch the media file as well as listen to the audio from start to end.
+                    Your text will be used for indexing these media files, so please only output the exact text that appears on the media file visually or said verbally.
+                    Try your best to recognize every word said or any piece of text displayed. Don't miss any text.
+                    When the media does not contain voice to transcribe, output for subtitles visually displayed.
+                    Your output text should follow the language used in the media file.
                   `,
                 },
               ],
@@ -956,11 +964,15 @@ export async function createTranscript(queryInfo, fileUrl, user) {
           ],
         });
 
-        console.log('[createTranscript]', queryInfo.id, response);
+        console.log(
+          '[createTranscript]',
+          queryInfo.id,
+          JSON.stringify(response)
+        );
         const usage = {
-          prompt_tokens: response.usageMetadata?.promptTokenCount || 0,
-          completion_tokens: response.usageMetadata?.candidatesTokenCount || 0,
-          total_tokens:
+          promptTokens: response.usageMetadata?.promptTokenCount,
+          completionTokens: response.usageMetadata?.candidatesTokenCount,
+          totalTokens:
             (response.usageMetadata?.promptTokenCount || 0) +
             (response.usageMetadata?.candidatesTokenCount || 0),
         };
