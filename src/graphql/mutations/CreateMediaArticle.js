@@ -35,6 +35,7 @@ const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
   AUDIO: MediaType.audio,
 };
 
+// Move this to src/graphql/util, above createTranscript, AI!
 /**
  * Upload media of specified article type from the given mediaUrl
  *
