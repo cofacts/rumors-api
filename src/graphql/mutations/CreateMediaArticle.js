@@ -1,9 +1,8 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { MediaType } from '@cofacts/media-manager';
 import { assertUser, getContentDefaultStatus } from 'util/user';
-import { uploadMedia } from 'graphql/util';
+import { uploadMedia, getAIResponse } from 'graphql/util';
 import client from 'util/client';
-import { getAIResponse } from 'graphql/util';
 import { schema } from 'prosemirror-schema-basic';
 import Y from 'yjs';
 import { EditorState } from 'prosemirror-state';
