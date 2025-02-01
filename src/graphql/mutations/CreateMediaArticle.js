@@ -1,11 +1,7 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
-import sharp from 'sharp';
-import { MediaType, variants } from '@cofacts/media-manager';
-import mediaManager, {
-  IMAGE_PREVIEW,
-  IMAGE_THUMBNAIL,
-} from 'util/mediaManager';
+import { MediaType } from '@cofacts/media-manager';
 import { assertUser, getContentDefaultStatus } from 'util/user';
+import { uploadMedia } from 'graphql/util';
 import client from 'util/client';
 import { getAIResponse } from 'graphql/util';
 import { schema } from 'prosemirror-schema-basic';

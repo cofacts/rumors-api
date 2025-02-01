@@ -1,4 +1,5 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
+import sharp from 'sharp';
 import {
   GraphQLInputObjectType,
   GraphQLObjectType,
@@ -11,6 +12,11 @@ import {
   GraphQLID,
   GraphQLBoolean,
 } from 'graphql';
+import { MediaType, variants } from '@cofacts/media-manager';
+import mediaManager, {
+  IMAGE_PREVIEW,
+  IMAGE_THUMBNAIL,
+} from 'util/mediaManager';
 import fetch from 'node-fetch';
 import ffmpeg from 'fluent-ffmpeg';
 import { toFile } from 'openai';
@@ -733,6 +739,9 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
 
 const imageAnnotator = new ImageAnnotatorClient();
 const OCR_CONFIDENCE_THRESHOLD = 0.75;
+const METADATA = {
+  cacheControl: 'public, max-age=31536000, immutable',
+};
 
 /**
  * Upload media of specified article type from the given mediaUrl
