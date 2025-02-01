@@ -25,7 +25,7 @@
     "rumors-db:install": "cd src/rumors-db && npm i"
   },
   "dependencies": {
-    "@cofacts/media-manager": "^0.3.0",
+    "@cofacts/media-manager": "^0.3.2",
     "@elastic/elasticsearch": "^6.8.6",
     "@google-cloud/bigquery": "^6.2.0",
     "@google-cloud/vertexai": "^1.9.3",
