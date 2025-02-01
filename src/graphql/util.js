@@ -735,6 +735,69 @@ const imageAnnotator = new ImageAnnotatorClient();
 const OCR_CONFIDENCE_THRESHOLD = 0.75;
 
 /**
+ * Upload media of specified article type from the given mediaUrl
+ *
+ * @param {object} param
+ * @param {string} param.mediaUrl
+ * @param {ArticleTypeEnum} param.articleType
+ * @returns {Promise<MediaEntry>}
+ */
+export async function uploadMedia({ mediaUrl, articleType }) {
+  const mappedMediaType = VALID_ARTICLE_TYPE_TO_MEDIA_TYPE[articleType];
+  const mediaEntry = await mediaManager.insert({
+    url: mediaUrl,
+    getVariantSettings(options) {
+      const { type, contentType } = options;
+
+      // Abort if articleType does not match mediaUrl's file type
+      //
+      if (!mappedMediaType || mappedMediaType !== type) {
+        throw new Error(
+          `Specified article type is "${articleType}", but the media file is a ${type}.`
+        );
+      }
+
+      switch (type) {
+        case MediaType.image:
+          return [
+            variants.original(contentType),
+            {
+              name: IMAGE_THUMBNAIL,
+              contentType: 'image/jpeg',
+              transform: sharp()
+                .resize({ height: 240, withoutEnlargement: true })
+                .jpeg({ quality: 60 }),
+            },
+            {
+              name: IMAGE_PREVIEW,
+              contentType: 'image/webp',
+              transform: sharp()
+                .resize({ width: 600, withoutEnlargement: true })
+                .webp({ quality: 30 }),
+            },
+          ];
+
+        default:
+          return variants.defaultGetVariantSettings(options);
+      }
+    },
+    onUploadStop(error) {
+      /* istanbul ignore if */
+      if (error) {
+        console.error(`[createNewMediaArticle] onUploadStop error:`, error);
+        return;
+      }
+
+      mediaEntry.variants.forEach((variant) =>
+        mediaEntry.getFile(variant).setMetadata(METADATA)
+      );
+    },
+  });
+
+  return mediaEntry;
+}
+
+/**
  * @param {ITextAnnotation} fullTextAnnotation - The fullTextAnnotation returned by client.documentTextDetection
  * @returns {string} The extracted text that is comprised of paragraphs passing OCR_CONFIDENCE_THRESHOLD
  */
