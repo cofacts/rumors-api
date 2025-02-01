@@ -142,7 +142,7 @@ describe('archiveUrlsFromText', () => {
     `);
   });
 
-  it.only('expect errors can be handled', async () => {
+  it('expect errors can be handled', async () => {
     mockedFetch.mockImplementation(
       async () =>
         ({
