@@ -60,7 +60,7 @@ if (process.env.GCS_BUCKET_NAME) {
   describe('createTranscript', () => {
     const storage = new Storage();
     const bucket = storage.bucket(process.env.GCS_BUCKET_NAME);
-    const FIXTURES = ['ocr-test.jpg', 'audio-test.mp4'];
+    const FIXTURES = ['ocr-test.jpg', 'audio-test.m4a'];
     let FIXTURES_URLS = {};
 
     // Upload file to public GCS bucket so that APIs can access them
@@ -170,7 +170,7 @@ if (process.env.GCS_BUCKET_NAME) {
           id: 'foo',
           type: 'audio',
         },
-        FIXTURES_URLS['audio-test.mp4'],
+        FIXTURES_URLS['audio-test.m4a'],
         { id: 'user-id', appId: 'app-id' }
       );
 
