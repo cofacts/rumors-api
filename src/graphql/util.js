@@ -929,13 +929,17 @@ export async function createTranscript(queryInfo, fileUrl, user) {
                 { fileData: { fileUri, mimeType } },
                 {
                   text: `
-                    Your job is to transcribe the given media file accurately.
-                    Please watch the media file as well as listen to the audio from start to end.
-                    Your text will be used for indexing these media files, so please only output the exact text that appears on the media file visually or said verbally.
-                    Try your best to recognize every word said or any piece of text displayed. Don't miss any text.
-                    When the media does not contain voice to transcribe, output for subtitles visually displayed.
-                    Your output text should follow the language used in the media file.
-                  `,
+      Your job is to transcribe the given media file accurately.
+      Please watch the media file as well as listen to the audio from start to end.
+      Your text will be used for indexing these media files, so please follow these rules carefully:
+      - Only output the exact text that appears on the media file visually or said verbally.
+      - Please output transcript only -- no timestamps, no explanation.
+      - Try your best to recognize every word said or any piece of text displayed. Don't miss any text.
+      - When the media does not contain voice to transcribe, output for subtitles visually displayed.
+      - Your output text should follow the language used in the media file.
+        - When choosing between Traditional Chinese and Simplified Chinese, use the variant that is used in displayed text.
+        - If there is no displayed text, then prefer Traditional Chinese over the Simplified variant.
+                  `.trim(),
                 },
               ],
             },
