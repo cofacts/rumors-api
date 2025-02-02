@@ -940,9 +940,7 @@ export async function createTranscript(queryInfo, fileUrl, user) {
           ],
           generationConfig: {
             responseModalities: ['TEXT'],
-            maxOutputTokens: 8192,
-            temperature: 1,
-            topP: 0.95,
+            temperature: 0.1,
           },
           safetySettings: [
             {

@@ -139,14 +139,14 @@ if (process.env.GCS_BUCKET_NAME) {
       expect(text).toMatch(/德國醫學博士艾倫斯特發現/);
       expect(text).toMatch(/汗也具有調節體溫的重要作用/);
       expect(aiResponse).toMatchInlineSnapshot(`
-      Object {
-        "appId": "app-id",
-        "docId": "foo",
-        "status": "SUCCESS",
-        "type": "TRANSCRIPT",
-        "userId": "user-id",
-      }
-    `);
+        Object {
+          "appId": "app-id",
+          "docId": "foo",
+          "status": "SUCCESS",
+          "type": "TRANSCRIPT",
+          "userId": "user-id",
+        }
+      `);
 
       // Cleanup
       await client.delete({
@@ -156,7 +156,7 @@ if (process.env.GCS_BUCKET_NAME) {
       });
     });
 
-    it.only('does transcript for audio', async () => {
+    it('does transcript for audio', async () => {
       const {
         id: aiResponseId,
         // eslint-disable-next-line no-unused-vars
@@ -168,7 +168,7 @@ if (process.env.GCS_BUCKET_NAME) {
         ...aiResponse
       } = await createTranscript(
         {
-          id: 'foo',
+          id: 'direct-sales',
           type: 'audio',
         },
         FIXTURES_URLS['audio-test.m4a'],
@@ -176,22 +176,23 @@ if (process.env.GCS_BUCKET_NAME) {
       );
 
       expect(aiResponse).toMatchInlineSnapshot(`
-          Object {
-            "appId": "app-id",
-            "docId": "foo",
-            "status": "SUCCESS",
-            "type": "TRANSCRIPT",
-            "userId": "user-id",
-          }
-        `);
+        Object {
+          "appId": "app-id",
+          "docId": "direct-sales",
+          "status": "SUCCESS",
+          "type": "TRANSCRIPT",
+          "userId": "user-id",
+        }
+      `);
 
       expect(usage).not.toBe(undefined);
 
       // Expect some keywords are identified.
       // The whole text are not always 100% identical, but these keywords should be always included.
-      expect(text).toMatch(/^各位鄉親/);
-      expect(text).toMatch(/安平地區/);
-      expect(text).toMatch(/110/);
+      expect(text).toMatch(/幫我捧場一組我兼職網拍賣的葉黃素軟糖/);
+      expect(text).toMatch(/含運費是1280/);
+      expect(text).toMatch(/達到就會有額外的獎金/);
+      expect(text).toMatch(/所以才希望你能夠幫我一組就好了/);
 
       // Cleanup
       await client.delete({
