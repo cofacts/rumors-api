@@ -852,6 +852,7 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
 }
 
 const TRANSCRIPT_MODEL = 'gemini-2.0-flash-exp';
+// const TRANSCRIPT_MODEL = 'gemini-1.5-pro-002';
 const geminiModel = new VertexAI({
   project: 'industrious-eye-145611',
 }).getGenerativeModel({ model: TRANSCRIPT_MODEL });
@@ -942,6 +943,7 @@ export async function createTranscript(queryInfo, fileUrl, user) {
           generationConfig: {
             responseModalities: ['TEXT'],
             temperature: 0.1,
+            maxOutputTokens: 2048, // Stop hallucinations early
           },
           safetySettings: [
             {
