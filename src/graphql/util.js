@@ -973,12 +973,12 @@ export async function createTranscript(queryInfo, fileUrl, user) {
           model: TRANSCRIPT_MODEL,
           modelParameters: {
             ...generateContentArgs.generationConfig,
-            safetySettings: generateContentArgs.safetySettings,
+            safetySettings: JSON.stringify(generateContentArgs.safetySettings),
           },
-          input: {
+          input: JSON.stringify({
             systemInstruction: generateContentArgs.systemInstruction,
             contents: generateContentArgs.contents,
-          },
+          }),
         });
 
         const { response } = await geminiModel.generateContent(
