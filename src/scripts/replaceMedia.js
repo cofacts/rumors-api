@@ -6,7 +6,7 @@ import 'dotenv/config';
 import yargs from 'yargs';
 import client from 'util/client';
 import mediaManager from 'util/mediaManager';
-import { uploadMedia } from 'graphql/mutations/CreateMediaArticle';
+import { uploadMedia } from 'graphql/util';
 
 /**
  * @param {object} args
