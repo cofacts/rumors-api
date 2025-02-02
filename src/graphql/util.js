@@ -966,6 +966,7 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         const trace = langfuse.trace({
           id: aiResponseId,
           name: `Transcript for ${queryInfo.id}`,
+          input: fileUri,
         });
 
         const generation = trace.generation({
@@ -998,7 +999,8 @@ export async function createTranscript(queryInfo, fileUrl, user) {
             (response.usageMetadata?.promptTokenCount || 0) +
             (response.usageMetadata?.candidatesTokenCount || 0),
         };
-        generation.end({ output, usage });
+        trace.update({ output });
+        generation.end({ output: JSON.stringify(response), usage });
 
         return update({ status: 'SUCCESS', text: output, usage });
       }
