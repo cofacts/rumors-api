@@ -60,7 +60,12 @@ if (process.env.GCS_BUCKET_NAME) {
   describe('createTranscript', () => {
     const storage = new Storage();
     const bucket = storage.bucket(process.env.GCS_BUCKET_NAME);
-    const FIXTURES = ['ocr-test.jpg', 'audio-test.m4a'];
+    const FIXTURES = [
+      'ocr-test.jpg',
+      'audio-test.m4a',
+      'video-subtitles-only.mp4',
+      'video-complex.mp4',
+    ];
     let FIXTURES_URLS = {};
 
     // Upload file to public GCS bucket so that APIs can access them
@@ -201,6 +206,96 @@ if (process.env.GCS_BUCKET_NAME) {
         id: aiResponseId,
       });
     }, 30000);
-    // it('does transcript for video files')
+
+    it('does transcript for text-only video', async () => {
+      const {
+        id: aiResponseId,
+        // eslint-disable-next-line no-unused-vars
+        createdAt,
+        // eslint-disable-next-line no-unused-vars
+        updatedAt,
+        // eslint-disable-next-line no-unused-vars
+        usage,
+        text,
+        ...aiResponse
+      } = await createTranscript(
+        {
+          id: 'ginger',
+          type: 'video',
+        },
+        FIXTURES_URLS['video-subtitles-only.mp4'],
+        { id: 'user-id', appId: 'app-id' }
+      );
+
+      expect(aiResponse).toMatchInlineSnapshot(`
+        Object {
+          "appId": "app-id",
+          "docId": "ginger",
+          "status": "SUCCESS",
+          "type": "TRANSCRIPT",
+          "userId": "user-id",
+        }
+      `);
+
+      // Expect some keywords are identified.
+      // The whole text are not always 100% identical, but these keywords should be always included.
+      expect(text).toMatch(/薑是體內最佳除濕機/);
+      expect(text).toMatch(/嫩薑切塊/);
+      expect(text).toMatch(/鳳梨切塊/);
+      expect(text).toMatch(/6週減緩40%疼痛/);
+      expect(text).toMatch(/好口味雙倍照顧關節/);
+
+      // Cleanup
+      await client.delete({
+        index: 'airesponses',
+        type: 'doc',
+        id: aiResponseId,
+      });
+    }, 50000);
+
+    it('does transcript for complex video', async () => {
+      const {
+        id: aiResponseId,
+        // eslint-disable-next-line no-unused-vars
+        createdAt,
+        // eslint-disable-next-line no-unused-vars
+        updatedAt,
+        // eslint-disable-next-line no-unused-vars
+        usage,
+        text,
+        ...aiResponse
+      } = await createTranscript(
+        {
+          id: 'tiktok',
+          type: 'video',
+        },
+        FIXTURES_URLS['video-complex.mp4'],
+        { id: 'user-id', appId: 'app-id' }
+      );
+
+      expect(aiResponse).toMatchInlineSnapshot(`
+        Object {
+          "appId": "app-id",
+          "docId": "tiktok",
+          "status": "SUCCESS",
+          "type": "TRANSCRIPT",
+          "userId": "user-id",
+        }
+      `);
+
+      // Expect some keywords are identified.
+      // The whole text are not always 100% identical, but these keywords should be always included.
+      expect(text).toMatch(/一招教你秒变失踪人口/);
+      expect(text).toMatch(/我们的手机就会变成空号/);
+      expect(text).toMatch(/你拨打的号码不存在/);
+      expect(text).toMatch(/你学会了吗/);
+
+      // Cleanup
+      await client.delete({
+        index: 'airesponses',
+        type: 'doc',
+        id: aiResponseId,
+      });
+    }, 50000);
   });
 }
