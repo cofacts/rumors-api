@@ -15,20 +15,6 @@ describe('archiveUrlsFromText', () => {
   beforeAll(() => {
     // Spy on and mock the global fetch function
     mockedFetch = jest.spyOn(global, 'fetch');
-    mockedFetch.mockImplementation(async (url, reqInit) => {
-      // Make Tyepscript happy
-      if (typeof url !== 'string')
-        throw new Error(
-          'Fetch with non-string URL is not implemented in unit test'
-        );
-
-      // Extract URL to archive from fetched URL
-      const urlToArchive = (reqInit?.body as FormData).get('url');
-
-      return {
-        json: async () => ({ job_id: '123', url: urlToArchive }),
-      } as Response;
-    });
 
     realEnvs = {
       INTERNET_ARCHIVE_S3_ACCESS_KEY:
@@ -54,6 +40,21 @@ describe('archiveUrlsFromText', () => {
   });
 
   it('expect URL in text are archived', async () => {
+    mockedFetch.mockImplementation(async (url, reqInit) => {
+      // Make Tyepscript happy
+      if (typeof url !== 'string')
+        throw new Error(
+          'Fetch with non-string URL is not implemented in unit test'
+        );
+
+      // Extract URL to archive from fetched URL
+      const urlToArchive = (reqInit?.body as FormData).get('url');
+
+      return {
+        json: async () => ({ job_id: '123', url: urlToArchive }),
+      } as Response;
+    });
+
     const text =
       'Please check https://example.com and https://example2.com?foo=bar&fbclid=123';
     const results = await archiveUrlsFromText(text);
@@ -137,6 +138,34 @@ describe('archiveUrlsFromText', () => {
             "method": "POST",
           },
         ],
+      ]
+    `);
+  });
+
+  it('expect errors can be handled', async () => {
+    mockedFetch.mockImplementation(
+      async () =>
+        ({
+          json: async () => ({
+            message: 'You need to be logged in to use Save Page Now.',
+          }),
+        } as Response)
+    );
+
+    const text =
+      'Please check https://example.com and https://example2.com?foo=bar&fbclid=123';
+    const results = await archiveUrlsFromText(text);
+
+    // Check if result is passed
+    //
+    expect(results).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "message": "You need to be logged in to use Save Page Now.",
+        },
+        Object {
+          "message": "You need to be logged in to use Save Page Now.",
+        },
       ]
     `);
   });

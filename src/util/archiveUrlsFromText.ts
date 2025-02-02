@@ -33,8 +33,16 @@ export default async function archiveUrlsFromText(text: string) {
   );
 
   console.info(`[archiveUrlsFromText] Archiving ${results.length} URLs`);
-  results.forEach((result) =>
-    console.info(`[archiveUrlsFromText] [${result.job_id}]: ${result.url}`)
-  );
+  results.forEach((result, i) => {
+    if (result.job_id) {
+      console.info(`[archiveUrlsFromText] [ ${result.url} ]: ${result.job_id}`);
+    } else {
+      console.error(
+        `[archiveUrlsFromText] [ ${normalizedUrls[i]} ]: ${JSON.stringify(
+          result
+        )}`
+      );
+    }
+  });
   return results;
 }
