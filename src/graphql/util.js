@@ -1,7 +1,6 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
 import { VertexAI } from '@google-cloud/vertexai';
 import fetch from 'node-fetch';
-
 import sharp from 'sharp';
 import {
   GraphQLInputObjectType,
@@ -27,6 +26,7 @@ import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
 import delayForMs from 'util/delayForMs';
+import langfuse from 'util/langfuse';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -851,11 +851,10 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
     .join('');
 }
 
+const TRANSCRIPT_MODEL = 'gemini-2.0-flash-exp';
 const geminiModel = new VertexAI({
   project: 'industrious-eye-145611',
-}).getGenerativeModel({
-  model: 'gemini-2.0-flash-exp',
-});
+}).getGenerativeModel({ model: TRANSCRIPT_MODEL });
 
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
@@ -902,6 +901,8 @@ export async function createTranscript(queryInfo, fileUrl, user) {
 
       case 'video':
       case 'audio': {
+        const aiResponseId = await getAIResponseId();
+
         // Upload to GCS first and get the file
         const mediaEntry = await uploadMedia({
           mediaUrl: fileUrl,
@@ -917,7 +918,7 @@ export async function createTranscript(queryInfo, fileUrl, user) {
             queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
           );
 
-        const { response } = await geminiModel.generateContent({
+        const generateContentArgs = {
           systemInstruction:
             'You are a transcriber that provide precise transcript to video and audio content.',
           contents: [
@@ -960,13 +961,36 @@ export async function createTranscript(queryInfo, fileUrl, user) {
               threshold: 'OFF',
             },
           ],
+        };
+
+        const trace = langfuse.trace({
+          id: aiResponseId,
+          name: `Transcript for ${queryInfo.id}`,
         });
 
+        const generation = trace.generation({
+          name: 'gemini-transcript',
+          model: TRANSCRIPT_MODEL,
+          modelParameters: {
+            ...generateContentArgs.generationConfig,
+            safetySettings: generateContentArgs.safetySettings,
+          },
+          input: {
+            systemInstruction: generateContentArgs.systemInstruction,
+            contents: generateContentArgs.contents,
+          },
+        });
+
+        const { response } = await geminiModel.generateContent(
+          generateContentArgs
+        );
         console.log(
           '[createTranscript]',
           queryInfo.id,
           JSON.stringify(response)
         );
+
+        const output = response.candidates[0].content.parts[0].text;
         const usage = {
           promptTokens: response.usageMetadata?.promptTokenCount,
           completionTokens: response.usageMetadata?.candidatesTokenCount,
@@ -974,12 +998,9 @@ export async function createTranscript(queryInfo, fileUrl, user) {
             (response.usageMetadata?.promptTokenCount || 0) +
             (response.usageMetadata?.candidatesTokenCount || 0),
         };
+        generation.end({ output, usage });
 
-        return update({
-          status: 'SUCCESS',
-          text: response.candidates[0].content.parts[0].text,
-          usage,
-        });
+        return update({ status: 'SUCCESS', text: output, usage });
       }
       default:
         throw new Error(`Type ${queryInfo.type} not supported`);
