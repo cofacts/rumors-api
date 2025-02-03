@@ -851,11 +851,7 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
     .join('');
 }
 
-const TRANSCRIPT_MODEL = 'gemini-2.0-flash-exp';
-// const TRANSCRIPT_MODEL = 'gemini-1.5-pro-002';
-const geminiModel = new VertexAI({
-  project: 'industrious-eye-145611',
-}).getGenerativeModel({ model: TRANSCRIPT_MODEL });
+const TRANSCRIPT_MODELS = ['gemini-2.0-flash-exp', 'gemini-1.5-pro-latest'];
 
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
@@ -987,31 +983,57 @@ export async function createTranscript(queryInfo, fileUrl, user) {
           }),
         });
 
-        const { response } = await geminiModel.generateContent(
-          generateContentArgs
-        );
-        console.log(
-          '[createTranscript]',
-          queryInfo.id,
-          JSON.stringify(response)
-        );
+        for (const model of TRANSCRIPT_MODELS) {
+          try {
+            const geminiModel = new VertexAI({
+              project: 'industrious-eye-145611',
+            }).getGenerativeModel({ model });
 
-        const output = response.candidates[0].content.parts[0].text;
-        const usage = {
-          promptTokens: response.usageMetadata?.promptTokenCount,
-          completionTokens: response.usageMetadata?.candidatesTokenCount,
-          totalTokens:
-            (response.usageMetadata?.promptTokenCount || 0) +
-            (response.usageMetadata?.candidatesTokenCount || 0),
-        };
-        trace.update({ output });
-        generation.end({
-          output: JSON.stringify(response),
-          usage,
-          model: TRANSCRIPT_MODEL,
+            const { response } = await geminiModel.generateContent(
+              generateContentArgs
+            );
+            console.log(
+              '[createTranscript]',
+              queryInfo.id,
+              JSON.stringify(response)
+            );
+
+            const output = response.candidates[0].content.parts[0].text;
+            const usage = {
+              promptTokens: response.usageMetadata?.promptTokenCount,
+              completionTokens: response.usageMetadata?.candidatesTokenCount,
+              totalTokens:
+                (response.usageMetadata?.promptTokenCount || 0) +
+                (response.usageMetadata?.candidatesTokenCount || 0),
+            };
+            trace.update({ output });
+            generation.end({
+              output: JSON.stringify(response),
+              usage,
+              model,
+            });
+
+            return update({ status: 'SUCCESS', text: output, usage });
+          } catch (e) {
+            console.error('[createTranscript]', e);
+
+            if (
+              e.message.includes('429') &&
+              e.message.includes('RESOURCE_EXHAUSTED')
+            ) {
+              console.warn(`[createTranscript] Model ${model} quota exceeded, trying next model.`);
+              continue; // Try the next model
+            }
+
+            throw e; // Re-throw other errors
+          }
+        }
+
+        // If all models fail
+        return update({
+          status: 'ERROR',
+          text: 'All models failed due to quota limits.',
         });
-
-        return update({ status: 'SUCCESS', text: output, usage });
       }
       default:
         throw new Error(`Type ${queryInfo.type} not supported`);
