@@ -977,7 +977,6 @@ export async function createTranscript(queryInfo, fileUrl, user) {
 
         const generation = trace.generation({
           name: 'gemini-transcript',
-          model: TRANSCRIPT_MODEL,
           modelParameters: {
             ...generateContentArgs.generationConfig,
             safetySettings: JSON.stringify(generateContentArgs.safetySettings),
@@ -1006,7 +1005,11 @@ export async function createTranscript(queryInfo, fileUrl, user) {
             (response.usageMetadata?.candidatesTokenCount || 0),
         };
         trace.update({ output });
-        generation.end({ output: JSON.stringify(response), usage });
+        generation.end({
+          output: JSON.stringify(response),
+          usage,
+          model: TRANSCRIPT_MODEL,
+        });
 
         return update({ status: 'SUCCESS', text: output, usage });
       }
