@@ -1,5 +1,6 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
 import { VertexAI } from '@google-cloud/vertexai';
+import { GoogleAuth } from 'google-auth-library';
 import fetch from 'node-fetch';
 import sharp from 'sharp';
 import {
@@ -851,7 +852,6 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
     .join('');
 }
 
-const vertexAI = new VertexAI({ project: 'industrious-eye-145611' });
 const TRANSCRIPT_MODELS = ['gemini-2.0-flash-exp', 'gemini-1.5-pro-latest'];
 
 /**
@@ -984,6 +984,9 @@ export async function createTranscript(queryInfo, fileUrl, user) {
           }),
         });
 
+        const vertexAI = new VertexAI({
+          project: await new GoogleAuth().getProjectId(),
+        });
         for (const model of TRANSCRIPT_MODELS) {
           try {
             const geminiModel = vertexAI.getGenerativeModel({ model });
