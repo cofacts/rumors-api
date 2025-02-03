@@ -1021,7 +1021,9 @@ export async function createTranscript(queryInfo, fileUrl, user) {
               e.message.includes('429') &&
               e.message.includes('RESOURCE_EXHAUSTED')
             ) {
-              console.warn(`[createTranscript] Model ${model} quota exceeded, trying next model.`);
+              console.warn(
+                `[createTranscript] Model ${model} quota exceeded, trying next model.`
+              );
               continue; // Try the next model
             }
 
