@@ -851,6 +851,7 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
     .join('');
 }
 
+const vertexAI = new VertexAI({ project: 'industrious-eye-145611' });
 const TRANSCRIPT_MODELS = ['gemini-2.0-flash-exp', 'gemini-1.5-pro-latest'];
 
 /**
@@ -985,9 +986,7 @@ export async function createTranscript(queryInfo, fileUrl, user) {
 
         for (const model of TRANSCRIPT_MODELS) {
           try {
-            const geminiModel = new VertexAI({
-              project: 'industrious-eye-145611',
-            }).getGenerativeModel({ model });
+            const geminiModel = vertexAI.getGenerativeModel({ model });
 
             const { response } = await geminiModel.generateContent(
               generateContentArgs
