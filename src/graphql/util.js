@@ -909,7 +909,7 @@ export async function createTranscript(queryInfo, fileUrl, user) {
           // The URI starting with gs://
           fileUri,
           mimeType,
-        ] = Promise.all([
+        ] = await Promise.all([
           // Upload to GCS first and get the file.
           // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
           new Promise((resolve) => {
