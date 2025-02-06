@@ -1008,6 +1008,7 @@ Your text will be used for indexing these media files, so please follow these ru
 
         const vertexAI = new VertexAI({
           project: await new GoogleAuth().getProjectId(),
+          location: 'us-west1', // Nearest to Taiwan that has Gemini 2.0
         });
         for (const model of TRANSCRIPT_MODELS) {
           try {
