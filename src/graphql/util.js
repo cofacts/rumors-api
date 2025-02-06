@@ -753,6 +753,7 @@ const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
  * @param {object} param
  * @param {string} param.mediaUrl
  * @param {ArticleTypeEnum} param.articleType
+ * @param {undefined | (error: Error | null, mediaEntry: MediaEntry) => void} param.onUploadStop
  * @returns {Promise<import('@cofacts/media-manager').MediaEntry>}
  */
 export async function uploadMedia({ mediaUrl, articleType, onUploadStop }) {
@@ -798,12 +799,15 @@ export async function uploadMedia({ mediaUrl, articleType, onUploadStop }) {
       /* istanbul ignore if */
       if (error) {
         console.error(`[createNewMediaArticle] onUploadStop error:`, error);
-        return;
+      } else {
+        mediaEntry.variants.forEach((variant) =>
+          mediaEntry.getFile(variant).setMetadata(METADATA)
+        );
       }
 
-      mediaEntry.variants.forEach((variant) =>
-        mediaEntry.getFile(variant).setMetadata(METADATA)
-      );
+      if (onUploadStop) {
+        onUploadStop(error, mediaEntry);
+      }
     },
   });
 
@@ -901,20 +905,29 @@ export async function createTranscript(queryInfo, fileUrl, user) {
       case 'audio': {
         const aiResponseId = await getAIResponseId();
 
-        // Upload to GCS first and get the file
-        const mediaEntry = await uploadMedia({
-          mediaUrl: fileUrl,
-          articleType: queryInfo.type.toUpperCase(),
-        });
-
-        // The URI starting with gs://
-        const fileUri = mediaEntry.getFile().cloudStorageURI.href;
-
-        const mimeType = await fetch(fileUrl)
-          .then((res) => res.headers.get('content-type'))
-          .catch(() =>
-            queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
-          );
+        const [
+          // The URI starting with gs://
+          fileUri,
+          mimeType,
+        ] = Promise.all([
+          // Upload to GCS first and get the file.
+          // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
+          new Promise((resolve) => {
+            uploadMedia({
+              mediaUrl: fileUrl,
+              articleType: queryInfo.type.toUpperCase(),
+              onUploadStop: (error, mediaEntry) => {
+                resolve(mediaEntry.getFile().cloudStorageURI.href);
+              },
+            });
+          }),
+          // Perform a HEAD request to get the content-type
+          fetch(fileUrl, { method: 'HEAD' })
+            .then((res) => res.headers.get('content-type'))
+            .catch(() =>
+              queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
+            ),
+        ]);
 
         const generateContentArgs = {
           systemInstruction:
@@ -926,16 +939,16 @@ export async function createTranscript(queryInfo, fileUrl, user) {
                 { fileData: { fileUri, mimeType } },
                 {
                   text: `
-      Your job is to transcribe the given media file accurately.
-      Please watch the media file as well as listen to the audio from start to end.
-      Your text will be used for indexing these media files, so please follow these rules carefully:
-      - Only output the exact text that appears on the media file visually or said verbally.
-      - Please output transcript only -- no timestamps, no explanation.
-      - Try your best to recognize every word said or any piece of text displayed. Don't miss any text.
-      - When the media does not contain voice to transcribe, output for subtitles visually displayed.
-      - Your output text should follow the language used in the media file.
-        - When choosing between Traditional Chinese and Simplified Chinese, use the variant that is used in displayed text.
-        - If there is no displayed text, then prefer Traditional Chinese over the Simplified variant.
+Your job is to transcribe the given media file accurately.
+Please watch the media file as well as listen to the audio from start to end.
+Your text will be used for indexing these media files, so please follow these rules carefully:
+- Only output the exact text that appears on the media file visually or said verbally.
+- Please output transcript only -- no timestamps, no explanation.
+- Try your best to recognize every word said or any piece of text displayed. Don't miss any text.
+- When the media does not contain voice to transcribe, output for subtitles visually displayed.
+- Your output text should follow the language used in the media file.
+  - When choosing between Traditional Chinese and Simplified Chinese, use the variant that is used in displayed text.
+  - If there is no displayed text, then prefer Traditional Chinese over the Simplified variant.
                   `.trim(),
                 },
               ],
