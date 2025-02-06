@@ -753,7 +753,7 @@ const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
  * @param {object} param
  * @param {string} param.mediaUrl
  * @param {ArticleTypeEnum} param.articleType
- * @param {undefined | (error: Error | null, mediaEntry: MediaEntry) => void} param.onUploadStop
+ * @param {undefined | (error: Error | null) => void} param.onUploadStop
  * @returns {Promise<import('@cofacts/media-manager').MediaEntry>}
  */
 export async function uploadMedia({ mediaUrl, articleType, onUploadStop }) {
@@ -806,7 +806,7 @@ export async function uploadMedia({ mediaUrl, articleType, onUploadStop }) {
       }
 
       if (onUploadStop) {
-        onUploadStop(error, mediaEntry);
+        onUploadStop(error);
       }
     },
   });
@@ -905,20 +905,26 @@ export async function createTranscript(queryInfo, fileUrl, user) {
       case 'audio': {
         const aiResponseId = await getAIResponseId();
 
-        const [
-          // The URI starting with gs://
-          fileUri,
-          mimeType,
-        ] = await Promise.all([
+        const [mediaEntry, mimeType] = await Promise.all([
           // Upload to GCS first and get the file.
           // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
           new Promise((resolve) => {
+            let isUploadStopped = false;
+            let mediaEntryToResolve = undefined;
             uploadMedia({
               mediaUrl: fileUrl,
               articleType: queryInfo.type.toUpperCase(),
-              onUploadStop: (error, mediaEntry) => {
-                resolve(mediaEntry.getFile().cloudStorageURI.href);
+              onUploadStop: () => {
+                isUploadStopped = true;
+                if (mediaEntryToResolve) resolve(mediaEntryToResolve);
               },
+            }).then((mediaEntry) => {
+              if (isUploadStopped) {
+                resolve(mediaEntry);
+              } else {
+                // Initialize mediaEntry so that we can pick it up when upload stop
+                mediaEntryToResolve = mediaEntry;
+              }
             });
           }),
           // Perform a HEAD request to get the content-type
@@ -928,6 +934,9 @@ export async function createTranscript(queryInfo, fileUrl, user) {
               queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
             ),
         ]);
+
+        // The URI starting with gs://
+        const fileUri = mediaEntry.getFile().cloudStorageURI.href;
 
         const generateContentArgs = {
           systemInstruction:
@@ -943,12 +952,12 @@ Your job is to transcribe the given media file accurately.
 Please watch the media file as well as listen to the audio from start to end.
 Your text will be used for indexing these media files, so please follow these rules carefully:
 - Only output the exact text that appears on the media file visually or said verbally.
+- Try your best to recognize and include every word said or any piece of text displayed. Don't miss any text.
 - Please output transcript only -- no timestamps, no explanation.
-- Try your best to recognize every word said or any piece of text displayed. Don't miss any text.
-- When the media does not contain voice to transcribe, output for subtitles visually displayed.
 - Your output text should follow the language used in the media file.
   - When choosing between Traditional Chinese and Simplified Chinese, use the variant that is used in displayed text.
   - If there is no displayed text, then prefer Traditional Chinese over the Simplified variant.
+- To maximize readability, sentenses should be grouped into paragraphs with appropriate punctuations whenever applicable.
                   `.trim(),
                 },
               ],
