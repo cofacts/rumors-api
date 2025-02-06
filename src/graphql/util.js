@@ -856,7 +856,7 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
     .join('');
 }
 
-const TRANSCRIPT_MODELS = ['gemini-2.0-flash', 'gemini-1.5-pro-002'];
+const TRANSCRIPT_MODELS = ['gemini-2.0-flash-001', 'gemini-1.5-pro-002'];
 
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
