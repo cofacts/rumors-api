@@ -857,23 +857,10 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
 }
 
 const TRANSCRIPT_MODELS = [
-  {
-    model: 'gemini-1.5-pro-002',
-    location: 'asia-east1',
-  },
-  {
-    model: 'gemini-1.5-flash-002',
-    location: 'asia-east1',
-  },
-  // Commented models can be added back with their locations when needed
-  // {
-  //   model: 'gemini-2.0-flash-001',
-  //   location: 'us-west1'
-  // },
-  // {
-  //   model: 'gemini-2.0-flash-lite-preview-02-05',
-  //   location: 'us-west1'
-  // }
+  // Combinations that are faster than gemini-2.0-flash-001 @ us
+  { model: 'gemini-1.5-pro-002', location: 'asia-east1' },
+  { model: 'gemini-1.5-pro-002', location: 'asia-northeast1' },
+  { model: 'gemini-2.0-flash-exp', location: 'us-central1' },
 ];
 
 /**
@@ -1024,12 +1011,10 @@ Your text will be used for indexing these media files, so please follow these ru
           }),
         });
 
+        const project = await new GoogleAuth().getProjectId();
         for (const { model, location } of TRANSCRIPT_MODELS) {
           try {
-            const vertexAI = new VertexAI({
-              project: await new GoogleAuth().getProjectId(),
-              location,
-            });
+            const vertexAI = new VertexAI({ project, location });
             const geminiModel = vertexAI.getGenerativeModel({ model });
 
             const { response } = await geminiModel.generateContent(
@@ -1054,6 +1039,7 @@ Your text will be used for indexing these media files, so please follow these ru
               output: JSON.stringify(response),
               usage,
               model,
+              modelParameters: { location },
             });
 
             return update({ status: 'SUCCESS', text: output, usage });
@@ -1065,7 +1051,7 @@ Your text will be used for indexing these media files, so please follow these ru
               e.message.includes('RESOURCE_EXHAUSTED')
             ) {
               console.warn(
-                `[createTranscript] Model ${model} quota exceeded, trying next model.`
+                `[createTranscript] Model ${model} @ ${location} quota exceeded, trying next model.`
               );
               continue; // Try the next model
             }
