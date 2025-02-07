@@ -857,10 +857,23 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
 }
 
 const TRANSCRIPT_MODELS = [
-  'gemini-1.5-pro-002',
-  'gemini-1.5-flash-002',
-  // 'gemini-2.0-flash-001',
-  // 'gemini-2.0-flash-lite-preview-02-05',
+  {
+    model: 'gemini-1.5-pro-002',
+    location: 'asia-east1'
+  },
+  {
+    model: 'gemini-1.5-flash-002',
+    location: 'asia-east1'
+  },
+  // Commented models can be added back with their locations when needed
+  // {
+  //   model: 'gemini-2.0-flash-001',
+  //   location: 'us-west1'  
+  // },
+  // {
+  //   model: 'gemini-2.0-flash-lite-preview-02-05',
+  //   location: 'us-west1'
+  // }
 ];
 
 /**
@@ -1011,13 +1024,12 @@ Your text will be used for indexing these media files, so please follow these ru
           }),
         });
 
-        const vertexAI = new VertexAI({
-          project: await new GoogleAuth().getProjectId(),
-          location: 'asia-east1',
-          // location: 'us-west1', // Nearest to Taiwan that has Gemini 2.0
-        });
-        for (const model of TRANSCRIPT_MODELS) {
+        for (const { model, location } of TRANSCRIPT_MODELS) {
           try {
+            const vertexAI = new VertexAI({
+              project: await new GoogleAuth().getProjectId(),
+              location,
+            });
             const geminiModel = vertexAI.getGenerativeModel({ model });
 
             const { response } = await geminiModel.generateContent(
