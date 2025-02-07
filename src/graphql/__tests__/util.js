@@ -1,7 +1,7 @@
 import { Storage } from '@google-cloud/storage';
 import MockDate from 'mockdate';
 import path from 'path';
-
+import langfuse from 'util/langfuse';
 import client from 'util/client';
 
 import {
@@ -60,7 +60,12 @@ if (process.env.GCS_BUCKET_NAME) {
   describe('createTranscript', () => {
     const storage = new Storage();
     const bucket = storage.bucket(process.env.GCS_BUCKET_NAME);
-    const FIXTURES = ['ocr-test.jpg', 'audio-test.mp4'];
+    const FIXTURES = [
+      'ocr-test.jpg',
+      'audio-test.m4a',
+      'video-subtitles-only.mp4',
+      'video-complex.mp4',
+    ];
     let FIXTURES_URLS = {};
 
     // Upload file to public GCS bucket so that APIs can access them
@@ -80,6 +85,10 @@ if (process.env.GCS_BUCKET_NAME) {
         map[FIXTURES[i]] = publicUrl;
         return map;
       }, {});
+    }, 10 * 1000);
+
+    afterAll(async () => {
+      await langfuse.shutdownAsync();
     });
 
     it('creates error when file format is not supported', async () => {
@@ -139,14 +148,14 @@ if (process.env.GCS_BUCKET_NAME) {
       expect(text).toMatch(/德國醫學博士艾倫斯特發現/);
       expect(text).toMatch(/汗也具有調節體溫的重要作用/);
       expect(aiResponse).toMatchInlineSnapshot(`
-      Object {
-        "appId": "app-id",
-        "docId": "foo",
-        "status": "SUCCESS",
-        "type": "TRANSCRIPT",
-        "userId": "user-id",
-      }
-    `);
+        Object {
+          "appId": "app-id",
+          "docId": "foo",
+          "status": "SUCCESS",
+          "type": "TRANSCRIPT",
+          "userId": "user-id",
+        }
+      `);
 
       // Cleanup
       await client.delete({
@@ -156,11 +165,7 @@ if (process.env.GCS_BUCKET_NAME) {
       });
     });
 
-    // fluent-ffmpeg throws weird "Error: Output stream closed " error on Github action, but works on local machine.
-    // Ref: https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/issues/1135
-    // We will replace the entire ffmpeg + whisper with Gemini in the future, thus we can skip this test for now.
-    //
-    it.skip('does transcript for audio', async () => {
+    it('does transcript for audio', async () => {
       const {
         id: aiResponseId,
         // eslint-disable-next-line no-unused-vars
@@ -168,32 +173,36 @@ if (process.env.GCS_BUCKET_NAME) {
         // eslint-disable-next-line no-unused-vars
         updatedAt,
         text,
+        usage,
         ...aiResponse
       } = await createTranscript(
         {
-          id: 'foo',
+          id: 'direct-sales',
           type: 'audio',
         },
-        FIXTURES_URLS['audio-test.mp4'],
+        FIXTURES_URLS['audio-test.m4a'],
         { id: 'user-id', appId: 'app-id' }
       );
 
       expect(aiResponse).toMatchInlineSnapshot(`
-          Object {
-            "appId": "app-id",
-            "docId": "foo",
-            "status": "SUCCESS",
-            "type": "TRANSCRIPT",
-            "userId": "user-id",
-          }
-        `);
+        Object {
+          "appId": "app-id",
+          "docId": "direct-sales",
+          "status": "SUCCESS",
+          "type": "TRANSCRIPT",
+          "userId": "user-id",
+        }
+      `);
+
+      expect(usage).not.toBe(undefined);
 
       // Expect some keywords are identified.
       // The whole text are not always 100% identical, but these keywords should be always included.
-      expect(text).toMatch(/^各位鄉親/);
-      expect(text).toMatch(/安平地區/);
-      expect(text).toMatch(/110/);
-      expect(text).toMatch(/165/);
+      expect(text).toMatch(/幫我捧場一組我兼職/);
+      expect(text).toMatch(/賣的葉黃素軟糖/);
+      expect(text).toMatch(/含運費是1280/);
+      expect(text).toMatch(/達到就會有額外的獎金/);
+      expect(text).toMatch(/你能夠幫我一組就好了/);
 
       // Cleanup
       await client.delete({
@@ -201,7 +210,94 @@ if (process.env.GCS_BUCKET_NAME) {
         type: 'doc',
         id: aiResponseId,
       });
-    }, 30000);
-    // it('does transcript for video files')
+    }, 60000);
+
+    it('does transcript for text-only video', async () => {
+      const {
+        id: aiResponseId,
+        // eslint-disable-next-line no-unused-vars
+        createdAt,
+        // eslint-disable-next-line no-unused-vars
+        updatedAt,
+        // eslint-disable-next-line no-unused-vars
+        usage,
+        text,
+        ...aiResponse
+      } = await createTranscript(
+        {
+          id: 'ginger',
+          type: 'video',
+        },
+        FIXTURES_URLS['video-subtitles-only.mp4'],
+        { id: 'user-id', appId: 'app-id' }
+      );
+
+      expect(aiResponse).toMatchInlineSnapshot(`
+        Object {
+          "appId": "app-id",
+          "docId": "ginger",
+          "status": "SUCCESS",
+          "type": "TRANSCRIPT",
+          "userId": "user-id",
+        }
+      `);
+
+      // Expect some keywords are identified.
+      // The whole text are not always 100% identical, but these keywords should be always included.
+      expect(text).toMatch(/薑是體內最佳除濕機/);
+      expect(text).toMatch(/鳳梨切塊/);
+      expect(text).toMatch(/6周減緩40%疼痛/);
+      expect(text).toMatch(/好口味雙倍照顧關節/);
+
+      // Cleanup
+      await client.delete({
+        index: 'airesponses',
+        type: 'doc',
+        id: aiResponseId,
+      });
+    }, 120000);
+
+    it('does transcript for complex video', async () => {
+      const {
+        id: aiResponseId,
+        // eslint-disable-next-line no-unused-vars
+        createdAt,
+        // eslint-disable-next-line no-unused-vars
+        updatedAt,
+        // eslint-disable-next-line no-unused-vars
+        usage,
+        text,
+        ...aiResponse
+      } = await createTranscript(
+        {
+          id: 'tiktok',
+          type: 'video',
+        },
+        FIXTURES_URLS['video-complex.mp4'],
+        { id: 'user-id', appId: 'app-id' }
+      );
+
+      expect(aiResponse).toMatchInlineSnapshot(`
+        Object {
+          "appId": "app-id",
+          "docId": "tiktok",
+          "status": "SUCCESS",
+          "type": "TRANSCRIPT",
+          "userId": "user-id",
+        }
+      `);
+
+      // Traditional / Simplified Chinese is not stable
+      expect(text).toMatch(/一招教你秒变失踪人口|一招教你秒變失踪人口/);
+      expect(text).toMatch(/就会变成空号|就會變成空號/);
+      expect(text).toMatch(/你学会了吗|你學會了嗎/);
+
+      // Cleanup
+      await client.delete({
+        index: 'airesponses',
+        type: 'doc',
+        id: aiResponseId,
+      });
+    }, 120000);
   });
 }

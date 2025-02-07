@@ -1,4 +1,7 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
+import { VertexAI } from '@google-cloud/vertexai';
+import { GoogleAuth } from 'google-auth-library';
+import fetch from 'node-fetch';
 import sharp from 'sharp';
 import {
   GraphQLInputObjectType,
@@ -17,9 +20,6 @@ import mediaManager, {
   IMAGE_PREVIEW,
   IMAGE_THUMBNAIL,
 } from 'util/mediaManager';
-import fetch from 'node-fetch';
-import ffmpeg from 'fluent-ffmpeg';
-import { toFile } from 'openai';
 
 import Connection from './interfaces/Connection';
 import Edge from './interfaces/Edge';
@@ -27,7 +27,7 @@ import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
 import delayForMs from 'util/delayForMs';
-import getOpenAI from 'util/openai';
+import langfuse from 'util/langfuse';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -753,9 +753,10 @@ const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
  * @param {object} param
  * @param {string} param.mediaUrl
  * @param {ArticleTypeEnum} param.articleType
+ * @param {undefined | (error: Error | null) => void} param.onUploadStop
  * @returns {Promise<import('@cofacts/media-manager').MediaEntry>}
  */
-export async function uploadMedia({ mediaUrl, articleType }) {
+export async function uploadMedia({ mediaUrl, articleType, onUploadStop }) {
   const mappedMediaType = VALID_ARTICLE_TYPE_TO_MEDIA_TYPE[articleType];
   const mediaEntry = await mediaManager.insert({
     url: mediaUrl,
@@ -798,12 +799,15 @@ export async function uploadMedia({ mediaUrl, articleType }) {
       /* istanbul ignore if */
       if (error) {
         console.error(`[createNewMediaArticle] onUploadStop error:`, error);
-        return;
+      } else {
+        mediaEntry.variants.forEach((variant) =>
+          mediaEntry.getFile(variant).setMetadata(METADATA)
+        );
       }
 
-      mediaEntry.variants.forEach((variant) =>
-        mediaEntry.getFile(variant).setMetadata(METADATA)
-      );
+      if (onUploadStop) {
+        onUploadStop(error);
+      }
     },
   });
 
@@ -852,6 +856,8 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
     .join('');
 }
 
+const TRANSCRIPT_MODELS = ['gemini-2.0-flash-001', 'gemini-1.5-pro-002'];
+
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
  * @param {string} fileUrl - the audio, image or video file to process
@@ -897,66 +903,163 @@ export async function createTranscript(queryInfo, fileUrl, user) {
 
       case 'video':
       case 'audio': {
-        const fileResp = await fetch(fileUrl);
+        const aiResponseId = await getAIResponseId();
 
-        // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-1500899486
-        const audio = ffmpeg(fileResp.body).noVideo().format('mp3').pipe();
+        const [mediaEntry, mimeType] = await Promise.all([
+          // Upload to GCS first and get the file.
+          // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
+          new Promise((resolve) => {
+            let isUploadStopped = false;
+            let mediaEntryToResolve = undefined;
+            uploadMedia({
+              mediaUrl: fileUrl,
+              articleType: queryInfo.type.toUpperCase(),
+              onUploadStop: () => {
+                isUploadStopped = true;
+                if (mediaEntryToResolve) resolve(mediaEntryToResolve);
+              },
+            }).then((mediaEntry) => {
+              if (isUploadStopped) {
+                resolve(mediaEntry);
+              } else {
+                // Initialize mediaEntry so that we can pick it up when upload stop
+                mediaEntryToResolve = mediaEntry;
+              }
+            });
+          }),
+          // Perform a HEAD request to get the content-type
+          fetch(fileUrl, { method: 'HEAD' })
+            .then((res) => res.headers.get('content-type'))
+            .catch(() =>
+              queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
+            ),
+        ]);
 
-        const data = await getOpenAI({
-          traceId: await getAIResponseId(),
-          traceName: `Transcript for ${queryInfo.id}`,
-        }).audio.transcriptions.create({
-          // Ref: https://github.com/openai/openai-node/issues/77#issuecomment-2265072410
-          file: await toFile(audio, 'file.mp3', { type: 'audio/mp3' }),
-          model: 'whisper-1',
-          prompt: '接下來，是一則在網際網路上傳播的影片的逐字稿。內容如下：',
-          response_format: 'verbose_json',
-          temperature: 0,
+        // The URI starting with gs://
+        const fileUri = mediaEntry.getFile().cloudStorageURI.href;
+
+        const generateContentArgs = {
+          systemInstruction:
+            'You are a transcriber that provide precise transcript to video and audio content.',
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { fileData: { fileUri, mimeType } },
+                {
+                  text: `
+Your job is to transcribe the given media file accurately.
+Please watch the media file as well as listen to the audio from start to end.
+Your text will be used for indexing these media files, so please follow these rules carefully:
+- Only output the exact text that appears on the media file visually or said verbally.
+- Try your best to recognize and include every word said or any piece of text displayed. Don't miss any text.
+- Please output transcript only -- no timestamps, no explanation.
+- Your output text should follow the language used in the media file.
+  - When choosing between Traditional Chinese and Simplified Chinese, use the variant that is used in displayed text.
+  - If there is no displayed text, then prefer Traditional Chinese over the Simplified variant.
+- To maximize readability, sentenses should be grouped into paragraphs with appropriate punctuations whenever applicable.
+                  `.trim(),
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            responseModalities: ['TEXT'],
+            temperature: 0.1,
+            maxOutputTokens: 2048, // Stop hallucinations early
+          },
+          safetySettings: [
+            {
+              category: 'HARM_CATEGORY_HATE_SPEECH',
+              threshold: 'OFF',
+            },
+            {
+              category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+              threshold: 'OFF',
+            },
+            {
+              category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+              threshold: 'OFF',
+            },
+            {
+              category: 'HARM_CATEGORY_HARASSMENT',
+              threshold: 'OFF',
+            },
+          ],
+        };
+
+        const trace = langfuse.trace({
+          id: aiResponseId,
+          name: `Transcript for ${queryInfo.id}`,
+          input: fileUri,
         });
 
-        // Remove tokens keep only useful fields
-        const dataToLog = data.segments.map(
-          ({
-            start,
-            end,
-            seek,
-            text,
-            avg_logprob,
-            compression_ratio,
-            no_speech_prob,
-          }) => ({
-            start,
-            end,
-            seek,
-            text,
-            avg_logprob,
-            compression_ratio,
-            no_speech_prob,
-          })
-        );
+        const generation = trace.generation({
+          name: 'gemini-transcript',
+          modelParameters: {
+            ...generateContentArgs.generationConfig,
+            safetySettings: JSON.stringify(generateContentArgs.safetySettings),
+          },
+          input: JSON.stringify({
+            systemInstruction: generateContentArgs.systemInstruction,
+            contents: generateContentArgs.contents,
+          }),
+        });
 
-        console.log('[createTranscript]', queryInfo.id, dataToLog);
+        const vertexAI = new VertexAI({
+          project: await new GoogleAuth().getProjectId(),
+          location: 'us-west1', // Nearest to Taiwan that has Gemini 2.0
+        });
+        for (const model of TRANSCRIPT_MODELS) {
+          try {
+            const geminiModel = vertexAI.getGenerativeModel({ model });
 
+            const { response } = await geminiModel.generateContent(
+              generateContentArgs
+            );
+            console.log(
+              '[createTranscript]',
+              queryInfo.id,
+              JSON.stringify(response)
+            );
+
+            const output = response.candidates[0].content.parts[0].text;
+            const usage = {
+              promptTokens: response.usageMetadata?.promptTokenCount,
+              completionTokens: response.usageMetadata?.candidatesTokenCount,
+              totalTokens:
+                (response.usageMetadata?.promptTokenCount || 0) +
+                (response.usageMetadata?.candidatesTokenCount || 0),
+            };
+            trace.update({ output });
+            generation.end({
+              output: JSON.stringify(response),
+              usage,
+              model,
+            });
+
+            return update({ status: 'SUCCESS', text: output, usage });
+          } catch (e) {
+            console.error('[createTranscript]', e);
+
+            if (
+              e.message.includes('429') &&
+              e.message.includes('RESOURCE_EXHAUSTED')
+            ) {
+              console.warn(
+                `[createTranscript] Model ${model} quota exceeded, trying next model.`
+              );
+              continue; // Try the next model
+            }
+
+            throw e; // Re-throw other errors
+          }
+        }
+
+        // If all models fail
         return update({
-          status: 'SUCCESS',
-          text: dataToLog
-            .reduce((allText, segment, idx) => {
-              // Ignore segments with identical text & prob with previous segment.
-              // This is apparently hallucination.
-              if (idx > 0) {
-                const prevSegment = dataToLog[idx - 1];
-
-                if (
-                  prevSegment.text === segment.text &&
-                  prevSegment.avg_logprob === segment.avg_logprob
-                ) {
-                  return allText;
-                }
-              }
-
-              return allText + '\n' + segment.text;
-            }, '')
-            .trim(),
+          status: 'ERROR',
+          text: 'All models failed due to quota limits.',
         });
       }
       default:

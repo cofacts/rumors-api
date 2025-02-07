@@ -18,7 +18,6 @@ RUN npm prune --production
 
 #########################################
 FROM node:18-alpine3.18
-RUN apk update && apk add ffmpeg
 
 WORKDIR /srv/www
 EXPOSE 5000 5500
