@@ -856,7 +856,12 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
     .join('');
 }
 
-const TRANSCRIPT_MODELS = ['gemini-2.0-flash-001', 'gemini-1.5-pro-002'];
+const TRANSCRIPT_MODELS = [
+  'gemini-1.5-pro-002',
+  'gemini-1.5-flash-002',
+  // 'gemini-2.0-flash-001',
+  // 'gemini-2.0-flash-lite-preview-02-05',
+];
 
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
@@ -1008,7 +1013,8 @@ Your text will be used for indexing these media files, so please follow these ru
 
         const vertexAI = new VertexAI({
           project: await new GoogleAuth().getProjectId(),
-          location: 'us-west1', // Nearest to Taiwan that has Gemini 2.0
+          location: 'asia-east1',
+          // location: 'us-west1', // Nearest to Taiwan that has Gemini 2.0
         });
         for (const model of TRANSCRIPT_MODELS) {
           try {
