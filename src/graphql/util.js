@@ -859,16 +859,16 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
 const TRANSCRIPT_MODELS = [
   {
     model: 'gemini-1.5-pro-002',
-    location: 'asia-east1'
+    location: 'asia-east1',
   },
   {
     model: 'gemini-1.5-flash-002',
-    location: 'asia-east1'
+    location: 'asia-east1',
   },
   // Commented models can be added back with their locations when needed
   // {
   //   model: 'gemini-2.0-flash-001',
-  //   location: 'us-west1'  
+  //   location: 'us-west1'
   // },
   // {
   //   model: 'gemini-2.0-flash-lite-preview-02-05',
