@@ -1,4 +1,9 @@
-import { GraphQLBoolean, GraphQLObjectType, GraphQLString, GraphQLNonNull } from 'graphql';
+import {
+  GraphQLBoolean,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLNonNull,
+} from 'graphql';
 
 export default new GraphQLObjectType({
   name: 'UserAwardedBadge',
