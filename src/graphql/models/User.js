@@ -16,7 +16,7 @@ import AvatarTypeEnum from './AvatarTypeEnum';
 import Contribution from './Contribution';
 import Node from '../interfaces/Node';
 import { timeRangeInput, createConnectionType } from 'graphql/util';
-import Badge from './UserAwardedBadge';
+import UserAwardedBadge from './UserAwardedBadge';
 
 /**
  * Field config helper for current user only field.
@@ -161,7 +161,9 @@ const User = new GraphQLObjectType({
     },
 
     badges: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(UserAwardedBadge))),
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(UserAwardedBadge))
+      ),
       description: 'Badges awarded to the user.',
       resolve: (user) => user.badges || [],
     },
