@@ -161,7 +161,7 @@ const User = new GraphQLObjectType({
     },
 
     badges: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(Badge))),
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(UserAwardedBadge))),
       description: 'Badges awarded to the user.',
       resolve: (user) => user.badges || [],
     },
@@ -169,7 +169,7 @@ const User = new GraphQLObjectType({
     majorBadgeBorderUrl: {
       type: GraphQLString,
       description: 'returns badge background image url',
-      resolve: async (user, atgs, { loaders }) => {
+      resolve: async (user, args, { loaders }) => {
         const displayItem = user.badges.find({ isDisplay: true });
         if (displayItem == null) {
           return null;
@@ -186,7 +186,7 @@ const User = new GraphQLObjectType({
     majorBadgeImageUrl: {
       type: GraphQLString,
       description: 'returns badge background image url',
-      resolve: async (user, atgs, { loaders }) => {
+      resolve: async (user, args, { loaders }) => {
         const displayItem = user.badges.find({ isDisplay: true });
         if (displayItem == null) {
           return null;
@@ -203,7 +203,7 @@ const User = new GraphQLObjectType({
     majorBadgeName: {
       type: GraphQLString,
       description: 'returns badge background image url',
-      resolve: async (user, atgs, { loaders }) => {
+      resolve: async (user, args, { loaders }) => {
         const displayItem = user.badges.find({ isDisplay: true });
         if (displayItem == null) {
           return null;

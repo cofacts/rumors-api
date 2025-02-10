@@ -31,14 +31,6 @@ describe('awardBadge', () => {
     );
   });
 
-  /**
-   * Asserts the document in database is the same as in the fixture,
-   * i.e. the document is not modified
-   *
-   * @param {string} fixtureKey
-   * @param {{index: string; id: string;}} clientGetArgs - Arguments for client.get()
-   */
-
   it('correctly sets the awarded badge id when authorized', async () => {
     const result = await awardBadge({
       userId: 'user-to-award-badge',

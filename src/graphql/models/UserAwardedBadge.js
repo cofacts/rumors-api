@@ -3,10 +3,10 @@ import { GraphQLBoolean, GraphQLObjectType, GraphQLString } from 'graphql';
 export default new GraphQLObjectType({
   name: 'UserAwardedBadge',
   fields: () => ({
-    badgeId: { type: GraphQLString },
-    badgeMetaData: { type: GraphQLString },
-    isDisplayed: { type: GraphQLBoolean },
-    createdAt: { type: GraphQLString },
-    updatedAt: { type: GraphQLString },
+    badgeId: { type: new GraphQLNonNull(GraphQLString) },
+    badgeMetaData: { type: new GraphQLNonNull(GraphQLString) },
+    isDisplayed: { type: new GraphQLNonNull(GraphQLBoolean) },
+    createdAt: { type: new GraphQLNonNull(GraphQLString) },
+    updatedAt: { type: new GraphQLNonNull(GraphQLString) },
   }),
 });
