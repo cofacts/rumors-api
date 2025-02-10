@@ -10,7 +10,6 @@ import repliedArticleCountLoaderFactory from './repliedArticleCountLoaderFactory
 import votedArticleReplyCountLoaderFactory from './votedArticleReplyCountLoaderFactory';
 import userLevelLoaderFactory from './userLevelLoaderFactory';
 import userLoaderFactory from './userLoaderFactory';
-import badgeLoaderFactory from './badgeLoaderFactory';
 import contributionsLoaderFactory from './contributionsLoaderFactory';
 
 const LOADER_FACTORY_MAP = {
@@ -25,7 +24,6 @@ const LOADER_FACTORY_MAP = {
   repliedArticleCountLoader: repliedArticleCountLoaderFactory,
   votedArticleReplyCountLoader: votedArticleReplyCountLoaderFactory,
   userLoader: userLoaderFactory,
-  badgeLoader: badgeLoaderFactory,
   userLevelLoader: userLevelLoaderFactory,
   analyticsLoader: analyticsLoaderFactory,
   contributionsLoader: contributionsLoaderFactory,
@@ -65,9 +63,6 @@ export default class DataLoaders {
   }
   get userLoader() {
     return this._checkOrSetLoader('userLoader');
-  }
-  get badgeLoader() {
-    return this._checkOrSetLoader('badgeLoader');
   }
   get userLevelLoader() {
     return this._checkOrSetLoader('userLevelLoader');
