@@ -2,7 +2,7 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLList
+  GraphQLList,
 } from 'graphql';
 
 export default new GraphQLObjectType({
@@ -17,7 +17,7 @@ export default new GraphQLObjectType({
     issuers: {
       type: new GraphQLNonNull(
         new GraphQLList(new GraphQLNonNull(GraphQLString))
-      )
+      ),
     },
     createdAt: { type: new GraphQLNonNull(GraphQLString) },
     updatedAt: { type: GraphQLString },
