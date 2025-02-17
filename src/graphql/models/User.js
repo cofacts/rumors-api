@@ -16,6 +16,7 @@ import AvatarTypeEnum from './AvatarTypeEnum';
 import Contribution from './Contribution';
 import Node from '../interfaces/Node';
 import { timeRangeInput, createConnectionType } from 'graphql/util';
+import UserAwardedBadge from './UserAwardedBadge';
 
 /**
  * Field config helper for current user only field.
@@ -157,6 +158,65 @@ const User = new GraphQLObjectType({
       description:
         'If not null, the user is blocked with the announcement in this string.',
       type: GraphQLString,
+    },
+
+    badges: {
+      type: new GraphQLNonNull(
+        new GraphQLList(new GraphQLNonNull(UserAwardedBadge))
+      ),
+      description: 'Badges awarded to the user.',
+      resolve: (user) => user.badges || [],
+    },
+
+    majorBadgeBorderUrl: {
+      type: GraphQLString,
+      description: 'returns badge background image url',
+      resolve: async (user, args, { loaders }) => {
+        const displayItem = user.badges.find({ isDisplay: true });
+        if (displayItem == null) {
+          return null;
+        }
+        const badgeId = displayItem.id;
+        const badgeInfo = loaders.docLoader.load({
+          index: 'badges',
+          id: badgeId,
+        });
+        return badgeInfo.borderImage;
+      },
+    },
+
+    majorBadgeImageUrl: {
+      type: GraphQLString,
+      description: 'returns badge background image url',
+      resolve: async (user, args, { loaders }) => {
+        const displayItem = user.badges.find({ isDisplay: true });
+        if (displayItem == null) {
+          return null;
+        }
+        const badgeId = displayItem.id;
+        const badgeInfo = loaders.docLoader.load({
+          index: 'badges',
+          id: badgeId,
+        });
+        return badgeInfo.icon;
+      },
+    },
+
+    majorBadgeName: {
+      type: GraphQLString,
+      description: 'returns badge background image url',
+      resolve: async (user, args, { loaders }) => {
+        const displayItem = user.badges.find({ isDisplay: true });
+        if (displayItem == null) {
+          return null;
+        }
+        const badgeId = displayItem.id;
+        const badgeInfo = loaders.docLoader.load({
+          index: 'badges',
+          id: badgeId,
+        });
+        return badgeInfo.name;
+      },
     },
   }),
 });
