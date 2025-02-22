@@ -16,7 +16,7 @@ export default function timeoutHeader(timeout = 30000) {
           timeout,
           'ms'
         );
-        ctx.set('X-Accel-Buffering', 'no');
+        ctx.set('Content-Encoding', 'identity');
         ctx.flushHeaders();
       }
     }, timeout);
