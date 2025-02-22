@@ -83,6 +83,7 @@
     "@google-cloud/storage": "^6.11.0",
     "@types/cli-progress": "^3.11.6",
     "@types/dotenv": "^8.2.0",
+    "@types/koa": "^2.15.0",
     "@types/lodash": "^4.17.6",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
