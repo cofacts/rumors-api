@@ -6,7 +6,7 @@ import type { Context, Next } from 'koa';
  * @param {number} timeout Timeout in milliseconds before sending the header
  * @returns Koa middleware function
  */
-export default function timeoutHeader(timeout: number = 30000) {
+export default function timeoutHeader(timeout = 30000) {
   return async (ctx: Context, next: Next): Promise<void> => {
     // Create a timer to send headers
     const timer = setTimeout(() => {
