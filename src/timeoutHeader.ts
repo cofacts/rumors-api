@@ -11,7 +11,11 @@ export default function timeoutHeader(timeout = 30000) {
     // Create a timer to send headers
     const timer = setTimeout(() => {
       if (!ctx.headerSent) {
-        console.log('[timeoutHeader] Sending preliminary header after', timeout, 'ms');
+        console.log(
+          '[timeoutHeader] Sending preliminary header after',
+          timeout,
+          'ms'
+        );
         ctx.set('X-Accel-Buffering', 'no');
         ctx.flushHeaders();
       }
