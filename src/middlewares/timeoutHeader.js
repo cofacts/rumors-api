@@ -8,7 +8,7 @@ export default function timeoutHeader(timeout = 30000) {
   return async (ctx, next) => {
     // Create a timer to send headers
     const timer = setTimeout(() => {
-      if (!ctx.response.headerSent) {
+      if (!ctx.headerSent) {
         ctx.set('Content-Encoding', 'identity');
         ctx.flushHeaders();
       }
