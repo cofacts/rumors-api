@@ -14,6 +14,7 @@ import { formatError } from 'graphql';
 import checkHeaders from './checkHeaders';
 import schema from './graphql/schema';
 import contextFactory from './contextFactory';
+import timeoutHeader from './middlewares/timeoutHeader';
 
 import CookieStore from './CookieStore';
 import { loginRouter, authRouter } from './auth';
@@ -74,6 +75,7 @@ router.post('/logout', checkHeaders(), (ctx) => {
   ctx.body = { success: true };
 });
 
+router.use('/graphql', timeoutHeader(30000));
 router.options('/graphql', checkHeaders());
 router.post('/graphql', checkHeaders());
 
