@@ -14,7 +14,7 @@ import { formatError } from 'graphql';
 import checkHeaders from './checkHeaders';
 import schema from './graphql/schema';
 import contextFactory from './contextFactory';
-import timeoutHeader from './middlewares/timeoutHeader';
+import timeoutHeader from './timeoutHeader';
 
 import CookieStore from './CookieStore';
 import { loginRouter, authRouter } from './auth';
