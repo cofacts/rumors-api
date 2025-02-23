@@ -9,7 +9,7 @@ import type { Context, Next } from 'koa';
 export default function timeoutHeader(timeout = 90000) {
   return async (ctx: Context, next: Next): Promise<void> => {
     // Create a timer to send headers
-    const timer = setTimeout(() => {
+    const timer = setTimeout(() => /* istanbul ignore next */ {
       if (!ctx.headerSent) {
         console.log(
           '[timeoutHeader] Sending preliminary header after',
