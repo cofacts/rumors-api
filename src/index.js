@@ -75,9 +75,9 @@ router.post('/logout', checkHeaders(), (ctx) => {
   ctx.body = { success: true };
 });
 
-router.use('/graphql', timeoutHeader(30000));
 router.options('/graphql', checkHeaders());
 router.post('/graphql', checkHeaders());
+router.post('/graphql', timeoutHeader());
 
 router.get('/graphql', (ctx) => {
   return koaSend(ctx, '/static/graphiql.html');
