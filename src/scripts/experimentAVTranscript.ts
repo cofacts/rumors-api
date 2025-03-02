@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 import langfuse from 'util/langfuse';
 import { uploadMedia } from 'graphql/util';
 
-const DATASET_NAME = 'av-transcript-dataset';
+const DATASET_NAME = 'audio and video messages';
 
 async function main({ datasetName = DATASET_NAME, model, location } = {}) {
   try {
