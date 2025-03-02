@@ -45,7 +45,10 @@ async function main({
   const vertexAI = new VertexAI({ project, location });
   const geminiModel = vertexAI.getGenerativeModel({ model });
 
-  for (const item of dataset.items) {
+  for (const [index, item] of dataset.items.entries()) {
+    console.info(
+      `Processing item ${index + 1}/${dataset.items.length}: ${item.id}`
+    );
     const fileUri = item.input as string; // Already a GCS path starting with gs://
     const mimeType = 'video/mp4'; // All items are video/mp4
 
