@@ -1,3 +1,22 @@
+/**
+ * Script to run transcription experiments using the Gemini model.
+ * 
+ * Usage:
+ *   npx ts-node src/scripts/experimentAVTranscript.ts \
+ *     --runName "experiment-1" \
+ *     [--datasetName "audio and video messages"] \
+ *     [--model "gemini-1.5-pro-002"] \
+ *     [--location "asia-east1"]
+ * 
+ * Required args:
+ *   --runName: Name to identify this experiment run in Langfuse
+ * 
+ * Optional args:
+ *   --datasetName: Name of the Langfuse dataset to use
+ *   --model: Gemini model to use
+ *   --location: Model location to use
+ */
+
 import yargs from 'yargs';
 import { VertexAI } from '@google-cloud/vertexai';
 import { GoogleAuth } from 'google-auth-library';
@@ -13,6 +32,7 @@ async function main({
   datasetName = DATASET_NAME,
   model = MODEL,
   location = LOCATION,
+  runName,
 } = {}) {
   const dataset = await langfuse.getDataset(datasetName);
   const project = await new GoogleAuth().getProjectId();
@@ -37,7 +57,7 @@ async function main({
     });
 
     // Link execution trace to dataset item
-    await item.link(trace, `${model}-${location}`, {
+    await item.link(trace, runName, {
       description: `Transcript experiment using ${model} @ ${location}`,
       metadata: { model, location },
     });
@@ -97,6 +117,11 @@ if (require.main === module) {
         description: 'Name of the Langfuse dataset to use',
         type: 'string',
         default: DATASET_NAME,
+      },
+      runName: {
+        description: 'Name to identify this experiment run in Langfuse',
+        type: 'string',
+        demandOption: true,
       },
       model: {
         description: 'Gemini model to use',
