@@ -2,7 +2,7 @@
  * Script to run transcription experiments using the Gemini model.
  *
  * Usage:
- *   npx ts-node src/scripts/experimentAVTranscript.ts \
+ *   npx tsx src/scripts/experimentAVTranscript.ts \
  *     --runName "experiment-1" \
  *     [--datasetName "audio and video messages"] \
  *     [--model "gemini-1.5-pro-002"] \
@@ -33,7 +33,12 @@ async function main({
   model = MODEL,
   location = LOCATION,
   runName,
-} = {}) {
+}: {
+  datasetName?: string;
+  model?: string;
+  location?: string;
+  runName: string;
+}) {
   const dataset = await langfuse.getDataset(datasetName);
   const project = await new GoogleAuth().getProjectId();
   const vertexAI = new VertexAI({ project, location });
@@ -64,7 +69,7 @@ async function main({
 
     // Score the result if expected output exists
     if (item.expectedOutput) {
-      const { text: expectedText } = JSON.parse(item.expectedOutput);
+      const expectedText = item.expectedOutput as string;
 
       // Character-level similarity scoring
       const levDistance = levenshteinDistance(text, expectedText);
@@ -134,7 +139,7 @@ if (require.main === module) {
     })
     .help('help').argv;
 
-  main(argv).catch(console.error);
+  main(await argv).catch(console.error);
 }
 
 export default main;
