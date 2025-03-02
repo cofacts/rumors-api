@@ -20,7 +20,7 @@ async function main({
   const geminiModel = vertexAI.getGenerativeModel({ model });
 
   for (const item of dataset.items) {
-    const fileUri = item.input; // Already a GCS path starting with gs://
+    const fileUri = item.input as string; // Already a GCS path starting with gs://
     const mimeType = 'video/mp4'; // All items are video/mp4
 
     const trace = langfuse.trace({
@@ -29,7 +29,7 @@ async function main({
       metadata: { model, location },
     });
 
-    const { text, usage } = await transcribeAV({
+    const { text } = await transcribeAV({
       fileUri,
       mimeType,
       langfuseTrace: trace,
