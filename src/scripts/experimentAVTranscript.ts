@@ -14,64 +14,51 @@ async function main({
   model = MODEL,
   location = LOCATION,
 } = {}) {
-  try {
-    const dataset = await langfuse.getDataset(datasetName);
-    const project = await new GoogleAuth().getProjectId();
-    const vertexAI = new VertexAI({ project, location });
-    const geminiModel = vertexAI.getGenerativeModel({ model });
+  const dataset = await langfuse.getDataset(datasetName);
+  const project = await new GoogleAuth().getProjectId();
+  const vertexAI = new VertexAI({ project, location });
+  const geminiModel = vertexAI.getGenerativeModel({ model });
 
-    for (const item of dataset.items) {
-      const fileUri = item.input; // Already a GCS path starting with gs://
-      const mimeType = 'video/mp4'; // All items are video/mp4
+  for (const item of dataset.items) {
+    const fileUri = item.input; // Already a GCS path starting with gs://
+    const mimeType = 'video/mp4'; // All items are video/mp4
 
-      const trace = langfuse.trace({
-        name: `Experiment transcript for ${fileUri}`,
-        input: fileUri,
-        metadata: { model, location },
+    const trace = langfuse.trace({
+      name: `Experiment transcript for ${fileUri}`,
+      input: fileUri,
+      metadata: { model, location },
+    });
+
+    const { text, usage } = await transcribeAV({
+      fileUri,
+      mimeType,
+      langfuseTrace: trace,
+      geminiModel,
+    });
+
+    // Link execution trace to dataset item
+    await item.link(trace, `${model}-${location}`, {
+      description: `Transcript experiment using ${model} @ ${location}`,
+      metadata: { model, location },
+    });
+
+    // Score the result if expected output exists
+    if (item.expectedOutput) {
+      const { text: expectedText } = JSON.parse(item.expectedOutput);
+
+      // Character-level similarity scoring
+      const levDistance = levenshteinDistance(text, expectedText);
+      const similarity =
+        1 - levDistance / Math.max(text.length, expectedText.length);
+      trace.score({
+        name: 'char-similarity',
+        value: similarity,
+        comment: `Levenshtein distance: ${levDistance}`,
       });
-
-      try {
-        const { text, usage } = await transcribeAV({
-          fileUri,
-          mimeType,
-          langfuseTrace: trace,
-          geminiModel,
-        });
-
-        // Link execution trace to dataset item
-        await item.link(trace, `${model}-${location}`, {
-          description: `Transcript experiment using ${model} @ ${location}`,
-          metadata: { model, location },
-        });
-
-        // Score the result if expected output exists
-        if (item.expectedOutput) {
-          const { text: expectedText } = JSON.parse(item.expectedOutput);
-
-          // Character-level similarity scoring
-          const levDistance = levenshteinDistance(text, expectedText);
-          const similarity =
-            1 - levDistance / Math.max(text.length, expectedText.length);
-          trace.score({
-            name: 'char-similarity',
-            value: similarity,
-            comment: `Levenshtein distance: ${levDistance}`,
-          });
-        }
-      } catch (error) {
-        console.error('[experimentAVTranscript]', error);
-        trace.error({
-          message: error.message,
-          stack: error.stack,
-        });
-      }
     }
-
-    await langfuse.flushAsync();
-  } catch (error) {
-    console.error('[experimentAVTranscript]', error);
-    process.exit(1);
   }
+
+  await langfuse.flushAsync();
 }
 
 // Levenshtein distance implementation for text similarity scoring
