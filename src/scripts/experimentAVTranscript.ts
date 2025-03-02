@@ -1,11 +1,19 @@
 import yargs from 'yargs';
 import { VertexAI } from '@google-cloud/vertexai';
 import { GoogleAuth } from 'google-auth-library';
+import { transcribeAV } from 'graphql/util';
 import langfuse from 'util/langfuse';
 
+// Default arguments
 const DATASET_NAME = 'audio and video messages';
+const MODEL = 'gemini-1.5-pro-002';
+const LOCATION = 'asia-east1';
 
-async function main({ datasetName = DATASET_NAME, model, location } = {}) {
+async function main({
+  datasetName = DATASET_NAME,
+  model = MODEL,
+  location = LOCATION,
+} = {}) {
   try {
     const dataset = await langfuse.getDataset(datasetName);
     const project = await new GoogleAuth().getProjectId();
@@ -40,24 +48,14 @@ async function main({ datasetName = DATASET_NAME, model, location } = {}) {
         if (item.expectedOutput) {
           const { text: expectedText } = JSON.parse(item.expectedOutput);
 
-          // Simple exact match scoring
-          trace.score({
-            name: 'exact-match',
-            value: text === expectedText ? 1 : 0,
-            comment: text === expectedText ? 'Exact match' : 'No match',
-          });
-
           // Character-level similarity scoring
+          const levDistance = levenshteinDistance(text, expectedText);
           const similarity =
-            1 -
-            levenshteinDistance(text, expectedText) /
-              Math.max(text.length, expectedText.length);
+            1 - levDistance / Math.max(text.length, expectedText.length);
           trace.score({
             name: 'char-similarity',
             value: similarity,
-            comment: `Character-level similarity: ${(similarity * 100).toFixed(
-              2
-            )}%`,
+            comment: `Levenshtein distance: ${levDistance}`,
           });
         }
       } catch (error) {
@@ -116,12 +114,10 @@ if (require.main === module) {
       model: {
         description: 'Gemini model to use',
         type: 'string',
-        demandOption: true,
       },
       location: {
         description: 'Model location',
         type: 'string',
-        demandOption: true,
       },
     })
     .help('help').argv;
