@@ -70,7 +70,7 @@ async function main({ datasetName = DATASET_NAME, model, location } = {}) {
         // Score the result if expected output exists
         if (item.expectedOutput) {
           const { text: expectedText } = JSON.parse(item.expectedOutput);
-          
+
           // Simple exact match scoring
           trace.score({
             name: 'exact-match',
@@ -79,14 +79,18 @@ async function main({ datasetName = DATASET_NAME, model, location } = {}) {
           });
 
           // Character-level similarity scoring
-          const similarity = 1 - levenshteinDistance(text, expectedText) / Math.max(text.length, expectedText.length);
+          const similarity =
+            1 -
+            levenshteinDistance(text, expectedText) /
+              Math.max(text.length, expectedText.length);
           trace.score({
             name: 'char-similarity',
             value: similarity,
-            comment: `Character-level similarity: ${(similarity * 100).toFixed(2)}%`,
+            comment: `Character-level similarity: ${(similarity * 100).toFixed(
+              2
+            )}%`,
           });
         }
-
       } catch (error) {
         console.error('[experimentAVTranscript]', error);
         trace.error({
