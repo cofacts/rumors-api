@@ -137,9 +137,10 @@ if (require.main === module) {
         type: 'string',
       },
     })
-    .help('help').argv;
+    .help('help')
+    .parseSync();
 
-  main(await argv).catch(console.error);
+  main(argv).catch(console.error);
 }
 
 export default main;
