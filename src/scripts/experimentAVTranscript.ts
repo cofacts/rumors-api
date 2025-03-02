@@ -16,8 +16,9 @@
  *   --model: Gemini model to use
  *   --location: Model location to use
  */
-
+import 'dotenv/config';
 import yargs from 'yargs';
+
 import { VertexAI } from '@google-cloud/vertexai';
 import { GoogleAuth } from 'google-auth-library';
 import { transcribeAV } from 'graphql/util';
