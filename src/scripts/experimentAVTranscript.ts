@@ -1,10 +1,7 @@
 import yargs from 'yargs';
 import { VertexAI } from '@google-cloud/vertexai';
 import { GoogleAuth } from 'google-auth-library';
-import fetch from 'node-fetch';
-
 import langfuse from 'util/langfuse';
-import { uploadMedia } from 'graphql/util';
 
 const DATASET_NAME = 'audio and video messages';
 
@@ -16,40 +13,12 @@ async function main({ datasetName = DATASET_NAME, model, location } = {}) {
     const geminiModel = vertexAI.getGenerativeModel({ model });
 
     for (const item of dataset.items) {
-      const { fileUrl, type } = JSON.parse(item.input);
-
-      // Upload to GCS first and get the file
-      const [mediaEntry, mimeType] = await Promise.all([
-        // Wait until file is fully uploaded so LLM can read without error
-        new Promise((resolve) => {
-          let isUploadStopped = false;
-          let mediaEntryToResolve = undefined;
-          uploadMedia({
-            mediaUrl: fileUrl,
-            articleType: type.toUpperCase(),
-            onUploadStop: () => {
-              isUploadStopped = true;
-              if (mediaEntryToResolve) resolve(mediaEntryToResolve);
-            },
-          }).then((mediaEntry) => {
-            if (isUploadStopped) {
-              resolve(mediaEntry);
-            } else {
-              mediaEntryToResolve = mediaEntry;
-            }
-          });
-        }),
-        // Get content-type via HEAD request
-        fetch(fileUrl, { method: 'HEAD' })
-          .then((res) => res.headers.get('content-type'))
-          .catch(() => (type === 'video' ? 'video/mp4' : 'audio/mpeg')),
-      ]);
-
-      const fileUri = mediaEntry.getFile().cloudStorageURI.href;
+      const fileUri = item.input; // Already a GCS path starting with gs://
+      const mimeType = 'video/mp4'; // All items are video/mp4
 
       const trace = langfuse.trace({
-        name: `Experiment transcript for ${fileUrl}`,
-        input: fileUri,
+        name: `Experiment transcript for ${fileUri}`,
+        input: fileUri, 
         metadata: { model, location },
       });
 
