@@ -858,7 +858,7 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
 
 /**
  * Transcribes audio/video content using Gemini model
- * 
+ *
  * @param {object} params
  * @param {string} params.fileUri - The URI starting with gs://
  * @param {string} params.mimeType - The mime type of the file
