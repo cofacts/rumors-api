@@ -863,15 +863,20 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
  * @param {string} params.fileUri - The URI starting with gs://
  * @param {string} params.mimeType - The mime type of the file
  * @param {import('@langfuse/langfuse').Trace} params.langfuseTrace - Langfuse trace object
- * @param {import('@google-cloud/vertexai').GenerativeModel} params.geminiModel - Instance of vertexAI.getGenerativeModel
+ * @param {string} params.modelName - Name of the Gemini model
+ * @param {string} params.location - Location of the model
  * @returns {Promise<{text: string, usage: {promptTokens?: number, completionTokens?: number, totalTokens?: number}}>}
  */
 export async function transcribeAV({
   fileUri,
   mimeType,
   langfuseTrace,
-  geminiModel,
+  modelName,
+  location,
 }) {
+  const project = await new GoogleAuth().getProjectId();
+  const vertexAI = new VertexAI({ project, location });
+  const geminiModel = vertexAI.getGenerativeModel({ model: modelName });
   const generateContentArgs = {
     systemInstruction:
       'You are a transcriber that provide precise transcript to video and audio content.',
@@ -950,8 +955,8 @@ Your text will be used for indexing these media files, so please follow these ru
   generation.end({
     output: JSON.stringify(response),
     usage,
-    model: geminiModel._model,
-    modelParameters: { location: geminiModel._location },
+    model: modelName,
+    modelParameters: { location },
   });
 
   return { text: output, usage };
@@ -1053,14 +1058,12 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         const project = await new GoogleAuth().getProjectId();
         for (const { model, location } of TRANSCRIPT_MODELS) {
           try {
-            const vertexAI = new VertexAI({ project, location });
-            const geminiModel = vertexAI.getGenerativeModel({ model });
-
             const { text, usage } = await transcribeAV({
               fileUri,
               mimeType,
               langfuseTrace: trace,
-              geminiModel,
+              modelName: model,
+              location,
             });
 
             return update({ status: 'SUCCESS', text, usage });
