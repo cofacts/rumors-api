@@ -41,9 +41,6 @@ async function main({
   runName: string;
 }) {
   const dataset = await langfuse.getDataset(datasetName);
-  const project = await new GoogleAuth().getProjectId();
-  const vertexAI = new VertexAI({ project, location });
-  const geminiModel = vertexAI.getGenerativeModel({ model });
 
   for (const [index, item] of dataset.items.entries()) {
     console.info(
@@ -62,7 +59,8 @@ async function main({
       fileUri,
       mimeType,
       langfuseTrace: trace,
-      geminiModel,
+      location,
+      modelName: model,
     });
 
     // Link execution trace to dataset item
