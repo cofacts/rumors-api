@@ -1055,7 +1055,6 @@ export async function createTranscript(queryInfo, fileUrl, user) {
           input: fileUri,
         });
 
-        const project = await new GoogleAuth().getProjectId();
         for (const { model, location } of TRANSCRIPT_MODELS) {
           try {
             const { text, usage } = await transcribeAV({
