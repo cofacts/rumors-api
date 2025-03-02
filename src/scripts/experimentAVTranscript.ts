@@ -49,7 +49,7 @@ async function main({
     const mimeType = 'video/mp4'; // All items are video/mp4
 
     const trace = langfuse.trace({
-      name: `Experiment transcript for ${fileUri}`,
+      name: `Transcript for Dataset Item ${item.id}`,
       input: fileUri,
       metadata: { model, location },
     });
