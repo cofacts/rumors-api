@@ -866,7 +866,12 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
  * @param {import('@google-cloud/vertexai').GenerativeModel} params.geminiModel - Instance of vertexAI.getGenerativeModel
  * @returns {Promise<{text: string, usage: {promptTokens?: number, completionTokens?: number, totalTokens?: number}}>}
  */
-async function transcribeAV({ fileUri, mimeType, langfuseTrace, geminiModel }) {
+export async function transcribeAV({
+  fileUri,
+  mimeType,
+  langfuseTrace,
+  geminiModel,
+}) {
   const generateContentArgs = {
     systemInstruction:
       'You are a transcriber that provide precise transcript to video and audio content.',
