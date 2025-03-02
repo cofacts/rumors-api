@@ -18,7 +18,7 @@ async function main({ datasetName = DATASET_NAME, model, location } = {}) {
 
       const trace = langfuse.trace({
         name: `Experiment transcript for ${fileUri}`,
-        input: fileUri, 
+        input: fileUri,
         metadata: { model, location },
       });
 
