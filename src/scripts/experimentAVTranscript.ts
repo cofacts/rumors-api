@@ -1,16 +1,16 @@
 /**
  * Script to run transcription experiments using the Gemini model.
- * 
+ *
  * Usage:
  *   npx ts-node src/scripts/experimentAVTranscript.ts \
  *     --runName "experiment-1" \
  *     [--datasetName "audio and video messages"] \
  *     [--model "gemini-1.5-pro-002"] \
  *     [--location "asia-east1"]
- * 
+ *
  * Required args:
  *   --runName: Name to identify this experiment run in Langfuse
- * 
+ *
  * Optional args:
  *   --datasetName: Name of the Langfuse dataset to use
  *   --model: Gemini model to use
