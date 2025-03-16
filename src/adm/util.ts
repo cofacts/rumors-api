@@ -98,14 +98,13 @@ export function useAuth(): RouterPlugin<any, any> {
 export function useAuditLog(): RouterPlugin<any, any> {
   return {
     async onRequest({ request }) {
-      // Skip logging for GET requests
-      if (request.method === 'GET') return;
-
       const { url, user, userId } = request;
       const shouldIncludeBody =
-        'common_name' in (request.user ?? {}) /* Called via service tokens */ ||
-        request.headers.get('content-type') ===
-          'application/json'; /* Probably from Swagger UI */
+        request.method !== 'GET' &&
+        ('common_name' in
+          (request.user ?? {}) /* Called via service tokens */ ||
+          request.headers.get('content-type') ===
+            'application/json'); /* Probably from Swagger UI */
 
       logger.info(
         {
@@ -125,9 +124,6 @@ export function useAuditLog(): RouterPlugin<any, any> {
     },
 
     async onResponse({ request, response }) {
-      // Skip logging for GET requests
-      if (request.method === 'GET') return;
-
       const shouldIncludeBody =
         response.ok &&
         (response.headers.get('content-type') ?? '').startsWith(
