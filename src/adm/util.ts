@@ -98,6 +98,9 @@ export function useAuth(): RouterPlugin<any, any> {
 export function useAuditLog(): RouterPlugin<any, any> {
   return {
     async onRequest({ request }) {
+      // Skip logging for GET requests
+      if (request.method === 'GET') return;
+
       const { url, user, userId } = request;
       const shouldIncludeBody =
         'common_name' in (request.user ?? {}) /* Called via service tokens */ ||
@@ -122,6 +125,9 @@ export function useAuditLog(): RouterPlugin<any, any> {
     },
 
     async onResponse({ request, response }) {
+      // Skip logging for GET requests
+      if (request.method === 'GET') return;
+
       const shouldIncludeBody =
         response.ok &&
         (response.headers.get('content-type') ?? '').startsWith(
