@@ -856,6 +856,112 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
     .join('');
 }
 
+/**
+ * Transcribes audio/video content using Gemini model
+ *
+ * @param {object} params
+ * @param {string} params.fileUri - The URI starting with gs://
+ * @param {string} params.mimeType - The mime type of the file
+ * @param {import('@langfuse/langfuse').Trace} params.langfuseTrace - Langfuse trace object
+ * @param {string} params.modelName - Name of the Gemini model
+ * @param {string} params.location - Location of the model
+ * @returns {Promise<{text: string, usage: {promptTokens?: number, completionTokens?: number, totalTokens?: number}}>}
+ */
+export async function transcribeAV({
+  fileUri,
+  mimeType,
+  langfuseTrace,
+  modelName,
+  location,
+}) {
+  const project = await new GoogleAuth().getProjectId();
+  const vertexAI = new VertexAI({ project, location });
+  const geminiModel = vertexAI.getGenerativeModel({ model: modelName });
+  const generateContentArgs = {
+    systemInstruction:
+      'You are a transcriber that provide precise transcript to video and audio content.',
+    contents: [
+      {
+        role: 'user',
+        parts: [
+          { fileData: { fileUri, mimeType } },
+          {
+            text: `
+Your job is to transcribe the given media file accurately.
+Please watch the media file as well as listen to the audio from start to end.
+Your text will be used for indexing these media files, so please follow these rules carefully:
+- Only output the exact text that appears on the media file visually or said verbally.
+- Try your best to recognize and include every word said or any piece of text displayed. Don't miss any text.
+- Please output transcript only -- no timestamps, no explanation.
+- Your output text should follow the language used in the media file.
+  - When choosing between Traditional Chinese and Simplified Chinese, use the variant that is used in displayed text.
+  - If there is no displayed text, then prefer Traditional Chinese over the Simplified variant.
+- To maximize readability, sentenses should be grouped into paragraphs with appropriate punctuations whenever applicable.
+            `.trim(),
+          },
+        ],
+      },
+    ],
+    generationConfig: {
+      responseModalities: ['TEXT'],
+      temperature: 0.1,
+      maxOutputTokens: 2048, // Stop hallucinations early
+    },
+    safetySettings: [
+      {
+        category: 'HARM_CATEGORY_HATE_SPEECH',
+        threshold: 'OFF',
+      },
+      {
+        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+        threshold: 'OFF',
+      },
+      {
+        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+        threshold: 'OFF',
+      },
+      {
+        category: 'HARM_CATEGORY_HARASSMENT',
+        threshold: 'OFF',
+      },
+    ],
+  };
+
+  const generation = langfuseTrace.generation({
+    name: 'gemini-transcript',
+    modelParameters: {
+      ...generateContentArgs.generationConfig,
+      safetySettings: JSON.stringify(generateContentArgs.safetySettings),
+    },
+    input: JSON.stringify({
+      systemInstruction: generateContentArgs.systemInstruction,
+      contents: generateContentArgs.contents,
+    }),
+  });
+
+  const { response } = await geminiModel.generateContent(generateContentArgs);
+  console.log('[transcribeAV]', JSON.stringify(response));
+
+  const output = response.candidates[0].content.parts[0].text;
+  const usage = {
+    promptTokens: response.usageMetadata?.promptTokenCount,
+    completionTokens: response.usageMetadata?.candidatesTokenCount,
+    totalTokens:
+      (response.usageMetadata?.promptTokenCount || 0) +
+      (response.usageMetadata?.candidatesTokenCount || 0),
+  };
+
+  langfuseTrace.update({ output });
+  generation.end({
+    output: JSON.stringify(response),
+    usage,
+    model: modelName,
+    modelParameters: { location },
+  });
+
+  return { text: output, usage };
+}
+
 const TRANSCRIPT_MODELS = [
   // Combinations that are faster than gemini-2.0-flash-001 @ us
   { model: 'gemini-1.5-pro-002', location: 'asia-east1' },
@@ -943,106 +1049,23 @@ export async function createTranscript(queryInfo, fileUrl, user) {
         // The URI starting with gs://
         const fileUri = mediaEntry.getFile().cloudStorageURI.href;
 
-        const generateContentArgs = {
-          systemInstruction:
-            'You are a transcriber that provide precise transcript to video and audio content.',
-          contents: [
-            {
-              role: 'user',
-              parts: [
-                { fileData: { fileUri, mimeType } },
-                {
-                  text: `
-Your job is to transcribe the given media file accurately.
-Please watch the media file as well as listen to the audio from start to end.
-Your text will be used for indexing these media files, so please follow these rules carefully:
-- Only output the exact text that appears on the media file visually or said verbally.
-- Try your best to recognize and include every word said or any piece of text displayed. Don't miss any text.
-- Please output transcript only -- no timestamps, no explanation.
-- Your output text should follow the language used in the media file.
-  - When choosing between Traditional Chinese and Simplified Chinese, use the variant that is used in displayed text.
-  - If there is no displayed text, then prefer Traditional Chinese over the Simplified variant.
-- To maximize readability, sentenses should be grouped into paragraphs with appropriate punctuations whenever applicable.
-                  `.trim(),
-                },
-              ],
-            },
-          ],
-          generationConfig: {
-            responseModalities: ['TEXT'],
-            temperature: 0.1,
-            maxOutputTokens: 2048, // Stop hallucinations early
-          },
-          safetySettings: [
-            {
-              category: 'HARM_CATEGORY_HATE_SPEECH',
-              threshold: 'OFF',
-            },
-            {
-              category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-              threshold: 'OFF',
-            },
-            {
-              category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-              threshold: 'OFF',
-            },
-            {
-              category: 'HARM_CATEGORY_HARASSMENT',
-              threshold: 'OFF',
-            },
-          ],
-        };
-
         const trace = langfuse.trace({
           id: aiResponseId,
           name: `Transcript for ${queryInfo.id}`,
           input: fileUri,
         });
 
-        const generation = trace.generation({
-          name: 'gemini-transcript',
-          modelParameters: {
-            ...generateContentArgs.generationConfig,
-            safetySettings: JSON.stringify(generateContentArgs.safetySettings),
-          },
-          input: JSON.stringify({
-            systemInstruction: generateContentArgs.systemInstruction,
-            contents: generateContentArgs.contents,
-          }),
-        });
-
-        const project = await new GoogleAuth().getProjectId();
         for (const { model, location } of TRANSCRIPT_MODELS) {
           try {
-            const vertexAI = new VertexAI({ project, location });
-            const geminiModel = vertexAI.getGenerativeModel({ model });
-
-            const { response } = await geminiModel.generateContent(
-              generateContentArgs
-            );
-            console.log(
-              '[createTranscript]',
-              queryInfo.id,
-              JSON.stringify(response)
-            );
-
-            const output = response.candidates[0].content.parts[0].text;
-            const usage = {
-              promptTokens: response.usageMetadata?.promptTokenCount,
-              completionTokens: response.usageMetadata?.candidatesTokenCount,
-              totalTokens:
-                (response.usageMetadata?.promptTokenCount || 0) +
-                (response.usageMetadata?.candidatesTokenCount || 0),
-            };
-            trace.update({ output });
-            generation.end({
-              output: JSON.stringify(response),
-              usage,
-              model,
-              modelParameters: { location },
+            const { text, usage } = await transcribeAV({
+              fileUri,
+              mimeType,
+              langfuseTrace: trace,
+              modelName: model,
+              location,
             });
 
-            return update({ status: 'SUCCESS', text: output, usage });
+            return update({ status: 'SUCCESS', text, usage });
           } catch (e) {
             console.error('[createTranscript]', e);
 
