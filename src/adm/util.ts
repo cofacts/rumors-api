@@ -100,9 +100,11 @@ export function useAuditLog(): RouterPlugin<any, any> {
     async onRequest({ request }) {
       const { url, user, userId } = request;
       const shouldIncludeBody =
-        'common_name' in (request.user ?? {}) /* Called via service tokens */ ||
-        request.headers.get('content-type') ===
-          'application/json'; /* Probably from Swagger UI */
+        request.method !== 'GET' &&
+        ('common_name' in
+          (request.user ?? {}) /* Called via service tokens */ ||
+          request.headers.get('content-type') ===
+            'application/json'); /* Probably from Swagger UI */
 
       logger.info(
         {
