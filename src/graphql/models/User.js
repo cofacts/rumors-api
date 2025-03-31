@@ -172,50 +172,83 @@ const User = new GraphQLObjectType({
       type: GraphQLString,
       description: 'returns badge background image url',
       resolve: async (user, args, { loaders }) => {
-        const displayItem = user.badges.find({ isDisplay: true });
-        if (displayItem == null) {
+        if (!user.badges || !Array.isArray(user.badges)) {
+          console.log('No badges array found for user:', user.id);
           return null;
         }
-        const badgeId = displayItem.id;
-        const badgeInfo = loaders.docLoader.load({
+
+        const displayItem = user.badges.find(
+          (badge) => badge.isDisplayed === true
+        );
+        if (!displayItem) {
+          console.log('No displayed badge found for user:', user.id);
+          return null;
+        }
+
+        console.log('Finding badge with ID:', displayItem.badgeId);
+
+        const badgeInfo = await loaders.docLoader.load({
           index: 'badges',
-          id: badgeId,
+          id: displayItem.badgeId,
         });
-        return badgeInfo.borderImage;
+
+        console.log('Badge info found:', badgeInfo);
+        return badgeInfo?.borderImage || null;
+      },
+    },
+
+    majorBadgeId: {
+      type: GraphQLString,
+      description: 'returns badge icon url',
+      resolve: async (user) => {
+        if (!user.badges || !Array.isArray(user.badges)) return null;
+
+        const displayItem = user.badges.find(
+          (badge) => badge.isDisplayed === true
+        );
+        if (!displayItem) return null;
+
+        return displayItem.badgeId;
       },
     },
 
     majorBadgeImageUrl: {
       type: GraphQLString,
-      description: 'returns badge background image url',
+      description: 'returns badge icon url',
       resolve: async (user, args, { loaders }) => {
-        const displayItem = user.badges.find({ isDisplay: true });
-        if (displayItem == null) {
-          return null;
-        }
-        const badgeId = displayItem.id;
-        const badgeInfo = loaders.docLoader.load({
+        if (!user.badges || !Array.isArray(user.badges)) return null;
+
+        const displayItem = user.badges.find(
+          (badge) => badge.isDisplayed === true
+        );
+        if (!displayItem) return null;
+
+        const badgeInfo = await loaders.docLoader.load({
           index: 'badges',
-          id: badgeId,
+          id: displayItem.badgeId,
         });
-        return badgeInfo.icon;
+
+        return badgeInfo?.icon || null;
       },
     },
 
     majorBadgeName: {
       type: GraphQLString,
-      description: 'returns badge background image url',
+      description: 'returns badge name',
       resolve: async (user, args, { loaders }) => {
-        const displayItem = user.badges.find({ isDisplay: true });
-        if (displayItem == null) {
-          return null;
-        }
-        const badgeId = displayItem.id;
-        const badgeInfo = loaders.docLoader.load({
+        if (!user.badges || !Array.isArray(user.badges)) return null;
+
+        const displayItem = user.badges.find(
+          (badge) => badge.isDisplayed === true
+        );
+        if (!displayItem) return null;
+
+        const badgeInfo = await loaders.docLoader.load({
           index: 'badges',
-          id: badgeId,
+          id: displayItem.badgeId,
         });
-        return badgeInfo.name;
+
+        return badgeInfo?.name || null;
       },
     },
   }),

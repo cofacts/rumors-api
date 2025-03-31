@@ -165,6 +165,25 @@ Object {
 }
 `;
 
+exports[`GetUser returns badge information for user with displayed badge: userWithBadge 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "badges": Array [
+        Object {
+          "badgeId": "test-badge-id",
+          "isDisplayed": true,
+        },
+      ],
+      "id": "test-user",
+      "majorBadgeBorderUrl": "https://example.com/badge-border.png",
+      "majorBadgeImageUrl": "https://example.com/badge-icon.png",
+      "majorBadgeName": "Test Badge",
+    },
+  },
+}
+`;
+
 exports[`GetUser returns contributions of a user 1`] = `
 Object {
   "data": Object {
@@ -184,6 +203,20 @@ Object {
         },
       ],
       "id": "current-user",
+    },
+  },
+}
+`;
+
+exports[`GetUser returns null for badge fields when user has no displayed badge: userWithoutBadge 1`] = `
+Object {
+  "data": Object {
+    "GetUser": Object {
+      "badges": Array [],
+      "id": "user-without-badge",
+      "majorBadgeBorderUrl": null,
+      "majorBadgeImageUrl": null,
+      "majorBadgeName": null,
     },
   },
 }

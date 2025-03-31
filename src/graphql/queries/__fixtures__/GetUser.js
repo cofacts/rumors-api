@@ -5,6 +5,17 @@ export default {
     email: 'secret@secret.com',
     avatarType: 'Facebook',
     facebookId: 123456,
+    badges: [
+      {
+        badgeId: 'test-badge-id',
+        isDisplayed: true,
+        createdAt: '2024-03-30T00:00:00.000Z',
+      },
+    ],
+  },
+  '/users/doc/user-without-badge': {
+    // ...existing code...
+    badges: [],
   },
   '/users/doc/current-user': {
     slug: 'def456',
@@ -79,5 +90,11 @@ export default {
   '/articlereplyfeedbacks/doc/f3': {
     userId: 'current-user',
     createdAt: '2020-02-01T00:00:00.000+08:00',
+  },
+  '/badges/doc/test-badge-id': {
+    name: 'Test Badge',
+    displayName: 'Test Badge Display Name',
+    icon: 'https://example.com/badge-icon.png',
+    borderImage: 'https://example.com/badge-border.png',
   },
 };

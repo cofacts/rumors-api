@@ -16,6 +16,7 @@ import ListAnalytics from './queries/ListAnalytics';
 import ListAIResponses from './queries/ListAIResponses';
 import ListCooccurrences from './queries/ListCooccurrences';
 import ValidateSlug from './queries/ValidateSlug';
+import GetBadge from './queries/GetBadge';
 
 // Set individual objects
 import CreateArticle from './mutations/CreateArticle';
@@ -43,6 +44,7 @@ export default new GraphQLSchema({
       GetUser,
       GetCategory,
       GetYdoc,
+      GetBadge,
       ListArticles,
       ListReplies,
       ListCategories,
