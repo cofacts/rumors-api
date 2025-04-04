@@ -139,7 +139,6 @@ const router = createRouter({
             }),
             url: Type.String({
               description: 'The URL pointing to the new media content',
-              format: 'uri', // Add format validation for URL
             }),
             force: Type.Optional(
               Type.Boolean({
