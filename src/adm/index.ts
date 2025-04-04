@@ -11,6 +11,7 @@ import { useAuditLog, useAuth } from './util';
 import pingHandler from './handlers/ping';
 import blockUser from './handlers/moderation/blockUser';
 import awardBadge from './handlers/badge/awardBadge';
+import replaceMediaHandler from './handlers/moderation/replaceMedia';
 
 const shouldAuth = process.env.NODE_ENV === 'production';
 
@@ -121,6 +122,52 @@ const router = createRouter({
         })
       );
     },
+  })
+  .route({
+    method: 'POST',
+    path: '/moderation/article/media',
+    description:
+      "Replace the specified article's media with content from the given URL.",
+    schemas: {
+      request: {
+        json: Type.Object(
+          {
+            articleId: Type.String({
+              description:
+                'The ID of the article whose media should be replaced',
+            }),
+            url: Type.String({
+              description: 'The URL pointing to the new media content',
+              format: 'uri', // Add format validation for URL
+            }),
+            force: Type.Optional(
+              Type.Boolean({
+                description:
+                  'If true, skip checking if the old media entry exists before replacing',
+                default: false,
+              })
+            ),
+          },
+          { additionalProperties: false }
+        ),
+      },
+      responses: {
+        200: Type.Object(
+          {
+            attachmentHash: Type.String({
+              description: 'The attachment hash of the newly uploaded media',
+            }),
+          },
+          { additionalProperties: false }
+        ),
+        // Add potential error responses based on the handler
+        400: Type.Object({ message: Type.String() }), // e.g., old media missing and force=false
+        404: Type.Object({ message: Type.String() }), // e.g., article not found
+        500: Type.Object({ message: Type.String() }), // Internal server error
+      },
+    },
+    handler: async (request) =>
+      Response.json(await replaceMediaHandler(await request.json())),
   });
 
 createServer(router).listen(process.env.ADM_PORT, () => {
