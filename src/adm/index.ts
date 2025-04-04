@@ -86,7 +86,7 @@ const router = createRouter({
   })
   .route({
     method: 'POST',
-    path: '/moderation/awardBadge',
+    path: '/badge/award',
     description: 'Award the badge to the specified user.',
     schemas: {
       request: {
