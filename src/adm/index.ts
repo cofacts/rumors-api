@@ -10,7 +10,7 @@ import { useAuditLog, useAuth } from './util';
 
 import pingHandler from './handlers/ping';
 import blockUser from './handlers/moderation/blockUser';
-import awardBadge from './handlers/moderation/awardBadge';
+import awardBadge from './handlers/badge/awardBadge';
 
 const shouldAuth = process.env.NODE_ENV === 'production';
 
