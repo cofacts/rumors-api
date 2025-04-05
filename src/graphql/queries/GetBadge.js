@@ -11,7 +11,6 @@ export default {
       index: 'badges',
       id,
     });
-    console.log('Badge query result:', result); // 添加除錯日誌
     return result;
   },
 };

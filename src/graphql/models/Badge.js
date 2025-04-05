@@ -10,10 +10,6 @@ export default new GraphQLObjectType({
   name: 'Badge',
   fields: {
     _id: { type: new GraphQLNonNull(GraphQLID) },
-    id: {
-      type: GraphQLID,
-      resolve: (badge) => badge._id,
-    },
     name: { type: GraphQLString },
     displayName: { type: GraphQLString },
     description: { type: GraphQLString },

@@ -173,7 +173,6 @@ const User = new GraphQLObjectType({
       description: 'returns badge background image url',
       resolve: async (user, args, { loaders }) => {
         if (!user.badges || !Array.isArray(user.badges)) {
-          console.log('No badges array found for user:', user.id);
           return null;
         }
 
@@ -181,18 +180,14 @@ const User = new GraphQLObjectType({
           (badge) => badge.isDisplayed === true
         );
         if (!displayItem) {
-          console.log('No displayed badge found for user:', user.id);
           return null;
         }
-
-        console.log('Finding badge with ID:', displayItem.badgeId);
 
         const badgeInfo = await loaders.docLoader.load({
           index: 'badges',
           id: displayItem.badgeId,
         });
 
-        console.log('Badge info found:', badgeInfo);
         return badgeInfo?.borderImage || null;
       },
     },
