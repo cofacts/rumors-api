@@ -2,36 +2,24 @@ import 'dotenv/config';
 import client from 'util/client';
 
 /**
- * Updates users index mapping to include badges field
+ * This function previously updated users index mapping to include badges field.
+ * It's now a no-op since the Elasticsearch DB has already been re-indexed on 
+ * staging and production with the latest schema (by running npm run reload in rumors-db).
+ * The users index already has the badges field defined.
  */
 async function addBadgesField() {
-  await client.indices.putMapping({
-    index: 'users',
-    body: {
-      properties: {
-        badges: {
-          type: 'nested',
-          properties: {
-            badgeId: { type: 'keyword' },
-            badgeMetaData: { type: 'keyword' },
-            isDisplayed: { type: 'boolean' },
-            createdAt: { type: 'date' },
-            updatedAt: { type: 'date' },
-          },
-        },
-      },
-    },
-  });
+  // No-op: Elasticsearch DB has already been re-indexed with the latest schema
+  console.log('Skipping putMapping operation as the users index already has badges field defined.');
 }
 
 if (require.main === module) {
   addBadgesField().then(
     () => {
-      console.log('✅ Users index mapping updated successfully');
+      console.log('✅ Migration script executed successfully (no changes needed)');
       process.exit(0);
     },
     (error) => {
-      console.error('❌ Error updating users index mapping:', error);
+      console.error('❌ Error executing migration script:', error);
       process.exit(1);
     }
   );

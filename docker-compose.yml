@@ -39,7 +39,7 @@ services:
       ELASTICSEARCH_URL: "http://db:9200"
       URL_RESOLVER_URL: "url-resolver:4000"
     ports:
-      - "6000:5000"
+      - "5000:5000"
       - "5500:5500"
 
   site:

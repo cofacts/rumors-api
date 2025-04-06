@@ -33,7 +33,24 @@ async function appendBadgeToList(
             if (ctx._source.badges == null) {
               ctx._source.badges = [];
             }
-            ctx._source.badges.add(params.badge);
+            
+            // Check if badge with same ID already exists
+            boolean badgeExists = false;
+            for (badge in ctx._source.badges) {
+              if (badge.badgeId == params.badge.badgeId) {
+                badgeExists = true;
+                break;
+              }
+            }
+            
+            // Only add badge if it doesn't already exist
+            if (!badgeExists) {
+              ctx._source.badges.add(params.badge);
+              return "updated";
+            } else {
+              // Return noop if badge already exists
+              return "noop";
+            }
           `,
           params: {
             badge: {
