@@ -11,7 +11,6 @@ export default new GraphQLObjectType({
   fields: {
     id: {
       type: GraphQLID,
-      resolve: (badge) => badge._id,
     },
     name: { type: GraphQLString },
     displayName: { type: GraphQLString },
