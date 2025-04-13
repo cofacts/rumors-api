@@ -227,5 +227,43 @@ describe('GetUser', () => {
     ).toMatchSnapshot();
   });
 
+  it('returns badge information for user with displayed badge', async () => {
+    expect(
+      await gql`
+        {
+          GetUser(id: "test-user") {
+            id
+            badges {
+              badgeId
+              isDisplayed
+            }
+            majorBadgeBorderUrl
+            majorBadgeImageUrl
+            majorBadgeName
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('userWithBadge');
+  });
+
+  it('returns null for badge fields when user has no displayed badge', async () => {
+    expect(
+      await gql`
+        {
+          GetUser(id: "user-without-badge") {
+            id
+            badges {
+              badgeId
+              isDisplayed
+            }
+            majorBadgeBorderUrl
+            majorBadgeImageUrl
+            majorBadgeName
+          }
+        }
+      `({}, { user: currentUser })
+    ).toMatchSnapshot('userWithoutBadge');
+  });
+
   afterAll(() => unloadFixtures(fixtures));
 });

@@ -10,6 +10,7 @@ import { useAuditLog, useAuth } from './util';
 
 import pingHandler from './handlers/ping';
 import blockUser from './handlers/moderation/blockUser';
+import awardBadge from './handlers/badge/awardBadge';
 
 const shouldAuth = process.env.NODE_ENV === 'production';
 
@@ -49,7 +50,7 @@ const router = createRouter({
         ),
       },
     },
-    handler: async (request) =>
+    handler: async (request: Request) =>
       Response.json(pingHandler(await request.json())),
   })
   .route({
@@ -80,8 +81,46 @@ const router = createRouter({
         }),
       },
     },
-    handler: async (request) =>
+    handler: async (request: Request) =>
       Response.json(await blockUser(await request.json())),
+  })
+  .route({
+    method: 'POST',
+    path: '/badge/award',
+    description: 'Award the badge to the specified user.',
+    schemas: {
+      request: {
+        json: Type.Object(
+          {
+            userId: Type.String({
+              description: 'The user ID',
+            }),
+            badgeId: Type.String({
+              description: 'The badge key',
+            }),
+            badgeMetaData: Type.String({
+              description: 'The badge metadata, json in string format',
+            }),
+          },
+          { additionalProperties: false }
+        ),
+      },
+      responses: {
+        200: Type.Object({
+          badgeId: Type.String(),
+          badgeMetaData: Type.String(),
+        }),
+      },
+    },
+    handler: async (request: Request) => {
+      const body = await request.json();
+      return Response.json(
+        await awardBadge({
+          ...body,
+          request, // Pass the entire request object from feTS
+        })
+      );
+    },
   });
 
 createServer(router).listen(process.env.ADM_PORT, () => {
