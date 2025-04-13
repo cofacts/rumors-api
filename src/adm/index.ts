@@ -11,6 +11,8 @@ import { useAuditLog, useAuth } from './util';
 import pingHandler from './handlers/ping';
 import blockUser from './handlers/moderation/blockUser';
 import awardBadge from './handlers/badge/awardBadge';
+import replaceMediaHandler from './handlers/moderation/replaceMedia';
+import genAIReplyHandler from './handlers/moderation/genAIReply';
 
 const shouldAuth = process.env.NODE_ENV === 'production';
 
@@ -121,6 +123,94 @@ const router = createRouter({
         })
       );
     },
+  })
+  .route({
+    method: 'POST',
+    path: '/moderation/article/media',
+    description:
+      "Replace the specified article's media with content from the given URL.",
+    schemas: {
+      request: {
+        json: Type.Object(
+          {
+            articleId: Type.String({
+              description:
+                'The ID of the article whose media should be replaced',
+            }),
+            url: Type.String({
+              description: 'The URL pointing to the new media content',
+            }),
+            force: Type.Optional(
+              Type.Boolean({
+                description:
+                  'If true, skip checking if the old media entry exists before replacing',
+                default: false,
+              })
+            ),
+          },
+          { additionalProperties: false }
+        ),
+      },
+      responses: {
+        200: Type.Object(
+          {
+            attachmentHash: Type.String({
+              description: 'The attachment hash of the newly uploaded media',
+            }),
+          },
+          { additionalProperties: false }
+        ),
+        // Add potential error responses based on the handler
+        400: Type.Object({ message: Type.String() }), // e.g., old media missing and force=false
+        404: Type.Object({ message: Type.String() }), // e.g., article not found
+        500: Type.Object({ message: Type.String() }), // Internal server error
+      },
+    },
+    handler: async (request) =>
+      Response.json(await replaceMediaHandler(await request.json())),
+  })
+  .route({
+    method: 'POST',
+    path: '/moderation/aiReply',
+    description:
+      'Generate a new AI reply for the specified article, replacing any existing one.',
+    schemas: {
+      request: {
+        json: Type.Object(
+          {
+            articleId: Type.String({
+              description: 'The ID of the article to generate an AI reply for',
+            }),
+            temperature: Type.Optional(
+              Type.Number({
+                description:
+                  'OpenAI temperature setting (0-2). Higher values make the output more random.',
+                minimum: 0,
+                maximum: 2,
+              })
+            ),
+          },
+          { additionalProperties: false }
+        ),
+      },
+      responses: {
+        200: Type.Object(
+          {
+            success: Type.Boolean({
+              description:
+                'Indicates if the AI reply generation was initiated successfully.',
+            }),
+          },
+          { additionalProperties: false }
+        ),
+        // Add potential error responses based on the handler
+        400: Type.Object({ message: Type.String() }), // e.g., invalid input
+        404: Type.Object({ message: Type.String() }), // e.g., article not found
+        500: Type.Object({ message: Type.String() }), // Internal server error during generation
+      },
+    },
+    handler: async (request) =>
+      Response.json(await genAIReplyHandler(await request.json())),
   });
 
 createServer(router).listen(process.env.ADM_PORT, () => {
