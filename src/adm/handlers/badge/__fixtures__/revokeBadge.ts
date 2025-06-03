@@ -20,7 +20,7 @@ export default {
         isDisplayed: false,
         createdAt: '2020-01-02T00:00:00.000Z',
         updatedAt: '2020-01-02T00:00:00.000Z',
-      }
+      },
     ],
   } satisfies User,
 
