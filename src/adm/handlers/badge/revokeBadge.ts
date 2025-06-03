@@ -59,7 +59,7 @@ async function removeBadgeFromList(userId: string, badgeId: string) {
     if (removeBadgeResult === 'noop') {
       console.log(
         `Info: user ID ${userId} does not have badge with ID ${badgeId}.`
-    );
+      );
     }
   } catch (e) {
     console.log(e);
