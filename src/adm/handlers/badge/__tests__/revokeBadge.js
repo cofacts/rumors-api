@@ -113,13 +113,13 @@ describe('revokeBadge', () => {
   it('does nothing if the user has other badges but not the specified one', async () => {
     const result = await revokeBadge({
       userId: 'user-with-badge',
-      badgeId: 'non-existent-badge',
+      badgeId: 'test-certification-003',
       request: { userId: 'authorized-issuer@test.com' },
     });
 
     expect(result).toMatchInlineSnapshot(`
       Object {
-        "badgeId": "non-existent-badge",
+        "badgeId": "test-certification-003",
         "success": true,
       }
     `);
