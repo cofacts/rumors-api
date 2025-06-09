@@ -112,14 +112,14 @@ describe('revokeBadge', () => {
 
   it('does nothing if the user has other badges but not the specified one', async () => {
     const result = await revokeBadge({
-      userId: 'user-without-badge',
-      badgeId: 'test-certification-003',
+      userId: 'user-with-wrong-badge',
+      badgeId: 'test-certification-002',
       request: { userId: 'authorized-issuer@test.com' },
     });
 
     expect(result).toMatchInlineSnapshot(`
       Object {
-        "badgeId": "test-certification-003",
+        "badgeId": "test-certification-002",
         "success": true,
       }
     `);
@@ -129,12 +129,11 @@ describe('revokeBadge', () => {
     } = await client.get({
       index: 'users',
       type: 'doc',
-      id: 'user-with-badge',
+      id: 'user-with-wrong-badge',
     });
 
     // Assert that the user still has both original badges
-    expect(userWithBadge.badges).toHaveLength(2);
+    expect(userWithBadge.badges).toHaveLength(1);
     expect(userWithBadge.badges[0].badgeId).toBe('test-certification-001');
-    expect(userWithBadge.badges[1].badgeId).toBe('test-certification-002');
   });
 });

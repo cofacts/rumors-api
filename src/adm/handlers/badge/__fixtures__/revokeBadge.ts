@@ -31,6 +31,21 @@ export default {
     badges: [],
   } satisfies User,
 
+  '/users/doc/user-with-wrong-badge': {
+    name: 'user-with-wrong-badge',
+    createdAt: '2020-01-01T00:00:00.000Z',
+    googleId: 'some-google-id',
+    badges: [
+      {
+        badgeId: 'test-certification-001',
+        badgeMetaData: '{"from":"some-orgnization"}',
+        isDisplayed: true,
+        createdAt: '2020-01-01T00:00:00.000Z',
+        updatedAt: '2020-01-01T00:00:00.000Z',
+      },
+    ],
+  } satisfies User,
+
   '/badges/doc/test-certification-001': {
     name: 'Test Certification',
     displayName: 'Test Certification',
