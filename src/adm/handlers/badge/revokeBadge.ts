@@ -124,21 +124,6 @@ async function main({
   badgeId: string;
   request: { userId: string };
 }): Promise<revokeBadgeReturnValue> {
-  // Check if user exists first
-  try {
-    const { body } = await client.get({
-      index: 'users',
-      type: 'doc',
-      id: userId,
-    });
-    if (!body._source) {
-      throw new HTTPError(400, `User with ID=${userId} does not exist`);
-    }
-  } catch (e) {
-    if (e instanceof HTTPError) throw e;
-    throw new HTTPError(400, `User with ID=${userId} does not exist`);
-  }
-
   // Verify if the current user/service is authorized to revoke this badge
   await verifyBadgeIssuer(badgeId, request.userId);
 
