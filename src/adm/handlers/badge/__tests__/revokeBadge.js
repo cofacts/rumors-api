@@ -112,7 +112,7 @@ describe('revokeBadge', () => {
 
   it('does nothing if the user has other badges but not the specified one', async () => {
     const result = await revokeBadge({
-      userId: 'user-with-badge',
+      userId: 'user-without-badge',
       badgeId: 'test-certification-003',
       request: { userId: 'authorized-issuer@test.com' },
     });

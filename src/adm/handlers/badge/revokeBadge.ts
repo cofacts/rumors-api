@@ -139,15 +139,26 @@ async function main({
     throw new HTTPError(400, `User with ID=${userId} does not exist`);
   }
 
-  // Verify if the current user/service is authorized to revoke this badge
-  await verifyBadgeIssuer(badgeId, request.userId);
+  try {
+    const badge = await client.get({
+      index: 'badges',
+      type: 'doc',
+      id: badgeId,
+    });
 
-  await removeBadgeFromList(userId, badgeId);
+    // Verify if the current user/service is authorized to revoke this badge
+    await verifyBadgeIssuer(badgeId, request.userId);
 
-  return {
-    badgeId,
-    success: true,
-  };
+    await removeBadgeFromList(userId, badgeId);
+
+    return {
+      badgeId,
+      success: true,
+    };
+  } catch (e) {
+    if (e instanceof HTTPError) throw e;
+    throw new HTTPError(500, `Error while revoking badge: ${e.message}`);
+  }
 }
 
 export default main;
