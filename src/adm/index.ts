@@ -11,6 +11,7 @@ import { useAuditLog, useAuth } from './util';
 import pingHandler from './handlers/ping';
 import blockUser from './handlers/moderation/blockUser';
 import awardBadge from './handlers/badge/awardBadge';
+import revokeBadge from './handlers/badge/revokeBadge';
 import replaceMediaHandler from './handlers/moderation/replaceMedia';
 import genAIReplyHandler from './handlers/moderation/genAIReply';
 
@@ -118,6 +119,41 @@ const router = createRouter({
       const body = await request.json();
       return Response.json(
         await awardBadge({
+          ...body,
+          request, // Pass the entire request object from feTS
+        })
+      );
+    },
+  })
+  .route({
+    method: 'DELETE',
+    path: '/badge/revoke',
+    description: 'Revoke the badge from the specified user.',
+    schemas: {
+      request: {
+        json: Type.Object(
+          {
+            userId: Type.String({
+              description: 'The user ID',
+            }),
+            badgeId: Type.String({
+              description: 'The badge key',
+            }),
+          },
+          { additionalProperties: false }
+        ),
+      },
+      responses: {
+        200: Type.Object({
+          badgeId: Type.String(),
+          success: Type.Boolean(),
+        }),
+      },
+    },
+    handler: async (request: Request) => {
+      const body = await request.json();
+      return Response.json(
+        await revokeBadge({
           ...body,
           request, // Pass the entire request object from feTS
         })
