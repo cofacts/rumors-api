@@ -1,5 +1,5 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
-import { VertexAI } from '@google-cloud/vertexai';
+import { GoogleGenAI } from '@google/genai';
 import { GoogleAuth } from 'google-auth-library';
 import fetch from 'node-fetch';
 import sharp from 'sharp';
@@ -875,8 +875,13 @@ export async function transcribeAV({
   location,
 }) {
   const project = await new GoogleAuth().getProjectId();
-  const vertexAI = new VertexAI({ project, location });
-  const geminiModel = vertexAI.getGenerativeModel({ model: modelName });
+  // Use the new GoogleGenAI SDK with vertexai option
+  const genAI = new GoogleGenAI({
+    vertexai: true,
+    project,
+    location,
+  });
+  const model = genAI.models.get(modelName);
   const generateContentArgs = {
     systemInstruction:
       'You are a transcriber that provide precise transcript to video and audio content.',
@@ -939,7 +944,7 @@ Your text will be used for indexing these media files, so please follow these ru
     }),
   });
 
-  const { response } = await geminiModel.generateContent(generateContentArgs);
+  const response = await model.generateContent(generateContentArgs);
   console.log('[transcribeAV]', JSON.stringify(response));
 
   const output = response.candidates[0].content.parts[0].text;
