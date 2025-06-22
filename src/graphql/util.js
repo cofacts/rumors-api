@@ -881,8 +881,8 @@ export async function transcribeAV({
     project,
     location,
   });
-  const model = genAI.models.get(modelName);
   const generateContentArgs = {
+    model: modelName,
     systemInstruction:
       'You are a transcriber that provide precise transcript to video and audio content.',
     contents: [
@@ -944,7 +944,7 @@ Your text will be used for indexing these media files, so please follow these ru
     }),
   });
 
-  const response = await model.generateContent(generateContentArgs);
+  const response = await genAI.models.generateContent(generateContentArgs);
   console.log('[transcribeAV]', JSON.stringify(response));
 
   const output = response.candidates[0].content.parts[0].text;
