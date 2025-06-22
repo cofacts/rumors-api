@@ -883,8 +883,6 @@ export async function transcribeAV({
   });
   const generateContentArgs = {
     model: modelName,
-    systemInstruction:
-      'You are a transcriber that provide precise transcript to video and audio content.',
     contents: [
       {
         role: 'user',
@@ -907,39 +905,42 @@ Your text will be used for indexing these media files, so please follow these ru
         ],
       },
     ],
-    generationConfig: {
+    config: {
+      systemInstruction:
+        'You are a transcriber that provide precise transcript to video and audio content.',
       responseModalities: ['TEXT'],
       temperature: 0.1,
       maxOutputTokens: 2048, // Stop hallucinations early
+      safetySettings: [
+        {
+          category: 'HARM_CATEGORY_HATE_SPEECH',
+          threshold: 'OFF',
+        },
+        {
+          category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+          threshold: 'OFF',
+        },
+        {
+          category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+          threshold: 'OFF',
+        },
+        {
+          category: 'HARM_CATEGORY_HARASSMENT',
+          threshold: 'OFF',
+        },
+      ],
     },
-    safetySettings: [
-      {
-        category: 'HARM_CATEGORY_HATE_SPEECH',
-        threshold: 'OFF',
-      },
-      {
-        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-        threshold: 'OFF',
-      },
-      {
-        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-        threshold: 'OFF',
-      },
-      {
-        category: 'HARM_CATEGORY_HARASSMENT',
-        threshold: 'OFF',
-      },
-    ],
   };
 
   const generation = langfuseTrace.generation({
     name: 'gemini-transcript',
     modelParameters: {
-      ...generateContentArgs.generationConfig,
-      safetySettings: JSON.stringify(generateContentArgs.safetySettings),
+      temperature: generateContentArgs.config.temperature,
+      maxOutputTokens: generateContentArgs.config.maxOutputTokens,
+      safetySettings: JSON.stringify(generateContentArgs.config.safetySettings),
     },
     input: JSON.stringify({
-      systemInstruction: generateContentArgs.systemInstruction,
+      systemInstruction: generateContentArgs.config.systemInstruction,
       contents: generateContentArgs.contents,
     }),
   });
