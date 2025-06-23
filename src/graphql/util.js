@@ -911,7 +911,7 @@ Your text will be used for indexing these media files, so please follow these ru
       responseModalities: ['TEXT'],
       temperature: 0.5, // Raise a bit to reduce looping (repeated text) error
       maxOutputTokens: 2048, // Stop looping output early
-      thinkingConfig: { thinkingBudge: 0 }, // Thinking may somehow introduce more looping
+      thinkingConfig: { thinkingBudget: 0 }, // Thinking may somehow introduce more looping
       safetySettings: [
         {
           category: 'HARM_CATEGORY_HATE_SPEECH',
