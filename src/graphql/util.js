@@ -881,6 +881,8 @@ export async function transcribeAV({
     project,
     location,
   });
+
+  /**@type {import('@google/genai').GenerateContentParameters} */
   const generateContentArgs = {
     model: modelName,
     contents: [
