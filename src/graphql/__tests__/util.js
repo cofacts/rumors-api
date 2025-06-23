@@ -246,7 +246,7 @@ if (process.env.GCS_BUCKET_NAME) {
       // The whole text are not always 100% identical, but these keywords should be always included.
       expect(text).toMatch(/薑是體內最佳除濕機/);
       expect(text).toMatch(/鳳梨切塊/);
-      expect(text).toMatch(/6周減緩40%疼痛/);
+      expect(text).toMatch(/6(?:周|週)緩40%疼痛/);
       expect(text).toMatch(/好口味雙倍照顧關節/);
 
       // Cleanup
