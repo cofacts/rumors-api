@@ -198,11 +198,11 @@ if (process.env.GCS_BUCKET_NAME) {
 
       // Expect some keywords are identified.
       // The whole text are not always 100% identical, but these keywords should be always included.
-      expect(text).toMatch(/幫我捧場一組我兼職/);
-      expect(text).toMatch(/賣的葉黃素軟糖/);
-      expect(text).toMatch(/含運費是1280/);
-      expect(text).toMatch(/達到就會有額外的獎金/);
-      expect(text).toMatch(/你能夠幫我一組就好了/);
+      expect(text).toMatch(/幫我捧場一組我兼職|帮我捧场一组我兼职/);
+      expect(text).toMatch(/賣的葉黃素軟糖|卖的叶黄素软糖/);
+      expect(text).toMatch(/含運費是1280|含运费是1280/);
+      expect(text).toMatch(/達到就會有額外的獎金|达到就会有额外的奖金/);
+      expect(text).toMatch(/你能夠幫我一組就好了|你能够帮我一组就好了/);
 
       // Cleanup
       await client.delete({
@@ -246,7 +246,7 @@ if (process.env.GCS_BUCKET_NAME) {
       // The whole text are not always 100% identical, but these keywords should be always included.
       expect(text).toMatch(/薑是體內最佳除濕機/);
       expect(text).toMatch(/鳳梨切塊/);
-      expect(text).toMatch(/6周減緩40%疼痛/);
+      expect(text).toMatch(/6(?:周|週)減緩40%疼痛/);
       expect(text).toMatch(/好口味雙倍照顧關節/);
 
       // Cleanup

@@ -881,6 +881,8 @@ export async function transcribeAV({
     project,
     location,
   });
+
+  /**@type {import('@google/genai').GenerateContentParameters} */
   const generateContentArgs = {
     model: modelName,
     contents: [
@@ -909,8 +911,9 @@ Your text will be used for indexing these media files, so please follow these ru
       systemInstruction:
         'You are a transcriber that provide precise transcript to video and audio content.',
       responseModalities: ['TEXT'],
-      temperature: 0.1,
-      maxOutputTokens: 2048, // Stop hallucinations early
+      temperature: 0.5, // Raise a bit to reduce looping (repeated text) error
+      maxOutputTokens: 2048, // Stop looping output early
+      thinkingConfig: { thinkingBudget: 0 }, // Thinking may somehow introduce more looping
       safetySettings: [
         {
           category: 'HARM_CATEGORY_HATE_SPEECH',
@@ -937,6 +940,7 @@ Your text will be used for indexing these media files, so please follow these ru
     modelParameters: {
       temperature: generateContentArgs.config.temperature,
       maxOutputTokens: generateContentArgs.config.maxOutputTokens,
+      thinkingBudget: generateContentArgs.config.thinkingConfig?.thinkingBudget,
       safetySettings: JSON.stringify(generateContentArgs.config.safetySettings),
     },
     input: JSON.stringify({
@@ -970,9 +974,8 @@ Your text will be used for indexing these media files, so please follow these ru
 
 const TRANSCRIPT_MODELS = [
   // Combinations that are faster than gemini-2.0-flash-001 @ us
-  { model: 'gemini-1.5-pro-002', location: 'asia-east1' },
-  { model: 'gemini-1.5-pro-002', location: 'asia-northeast1' },
-  { model: 'gemini-2.0-flash-exp', location: 'us-central1' },
+  { model: 'gemini-2.5-flash', location: 'global' },
+  { model: 'gemini-2.5-flash-lite-preview-06-17', location: 'global' },
 ];
 
 /**
