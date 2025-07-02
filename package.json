@@ -30,6 +30,7 @@
     "@google-cloud/bigquery": "^6.2.0",
     "@google-cloud/vertexai": "^1.9.3",
     "@google-cloud/vision": "^3.1.4",
+    "@google/genai": "^1.6.0",
     "@grpc/grpc-js": "^1.6.7",
     "@grpc/proto-loader": "^0.5.0",
     "@sinclair/typebox": "^0.33.22",

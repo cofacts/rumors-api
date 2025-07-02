@@ -145,7 +145,7 @@ export const apolloServer = new ApolloServer({
                   // Only include IP & forwarded related headers.
                   // Other headers are logged by pino-logger.
                   headers: Object.fromEntries(
-                    Array.from(http.headers.entries()).filter(([key]) =>
+                    Object.entries(http?.headers ?? {}).filter(([key]) =>
                       LOGGER_HEADER_KEY_REGEX.test(key)
                     )
                   ),
