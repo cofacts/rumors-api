@@ -1,5 +1,5 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
-import { VertexAI } from '@google-cloud/vertexai';
+import { GoogleGenAI } from '@google/genai';
 import { GoogleAuth } from 'google-auth-library';
 import fetch from 'node-fetch';
 import sharp from 'sharp';
@@ -875,11 +875,14 @@ export async function transcribeAV({
   location,
 }) {
   const project = await new GoogleAuth().getProjectId();
-  const vertexAI = new VertexAI({ project, location });
-  const geminiModel = vertexAI.getGenerativeModel({ model: modelName });
+  // Use the new GoogleGenAI SDK with vertexai option
+  const genAI = new GoogleGenAI({
+    vertexai: true,
+    project,
+    location,
+  });
   const generateContentArgs = {
-    systemInstruction:
-      'You are a transcriber that provide precise transcript to video and audio content.',
+    model: modelName,
     contents: [
       {
         role: 'user',
@@ -902,44 +905,47 @@ Your text will be used for indexing these media files, so please follow these ru
         ],
       },
     ],
-    generationConfig: {
+    config: {
+      systemInstruction:
+        'You are a transcriber that provide precise transcript to video and audio content.',
       responseModalities: ['TEXT'],
       temperature: 0.1,
       maxOutputTokens: 2048, // Stop hallucinations early
+      safetySettings: [
+        {
+          category: 'HARM_CATEGORY_HATE_SPEECH',
+          threshold: 'OFF',
+        },
+        {
+          category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+          threshold: 'OFF',
+        },
+        {
+          category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+          threshold: 'OFF',
+        },
+        {
+          category: 'HARM_CATEGORY_HARASSMENT',
+          threshold: 'OFF',
+        },
+      ],
     },
-    safetySettings: [
-      {
-        category: 'HARM_CATEGORY_HATE_SPEECH',
-        threshold: 'OFF',
-      },
-      {
-        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-        threshold: 'OFF',
-      },
-      {
-        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-        threshold: 'OFF',
-      },
-      {
-        category: 'HARM_CATEGORY_HARASSMENT',
-        threshold: 'OFF',
-      },
-    ],
   };
 
   const generation = langfuseTrace.generation({
     name: 'gemini-transcript',
     modelParameters: {
-      ...generateContentArgs.generationConfig,
-      safetySettings: JSON.stringify(generateContentArgs.safetySettings),
+      temperature: generateContentArgs.config.temperature,
+      maxOutputTokens: generateContentArgs.config.maxOutputTokens,
+      safetySettings: JSON.stringify(generateContentArgs.config.safetySettings),
     },
     input: JSON.stringify({
-      systemInstruction: generateContentArgs.systemInstruction,
+      systemInstruction: generateContentArgs.config.systemInstruction,
       contents: generateContentArgs.contents,
     }),
   });
 
-  const { response } = await geminiModel.generateContent(generateContentArgs);
+  const response = await genAI.models.generateContent(generateContentArgs);
   console.log('[transcribeAV]', JSON.stringify(response));
 
   const output = response.candidates[0].content.parts[0].text;

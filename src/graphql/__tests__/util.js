@@ -85,7 +85,7 @@ if (process.env.GCS_BUCKET_NAME) {
         map[FIXTURES[i]] = publicUrl;
         return map;
       }, {});
-    }, 10 * 1000);
+    }, 40 * 1000);
 
     afterAll(async () => {
       await langfuse.shutdownAsync();
