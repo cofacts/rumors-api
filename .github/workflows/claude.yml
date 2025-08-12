@@ -39,7 +39,7 @@ jobs:
         uses: anthropics/claude-code-action@beta
         env:
           ANTHROPIC_VERTEX_PROJECT_ID: "industrious-eye-145611"
-          CLOUD_ML_REGION: "global"
+          CLOUD_ML_REGION: "asia-east1"
         with:
           use_vertex: "true"
           timeout_minutes: "60"
