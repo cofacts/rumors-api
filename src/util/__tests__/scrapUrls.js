@@ -1,4 +1,4 @@
-jest.mock('../grpc');
+jest.mock('../geminiUrlScraper');
 
 import MockDate from 'mockdate';
 
@@ -7,7 +7,7 @@ import fixtures from '../__fixtures__/scrapUrls';
 import scrapUrls, { removeFBCLIDIfExist } from '../scrapUrls';
 import DataLoaders from 'graphql/dataLoaders';
 import client from 'util/client';
-import resolveUrl from '../grpc';
+import scrapeUrlsWithGemini from '../geminiUrlScraper';
 
 describe('scrapping & storage', () => {
   afterAll(async () => {
@@ -24,25 +24,25 @@ describe('scrapping & storage', () => {
   it('scraps from Internet and handles error', async () => {
     MockDate.set(1485593157011);
 
-    resolveUrl.__addMockResponse([
-      // Mimics the out-of-order nature of gRPC
-      {
-        url: 'http://example.com/not-found',
-        canonical: 'http://example.com/not-found',
-        title: '',
-        summary: 'Not Found',
-        topImageUrl: '',
-        html: '<html><head></head><body>Not Found</body></html>',
-        status: 404,
-      },
+    scrapeUrlsWithGemini.mockResolvedValue([
       {
         url: 'http://example.com/index.html',
         canonical: 'http://example.com/index.html',
         title: 'Some title',
         summary: 'Some text as summary',
         topImageUrl: '',
-        html: '<html><head></head><body>Hello world</body></html>',
-        status: 200,
+        html: '',
+        status: 'SUCCESS',
+      },
+      {
+        url: 'http://example.com/not-found',
+        canonical: 'http://example.com/not-found',
+        title: '',
+        summary: 'Not Found',
+        topImageUrl: '',
+        html: '',
+        status: 'ERROR',
+        error: 'Not Found',
       },
     ]);
 
