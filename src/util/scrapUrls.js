@@ -3,7 +3,7 @@ import urlRegex from 'url-regex';
 import DataLoader from 'dataloader';
 import url from 'url';
 
-import resolveUrl from './grpc';
+import scrapeUrlsWithGemini from './geminiUrlScraper';
 
 /**
  * Extracts urls from a string.
@@ -33,17 +33,8 @@ async function scrapUrls(
   const normalizedUrls = removeFBCLIDIfExist(originalUrls);
 
   const scrapLoader = new DataLoader(async (urls) => {
-    const urlToIndex = urls.reduce((map, url, i) => {
-      map[url] = i;
-      return map;
-    }, {});
-    const unorderedFetchResults = await resolveUrl(urls);
-    const orderedFetchResults = [];
-    unorderedFetchResults.forEach(
-      (fetchResult) =>
-        (orderedFetchResults[urlToIndex[fetchResult.url]] = fetchResult)
-    );
-    return orderedFetchResults;
+    // Use Gemini-based URL scraping instead of gRPC
+    return await scrapeUrlsWithGemini(urls);
   });
 
   // result: list of ScrapResult, with its `url` being the url in text,
@@ -82,8 +73,8 @@ async function scrapUrls(
         scrappingCount += 1;
         return scrapLoader.load(result).then((scrapped) => ({
           ...scrapped,
-          url: originalUrls[i],
-          normalizedUrl: scrapped.url,
+          url: originalUrls[i], // Use original URL from text
+          normalizedUrl: result, // Use normalized URL for caching
         }));
       })
     );
