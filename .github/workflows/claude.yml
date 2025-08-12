@@ -38,7 +38,7 @@ jobs:
       - name: Run Claude PR Action
         uses: anthropics/claude-code-action@beta
         env:
-          ANTHROPIC_VERTEX_PROJECT_ID: "industrious-eye-145611"
+          ANTHROPIC_VERTEX_PROJECT_ID: "${{ secrets.GC_PROJECT_ID }}"
           CLOUD_ML_REGION: "asia-east1"
         with:
           use_vertex: "true"
