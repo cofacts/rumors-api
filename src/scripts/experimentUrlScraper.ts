@@ -41,12 +41,16 @@ async function main({
   if (single) {
     testUrls = [single];
   } else if (urls) {
-    testUrls = urls.split(',').map(url => url.trim());
+    testUrls = urls.split(',').map(url => url.trim()).filter(Boolean);
   } else {
     testUrls = DEFAULT_TEST_URLS;
     console.info('No URLs specified, using default test URLs:', testUrls);
   }
 
+  if (testUrls.length === 0) {
+    console.info('No valid URLs to process. Exiting.');
+    return;
+  }
   console.info(`Testing URL scraping with ${testUrls.length} URLs`);
 
   const trace = langfuse.trace({
