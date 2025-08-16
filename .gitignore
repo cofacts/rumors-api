@@ -45,3 +45,6 @@ esdata
 config/local-*
 .vscode/
 .env
+
+# Prevent google-github-actions/auth credentials being committed to git by accident
+gha-creds-*.json
