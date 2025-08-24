@@ -60,10 +60,10 @@ Requirements:
 - url: Return the exact original URL from the input list
 - canonical: Extract the canonical URL from meta tags or use the original URL if no canonical is found
 - title: Extract the main page title exactly as it appears
-- summary: Extract the complete original text content from the page - DO NOT summarize, rewrite, or paraphrase. Keep all original claims, statements, facts, and information exactly as written in the source material. This text will be used for indexing and search purposes.
+- summary: Extract the main textual content of the page, such as articles, posts, or video descriptions. Exclude navigational elements, cookie banners, ads, and system messages (e.g., 'Tap to unmute', 'Your browser can't play this video'). The goal is to capture the substance of the content for fact-checking and search indexing. DO NOT summarize, rewrite, or paraphrase. Keep all original claims, statements, facts, and information exactly as written in the source material.
 - topImageUrl: Find the most representative image (not logos, ads, or decorative images), return null if no suitable image exists
 - Return valid JSON array only, no markdown code blocks or explanations
-- Process all URLs and return results for each, even if some fail`,
+- Process all URLs and return results for each. If a URL cannot be accessed or results in an error, return an object for it with "title" and "summary" set to null.`,
             },
           ],
         },
