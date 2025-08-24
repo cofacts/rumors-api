@@ -857,6 +857,115 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
 }
 
 /**
+ * Transcribes a YouTube video using Gemini model.
+ *
+ * @param {object} params
+ * @param {string} params.youtubeUrl - The URL of the YouTube video.
+ * @param {import('@langfuse/langfuse').Trace} params.langfuseTrace - Langfuse trace object
+ * @returns {Promise<{text: string, usage: {promptTokens?: number, completionTokens?: number, totalTokens?: number}}>}
+ */
+export async function transcribeYoutube({ youtubeUrl, langfuseTrace }) {
+  const modelName = 'gemini-2.5-flash';
+  const location = 'global';
+
+  const project = await new GoogleAuth().getProjectId();
+  const genAI = new GoogleGenAI({
+    vertexai: true,
+    project,
+    location,
+  });
+
+  /**@type {import('@google/genai').GenerateContentParameters} */
+  const generateContentArgs = {
+    model: modelName,
+    contents: [
+      {
+        role: 'user',
+        parts: [
+          {
+            fileData: {
+              fileUri: youtubeUrl,
+              mimeType: 'video/*',
+            },
+          },
+        ],
+      },
+    ],
+    config: {
+      systemInstruction: `You are helping a fact checker to fact-check a YouTube video. Your task is to provide an accurate transcript of the video. The transcript will be used by human fact-checkers and for indexing in a hoax database.
+
+Please follow these rules carefully:
+- Transcribe the exact text shown visually and spoken in the audio.
+- If the verbal and visual text are the same, include it only once.
+- Do not miss any text or spoken words.
+- Output only the transcript. Do not include timestamps or any explanations.
+- Use the same language as the video. For Chinese, use the character set (Traditional or Simplified) that appears in the video's text. If there is no text, prefer Traditional Chinese.
+- Group sentences into paragraphs with appropriate punctuation to improve readability.`,
+      responseModalities: ['TEXT'],
+      temperature: 0.5,
+      maxOutputTokens: 65536,
+      thinkingConfig: { thinkingBudget: 0 },
+      mediaResolution: 'MEDIA_RESOLUTION_LOW',
+      safetySettings: [
+        {
+          category: 'HARM_CATEGORY_HATE_SPEECH',
+          threshold: 'OFF',
+        },
+        {
+          category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+          threshold: 'OFF',
+        },
+        {
+          category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+          threshold: 'OFF',
+        },
+        {
+          category: 'HARM_CATEGORY_HARASSMENT',
+          threshold: 'OFF',
+        },
+      ],
+    },
+  };
+
+  const generation = langfuseTrace.generation({
+    name: 'gemini-youtube-transcript',
+    modelParameters: {
+      temperature: generateContentArgs.config.temperature,
+      maxOutputTokens: generateContentArgs.config.maxOutputTokens,
+      thinkingBudget: generateContentArgs.config.thinkingConfig?.thinkingBudget,
+      safetySettings: JSON.stringify(generateContentArgs.config.safetySettings),
+      mediaResolution: generateContentArgs.config.mediaResolution,
+    },
+    input: JSON.stringify({
+      systemInstruction: generateContentArgs.config.systemInstruction,
+      contents: generateContentArgs.contents,
+    }),
+  });
+
+  const response = await genAI.models.generateContent(generateContentArgs);
+  console.log('[transcribeYoutube]', JSON.stringify(response));
+
+  const output = response.candidates[0].content.parts[0].text;
+  const usage = {
+    promptTokens: response.usageMetadata?.promptTokenCount,
+    completionTokens: response.usageMetadata?.candidatesTokenCount,
+    totalTokens:
+      (response.usageMetadata?.promptTokenCount || 0) +
+      (response.usageMetadata?.candidatesTokenCount || 0),
+  };
+
+  langfuseTrace.update({ output });
+  generation.end({
+    output: JSON.stringify(response),
+    usage,
+    model: modelName,
+    modelParameters: { location },
+  });
+
+  return { text: output, usage };
+}
+
+/**
  * Transcribes audio/video content using Gemini model
  *
  * @param {object} params
