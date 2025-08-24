@@ -145,12 +145,12 @@ async function main({
   } catch (error) {
     console.error('Experiment failed:', error);
     trace.update({
-      output: { error: error.message },
+      output: { error },
     });
     trace.score({
       name: 'success-rate',
       value: 0,
-      comment: `Experiment failed: ${error.message}`,
+      comment: `Experiment failed: ${error}`,
     });
   }
 
