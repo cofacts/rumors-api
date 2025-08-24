@@ -87,11 +87,7 @@ async function main({
 
       if (result.status === 'SUCCESS') {
         console.info(`Title: ${result.title || 'N/A'}`);
-        console.info(
-          `Summary: ${
-            result.summary ? result.summary.substring(0, 200) + '...' : 'N/A'
-          }`
-        );
+        console.info(`Summary: ${result.summary || 'N/A'}`);
         console.info(`Top Image: ${result.topImageUrl || 'N/A'}`);
       } else {
         console.info(`Error: ${result.error}`);
