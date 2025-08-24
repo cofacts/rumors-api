@@ -19,7 +19,7 @@ async function getGenAIClient() {
 
 /**
  * Scrapes URL content using Gemini's urlContext tool
- * 
+ *
  * @param {string[]} urls - Array of URLs to scrape
  * @returns {Promise<Array<{url: string, canonical?: string, title?: string, summary?: string, topImageUrl?: string, html?: string, status: string, error?: string}>>}
  */
@@ -33,7 +33,7 @@ export default async function scrapeUrlsWithGemini(urls) {
   try {
     // Process all URLs in a single LLM call for efficiency
     const urlList = urls.map((url, index) => `${index + 1}. ${url}`).join('\n');
-    
+
     const generateContentArgs = {
       model: 'gemini-2.5-flash',
       contents: [
@@ -70,21 +70,24 @@ Requirements:
       ],
       config: {
         tools: [{ urlContext: {} }],
-        systemInstruction: 'You are a web content analyzer that extracts structured information from web pages for fact-checking purposes.',
+        systemInstruction:
+          'You are a web content analyzer that extracts structured information from web pages for fact-checking purposes.',
         responseModalities: ['TEXT'],
         temperature: 0.1, // Low temperature for consistent extraction
         maxOutputTokens: 4096,
       },
     };
 
-    const response = await genAIClient.models.generateContent(generateContentArgs);
-    
+    const response = await genAIClient.models.generateContent(
+      generateContentArgs
+    );
+
     if (!response.candidates || !response.candidates[0]) {
       throw new Error('No response candidates received');
     }
 
     const responseText = response.candidates[0].content.parts[0].text;
-    
+
     // Parse the JSON response
     let extractedDataArray;
     try {
@@ -96,9 +99,12 @@ Requirements:
         extractedDataArray = JSON.parse(responseText);
       }
     } catch (parseError) {
-      console.warn('[geminiUrlScraper] Failed to parse JSON response:', responseText);
+      console.warn(
+        '[geminiUrlScraper] Failed to parse JSON response:',
+        responseText
+      );
       // Fallback: create error results for all URLs
-      return urls.map(url => ({
+      return urls.map((url) => ({
         url,
         canonical: url,
         title: null,
@@ -111,8 +117,9 @@ Requirements:
     }
 
     // Ensure we have results for all input URLs
-    const results = urls.map(url => {
-      const extracted = extractedDataArray.find(item => item.url === url) || {};
+    const results = urls.map((url) => {
+      const extracted =
+        extractedDataArray.find((item) => item.url === url) || {};
       return {
         url,
         canonical: extracted.canonical || url,
@@ -125,17 +132,16 @@ Requirements:
     });
 
     return results;
-
   } catch (error) {
     console.error('[geminiUrlScraper] Error processing URLs:', error);
-    
+
     rollbar.error('Gemini URL scraping error', {
       urls,
       error: error.message,
     });
 
     // Return error results for all URLs
-    return urls.map(url => ({
+    return urls.map((url) => ({
       url,
       canonical: url,
       title: null,
