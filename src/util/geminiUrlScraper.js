@@ -41,7 +41,7 @@ export default async function scrapeUrlsWithGemini(urls) {
           role: 'user',
           parts: [
             {
-              text: `Please analyze the content at these URLs and extract information from each:
+              text: `Please analyze the content at these URLs and extract the exact original text content from each:
 
 ${urlList}
 
@@ -51,7 +51,7 @@ For each URL, extract and return a JSON array with objects having the following 
     "url": "original URL from the list",
     "canonical": "canonical URL if different from original, or same as original",
     "title": "The main title of the page",
-    "summary": "A comprehensive summary of the content that captures the key information for fact-checking purposes",
+    "summary": "The exact original text content from the page without any rewriting, summarization, or paraphrasing - preserve all claims, statements, and information as written in the source",
     "topImageUrl": "URL of the most representative image on the page, or null if none exists"
   }
 ]
@@ -59,8 +59,8 @@ For each URL, extract and return a JSON array with objects having the following 
 Requirements:
 - url: Return the exact original URL from the input list
 - canonical: Extract the canonical URL from meta tags or use the original URL if no canonical is found
-- title: Extract the main page title
-- summary: Should be detailed enough for search and fact-checking, capturing all important claims and information
+- title: Extract the main page title exactly as it appears
+- summary: Extract the complete original text content from the page - DO NOT summarize, rewrite, or paraphrase. Keep all original claims, statements, facts, and information exactly as written in the source material. This text will be used for indexing and search purposes.
 - topImageUrl: Find the most representative image (not logos, ads, or decorative images), return null if no suitable image exists
 - Return valid JSON array only, no markdown code blocks or explanations
 - Process all URLs and return results for each, even if some fail`,
