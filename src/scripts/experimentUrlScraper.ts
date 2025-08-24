@@ -37,11 +37,14 @@ async function main({
   runName: string;
 }) {
   let testUrls: string[];
-  
+
   if (single) {
     testUrls = [single];
   } else if (urls) {
-    testUrls = urls.split(',').map(url => url.trim()).filter(Boolean);
+    testUrls = urls
+      .split(',')
+      .map((url) => url.trim())
+      .filter(Boolean);
   } else {
     testUrls = DEFAULT_TEST_URLS;
     console.info('No URLs specified, using default test URLs:', testUrls);
@@ -56,7 +59,7 @@ async function main({
   const trace = langfuse.trace({
     name: `URL Scraper Experiment: ${runName}`,
     input: testUrls,
-    metadata: { 
+    metadata: {
       experimentType: 'url-scraping',
       tool: 'gemini-urlcontext',
       urlCount: testUrls.length,
@@ -66,23 +69,29 @@ async function main({
   try {
     console.info('Starting URL scraping...');
     const startTime = Date.now();
-    
+
     const results = await scrapeUrlsWithGemini(testUrls);
-    
+
     const endTime = Date.now();
     const duration = endTime - startTime;
 
     console.info(`\n=== RESULTS ===`);
     console.info(`Processed ${results.length} URLs in ${duration}ms`);
-    console.info(`Average time per URL: ${Math.round(duration / results.length)}ms\n`);
+    console.info(
+      `Average time per URL: ${Math.round(duration / results.length)}ms\n`
+    );
 
     results.forEach((result, index) => {
       console.info(`--- URL ${index + 1}: ${result.url} ---`);
       console.info(`Status: ${result.status}`);
-      
+
       if (result.status === 'SUCCESS') {
         console.info(`Title: ${result.title || 'N/A'}`);
-        console.info(`Summary: ${result.summary ? result.summary.substring(0, 200) + '...' : 'N/A'}`);
+        console.info(
+          `Summary: ${
+            result.summary ? result.summary.substring(0, 200) + '...' : 'N/A'
+          }`
+        );
         console.info(`Top Image: ${result.topImageUrl || 'N/A'}`);
       } else {
         console.info(`Error: ${result.error}`);
@@ -91,12 +100,20 @@ async function main({
     });
 
     // Count success/failure rates
-    const successCount = results.filter(r => r.status === 'SUCCESS').length;
-    const errorCount = results.filter(r => r.status === 'ERROR').length;
-    
+    const successCount = results.filter((r) => r.status === 'SUCCESS').length;
+    const errorCount = results.filter((r) => r.status === 'ERROR').length;
+
     console.info('=== SUMMARY ===');
-    console.info(`Success rate: ${successCount}/${results.length} (${Math.round(successCount / results.length * 100)}%)`);
-    console.info(`Error rate: ${errorCount}/${results.length} (${Math.round(errorCount / results.length * 100)}%)`);
+    console.info(
+      `Success rate: ${successCount}/${results.length} (${Math.round(
+        (successCount / results.length) * 100
+      )}%)`
+    );
+    console.info(
+      `Error rate: ${errorCount}/${results.length} (${Math.round(
+        (errorCount / results.length) * 100
+      )}%)`
+    );
     console.info(`Total processing time: ${duration}ms`);
 
     // Record results in Langfuse
@@ -119,13 +136,12 @@ async function main({
 
     // Score based on average processing time (lower is better, normalize to 0-1)
     const avgTimePerUrl = duration / results.length;
-    const timeScore = Math.max(0, 1 - (avgTimePerUrl / 10000)); // Penalize if >10s per URL
+    const timeScore = Math.max(0, 1 - avgTimePerUrl / 10000); // Penalize if >10s per URL
     trace.score({
       name: 'processing-speed',
       value: timeScore,
       comment: `Average ${Math.round(avgTimePerUrl)}ms per URL`,
     });
-
   } catch (error) {
     console.error('Experiment failed:', error);
     trace.update({
