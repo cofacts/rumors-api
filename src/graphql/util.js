@@ -902,6 +902,8 @@ Your text will be used for indexing these media files, so please follow these ru
   - When choosing between Traditional Chinese and Simplified Chinese, use the variant that is used in displayed text.
   - If there is no displayed text, then prefer Traditional Chinese over the Simplified variant.
 - To maximize readability, sentenses should be grouped into paragraphs with appropriate punctuations whenever applicable.
+- Do not summarize. Provide a verbatim transcription.
+- Ensure you transcript covers the media from the beginning until the very end. Do not cut off early.
             `.trim(),
           },
         ],
@@ -911,9 +913,9 @@ Your text will be used for indexing these media files, so please follow these ru
       systemInstruction:
         'You are a transcriber that provide precise transcript to video and audio content.',
       responseModalities: ['TEXT'],
-      temperature: 0.5, // Raise a bit to reduce looping (repeated text) error
+      temperature: 1.0, // Default for Gemini 3. Previously 0.5 for older models.
       maxOutputTokens: 2048, // Stop looping output early
-      thinkingConfig: { thinkingBudget: 0 }, // Thinking may somehow introduce more looping
+      thinkingConfig: { thinkingLevel: 'minimal' }, // "Thinking = 0" equivalent for Gemini 3 Flash
       safetySettings: [
         {
           category: 'HARM_CATEGORY_HATE_SPEECH',
