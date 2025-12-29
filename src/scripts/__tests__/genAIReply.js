@@ -33,7 +33,6 @@ it('calls AI reply generation as expected', async () => {
   // Cleanup generated reviewer user before invoking the mocked createNewAIReply
   await client.delete({
     index: 'users',
-    type: 'doc',
     id: createNewAIReply.mock.calls[0][0].user.id,
   });
 });

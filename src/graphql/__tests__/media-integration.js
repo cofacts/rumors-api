@@ -142,13 +142,11 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     // Cleanup
     await client.delete({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
 
     await client.delete({
       index: 'replyrequests',
-      type: 'doc',
       id: getReplyRequestId({
         articleId,
         userId: context.user.id,
@@ -224,13 +222,11 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     // Cleanup
     await client.delete({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
 
     await client.delete({
       index: 'replyrequests',
-      type: 'doc',
       id: getReplyRequestId({
         articleId,
         userId: context.user.id,

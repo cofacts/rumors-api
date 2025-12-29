@@ -66,9 +66,7 @@ describe('scrapping & storage', () => {
     await client.indices.refresh({ index: 'urls' });
 
     const {
-      body: {
-        hits: { hits: urls },
-      },
+      hits: { hits: urls },
     } = await client.search({
       index: 'urls',
       body: {

@@ -85,11 +85,8 @@ Array [
   },
 ]
 `);
-  const {
-    body: { _source },
-  } = await client.get({
+  const { _source } = await client.get({
     index: 'articles',
-    type: 'doc',
     id: 'article1',
   });
   expect(_source.normalArticleReplyCount).toBe(2);

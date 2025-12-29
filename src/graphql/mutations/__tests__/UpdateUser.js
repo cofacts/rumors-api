@@ -23,11 +23,8 @@ const updateUser = (variableString, userId) =>
     `({}, { userId });
 
 const getUser = async (userId) => {
-  const {
-    body: { _source: user },
-  } = await client.get({
+  const { _source: user } = await client.get({
     index: 'users',
-    type: 'doc',
     id: userId,
   });
   return user;
@@ -58,11 +55,8 @@ describe('UpdateUser', () => {
     expect(errors).toBe(undefined);
     expect(data).toMatchSnapshot();
 
-    const {
-      body: { _source: normal },
-    } = await client.get({
+    const { _source: normal } = await client.get({
       index: 'users',
-      type: 'doc',
       id: userId,
     });
     expect(normal).toMatchSnapshot();

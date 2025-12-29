@@ -80,11 +80,8 @@ describe('creation', () => {
       ]
     `);
 
-    const {
-      body: { _source: article },
-    } = await client.get({
+    const { _source: article } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: data.CreateMediaArticle.id,
     });
 
@@ -124,11 +121,8 @@ describe('creation', () => {
       appId,
     });
 
-    const {
-      body: { _source: replyRequest },
-    } = await client.get({
+    const { _source: replyRequest } = await client.get({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
 
@@ -148,12 +142,9 @@ describe('creation', () => {
     `);
 
     const {
-      body: {
-        _source: { ydoc: encodedYdoc, versions },
-      },
+      _source: { ydoc: encodedYdoc, versions },
     } = await client.get({
       index: 'ydocs',
-      type: 'doc',
       id: data.CreateMediaArticle.id,
     });
 
@@ -175,19 +166,16 @@ describe('creation', () => {
     // Cleanup
     await client.delete({
       index: 'articles',
-      type: 'doc',
       id: data.CreateMediaArticle.id,
     });
 
     await client.delete({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
 
     await client.delete({
       index: 'ydocs',
-      type: 'doc',
       id: data.CreateMediaArticle.id,
     });
   });
@@ -235,11 +223,8 @@ describe('creation', () => {
     expect(data.CreateMediaArticle.id).toBe('image1');
 
     const articleId = data.CreateMediaArticle.id;
-    const {
-      body: { _source: article },
-    } = await client.get({
+    const { _source: article } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
 
@@ -261,11 +246,8 @@ describe('creation', () => {
 
     // Expects new replyRequest is generated
     const replyRequestId = getReplyRequestId({ articleId, appId, userId });
-    const {
-      body: { _source: replyRequest },
-    } = await client.get({
+    const { _source: replyRequest } = await client.get({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
 
@@ -287,7 +269,6 @@ describe('creation', () => {
     // Cleanup
     await client.delete({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
   });
@@ -367,11 +348,8 @@ describe('creation', () => {
     );
     MockDate.reset();
 
-    const {
-      body: { _source: article },
-    } = await client.get({
+    const { _source: article } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: data.CreateMediaArticle.id,
     });
 
@@ -383,11 +361,8 @@ describe('creation', () => {
       appId,
     });
 
-    const {
-      body: { _source: replyRequest },
-    } = await client.get({
+    const { _source: replyRequest } = await client.get({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
 
@@ -396,13 +371,11 @@ describe('creation', () => {
     // // Cleanup
     await client.delete({
       index: 'articles',
-      type: 'doc',
       id: data.CreateMediaArticle.id,
     });
 
     await client.delete({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
   });

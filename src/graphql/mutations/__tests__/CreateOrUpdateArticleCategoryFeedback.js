@@ -56,9 +56,8 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
       appId,
     });
 
-    const { body: conn } = await client.get({
+    const conn = await client.get({
       index: 'articlecategoryfeedbacks',
-      type: 'doc',
       id,
     });
     expect(conn._source).toMatchInlineSnapshot(`
@@ -75,9 +74,8 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
       }
     `);
 
-    const { body: article } = await client.get({
+    const article = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(article._source.articleCategories).toMatchInlineSnapshot(`
@@ -93,7 +91,6 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
     // Cleanup
     await client.delete({
       index: 'articlecategoryfeedbacks',
-      type: 'doc',
       id,
     });
     await resetFrom(fixtures, '/articles/doc/article1');
@@ -145,8 +142,7 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
     });
 
     expect(
-      (await client.get({ index: 'articlecategoryfeedbacks', type: 'doc', id }))
-        .body._source
+      (await client.get({ index: 'articlecategoryfeedbacks', id }))._source
     ).toMatchInlineSnapshot(`
       Object {
         "appId": "testClient",
@@ -212,9 +208,8 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
       appId,
     });
 
-    const { body: conn } = await client.get({
+    const conn = await client.get({
       index: 'articlecategoryfeedbacks',
-      type: 'doc',
       id,
     });
     expect(conn._source).toMatchInlineSnapshot(`
@@ -231,9 +226,8 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
       }
     `);
 
-    const { body: article } = await client.get({
+    const article = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(article._source.articleCategories).toMatchInlineSnapshot(`
@@ -249,7 +243,6 @@ describe('CreateOrUpdateArticleCategoryFeedback', () => {
     // Cleanup
     await client.delete({
       index: 'articlecategoryfeedbacks',
-      type: 'doc',
       id,
     });
     await resetFrom(fixtures, '/articles/doc/article1');

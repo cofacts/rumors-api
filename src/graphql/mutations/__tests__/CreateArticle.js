@@ -42,11 +42,8 @@ describe('creation', () => {
 
     expect(errors).toBeUndefined();
 
-    const {
-      body: { _source: article },
-    } = await client.get({
+    const { _source: article } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: data.CreateArticle.id,
     });
 
@@ -68,11 +65,8 @@ describe('creation', () => {
       appId,
     });
 
-    const {
-      body: { _source: replyRequest },
-    } = await client.get({
+    const { _source: replyRequest } = await client.get({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
 
@@ -94,13 +88,11 @@ describe('creation', () => {
     // Cleanup
     await client.delete({
       index: 'articles',
-      type: 'doc',
       id: data.CreateArticle.id,
     });
 
     await client.delete({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
   });
@@ -135,11 +127,8 @@ describe('creation', () => {
     // and it returns the existing ID
     expect(data.CreateArticle.id).toBe(articleId);
 
-    const {
-      body: { _source: article },
-    } = await client.get({
+    const { _source: article } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
 
@@ -148,11 +137,8 @@ describe('creation', () => {
 
     // Expects new replyRequest is generated
     const replyRequestId = getReplyRequestId({ articleId, appId, userId });
-    const {
-      body: { _source: replyRequest },
-    } = await client.get({
+    const { _source: replyRequest } = await client.get({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
 
@@ -174,7 +160,6 @@ describe('creation', () => {
     // Cleanup
     await client.delete({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
   });
@@ -205,11 +190,8 @@ describe('creation', () => {
     );
     MockDate.reset();
 
-    const {
-      body: { _source: article },
-    } = await client.get({
+    const { _source: article } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: data.CreateArticle.id,
     });
 
@@ -221,11 +203,8 @@ describe('creation', () => {
       appId,
     });
 
-    const {
-      body: { _source: replyRequest },
-    } = await client.get({
+    const { _source: replyRequest } = await client.get({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
 
@@ -234,13 +213,11 @@ describe('creation', () => {
     // Cleanup
     await client.delete({
       index: 'articles',
-      type: 'doc',
       id: data.CreateArticle.id,
     });
 
     await client.delete({
       index: 'replyrequests',
-      type: 'doc',
       id: replyRequestId,
     });
   });

@@ -46,11 +46,8 @@ describe('awardBadge', () => {
       }
     `);
 
-    const {
-      body: { _source: userWithBadge },
-    } = await client.get({
+    const { _source: userWithBadge } = await client.get({
       index: 'users',
-      type: 'doc',
       id: 'user-to-award-badge',
     });
 
@@ -88,11 +85,8 @@ describe('awardBadge', () => {
       }
     `);
 
-    const {
-      body: { _source: userWithBadge },
-    } = await client.get({
+    const { _source: userWithBadge } = await client.get({
       index: 'users',
-      type: 'doc',
       id: 'user-to-award-badge',
     });
 

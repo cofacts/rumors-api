@@ -139,9 +139,7 @@ if (process.env.GCS_BUCKET_NAME) {
       await client.indices.refresh({ index: 'airesponses' });
 
       // Track created aiResponseId for cleanup
-      const {
-        body: { hits },
-      } = await client.search({
+      const { hits } = await client.search({
         index: 'airesponses',
         type: 'doc',
         body: { query: { term: { docId: mediaEntry.id } } },
@@ -156,9 +154,7 @@ if (process.env.GCS_BUCKET_NAME) {
       });
 
       // 5. Verify article text was updated
-      const {
-        body: { _source: updatedArticle },
-      } = await client.get({
+      const { _source: updatedArticle } = await client.get({
         index: 'articles',
         type: 'doc',
         id: articleId,
@@ -219,9 +215,7 @@ if (process.env.GCS_BUCKET_NAME) {
       await client.indices.refresh({ index: 'airesponses' });
 
       // Track created aiResponseId for cleanup
-      const {
-        body: { hits },
-      } = await client.search({
+      const { hits } = await client.search({
         index: 'airesponses',
         type: 'doc',
         body: { query: { term: { docId: mediaEntry.id } } },
@@ -236,9 +230,7 @@ if (process.env.GCS_BUCKET_NAME) {
       });
 
       // 5. Verify article text was updated
-      const {
-        body: { _source: updatedArticle },
-      } = await client.get({
+      const { _source: updatedArticle } = await client.get({
         index: 'articles',
         type: 'doc',
         id: articleId,

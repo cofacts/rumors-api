@@ -51,7 +51,6 @@ describe('verifyProfile', () => {
     MockDate.reset();
     await client.delete({
       index: 'users',
-      type: 'doc',
       id: id,
     });
     expect(newUser).toMatchSnapshot();

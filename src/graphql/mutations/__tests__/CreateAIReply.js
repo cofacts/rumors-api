@@ -113,12 +113,9 @@ describe('CreateAIReply', () => {
     await delayForMs(2000); // Wait a bit until airesponse is indexed
 
     const {
-      body: {
-        hits: { hits: loadingAIReplies },
-      },
+      hits: { hits: loadingAIReplies },
     } = await client.search({
       index: 'airesponses',
-      type: 'doc',
       body: {
         query: {
           bool: {
@@ -180,7 +177,6 @@ describe('CreateAIReply', () => {
     // Cleanup
     await client.delete({
       index: 'airesponses',
-      type: 'doc',
       id,
     });
   });
@@ -191,7 +187,6 @@ describe('CreateAIReply', () => {
     //
     await client.update({
       index: 'airesponses',
-      type: 'doc',
       id: 'loading',
       body: {
         doc: {
@@ -228,7 +223,6 @@ describe('CreateAIReply', () => {
     //
     await client.update({
       index: 'airesponses',
-      type: 'doc',
       id: 'loading',
       body: {
         doc: {
@@ -297,7 +291,6 @@ describe('CreateAIReply', () => {
     // Cleanup
     await client.delete({
       index: 'airesponses',
-      type: 'doc',
       id,
     });
   });
@@ -359,7 +352,6 @@ describe('CreateAIReply', () => {
     // Cleanup
     await client.delete({
       index: 'airesponses',
-      type: 'doc',
       id,
     });
   });

@@ -62,11 +62,8 @@ describe('UpdateArticleReplyStatus', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const {
-      body: { _source: normal },
-    } = await client.get({
+    const { _source: normal } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: 'normal',
     });
     expect(normal.articleReplies).toMatchInlineSnapshot(`
@@ -82,11 +79,8 @@ describe('UpdateArticleReplyStatus', () => {
     `);
     expect(normal.normalArticleReplyCount).toBe(0);
 
-    const {
-      body: { _source: deleted },
-    } = await client.get({
+    const { _source: deleted } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: 'deleted',
     });
     expect(deleted.articleReplies).toMatchInlineSnapshot(`
@@ -129,11 +123,8 @@ describe('UpdateArticleReplyStatus', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const {
-      body: { _source },
-    } = await client.get({
+    const { _source } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: 'blocked',
     });
     expect(_source).toMatchInlineSnapshot(`

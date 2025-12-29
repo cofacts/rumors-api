@@ -56,11 +56,8 @@ describe('writeFeedbacks', () => {
     await writeFeedbacks(articleCategories);
     MockDate.reset();
 
-    const {
-      body: { _source: articleDoc },
-    } = await client.get({
+    const { _source: articleDoc } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: 'a1',
     });
 
@@ -101,9 +98,7 @@ describe('writeFeedbacks', () => {
     // Check if article category feedbacks are generated correctly
     //
     const {
-      body: {
-        hits: { total, hits: articleCategoryFeedbacks },
-      },
+      hits: { total, hits: articleCategoryFeedbacks },
     } = await client.search({
       index: 'articlecategoryfeedbacks',
       body: {
@@ -169,7 +164,7 @@ describe('writeFeedbacks', () => {
         },
       },
     });
-    await client.delete({ index: 'users', type: 'doc', id: reviewerUserId });
+    await client.delete({ index: 'users', id: reviewerUserId });
   });
 });
 

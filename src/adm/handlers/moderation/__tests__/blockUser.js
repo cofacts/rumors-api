@@ -22,9 +22,7 @@ it('fails if userId is not valid', async () => {
  * @param {{index: string; id: string;}} clientGetArgs - Arguments for client.get()
  */
 async function expectSameAsFixture(fixtureKey, clientGetArgs) {
-  const {
-    body: { _source: docInDb },
-  } = await client.get({ ...clientGetArgs, type: 'doc' });
+  const { _source: docInDb } = await client.get({ ...clientGetArgs });
   expect(docInDb).toMatchObject(fixtures[fixtureKey]);
 }
 
@@ -43,11 +41,8 @@ it('correctly sets the block reason and updates status of their works', async ()
     }
   `);
 
-  const {
-    body: { _source: blockedUser },
-  } = await client.get({
+  const { _source: blockedUser } = await client.get({
     index: 'users',
-    type: 'doc',
     id: 'user-to-block',
   });
 
@@ -83,20 +78,14 @@ it('correctly sets the block reason and updates status of their works', async ()
 
   // Assert normal contents being blocked and article being updated
   //
-  const {
-    body: { _source: replyRequestToBlock },
-  } = await client.get({
+  const { _source: replyRequestToBlock } = await client.get({
     index: 'replyrequests',
-    type: 'doc',
     id: 'replyrequest-to-block',
   });
   expect(replyRequestToBlock.status).toEqual('BLOCKED');
 
-  const {
-    body: { _source: modifiedArticle },
-  } = await client.get({
+  const { _source: modifiedArticle } = await client.get({
     index: 'articles',
-    type: 'doc',
     id: 'modified-article',
   });
   expect(modifiedArticle).toMatchObject({
@@ -125,11 +114,8 @@ it('correctly sets the block reason and updates status of their works', async ()
 
   // Assert article reply feedback is being blocked
   //
-  const {
-    body: { _source: articleReplyFeedbackToBlock },
-  } = await client.get({
+  const { _source: articleReplyFeedbackToBlock } = await client.get({
     index: 'articlereplyfeedbacks',
-    type: 'doc',
     id: 'f-spam',
   });
   expect(articleReplyFeedbackToBlock.status).toEqual('BLOCKED');
@@ -146,11 +132,8 @@ it('correctly sets the block reason and updates status of their works', async ()
   });
 
   // Expect spammer's article's status are changed to blocked
-  const {
-    body: { _source: spammerArticle },
-  } = await client.get({
+  const { _source: spammerArticle } = await client.get({
     index: 'articles',
-    type: 'doc',
     id: 'spammers-article',
   });
   expect(spammerArticle.status).toEqual('BLOCKED');

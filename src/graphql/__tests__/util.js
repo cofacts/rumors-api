@@ -118,7 +118,6 @@ if (process.env.GCS_BUCKET_NAME) {
       // Cleanup
       await client.delete({
         index: 'airesponses',
-        type: 'doc',
         id: aiResponseId,
       });
     });
@@ -159,7 +158,6 @@ if (process.env.GCS_BUCKET_NAME) {
       // Cleanup
       await client.delete({
         index: 'airesponses',
-        type: 'doc',
         id: aiResponseId,
       });
     });
@@ -206,7 +204,6 @@ if (process.env.GCS_BUCKET_NAME) {
       // Cleanup
       await client.delete({
         index: 'airesponses',
-        type: 'doc',
         id: aiResponseId,
       });
     }, 60000);
@@ -251,7 +248,6 @@ if (process.env.GCS_BUCKET_NAME) {
       // Cleanup
       await client.delete({
         index: 'airesponses',
-        type: 'doc',
         id: aiResponseId,
       });
     }, 120000);
@@ -295,7 +291,6 @@ if (process.env.GCS_BUCKET_NAME) {
         // Cleanup
         await client.delete({
           index: 'airesponses',
-          type: 'doc',
           id: aiResponseId,
         });
       }
