@@ -58,7 +58,7 @@ export const timeRangeInput = getArithmeticExpressionType(
   'TimeRangeInput',
   GraphQLString,
   'List only the entries that were created between the specific time range. ' +
-  'The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)'
+    'The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)'
 );
 export const intRangeInput = getArithmeticExpressionType(
   'RangeInput',
@@ -571,7 +571,7 @@ export async function getAIResponse({ type, docId }) {
   // Try reading successful AI response.
   //
   //
-  for (; ;) {
+  for (;;) {
     // First, find latest successful airesponse. Return if found.
     //
     const {

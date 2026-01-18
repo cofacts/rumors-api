@@ -4,125 +4,129 @@ import { createTranscript, getAIResponse } from 'graphql/util';
 import { writeAITranscript } from 'graphql/mutations/CreateMediaArticle';
 
 const SYSTEM_USER = {
-    id: 'admin-script',
-    appId: 'RUMORS_ADMIN',
+  id: 'admin-script',
+  appId: 'RUMORS_ADMIN',
 };
 
 type GenAITranscriptParams = {
-    articleIds: string[];
-    force?: boolean;
+  articleIds: string[];
+  force?: boolean;
 };
 
 type GenAITranscriptResult = {
-    id: string;
-    status: 'SUCCESS' | 'FAILED' | 'ERROR' | 'SKIPPED';
-    reason?: string;
+  id: string;
+  status: 'SUCCESS' | 'FAILED' | 'ERROR' | 'SKIPPED';
+  reason?: string;
 };
 
 async function genAITranscript({
-    articleIds,
-    force = false,
+  articleIds,
+  force = false,
 }: GenAITranscriptParams) {
-    if (!articleIds || articleIds.length === 0) {
-        return { count: 0, results: [] };
-    }
+  if (!articleIds || articleIds.length === 0) {
+    return { count: 0, results: [] };
+  }
 
-    // Fetch articles
-    const {
-        body: { docs },
-    } = await client.mget({
-        index: 'articles',
-        type: 'doc',
-        body: {
-            ids: articleIds,
-        },
-        _source: ['text', 'attachmentHash', 'articleType'],
-    });
+  // Fetch articles
+  const {
+    body: { docs },
+  } = await client.mget({
+    index: 'articles',
+    type: 'doc',
+    body: {
+      ids: articleIds,
+    },
+    _source: ['text', 'attachmentHash', 'articleType'],
+  });
 
-    const results: GenAITranscriptResult[] = await Promise.all(
-        docs.map(async (doc: any): Promise<GenAITranscriptResult> => {
-            const articleId = doc._id;
+  const results: GenAITranscriptResult[] = await Promise.all(
+    docs.map(async (doc: any): Promise<GenAITranscriptResult> => {
+      const articleId = doc._id;
 
-            if (!doc.found) {
-                return { id: articleId, status: 'SKIPPED', reason: 'Article not found' };
-            }
+      if (!doc.found) {
+        return {
+          id: articleId,
+          status: 'SKIPPED',
+          reason: 'Article not found',
+        };
+      }
 
-            const article = doc._source;
+      const article = doc._source;
 
-            if (!article.attachmentHash) {
-                return {
-                    id: articleId,
-                    status: 'SKIPPED',
-                    reason: 'Not a media article',
-                };
-            }
+      if (!article.attachmentHash) {
+        return {
+          id: articleId,
+          status: 'SKIPPED',
+          reason: 'Not a media article',
+        };
+      }
 
-            if (!force) {
-                // If article already has text, skip
-                if (article.text && article.text.trim().length > 0) {
-                    return {
-                        id: articleId,
-                        status: 'SKIPPED',
-                        reason: 'Article already has text',
-                    };
-                }
+      if (!force) {
+        // If article already has text, skip
+        if (article.text && article.text.trim().length > 0) {
+          return {
+            id: articleId,
+            status: 'SKIPPED',
+            reason: 'Article already has text',
+          };
+        }
 
-                // If article has successful AI transcript, skip
-                const existingResponse = await getAIResponse({
-                    type: 'TRANSCRIPT',
-                    docId: article.attachmentHash,
-                });
+        // If article has successful AI transcript, skip
+        const existingResponse = await getAIResponse({
+          type: 'TRANSCRIPT',
+          docId: article.attachmentHash,
+        });
 
-                if (existingResponse && existingResponse.status === 'SUCCESS') {
-                    return {
-                        id: articleId,
-                        status: 'SKIPPED',
-                        reason: 'Existing AI transcript found',
-                    };
-                }
-            }
+        if (existingResponse && existingResponse.status === 'SUCCESS') {
+          return {
+            id: articleId,
+            status: 'SKIPPED',
+            reason: 'Existing AI transcript found',
+          };
+        }
+      }
 
-            try {
-                const mediaEntry = await mediaManager.get(article.attachmentHash);
-                const transcriptResponse = await createTranscript(
-                    {
-                        id: article.attachmentHash,
-                        type: article.articleType.toLowerCase(),
-                    },
-                    mediaEntry,
-                    SYSTEM_USER
-                );
+      try {
+        const mediaEntry = await mediaManager.get(article.attachmentHash);
+        const transcriptResponse = await createTranscript(
+          {
+            id: article.attachmentHash,
+            type: article.articleType.toLowerCase(),
+          },
+          mediaEntry,
+          SYSTEM_USER
+        );
 
-                if (
-                    transcriptResponse.status === 'SUCCESS' &&
-                    transcriptResponse.text
-                ) {
-                    await writeAITranscript(articleId, transcriptResponse.text);
-                    return { id: articleId, status: 'SUCCESS' };
-                } else {
-                    return {
-                        id: articleId,
-                        status: 'FAILED',
-                        reason: transcriptResponse.text || 'Transcription failed',
-                    };
-                }
-            } catch (e: any) {
-                console.error(`[genAITranscript] Error processing ${articleId}:`, e);
-                return {
-                    id: articleId,
-                    status: 'ERROR',
-                    reason: e.message || e.toString(),
-                };
-            }
-        })
-    );
+        if (
+          transcriptResponse.status === 'SUCCESS' &&
+          transcriptResponse.text
+        ) {
+          await writeAITranscript(articleId, transcriptResponse.text);
+          return { id: articleId, status: 'SUCCESS' };
+        } else {
+          return {
+            id: articleId,
+            status: 'FAILED',
+            reason: transcriptResponse.text || 'Transcription failed',
+          };
+        }
+      } catch (e: any) {
+        console.error(`[genAITranscript] Error processing ${articleId}:`, e);
+        return {
+          id: articleId,
+          status: 'ERROR',
+          reason: e.message || e.toString(),
+        };
+      }
+    })
+  );
 
-    const successCount = results.filter((r) => r.status === 'SUCCESS').length;
+  const successCount = results.filter((r) => r.status === 'SUCCESS').length;
 
-    return {
-        count: successCount,
-        results,
-    };
+  return {
+    count: successCount,
+    results,
+  };
 }
 
 export default genAITranscript;
