@@ -6,8 +6,12 @@ import { writeAITranscript } from 'graphql/mutations/CreateMediaArticle';
 
 jest.mock('util/client');
 jest.mock('util/mediaManager');
-jest.mock('graphql/util');
 jest.mock('graphql/mutations/CreateMediaArticle');
+jest.mock('graphql/util', () => ({
+  ...jest.requireActual('../../../../graphql/util.js'),
+  createTranscript: jest.fn(),
+  getAIResponse: jest.fn(),
+}));
 
 describe('genAITranscript', () => {
   beforeEach(() => {
