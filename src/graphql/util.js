@@ -58,7 +58,7 @@ export const timeRangeInput = getArithmeticExpressionType(
   'TimeRangeInput',
   GraphQLString,
   'List only the entries that were created between the specific time range. ' +
-    'The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)'
+  'The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)'
 );
 export const intRangeInput = getArithmeticExpressionType(
   'RangeInput',
@@ -563,7 +563,7 @@ export function attachCommonListFilter(
  * Returns null if there is no successful nor latest loading AI response.
  *
  * @param {object} param
- * @param {'AI_REPLY'} param.type
+ * @param {'AI_REPLY' | 'TRANSCRIPT'} param.type
  * @param {string} param.docId
  * @returns {AIReponse | null}
  */
@@ -571,7 +571,7 @@ export async function getAIResponse({ type, docId }) {
   // Try reading successful AI response.
   //
   //
-  for (;;) {
+  for (; ;) {
     // First, find latest successful airesponse. Return if found.
     //
     const {
@@ -980,10 +980,10 @@ const TRANSCRIPT_MODELS = [
 
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
- * @param {string} fileUrl - the audio, image or video file to process
+ * @param {string|object} fileUrlOrMediaEntry - the audio, image or video file to process, or the MediaEntry object
  * @param {object} user - the user who requested the transcription
  */
-export async function createTranscript(queryInfo, fileUrl, user) {
+export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
   if (!user) throw new Error('[createTranscript] user is required');
 
   const { update, getAIResponseId } = createAIResponse({
@@ -995,6 +995,11 @@ export async function createTranscript(queryInfo, fileUrl, user) {
   try {
     switch (queryInfo.type) {
       case 'image': {
+        const fileUrl =
+          typeof fileUrlOrMediaEntry === 'string'
+            ? fileUrlOrMediaEntry
+            : fileUrlOrMediaEntry.url;
+
         const [{ fullTextAnnotation }] =
           await imageAnnotator.documentTextDetection(fileUrl);
 
@@ -1024,36 +1029,45 @@ export async function createTranscript(queryInfo, fileUrl, user) {
       case 'video':
       case 'audio': {
         const aiResponseId = await getAIResponseId();
+        let mediaEntry;
+        let mimeType;
 
-        const [mediaEntry, mimeType] = await Promise.all([
-          // Upload to GCS first and get the file.
-          // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
-          new Promise((resolve) => {
-            let isUploadStopped = false;
-            let mediaEntryToResolve = undefined;
-            uploadMedia({
-              mediaUrl: fileUrl,
-              articleType: queryInfo.type.toUpperCase(),
-              onUploadStop: () => {
-                isUploadStopped = true;
-                if (mediaEntryToResolve) resolve(mediaEntryToResolve);
-              },
-            }).then((mediaEntry) => {
-              if (isUploadStopped) {
-                resolve(mediaEntry);
-              } else {
-                // Initialize mediaEntry so that we can pick it up when upload stop
-                mediaEntryToResolve = mediaEntry;
-              }
-            });
-          }),
-          // Perform a HEAD request to get the content-type
-          fetch(fileUrl, { method: 'HEAD' })
-            .then((res) => res.headers.get('content-type'))
-            .catch(() =>
-              queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
-            ),
-        ]);
+        if (typeof fileUrlOrMediaEntry !== 'string') {
+          mediaEntry = fileUrlOrMediaEntry;
+          // Deduce mimeType from queryInfo.type
+          mimeType = queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg';
+        } else {
+          const fileUrl = fileUrlOrMediaEntry;
+          [mediaEntry, mimeType] = await Promise.all([
+            // Upload to GCS first and get the file.
+            // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
+            new Promise((resolve) => {
+              let isUploadStopped = false;
+              let mediaEntryToResolve = undefined;
+              uploadMedia({
+                mediaUrl: fileUrl,
+                articleType: queryInfo.type.toUpperCase(),
+                onUploadStop: () => {
+                  isUploadStopped = true;
+                  if (mediaEntryToResolve) resolve(mediaEntryToResolve);
+                },
+              }).then((mediaEntry) => {
+                if (isUploadStopped) {
+                  resolve(mediaEntry);
+                } else {
+                  // Initialize mediaEntry so that we can pick it up when upload stop
+                  mediaEntryToResolve = mediaEntry;
+                }
+              });
+            }),
+            // Perform a HEAD request to get the content-type
+            fetch(fileUrl, { method: 'HEAD' })
+              .then((res) => res.headers.get('content-type'))
+              .catch(() =>
+                queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
+              ),
+          ]);
+        }
 
         // The URI starting with gs://
         const fileUri = mediaEntry.getFile().cloudStorageURI.href;

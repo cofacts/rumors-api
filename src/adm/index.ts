@@ -14,6 +14,7 @@ import awardBadge from './handlers/badge/awardBadge';
 import revokeBadge from './handlers/badge/revokeBadge';
 import replaceMediaHandler from './handlers/moderation/replaceMedia';
 import genAIReplyHandler from './handlers/moderation/genAIReply';
+import genAITranscript from './handlers/moderation/genAITranscript';
 
 const shouldAuth = process.env.NODE_ENV === 'production';
 
@@ -247,6 +248,44 @@ const router = createRouter({
     },
     handler: async (request) =>
       Response.json(await genAIReplyHandler(await request.json())),
+  })
+  .route({
+    method: 'POST',
+    path: '/moderation/media/transcript',
+    description: 'Regenerate AI transcript for the given media articles.',
+    schemas: {
+      request: {
+        json: Type.Object(
+          {
+            articleIds: Type.Array(
+              Type.String({ description: 'List of article IDs to process' })
+            ),
+            force: Type.Optional(
+              Type.Boolean({
+                description: 'Force regeneration even if transcript exists',
+              })
+            ),
+          },
+          { additionalProperties: false }
+        ),
+      },
+      responses: {
+        200: Type.Object({
+          count: Type.Number({
+            description: 'Number of successfully processed articles',
+          }),
+          results: Type.Array(
+            Type.Object({
+              id: Type.String(),
+              status: Type.String(),
+              reason: Type.Optional(Type.String()),
+            })
+          ),
+        }),
+      },
+    },
+    handler: async (request: Request) =>
+      Response.json(await genAITranscript(await request.json())),
   });
 
 createServer(router).listen(process.env.ADM_PORT, () => {
