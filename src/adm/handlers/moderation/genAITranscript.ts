@@ -88,6 +88,14 @@ async function genAITranscript({
 
       try {
         const mediaEntry = await mediaManager.get(article.attachmentHash);
+        if (!mediaEntry) {
+          return {
+            id: articleId,
+            status: 'SKIPPED',
+            reason: 'Media entry not found',
+          };
+        }
+
         const transcriptResponse = await createTranscript(
           {
             id: article.attachmentHash,
