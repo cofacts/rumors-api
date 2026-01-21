@@ -2,6 +2,7 @@ import client from 'util/client';
 import mediaManager from 'util/mediaManager';
 import { createTranscript, getAIResponse } from 'graphql/util';
 import { writeAITranscript } from 'graphql/mutations/CreateMediaArticle';
+import type { Article } from 'rumors-db/schema/articles';
 
 const SYSTEM_USER = {
   id: 'admin-script',
@@ -40,7 +41,7 @@ async function genAITranscript({
   });
 
   const results: GenAITranscriptResult[] = await Promise.all(
-    docs.map(async (doc: any): Promise<GenAITranscriptResult> => {
+    docs.map(async (doc: { _id: string; found: boolean; _source: Article }): Promise<GenAITranscriptResult> => {
       const articleId = doc._id;
 
       if (!doc.found) {
@@ -51,7 +52,7 @@ async function genAITranscript({
         };
       }
 
-      const article = doc._source;
+      const article: Article = doc._source;
 
       if (!article.attachmentHash) {
         return {
@@ -118,12 +119,12 @@ async function genAITranscript({
             reason: transcriptResponse.text || 'Transcription failed',
           };
         }
-      } catch (e: any) {
+      } catch (e) {
         console.error(`[genAITranscript] Error processing ${articleId}:`, e);
         return {
           id: articleId,
           status: 'ERROR',
-          reason: e.message || e.toString(),
+          reason: e instanceof Error ? e.message : String(e),
         };
       }
     })
