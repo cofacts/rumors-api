@@ -299,5 +299,42 @@ if (process.env.GCS_BUCKET_NAME) {
         id: aiResponseId,
       });
     }, 120000);
+    it('uses fetch HEAD to get mimeType for MediaEntry input', async () => {
+      const mockMediaEntry = {
+        url: FIXTURES_URLS['audio-test.m4a'],
+        getFile: () => ({
+          cloudStorageURI: {
+            href: `gs://${process.env.GCS_BUCKET_NAME}/transcript-test/audio-test.m4a`,
+          },
+        }),
+      };
+
+      const {
+        id: aiResponseId,
+        // eslint-disable-next-line no-unused-vars
+        createdAt,
+        // eslint-disable-next-line no-unused-vars
+        updatedAt,
+        text,
+        ...aiResponse
+      } = await createTranscript(
+        {
+          id: 'media-entry-test',
+          type: 'audio',
+        },
+        mockMediaEntry,
+        { id: 'user-id', appId: 'app-id' }
+      );
+
+      expect(aiResponse.status).toBe('SUCCESS');
+      expect(text).toMatch(/幫我捧場一組我兼職|帮我捧场一组我兼职/);
+
+      // Cleanup
+      await client.delete({
+        index: 'airesponses',
+        type: 'doc',
+        id: aiResponseId,
+      });
+    }, 60000);
   });
 }

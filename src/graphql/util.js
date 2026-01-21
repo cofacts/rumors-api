@@ -1029,15 +1029,23 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
       case 'video':
       case 'audio': {
         const aiResponseId = await getAIResponseId();
+        const fileUrl =
+          typeof fileUrlOrMediaEntry === 'string'
+            ? fileUrlOrMediaEntry
+            : fileUrlOrMediaEntry.url;
+
+        const mimeTypePromise = fetch(fileUrl, { method: 'HEAD' })
+          .then((res) => res.headers.get('content-type'))
+          .catch(() =>
+            queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
+          );
+
         let mediaEntry;
         let mimeType;
-
         if (typeof fileUrlOrMediaEntry !== 'string') {
           mediaEntry = fileUrlOrMediaEntry;
-          // Deduce mimeType from queryInfo.type
-          mimeType = queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg';
+          mimeType = await mimeTypePromise;
         } else {
-          const fileUrl = fileUrlOrMediaEntry;
           [mediaEntry, mimeType] = await Promise.all([
             // Upload to GCS first and get the file.
             // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
@@ -1060,12 +1068,7 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
                 }
               });
             }),
-            // Perform a HEAD request to get the content-type
-            fetch(fileUrl, { method: 'HEAD' })
-              .then((res) => res.headers.get('content-type'))
-              .catch(() =>
-                queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
-              ),
+            mimeTypePromise,
           ]);
         }
 
