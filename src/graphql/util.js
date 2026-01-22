@@ -995,13 +995,26 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
   try {
     switch (queryInfo.type) {
       case 'image': {
-        const fileUrl =
-          typeof fileUrlOrMediaEntry === 'string'
-            ? fileUrlOrMediaEntry
-            : fileUrlOrMediaEntry.getUrl();
+        const isMediaEntry = typeof fileUrlOrMediaEntry !== 'string';
+        const fileUrl = isMediaEntry
+          ? fileUrlOrMediaEntry.getUrl()
+          : fileUrlOrMediaEntry;
+
+        const visionSource = isMediaEntry
+          ? {
+              gcsImageUri: fileUrlOrMediaEntry.getFile().cloudStorageURI.href,
+            }
+          : { imageUri: fileUrl };
+
+        console.log(
+          '[createTranscript] image visionSource:',
+          JSON.stringify(visionSource)
+        );
 
         const [{ fullTextAnnotation }] =
-          await imageAnnotator.documentTextDetection(fileUrl);
+          await imageAnnotator.documentTextDetection({
+            image: { source: visionSource },
+          });
 
         console.log('[createTranscript]', queryInfo.id, fullTextAnnotation);
 
@@ -1074,6 +1087,12 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
 
         // The URI starting with gs://
         const fileUri = mediaEntry.getFile().cloudStorageURI.href;
+
+        // Try to get mimeType from GCS metadata first
+        const [metadata] = await mediaEntry.getFile().getMetadata();
+        mimeType = metadata.contentType || (await mimeTypePromise);
+
+        console.log('[createTranscript] using mimeType:', mimeType);
 
         const trace = langfuse.trace({
           id: aiResponseId,
