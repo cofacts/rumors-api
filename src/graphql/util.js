@@ -998,7 +998,7 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
         const fileUrl =
           typeof fileUrlOrMediaEntry === 'string'
             ? fileUrlOrMediaEntry
-            : fileUrlOrMediaEntry.url;
+            : fileUrlOrMediaEntry.getUrl();
 
         const [{ fullTextAnnotation }] =
           await imageAnnotator.documentTextDetection(fileUrl);
@@ -1032,7 +1032,7 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
         const fileUrl =
           typeof fileUrlOrMediaEntry === 'string'
             ? fileUrlOrMediaEntry
-            : fileUrlOrMediaEntry.url;
+            : fileUrlOrMediaEntry.getUrl();
 
         const mimeTypePromise = fetch(fileUrl, { method: 'HEAD' })
           .then((res) => res.headers.get('content-type'))

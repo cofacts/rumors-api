@@ -301,7 +301,7 @@ if (process.env.GCS_BUCKET_NAME) {
     }, 120000);
     it('uses fetch HEAD to get mimeType for MediaEntry input', async () => {
       const mockMediaEntry = {
-        url: FIXTURES_URLS['audio-test.m4a'],
+        getUrl: () => FIXTURES_URLS['audio-test.m4a'],
         getFile: () => ({
           cloudStorageURI: {
             href: `gs://${process.env.GCS_BUCKET_NAME}/transcript-test/audio-test.m4a`,
