@@ -41,93 +41,99 @@ async function genAITranscript({
   });
 
   const results: GenAITranscriptResult[] = await Promise.all(
-    docs.map(async (doc: { _id: string; found: boolean; _source: Article }): Promise<GenAITranscriptResult> => {
-      const articleId = doc._id;
+    docs.map(
+      async (doc: {
+        _id: string;
+        found: boolean;
+        _source: Article;
+      }): Promise<GenAITranscriptResult> => {
+        const articleId = doc._id;
 
-      if (!doc.found) {
-        return {
-          id: articleId,
-          status: 'SKIPPED',
-          reason: 'Article not found',
-        };
-      }
-
-      const article: Article = doc._source;
-
-      if (!article.attachmentHash) {
-        return {
-          id: articleId,
-          status: 'SKIPPED',
-          reason: 'Not a media article',
-        };
-      }
-
-      if (!force) {
-        // If article already has text, skip
-        if (article.text && article.text.trim().length > 0) {
+        if (!doc.found) {
           return {
             id: articleId,
             status: 'SKIPPED',
-            reason: 'Article already has text',
+            reason: 'Article not found',
           };
         }
 
-        // If article has successful AI transcript, skip
-        const existingResponse = await getAIResponse({
-          type: 'TRANSCRIPT',
-          docId: article.attachmentHash,
-        });
+        const article: Article = doc._source;
 
-        if (existingResponse && existingResponse.status === 'SUCCESS') {
+        if (!article.attachmentHash) {
           return {
             id: articleId,
             status: 'SKIPPED',
-            reason: 'Existing AI transcript found',
+            reason: 'Not a media article',
+          };
+        }
+
+        if (!force) {
+          // If article already has text, skip
+          if (article.text && article.text.trim().length > 0) {
+            return {
+              id: articleId,
+              status: 'SKIPPED',
+              reason: 'Article already has text',
+            };
+          }
+
+          // If article has successful AI transcript, skip
+          const existingResponse = await getAIResponse({
+            type: 'TRANSCRIPT',
+            docId: article.attachmentHash,
+          });
+
+          if (existingResponse && existingResponse.status === 'SUCCESS') {
+            return {
+              id: articleId,
+              status: 'SKIPPED',
+              reason: 'Existing AI transcript found',
+            };
+          }
+        }
+
+        try {
+          const mediaEntry = await mediaManager.get(article.attachmentHash);
+          if (!mediaEntry) {
+            return {
+              id: articleId,
+              status: 'SKIPPED',
+              reason: 'Media entry not found',
+            };
+          }
+
+          const transcriptResponse = await createTranscript(
+            {
+              id: article.attachmentHash,
+              type: article.articleType.toLowerCase(),
+            },
+            mediaEntry,
+            SYSTEM_USER
+          );
+
+          if (
+            transcriptResponse.status === 'SUCCESS' &&
+            transcriptResponse.text
+          ) {
+            await writeAITranscript(articleId, transcriptResponse.text);
+            return { id: articleId, status: 'SUCCESS' };
+          } else {
+            return {
+              id: articleId,
+              status: 'FAILED',
+              reason: transcriptResponse.text || 'Transcription failed',
+            };
+          }
+        } catch (e) {
+          console.error(`[genAITranscript] Error processing ${articleId}:`, e);
+          return {
+            id: articleId,
+            status: 'ERROR',
+            reason: e instanceof Error ? e.message : String(e),
           };
         }
       }
-
-      try {
-        const mediaEntry = await mediaManager.get(article.attachmentHash);
-        if (!mediaEntry) {
-          return {
-            id: articleId,
-            status: 'SKIPPED',
-            reason: 'Media entry not found',
-          };
-        }
-
-        const transcriptResponse = await createTranscript(
-          {
-            id: article.attachmentHash,
-            type: article.articleType.toLowerCase(),
-          },
-          mediaEntry,
-          SYSTEM_USER
-        );
-
-        if (
-          transcriptResponse.status === 'SUCCESS' &&
-          transcriptResponse.text
-        ) {
-          await writeAITranscript(articleId, transcriptResponse.text);
-          return { id: articleId, status: 'SUCCESS' };
-        } else {
-          return {
-            id: articleId,
-            status: 'FAILED',
-            reason: transcriptResponse.text || 'Transcription failed',
-          };
-        }
-      } catch (e) {
-        console.error(`[genAITranscript] Error processing ${articleId}:`, e);
-        return {
-          id: articleId,
-          status: 'ERROR',
-          reason: e instanceof Error ? e.message : String(e),
-        };
-      }
-    })
+    )
   );
 
   const successCount = results.filter((r) => r.status === 'SUCCESS').length;
