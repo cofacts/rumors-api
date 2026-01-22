@@ -64,7 +64,12 @@ if (process.env.GCS_BUCKET_NAME) {
 
       // Cleanup GCS files
       await Promise.all(
-        uploadedGcsPaths.map((path) => bucket.file(path).delete().catch(() => {}))
+        uploadedGcsPaths.map((path) =>
+          bucket
+            .file(path)
+            .delete()
+            .catch(() => {})
+        )
       );
 
       await langfuse.shutdownAsync();
@@ -208,7 +213,9 @@ if (process.env.GCS_BUCKET_NAME) {
         id: articleId,
       });
 
-      expect(updatedArticle.text).toMatch(/幫我捧場一組我兼職|帮我捧场一组我兼职/);
+      expect(updatedArticle.text).toMatch(
+        /幫我捧場一組我兼職|帮我捧场一组我兼职/
+      );
       expect(updatedArticle.text).toMatch(/葉黃[素樹]軟糖|叶黄[素树]软糖/);
     }, 120000);
   });
