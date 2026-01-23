@@ -30,7 +30,6 @@ if (process.env.GCS_BUCKET_NAME) {
                 ),
                 {
                   destination: `genai-transcript-test/${filename}`,
-                  public: true,
                 }
               )
               .then(([file]) => {
