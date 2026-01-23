@@ -123,6 +123,9 @@ if (process.env.GCS_BUCKET_NAME) {
       // 3. Execute genAITranscript
       const result = await genAITranscript({ articleIds: [articleId] });
 
+      // Wait for indexing
+      await client.indices.refresh({ index: 'airesponses' });
+
       // Track created aiResponseId for cleanup
       const {
         body: { hits },
@@ -186,6 +189,9 @@ if (process.env.GCS_BUCKET_NAME) {
 
       // 3. Execute genAITranscript
       const result = await genAITranscript({ articleIds: [articleId] });
+
+      // Wait for indexing
+      await client.indices.refresh({ index: 'airesponses' });
 
       // Track created aiResponseId for cleanup
       const {
