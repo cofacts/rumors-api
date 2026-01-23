@@ -995,36 +995,41 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
   try {
     switch (queryInfo.type) {
       case 'image': {
-        const isMediaEntry = typeof fileUrlOrMediaEntry !== 'string';
-        const fileUrl = isMediaEntry
-          ? fileUrlOrMediaEntry.getUrl()
-          : fileUrlOrMediaEntry;
+        const imageUri =
+          typeof fileUrlOrMediaEntry === 'string'
+            ? fileUrlOrMediaEntry
+            : fileUrlOrMediaEntry.getFile().cloudStorageURI.href;
 
-        const visionSource = isMediaEntry
-          ? {
-              gcsImageUri: fileUrlOrMediaEntry.getFile().cloudStorageURI.href,
-            }
-          : { imageUri: fileUrl };
+        const [response] = await imageAnnotator.documentTextDetection(imageUri);
+        console.info('[createTranscript] Request', queryInfo.id, imageUri);
 
-        console.log(
-          '[createTranscript] image visionSource:',
-          JSON.stringify(visionSource)
+        const { fullTextAnnotation, error } = response;
+
+        if (error) {
+          console.error('[createTranscript] Vision API error:', error);
+          return update({
+            status: 'ERROR',
+            text: error.message || 'Vision API error',
+          });
+        }
+
+        console.info(
+          '[createTranscript] Response',
+          queryInfo.id,
+          fullTextAnnotation
         );
 
-        const [{ fullTextAnnotation }] =
-          await imageAnnotator.documentTextDetection({
-            image: { source: visionSource },
-          });
-
-        console.log('[createTranscript]', queryInfo.id, fullTextAnnotation);
-
-        // This should not happen, but just in case
-        //
         if (
           !fullTextAnnotation ||
           !fullTextAnnotation.pages ||
           fullTextAnnotation.pages.length === 0
         ) {
+          if (!fullTextAnnotation) {
+            console.info(
+              '[createTranscript] No fullTextAnnotation. Full response:',
+              JSON.stringify(response)
+            );
+          }
           return update({
             status: 'SUCCESS',
             // No text detected

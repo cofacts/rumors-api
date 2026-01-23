@@ -16,7 +16,7 @@ type GenAITranscriptParams = {
 
 type GenAITranscriptResult = {
   id: string;
-  status: 'SUCCESS' | 'FAILED' | 'ERROR' | 'SKIPPED';
+  status: 'SUCCESS' | 'ERROR' | 'SKIPPED';
   reason?: string;
 };
 
@@ -111,16 +111,15 @@ async function genAITranscript({
             SYSTEM_USER
           );
 
-          if (
-            transcriptResponse.status === 'SUCCESS' &&
-            transcriptResponse.text
-          ) {
-            await writeAITranscript(articleId, transcriptResponse.text);
+          if (transcriptResponse.status === 'SUCCESS') {
+            if (transcriptResponse.text) {
+              await writeAITranscript(articleId, transcriptResponse.text);
+            }
             return { id: articleId, status: 'SUCCESS' };
           } else {
             return {
               id: articleId,
-              status: 'FAILED',
+              status: 'ERROR',
               reason: transcriptResponse.text || 'Transcription failed',
             };
           }
