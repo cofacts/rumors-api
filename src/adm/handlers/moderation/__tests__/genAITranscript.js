@@ -90,10 +90,23 @@ if (process.env.GCS_BUCKET_NAME) {
 
     it('processes image with real OCR', async () => {
       // 1. Upload image to GCS and get mediaEntry
-      const mediaEntry = await uploadMedia({
-        mediaUrl: FIXTURES_URLS['ocr-test.jpg'],
-        articleType: 'IMAGE',
-        onUploadStop: () => {},
+      const mediaEntry = await new Promise((resolve) => {
+        let isUploadStopped = false;
+        let mediaEntryToResolve = undefined;
+        uploadMedia({
+          mediaUrl: FIXTURES_URLS['ocr-test.jpg'],
+          articleType: 'IMAGE',
+          onUploadStop: () => {
+            isUploadStopped = true;
+            if (mediaEntryToResolve) resolve(mediaEntryToResolve);
+          },
+        }).then((entry) => {
+          if (isUploadStopped) {
+            resolve(entry);
+          } else {
+            mediaEntryToResolve = entry;
+          }
+        });
       });
 
       // 2. Create article in Elasticsearch
@@ -157,10 +170,23 @@ if (process.env.GCS_BUCKET_NAME) {
 
     it('processes audio with real transcript', async () => {
       // 1. Upload audio to GCS and get mediaEntry
-      const mediaEntry = await uploadMedia({
-        mediaUrl: FIXTURES_URLS['audio-test.m4a'],
-        articleType: 'AUDIO',
-        onUploadStop: () => {},
+      const mediaEntry = await new Promise((resolve) => {
+        let isUploadStopped = false;
+        let mediaEntryToResolve = undefined;
+        uploadMedia({
+          mediaUrl: FIXTURES_URLS['audio-test.m4a'],
+          articleType: 'AUDIO',
+          onUploadStop: () => {
+            isUploadStopped = true;
+            if (mediaEntryToResolve) resolve(mediaEntryToResolve);
+          },
+        }).then((entry) => {
+          if (isUploadStopped) {
+            resolve(entry);
+          } else {
+            mediaEntryToResolve = entry;
+          }
+        });
       });
 
       // 2. Create article in Elasticsearch
