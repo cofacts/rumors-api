@@ -76,7 +76,6 @@ if (process.env.GCS_BUCKET_NAME) {
             bucket
               .upload(path.join(__dirname, '../__fixtures__/util/', filename), {
                 destination: `transcript-test/${filename}`,
-                public: true,
               })
               .then(([file]) => file.publicUrl())
           )

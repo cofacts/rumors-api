@@ -563,7 +563,7 @@ export function attachCommonListFilter(
  * Returns null if there is no successful nor latest loading AI response.
  *
  * @param {object} param
- * @param {'AI_REPLY'} param.type
+ * @param {'AI_REPLY' | 'TRANSCRIPT'} param.type
  * @param {string} param.docId
  * @returns {AIReponse | null}
  */
@@ -980,10 +980,10 @@ const TRANSCRIPT_MODELS = [
 
 /**
  * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
- * @param {string} fileUrl - the audio, image or video file to process
+ * @param {string|object} fileUrlOrMediaEntry - the audio, image or video file to process, or the MediaEntry object
  * @param {object} user - the user who requested the transcription
  */
-export async function createTranscript(queryInfo, fileUrl, user) {
+export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
   if (!user) throw new Error('[createTranscript] user is required');
 
   const { update, getAIResponseId } = createAIResponse({
@@ -995,18 +995,41 @@ export async function createTranscript(queryInfo, fileUrl, user) {
   try {
     switch (queryInfo.type) {
       case 'image': {
-        const [{ fullTextAnnotation }] =
-          await imageAnnotator.documentTextDetection(fileUrl);
+        const imageUri =
+          typeof fileUrlOrMediaEntry === 'string'
+            ? fileUrlOrMediaEntry
+            : fileUrlOrMediaEntry.getFile().cloudStorageURI.href;
 
-        console.log('[createTranscript]', queryInfo.id, fullTextAnnotation);
+        const [response] = await imageAnnotator.documentTextDetection(imageUri);
+        console.info('[createTranscript] Request', queryInfo.id, imageUri);
 
-        // This should not happen, but just in case
-        //
+        const { fullTextAnnotation, error } = response;
+
+        if (error) {
+          console.error('[createTranscript] Vision API error:', error);
+          return update({
+            status: 'ERROR',
+            text: error.message || 'Vision API error',
+          });
+        }
+
+        console.info(
+          '[createTranscript] Response',
+          queryInfo.id,
+          fullTextAnnotation
+        );
+
         if (
           !fullTextAnnotation ||
           !fullTextAnnotation.pages ||
           fullTextAnnotation.pages.length === 0
         ) {
+          if (!fullTextAnnotation) {
+            console.info(
+              '[createTranscript] No fullTextAnnotation. Full response:',
+              JSON.stringify(response)
+            );
+          }
           return update({
             status: 'SUCCESS',
             // No text detected
@@ -1024,39 +1047,57 @@ export async function createTranscript(queryInfo, fileUrl, user) {
       case 'video':
       case 'audio': {
         const aiResponseId = await getAIResponseId();
+        const fileUrl =
+          typeof fileUrlOrMediaEntry === 'string'
+            ? fileUrlOrMediaEntry
+            : fileUrlOrMediaEntry.getUrl();
 
-        const [mediaEntry, mimeType] = await Promise.all([
-          // Upload to GCS first and get the file.
-          // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
-          new Promise((resolve) => {
-            let isUploadStopped = false;
-            let mediaEntryToResolve = undefined;
-            uploadMedia({
-              mediaUrl: fileUrl,
-              articleType: queryInfo.type.toUpperCase(),
-              onUploadStop: () => {
-                isUploadStopped = true;
-                if (mediaEntryToResolve) resolve(mediaEntryToResolve);
-              },
-            }).then((mediaEntry) => {
-              if (isUploadStopped) {
-                resolve(mediaEntry);
-              } else {
-                // Initialize mediaEntry so that we can pick it up when upload stop
-                mediaEntryToResolve = mediaEntry;
-              }
-            });
-          }),
-          // Perform a HEAD request to get the content-type
-          fetch(fileUrl, { method: 'HEAD' })
-            .then((res) => res.headers.get('content-type'))
-            .catch(() =>
-              queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
-            ),
-        ]);
+        const mimeTypePromise = fetch(fileUrl, { method: 'HEAD' })
+          .then((res) => res.headers.get('content-type'))
+          .catch(() =>
+            queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
+          );
+
+        let mediaEntry;
+        let mimeType;
+        if (typeof fileUrlOrMediaEntry !== 'string') {
+          mediaEntry = fileUrlOrMediaEntry;
+          mimeType = await mimeTypePromise;
+        } else {
+          [mediaEntry, mimeType] = await Promise.all([
+            // Upload to GCS first and get the file.
+            // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
+            new Promise((resolve) => {
+              let isUploadStopped = false;
+              let mediaEntryToResolve = undefined;
+              uploadMedia({
+                mediaUrl: fileUrl,
+                articleType: queryInfo.type.toUpperCase(),
+                onUploadStop: () => {
+                  isUploadStopped = true;
+                  if (mediaEntryToResolve) resolve(mediaEntryToResolve);
+                },
+              }).then((mediaEntry) => {
+                if (isUploadStopped) {
+                  resolve(mediaEntry);
+                } else {
+                  // Initialize mediaEntry so that we can pick it up when upload stop
+                  mediaEntryToResolve = mediaEntry;
+                }
+              });
+            }),
+            mimeTypePromise,
+          ]);
+        }
 
         // The URI starting with gs://
         const fileUri = mediaEntry.getFile().cloudStorageURI.href;
+
+        // Try to get mimeType from GCS metadata first
+        const [metadata] = await mediaEntry.getFile().getMetadata();
+        mimeType = metadata.contentType || (await mimeTypePromise);
+
+        console.log('[createTranscript] using mimeType:', mimeType);
 
         const trace = langfuse.trace({
           id: aiResponseId,
