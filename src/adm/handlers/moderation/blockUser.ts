@@ -6,7 +6,7 @@
  */
 import { HTTPError } from 'fets';
 
-import client from 'util/client';
+import client, { getTotalCount } from 'util/client';
 import getAllDocs from 'util/getAllDocs';
 import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
 import { updateArticleReplyByFeedbacks } from 'graphql/mutations/CreateOrUpdateArticleReplyFeedback';
@@ -112,13 +112,13 @@ async function processReplyRequests(userId: string) {
       id: articleId,
       doc: {
         lastRequestedAt,
-        replyRequestCount: total,
+        replyRequestCount: getTotalCount(total),
       },
     });
 
     console.log(
       `[${i + 1}/${articleIdsWithNormalReplyRequests.length
-      }] article ${articleId}: changed to ${total} reply requests, last requested at ${lastRequestedAt}`
+      }] article ${articleId}: changed to ${getTotalCount(total)} reply requests, last requested at ${lastRequestedAt}`
     );
   }
 

@@ -1,5 +1,5 @@
 import DataLoader from 'dataloader';
-import client from 'util/client';
+import client, { getTotalCount } from 'util/client';
 
 export default () =>
   new DataLoader(
@@ -23,7 +23,7 @@ export default () =>
       );
 
       return (await client.msearch({ body })).responses.map(
-        ({ hits: { total } }) => total
+        ({ hits: { total } }) => getTotalCount(total)
       );
     }
   );

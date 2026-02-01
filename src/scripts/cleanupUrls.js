@@ -41,7 +41,7 @@ async function processUrls(processFn) {
   });
   await processFn(hits.hits);
   processedCount += hits.hits.length;
-  total = hits.total;
+  total = getTotalCount(hits.total);
   scrollId = _scroll_id;
 
   // eslint-disable-next-line no-console
@@ -102,7 +102,7 @@ async function processFn(docs) {
   //
   const bulkBody = [];
   docs.forEach(async ({ _id }, idx) => {
-    const isReferenced = mSearchResult[idx].hits.total > 0;
+    const isReferenced = getTotalCount(mSearchResult[idx].hits.total) > 0;
     if (!isReferenced) {
       bulkBody.push({ delete: { _index: 'urls', _id } });
     } else {

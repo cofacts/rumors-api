@@ -1,5 +1,5 @@
 import passport from 'koa-passport';
-import client, { processMeta } from 'util/client';
+import client, { processMeta, getTotalCount } from 'util/client';
 import FacebookStrategy from 'passport-facebook';
 import TwitterStrategy from 'passport-twitter';
 import GithubStrategy from 'passport-github2';
@@ -42,7 +42,7 @@ export async function verifyProfile(profile, fieldName) {
     q: `${fieldName}:${profile.id}`,
   });
 
-  if (users.hits.total) {
+  if (getTotalCount(users.hits.total)) {
     return processMeta(users.hits.hits[0]);
   }
 
@@ -59,7 +59,7 @@ export async function verifyProfile(profile, fieldName) {
       q: `email:${email}`,
     });
 
-    if (usersWithEmail.hits.total) {
+    if (getTotalCount(usersWithEmail.hits.total)) {
       const id = usersWithEmail.hits.hits[0]._id;
       // Fill in fieldName with profile.id so that it does not matter if user's
       // email gets changed in the future.

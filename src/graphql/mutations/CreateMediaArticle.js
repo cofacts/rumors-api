@@ -56,7 +56,7 @@ async function createNewMediaArticle({
     },
   });
 
-  if (matchedArticle.hits.total) {
+  if (matchedArticle.hits.total.value) {
     return matchedArticle.hits.hits[0]._id;
   }
 

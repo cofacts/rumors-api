@@ -1,6 +1,6 @@
-import elasticsearch from '@elastic/elasticsearch';
+import { Client } from '@elastic/elasticsearch';
 
-export default new elasticsearch.Client({
+export default new Client({
   node: process.env.ELASTICSEARCH_URL,
 });
 
@@ -45,4 +45,17 @@ export function processMeta<T extends object>({
     };
   }
   return null; // not found
+}
+
+/**
+ * Helper to get total count from ES search response.
+ * In ES 7+, hits.total is an object { value, relation }.
+ */
+export function getTotalCount(
+  total: number | { value: number; relation: string }
+): number {
+  if (typeof total === 'number') {
+    return total;
+  }
+  return total?.value ?? 0;
 }
