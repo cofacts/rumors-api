@@ -209,7 +209,7 @@ export function getSortArgs(orderBy, fieldFnMap = {}) {
 
       return (fieldFnMap[field] || defaultFieldFn)(order);
     })
-    .concat({ _id: { order: 'desc' } }); // enforce at least 1 sort order for pagination
+    .concat({ _shard_doc: { order: 'desc' } }); // enforce at least 1 sort order for pagination
 }
 
 // sort: [{fieldName: {order: 'desc'}}, {fieldName2: {order: 'desc'}}, ...]
