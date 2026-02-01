@@ -244,18 +244,20 @@ async function defaultResolveTotalCount({
   first, // eslint-disable-line no-unused-vars
   before, // eslint-disable-line no-unused-vars
   after, // eslint-disable-line no-unused-vars
+  body,
   ...searchContext
 }) {
   try {
-    return (
-      await client.count({
-        ...searchContext,
-        body: {
-          // count API only supports "query"
-          query: searchContext.body.query,
-        },
-      })
-    ).body.count;
+    const countParams = {
+      ...searchContext,
+    };
+
+    // count API only supports "query"
+    if (body?.query) {
+      countParams.query = body.query;
+    }
+
+    return (await client.count(countParams)).count;
   } catch (e) /* istanbul ignore next */ {
     console.error('[defaultResolveTotalCount]', JSON.stringify(e));
     throw e;
