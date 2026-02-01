@@ -216,7 +216,7 @@ describe('CreateAIReply', () => {
 
     // Wait for some time for the loop in CreateAIReply to repeat itself.
     // The AI reply promise should not resolve before the AI Reply turns "SUCCESS".
-    delayForMs(2000);
+    await delayForMs(2000);
     expect(isAIReplyPromiseResolved).toBe(false);
 
     // Simulate that the AI reply turns "SUCCESS" by another process
@@ -274,7 +274,7 @@ describe('CreateAIReply', () => {
     MockDate.reset();
 
     expect(mockFn).toHaveReturned();
-    expect(errors).toBeUndefined;
+    expect(errors).toBeUndefined();
 
     const {
       CreateAIReply: { id, ...aiReplyContent },
