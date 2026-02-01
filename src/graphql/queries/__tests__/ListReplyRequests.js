@@ -1,10 +1,29 @@
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import gql from 'util/GraphQL';
-import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListReplyRequests';
 
 describe('ListReplyRequests', () => {
   beforeAll(() => loadFixtures(fixtures));
+
+  const getCursor = async (id) => {
+    const {
+      data: {
+        ListReplyRequests: { edges },
+      },
+    } = await gql`
+      {
+        ListReplyRequests {
+          edges {
+            node {
+              id
+            }
+            cursor
+          }
+        }
+      }
+    `();
+    return edges.find(({ node }) => node.id === id).cursor;
+  };
 
   it('lists all RelyRequests', async () => {
     expect(
@@ -189,7 +208,7 @@ describe('ListReplyRequests', () => {
             }
           }
         }
-      `({ cursor: getCursor(['replyrequests2']) })
+      `({ cursor: await getCursor('replyrequests2') })
     ).toMatchSnapshot();
   });
 
@@ -210,7 +229,7 @@ describe('ListReplyRequests', () => {
             }
           }
         }
-      `({ cursor: getCursor(['replyrequests2']) })
+      `({ cursor: await getCursor('replyrequests2') })
     ).toMatchSnapshot();
   });
 

@@ -1,10 +1,29 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListCategories';
 
 describe('ListCategories', () => {
   beforeAll(() => loadFixtures(fixtures));
+
+  const getCursor = async (id) => {
+    const {
+      data: {
+        ListCategories: { edges },
+      },
+    } = await gql`
+      {
+        ListCategories {
+          edges {
+            node {
+              id
+            }
+            cursor
+          }
+        }
+      }
+    `();
+    return edges.find(({ node }) => node.id === id).cursor;
+  };
 
   it('lists all Categories', async () => {
     expect(
@@ -66,7 +85,7 @@ describe('ListCategories', () => {
             }
           }
         }
-      `({ cursor: getCursor(['c2']) })
+      `({ cursor: await getCursor('c2') })
     ).toMatchSnapshot();
   });
 
@@ -87,7 +106,7 @@ describe('ListCategories', () => {
             }
           }
         }
-      `({ cursor: getCursor(['c2']) })
+      `({ cursor: await getCursor('c2') })
     ).toMatchSnapshot();
   });
 

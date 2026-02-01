@@ -1,6 +1,6 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import { getCursor, createTranscript } from 'graphql/util';
+import { createTranscript } from 'graphql/util';
 import fixtures from '../__fixtures__/ListArticles';
 import mediaManager from 'util/mediaManager';
 
@@ -23,6 +23,26 @@ describe('ListArticles', () => {
     mediaManager.insert.mockClear();
     createTranscript.mockClear();
   });
+
+  const getCursor = async (id) => {
+    const {
+      data: {
+        ListArticles: { edges },
+      },
+    } = await gql`
+      {
+        ListArticles {
+          edges {
+            node {
+              id
+            }
+            cursor
+          }
+        }
+      }
+    `();
+    return edges.find(({ node }) => node.id === id).cursor;
+  };
 
   it('lists all articles', async () => {
     expect(
@@ -706,7 +726,7 @@ describe('ListArticles', () => {
             }
           }
         }
-      `({ cursor: getCursor(['listArticleTest2']) })
+      `({ cursor: await getCursor('listArticleTest2') })
     ).toMatchSnapshot();
   });
 
@@ -727,7 +747,7 @@ describe('ListArticles', () => {
             }
           }
         }
-      `({ cursor: getCursor(['listArticleTest2']) })
+      `({ cursor: await getCursor('listArticleTest2') })
     ).toMatchSnapshot();
   });
 
@@ -748,7 +768,7 @@ describe('ListArticles', () => {
             }
           }
         }
-      `({ cursor: getCursor(['listArticleTest2']) })
+      `({ cursor: await getCursor('listArticleTest2') })
     ).toMatchSnapshot();
   });
 

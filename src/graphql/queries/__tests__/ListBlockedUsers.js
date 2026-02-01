@@ -1,10 +1,29 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListBlockedUsers';
 
 describe('ListBlockedUsers', () => {
   beforeAll(() => loadFixtures(fixtures));
+
+  const getCursor = async (id) => {
+    const {
+      data: {
+        ListBlockedUsers: { edges },
+      },
+    } = await gql`
+      {
+        ListBlockedUsers {
+          edges {
+            node {
+              id
+            }
+            cursor
+          }
+        }
+      }
+    `();
+    return edges.find(({ node }) => node.id === id).cursor;
+  };
 
   it('lists all blocked users', async () => {
     expect(
@@ -84,7 +103,7 @@ describe('ListBlockedUsers', () => {
             totalCount
           }
         }
-      `({ cursor: getCursor(['blockedUser2']) })
+      `({ cursor: await getCursor('blockedUser2') })
     ).toMatchSnapshot();
   });
 
@@ -101,7 +120,7 @@ describe('ListBlockedUsers', () => {
             totalCount
           }
         }
-      `({ cursor: getCursor(['blockedUser2']) })
+      `({ cursor: await getCursor('blockedUser2') })
     ).toMatchSnapshot();
   });
 
