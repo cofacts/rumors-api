@@ -22,13 +22,10 @@ export async function updateArticleReplyStatus({
   status,
 }) {
   const {
-    body: {
-      result,
-      get: { _source },
-    },
+    result,
+    get: { _source },
   } = await client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
     body: {
       script: {

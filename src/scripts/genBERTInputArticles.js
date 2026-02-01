@@ -140,9 +140,7 @@ export async function* getDocToExport(articleCategories) {
     },
   };
 
-  const {
-    body: { count },
-  } = await client.count({
+  const { count } = await client.count({
     index: 'articles',
     body: { query: ARTICLE_QUERY },
   });

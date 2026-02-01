@@ -46,11 +46,8 @@ async function createNewArticle({ text, reference: originalReference, user }) {
     appId: user.appId,
   };
 
-  const {
-    body: { result },
-  } = await client.update({
+  const { result } = await client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
     body: {
       script: {
@@ -105,7 +102,6 @@ export function updateArticleHyperlinks(articleId, scrapResults) {
 
   return client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
     body: {
       doc: {

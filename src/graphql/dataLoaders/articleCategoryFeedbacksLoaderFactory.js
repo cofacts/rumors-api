@@ -7,7 +7,7 @@ export default () =>
       const body = [];
 
       articleAndCategoryIds.forEach(({ articleId, categoryId }) => {
-        body.push({ index: 'articlecategoryfeedbacks', type: 'doc' });
+        body.push({ index: 'articlecategoryfeedbacks' });
 
         body.push({
           query: {
@@ -23,7 +23,7 @@ export default () =>
         await client.msearch({
           body,
         })
-      ).body.responses.map(({ hits }) => {
+      ).responses.map(({ hits }) => {
         if (!hits || !hits.hits) return [];
 
         return hits.hits.map(processMeta);

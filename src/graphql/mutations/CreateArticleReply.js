@@ -35,13 +35,10 @@ export async function createArticleReply({ article, reply, user }) {
   };
 
   const {
-    body: {
-      result: articleResult,
-      get: { _source },
-    },
+    result: articleResult,
+    get: { _source },
   } = await client.update({
     index: 'articles',
-    type: 'doc',
     id: article.id,
     body: {
       script: {

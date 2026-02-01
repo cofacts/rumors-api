@@ -13,7 +13,6 @@ export default () =>
           commands.concat(
             {
               index: 'articlereplyfeedbacks',
-              type: 'doc',
             },
             {
               size: 0,
@@ -23,7 +22,7 @@ export default () =>
         []
       );
 
-      return (await client.msearch({ body })).body.responses.map(
+      return (await client.msearch({ body })).responses.map(
         ({ hits: { total } }) => total
       );
     }

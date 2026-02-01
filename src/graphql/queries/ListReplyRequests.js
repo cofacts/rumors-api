@@ -72,7 +72,6 @@ export default {
 
     return {
       index: 'replyrequests',
-      type: 'doc',
       body,
       ...otherParams,
     };

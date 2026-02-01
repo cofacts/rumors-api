@@ -6,7 +6,7 @@ export default () =>
     const body = [];
 
     replyIds.forEach((id) => {
-      body.push({ index: 'articles', type: 'doc' });
+      body.push({ index: 'articles' });
 
       body.push({
         query: {
@@ -26,7 +26,7 @@ export default () =>
       await client.msearch({
         body,
       })
-    ).body.responses.map(({ hits }, idx) => {
+    ).responses.map(({ hits }, idx) => {
       if (!hits || !hits.hits) return [];
 
       const replyId = replyIds[idx];

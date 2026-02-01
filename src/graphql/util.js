@@ -575,14 +575,11 @@ export async function getAIResponse({ type, docId }) {
     // First, find latest successful airesponse. Return if found.
     //
     const {
-      body: {
-        hits: {
-          hits: [successfulAiResponse],
-        },
+      hits: {
+        hits: [successfulAiResponse],
       },
     } = await client.search({
       index: 'airesponses',
-      type: 'doc',
       body: {
         query: {
           bool: {
@@ -609,11 +606,8 @@ export async function getAIResponse({ type, docId }) {
 
     // If no successful AI responses, find loading responses created within 1 min.
     //
-    const {
-      body: { count },
-    } = await client.count({
+    const { count } = await client.count({
       index: 'airesponses',
-      type: 'doc',
       body: {
         query: {
           bool: {
@@ -678,10 +672,9 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   const newResponseIdPromise = client
     .index({
       index: 'airesponses',
-      type: 'doc',
       body: newResponse,
     })
-    .then(({ body: { result, _id } }) => {
+    .then(({ result, _id }) => {
       /* istanbul ignore if */
       if (result !== 'created') {
         throw new Error(`Cannot create AI response: ${result}`);
@@ -694,12 +687,9 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
     const aiResponseId = await newResponseIdPromise;
 
     const {
-      body: {
-        get: { _source },
-      },
+      get: { _source },
     } = await client.update({
       index: 'airesponses',
-      type: 'doc',
       id: aiResponseId,
       _source: true,
       body: {

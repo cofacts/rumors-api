@@ -339,11 +339,10 @@ export default {
         specifiedArticle = (
           await client.get({
             index: 'articles',
-            type: 'doc',
             id: filter.fromUserOfArticleId,
             _source: ['userId', 'appId'],
           })
-        ).body._source;
+        )._source;
       } catch (e) {
         if (e.statusCode && e.statusCode === 404) {
           throw new Error(
@@ -644,7 +643,6 @@ export default {
           await loaders.searchResultLoader.loadMany(
             queryResult.hits.map((hit) => ({
               index: 'articles',
-              type: 'doc',
               body: { query: { term: { attachmentHash: hit.entry.id } } },
             }))
           )
@@ -704,7 +702,6 @@ export default {
     // should return search context for resolveEdges & resolvePageInfo
     return {
       index: 'articles',
-      type: 'doc',
       body,
       ...otherParams,
     };

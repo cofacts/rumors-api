@@ -21,11 +21,8 @@ async function appendBadgeToList(
   const now = new Date().toISOString();
 
   try {
-    const {
-      body: { result: setbadgeIdResult },
-    } = await client.update({
+    const { result: setbadgeIdResult } = await client.update({
       index: 'users',
-      type: 'doc',
       id: userId,
       body: {
         script: {
@@ -94,11 +91,8 @@ async function appendBadgeToList(
  */
 async function verifyBadgeIssuer(badgeId: string, requestUserId: string) {
   try {
-    const {
-      body: { _source: badge },
-    } = await client.get({
+    const { _source: badge } = await client.get({
       index: 'badges',
-      type: 'doc',
       id: badgeId,
     });
 
@@ -136,12 +130,11 @@ async function main({
 }): Promise<awardBadgeReturnValue> {
   // Check if user exists first
   try {
-    const { body } = await client.get({
+    const result = await client.get({
       index: 'users',
-      type: 'doc',
       id: userId,
     });
-    if (!body._source) {
+    if (!result._source) {
       throw new HTTPError(400, `User with ID=${userId} does not exist`);
     }
   } catch (e) {

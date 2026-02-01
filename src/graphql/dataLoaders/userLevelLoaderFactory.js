@@ -24,7 +24,6 @@ export default () =>
           commands.concat(
             {
               index: 'articles',
-              type: 'doc',
             },
             {
               size: 0,
@@ -65,7 +64,7 @@ export default () =>
         []
       );
 
-      return (await client.msearch({ body })).body.responses.map(
+      return (await client.msearch({ body })).responses.map(
         ({
           aggregations: {
             articleReplies: {

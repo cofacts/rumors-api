@@ -16,11 +16,8 @@ async function removeBadgeFromList(userId: string, badgeId: string) {
   const now = new Date().toISOString();
 
   try {
-    const {
-      body: { result: removeBadgeResult },
-    } = await client.update({
+    const { result: removeBadgeResult } = await client.update({
       index: 'users',
-      type: 'doc',
       id: userId,
       body: {
         script: {
@@ -86,11 +83,8 @@ async function removeBadgeFromList(userId: string, badgeId: string) {
  */
 async function verifyBadgeIssuer(badgeId: string, requestUserId: string) {
   try {
-    const {
-      body: { _source: badge },
-    } = await client.get({
+    const { _source: badge } = await client.get({
       index: 'badges',
-      type: 'doc',
       id: badgeId,
     });
 

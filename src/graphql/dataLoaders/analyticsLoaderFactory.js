@@ -19,7 +19,7 @@ export default () =>
         ({ docId, docType, dateRange = defaultDateRange }) => {
           if (!docId) throw new Error('docId is required');
           if (!docType) throw new Error('docType is required');
-          body.push({ index: 'analytics', type: 'doc' });
+          body.push({ index: 'analytics' });
           body.push({
             query: {
               bool: {
@@ -46,7 +46,7 @@ export default () =>
         await client.msearch({
           body,
         })
-      ).body.responses.map(({ hits: { hits: analytics } }) =>
+      ).responses.map(({ hits: { hits: analytics } }) =>
         analytics.map((row) => row._source)
       );
     },

@@ -56,13 +56,10 @@ export default {
       doc = omit(doc, ['avatarData']);
 
     const {
-      body: {
-        result,
-        get: { _source },
-      },
+      result,
+      get: { _source },
     } = await client.update({
       index: 'users',
-      type: 'doc',
       id: userId,
       body: {
         doc,

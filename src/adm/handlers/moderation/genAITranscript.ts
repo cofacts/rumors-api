@@ -29,14 +29,9 @@ async function genAITranscript({
   }
 
   // Fetch articles
-  const {
-    body: { docs },
-  } = await client.mget({
+  const { docs } = await client.mget({
     index: 'articles',
-    type: 'doc',
-    body: {
-      ids: articleIds,
-    },
+    ids: articleIds,
     _source: ['text', 'attachmentHash', 'articleType'],
   });
 

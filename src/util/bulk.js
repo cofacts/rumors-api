@@ -28,14 +28,14 @@ export default class Bulk {
     // Process entires queued up
     const op = this._operations.splice(0);
     this.actionCounts = 0;
-    const { body } = await this.client.bulk({
+    const result = await this.client.bulk({
       body: op,
       refresh: 'true',
     });
-    if (body.errors) {
-      console.error(body.errors);
+    if (result.errors) {
+      console.error(result.errors);
     } else {
-      console.info(`${body.items.length} items processed`);
+      console.info(`${result.items.length} items processed`);
     }
 
     return this;

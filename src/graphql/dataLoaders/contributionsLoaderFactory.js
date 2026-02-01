@@ -21,7 +21,6 @@ export default () =>
         if (!userId) throw new Error('userId is required');
         body.push({
           index: ['replyrequests', 'replies', 'articlereplyfeedbacks'],
-          type: 'doc',
         });
         body.push({
           query: {
@@ -56,7 +55,7 @@ export default () =>
         await client.msearch({
           body,
         })
-      ).body.responses.map(
+      ).responses.map(
         ({
           aggregations: {
             contributions: { buckets },

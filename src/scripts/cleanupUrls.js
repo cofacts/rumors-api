@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import 'util/catchUnhandledRejection';
 
-import client from 'util/client';
+import client, { getTotalCount } from 'util/client';
 
 export const FLAG_FIELD = 'isReferenced';
 
@@ -15,9 +15,7 @@ async function processUrls(processFn) {
     processedCount = 0,
     total = Infinity;
 
-  const {
-    body: { hits, _scroll_id },
-  } = await client.search({
+  const { hits, _scroll_id } = await client.search({
     index: 'urls',
     scroll: '30s',
     size: 100,
@@ -50,11 +48,9 @@ async function processUrls(processFn) {
   console.info(`${processedCount} / ${total} Processed`);
 
   while (processedCount < total) {
-    const {
-      body: { hits, _scroll_id },
-    } = await client.scroll({
+    const { hits, _scroll_id } = await client.scroll({
       scroll: '30s',
-      scrollId,
+      scroll_id: scrollId,
     });
     await processFn(hits.hits);
     processedCount += hits.hits.length;
@@ -99,8 +95,7 @@ async function processFn(docs) {
   /**
    * mSearchResult: [{hits: {total: count}}, ...]
    */
-  const mSearchResult = (await client.msearch({ body: mSearchBody })).body
-    .responses;
+  const mSearchResult = (await client.msearch({ body: mSearchBody })).responses;
 
   //
   // Then perform update / delete on each doc
@@ -109,14 +104,14 @@ async function processFn(docs) {
   docs.forEach(async ({ _id }, idx) => {
     const isReferenced = mSearchResult[idx].hits.total > 0;
     if (!isReferenced) {
-      bulkBody.push({ delete: { _index: 'urls', _type: 'doc', _id } });
+      bulkBody.push({ delete: { _index: 'urls', _id } });
     } else {
-      bulkBody.push({ update: { _index: 'urls', _type: 'doc', _id } });
+      bulkBody.push({ update: { _index: 'urls', _id } });
       bulkBody.push({ doc: { [FLAG_FIELD]: true } });
     }
   });
 
-  const { body: bulkResult } = await client.bulk({
+  const bulkResult = await client.bulk({
     body: bulkBody,
     refresh: 'true',
   });

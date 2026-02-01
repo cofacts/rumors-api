@@ -114,7 +114,7 @@ async function scrapUrls(
     } = r;
 
     return body.concat([
-      { index: { _index: 'urls', _type: 'doc' } },
+      { index: { _index: 'urls' } },
       {
         canonical,
         title,
@@ -134,7 +134,7 @@ async function scrapUrls(
     return result;
   }
 
-  const { body: insertResult } = await client.bulk({
+  const insertResult = await client.bulk({
     body: urlsBody,
   });
 

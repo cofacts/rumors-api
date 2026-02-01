@@ -48,13 +48,10 @@ export async function createArticleCategory({
   };
 
   const {
-    body: {
-      result: articleResult,
-      get: { _source },
-    },
+    result: articleResult,
+    get: { _source },
   } = await client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
     body: {
       script: {

@@ -77,9 +77,7 @@ async function getArticleCategoryFeedbacksMap() {
   const FEEDBACK_QUERY = {
     term: { status: 'NORMAL' },
   };
-  const {
-    body: { count: feedbackCount },
-  } = await client.count({
+  const { count: feedbackCount } = await client.count({
     index: 'articlecategoryfeedbacks',
     body: { query: FEEDBACK_QUERY },
   });
@@ -126,9 +124,7 @@ async function main({ startFrom } = {}) {
     appId: REVIEWER_APP_ID,
   });
 
-  const {
-    body: { count: articleCount },
-  } = await client.count({
+  const { count: articleCount } = await client.count({
     index: 'articles',
     body: { query: ARTICLE_QUERY },
   });

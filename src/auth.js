@@ -37,9 +37,8 @@ passport.deserializeUser((userId, done) => {
 export async function verifyProfile(profile, fieldName) {
   // Find user with such user id
   //
-  const { body: users } = await client.search({
+  const users = await client.search({
     index: 'users',
-    type: 'doc',
     q: `${fieldName}:${profile.id}`,
   });
 
@@ -55,9 +54,8 @@ export async function verifyProfile(profile, fieldName) {
   // Find user with such email
   //
   if (email) {
-    const { body: usersWithEmail } = await client.search({
+    const usersWithEmail = await client.search({
       index: 'users',
-      type: 'doc',
       q: `email:${email}`,
     });
 
@@ -66,9 +64,8 @@ export async function verifyProfile(profile, fieldName) {
       // Fill in fieldName with profile.id so that it does not matter if user's
       // email gets changed in the future.
       //
-      const { body: updateUserResult } = await client.update({
+      const updateUserResult = await client.update({
         index: 'users',
-        type: 'doc',
         id,
         body: {
           doc: {
@@ -89,9 +86,8 @@ export async function verifyProfile(profile, fieldName) {
 
   // No user in DB, create one
   //
-  const { body: createUserResult } = await client.index({
+  const createUserResult = await client.index({
     index: 'users',
-    type: 'doc',
     body: {
       email,
       name: username,
@@ -104,13 +100,10 @@ export async function verifyProfile(profile, fieldName) {
 
   if (createUserResult.result === 'created') {
     return processMeta(
-      (
-        await client.get({
-          index: 'users',
-          type: 'doc',
-          id: createUserResult._id,
-        })
-      ).body
+      await client.get({
+        index: 'users',
+        id: createUserResult._id,
+      })
     );
   }
 

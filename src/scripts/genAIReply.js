@@ -16,11 +16,8 @@ export const GENERATOR_USER_ID = 'ai-reply-reviewer';
 async function main({ articleId, temperature } = {}) {
   if (!articleId) throw new Error('Please specify articleId');
 
-  const {
-    body: { _source: article },
-  } = await client.get({
+  const { _source: article } = await client.get({
     index: 'articles',
-    type: 'doc',
     id: articleId,
   });
 

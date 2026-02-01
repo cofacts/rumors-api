@@ -42,7 +42,6 @@ export async function createOrUpdateArticleCategoryFeedback({
 
   await client.update({
     index: 'articlecategoryfeedbacks',
-    type: 'doc',
     id,
     body: {
       doc: {
@@ -84,9 +83,8 @@ export async function createOrUpdateArticleCategoryFeedback({
       [0, 0]
     );
 
-  const { body: articleCategoryUpdateResult } = await client.update({
+  const articleCategoryUpdateResult = await client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
     body: {
       script: {

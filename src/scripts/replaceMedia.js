@@ -12,9 +12,10 @@ import { uploadMedia } from 'graphql/util';
  * @param {object} args
  */
 async function replaceMedia({ articleId, url, force = false } = {}) {
-  const {
-    body: { _source: article },
-  } = await client.get({ index: 'articles', type: 'doc', id: articleId });
+  const { _source: article } = await client.get({
+    index: 'articles',
+    id: articleId,
+  });
 
   /* istanbul ignore if */
   if (!article) throw new Error(`Article ${articleId} is not found`);
@@ -54,7 +55,6 @@ async function replaceMedia({ articleId, url, force = false } = {}) {
   );
   await client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
     body: {
       doc: {

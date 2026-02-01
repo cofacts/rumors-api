@@ -45,9 +45,8 @@ async function createNewMediaArticle({
     userId: user.id,
     appId: user.appId,
   };
-  const { body: matchedArticle } = await client.search({
+  const matchedArticle = await client.search({
     index: 'articles',
-    type: 'doc',
     body: {
       query: {
         term: {
@@ -62,11 +61,8 @@ async function createNewMediaArticle({
   }
 
   // use elasticsearch created id
-  const {
-    body: { _id: articleId },
-  } = await client.index({
+  const { _id: articleId } = await client.index({
     index: 'articles',
-    type: 'doc',
     body: {
       text,
       createdAt: now,
@@ -100,7 +96,6 @@ export function writeAITranscript(articleId, text) {
   // Write aiResponse to articles
   const writeToArticleTextPromise = client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
     body: { doc: { text } },
   });
@@ -127,7 +122,6 @@ export function writeAITranscript(articleId, text) {
   // Create Y.doc and write to ydoc collection
   const createYdocPromise = client.index({
     index: 'ydocs',
-    type: 'doc',
     id: articleId,
     body: {
       ydoc: Buffer.from(Y.encodeStateAsUpdate(ydoc)).toString('base64'),

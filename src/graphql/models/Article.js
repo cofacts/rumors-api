@@ -160,7 +160,6 @@ const Article = new GraphQLObjectType({
       async resolve({ id }, _, { loaders }) {
         return loaders.searchResultLoader.load({
           index: 'airesponses',
-          type: 'doc',
           body: {
             query: {
               bool: {
@@ -188,7 +187,6 @@ const Article = new GraphQLObjectType({
       async resolve({ attachmentHash }, _, { loaders }) {
         return loaders.searchResultLoader.load({
           index: 'airesponses',
-          type: 'doc',
           body: {
             query: {
               bool: {
@@ -340,7 +338,7 @@ const Article = new GraphQLObjectType({
                 {
                   more_like_this: {
                     fields: ['text'],
-                    like: [{ _index: 'articles', _type: 'doc', _id: id }],
+                    like: [{ _index: 'articles', _id: id }],
                     min_term_freq: 1,
                     min_doc_freq: 1,
                   },
@@ -352,7 +350,7 @@ const Article = new GraphQLObjectType({
                     query: {
                       more_like_this: {
                         fields: ['hyperlinks.title', 'hyperlinks.summary'],
-                        like: [{ _index: 'articles', _type: 'doc', _id: id }],
+                        like: [{ _index: 'articles', _id: id }],
                         min_term_freq: 1,
                         min_doc_freq: 1,
                       },
@@ -456,7 +454,6 @@ const Article = new GraphQLObjectType({
 
         return {
           index: 'articles',
-          type: 'doc',
           body,
           ...otherParams,
         };
@@ -572,7 +569,6 @@ const Article = new GraphQLObjectType({
       resolve: async ({ id }, args, { loaders }) =>
         loaders.searchResultLoader.load({
           index: 'cooccurrences',
-          type: 'doc',
           body: {
             query: {
               term: { articleIds: id },

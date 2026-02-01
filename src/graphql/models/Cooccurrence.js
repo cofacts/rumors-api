@@ -20,7 +20,6 @@ const Cooccurrence = new GraphQLObjectType({
       resolve: async ({ articleIds }, args, { loaders }) =>
         loaders.searchResultLoader.load({
           index: 'articles',
-          type: 'doc',
           body: {
             query: {
               ids: {

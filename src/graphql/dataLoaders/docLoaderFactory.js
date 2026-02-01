@@ -1,7 +1,7 @@
 import DataLoader from 'dataloader';
 import client, { processMeta } from 'util/client';
 
-// Given document {index, type, id}
+// Given document {index, id}
 // returns the specified documents.
 //
 export default () =>
@@ -10,14 +10,13 @@ export default () =>
       const docs = indexTypeIds.map(({ index, id }) => ({
         _index: index,
         _id: id,
-        _type: 'doc',
       }));
 
       return (
         await client.mget({
           body: { docs },
         })
-      ).body.docs.map(processMeta);
+      ).docs.map(processMeta);
     },
     {
       cacheKeyFn: ({ index, id }) => `/${index}/${id}`,

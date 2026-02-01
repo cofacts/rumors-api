@@ -7,7 +7,7 @@ export default () =>
       const body = [];
 
       slugs.forEach(({ slug }) => {
-        body.push({ index: 'users', type: 'doc' });
+        body.push({ index: 'users' });
 
         body.push({
           query: {
@@ -21,7 +21,7 @@ export default () =>
         await client.msearch({
           body,
         })
-      ).body.responses.map(({ hits }) => {
+      ).responses.map(({ hits }) => {
         if (!hits || !hits.hits || hits.hits.length == 0) return null;
         return processMeta(hits.hits[0]);
       });

@@ -56,7 +56,6 @@ export default {
 
     return {
       index: 'users',
-      type: 'doc',
       body,
       ...otherParams,
     };

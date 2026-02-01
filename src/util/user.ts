@@ -224,28 +224,23 @@ export async function createOrUpdateUser({
   assertUser({ appId, userId });
   const now = new Date().toISOString();
   const dbUserId = exports.getUserId({ appId, userId }); // For unit test mocking
-  const {
-    body: { result, get: userFound },
-  } = await client.update({
+  const { result, get: userFound } = await client.update({
     index: 'users',
-    type: 'doc',
     id: dbUserId,
-    body: {
-      doc: {
-        lastActiveAt: now,
-      },
-      upsert: {
-        name: exports.generatePseudonym(),
-        avatarType: AvatarTypes.OpenPeeps,
-        avatarData: JSON.stringify(exports.generateOpenPeepsAvatar()),
-        appId,
-        appUserId: userId,
-        createdAt: now,
-        updatedAt: now,
-        lastActiveAt: now,
-      },
-      _source: true,
+    doc: {
+      lastActiveAt: now,
     },
+    upsert: {
+      name: exports.generatePseudonym(),
+      avatarType: AvatarTypes.OpenPeeps,
+      avatarData: JSON.stringify(exports.generateOpenPeepsAvatar()),
+      appId,
+      appUserId: userId,
+      createdAt: now,
+      updatedAt: now,
+      lastActiveAt: now,
+    },
+    _source: true,
   });
 
   const isCreated = result === 'created';

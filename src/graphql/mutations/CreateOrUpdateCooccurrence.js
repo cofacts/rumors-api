@@ -31,13 +31,10 @@ export async function createOrUpdateCooccurrence({ articleIds, user }) {
   };
 
   const {
-    body: {
-      result,
-      get: { _source },
-    },
+    result,
+    get: { _source },
   } = await client.update({
     index: 'cooccurrences',
-    type: 'doc',
     id,
     body: {
       doc: updatedDoc,

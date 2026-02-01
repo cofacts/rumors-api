@@ -56,11 +56,8 @@ export async function createOrUpdateReplyRequest({
 
   const replyRequestStatus = getContentDefaultStatus(user);
 
-  const {
-    body: { result },
-  } = await client.update({
+  const { result } = await client.update({
     index: 'replyrequests',
-    type: 'doc',
     id,
     body: {
       doc: updatedDoc,
@@ -86,18 +83,14 @@ export async function createOrUpdateReplyRequest({
   //
   const article = await (async () => {
     if (replyRequestStatus !== 'NORMAL') {
-      return (
-        await client.get({
-          index: 'articles',
-          type: 'doc',
-          id: articleId,
-        })
-      ).body;
+      return await client.get({
+        index: 'articles',
+        id: articleId,
+      });
     }
 
-    const { body: articleUpdateResult } = await client.update({
+    const articleUpdateResult = await client.update({
       index: 'articles',
-      type: 'doc',
       id: articleId,
       body: {
         script: {

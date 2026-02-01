@@ -23,15 +23,10 @@ import type { ArticleReplyFeedback } from 'rumors-db/schema/articlereplyfeedback
  */
 async function writeBlockedReasonToUser(userId: string, blockedReason: string) {
   try {
-    const {
-      body: { result: setBlockedReasonResult },
-    } = await client.update({
+    const { result: setBlockedReasonResult } = await client.update({
       index: 'users',
-      type: 'doc',
       id: userId,
-      body: {
-        doc: { blockedReason },
-      },
+      doc: { blockedReason },
     });
 
     /* istanbul ignore if */
@@ -76,15 +71,12 @@ async function processReplyRequests(userId: string) {
   }
 
   /* Bulk update reply reqeuests status */
-  const { body: updateByQueryResult } = await client.updateByQuery({
+  const updateByQueryResult = await client.updateByQuery({
     index: 'replyrequests',
-    type: 'doc',
-    body: {
-      query: NORMAL_REPLY_REQUEST_QUERY,
-      script: {
-        lang: 'painless',
-        source: `ctx._source.status = 'BLOCKED';`,
-      },
+    query: NORMAL_REPLY_REQUEST_QUERY,
+    script: {
+      lang: 'painless',
+      source: `ctx._source.status = 'BLOCKED';`,
     },
     refresh: true,
   });
@@ -98,42 +90,34 @@ async function processReplyRequests(userId: string) {
 
   for (const [i, articleId] of articleIdsWithNormalReplyRequests.entries()) {
     const {
-      body: {
-        hits: { total },
-        aggregations: {
-          lastRequestedAt: { value_as_string: lastRequestedAt },
-        },
+      hits: { total },
+      aggregations: {
+        lastRequestedAt: { value_as_string: lastRequestedAt },
       },
     } = await client.search({
       index: 'replyrequests',
       size: 0,
-      body: {
-        query: {
-          bool: {
-            must: [{ term: { status: 'NORMAL' } }, { term: { articleId } }],
-          },
+      query: {
+        bool: {
+          must: [{ term: { status: 'NORMAL' } }, { term: { articleId } }],
         },
-        aggs: {
-          lastRequestedAt: { max: { field: 'createdAt' } },
-        },
+      },
+      aggs: {
+        lastRequestedAt: { max: { field: 'createdAt' } },
       },
     });
 
     await client.update({
       index: 'articles',
-      type: 'doc',
       id: articleId,
-      body: {
-        doc: {
-          lastRequestedAt,
-          replyRequestCount: total,
-        },
+      doc: {
+        lastRequestedAt,
+        replyRequestCount: total,
       },
     });
 
     console.log(
-      `[${i + 1}/${
-        articleIdsWithNormalReplyRequests.length
+      `[${i + 1}/${articleIdsWithNormalReplyRequests.length
       }] article ${articleId}: changed to ${total} reply requests, last requested at ${lastRequestedAt}`
     );
   }
@@ -231,15 +215,12 @@ async function processArticleReplyFeedbacks(userId: string) {
   }
 
   /* Bulk update feedback status */
-  const { body: updateByQueryResult } = await client.updateByQuery({
+  const updateByQueryResult = await client.updateByQuery({
     index: 'articlereplyfeedbacks',
-    type: 'doc',
-    body: {
-      query: NORMAL_FEEDBACK_QUERY,
-      script: {
-        lang: 'painless',
-        source: `ctx._source.status = 'BLOCKED';`,
-      },
+    query: NORMAL_FEEDBACK_QUERY,
+    script: {
+      lang: 'painless',
+      source: `ctx._source.status = 'BLOCKED';`,
     },
     refresh: true,
   });
@@ -278,8 +259,7 @@ async function processArticleReplyFeedbacks(userId: string) {
       await updateArticleReplyByFeedbacks(articleId, replyId, feedbacks);
 
     console.log(
-      `[${i + 1}/${
-        articleReplyIdsWithNormalFeedbacks.length
+      `[${i + 1}/${articleReplyIdsWithNormalFeedbacks.length
       }] article=${articleId} reply=${replyId}: score changed to +${positiveFeedbackCount}, -${negativeFeedbackCount}`
     );
   }
@@ -300,15 +280,12 @@ async function processArticles(userId: string) {
   };
 
   /* Bulk update reply reqeuests status */
-  const { body: updateByQueryResult } = await client.updateByQuery({
+  const updateByQueryResult = await client.updateByQuery({
     index: 'articles',
-    type: 'doc',
-    body: {
-      query: NORMAL_ARTICLE_QUERY,
-      script: {
-        lang: 'painless',
-        source: `ctx._source.status = 'BLOCKED';`,
-      },
+    query: NORMAL_ARTICLE_QUERY,
+    script: {
+      lang: 'painless',
+      source: `ctx._source.status = 'BLOCKED';`,
     },
     refresh: true,
   });

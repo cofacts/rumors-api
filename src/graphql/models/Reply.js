@@ -99,7 +99,7 @@ const Reply = new GraphQLObjectType({
         { id },
         { orderBy = [{ _score: 'DESC' }], ...otherParams }
       ) {
-        const likeQuery = [{ _index: 'replies', _type: 'doc', _id: id }];
+        const likeQuery = [{ _index: 'replies', _id: id }];
 
         const body = {
           query: {
@@ -157,7 +157,6 @@ const Reply = new GraphQLObjectType({
 
         return {
           index: 'replies',
-          type: 'doc',
           body,
           ...otherParams,
         };

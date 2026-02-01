@@ -12,7 +12,7 @@ export default () =>
           throw new Error('Use of before & after is prohibited.');
         }
 
-        body.push({ index: 'articles', type: 'doc' });
+        body.push({ index: 'articles' });
 
         body.push({
           query: {
@@ -35,7 +35,7 @@ export default () =>
         await client.msearch({
           body,
         })
-      ).body.responses.map(({ hits }, idx) => {
+      ).responses.map(({ hits }, idx) => {
         if (!hits || !hits.hits) return [];
 
         const categoryId = categoryQueries[idx].id;

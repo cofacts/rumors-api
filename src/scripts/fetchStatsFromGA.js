@@ -90,7 +90,6 @@ const docUserAppLoader = new DataLoader(
           ? null
           : {
               _index: index,
-              _type: 'doc',
               _id: docId,
             };
       })
@@ -101,7 +100,7 @@ const docUserAppLoader = new DataLoader(
         body: { docs },
         _source: ['userId', 'appId'],
       })
-    ).body.docs.reduce((map, { _source, _index, _id, found }) => {
+    ).docs.reduce((map, { _source, _index, _id, found }) => {
       if (found) {
         const [index] = _index.split('_v'); // take the part before versions
         map[`${index}/${_id}`] = {
@@ -241,7 +240,7 @@ export async function fetchStatsFromGA(params) {
 
               return [
                 {
-                  index: { _index: 'analytics', _type: 'doc', _id: getId(doc) },
+                  index: { _index: 'analytics', _id: getId(doc) },
                 },
                 {
                   ...analyticsFields,
@@ -255,7 +254,7 @@ export async function fetchStatsFromGA(params) {
 
         processedCount += docs.length;
 
-        const { body: response } = await client.bulk({ body: esBatch });
+        const response = await client.bulk({ body: esBatch });
 
         /* istanbul ignore next */
         if (response.errors) {

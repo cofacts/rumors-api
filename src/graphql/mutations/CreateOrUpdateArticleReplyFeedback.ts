@@ -53,9 +53,8 @@ export async function updateArticleReplyByFeedbacks(
       [0, 0]
     );
 
-  const { body: articleReplyUpdateResult } = await client.update({
+  const articleReplyUpdateResult = await client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
     body: {
       script: {
@@ -135,29 +134,24 @@ export default {
       appId: user.appId,
     });
 
-    const {
-      body: { result },
-    } = await client.update({
+    const { result } = await client.update({
       index: 'articlereplyfeedbacks',
-      type: 'doc',
       id,
-      body: {
-        doc: {
-          score: vote,
-          comment: comment,
-          updatedAt: now,
-        },
-        upsert: {
-          articleId,
-          replyId,
-          userId: user.id,
-          appId: user.appId,
-          score: vote,
-          createdAt: now,
-          updatedAt: now,
-          comment: comment,
-          status: getContentDefaultStatus(user),
-        },
+      doc: {
+        score: vote,
+        comment: comment,
+        updatedAt: now,
+      },
+      upsert: {
+        articleId,
+        replyId,
+        userId: user.id,
+        appId: user.appId,
+        score: vote,
+        createdAt: now,
+        updatedAt: now,
+        comment: comment,
+        status: getContentDefaultStatus(user),
       },
       refresh: 'true', // We are searching for articlereplyfeedbacks immediately
     });
@@ -191,13 +185,10 @@ export default {
 
       await client.update({
         index: 'articlereplyfeedbacks',
-        type: 'doc',
         id,
-        body: {
-          doc: {
-            replyUserId,
-            articleReplyUserId,
-          },
+        doc: {
+          replyUserId,
+          articleReplyUserId,
         },
       });
     }
