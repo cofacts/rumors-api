@@ -5,6 +5,7 @@
  * Please announce that the user will be blocked openly with a URL first.
  */
 import { HTTPError } from 'fets';
+import { errors } from '@elastic/elasticsearch';
 
 import client, { getTotalCount } from 'util/client';
 import getAllDocs from 'util/getAllDocs';
@@ -38,10 +39,8 @@ async function writeBlockedReasonToUser(userId: string, blockedReason: string) {
   } catch (e) {
     /* istanbul ignore else */
     if (
-      e &&
-      typeof e === 'object' &&
-      'message' in e &&
-      e.message === 'document_missing_exception'
+      e instanceof errors.ResponseError &&
+      e.body?.error?.type === 'document_missing_exception'
     ) {
       throw new HTTPError(400, `User with ID=${userId} does not exist`);
     }

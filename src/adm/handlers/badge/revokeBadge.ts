@@ -3,6 +3,7 @@
  *
  */
 import { HTTPError } from 'fets';
+import { errors } from '@elastic/elasticsearch';
 
 import client from 'util/client';
 
@@ -62,10 +63,8 @@ async function removeBadgeFromList(userId: string, badgeId: string) {
     console.log(e);
     /* istanbul ignore else */
     if (
-      e &&
-      typeof e === 'object' &&
-      'message' in e &&
-      e.message === 'document_missing_exception'
+      e instanceof errors.ResponseError &&
+      e.body?.error?.type === 'document_missing_exception'
     ) {
       throw new HTTPError(400, `User with ID=${userId} does not exist`);
     }
