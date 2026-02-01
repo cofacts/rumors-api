@@ -228,10 +228,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJtb3JlTGlrZVRoaXMyIl0=",
-        "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
-      },
       "totalCount": 2,
     },
   },
@@ -252,10 +248,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJ1c2VyRm9vIl0=",
-        "lastCursor": "WyJ1c2VyRm9vIl0=",
-      },
       "totalCount": 1,
     },
   },
@@ -274,10 +266,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJydW1vciJd",
-        "lastCursor": "WyJydW1vciJd",
-      },
       "totalCount": 1,
     },
   },
@@ -365,40 +353,31 @@ Object {
     "ListReplies": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJ1c2VyRm9vIl0=",
           "node": Object {
             "id": "referenceUrl",
           },
         },
         Object {
-          "cursor": "WyJydW1vciJd",
           "node": Object {
             "id": "rumor",
           },
         },
         Object {
-          "cursor": "WyJyZWZlcmVuY2VVcmwiXQ==",
           "node": Object {
             "id": "userFoo",
           },
         },
         Object {
-          "cursor": "WyJtb3JlTGlrZVRoaXMyIl0=",
           "node": Object {
             "id": "moreLikeThis2",
           },
         },
         Object {
-          "cursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
           "node": Object {
             "id": "moreLikeThis1",
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJ1c2VyRm9vIl0=",
-        "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
-      },
       "totalCount": 5,
     },
   },
@@ -436,10 +415,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WzE1ODEwMzM2MDAwMDAsInVzZXJGb28iXQ==",
-        "lastCursor": "WzE1ODA3NzQ0MDAwMDAsInJlZmVyZW5jZVVybCJd",
-      },
       "totalCount": 5,
     },
   },
@@ -457,10 +432,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJ1c2VyRm9vIl0=",
-        "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
-      },
       "totalCount": 5,
     },
   },
@@ -493,10 +464,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJ1c2VyRm9vIl0=",
-        "lastCursor": "WyJtb3JlTGlrZVRoaXMxIl0=",
-      },
       "totalCount": 5,
     },
   },

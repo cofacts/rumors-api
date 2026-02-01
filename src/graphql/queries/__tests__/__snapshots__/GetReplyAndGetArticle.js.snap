@@ -128,28 +128,24 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzcuNSwic2ltaWxhck1lZGlhQXJ0aWNsZSJd",
             "node": Object {
               "id": "similarMediaArticle",
             },
             "score": 7.5,
           },
           Object {
-            "cursor": "WzAuNTQ2MTgxODYsImZvbzMiXQ==",
             "node": Object {
               "id": "foo3",
             },
             "score": 4.784827,
           },
           Object {
-            "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
             "node": Object {
               "id": "foo2",
             },
             "score": 4.6379166,
           },
           Object {
-            "cursor": "WzAuNDg3ODUxNywiZm9vIl0=",
             "node": Object {
               "id": "foo",
             },
@@ -169,7 +165,6 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuOTg2NDk1MywiZm9vMyJd",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
@@ -177,7 +172,6 @@ Object {
             "score": 5.3724933,
           },
           Object {
-            "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
@@ -198,7 +192,6 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuOTg2NDk1MywiZm9vMyJd",
             "highlight": Object {
               "hyperlinks": Array [
                 Object {
@@ -215,7 +208,6 @@ Object {
             "score": 5.3724933,
           },
           Object {
-            "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
             "highlight": Object {
               "hyperlinks": Array [],
               "reference": null,
@@ -227,7 +219,6 @@ Object {
             "score": 4.6379166,
           },
           Object {
-            "cursor": "WzAuNDg3ODUxNywibWVkaWFBcnRpY2xlIl0=",
             "highlight": Object {
               "hyperlinks": Array [],
               "reference": null,
@@ -252,7 +243,6 @@ Object {
       "relatedArticles": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuNDg3ODUxNywibWVkaWFBcnRpY2xlIl0=",
             "node": Object {
               "id": "mediaArticle",
               "text": "Lorum ipsum",
@@ -260,7 +250,6 @@ Object {
             "score": 4.246747,
           },
           Object {
-            "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
@@ -268,7 +257,6 @@ Object {
             "score": 4.6379166,
           },
           Object {
-            "cursor": "WzAuOTg2NDk1MywiZm9vMyJd",
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
@@ -465,7 +453,6 @@ Object {
       "similarReplies": Object {
         "edges": Array [
           Object {
-            "cursor": "WzIuMTE2NjU0LCJzaW1pbGFyLXRvLWJhciJd",
             "highlight": Object {
               "hyperlinks": Array [],
               "reference": "<HIGHLIGHT>barbar</HIGHLIGHT>",
@@ -477,7 +464,6 @@ Object {
             "score": 2.377056,
           },
           Object {
-            "cursor": "WzAuNTY2MzE3Miwic2ltaWxhci10by1iYXIyIl0=",
             "highlight": Object {
               "hyperlinks": Array [
                 Object {
@@ -507,7 +493,6 @@ Object {
       "similarReplies": Object {
         "edges": Array [
           Object {
-            "cursor": "WzAuNTY2MzE3Miwic2ltaWxhci10by1iYXIyIl0=",
             "highlight": Object {
               "hyperlinks": Array [
                 Object {
@@ -524,7 +509,6 @@ Object {
             "score": 1.6116467,
           },
           Object {
-            "cursor": "WzIuMTE2NjU0LCJzaW1pbGFyLXRvLWJhciJd",
             "highlight": Object {
               "hyperlinks": Array [],
               "reference": "<HIGHLIGHT>barbar</HIGHLIGHT>",

@@ -110,40 +110,31 @@ Object {
     "ListAIResponses": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJ0cmFuc2NyaXB0Il0=",
           "node": Object {
             "id": "transcript",
           },
         },
         Object {
-          "cursor": "WyJsb2FkaW5nIl0=",
           "node": Object {
             "id": "loading",
           },
         },
         Object {
-          "cursor": "WyJleHBpcmVkLWxvYWRpbmciXQ==",
           "node": Object {
             "id": "expired-loading",
           },
         },
         Object {
-          "cursor": "WyJhaS1yZXBseS1vbGQiXQ==",
           "node": Object {
             "id": "ai-reply-latest",
           },
         },
         Object {
-          "cursor": "WyJhaS1yZXBseS1sYXRlc3QiXQ==",
           "node": Object {
             "id": "ai-reply-old",
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJ0cmFuc2NyaXB0Il0=",
-        "lastCursor": "WyJhaS1yZXBseS1sYXRlc3QiXQ==",
-      },
       "totalCount": 5,
     },
   },
