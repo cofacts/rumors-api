@@ -207,7 +207,6 @@ describe('GetReplyAndGetArticle', () => {
             GetArticle(id: "foo") {
               relatedArticles {
                 edges {
-                  cursor
                   node {
                     id
                   }
@@ -235,7 +234,6 @@ describe('GetReplyAndGetArticle', () => {
             GetArticle(id: "foo") {
               relatedArticles(filter: { replyCount: { GT: 0 } }) {
                 edges {
-                  cursor
                   node {
                     id
                     text
@@ -256,7 +254,6 @@ describe('GetReplyAndGetArticle', () => {
             GetArticle(id: "foo") {
               relatedArticles(orderBy: [{ _score: ASC }]) {
                 edges {
-                  cursor
                   node {
                     id
                     text
@@ -304,7 +301,6 @@ describe('GetReplyAndGetArticle', () => {
             GetArticle(id: "mediaArticle") {
               relatedArticles {
                 edges {
-                  cursor
                   node {
                     id
                   }
@@ -552,7 +548,6 @@ describe('GetReplyAndGetArticle', () => {
             GetReply(id: "bar") {
               similarReplies {
                 edges {
-                  cursor
                   node {
                     id
                   }
@@ -580,7 +575,6 @@ describe('GetReplyAndGetArticle', () => {
             GetReply(id: "bar") {
               similarReplies(orderBy: [{ _score: ASC }]) {
                 edges {
-                  cursor
                   node {
                     id
                   }

@@ -39,11 +39,6 @@ describe('ListReplyRequests', () => {
                   name
                 }
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -62,10 +57,6 @@ describe('ListReplyRequests', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -81,10 +72,6 @@ describe('ListReplyRequests', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -102,10 +89,6 @@ describe('ListReplyRequests', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -121,10 +104,6 @@ describe('ListReplyRequests', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -142,10 +121,6 @@ describe('ListReplyRequests', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -202,10 +177,6 @@ describe('ListReplyRequests', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `({ cursor: await getCursor('replyrequests2') })
@@ -223,10 +194,6 @@ describe('ListReplyRequests', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `({ cursor: await getCursor('replyrequests2') })

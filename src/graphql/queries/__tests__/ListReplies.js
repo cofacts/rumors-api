@@ -35,11 +35,6 @@ describe('ListReplies', () => {
               node {
                 id
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -58,10 +53,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -91,10 +82,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -113,10 +100,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `(
@@ -140,10 +123,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -374,10 +353,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `({ cursor: await getCursor('moreLikeThis2') })
@@ -395,10 +370,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `({ cursor: await getCursor('moreLikeThis1') })
@@ -416,10 +387,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()

@@ -17,11 +17,6 @@ describe('ListAIResponses', () => {
               node {
                 id
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }

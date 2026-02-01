@@ -22,12 +22,7 @@ describe('GetCategory', () => {
                   }
                   status
                 }
-                cursor
                 score
-              }
-              pageInfo {
-                firstCursor
-                lastCursor
               }
             }
           }
@@ -53,12 +48,7 @@ describe('GetCategory', () => {
                   }
                   status
                 }
-                cursor
                 score
-              }
-              pageInfo {
-                firstCursor
-                lastCursor
               }
             }
           }

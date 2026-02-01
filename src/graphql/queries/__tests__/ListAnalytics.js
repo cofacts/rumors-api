@@ -36,11 +36,6 @@ describe('ListAnalytics', () => {
               node {
                 id
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }

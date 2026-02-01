@@ -54,11 +54,6 @@ describe('ListArticles', () => {
               node {
                 id
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -78,10 +73,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -98,10 +89,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -244,10 +231,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -720,10 +703,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `({ cursor: await getCursor('listArticleTest2') })
@@ -741,10 +720,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `({ cursor: await getCursor('listArticleTest2') })
@@ -762,10 +737,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `({ cursor: await getCursor('listArticleTest2') })
@@ -793,10 +764,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -817,10 +784,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -1132,11 +1095,6 @@ describe('ListArticles', () => {
                   id
                 }
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }

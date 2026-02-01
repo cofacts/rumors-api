@@ -35,11 +35,6 @@ describe('ListCategories', () => {
               node {
                 id
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -58,10 +53,6 @@ describe('ListCategories', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -79,10 +70,6 @@ describe('ListCategories', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `({ cursor: await getCursor('c2') })
@@ -100,10 +87,6 @@ describe('ListCategories', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `({ cursor: await getCursor('c2') })

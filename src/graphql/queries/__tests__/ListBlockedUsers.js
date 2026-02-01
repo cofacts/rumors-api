@@ -36,11 +36,6 @@ describe('ListBlockedUsers', () => {
                 id
                 blockedReason
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -80,10 +75,6 @@ describe('ListBlockedUsers', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
