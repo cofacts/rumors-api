@@ -58,7 +58,9 @@ app.use(
   session({
     store: new CookieStore({ password: app.keys[0] }),
     signed: true,
-    maxAge: process.env.COOKIE_MAXAGE,
+    maxAge: process.env.COOKIE_MAXAGE
+      ? Number(process.env.COOKIE_MAXAGE)
+      : 1209600000,
     ...samesiteConfig,
   })
 );
