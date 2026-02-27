@@ -139,21 +139,21 @@ Object {
             "node": Object {
               "id": "foo3",
             },
-            "score": 0.54618186,
+            "score": 4.784827,
           },
           Object {
             "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
             "node": Object {
               "id": "foo2",
             },
-            "score": 0.5303296,
+            "score": 4.6379166,
           },
           Object {
             "cursor": "WzAuNDg3ODUxNywiZm9vIl0=",
             "node": Object {
               "id": "foo",
             },
-            "score": 0.4878517,
+            "score": 4.246747,
           },
         ],
       },
@@ -174,7 +174,7 @@ Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.9864953,
+            "score": 5.3724933,
           },
           Object {
             "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
@@ -182,7 +182,7 @@ Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 0.5303296,
+            "score": 4.6379166,
           },
         ],
       },
@@ -212,7 +212,7 @@ Object {
             "node": Object {
               "id": "foo3",
             },
-            "score": 0.9864953,
+            "score": 5.3724933,
           },
           Object {
             "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
@@ -224,7 +224,7 @@ Object {
             "node": Object {
               "id": "foo2",
             },
-            "score": 0.5303296,
+            "score": 4.6379166,
           },
           Object {
             "cursor": "WzAuNDg3ODUxNywibWVkaWFBcnRpY2xlIl0=",
@@ -236,7 +236,7 @@ Object {
             "node": Object {
               "id": "mediaArticle",
             },
-            "score": 0.4878517,
+            "score": 4.246747,
           },
         ],
       },
@@ -257,7 +257,7 @@ Object {
               "id": "mediaArticle",
               "text": "Lorum ipsum",
             },
-            "score": 0.4878517,
+            "score": 4.246747,
           },
           Object {
             "cursor": "WzAuNTMwMzI5NiwiZm9vMiJd",
@@ -265,7 +265,7 @@ Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 0.5303296,
+            "score": 4.6379166,
           },
           Object {
             "cursor": "WzAuOTg2NDk1MywiZm9vMyJd",
@@ -273,7 +273,7 @@ Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 0.9864953,
+            "score": 5.3724933,
           },
         ],
       },
@@ -474,7 +474,7 @@ Object {
             "node": Object {
               "id": "similar-to-bar",
             },
-            "score": 2.116654,
+            "score": 2.377056,
           },
           Object {
             "cursor": "WzAuNTY2MzE3Miwic2ltaWxhci10by1iYXIyIl0=",
@@ -491,7 +491,7 @@ Object {
             "node": Object {
               "id": "similar-to-bar2",
             },
-            "score": 0.5663172,
+            "score": 1.6116467,
           },
         ],
       },
@@ -521,7 +521,7 @@ Object {
             "node": Object {
               "id": "similar-to-bar2",
             },
-            "score": 0.5663172,
+            "score": 1.6116467,
           },
           Object {
             "cursor": "WzIuMTE2NjU0LCJzaW1pbGFyLXRvLWJhciJd",
@@ -533,7 +533,7 @@ Object {
             "node": Object {
               "id": "similar-to-bar",
             },
-            "score": 2.116654,
+            "score": 2.377056,
           },
         ],
       },

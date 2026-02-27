@@ -357,12 +357,12 @@ describe('GetReplyAndGetArticle', () => {
                   },
                   Object {
                     "node": Object {
-                      "id": "foo2",
+                      "id": "blockedArticle2",
                     },
                   },
                   Object {
                     "node": Object {
-                      "id": "blockedArticle2",
+                      "id": "foo2",
                     },
                   },
                   Object {

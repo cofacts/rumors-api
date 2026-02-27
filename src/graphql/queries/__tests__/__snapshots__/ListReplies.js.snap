@@ -71,7 +71,7 @@ Object {
             "text": "<HIGHLIGHT>bar</HIGHLIGHT>",
           },
           "node": Object {
-            "id": "userFoo",
+            "id": "rumor",
           },
         },
         Object {
@@ -81,7 +81,7 @@ Object {
             "text": "<HIGHLIGHT>bar</HIGHLIGHT>",
           },
           "node": Object {
-            "id": "rumor",
+            "id": "userFoo",
           },
         },
         Object {
@@ -118,13 +118,13 @@ Object {
         Object {
           "node": Object {
             "createdAt": "2020-02-04T00:00:00.000Z",
-            "id": "rumor",
+            "id": "referenceUrl",
           },
         },
         Object {
           "node": Object {
             "createdAt": "2020-02-04T00:00:00.000Z",
-            "id": "referenceUrl",
+            "id": "rumor",
           },
         },
         Object {
@@ -154,13 +154,13 @@ Object {
         Object {
           "node": Object {
             "createdAt": "2020-02-04T00:00:00.000Z",
-            "id": "rumor",
+            "id": "referenceUrl",
           },
         },
         Object {
           "node": Object {
             "createdAt": "2020-02-04T00:00:00.000Z",
-            "id": "referenceUrl",
+            "id": "rumor",
           },
         },
         Object {
@@ -291,14 +291,14 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
-            "id": "rumor",
-            "type": "RUMOR",
+            "id": "referenceUrl",
+            "type": "NOT_RUMOR",
           },
         },
         Object {
           "node": Object {
-            "id": "referenceUrl",
-            "type": "NOT_RUMOR",
+            "id": "rumor",
+            "type": "RUMOR",
           },
         },
       ],
@@ -367,7 +367,7 @@ Object {
         Object {
           "cursor": "WyJ1c2VyRm9vIl0=",
           "node": Object {
-            "id": "userFoo",
+            "id": "referenceUrl",
           },
         },
         Object {
@@ -379,7 +379,7 @@ Object {
         Object {
           "cursor": "WyJyZWZlcmVuY2VVcmwiXQ==",
           "node": Object {
-            "id": "referenceUrl",
+            "id": "userFoo",
           },
         },
         Object {
@@ -427,12 +427,12 @@ Object {
         },
         Object {
           "node": Object {
-            "id": "rumor",
+            "id": "referenceUrl",
           },
         },
         Object {
           "node": Object {
-            "id": "referenceUrl",
+            "id": "rumor",
           },
         },
       ],
@@ -474,7 +474,7 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
-            "id": "userFoo",
+            "id": "referenceUrl",
           },
         },
         Object {
@@ -484,7 +484,7 @@ Object {
         },
         Object {
           "node": Object {
-            "id": "referenceUrl",
+            "id": "userFoo",
           },
         },
         Object {
