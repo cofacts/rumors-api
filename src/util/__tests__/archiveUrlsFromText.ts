@@ -79,7 +79,7 @@ describe('archiveUrlsFromText', () => {
     const calls = mockedFetch.mock.calls.map((call) => {
       const [url, init] = call;
       const body = init?.body as FormData;
-      const bodyEntries = {};
+      const bodyEntries: Record<string, unknown> = {};
       if (body && typeof body.forEach === 'function') {
         body.forEach((value, key) => {
           bodyEntries[key] = value;
