@@ -91,7 +91,7 @@ it('adds article category and feedbacks as expected', async () => {
     },
   });
 
-  expect(total).toBe(4);
+  expect(total.value).toBe(4);
 
   // Test if existing feedback is modified
   //

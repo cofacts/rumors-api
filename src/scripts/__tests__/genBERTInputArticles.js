@@ -112,7 +112,7 @@ describe('writeFeedbacks', () => {
 
     // Only 1 positive & 1 negative feedbacks inserted
     //
-    expect(total).toBe(2);
+    expect(total.value).toBe(2);
 
     const { _source: positiveFeedback } = articleCategoryFeedbacks.find(
       ({ _source }) => _source.score === 1
