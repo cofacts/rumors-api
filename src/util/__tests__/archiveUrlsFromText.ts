@@ -76,30 +76,34 @@ describe('archiveUrlsFromText', () => {
 
     // Check if https://web.archive.org/save is called with expected params and headers
     //
-    expect(mockedFetch.mock.calls).toMatchInlineSnapshot(`
+    const calls = mockedFetch.mock.calls.map((call) => {
+      const [url, init] = call;
+      const body = init?.body as FormData;
+      const bodyEntries = {};
+      if (body && typeof body.forEach === 'function') {
+        body.forEach((value, key) => {
+          bodyEntries[key] = value;
+        });
+      }
+      return [
+        url,
+        {
+          ...init,
+          body: bodyEntries,
+        },
+      ];
+    });
+
+    expect(calls).toMatchInlineSnapshot(`
       Array [
         Array [
           "https://web.archive.org/save",
           Object {
-            "body": FormData {
-              Symbol(state): Array [
-                Object {
-                  "name": "url",
-                  "value": "https://example.com/",
-                },
-                Object {
-                  "name": "capture_screenshot",
-                  "value": "1",
-                },
-                Object {
-                  "name": "skip_first_archive",
-                  "value": "1",
-                },
-                Object {
-                  "name": "delay_wb_availability",
-                  "value": "1",
-                },
-              ],
+            "body": Object {
+              "capture_screenshot": "1",
+              "delay_wb_availability": "1",
+              "skip_first_archive": "1",
+              "url": "https://example.com/",
             },
             "headers": Object {
               "Accept": "application/json",
@@ -111,25 +115,11 @@ describe('archiveUrlsFromText', () => {
         Array [
           "https://web.archive.org/save",
           Object {
-            "body": FormData {
-              Symbol(state): Array [
-                Object {
-                  "name": "url",
-                  "value": "https://example2.com/?foo=bar",
-                },
-                Object {
-                  "name": "capture_screenshot",
-                  "value": "1",
-                },
-                Object {
-                  "name": "skip_first_archive",
-                  "value": "1",
-                },
-                Object {
-                  "name": "delay_wb_availability",
-                  "value": "1",
-                },
-              ],
+            "body": Object {
+              "capture_screenshot": "1",
+              "delay_wb_availability": "1",
+              "skip_first_archive": "1",
+              "url": "https://example2.com/?foo=bar",
             },
             "headers": Object {
               "Accept": "application/json",
