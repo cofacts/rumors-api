@@ -22,49 +22,46 @@ async function appendBadgeToList(
   const now = new Date().toISOString();
 
   try {
-    const { result: setbadgeIdResult } = await client.update({
+    const setbadgeIdResult = await client.update({
       index: 'users',
       id: userId,
-      body: {
-        script: {
-          source: `
-            if (ctx._source.badges == null) {
-              ctx._source.badges = [];
+      script: {
+        source: `
+          if (ctx._source.badges == null) {
+            ctx._source.badges = [];
+          }
+          
+          // Check if badge with same ID already exists
+          boolean badgeExists = false;
+          for (badge in ctx._source.badges) {
+            if (badge.badgeId == params.badge.badgeId) {
+              badgeExists = true;
+              break;
             }
-            
-            // Check if badge with same ID already exists
-            boolean badgeExists = false;
-            for (badge in ctx._source.badges) {
-              if (badge.badgeId == params.badge.badgeId) {
-                badgeExists = true;
-                break;
-              }
-            }
-            
-            // Only add badge if it doesn't already exist
-            if (!badgeExists) {
-              ctx._source.badges.add(params.badge);
-              return "updated";
-            } else {
-              // Return noop if badge already exists
-              return "noop";
-            }
-          `,
-          params: {
-            badge: {
-              badgeId: badgeId,
-              badgeMetaData: badgeMetaData,
-              createdAt: now,
-              isDisplayed: true,
-              updatedAt: now,
-            },
+          }
+          
+          // Only add badge if it doesn't already exist
+          if (!badgeExists) {
+            ctx._source.badges.add(params.badge);
+          } else {
+            // Set operation to noop if badge already exists
+            ctx.op = 'noop';
+          }
+        `,
+        params: {
+          badge: {
+            badgeId: badgeId,
+            badgeMetaData: badgeMetaData,
+            createdAt: now,
+            isDisplayed: true,
+            updatedAt: now,
           },
         },
       },
     });
 
     /* istanbul ignore if */
-    if (setbadgeIdResult === 'noop') {
+    if (setbadgeIdResult.result === 'noop') {
       console.log(`Info: user ID ${userId} already has set the same badgeId.`);
     }
   } catch (e) {
