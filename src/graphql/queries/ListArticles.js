@@ -470,8 +470,10 @@ export default {
                     {
                       script: {
                         script: {
-                          source:
-                            "doc['articleCategories.positiveFeedbackCount'].value >= doc['articleCategories.negativeFeedbackCount'].value",
+                          source: `
+                            (!doc['articleCategories.positiveFeedbackCount'].isEmpty() ? doc['articleCategories.positiveFeedbackCount'].value : 0) >=
+                            (!doc['articleCategories.negativeFeedbackCount'].isEmpty() ? doc['articleCategories.negativeFeedbackCount'].value : 0)
+                          `,
                           lang: 'painless',
                         },
                       },
@@ -503,8 +505,10 @@ export default {
                 {
                   script: {
                     script: {
-                      source:
-                        "doc['articleReplies.positiveFeedbackCount'].value > doc['articleReplies.negativeFeedbackCount'].value",
+                      source: `
+                        (!doc['articleReplies.positiveFeedbackCount'].isEmpty() ? doc['articleReplies.positiveFeedbackCount'].value : 0) > 
+                        (!doc['articleReplies.negativeFeedbackCount'].isEmpty() ? doc['articleReplies.negativeFeedbackCount'].value : 0)
+                      `,
                       lang: 'painless',
                     },
                   },

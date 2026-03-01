@@ -127,8 +127,10 @@ export async function* getDocToExport(articleCategories) {
             {
               script: {
                 script: {
-                  source:
-                    "doc['articleCategories.positiveFeedbackCount'].value > doc['articleCategories.negativeFeedbackCount'].value",
+                  source: `
+                        (!doc['articleCategories.positiveFeedbackCount'].isEmpty() ? doc['articleCategories.positiveFeedbackCount'].value : 0) > 
+                        (!doc['articleCategories.negativeFeedbackCount'].isEmpty() ? doc['articleCategories.negativeFeedbackCount'].value : 0)
+                  `,
                   lang: 'painless',
                 },
               },
