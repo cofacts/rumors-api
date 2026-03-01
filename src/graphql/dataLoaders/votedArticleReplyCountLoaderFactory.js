@@ -8,21 +8,16 @@ export default () =>
      * @returns {Promise<number[]>} - number of article replies the specified user has voted
      */
     async (userIds) => {
-      const body = userIds.reduce(
-        (commands, userId) =>
-          commands.concat(
-            {
-              index: 'articlereplyfeedbacks',
-            },
-            {
-              size: 0,
-              query: { term: { userId } },
-            }
-          ),
-        []
-      );
+      const searches = [];
+      userIds.forEach((userId) => {
+        searches.push({ index: 'articlereplyfeedbacks' });
+        searches.push({
+          size: 0,
+          query: { term: { userId } },
+        });
+      });
 
-      return (await client.msearch({ body })).responses.map(
+      return (await client.msearch({ searches })).responses.map(
         ({ hits: { total } }) => getTotalCount(total)
       );
     }

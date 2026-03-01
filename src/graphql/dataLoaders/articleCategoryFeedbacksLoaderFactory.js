@@ -4,12 +4,11 @@ import client, { processMeta } from 'util/client';
 export default () =>
   new DataLoader(
     async (articleAndCategoryIds) => {
-      const body = [];
+      const searches = [];
 
       articleAndCategoryIds.forEach(({ articleId, categoryId }) => {
-        body.push({ index: 'articlecategoryfeedbacks' });
-
-        body.push({
+        searches.push({ index: 'articlecategoryfeedbacks' });
+        searches.push({
           query: {
             bool: {
               must: [{ term: { articleId } }, { term: { categoryId } }],
@@ -21,7 +20,7 @@ export default () =>
 
       return (
         await client.msearch({
-          body,
+          searches,
         })
       ).responses.map(({ hits }) => {
         if (!hits || !hits.hits) return [];

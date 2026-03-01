@@ -4,7 +4,7 @@ import client from 'util/client';
 export default () =>
   new DataLoader(
     async (categoryQueries) => {
-      const body = [];
+      const searches = [];
 
       categoryQueries.forEach(({ id, first, before, after }) => {
         // TODO error independently?
@@ -12,9 +12,9 @@ export default () =>
           throw new Error('Use of before & after is prohibited.');
         }
 
-        body.push({ index: 'articles' });
+        searches.push({ index: 'articles' });
 
-        body.push({
+        const bodyConfig = {
           query: {
             nested: {
               path: 'articleCategories',
@@ -27,13 +27,18 @@ export default () =>
           },
           size: first ? first : 10,
           sort: before ? [{ updatedAt: 'desc' }] : [{ updatedAt: 'asc' }],
-          search_after: before || after ? before || after : undefined,
-        });
+        };
+
+        if (before || after) {
+          bodyConfig.search_after = before || after;
+        }
+
+        searches.push(bodyConfig);
       });
 
       return (
         await client.msearch({
-          body,
+          searches,
         })
       ).responses.map(({ hits }, idx) => {
         if (!hits || !hits.hits) return [];

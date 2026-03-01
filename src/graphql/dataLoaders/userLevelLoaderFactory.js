@@ -19,52 +19,47 @@ export default () =>
      */
     async (userIds) => {
       // Currently "point" is defined as number of authored article replies.
-      const body = userIds.reduce(
-        (commands, userId) =>
-          commands.concat(
-            {
-              index: 'articles',
-            },
-            {
-              size: 0,
+      const searches = [];
+      userIds.forEach((userId) => {
+        searches.push({ index: 'articles' });
+        searches.push({
+          size: 0,
+          aggs: {
+            articleReplies: {
+              nested: {
+                path: 'articleReplies',
+              },
               aggs: {
-                articleReplies: {
-                  nested: {
-                    path: 'articleReplies',
-                  },
-                  aggs: {
-                    authored: {
-                      filter: {
-                        bool: {
-                          must: [
-                            {
-                              term: {
-                                'articleReplies.userId': userId,
-                              },
-                            },
-                            {
-                              term: {
-                                'articleReplies.appId': 'WEBSITE',
-                              },
-                            },
-                            {
-                              term: {
-                                'articleReplies.status': 'NORMAL',
-                              },
-                            },
-                          ],
+                authored: {
+                  filter: {
+                    bool: {
+                      must: [
+                        {
+                          term: {
+                            'articleReplies.userId': userId,
+                          },
                         },
-                      },
+                        {
+                          term: {
+                            'articleReplies.appId': 'WEBSITE',
+                          },
+                        },
+                        {
+                          term: {
+                            'articleReplies.status': 'NORMAL',
+                          },
+                        },
+                      ],
                     },
                   },
                 },
               },
-            }
-          ),
-        []
-      );
+            },
+          },
+        });
+      });
 
-      return (await client.msearch({ body })).responses.map(
+      return (await client.msearch({ searches })).responses.map(
         ({
           aggregations: {
             articleReplies: {

@@ -3,12 +3,11 @@ import client from 'util/client';
 
 export default () =>
   new DataLoader(async (replyIds) => {
-    const body = [];
+    const searches = [];
 
     replyIds.forEach((id) => {
-      body.push({ index: 'articles' });
-
-      body.push({
+      searches.push({ index: 'articles' });
+      searches.push({
         query: {
           nested: {
             path: 'articleReplies',
@@ -24,7 +23,7 @@ export default () =>
 
     return (
       await client.msearch({
-        body,
+        searches,
       })
     ).responses.map(({ hits }, idx) => {
       if (!hits || !hits.hits) return [];
