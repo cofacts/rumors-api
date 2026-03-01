@@ -387,14 +387,12 @@ const Article = new GraphQLObjectType({
         };
 
         if (filter.replyCount) {
-          body.query.bool.filter.push([
-            {
-              range: {
-                normalArticleReplyCount:
-                  getRangeFieldParamFromArithmeticExpression(filter.replyCount),
-              },
+          body.query.bool.filter.push({
+            range: {
+              normalArticleReplyCount:
+                getRangeFieldParamFromArithmeticExpression(filter.replyCount),
             },
-          ]);
+          });
         }
 
         /**
