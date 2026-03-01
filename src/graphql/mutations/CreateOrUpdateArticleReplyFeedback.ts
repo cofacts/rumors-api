@@ -56,35 +56,33 @@ export async function updateArticleReplyByFeedbacks(
   const articleReplyUpdateResult = await client.update({
     index: 'articles',
     id: articleId,
-    body: {
-      script: {
-        source: `
-          int idx = 0;
-          int replyCount = ctx._source.articleReplies.size();
-          for(; idx < replyCount; idx += 1) {
-            HashMap articleReply = ctx._source.articleReplies.get(idx);
-            if( articleReply.get('replyId').equals(params.replyId) ) {
-              break;
-            }
+    script: {
+      source: `
+        int idx = 0;
+        int replyCount = ctx._source.articleReplies.size();
+        for(; idx < replyCount; idx += 1) {
+          HashMap articleReply = ctx._source.articleReplies.get(idx);
+          if( articleReply.get('replyId').equals(params.replyId) ) {
+            break;
           }
+        }
 
-          if( idx === replyCount ) {
-            ctx.op = 'none';
-          } else {
-            ctx._source.articleReplies.get(idx).put(
-              'positiveFeedbackCount', params.positiveFeedbackCount);
-            ctx._source.articleReplies.get(idx).put(
-              'negativeFeedbackCount', params.negativeFeedbackCount);
-          }
-        `,
-        params: {
-          replyId,
-          positiveFeedbackCount,
-          negativeFeedbackCount,
-        },
+        if( idx === replyCount ) {
+          ctx.op = 'none';
+        } else {
+          ctx._source.articleReplies.get(idx).put(
+            'positiveFeedbackCount', params.positiveFeedbackCount);
+          ctx._source.articleReplies.get(idx).put(
+            'negativeFeedbackCount', params.negativeFeedbackCount);
+        }
+      `,
+      params: {
+        replyId,
+        positiveFeedbackCount,
+        negativeFeedbackCount,
       },
     },
-    _source: 'true',
+    _source: true,
   });
 
   /* istanbul ignore if */
