@@ -1,8 +1,8 @@
-import { ImageAnnotatorClient } from "@google-cloud/vision";
-import { GoogleGenAI } from "@google/genai";
-import { GoogleAuth } from "google-auth-library";
-import fetch from "node-fetch";
-import sharp from "sharp";
+import { ImageAnnotatorClient } from '@google-cloud/vision';
+import { GoogleGenAI } from '@google/genai';
+import { GoogleAuth } from 'google-auth-library';
+import fetch from 'node-fetch';
+import sharp from 'sharp';
 import {
   GraphQLInputObjectType,
   GraphQLObjectType,
@@ -14,20 +14,20 @@ import {
   GraphQLNonNull,
   GraphQLID,
   GraphQLBoolean,
-} from "graphql";
-import { MediaType, variants } from "@cofacts/media-manager";
+} from 'graphql';
+import { MediaType, variants } from '@cofacts/media-manager';
 import mediaManager, {
   IMAGE_PREVIEW,
   IMAGE_THUMBNAIL,
-} from "util/mediaManager";
+} from 'util/mediaManager';
 
-import Connection from "./interfaces/Connection";
-import Edge from "./interfaces/Edge";
-import PageInfo from "./interfaces/PageInfo";
-import Highlights from "./models/Highlights";
-import client from "util/client";
-import delayForMs from "util/delayForMs";
-import langfuse from "util/langfuse";
+import Connection from './interfaces/Connection';
+import Edge from './interfaces/Edge';
+import PageInfo from './interfaces/PageInfo';
+import Highlights from './models/Highlights';
+import client from 'util/client';
+import delayForMs from 'util/delayForMs';
+import langfuse from 'util/langfuse';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
 //
@@ -55,15 +55,15 @@ function getArithmeticExpressionType(typeName, argType, description) {
 }
 
 export const timeRangeInput = getArithmeticExpressionType(
-  "TimeRangeInput",
+  'TimeRangeInput',
   GraphQLString,
-  "List only the entries that were created between the specific time range. " +
-    "The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)",
+  'List only the entries that were created between the specific time range. ' +
+    'The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)'
 );
 export const intRangeInput = getArithmeticExpressionType(
-  "RangeInput",
+  'RangeInput',
   GraphQLInt,
-  "List only the entries whose field match the criteria.",
+  'List only the entries whose field match the criteria.'
 );
 
 /**
@@ -72,10 +72,10 @@ export const intRangeInput = getArithmeticExpressionType(
  * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-range-query.html#range-query-field-params
  */
 export function getRangeFieldParamFromArithmeticExpression(
-  arithmeticFilterObj,
+  arithmeticFilterObj
 ) {
   // EQ overrides all other operators
-  if (typeof arithmeticFilterObj.EQ !== "undefined") {
+  if (typeof arithmeticFilterObj.EQ !== 'undefined') {
     return {
       gte: arithmeticFilterObj.EQ,
       lte: arithmeticFilterObj.EQ,
@@ -84,34 +84,34 @@ export function getRangeFieldParamFromArithmeticExpression(
 
   const conditionEntries = Object.entries(arithmeticFilterObj);
 
-  if (conditionEntries.length === 0) throw new Error("Invalid Expression!");
+  if (conditionEntries.length === 0) throw new Error('Invalid Expression!');
 
   return Object.fromEntries(
-    conditionEntries.map(([key, value]) => [key.toLowerCase(), value]),
+    conditionEntries.map(([key, value]) => [key.toLowerCase(), value])
   );
 }
 
 export const moreLikeThisInput = new GraphQLInputObjectType({
-  name: "MoreLikeThisInput",
+  name: 'MoreLikeThisInput',
   description:
-    "Parameters for Elasticsearch more_like_this query.\n" +
-    "See: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-mlt-query.html",
+    'Parameters for Elasticsearch more_like_this query.\n' +
+    'See: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-mlt-query.html',
   fields: {
     like: {
       type: GraphQLString,
-      description: "The text string to search for.",
+      description: 'The text string to search for.',
     },
     minimumShouldMatch: {
       type: GraphQLString,
       description:
         'more_like_this query\'s "minimum_should_match" query param.\n' +
-        "See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html for possible values.",
+        'See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html for possible values.',
     },
   },
 });
 
 export const userAndExistInput = new GraphQLInputObjectType({
-  name: "UserAndExistInput",
+  name: 'UserAndExistInput',
   fields: {
     userId: {
       type: new GraphQLNonNull(GraphQLString),
@@ -145,10 +145,10 @@ export function createFilterType(typeName, args) {
 //
 
 const SortOrderEnum = new GraphQLEnumType({
-  name: "SortOrderEnum",
+  name: 'SortOrderEnum',
   values: {
-    ASC: { value: "asc" },
-    DESC: { value: "desc" },
+    ASC: { value: 'asc' },
+    DESC: { value: 'desc' },
   },
 });
 
@@ -162,25 +162,25 @@ export function createSortType(typeName, filterableFields = []) {
     new GraphQLInputObjectType({
       name: typeName,
       description:
-        "An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.",
+        'An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.',
       fields: filterableFields.reduce((fields, field) => {
-        const fieldName = typeof field === "string" ? field : field.name;
+        const fieldName = typeof field === 'string' ? field : field.name;
         const description =
-          typeof field === "string" ? undefined : field.description;
+          typeof field === 'string' ? undefined : field.description;
 
         return {
           ...fields,
           [fieldName]: { type: SortOrderEnum, description },
         };
       }, {}),
-    }),
+    })
   );
 }
 
 export const pagingArgs = {
   first: {
     type: GraphQLInt,
-    description: "Returns only first <first> results",
+    description: 'Returns only first <first> results',
     defaultValue: 10,
   },
   after: {
@@ -209,7 +209,7 @@ export function getSortArgs(orderBy, fieldFnMap = {}) {
 
       return (fieldFnMap[field] || defaultFieldFn)(order);
     })
-    .concat({ _id: { order: "desc" } }); // enforce at least 1 sort order for pagination
+    .concat({ _id: { order: 'desc' } }); // enforce at least 1 sort order for pagination
 }
 
 // sort: [{fieldName: {order: 'desc'}}, {fieldName2: {order: 'desc'}}, ...]
@@ -219,7 +219,7 @@ function reverseSortArgs(sort) {
   if (!sort) return undefined;
   return sort.map((item) => {
     const field = Object.keys(item)[0];
-    const order = item[field].order === "desc" ? "asc" : "desc";
+    const order = item[field].order === 'desc' ? 'asc' : 'desc';
     return {
       [field]: {
         ...item[field],
@@ -232,12 +232,12 @@ function reverseSortArgs(sort) {
 // Export for custom resolveEdges() and resolveLastCursor()
 //
 export function getCursor(cursor) {
-  return Buffer.from(JSON.stringify(cursor)).toString("base64");
+  return Buffer.from(JSON.stringify(cursor)).toString('base64');
 }
 
 export function getSearchAfterFromCursor(cursor) {
   if (!cursor) return undefined;
-  return JSON.parse(Buffer.from(cursor, "base64").toString("utf8"));
+  return JSON.parse(Buffer.from(cursor, 'base64').toString('utf8'));
 }
 
 async function defaultResolveTotalCount({
@@ -257,7 +257,7 @@ async function defaultResolveTotalCount({
       })
     ).body.count;
   } catch (e) /* istanbul ignore next */ {
-    console.error("[defaultResolveTotalCount]", JSON.stringify(e));
+    console.error('[defaultResolveTotalCount]', JSON.stringify(e));
     throw e;
   }
 }
@@ -265,10 +265,10 @@ async function defaultResolveTotalCount({
 export async function defaultResolveEdges(
   { first, before, after, ...searchContext },
   args,
-  { loaders },
+  { loaders }
 ) {
   if (before && after) {
-    throw new Error("Use of before & after is prohibited.");
+    throw new Error('Use of before & after is prohibited.');
   }
 
   const nodes = await loaders.searchResultLoader.load({
@@ -284,21 +284,21 @@ export async function defaultResolveEdges(
         ? reverseSortArgs(searchContext.body.sort)
         : searchContext.body.sort,
       highlight: {
-        order: "score",
+        order: 'score',
         fields: {
           text: {
             number_of_fragments: 1, // Return only 1 piece highlight text
             fragment_size: 200, // word count of highlighted fragment
-            type: "plain",
+            type: 'plain',
           },
           reference: {
             number_of_fragments: 1, // Return only 1 piece highlight text
             fragment_size: 200, // word count of highlighted fragment
-            type: "plain",
+            type: 'plain',
           },
         },
-        pre_tags: ["<HIGHLIGHT>"],
-        post_tags: ["</HIGHLIGHT>"],
+        pre_tags: ['<HIGHLIGHT>'],
+        post_tags: ['</HIGHLIGHT>'],
       },
     },
   });
@@ -314,7 +314,7 @@ export async function defaultResolveEdges(
       score,
       highlight,
       inner_hits,
-    }),
+    })
   );
 }
 
@@ -326,7 +326,7 @@ async function defaultResolveLastCursor(
     ...searchContext
   },
   args,
-  { loaders },
+  { loaders }
 ) {
   const lastNode = (
     await loaders.searchResultLoader.load({
@@ -350,7 +350,7 @@ async function defaultResolveFirstCursor(
     ...searchContext
   },
   args,
-  { loaders },
+  { loaders }
 ) {
   const firstNode = (
     await loaders.searchResultLoader.load({
@@ -369,14 +369,14 @@ async function defaultResolveHighlights(edge) {
     ({
       _source: { url },
       highlight: {
-        "hyperlinks.title": title,
-        "hyperlinks.summary": summary,
+        'hyperlinks.title': title,
+        'hyperlinks.summary': summary,
       } = {},
     }) => ({
       url,
       title: title ? title[0] : undefined,
       summary: summary ? summary[0] : undefined,
-    }),
+    })
   );
 
   // Elasticsearch highlight returns an array because it can be multiple fragments,
@@ -401,7 +401,7 @@ export function createConnectionType(
     resolveFirstCursor = defaultResolveFirstCursor,
     resolveHighlights = defaultResolveHighlights,
     extraEdgeFields = {},
-  } = {},
+  } = {}
 ) {
   return new GraphQLObjectType({
     name: typeName,
@@ -430,9 +430,9 @@ export function createConnectionType(
                   },
                   ...extraEdgeFields,
                 },
-              }),
-            ),
-          ),
+              })
+            )
+          )
         ),
         resolve: resolveEdges,
       },
@@ -451,7 +451,7 @@ export function createConnectionType(
                 resolve: resolveFirstCursor,
               },
             },
-          }),
+          })
         ),
         resolve: (params) => params,
       },
@@ -470,11 +470,11 @@ export function filterByStatuses(entriesWithStatus, statuses) {
     .filter(({ status }) => statuses.includes(status));
 }
 
-export const DEFAULT_ARTICLE_STATUSES = ["NORMAL"];
-export const DEFAULT_ARTICLE_REPLY_STATUSES = ["NORMAL"];
-export const DEFAULT_ARTICLE_CATEGORY_STATUSES = ["NORMAL"];
-export const DEFAULT_REPLY_REQUEST_STATUSES = ["NORMAL"];
-export const DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES = ["NORMAL"];
+export const DEFAULT_ARTICLE_STATUSES = ['NORMAL'];
+export const DEFAULT_ARTICLE_REPLY_STATUSES = ['NORMAL'];
+export const DEFAULT_ARTICLE_CATEGORY_STATUSES = ['NORMAL'];
+export const DEFAULT_REPLY_REQUEST_STATUSES = ['NORMAL'];
+export const DEFAULT_ARTICLE_REPLY_FEEDBACK_STATUSES = ['NORMAL'];
 
 /**
  * @param {string} pluralEntityName - the name to display on argument description
@@ -523,9 +523,9 @@ export function attachCommonListFilter(
   filter,
   userId,
   appId,
-  fieldPrefix = "",
+  fieldPrefix = ''
 ) {
-  ["userId", "appId"].forEach((field) => {
+  ['userId', 'appId'].forEach((field) => {
     if (!filter[field]) return;
     filterQueries.push({ term: { [`${fieldPrefix}${field}`]: filter[field] } });
   });
@@ -538,7 +538,7 @@ export function attachCommonListFilter(
     filterQueries.push({
       range: {
         [`${fieldPrefix}createdAt`]: getRangeFieldParamFromArithmeticExpression(
-          filter.createdAt,
+          filter.createdAt
         ),
       },
     });
@@ -549,10 +549,10 @@ export function attachCommonListFilter(
   }
 
   if (filter.selfOnly) {
-    if (!userId) throw new Error("selfOnly can be set only after log in");
+    if (!userId) throw new Error('selfOnly can be set only after log in');
     filterQueries.push(
       { term: { [`${fieldPrefix}userId`]: userId } },
-      { term: { [`${fieldPrefix}appId`]: appId } },
+      { term: { [`${fieldPrefix}appId`]: appId } }
     );
   }
 }
@@ -581,20 +581,20 @@ export async function getAIResponse({ type, docId }) {
         },
       },
     } = await client.search({
-      index: "airesponses",
-      type: "doc",
+      index: 'airesponses',
+      type: 'doc',
       body: {
         query: {
           bool: {
             must: [
               { term: { type } },
               { term: { docId } },
-              { term: { status: "SUCCESS" } },
+              { term: { status: 'SUCCESS' } },
             ],
           },
         },
         sort: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
         size: 1,
       },
@@ -612,20 +612,20 @@ export async function getAIResponse({ type, docId }) {
     const {
       body: { count },
     } = await client.count({
-      index: "airesponses",
-      type: "doc",
+      index: 'airesponses',
+      type: 'doc',
       body: {
         query: {
           bool: {
             must: [
               { term: { type } },
               { term: { docId } },
-              { term: { status: "LOADING" } },
+              { term: { status: 'LOADING' } },
               {
                 // loading document created within 1 min
                 range: {
                   createdAt: {
-                    gte: "now-1m",
+                    gte: 'now-1m',
                   },
                 },
               },
@@ -669,7 +669,7 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   const newResponse = {
     userId: user.id,
     appId: user.appId,
-    status: "LOADING",
+    status: 'LOADING',
     createdAt: new Date(),
     ...loadingResponseBody,
   };
@@ -677,13 +677,13 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   // Resolves to loading AI Response.
   const newResponseIdPromise = client
     .index({
-      index: "airesponses",
-      type: "doc",
+      index: 'airesponses',
+      type: 'doc',
       body: newResponse,
     })
     .then(({ body: { result, _id } }) => {
       /* istanbul ignore if */
-      if (result !== "created") {
+      if (result !== 'created') {
         throw new Error(`Cannot create AI response: ${result}`);
       }
       return _id;
@@ -698,8 +698,8 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
         get: { _source },
       },
     } = await client.update({
-      index: "airesponses",
-      type: "doc",
+      index: 'airesponses',
+      type: 'doc',
       id: aiResponseId,
       _source: true,
       body: {
@@ -738,7 +738,7 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
 }
 
 const METADATA = {
-  cacheControl: "public, max-age=31536000, immutable",
+  cacheControl: 'public, max-age=31536000, immutable',
 };
 
 const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
@@ -767,7 +767,7 @@ export async function uploadMedia({ mediaUrl, articleType, onUploadStop }) {
       //
       if (!mappedMediaType || mappedMediaType !== type) {
         throw new Error(
-          `Specified article type is "${articleType}", but the media file is a ${type}.`,
+          `Specified article type is "${articleType}", but the media file is a ${type}.`
         );
       }
 
@@ -777,14 +777,14 @@ export async function uploadMedia({ mediaUrl, articleType, onUploadStop }) {
             variants.original(contentType),
             {
               name: IMAGE_THUMBNAIL,
-              contentType: "image/jpeg",
+              contentType: 'image/jpeg',
               transform: sharp()
                 .resize({ height: 240, withoutEnlargement: true })
                 .jpeg({ quality: 60 }),
             },
             {
               name: IMAGE_PREVIEW,
-              contentType: "image/webp",
+              contentType: 'image/webp',
               transform: sharp()
                 .resize({ width: 600, withoutEnlargement: true })
                 .webp({ quality: 30 }),
@@ -801,7 +801,7 @@ export async function uploadMedia({ mediaUrl, articleType, onUploadStop }) {
         console.error(`[createNewMediaArticle] onUploadStop error:`, error);
       } else {
         mediaEntry.variants.forEach((variant) =>
-          mediaEntry.getFile(variant).setMetadata(METADATA),
+          mediaEntry.getFile(variant).setMetadata(METADATA)
         );
       }
 
@@ -840,20 +840,20 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
               // Word break type described in
               // http://googleapis.github.io/googleapis/java/grpc-google-cloud-vision-v1/0.1.5/apidocs/com/google/cloud/vision/v1/TextAnnotation.DetectedBreak.BreakType.html#UNKNOWN
               const breakStr = [
-                "EOL_SURE_SPACE",
-                "HYPHEN",
-                "LINE_BREAK",
+                'EOL_SURE_SPACE',
+                'HYPHEN',
+                'LINE_BREAK',
               ].includes(property.detectedBreak.type)
-                ? "\n"
-                : " ";
+                ? '\n'
+                : ' ';
               return property.detectedBreak.isPrefix
                 ? `${breakStr}${text}`
                 : `${text}${breakStr}`;
-            }),
-          ),
-        ),
+            })
+          )
+        )
     )
-    .join("");
+    .join('');
 }
 
 /**
@@ -887,7 +887,7 @@ export async function transcribeAV({
     model: modelName,
     contents: [
       {
-        role: "user",
+        role: 'user',
         parts: [
           { fileData: { fileUri, mimeType } },
           {
@@ -909,34 +909,34 @@ Your text will be used for indexing these media files, so please follow these ru
     ],
     config: {
       systemInstruction:
-        "You are a transcriber that provide precise transcript to video and audio content.",
-      responseModalities: ["TEXT"],
+        'You are a transcriber that provide precise transcript to video and audio content.',
+      responseModalities: ['TEXT'],
       temperature: 0.5, // Raise a bit to reduce looping (repeated text) error
       maxOutputTokens: 2048, // Stop looping output early
       thinkingConfig: { thinkingBudget: 0 }, // TODO: thinkingConfig is for Gemini 2.5 fallback. Can be removed once Gemini 2.5 is phased out.
       safetySettings: [
         {
-          category: "HARM_CATEGORY_HATE_SPEECH",
-          threshold: "OFF",
+          category: 'HARM_CATEGORY_HATE_SPEECH',
+          threshold: 'OFF',
         },
         {
-          category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-          threshold: "OFF",
+          category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+          threshold: 'OFF',
         },
         {
-          category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-          threshold: "OFF",
+          category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+          threshold: 'OFF',
         },
         {
-          category: "HARM_CATEGORY_HARASSMENT",
-          threshold: "OFF",
+          category: 'HARM_CATEGORY_HARASSMENT',
+          threshold: 'OFF',
         },
       ],
     },
   };
 
   const generation = langfuseTrace.generation({
-    name: "gemini-transcript",
+    name: 'gemini-transcript',
     modelParameters: {
       temperature: generateContentArgs.config.temperature,
       maxOutputTokens: generateContentArgs.config.maxOutputTokens,
@@ -950,7 +950,7 @@ Your text will be used for indexing these media files, so please follow these ru
   });
 
   const response = await genAI.models.generateContent(generateContentArgs);
-  console.log("[transcribeAV]", JSON.stringify(response));
+  console.log('[transcribeAV]', JSON.stringify(response));
 
   const output = response.candidates[0].content.parts[0].text;
   const usage = {
@@ -974,8 +974,8 @@ Your text will be used for indexing these media files, so please follow these ru
 
 const TRANSCRIPT_MODELS = [
   // Combinations that are faster than gemini-2.0-flash-001 @ us
-  { model: "gemini-3.1-flash-lite-preview", location: "global" },
-  { model: "gemini-2.5-flash", location: "global" },
+  { model: 'gemini-3.1-flash-lite-preview', location: 'global' },
+  { model: 'gemini-2.5-flash', location: 'global' },
 ];
 
 /**
@@ -984,39 +984,39 @@ const TRANSCRIPT_MODELS = [
  * @param {object} user - the user who requested the transcription
  */
 export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
-  if (!user) throw new Error("[createTranscript] user is required");
+  if (!user) throw new Error('[createTranscript] user is required');
 
   const { update, getAIResponseId } = createAIResponse({
     user,
-    type: "TRANSCRIPT",
+    type: 'TRANSCRIPT',
     docId: queryInfo.id,
   });
 
   try {
     switch (queryInfo.type) {
-      case "image": {
+      case 'image': {
         const imageUri =
-          typeof fileUrlOrMediaEntry === "string"
+          typeof fileUrlOrMediaEntry === 'string'
             ? fileUrlOrMediaEntry
             : fileUrlOrMediaEntry.getFile().cloudStorageURI.href;
 
         const [response] = await imageAnnotator.documentTextDetection(imageUri);
-        console.info("[createTranscript] Request", queryInfo.id, imageUri);
+        console.info('[createTranscript] Request', queryInfo.id, imageUri);
 
         const { fullTextAnnotation, error } = response;
 
         if (error) {
-          console.error("[createTranscript] Vision API error:", error);
+          console.error('[createTranscript] Vision API error:', error);
           return update({
-            status: "ERROR",
-            text: error.message || "Vision API error",
+            status: 'ERROR',
+            text: error.message || 'Vision API error',
           });
         }
 
         console.info(
-          "[createTranscript] Response",
+          '[createTranscript] Response',
           queryInfo.id,
-          fullTextAnnotation,
+          fullTextAnnotation
         );
 
         if (
@@ -1026,41 +1026,41 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
         ) {
           if (!fullTextAnnotation) {
             console.info(
-              "[createTranscript] No fullTextAnnotation. Full response:",
-              JSON.stringify(response),
+              '[createTranscript] No fullTextAnnotation. Full response:',
+              JSON.stringify(response)
             );
           }
           return update({
-            status: "SUCCESS",
+            status: 'SUCCESS',
             // No text detected
-            text: "",
+            text: '',
           });
         }
 
         return update({
-          status: "SUCCESS",
+          status: 'SUCCESS',
           // Write '' if no text detected
           text: extractTextFromFullTextAnnotation(fullTextAnnotation),
         });
       }
 
-      case "video":
-      case "audio": {
+      case 'video':
+      case 'audio': {
         const aiResponseId = await getAIResponseId();
         const fileUrl =
-          typeof fileUrlOrMediaEntry === "string"
+          typeof fileUrlOrMediaEntry === 'string'
             ? fileUrlOrMediaEntry
             : fileUrlOrMediaEntry.getUrl();
 
-        const mimeTypePromise = fetch(fileUrl, { method: "HEAD" })
-          .then((res) => res.headers.get("content-type"))
+        const mimeTypePromise = fetch(fileUrl, { method: 'HEAD' })
+          .then((res) => res.headers.get('content-type'))
           .catch(() =>
-            queryInfo.type === "video" ? "video/mp4" : "audio/mpeg",
+            queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
           );
 
         let mediaEntry;
         let mimeType;
-        if (typeof fileUrlOrMediaEntry !== "string") {
+        if (typeof fileUrlOrMediaEntry !== 'string') {
           mediaEntry = fileUrlOrMediaEntry;
           mimeType = await mimeTypePromise;
         } else {
@@ -1097,7 +1097,7 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
         const [metadata] = await mediaEntry.getFile().getMetadata();
         mimeType = metadata.contentType || (await mimeTypePromise);
 
-        console.log("[createTranscript] using mimeType:", mimeType);
+        console.log('[createTranscript] using mimeType:', mimeType);
 
         const trace = langfuse.trace({
           id: aiResponseId,
@@ -1115,16 +1115,16 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
               location,
             });
 
-            return update({ status: "SUCCESS", text, usage });
+            return update({ status: 'SUCCESS', text, usage });
           } catch (e) {
-            console.error("[createTranscript]", e);
+            console.error('[createTranscript]', e);
 
             if (
-              e.message.includes("429") &&
-              e.message.includes("RESOURCE_EXHAUSTED")
+              e.message.includes('429') &&
+              e.message.includes('RESOURCE_EXHAUSTED')
             ) {
               console.warn(
-                `[createTranscript] Model ${model} @ ${location} quota exceeded, trying next model.`,
+                `[createTranscript] Model ${model} @ ${location} quota exceeded, trying next model.`
               );
               continue; // Try the next model
             }
@@ -1135,17 +1135,17 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
 
         // If all models fail
         return update({
-          status: "ERROR",
-          text: "All models failed due to quota limits.",
+          status: 'ERROR',
+          text: 'All models failed due to quota limits.',
         });
       }
       default:
         throw new Error(`Type ${queryInfo.type} not supported`);
     }
   } catch (e) {
-    console.error("[createTranscript]", e);
+    console.error('[createTranscript]', e);
     return update({
-      status: "ERROR",
+      status: 'ERROR',
       text: e.toString(),
     });
   }
