@@ -90,9 +90,7 @@ async function processReplyRequests(userId: string) {
   for (const [i, articleId] of articleIdsWithNormalReplyRequests.entries()) {
     const {
       hits: { total },
-      aggregations: {
-        lastRequestedAt: { value_as_string: lastRequestedAt },
-      },
+      aggregations,
     } = await client.search({
       index: 'replyrequests',
       size: 0,
@@ -106,6 +104,10 @@ async function processReplyRequests(userId: string) {
       },
     });
 
+    const lastRequestedAt = (
+      aggregations?.lastRequestedAt as { value_as_string?: string }
+    )?.value_as_string;
+
     await client.update({
       index: 'articles',
       id: articleId,
@@ -116,8 +118,11 @@ async function processReplyRequests(userId: string) {
     });
 
     console.log(
-      `[${i + 1}/${articleIdsWithNormalReplyRequests.length
-      }] article ${articleId}: changed to ${getTotalCount(total)} reply requests, last requested at ${lastRequestedAt}`
+      `[${i + 1}/${
+        articleIdsWithNormalReplyRequests.length
+      }] article ${articleId}: changed to ${getTotalCount(
+        total
+      )} reply requests, last requested at ${lastRequestedAt}`
     );
   }
 
@@ -258,7 +263,8 @@ async function processArticleReplyFeedbacks(userId: string) {
       await updateArticleReplyByFeedbacks(articleId, replyId, feedbacks);
 
     console.log(
-      `[${i + 1}/${articleReplyIdsWithNormalFeedbacks.length
+      `[${i + 1}/${
+        articleReplyIdsWithNormalFeedbacks.length
       }] article=${articleId} reply=${replyId}: score changed to +${positiveFeedbackCount}, -${negativeFeedbackCount}`
     );
   }
@@ -308,10 +314,12 @@ async function main({
   blockedReason: string;
 }): Promise<BlockUserReturnValue> {
   await writeBlockedReasonToUser(userId, blockedReason);
-  const { updated: updatedArticles } = await processArticles(userId);
-  const { updated: updatedReplyRequests } = await processReplyRequests(userId);
+  const { updated: updatedArticles = 0 } = await processArticles(userId);
+  const { updated: updatedReplyRequests = 0 } = await processReplyRequests(
+    userId
+  );
   const updatedArticleReplies = await processArticleReplies(userId);
-  const { updated: updateArticleReplyFeedbacks } =
+  const { updated: updateArticleReplyFeedbacks = 0 } =
     await processArticleReplyFeedbacks(userId);
 
   return {

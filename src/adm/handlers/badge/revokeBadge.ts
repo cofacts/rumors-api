@@ -79,7 +79,7 @@ async function removeBadgeFromList(userId: string, badgeId: string) {
  */
 async function verifyBadgeIssuer(badgeId: string, requestUserId: string) {
   try {
-    const { _source: badge } = await client.get({
+    const { _source: badge } = await client.get<{ issuers?: string[] }>({
       index: 'badges',
       id: badgeId,
     });

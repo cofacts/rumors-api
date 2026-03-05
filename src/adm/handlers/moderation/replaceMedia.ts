@@ -18,7 +18,9 @@ async function replaceMediaHandler({
     // We'll run the script and then fetch the article again to get the updated hash.
     await replaceMediaScript({ articleId, url, force });
 
-    const { _source: updatedArticle } = await client.get({
+    const { _source: updatedArticle } = await client.get<{
+      attachmentHash: string;
+    }>({
       index: 'articles',
       id: articleId,
     });
