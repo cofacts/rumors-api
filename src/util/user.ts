@@ -244,7 +244,16 @@ export async function createOrUpdateUser({
   });
 
   const isCreated = result === 'created';
-  const user = processMeta<User>({ ...userFound, _id: dbUserId });
+  const user = processMeta<User>({
+    _id: dbUserId,
+    _source: userFound?._source as User,
+    found: userFound?.found ?? true,
+    _score: 0,
+    highlight: {},
+    inner_hits: {},
+    sort: '',
+    fields: userFound?.fields ?? {},
+  });
 
   // Make Typescript happy
   if (!user) throw new Error('[createOrUpdateUser] Cannot process user');

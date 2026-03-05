@@ -53,7 +53,7 @@ export async function updateArticleReplyByFeedbacks(
       [0, 0]
     );
 
-  const articleReplyUpdateResult = await client.update({
+  const articleReplyUpdateResult = await client.update<Article>({
     index: 'articles',
     id: articleId,
     script: {
@@ -90,9 +90,22 @@ export async function updateArticleReplyByFeedbacks(
     throw new Error(`Cannot article ${articleId}'s feedback count`);
   }
 
-  return articleReplyUpdateResult.get._source.articleReplies.find(
-    (articleReply: ArticleReplyType) => articleReply.replyId === replyId
+  const source = articleReplyUpdateResult.get?._source;
+  if (!source) {
+    throw new Error(`Cannot get updated article ${articleId}`);
+  }
+
+  const articleReply = (source as Article).articleReplies.find(
+    (ar: ArticleReplyType) => ar.replyId === replyId
   );
+
+  if (!articleReply) {
+    throw new Error(
+      `Cannot find article reply with replyId ${replyId} in article ${articleId}`
+    );
+  }
+
+  return articleReply;
 }
 
 export default {
@@ -158,17 +171,18 @@ export default {
       // Fill in reply & article reply author ID
       //
 
-      const [{ userId: replyUserId }, article] =
-        (await loaders.docLoader.loadMany([
-          {
-            index: 'replies',
-            id: replyId,
-          },
-          {
-            index: 'articles',
-            id: articleId,
-          },
-        ])) as [Reply, Article];
+      const [reply, article] = (await loaders.docLoader.loadMany([
+        {
+          index: 'replies',
+          id: replyId,
+        },
+        {
+          index: 'articles',
+          id: articleId,
+        },
+      ])) as unknown as [Reply, Article];
+
+      const { userId: replyUserId } = reply;
 
       const ar = article.articleReplies.find((ar) => ar.replyId === replyId);
 
