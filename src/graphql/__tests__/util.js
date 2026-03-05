@@ -287,16 +287,18 @@ if (process.env.GCS_BUCKET_NAME) {
       `);
 
       // Traditional / Simplified Chinese is not stable
-      expect(text).toMatch(/一招教你秒变失踪人口|一招教你秒變失踪人口/);
-      expect(text).toMatch(/就会变成空号|就會變成空號/);
-      expect(text).toMatch(/你学会了吗|你學會了嗎/);
-
-      // Cleanup
-      await client.delete({
-        index: 'airesponses',
-        type: 'doc',
-        id: aiResponseId,
-      });
+      try {
+        expect(text).toMatch(/教你秒变失踪人口|教你秒變失踪人口/);
+        expect(text).toMatch(/就会变成空号|就會變成空號/);
+        expect(text).toMatch(/你学会了吗|你學會了嗎/);
+      } finally {
+        // Cleanup
+        await client.delete({
+          index: 'airesponses',
+          type: 'doc',
+          id: aiResponseId,
+        });
+      }
     }, 120000);
   });
 }
