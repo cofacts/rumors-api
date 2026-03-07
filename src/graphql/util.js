@@ -913,7 +913,7 @@ Your text will be used for indexing these media files, so please follow these ru
       responseModalities: ['TEXT'],
       temperature: 0.5, // Raise a bit to reduce looping (repeated text) error
       maxOutputTokens: 2048, // Stop looping output early
-      thinkingConfig: { thinkingBudget: 0 }, // Thinking may somehow introduce more looping
+      thinkingConfig: { thinkingBudget: 0 }, // TODO: thinkingConfig is for Gemini 2.5 fallback. Can be removed once Gemini 2.5 is phased out.
       safetySettings: [
         {
           category: 'HARM_CATEGORY_HATE_SPEECH',
@@ -974,8 +974,8 @@ Your text will be used for indexing these media files, so please follow these ru
 
 const TRANSCRIPT_MODELS = [
   // Combinations that are faster than gemini-2.0-flash-001 @ us
+  { model: 'gemini-3.1-flash-lite-preview', location: 'global' },
   { model: 'gemini-2.5-flash', location: 'global' },
-  { model: 'gemini-2.5-flash-lite-preview-06-17', location: 'global' },
 ];
 
 /**
