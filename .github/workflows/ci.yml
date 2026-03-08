@@ -15,6 +15,7 @@ jobs:
         image: elasticsearch:9.2.2
         env:
           discovery.type: single-node
+          xpack.security.enabled: 'false'
         ports:
           - 62223:9200
 
