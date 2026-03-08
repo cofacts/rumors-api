@@ -12,7 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     services:
       rumors-test-db:
-        image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.2
+        image: elasticsearch:9.2.2
+        env:
+          discovery.type: single-node
         ports:
           - 62223:9200
 
@@ -26,7 +28,7 @@ jobs:
           submodules: true
       - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '24'
           cache: 'npm'
       - uses: google-github-actions/auth@v1
         with:
