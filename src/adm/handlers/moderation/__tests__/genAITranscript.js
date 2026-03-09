@@ -47,18 +47,12 @@ if (process.env.GCS_BUCKET_NAME) {
     afterAll(async () => {
       // Cleanup all created articles, their ydocs and airesponses
       for (const id of createdArticleIds) {
-        await client
-          .delete({ index: 'articles', type: 'doc', id })
-          .catch(() => {});
-        await client
-          .delete({ index: 'ydocs', type: 'doc', id })
-          .catch(() => {});
+        await client.delete({ index: 'articles', id }).catch(() => {});
+        await client.delete({ index: 'ydocs', id }).catch(() => {});
       }
 
       for (const id of createdAiResponseIds) {
-        await client
-          .delete({ index: 'airesponses', type: 'doc', id })
-          .catch(() => {});
+        await client.delete({ index: 'airesponses', id }).catch(() => {});
       }
 
       // Cleanup GCS files
@@ -114,9 +108,8 @@ if (process.env.GCS_BUCKET_NAME) {
       createdArticleIds.push(articleId);
       await client.index({
         index: 'articles',
-        type: 'doc',
         id: articleId,
-        body: {
+        document: {
           attachmentHash: mediaEntry.id,
           text: '',
           articleType: 'IMAGE',
@@ -141,8 +134,7 @@ if (process.env.GCS_BUCKET_NAME) {
       // Track created aiResponseId for cleanup
       const { hits } = await client.search({
         index: 'airesponses',
-        type: 'doc',
-        body: { query: { term: { docId: mediaEntry.id } } },
+        query: { term: { docId: mediaEntry.id } },
       });
       hits.hits.forEach((hit) => createdAiResponseIds.push(hit._id));
 
@@ -156,7 +148,6 @@ if (process.env.GCS_BUCKET_NAME) {
       // 5. Verify article text was updated
       const { _source: updatedArticle } = await client.get({
         index: 'articles',
-        type: 'doc',
         id: articleId,
       });
 
@@ -190,9 +181,8 @@ if (process.env.GCS_BUCKET_NAME) {
       createdArticleIds.push(articleId);
       await client.index({
         index: 'articles',
-        type: 'doc',
         id: articleId,
-        body: {
+        document: {
           attachmentHash: mediaEntry.id,
           text: '',
           articleType: 'AUDIO',
@@ -217,8 +207,7 @@ if (process.env.GCS_BUCKET_NAME) {
       // Track created aiResponseId for cleanup
       const { hits } = await client.search({
         index: 'airesponses',
-        type: 'doc',
-        body: { query: { term: { docId: mediaEntry.id } } },
+        query: { term: { docId: mediaEntry.id } },
       });
       hits.hits.forEach((hit) => createdAiResponseIds.push(hit._id));
 
@@ -232,7 +221,6 @@ if (process.env.GCS_BUCKET_NAME) {
       // 5. Verify article text was updated
       const { _source: updatedArticle } = await client.get({
         index: 'articles',
-        type: 'doc',
         id: articleId,
       });
 

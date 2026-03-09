@@ -9,7 +9,7 @@ import client from 'util/client';
 
 export async function loadFixtures(fixtureMap) {
   const body = [];
-  Object.keys(fixtureMap).forEach(key => {
+  Object.keys(fixtureMap).forEach((key) => {
     const [, _index, , _id] = key.split('/');
     body.push({ index: { _index, _id } });
     body.push(fixtureMap[key]);
@@ -20,7 +20,7 @@ export async function loadFixtures(fixtureMap) {
   // ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html#bulk
   //      https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html
   //
-  const result = await client.bulk({ body, refresh: 'true' });
+  const result = await client.bulk({ operations: body, refresh: 'true' });
 
   /* istanbul ignore if */
   if (result.errors) {
@@ -31,12 +31,12 @@ export async function loadFixtures(fixtureMap) {
 }
 
 export async function unloadFixtures(fixtureMap) {
-  const body = Object.keys(fixtureMap).map(key => {
+  const body = Object.keys(fixtureMap).map((key) => {
     const [, _index, , _id] = key.split('/');
     return { delete: { _index, _id } };
   });
 
-  const result = await client.bulk({ body, refresh: 'true' });
+  const result = await client.bulk({ operations: body, refresh: 'true' });
 
   /* istanbul ignore if */
   if (result.errors) {
@@ -53,9 +53,7 @@ export async function resetFrom(fixtureMap, key) {
   await client.update({
     index,
     id,
-    body: {
-      doc: fixtureMap[key],
-    },
+    doc: fixtureMap[key],
     refresh: 'true',
   });
 }

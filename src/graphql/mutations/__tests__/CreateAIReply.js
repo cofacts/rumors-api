@@ -116,14 +116,12 @@ describe('CreateAIReply', () => {
       hits: { hits: loadingAIReplies },
     } = await client.search({
       index: 'airesponses',
-      body: {
-        query: {
-          bool: {
-            must: [
-              { term: { type: 'AI_REPLY' } },
-              { term: { docId: 'reported-article' } },
-            ],
-          },
+      query: {
+        bool: {
+          must: [
+            { term: { type: 'AI_REPLY' } },
+            { term: { docId: 'reported-article' } },
+          ],
         },
       },
     });
@@ -188,10 +186,8 @@ describe('CreateAIReply', () => {
     await client.update({
       index: 'airesponses',
       id: 'loading',
-      body: {
-        doc: {
-          createdAt: new Date(),
-        },
+      doc: {
+        createdAt: new Date(),
       },
       refresh: 'true',
     });
@@ -224,11 +220,9 @@ describe('CreateAIReply', () => {
     await client.update({
       index: 'airesponses',
       id: 'loading',
-      body: {
-        doc: {
-          status: 'SUCCESS',
-          updatedAt: new Date(),
-        },
+      doc: {
+        status: 'SUCCESS',
+        updatedAt: new Date(),
       },
       refresh: 'true',
     });

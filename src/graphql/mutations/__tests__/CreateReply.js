@@ -103,7 +103,7 @@ describe('CreateReply', () => {
     await client.indices.refresh({ index: 'urls' });
     await client.deleteByQuery({
       index: 'urls',
-      body: { query: { term: { url: REF_URL } } },
+      query: { term: { url: REF_URL } },
       refresh: true,
     });
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
