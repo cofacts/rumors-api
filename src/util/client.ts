@@ -52,7 +52,7 @@ export function processMeta<T extends object>({
  * In ES 7+, hits.total is an object { value, relation }.
  */
 export function getTotalCount(
-  total: number | { value: number; relation: string }
+  total: number | { value: number; relation: string } | undefined
 ): number {
   if (typeof total === 'number') {
     return total;
