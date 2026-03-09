@@ -582,21 +582,19 @@ export async function getAIResponse({ type, docId }) {
       },
     } = await client.search({
       index: 'airesponses',
-      body: {
-        query: {
-          bool: {
-            must: [
-              { term: { type } },
-              { term: { docId } },
-              { term: { status: 'SUCCESS' } },
-            ],
-          },
+      query: {
+        bool: {
+          must: [
+            { term: { type } },
+            { term: { docId } },
+            { term: { status: 'SUCCESS' } },
+          ],
         },
-        sort: {
-          createdAt: 'desc',
-        },
-        size: 1,
       },
+      sort: {
+        createdAt: 'desc',
+      },
+      size: 1,
     });
 
     if (successfulAiResponse) {
@@ -610,23 +608,21 @@ export async function getAIResponse({ type, docId }) {
     //
     const { count } = await client.count({
       index: 'airesponses',
-      body: {
-        query: {
-          bool: {
-            must: [
-              { term: { type } },
-              { term: { docId } },
-              { term: { status: 'LOADING' } },
-              {
-                // loading document created within 1 min
-                range: {
-                  createdAt: {
-                    gte: 'now-1m',
-                  },
+      query: {
+        bool: {
+          must: [
+            { term: { type } },
+            { term: { docId } },
+            { term: { status: 'LOADING' } },
+            {
+              // loading document created within 1 min
+              range: {
+                createdAt: {
+                  gte: 'now-1m',
                 },
               },
-            ],
-          },
+            },
+          ],
         },
       },
     });
@@ -674,7 +670,7 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   const newResponseIdPromise = client
     .index({
       index: 'airesponses',
-      body: newResponse,
+      document: newResponse,
     })
     .then(({ result, _id }) => {
       /* istanbul ignore if */
@@ -694,11 +690,9 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
       index: 'airesponses',
       id: aiResponseId,
       _source: true,
-      body: {
-        doc: {
-          updatedAt: new Date(),
-          ...responseBody,
-        },
+      doc: {
+        updatedAt: new Date(),
+        ...responseBody,
       },
     });
 

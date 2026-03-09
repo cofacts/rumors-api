@@ -135,7 +135,7 @@ async function scrapUrls(
   }
 
   const insertResult = await client.bulk({
-    body: urlsBody,
+    operations: urlsBody,
   });
 
   if (insertResult.errors) {

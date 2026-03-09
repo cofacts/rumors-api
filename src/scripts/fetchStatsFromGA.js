@@ -97,8 +97,7 @@ const docUserAppLoader = new DataLoader(
 
     const docMap = (
       await client.mget({
-        body: { docs },
-        _source: ['userId', 'appId'],
+        docs,
       })
     ).docs.reduce((map, { _source, _index, _id, found }) => {
       if (found) {
@@ -254,7 +253,7 @@ export async function fetchStatsFromGA(params) {
 
         processedCount += docs.length;
 
-        const response = await client.bulk({ body: esBatch });
+        const response = await client.bulk({ operations: esBatch });
 
         /* istanbul ignore next */
         if (response.errors) {

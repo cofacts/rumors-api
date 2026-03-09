@@ -24,43 +24,41 @@ export default {
     } = await client.update({
       index: 'articles',
       id: articleId,
-      body: {
-        script: {
-          source: `
-            int idx = 0;
-            int categoryCount = ctx._source.articleCategories.size();
-            for(; idx < categoryCount; idx += 1) {
-              HashMap articleCategory = ctx._source.articleCategories.get(idx);
-              if(
-                articleCategory.get('categoryId').equals(params.categoryId) &&
-                articleCategory.get('userId').equals(params.userId) &&
-                articleCategory.get('appId').equals(params.appId)
-              ) {
-                break;
-              }
-            }
+      script: {
+        source: `
+        int idx = 0;
+        int categoryCount = ctx._source.articleCategories.size();
+        for(; idx < categoryCount; idx += 1) {
+          HashMap articleCategory = ctx._source.articleCategories.get(idx);
+          if(
+            articleCategory.get('categoryId').equals(params.categoryId) &&
+            articleCategory.get('userId').equals(params.userId) &&
+            articleCategory.get('appId').equals(params.appId)
+          ) {
+            break;
+          }
+        }
 
-            if( idx === categoryCount ) {
-              ctx.op = 'none';
-            } else {
-              ctx._source.articleCategories.get(idx).put('status', params.status);
-              ctx._source.articleCategories.get(idx).put('updatedAt', params.updatedAt);
-              ctx._source.normalArticleCategoryCount = ctx._source.articleCategories.stream().filter(
-                ar -> ar.get('status').equals('NORMAL')
-              ).count();
-            }
-          `,
-          params: {
-            categoryId,
-            userId,
-            appId,
-            status,
-            updatedAt: new Date().toISOString(),
-          },
-          lang: 'painless',
+        if( idx === categoryCount ) {
+          ctx.op = 'none';
+        } else {
+          ctx._source.articleCategories.get(idx).put('status', params.status);
+          ctx._source.articleCategories.get(idx).put('updatedAt', params.updatedAt);
+          ctx._source.normalArticleCategoryCount = ctx._source.articleCategories.stream().filter(
+            ar -> ar.get('status').equals('NORMAL')
+          ).count();
+        }
+      `,
+        params: {
+          categoryId,
+          userId,
+          appId,
+          status,
+          updatedAt: new Date().toISOString(),
         },
-        _source: ['articleCategories.*'],
+        lang: 'painless',
       },
+      _source: ['articleCategories.*'],
     });
 
     if (result === 'noop') {

@@ -32,12 +32,10 @@ export async function assertSlugIsValid(slug, userId) {
 
   const { count } = await client.count({
     index: 'users',
-    body: {
-      query: {
-        bool: {
-          must: [{ term: { slug } }],
-          must_not: [{ ids: { values: [userId] } }],
-        },
+    query: {
+      bool: {
+        must: [{ term: { slug } }],
+        must_not: [{ ids: { values: [userId] } }],
       },
     },
   });

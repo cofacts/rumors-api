@@ -14,7 +14,7 @@ export default () =>
 
       return (
         await client.mget({
-          body: { docs },
+          docs,
         })
       ).docs.map(processMeta);
     },

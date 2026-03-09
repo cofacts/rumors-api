@@ -79,7 +79,7 @@ async function getArticleCategoryFeedbacksMap() {
   };
   const { count: feedbackCount } = await client.count({
     index: 'articlecategoryfeedbacks',
-    body: { query: FEEDBACK_QUERY },
+    query: FEEDBACK_QUERY,
   });
 
   console.log(`Scanning ${feedbackCount} valid article category feedbacks...`);
@@ -126,7 +126,7 @@ async function main({ startFrom } = {}) {
 
   const { count: articleCount } = await client.count({
     index: 'articles',
-    body: { query: ARTICLE_QUERY },
+    query: ARTICLE_QUERY,
   });
 
   console.log(`Scanning ${articleCount} categorized articles...`);

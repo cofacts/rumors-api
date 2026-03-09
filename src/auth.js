@@ -67,11 +67,9 @@ export async function verifyProfile(profile, fieldName) {
       const updateUserResult = await client.update({
         index: 'users',
         id,
-        body: {
-          doc: {
-            [fieldName]: profile.id,
-            updatedAt: now,
-          },
+        doc: {
+          [fieldName]: profile.id,
+          updatedAt: now,
         },
         _source: true,
       });
@@ -88,7 +86,7 @@ export async function verifyProfile(profile, fieldName) {
   //
   const createUserResult = await client.index({
     index: 'users',
-    body: {
+    document: {
       email,
       name: username,
       avatarUrl: avatar,
@@ -97,7 +95,6 @@ export async function verifyProfile(profile, fieldName) {
       updatedAt: now,
     },
   });
-
   if (createUserResult.result === 'created') {
     return processMeta(
       await client.get({

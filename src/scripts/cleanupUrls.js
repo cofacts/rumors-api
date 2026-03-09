@@ -19,25 +19,23 @@ async function processUrls(processFn) {
     index: 'urls',
     scroll: '30s',
     size: 100,
-    body: {
-      query: {
-        bool: {
-          must_not: {
-            exists: {
-              field: FLAG_FIELD,
-            },
+    query: {
+      bool: {
+        must_not: {
+          exists: {
+            field: FLAG_FIELD,
           },
-          must: {
-            range: {
-              fetchedAt: {
-                lte: new Date(Date.now() - 86400 * 1000).toISOString(), // yesterday
-              },
+        },
+        must: {
+          range: {
+            fetchedAt: {
+              lte: new Date(Date.now() - 86400 * 1000).toISOString(), // yesterday
             },
           },
         },
       },
-      _source: ['url', 'canonical'],
     },
+    _source: ['url', 'canonical'],
   });
   await processFn(hits.hits);
   processedCount += hits.hits.length;
@@ -95,7 +93,8 @@ async function processFn(docs) {
   /**
    * mSearchResult: [{hits: {total: count}}, ...]
    */
-  const mSearchResult = (await client.msearch({ body: mSearchBody })).responses;
+  const mSearchResult = (await client.msearch({ searches: mSearchBody }))
+    .responses;
 
   //
   // Then perform update / delete on each doc
@@ -112,7 +111,7 @@ async function processFn(docs) {
   });
 
   const bulkResult = await client.bulk({
-    body: bulkBody,
+    operations: bulkBody,
     refresh: 'true',
   });
   const deleteCount = bulkResult.items.reduce(

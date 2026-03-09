@@ -59,20 +59,18 @@ export async function createOrUpdateReplyRequest({
   const { result } = await client.update({
     index: 'replyrequests',
     id,
-    body: {
-      doc: updatedDoc,
-      upsert: {
-        articleId,
-        userId: user.id,
-        appId: user.appId,
-        reason,
-        feedbacks: [],
-        positiveFeedbackCount: 0,
-        negativeFeedbackCount: 0,
-        createdAt: now,
-        updatedAt: now,
-        status: replyRequestStatus,
-      },
+    doc: updatedDoc,
+    upsert: {
+      articleId,
+      userId: user.id,
+      appId: user.appId,
+      reason,
+      feedbacks: [],
+      positiveFeedbackCount: 0,
+      negativeFeedbackCount: 0,
+      createdAt: now,
+      updatedAt: now,
+      status: replyRequestStatus,
     },
     refresh: 'true',
   });
@@ -92,14 +90,12 @@ export async function createOrUpdateReplyRequest({
     const articleUpdateResult = await client.update({
       index: 'articles',
       id: articleId,
-      body: {
-        script: {
-          source: `
-            ${isCreated ? 'ctx._source.replyRequestCount += 1;' : ''}
-            ctx._source.lastRequestedAt = params.now;
-          `,
-          params: { now },
-        },
+      script: {
+        source: `
+        ${isCreated ? 'ctx._source.replyRequestCount += 1;' : ''}
+        ctx._source.lastRequestedAt = params.now;
+      `,
+        params: { now },
       },
       _source: true,
     });

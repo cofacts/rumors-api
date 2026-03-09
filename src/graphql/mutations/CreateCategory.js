@@ -27,7 +27,7 @@ export default {
 
     const { result, _id: id } = await client.index({
       index: 'categories',
-      body: categoryBody,
+      document: categoryBody,
     });
 
     if (result !== 'created') {

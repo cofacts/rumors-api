@@ -27,43 +27,41 @@ export async function updateArticleReplyStatus({
   } = await client.update({
     index: 'articles',
     id: articleId,
-    body: {
-      script: {
-        source: `
-          int idx = 0;
-          int replyCount = ctx._source.articleReplies.size();
-          for(; idx < replyCount; idx += 1) {
-            HashMap articleReply = ctx._source.articleReplies.get(idx);
-            if(
-              articleReply.get('replyId').equals(params.replyId) &&
-              articleReply.get('userId').equals(params.userId) &&
-              articleReply.get('appId').equals(params.appId)
-            ) {
-              break;
-            }
+    script: {
+      source: `
+        int idx = 0;
+        int replyCount = ctx._source.articleReplies.size();
+        for(; idx < replyCount; idx += 1) {
+          HashMap articleReply = ctx._source.articleReplies.get(idx);
+          if(
+            articleReply.get('replyId').equals(params.replyId) &&
+            articleReply.get('userId').equals(params.userId) &&
+            articleReply.get('appId').equals(params.appId)
+          ) {
+            break;
           }
+        }
 
-          if( idx === replyCount ) {
-            ctx.op = 'none';
-          } else {
-            ctx._source.articleReplies.get(idx).put('status', params.status);
-            ctx._source.articleReplies.get(idx).put('updatedAt', params.updatedAt);
-            ctx._source.normalArticleReplyCount = ctx._source.articleReplies.stream().filter(
-              ar -> ar.get('status').equals('NORMAL')
-            ).count();
-          }
-        `,
-        params: {
-          replyId,
-          userId,
-          appId,
-          status,
-          updatedAt: new Date().toISOString(),
-        },
-        lang: 'painless',
+        if( idx === replyCount ) {
+          ctx.op = 'none';
+        } else {
+          ctx._source.articleReplies.get(idx).put('status', params.status);
+          ctx._source.articleReplies.get(idx).put('updatedAt', params.updatedAt);
+          ctx._source.normalArticleReplyCount = ctx._source.articleReplies.stream().filter(
+            ar -> ar.get('status').equals('NORMAL')
+          ).count();
+        }
+      `,
+      params: {
+        replyId,
+        userId,
+        appId,
+        status,
+        updatedAt: new Date().toISOString(),
       },
-      _source: ['articleReplies.*'],
+      lang: 'painless',
     },
+    _source: ['articleReplies.*'],
   });
 
   if (result === 'noop') {

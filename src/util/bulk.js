@@ -29,7 +29,7 @@ export default class Bulk {
     const op = this._operations.splice(0);
     this.actionCounts = 0;
     const result = await this.client.bulk({
-      body: op,
+      operations: op,
       refresh: 'true',
     });
     if (result.errors) {

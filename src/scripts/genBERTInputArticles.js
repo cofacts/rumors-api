@@ -144,7 +144,7 @@ export async function* getDocToExport(articleCategories) {
 
   const { count } = await client.count({
     index: 'articles',
-    body: { query: ARTICLE_QUERY },
+    query: ARTICLE_QUERY,
   });
   console.log(`Scanning through ${count} matching articles`);
   const articleBar = new SingleBar({ stopOnComplete: true });

@@ -53,41 +53,39 @@ export async function createArticleCategory({
   } = await client.update({
     index: 'articles',
     id: articleId,
-    body: {
-      script: {
-        /**
-         * Check if the category is already connected in the article.
-         * If connected with not default status, then set to default status.
-         * If connected with NORMAL status, then do nothing.
-         * Otherwise, do update.
-         */
-        source: `
-          def found = ctx._source.articleCategories.stream()
-            .filter(ar -> ar.get('categoryId').equals(params.articleCategory.get('categoryId')))
-            .findFirst();
+    script: {
+      /**
+       * Check if the category is already connected in the article.
+       * If connected with not default status, then set to default status.
+       * If connected with NORMAL status, then do nothing.
+       * Otherwise, do update.
+       */
+      source: `
+        def found = ctx._source.articleCategories.stream()
+          .filter(ar -> ar.get('categoryId').equals(params.articleCategory.get('categoryId')))
+          .findFirst();
 
-          if (found.isPresent()) {
-            HashMap ar = found.get();
-            if (ar.get('status').equals(params.defaultStatus)) {
-              ctx.op = 'none';
-            } else {
-              ar.put('status', params.defaultStatus);
-              ar.put('userId', params.articleCategory.get('userId'));
-              ar.put('appId', params.articleCategory.get('appId'));
-              ar.put('updatedAt', params.articleCategory.get('updatedAt'));
-            }
+        if (found.isPresent()) {
+          HashMap ar = found.get();
+          if (ar.get('status').equals(params.defaultStatus)) {
+            ctx.op = 'none';
           } else {
-            ctx._source.articleCategories.add(params.articleCategory);
-            ctx._source.normalArticleCategoryCount = ctx._source.articleCategories.stream().filter(
-              ar -> ar.get('status').equals('NORMAL')
-            ).count();
+            ar.put('status', params.defaultStatus);
+            ar.put('userId', params.articleCategory.get('userId'));
+            ar.put('appId', params.articleCategory.get('appId'));
+            ar.put('updatedAt', params.articleCategory.get('updatedAt'));
           }
-        `,
-        lang: 'painless',
-        params: { articleCategory, defaultStatus },
-      },
-      _source: ['articleCategories.*'],
+        } else {
+          ctx._source.articleCategories.add(params.articleCategory);
+          ctx._source.normalArticleCategoryCount = ctx._source.articleCategories.stream().filter(
+            ar -> ar.get('status').equals('NORMAL')
+          ).count();
+        }
+      `,
+      lang: 'painless',
+      params: { articleCategory, defaultStatus },
     },
+    _source: ['articleCategories.*'],
   });
 
   if (articleResult === 'noop') {

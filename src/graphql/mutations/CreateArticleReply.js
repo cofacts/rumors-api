@@ -40,32 +40,30 @@ export async function createArticleReply({ article, reply, user }) {
   } = await client.update({
     index: 'articles',
     id: article.id,
-    body: {
-      script: {
-        /**
-         * Check if the reply is already connected in the article.
-         * If so, do nothing;
-         * otherwise, do update.
-         */
-        source: `
-          if(
-            ctx._source.articleReplies.stream().anyMatch(
-              ar -> ar.get('replyId').equals(params.articleReply.get('replyId'))
-            )
-          ) {
-            ctx.op = 'none';
-          } else {
-            ctx._source.articleReplies.add(params.articleReply);
-            ctx._source.normalArticleReplyCount = ctx._source.articleReplies.stream().filter(
-              ar -> ar.get('status').equals('NORMAL')
-            ).count();
-          }
-        `,
-        lang: 'painless',
-        params: { articleReply },
-      },
-      _source: ['articleReplies.*'],
+    script: {
+      /**
+       * Check if the reply is already connected in the article.
+       * If so, do nothing;
+       * otherwise, do update.
+       */
+      source: `
+        if(
+          ctx._source.articleReplies.stream().anyMatch(
+            ar -> ar.get('replyId').equals(params.articleReply.get('replyId'))
+          )
+        ) {
+          ctx.op = 'none';
+        } else {
+          ctx._source.articleReplies.add(params.articleReply);
+          ctx._source.normalArticleReplyCount = ctx._source.articleReplies.stream().filter(
+            ar -> ar.get('status').equals('NORMAL')
+          ).count();
+        }
+      `,
+      lang: 'painless',
+      params: { articleReply },
     },
+    _source: ['articleReplies.*'],
   });
 
   if (articleResult === 'noop') {

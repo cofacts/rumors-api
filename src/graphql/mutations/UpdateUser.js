@@ -61,10 +61,8 @@ export default {
     } = await client.update({
       index: 'users',
       id: userId,
-      body: {
-        doc,
-        _source: true,
-      },
+      doc,
+      _source: true,
     });
 
     /* istanbul ignore if */

@@ -21,17 +21,15 @@ export function updateReplyHyperlinks(replyId, scrapResults) {
   return client.update({
     index: 'replies',
     id: replyId,
-    body: {
-      doc: {
-        hyperlinks: scrapResults.map(
-          ({ url, normalizedUrl, title, summary }) => ({
-            url,
-            normalizedUrl,
-            title,
-            summary,
-          })
-        ),
-      },
+    doc: {
+      hyperlinks: scrapResults.map(
+        ({ url, normalizedUrl, title, summary }) => ({
+          url,
+          normalizedUrl,
+          title,
+          summary,
+        })
+      ),
     },
   });
 }
@@ -79,7 +77,7 @@ export default {
     const newReplyPromise = client
       .index({
         index: 'replies',
-        body: replyBody,
+        document: replyBody,
       })
       .then(({ result, _id }) => {
         if (result !== 'created') {

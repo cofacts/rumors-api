@@ -1,7 +1,8 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { assertUser, getContentDefaultStatus } from 'util/user';
 import { uploadMedia, getAIResponse } from 'graphql/util';
-import client from 'util/client';
+import client, { getTotalCount } from 'util/client';
+import { errors } from '@elastic/elasticsearch';
 import { schema } from 'prosemirror-schema-basic';
 import Y from 'yjs';
 import { EditorState } from 'prosemirror-state';
@@ -47,23 +48,21 @@ async function createNewMediaArticle({
   };
   const matchedArticle = await client.search({
     index: 'articles',
-    body: {
-      query: {
-        term: {
-          attachmentHash,
-        },
+    query: {
+      term: {
+        attachmentHash,
       },
     },
   });
 
-  if (matchedArticle.hits.total.value) {
+  if (getTotalCount(matchedArticle.hits.total)) {
     return matchedArticle.hits.hits[0]._id;
   }
 
   // use elasticsearch created id
   const { _id: articleId } = await client.index({
     index: 'articles',
-    body: {
+    document: {
       text,
       createdAt: now,
       updatedAt: now,
@@ -97,7 +96,7 @@ export function writeAITranscript(articleId, text) {
   const writeToArticleTextPromise = client.update({
     index: 'articles',
     id: articleId,
-    body: { doc: { text } },
+    doc: { text },
   });
 
   // Prosemirror editor state with AI response text
@@ -123,7 +122,7 @@ export function writeAITranscript(articleId, text) {
   const createYdocPromise = client.index({
     index: 'ydocs',
     id: articleId,
-    body: {
+    document: {
       ydoc: Buffer.from(Y.encodeStateAsUpdate(ydoc)).toString('base64'),
       versions: [
         {
@@ -206,7 +205,7 @@ export default {
             `[CreateMediaArticle] ${mediaEntry.id}:`,
 
             // `meta` is provided by elasticsearch error response
-            'meta' in e ? e.meta : e
+            e instanceof errors.ResponseError ? e.meta : e
           )
         ),
     ]);

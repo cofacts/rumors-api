@@ -56,10 +56,8 @@ async function replaceMedia({ articleId, url, force = false } = {}) {
   await client.update({
     index: 'articles',
     id: articleId,
-    body: {
-      doc: {
-        attachmentHash: newMediaEntry.id,
-      },
+    doc: {
+      attachmentHash: newMediaEntry.id,
     },
   });
 }

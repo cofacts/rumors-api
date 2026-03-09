@@ -36,17 +36,15 @@ export async function createOrUpdateCooccurrence({ articleIds, user }) {
   } = await client.update({
     index: 'cooccurrences',
     id,
-    body: {
-      doc: updatedDoc,
-      upsert: {
-        articleIds,
-        userId: user.id,
-        appId: user.appId,
-        createdAt: now,
-        updatedAt: now,
-      },
-      _source: true,
+    doc: updatedDoc,
+    upsert: {
+      articleIds,
+      userId: user.id,
+      appId: user.appId,
+      createdAt: now,
+      updatedAt: now,
     },
+    _source: true,
     refresh: 'true',
   });
 
