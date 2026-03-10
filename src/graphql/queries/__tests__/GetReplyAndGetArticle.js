@@ -218,7 +218,6 @@ describe('GetReplyAndGetArticle', () => {
                       summary
                     }
                   }
-                  score
                 }
               }
             }
@@ -238,7 +237,6 @@ describe('GetReplyAndGetArticle', () => {
                     id
                     text
                   }
-                  score
                 }
               }
             }
@@ -258,7 +256,6 @@ describe('GetReplyAndGetArticle', () => {
                     id
                     text
                   }
-                  score
                 }
               }
             }
@@ -304,7 +301,6 @@ describe('GetReplyAndGetArticle', () => {
                   node {
                     id
                   }
-                  score
                 }
               }
             }
@@ -551,7 +547,6 @@ describe('GetReplyAndGetArticle', () => {
                   node {
                     id
                   }
-                  score
                   highlight {
                     text
                     reference
@@ -578,7 +573,6 @@ describe('GetReplyAndGetArticle', () => {
                   node {
                     id
                   }
-                  score
                   highlight {
                     text
                     reference

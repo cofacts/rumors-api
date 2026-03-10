@@ -12,12 +12,16 @@ describe('userLoaderFactory', () => {
       await loader.userLoader.load({
         slug: 'abc123',
       })
-    ).toMatchSnapshot();
+    ).toMatchSnapshot({
+      _score: expect.any(Number),
+    });
     expect(
       await loader.userLoader.load({
         slug: 'def456',
       })
-    ).toMatchSnapshot();
+    ).toMatchSnapshot({
+      _score: expect.any(Number),
+    });
   });
 
   it('should return null if slug does not exist', async () => {

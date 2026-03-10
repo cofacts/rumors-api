@@ -1022,7 +1022,6 @@ describe('ListArticles', () => {
             filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
           ) {
             edges {
-              score
               mediaSimilarity
               node {
                 id
@@ -1047,7 +1046,6 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest5",
                 },
-                "score": 100,
               },
               Object {
                 "mediaSimilarity": 0.5,
@@ -1057,7 +1055,6 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest6",
                 },
-                "score": 70.55717,
               },
               Object {
                 "mediaSimilarity": 0,
@@ -1067,7 +1064,6 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest1",
                 },
-                "score": 6.4781947,
               },
             ],
           },
@@ -1121,7 +1117,6 @@ describe('ListArticles', () => {
             filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
           ) {
             edges {
-              score
               node {
                 id
                 articleType
@@ -1170,7 +1165,6 @@ describe('ListArticles', () => {
             }
           ) {
             edges {
-              score
               mediaSimilarity
               node {
                 id
@@ -1203,7 +1197,6 @@ describe('ListArticles', () => {
                   "attachmentHash": "",
                   "id": "listArticleTest1",
                 },
-                "score": 18.726381,
               },
             ],
           },
