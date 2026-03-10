@@ -131,25 +131,21 @@ Object {
             "node": Object {
               "id": "similarMediaArticle",
             },
-            "score": 7.5,
           },
           Object {
             "node": Object {
               "id": "foo3",
             },
-            "score": 4.784827,
           },
           Object {
             "node": Object {
               "id": "foo2",
             },
-            "score": 4.6379166,
           },
           Object {
             "node": Object {
               "id": "foo",
             },
-            "score": 4.246747,
           },
         ],
       },
@@ -169,14 +165,12 @@ Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 5.3724933,
           },
           Object {
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 4.6379166,
           },
         ],
       },
@@ -205,7 +199,6 @@ Object {
             "node": Object {
               "id": "foo3",
             },
-            "score": 5.3724933,
           },
           Object {
             "highlight": Object {
@@ -216,7 +209,6 @@ Object {
             "node": Object {
               "id": "foo2",
             },
-            "score": 4.6379166,
           },
           Object {
             "highlight": Object {
@@ -227,7 +219,6 @@ Object {
             "node": Object {
               "id": "mediaArticle",
             },
-            "score": 4.246747,
           },
         ],
       },
@@ -247,21 +238,18 @@ Object {
               "id": "mediaArticle",
               "text": "Lorum ipsum",
             },
-            "score": 4.246747,
           },
           Object {
             "node": Object {
               "id": "foo2",
               "text": "Lorum ipsum Lorum ipsum",
             },
-            "score": 4.6379166,
           },
           Object {
             "node": Object {
               "id": "foo3",
               "text": "Lorum ipsum Lorum ipsum Lorum ipsum",
             },
-            "score": 5.3724933,
           },
         ],
       },
@@ -461,7 +449,6 @@ Object {
             "node": Object {
               "id": "similar-to-bar",
             },
-            "score": 2.377056,
           },
           Object {
             "highlight": Object {
@@ -477,7 +464,6 @@ Object {
             "node": Object {
               "id": "similar-to-bar2",
             },
-            "score": 1.6116467,
           },
         ],
       },
@@ -506,7 +492,6 @@ Object {
             "node": Object {
               "id": "similar-to-bar2",
             },
-            "score": 1.6116467,
           },
           Object {
             "highlight": Object {
@@ -517,7 +502,6 @@ Object {
             "node": Object {
               "id": "similar-to-bar",
             },
-            "score": 2.377056,
           },
         ],
       },
