@@ -18,8 +18,9 @@ jobs:
       (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
       (github.event_name == 'issues' && contains(github.event.issue.body, '@claude'))
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
       issues: write
       id-token: write
@@ -36,10 +37,9 @@ jobs:
           service_account: ${{ secrets.GC_SERVICE_ACCOUNT }}
 
       - name: Run Claude PR Action
-        uses: anthropics/claude-code-action@beta
+        uses: anthropics/claude-code-action@v1
         env:
           ANTHROPIC_VERTEX_PROJECT_ID: "${{ secrets.GC_PROJECT_ID }}"
-          CLOUD_ML_REGION: "asia-east1"
+          CLOUD_ML_REGION: "global"
         with:
           use_vertex: "true"
-          timeout_minutes: "60"
