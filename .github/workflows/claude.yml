@@ -30,16 +30,17 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GC_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GC_SERVICE_ACCOUNT }}
+      #- name: Authenticate to Google Cloud
+      #  uses: google-github-actions/auth@v2
+      #  with:
+      #    workload_identity_provider: ${{ secrets.GC_WORKLOAD_IDENTITY_PROVIDER }}
+      #    service_account: ${{ secrets.GC_SERVICE_ACCOUNT }}
 
       - name: Run Claude PR Action
         uses: anthropics/claude-code-action@v1
-        env:
-          ANTHROPIC_VERTEX_PROJECT_ID: "${{ secrets.GC_PROJECT_ID }}"
-          CLOUD_ML_REGION: "global"
+        # env:
+        #  ANTHROPIC_VERTEX_PROJECT_ID: "${{ secrets.GC_PROJECT_ID }}"
+        #  CLOUD_ML_REGION: "global"
         with:
-          use_vertex: "true"
+        #  use_vertex: "true"
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
