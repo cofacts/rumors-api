@@ -17,6 +17,7 @@ import contextFactory from './contextFactory';
 
 import CookieStore from './CookieStore';
 import { loginRouter, authRouter } from './auth';
+import tokenRoute from './tokenRoute';
 import rollbar from './rollbarInstance';
 import { AUTH_ERROR_MSG } from './util/user';
 
@@ -67,6 +68,8 @@ app.use(passport.session());
 
 router.use('/login', loginRouter.routes(), loginRouter.allowedMethods());
 router.use('/callback', authRouter.routes(), authRouter.allowedMethods());
+
+router.post('/auth/token', tokenRoute);
 
 router.options('/logout', checkHeaders());
 router.post('/logout', checkHeaders(), (ctx) => {
