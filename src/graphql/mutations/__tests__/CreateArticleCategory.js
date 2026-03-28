@@ -56,11 +56,8 @@ describe('CreateArticleCategory', () => {
       ]
     `);
 
-    const {
-      body: { _source },
-    } = await client.get({
+    const { _source } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(_source).toMatchSnapshot();
@@ -131,11 +128,8 @@ describe('CreateArticleCategory', () => {
       ]
     `);
 
-    const {
-      body: { _source },
-    } = await client.get({
+    const { _source } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(_source).toMatchSnapshot();
@@ -221,11 +215,8 @@ describe('CreateArticleCategory', () => {
       ]
     `);
 
-    const {
-      body: { _source },
-    } = await client.get({
+    const { _source } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(_source).toMatchSnapshot();
@@ -272,11 +263,8 @@ describe('CreateArticleCategory', () => {
 
     // Expect article is not altered
     //
-    const {
-      body: { _source },
-    } = await client.get({
+    const { _source } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(_source.normalArticleCategoryCount).toBe(0);

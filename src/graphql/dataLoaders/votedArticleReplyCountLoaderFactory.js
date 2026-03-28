@@ -1,5 +1,5 @@
 import DataLoader from 'dataloader';
-import client from 'util/client';
+import client, { getTotalCount } from 'util/client';
 
 export default () =>
   new DataLoader(
@@ -8,23 +8,17 @@ export default () =>
      * @returns {Promise<number[]>} - number of article replies the specified user has voted
      */
     async (userIds) => {
-      const body = userIds.reduce(
-        (commands, userId) =>
-          commands.concat(
-            {
-              index: 'articlereplyfeedbacks',
-              type: 'doc',
-            },
-            {
-              size: 0,
-              query: { term: { userId } },
-            }
-          ),
-        []
-      );
+      const searches = [];
+      userIds.forEach((userId) => {
+        searches.push({ index: 'articlereplyfeedbacks' });
+        searches.push({
+          size: 0,
+          query: { term: { userId } },
+        });
+      });
 
-      return (await client.msearch({ body })).body.responses.map(
-        ({ hits: { total } }) => total
+      return (await client.msearch({ searches })).responses.map(
+        ({ hits: { total } }) => getTotalCount(total)
       );
     }
   );

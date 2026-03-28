@@ -1,10 +1,29 @@
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import gql from 'util/GraphQL';
-import { getCursor } from 'graphql/util';
 import fixtures from '../__fixtures__/ListReplies';
 
 describe('ListReplies', () => {
   beforeAll(() => loadFixtures(fixtures));
+
+  const getCursor = async (id) => {
+    const {
+      data: {
+        ListReplies: { edges },
+      },
+    } = await gql`
+      {
+        ListReplies {
+          edges {
+            node {
+              id
+            }
+            cursor
+          }
+        }
+      }
+    `();
+    return edges.find(({ node }) => node.id === id).cursor;
+  };
 
   it('lists all replies', async () => {
     expect(
@@ -16,11 +35,6 @@ describe('ListReplies', () => {
               node {
                 id
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -39,10 +53,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -72,10 +82,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -94,10 +100,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `(
@@ -121,10 +123,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -355,13 +353,9 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
-      `({ cursor: getCursor(['moreLikeThis2']) })
+      `({ cursor: await getCursor('moreLikeThis2') })
     ).toMatchSnapshot();
   });
 
@@ -376,13 +370,9 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
-      `({ cursor: getCursor(['moreLikeThis1']) })
+      `({ cursor: await getCursor('moreLikeThis1') })
     ).toMatchSnapshot();
   });
 
@@ -397,10 +387,6 @@ describe('ListReplies', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()

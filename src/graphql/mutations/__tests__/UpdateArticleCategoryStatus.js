@@ -62,21 +62,15 @@ describe('UpdateArticleCategoryStatus', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const {
-      body: { _source: normal },
-    } = await client.get({
+    const { _source: normal } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: 'normal',
     });
     expect(normal.articleCategories).toMatchSnapshot();
     expect(normal.normalArticleCategoryCount).toBe(0);
 
-    const {
-      body: { _source: deleted },
-    } = await client.get({
+    const { _source: deleted } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: 'deleted',
     });
     expect(deleted.articleCategories).toMatchSnapshot();

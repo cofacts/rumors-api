@@ -209,7 +209,7 @@ export function getSortArgs(orderBy, fieldFnMap = {}) {
 
       return (fieldFnMap[field] || defaultFieldFn)(order);
     })
-    .concat({ _id: { order: 'desc' } }); // enforce at least 1 sort order for pagination
+    .concat({ _shard_doc: { order: 'desc' } }); // enforce at least 1 sort order for pagination
 }
 
 // sort: [{fieldName: {order: 'desc'}}, {fieldName2: {order: 'desc'}}, ...]
@@ -244,18 +244,20 @@ async function defaultResolveTotalCount({
   first, // eslint-disable-line no-unused-vars
   before, // eslint-disable-line no-unused-vars
   after, // eslint-disable-line no-unused-vars
+  body,
   ...searchContext
 }) {
   try {
-    return (
-      await client.count({
-        ...searchContext,
-        body: {
-          // count API only supports "query"
-          query: searchContext.body.query,
-        },
-      })
-    ).body.count;
+    const countParams = {
+      ...searchContext,
+    };
+
+    // count API only supports "query"
+    if (body?.query) {
+      countParams.query = body.query;
+    }
+
+    return (await client.count(countParams)).count;
   } catch (e) /* istanbul ignore next */ {
     console.error('[defaultResolveTotalCount]', JSON.stringify(e));
     throw e;
@@ -575,29 +577,24 @@ export async function getAIResponse({ type, docId }) {
     // First, find latest successful airesponse. Return if found.
     //
     const {
-      body: {
-        hits: {
-          hits: [successfulAiResponse],
-        },
+      hits: {
+        hits: [successfulAiResponse],
       },
     } = await client.search({
       index: 'airesponses',
-      type: 'doc',
-      body: {
-        query: {
-          bool: {
-            must: [
-              { term: { type } },
-              { term: { docId } },
-              { term: { status: 'SUCCESS' } },
-            ],
-          },
+      query: {
+        bool: {
+          must: [
+            { term: { type } },
+            { term: { docId } },
+            { term: { status: 'SUCCESS' } },
+          ],
         },
-        sort: {
-          createdAt: 'desc',
-        },
-        size: 1,
       },
+      sort: {
+        createdAt: 'desc',
+      },
+      size: 1,
     });
 
     if (successfulAiResponse) {
@@ -609,28 +606,23 @@ export async function getAIResponse({ type, docId }) {
 
     // If no successful AI responses, find loading responses created within 1 min.
     //
-    const {
-      body: { count },
-    } = await client.count({
+    const { count } = await client.count({
       index: 'airesponses',
-      type: 'doc',
-      body: {
-        query: {
-          bool: {
-            must: [
-              { term: { type } },
-              { term: { docId } },
-              { term: { status: 'LOADING' } },
-              {
-                // loading document created within 1 min
-                range: {
-                  createdAt: {
-                    gte: 'now-1m',
-                  },
+      query: {
+        bool: {
+          must: [
+            { term: { type } },
+            { term: { docId } },
+            { term: { status: 'LOADING' } },
+            {
+              // loading document created within 1 min
+              range: {
+                createdAt: {
+                  gte: 'now-1m',
                 },
               },
-            ],
-          },
+            },
+          ],
         },
       },
     });
@@ -678,10 +670,9 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
   const newResponseIdPromise = client
     .index({
       index: 'airesponses',
-      type: 'doc',
-      body: newResponse,
+      document: newResponse,
     })
-    .then(({ body: { result, _id } }) => {
+    .then(({ result, _id }) => {
       /* istanbul ignore if */
       if (result !== 'created') {
         throw new Error(`Cannot create AI response: ${result}`);
@@ -694,19 +685,14 @@ export function createAIResponse({ user, ...loadingResponseBody }) {
     const aiResponseId = await newResponseIdPromise;
 
     const {
-      body: {
-        get: { _source },
-      },
+      get: { _source },
     } = await client.update({
       index: 'airesponses',
-      type: 'doc',
       id: aiResponseId,
       _source: true,
-      body: {
-        doc: {
-          updatedAt: new Date(),
-          ...responseBody,
-        },
+      doc: {
+        updatedAt: new Date(),
+        ...responseBody,
       },
     });
 

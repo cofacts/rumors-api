@@ -202,7 +202,6 @@ export default class CreateBackendUsers {
             {
               index: {
                 _index: 'users',
-                _type: 'doc',
                 _id: dbUserId,
               },
             },
@@ -230,10 +229,8 @@ export default class CreateBackendUsers {
   async fetchUniqueUsers(indexName, pageIndex = undefined) {
     try {
       const {
-        body: {
-          aggregations: {
-            [AGG_NAME]: { buckets },
-          },
+        aggregations: {
+          [AGG_NAME]: { buckets },
         },
       } = await client.search({
         index: indexName,
@@ -342,14 +339,12 @@ export default class CreateBackendUsers {
               {
                 delete: {
                   _index: doc._index,
-                  _type: 'doc',
                   _id: doc._id,
                 },
               },
               {
                 index: {
                   _index: doc._index,
-                  _type: 'doc',
                   _id: genId({ ...doc._source, ...newFields }),
                 },
               },
@@ -365,7 +360,6 @@ export default class CreateBackendUsers {
             {
               update: {
                 _index: doc._index,
-                _type: 'doc',
                 _id: doc._id,
               },
             },
@@ -383,10 +377,8 @@ export default class CreateBackendUsers {
   async fetchUniqueDocs(docType, docIndex, pageIndex = undefined) {
     try {
       const {
-        body: {
-          aggregations: {
-            docIds: { buckets },
-          },
+        aggregations: {
+          docIds: { buckets },
         },
       } = await client.search({
         index: 'analytics',
@@ -406,9 +398,7 @@ export default class CreateBackendUsers {
       });
       if (buckets.length > 0) {
         const {
-          body: {
-            hits: { hits: docs },
-          },
+          hits: { hits: docs },
         } = await client.search({
           index: docIndex,
           size: this.analyticsBatchSize,
@@ -458,9 +448,7 @@ export default class CreateBackendUsers {
               },
             },
           };
-          const {
-            body: { updated },
-          } = await client.updateByQuery({
+          const { updated } = await client.updateByQuery({
             index: 'analytics',
             body: requestBody,
             refresh: 'true',

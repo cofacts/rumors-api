@@ -1,23 +1,27 @@
 # Builds developing environment for rumors-api
 #
-version: '2'
+version: "2"
 services:
-  db:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.2
+  db-v9:
+    image: elasticsearch:9.2.2
     ports:
       - "62222:9200"
     volumes:
-      - "./esdata:/usr/share/elasticsearch/data"
+      - "./esdata-v9:/usr/share/elasticsearch/data"
     environment:
       - "path.repo=/usr/share/elasticsearch/data"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Prevent elasticsearch eating up too much memory
+      # - "reindex.remote.whitelist=host.docker.internal:62222,ip:62222" # Allow reindex from old ES
+      - "discovery.type=single-node" # Single node mode for development
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Allow container to access host machine
 
   kibana:
-    image: docker.elastic.co/kibana/kibana-oss:6.3.2
+    image: kibana:9.2.2
     depends_on:
-      - db
+      - db-v9
     environment:
-      ELASTICSEARCH_URL: http://db:9200 # Through docker network, not exposed port
+      ELASTICSEARCH_HOSTS: http://db-v9:9200 # Note: 7.x uses ELASTICSEARCH_HOSTS instead of ELASTICSEARCH_URL
     ports:
       - "6222:5601"
 
@@ -27,16 +31,16 @@ services:
       - "4000:4000"
 
   api:
-    image: node:18
+    image: node:24
     container_name: rumors-api
     depends_on:
-      - db
+      - db-v9
     working_dir: "/srv/www"
     entrypoint: npm run dev
     volumes:
       - ".:/srv/www"
     environment:
-      ELASTICSEARCH_URL: "http://db:9200"
+      ELASTICSEARCH_URL: "http://db-v9:9200"
       URL_RESOLVER_URL: "url-resolver:4000"
     ports:
       - "5000:5000"

@@ -89,7 +89,6 @@ export default {
 
     return {
       index: 'airesponses',
-      type: 'doc',
       body,
       ...otherParams,
     };

@@ -16,9 +16,9 @@ describe('verifyProfile', () => {
       id: 'secret-fb-id',
     };
 
-    expect(
-      await verifyProfile(passportProfile, 'facebookId')
-    ).toMatchSnapshot();
+    expect(await verifyProfile(passportProfile, 'facebookId')).toMatchSnapshot({
+      _score: expect.any(Number),
+    });
   });
 
   it('authenticates user via same email of existing user; also updates profile ID', async () => {
@@ -51,7 +51,6 @@ describe('verifyProfile', () => {
     MockDate.reset();
     await client.delete({
       index: 'users',
-      type: 'doc',
       id: id,
     });
     expect(newUser).toMatchSnapshot();

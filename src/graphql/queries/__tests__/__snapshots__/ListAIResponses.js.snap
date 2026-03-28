@@ -19,13 +19,13 @@ Object {
         },
         Object {
           "node": Object {
-            "id": "ai-reply-old",
+            "id": "ai-reply-latest",
             "status": "SUCCESS",
           },
         },
         Object {
           "node": Object {
-            "id": "ai-reply-latest",
+            "id": "ai-reply-old",
             "status": "SUCCESS",
           },
         },
@@ -88,14 +88,14 @@ Object {
         },
         Object {
           "node": Object {
-            "createdAt": "2020-01-01T00:00:00.000Z",
-            "id": "ai-reply-old",
+            "createdAt": "2020-01-02T00:00:00.000Z",
+            "id": "ai-reply-latest",
           },
         },
         Object {
           "node": Object {
-            "createdAt": "2020-01-02T00:00:00.000Z",
-            "id": "ai-reply-latest",
+            "createdAt": "2020-01-01T00:00:00.000Z",
+            "id": "ai-reply-old",
           },
         },
       ],
@@ -110,40 +110,31 @@ Object {
     "ListAIResponses": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJ0cmFuc2NyaXB0Il0=",
           "node": Object {
             "id": "transcript",
           },
         },
         Object {
-          "cursor": "WyJsb2FkaW5nIl0=",
           "node": Object {
             "id": "loading",
           },
         },
         Object {
-          "cursor": "WyJleHBpcmVkLWxvYWRpbmciXQ==",
           "node": Object {
             "id": "expired-loading",
           },
         },
         Object {
-          "cursor": "WyJhaS1yZXBseS1vbGQiXQ==",
-          "node": Object {
-            "id": "ai-reply-old",
-          },
-        },
-        Object {
-          "cursor": "WyJhaS1yZXBseS1sYXRlc3QiXQ==",
           "node": Object {
             "id": "ai-reply-latest",
           },
         },
+        Object {
+          "node": Object {
+            "id": "ai-reply-old",
+          },
+        },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJ0cmFuc2NyaXB0Il0=",
-        "lastCursor": "WyJhaS1yZXBseS1sYXRlc3QiXQ==",
-      },
       "totalCount": 5,
     },
   },

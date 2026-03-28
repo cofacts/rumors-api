@@ -132,10 +132,9 @@ describe('fetchStatsFromGA', () => {
       const { fetchedAt: dontcare, ...article1At0601 } = (
         await client.get({
           index: 'analytics',
-          type: 'doc',
           id: 'article_article1_2023-06-01',
         })
-      ).body._source;
+      )._source;
       expect(article1At0601).toMatchInlineSnapshot(`
         Object {
           "date": "2023-06-01T00:00:00.000+08:00",
@@ -159,10 +158,9 @@ describe('fetchStatsFromGA', () => {
         (
           await client.get({
             index: 'analytics',
-            type: 'doc',
             id: 'reply_reply1_2023-06-01',
           })
-        ).body._source.stats
+        )._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [],
@@ -179,10 +177,9 @@ describe('fetchStatsFromGA', () => {
         (
           await client.get({
             index: 'analytics',
-            type: 'doc',
             id: 'article_article1_2023-06-02',
           })
-        ).body._source.stats
+        )._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [
@@ -210,10 +207,9 @@ describe('fetchStatsFromGA', () => {
         (
           await client.get({
             index: 'analytics',
-            type: 'doc',
             id: 'article_article2_2023-06-01',
           })
-        ).body._source.stats
+        )._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [],
@@ -232,7 +228,7 @@ describe('fetchStatsFromGA', () => {
         'article_article1_2023-06-01',
         'article_article1_2023-06-02',
       ]) {
-        await client.delete({ index: 'analytics', type: 'doc', id });
+        await client.delete({ index: 'analytics', id });
       }
     });
 
@@ -254,10 +250,9 @@ describe('fetchStatsFromGA', () => {
         (
           await client.get({
             index: 'analytics',
-            type: 'doc',
             id: articleAnalyticsTodayId,
           })
-        ).body._source.stats
+        )._source.stats
       ).toMatchInlineSnapshot(`
         Object {
           "liff": Array [
@@ -277,7 +272,6 @@ describe('fetchStatsFromGA', () => {
       // Cleanup
       await client.delete({
         index: 'analytics',
-        type: 'doc',
         id: articleAnalyticsTodayId,
       });
     });

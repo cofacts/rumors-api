@@ -18,8 +18,7 @@ async function main({ articleId, replyId, userId, replacedText } = {}) {
 
     await client.update({
       index: 'replies',
-      type: 'doc',
-      body: replyBody,
+      doc: replyBody,
     });
   }
   return updateArticleReplyStatus({

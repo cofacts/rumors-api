@@ -224,32 +224,36 @@ export async function createOrUpdateUser({
   assertUser({ appId, userId });
   const now = new Date().toISOString();
   const dbUserId = exports.getUserId({ appId, userId }); // For unit test mocking
-  const {
-    body: { result, get: userFound },
-  } = await client.update({
+  const { result, get: userFound } = await client.update({
     index: 'users',
-    type: 'doc',
     id: dbUserId,
-    body: {
-      doc: {
-        lastActiveAt: now,
-      },
-      upsert: {
-        name: exports.generatePseudonym(),
-        avatarType: AvatarTypes.OpenPeeps,
-        avatarData: JSON.stringify(exports.generateOpenPeepsAvatar()),
-        appId,
-        appUserId: userId,
-        createdAt: now,
-        updatedAt: now,
-        lastActiveAt: now,
-      },
-      _source: true,
+    doc: {
+      lastActiveAt: now,
     },
+    upsert: {
+      name: exports.generatePseudonym(),
+      avatarType: AvatarTypes.OpenPeeps,
+      avatarData: JSON.stringify(exports.generateOpenPeepsAvatar()),
+      appId,
+      appUserId: userId,
+      createdAt: now,
+      updatedAt: now,
+      lastActiveAt: now,
+    },
+    _source: true,
   });
 
   const isCreated = result === 'created';
-  const user = processMeta<User>({ ...userFound, _id: dbUserId });
+  const user = processMeta<User>({
+    _id: dbUserId,
+    _source: userFound?._source as User,
+    found: userFound?.found ?? true,
+    _score: 0,
+    highlight: {},
+    inner_hits: {},
+    sort: '',
+    fields: userFound?.fields ?? {},
+  });
 
   // Make Typescript happy
   if (!user) throw new Error('[createOrUpdateUser] Cannot process user');

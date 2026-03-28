@@ -207,7 +207,6 @@ describe('GetReplyAndGetArticle', () => {
             GetArticle(id: "foo") {
               relatedArticles {
                 edges {
-                  cursor
                   node {
                     id
                   }
@@ -219,7 +218,6 @@ describe('GetReplyAndGetArticle', () => {
                       summary
                     }
                   }
-                  score
                 }
               }
             }
@@ -235,12 +233,10 @@ describe('GetReplyAndGetArticle', () => {
             GetArticle(id: "foo") {
               relatedArticles(filter: { replyCount: { GT: 0 } }) {
                 edges {
-                  cursor
                   node {
                     id
                     text
                   }
-                  score
                 }
               }
             }
@@ -256,12 +252,10 @@ describe('GetReplyAndGetArticle', () => {
             GetArticle(id: "foo") {
               relatedArticles(orderBy: [{ _score: ASC }]) {
                 edges {
-                  cursor
                   node {
                     id
                     text
                   }
-                  score
                 }
               }
             }
@@ -304,11 +298,9 @@ describe('GetReplyAndGetArticle', () => {
             GetArticle(id: "mediaArticle") {
               relatedArticles {
                 edges {
-                  cursor
                   node {
                     id
                   }
-                  score
                 }
               }
             }
@@ -357,12 +349,12 @@ describe('GetReplyAndGetArticle', () => {
                   },
                   Object {
                     "node": Object {
-                      "id": "foo2",
+                      "id": "blockedArticle2",
                     },
                   },
                   Object {
                     "node": Object {
-                      "id": "blockedArticle2",
+                      "id": "foo2",
                     },
                   },
                   Object {
@@ -552,11 +544,9 @@ describe('GetReplyAndGetArticle', () => {
             GetReply(id: "bar") {
               similarReplies {
                 edges {
-                  cursor
                   node {
                     id
                   }
-                  score
                   highlight {
                     text
                     reference
@@ -580,11 +570,9 @@ describe('GetReplyAndGetArticle', () => {
             GetReply(id: "bar") {
               similarReplies(orderBy: [{ _score: ASC }]) {
                 edges {
-                  cursor
                   node {
                     id
                   }
-                  score
                   highlight {
                     text
                     reference

@@ -2,17 +2,17 @@
 
 exports[`user utils CreateOrUpdateUser creates backend user if not existed 1`] = `
 Object {
-  "_cursor": undefined,
-  "_fields": undefined,
-  "_score": undefined,
+  "_cursor": "",
+  "_fields": Object {},
+  "_score": 0,
   "appId": "TEST_BACKEND",
   "appUserId": "testUser2",
   "avatarData": "{\\"accessory\\":\\"mask\\"}",
   "avatarType": "OpenPeeps",
   "createdAt": "2020-10-10T00:00:00.000Z",
-  "highlight": undefined,
+  "highlight": Object {},
   "id": "6LOqD_3gpe4ZVaxRvemf7KNTfm6y3WNBu1hbs-5MRdSWiWVss",
-  "inner_hits": undefined,
+  "inner_hits": Object {},
   "lastActiveAt": "2020-10-10T00:00:00.000Z",
   "name": "Friendly Neighborhood Spider Man",
   "updatedAt": "2020-10-10T00:00:00.000Z",
@@ -34,13 +34,13 @@ Object {
 
 exports[`user utils CreateOrUpdateUser fills appId for website users 1`] = `
 Object {
-  "_cursor": undefined,
-  "_fields": undefined,
-  "_score": undefined,
+  "_cursor": "",
+  "_fields": Object {},
+  "_score": 0,
   "appId": "WEBSITE",
-  "highlight": undefined,
+  "highlight": Object {},
   "id": "web-user",
-  "inner_hits": undefined,
+  "inner_hits": Object {},
   "lastActiveAt": "2020-10-10T01:00:00.000Z",
   "name": "Web user",
 }
@@ -48,14 +48,14 @@ Object {
 
 exports[`user utils CreateOrUpdateUser logs error if collision occurs 1`] = `
 Object {
-  "_cursor": undefined,
-  "_fields": undefined,
-  "_score": undefined,
+  "_cursor": "",
+  "_fields": Object {},
+  "_score": 0,
   "appId": "TEST_BACKEND",
   "appUserId": "testUser1",
-  "highlight": undefined,
+  "highlight": Object {},
   "id": "6LOqD_QabTT7XXTrsz7ybEa5PLfc0GfXlV578HYPhODPfSWc8",
-  "inner_hits": undefined,
+  "inner_hits": Object {},
   "lastActiveAt": "2020-10-10T01:00:00.000Z",
   "name": "test user 1",
 }
@@ -80,14 +80,14 @@ Array [
 
 exports[`user utils CreateOrUpdateUser updates backend users' last active time if user already existed 1`] = `
 Object {
-  "_cursor": undefined,
-  "_fields": undefined,
-  "_score": undefined,
+  "_cursor": "",
+  "_fields": Object {},
+  "_score": 0,
   "appId": "TEST_BACKEND",
   "appUserId": "testUser1",
-  "highlight": undefined,
+  "highlight": Object {},
   "id": "6LOqD_QabTT7XXTrsz7ybEa5PLfc0GfXlV578HYPhODPfSWc8",
-  "inner_hits": undefined,
+  "inner_hits": Object {},
   "lastActiveAt": "2020-10-10T01:00:00.000Z",
   "name": "test user 1",
 }

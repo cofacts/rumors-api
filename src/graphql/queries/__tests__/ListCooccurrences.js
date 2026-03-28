@@ -15,11 +15,6 @@ describe('ListCooccurrences', () => {
               node {
                 id
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -39,10 +34,6 @@ describe('ListCooccurrences', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()

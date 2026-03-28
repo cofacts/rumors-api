@@ -66,7 +66,6 @@ describe('apolloServer', () => {
     await unloadFixtures(fixtures);
     await client.delete({
       index: 'users',
-      type: 'doc',
       id: '6LOqD_gsUWLlGviSA4KFdKpsNncQfTYeueOl-DGx9fL6zCNeA',
     });
   });

@@ -57,16 +57,14 @@ describe('CreateReply', () => {
     expect(errors).toBeUndefined();
 
     const replyId = data.CreateReply.id;
-    const { body: reply } = await client.get({
+    const reply = await client.get({
       index: 'replies',
-      type: 'doc',
       id: replyId,
     });
     expect(reply._source).toMatchSnapshot('reply without hyperlinks');
 
-    const { body: article } = await client.get({
+    const article = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(article._source.articleReplies[0].replyId).toBe(replyId);
@@ -90,9 +88,8 @@ describe('CreateReply', () => {
     resolveUrl.__reset();
 
     // Check replies and hyperlinks
-    const { body: replyAfterFetch } = await client.get({
+    const replyAfterFetch = await client.get({
       index: 'replies',
-      type: 'doc',
       id: replyId,
     });
     expect(replyAfterFetch._source.hyperlinks).toMatchSnapshot(
@@ -100,15 +97,14 @@ describe('CreateReply', () => {
     );
 
     // Cleanup
-    await client.delete({ index: 'replies', type: 'doc', id: replyId });
+    await client.delete({ index: 'replies', id: replyId });
 
     // refresh must be invoked before deleteByQuery, or the query may find nothing and delete nothing
     await client.indices.refresh({ index: 'urls' });
     await client.deleteByQuery({
       index: 'urls',
-      type: 'doc',
-      body: { query: { term: { url: REF_URL } } },
-      refresh: 'true',
+      query: { term: { url: REF_URL } },
+      refresh: true,
     });
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
@@ -148,16 +144,15 @@ describe('CreateReply', () => {
     expect(errors).toBeUndefined();
 
     const replyId = data.CreateReply.id;
-    const { body: reply } = await client.get({
+    const reply = await client.get({
       index: 'replies',
-      type: 'doc',
       id: replyId,
     });
 
     expect(reply._source).toMatchSnapshot();
 
     // Cleanup
-    await client.delete({ index: 'replies', type: 'doc', id: replyId });
+    await client.delete({ index: 'replies', id: replyId });
   });
 
   it('should throw error since a reference is required for type !== NOT_ARTICLE', async () => {

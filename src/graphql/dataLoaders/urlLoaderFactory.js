@@ -8,7 +8,6 @@ export default (dataLoaders) =>
     const data = await dataLoaders.searchResultLoader.loadMany(
       urls.map((url) => ({
         index: 'urls',
-        type: 'doc',
         body: {
           query: {
             bool: {

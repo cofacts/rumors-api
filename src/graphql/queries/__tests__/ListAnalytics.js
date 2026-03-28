@@ -1,11 +1,30 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../../dataLoaders/__fixtures__/analyticsLoaderFactory';
-import { getCursor } from 'graphql/util';
 
 describe('ListAnalytics', () => {
   beforeAll(() => loadFixtures(fixtures));
   afterAll(() => unloadFixtures(fixtures));
+
+  const getCursor = async (id) => {
+    const {
+      data: {
+        ListAnalytics: { edges },
+      },
+    } = await gql`
+      {
+        ListAnalytics {
+          edges {
+            node {
+              id
+            }
+            cursor
+          }
+        }
+      }
+    `();
+    return edges.find(({ node }) => node.id === id).cursor;
+  };
 
   it('lists all analytics', async () => {
     expect(
@@ -17,11 +36,6 @@ describe('ListAnalytics', () => {
               node {
                 id
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -117,7 +131,7 @@ describe('ListAnalytics', () => {
             }
           }
         }
-      `({ cursor: getCursor(['article_articleId1_2020-01-05']) })
+      `({ cursor: await getCursor('article_articleId1_2020-01-05') })
     ).toMatchSnapshot('after article_articleId1_2020-01-05');
 
     expect(
@@ -132,7 +146,7 @@ describe('ListAnalytics', () => {
             }
           }
         }
-      `({ cursor: getCursor(['article_articleId1_2020-01-05']) })
+      `({ cursor: await getCursor('article_articleId1_2020-01-05') })
     ).toMatchSnapshot('before article_articleId1_2020-01-05');
   });
 });

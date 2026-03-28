@@ -1,5 +1,5 @@
 import passport from 'koa-passport';
-import client, { processMeta } from 'util/client';
+import client, { processMeta, getTotalCount } from 'util/client';
 import FacebookStrategy from 'passport-facebook';
 import TwitterStrategy from 'passport-twitter';
 import GithubStrategy from 'passport-github2';
@@ -37,13 +37,12 @@ passport.deserializeUser((userId, done) => {
 export async function verifyProfile(profile, fieldName) {
   // Find user with such user id
   //
-  const { body: users } = await client.search({
+  const users = await client.search({
     index: 'users',
-    type: 'doc',
     q: `${fieldName}:${profile.id}`,
   });
 
-  if (users.hits.total) {
+  if (getTotalCount(users.hits.total)) {
     return processMeta(users.hits.hits[0]);
   }
 
@@ -55,26 +54,22 @@ export async function verifyProfile(profile, fieldName) {
   // Find user with such email
   //
   if (email) {
-    const { body: usersWithEmail } = await client.search({
+    const usersWithEmail = await client.search({
       index: 'users',
-      type: 'doc',
       q: `email:${email}`,
     });
 
-    if (usersWithEmail.hits.total) {
+    if (getTotalCount(usersWithEmail.hits.total)) {
       const id = usersWithEmail.hits.hits[0]._id;
       // Fill in fieldName with profile.id so that it does not matter if user's
       // email gets changed in the future.
       //
-      const { body: updateUserResult } = await client.update({
+      const updateUserResult = await client.update({
         index: 'users',
-        type: 'doc',
         id,
-        body: {
-          doc: {
-            [fieldName]: profile.id,
-            updatedAt: now,
-          },
+        doc: {
+          [fieldName]: profile.id,
+          updatedAt: now,
         },
         _source: true,
       });
@@ -89,10 +84,9 @@ export async function verifyProfile(profile, fieldName) {
 
   // No user in DB, create one
   //
-  const { body: createUserResult } = await client.index({
+  const createUserResult = await client.index({
     index: 'users',
-    type: 'doc',
-    body: {
+    document: {
       email,
       name: username,
       avatarUrl: avatar,
@@ -101,16 +95,12 @@ export async function verifyProfile(profile, fieldName) {
       updatedAt: now,
     },
   });
-
   if (createUserResult.result === 'created') {
     return processMeta(
-      (
-        await client.get({
-          index: 'users',
-          type: 'doc',
-          id: createUserResult._id,
-        })
-      ).body
+      await client.get({
+        index: 'users',
+        id: createUserResult._id,
+      })
     );
   }
 

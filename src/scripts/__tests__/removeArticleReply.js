@@ -39,9 +39,11 @@ it('should abort when article or reply ID is wrong', async () => {
       articleId: 'no-such-article',
       replyId: 'foo',
     })
-  ).rejects.toMatchInlineSnapshot(
-    `[ResponseError: document_missing_exception]`
-  );
+  ).rejects.toMatchInlineSnapshot(`
+    [ResponseError: document_missing_exception
+    	Root causes:
+    		document_missing_exception: [no-such-article]: document missing]
+  `);
   await expect(
     removeArticleReply({
       userId: 'current-user',
@@ -63,33 +65,30 @@ it('successfully deletes article-reply and updates normalArticleReplyCount', asy
   MockDate.reset();
 
   expect(result).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "appId": "WEBSITE",
-    "replyId": "foo",
-    "status": "DELETED",
-    "updatedAt": "1989-06-04T00:00:00.000Z",
-    "userId": "current-user",
-  },
-  Object {
-    "appId": "WEBSITE",
-    "replyId": "bar",
-    "status": "NORMAL",
-    "userId": "current-user",
-  },
-  Object {
-    "appId": "WEBSITE",
-    "replyId": "foo2",
-    "status": "NORMAL",
-    "userId": "other-user",
-  },
-]
-`);
-  const {
-    body: { _source },
-  } = await client.get({
+    Array [
+      Object {
+        "appId": "WEBSITE",
+        "replyId": "foo",
+        "status": "DELETED",
+        "updatedAt": "1989-06-04T00:00:00.000Z",
+        "userId": "current-user",
+      },
+      Object {
+        "appId": "WEBSITE",
+        "replyId": "bar",
+        "status": "NORMAL",
+        "userId": "current-user",
+      },
+      Object {
+        "appId": "WEBSITE",
+        "replyId": "foo2",
+        "status": "NORMAL",
+        "userId": "other-user",
+      },
+    ]
+  `);
+  const { _source } = await client.get({
     index: 'articles',
-    type: 'doc',
     id: 'article1',
   });
   expect(_source.normalArticleReplyCount).toBe(2);

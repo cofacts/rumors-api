@@ -1,4 +1,5 @@
 import { HTTPError } from 'fets';
+import { errors } from '@elastic/elasticsearch';
 import genAIReplyScript from 'scripts/genAIReply';
 type GenAIReplyParams = {
   articleId: string;
@@ -23,13 +24,13 @@ async function genAIReplyHandler({
     return { success: true };
   } catch (e: any) {
     // Handle known errors, e.g., article not found by the script
-    if (e.message.includes('Please specify articleId')) {
-      // This specific error is unlikely if articleId is required by schema, but good practice
+    if (e instanceof Error && e.message.includes('Please specify articleId')) {
       throw new HTTPError(400, e.message);
     }
     if (
-      e.message.includes('document_missing_exception') ||
-      e.message.includes('not found')
+      e instanceof errors.ResponseError &&
+      (e.body?.error?.type === 'document_missing_exception' ||
+        e.statusCode === 404)
     ) {
       // Error from client.get inside the script if article doesn't exist
       throw new HTTPError(404, `Article with ID=${articleId} not found.`);

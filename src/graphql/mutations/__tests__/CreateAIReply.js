@@ -113,20 +113,15 @@ describe('CreateAIReply', () => {
     await delayForMs(2000); // Wait a bit until airesponse is indexed
 
     const {
-      body: {
-        hits: { hits: loadingAIReplies },
-      },
+      hits: { hits: loadingAIReplies },
     } = await client.search({
       index: 'airesponses',
-      type: 'doc',
-      body: {
-        query: {
-          bool: {
-            must: [
-              { term: { type: 'AI_REPLY' } },
-              { term: { docId: 'reported-article' } },
-            ],
-          },
+      query: {
+        bool: {
+          must: [
+            { term: { type: 'AI_REPLY' } },
+            { term: { docId: 'reported-article' } },
+          ],
         },
       },
     });
@@ -180,7 +175,6 @@ describe('CreateAIReply', () => {
     // Cleanup
     await client.delete({
       index: 'airesponses',
-      type: 'doc',
       id,
     });
   });
@@ -191,12 +185,9 @@ describe('CreateAIReply', () => {
     //
     await client.update({
       index: 'airesponses',
-      type: 'doc',
       id: 'loading',
-      body: {
-        doc: {
-          createdAt: new Date(),
-        },
+      doc: {
+        createdAt: new Date(),
       },
       refresh: 'true',
     });
@@ -221,20 +212,17 @@ describe('CreateAIReply', () => {
 
     // Wait for some time for the loop in CreateAIReply to repeat itself.
     // The AI reply promise should not resolve before the AI Reply turns "SUCCESS".
-    delayForMs(2000);
+    await delayForMs(2000);
     expect(isAIReplyPromiseResolved).toBe(false);
 
     // Simulate that the AI reply turns "SUCCESS" by another process
     //
     await client.update({
       index: 'airesponses',
-      type: 'doc',
       id: 'loading',
-      body: {
-        doc: {
-          status: 'SUCCESS',
-          updatedAt: new Date(),
-        },
+      doc: {
+        status: 'SUCCESS',
+        updatedAt: new Date(),
       },
       refresh: 'true',
     });
@@ -280,7 +268,7 @@ describe('CreateAIReply', () => {
     MockDate.reset();
 
     expect(mockFn).toHaveReturned();
-    expect(errors).toBeUndefined;
+    expect(errors).toBeUndefined();
 
     const {
       CreateAIReply: { id, ...aiReplyContent },
@@ -297,7 +285,6 @@ describe('CreateAIReply', () => {
     // Cleanup
     await client.delete({
       index: 'airesponses',
-      type: 'doc',
       id,
     });
   });
@@ -359,7 +346,6 @@ describe('CreateAIReply', () => {
     // Cleanup
     await client.delete({
       index: 'airesponses',
-      type: 'doc',
       id,
     });
   });

@@ -64,7 +64,6 @@ const Category = new GraphQLObjectType({
 
         return {
           index: 'articles',
-          type: 'doc',
           body,
           ...otherParams,
         };

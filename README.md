@@ -116,7 +116,19 @@ $ npm run lint:fix
 To prepare test DB, first start an elastic search server on port 62223:
 
 ```
-$ docker run -d -p "62223:9200" --name "rumors-test-db" docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.2
+$ docker run -d \
+  -p "62223:9200" \
+  --name "rumors-test-db" \
+  -e "discovery.type=single-node" \
+  -e "xpack.security.enabled=false" \
+  elasticsearch:9.2.2
+
+# discovery.type=single-node: ES 7+ expects multi-node cluster by default.
+#   Single-node mode skips bootstrap checks (e.g. minimum master nodes) and
+#   speeds up startup for local dev/test.
+# xpack.security.enabled=false: ES 8+ enables security (auth) by default.
+#   Disable it for local test DB so the API can connect without credentials.
+
 # If it says 'The name "rumors-test-db" is already in use',
 # Just run:
 $ docker start rumors-test-db

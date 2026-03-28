@@ -19,7 +19,7 @@ export default {
   '/articles/doc/some-article': {
     replyRequestCount: 1,
     normalArticleReplyCount: 0,
-    lastRequestedAt: '2021-01-01T00:00.000Z',
+    lastRequestedAt: '2021-01-01T00:00:00.000Z',
     articleReplies: [
       {
         replyId: 'some-reply',

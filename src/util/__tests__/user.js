@@ -65,7 +65,7 @@ describe('user utils', () => {
       expect(() => assertUser(user)).not.toThrow();
 
       // Cleanup
-      await client.delete({ index: 'users', type: 'doc', id: user.id });
+      await client.delete({ index: 'users', id: user.id });
     });
   });
 
@@ -222,11 +222,8 @@ describe('user utils', () => {
 
       const id = getUserId({ userId, appId });
 
-      const {
-        body: { _source: source },
-      } = await client.get({
+      const { _source: source } = await client.get({
         index: 'users',
-        type: 'doc',
         id,
       });
       expect(source).toMatchSnapshot();
@@ -234,7 +231,7 @@ describe('user utils', () => {
       rollbar.error.mockClear();
 
       MockDate.reset();
-      await client.delete({ index: 'users', type: 'doc', id });
+      await client.delete({ index: 'users', id });
     });
 
     it("updates backend users' last active time if user already existed", async () => {
@@ -252,11 +249,8 @@ describe('user utils', () => {
       expect(user).toMatchSnapshot();
 
       const id = getUserId({ userId, appId });
-      const {
-        body: { _source: source },
-      } = await client.get({
+      const { _source: source } = await client.get({
         index: 'users',
-        type: 'doc',
         id,
       });
       expect(source).toMatchSnapshot();
@@ -280,11 +274,8 @@ describe('user utils', () => {
       expect(isCreated).toBe(false);
       expect(user).toMatchSnapshot();
 
-      const {
-        body: { _source: source },
-      } = await client.get({
+      const { _source: source } = await client.get({
         index: 'users',
-        type: 'doc',
         id,
       });
       expect(source).toMatchSnapshot();

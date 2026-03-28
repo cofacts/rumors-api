@@ -5,10 +5,6 @@ Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [],
-      "pageInfo": Object {
-        "firstCursor": null,
-        "lastCursor": null,
-      },
       "totalCount": 0,
     },
   },
@@ -105,10 +101,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
-      },
       "totalCount": 2,
     },
   },
@@ -709,6 +701,93 @@ Object {
 }
 `;
 
+exports[`ListArticles filters via articleRepliesFrom: do not have articleReply from user1 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest7",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest6",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest5",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "user": null,
+              },
+              Object {
+                "user": null,
+              },
+              Object {
+                "user": null,
+              },
+            ],
+            "id": "listArticleTest4",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [],
+            "id": "listArticleTest3",
+          },
+        },
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "user": null,
+              },
+            ],
+            "id": "listArticleTest2",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`ListArticles filters via articleRepliesFrom: has articleReply from user1 1`] = `
+Object {
+  "data": Object {
+    "ListArticles": Object {
+      "edges": Array [
+        Object {
+          "node": Object {
+            "articleReplies": Array [
+              Object {
+                "user": Object {
+                  "id": "user1",
+                },
+              },
+              Object {
+                "user": null,
+              },
+            ],
+            "id": "listArticleTest1",
+          },
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`ListArticles filters via transcribedBy: is not transcribedBy user1 1`] = `
 Object {
   "data": Object {
@@ -807,145 +886,47 @@ Object {
 }
 `;
 
-exports[`ListArticles filters via articleRepliesFrom: do not have articleReply from user1 1`] = `
-Object {
-  "data": Object {
-    "ListArticles": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "articleReplies": Array [],
-            "id": "listArticleTest7",
-          },
-        },
-        Object {
-          "node": Object {
-            "articleReplies": Array [],
-            "id": "listArticleTest6",
-          },
-        },
-        Object {
-          "node": Object {
-            "articleReplies": Array [],
-            "id": "listArticleTest5",
-          },
-        },
-        Object {
-          "node": Object {
-            "articleReplies": Array [
-              Object {
-                "user": null,
-              },
-              Object {
-                "user": null,
-              },
-              Object {
-                "user": null,
-              },
-            ],
-            "id": "listArticleTest4",
-          },
-        },
-        Object {
-          "node": Object {
-            "articleReplies": Array [],
-            "id": "listArticleTest3",
-          },
-        },
-        Object {
-          "node": Object {
-            "articleReplies": Array [
-              Object {
-                "user": null,
-              },
-            ],
-            "id": "listArticleTest2",
-          },
-        },
-      ],
-    },
-  },
-}
-`;
-
-exports[`ListArticles filters via articleRepliesFrom: has articleReply from user1 1`] = `
-Object {
-  "data": Object {
-    "ListArticles": Object {
-      "edges": Array [
-        Object {
-          "node": Object {
-            "articleReplies": Array [
-              Object {
-                "user": Object {
-                  "id": "user1",
-                },
-              },
-              Object {
-                "user": null,
-              },
-            ],
-            "id": "listArticleTest1",
-          },
-        },
-      ],
-    },
-  },
-}
-`;
-
 exports[`ListArticles lists all articles 1`] = `
 Object {
   "data": Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q3Il0=",
           "node": Object {
             "id": "listArticleTest7",
           },
         },
         Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q2Il0=",
           "node": Object {
             "id": "listArticleTest6",
           },
         },
         Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q1Il0=",
           "node": Object {
             "id": "listArticleTest5",
           },
         },
         Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3Q0Il0=",
           "node": Object {
             "id": "listArticleTest4",
           },
         },
         Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QzIl0=",
           "node": Object {
             "id": "listArticleTest3",
           },
         },
         Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
           "node": Object {
             "id": "listArticleTest2",
           },
         },
         Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
           "node": Object {
             "id": "listArticleTest1",
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q3Il0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
-      },
       "totalCount": 7,
     },
   },
@@ -958,7 +939,6 @@ Object {
     "ListArticles": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
           "node": Object {
             "cooccurrences": Array [
               Object {
@@ -969,7 +949,6 @@ Object {
           },
         },
         Object {
-          "cursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
           "node": Object {
             "cooccurrences": Array [
               Object {
@@ -980,10 +959,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3QyIl0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
-      },
       "totalCount": 2,
     },
   },
@@ -1220,10 +1195,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WzIsImxpc3RBcnRpY2xlVGVzdDUiXQ==",
-        "lastCursor": "WzAsImxpc3RBcnRpY2xlVGVzdDMiXQ==",
-      },
       "totalCount": 7,
     },
   },
@@ -1278,10 +1249,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WzQsImxpc3RBcnRpY2xlVGVzdDQiXQ==",
-        "lastCursor": "WzEsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
-      },
       "totalCount": 7,
     },
   },
@@ -1299,10 +1266,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q3Il0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
-      },
       "totalCount": 7,
     },
   },
@@ -1340,10 +1303,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJsaXN0QXJ0aWNsZVRlc3Q3Il0=",
-        "lastCursor": "WyJsaXN0QXJ0aWNsZVRlc3QxIl0=",
-      },
       "totalCount": 7,
     },
   },
@@ -1372,10 +1331,6 @@ Object {
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WzEsImxpc3RBcnRpY2xlVGVzdDIiXQ==",
-        "lastCursor": "WzEsImxpc3RBcnRpY2xlVGVzdDEiXQ==",
-      },
       "totalCount": 2,
     },
   },

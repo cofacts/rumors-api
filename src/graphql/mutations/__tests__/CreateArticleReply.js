@@ -40,11 +40,8 @@ describe('CreateArticleReply', () => {
     expect(errors).toBeUndefined();
     expect(data.CreateArticleReply).toMatchSnapshot();
 
-    const {
-      body: { _source },
-    } = await client.get({
+    const { _source } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(_source).toMatchSnapshot();
@@ -107,11 +104,8 @@ describe('CreateArticleReply', () => {
 
     expect(errors).toBeUndefined();
 
-    const {
-      body: { _source },
-    } = await client.get({
+    const { _source } = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(_source).toMatchSnapshot();

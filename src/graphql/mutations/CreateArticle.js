@@ -46,43 +46,38 @@ async function createNewArticle({ text, reference: originalReference, user }) {
     appId: user.appId,
   };
 
-  const {
-    body: { result },
-  } = await client.update({
+  const { result } = await client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
-    body: {
-      script: {
-        source: `
-          ctx._source.updatedAt = params.updatedAt;
-          ctx._source.references.add(params.reference);
-        `,
-        lang: 'painless',
-        params: {
-          updatedAt: now,
-          reference,
-        },
-      },
-      upsert: {
-        text,
-        createdAt: now,
+    script: {
+      source: `
+        ctx._source.updatedAt = params.updatedAt;
+        ctx._source.references.add(params.reference);
+      `,
+      lang: 'painless',
+      params: {
         updatedAt: now,
-        userId: user.id,
-        appId: user.appId,
-        references: [reference],
-        articleReplies: [],
-        articleCategories: [],
-        normalArticleReplyCount: 0,
-        normalArticleCategoryCount: 0,
-        replyRequestCount: 0,
-        hyperlinks: [],
-        articleType: 'TEXT',
-        attachmentUrl: '',
-        attachmentHash: '',
-        status: getContentDefaultStatus(user),
-        contributors: [],
+        reference,
       },
+    },
+    upsert: {
+      text,
+      createdAt: now,
+      updatedAt: now,
+      userId: user.id,
+      appId: user.appId,
+      references: [reference],
+      articleReplies: [],
+      articleCategories: [],
+      normalArticleReplyCount: 0,
+      normalArticleCategoryCount: 0,
+      replyRequestCount: 0,
+      hyperlinks: [],
+      articleType: 'TEXT',
+      attachmentUrl: '',
+      attachmentHash: '',
+      status: getContentDefaultStatus(user),
+      contributors: [],
     },
     refresh: 'true', // Make sure the data is indexed when we create ReplyRequest
   });
@@ -105,19 +100,16 @@ export function updateArticleHyperlinks(articleId, scrapResults) {
 
   return client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
-    body: {
-      doc: {
-        hyperlinks: scrapResults.map(
-          ({ url, normalizedUrl, title, summary }) => ({
-            url,
-            normalizedUrl,
-            title,
-            summary,
-          })
-        ),
-      },
+    doc: {
+      hyperlinks: scrapResults.map(
+        ({ url, normalizedUrl, title, summary }) => ({
+          url,
+          normalizedUrl,
+          title,
+          summary,
+        })
+      ),
     },
   });
 }

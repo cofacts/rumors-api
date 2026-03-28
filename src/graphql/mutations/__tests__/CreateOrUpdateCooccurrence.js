@@ -45,9 +45,8 @@ describe('CreateOrUpdateCooccurrence', () => {
       appId,
     });
 
-    const { body: conn } = await client.get({
+    const conn = await client.get({
       index: 'cooccurrences',
-      type: 'doc',
       id,
     });
     expect(conn._source).toMatchInlineSnapshot(`
@@ -66,7 +65,6 @@ describe('CreateOrUpdateCooccurrence', () => {
     // Cleanup
     await client.delete({
       index: 'cooccurrences',
-      type: 'doc',
       id,
     });
   });

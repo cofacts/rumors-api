@@ -25,15 +25,14 @@ describe('CreateCategory', () => {
     expect(errors).toBeUndefined();
 
     const categoryId = data.CreateCategory.id;
-    const { body: category } = await client.get({
+    const category = await client.get({
       index: 'categories',
-      type: 'doc',
       id: categoryId,
     });
 
     expect(category._source).toMatchSnapshot('created category');
 
     // Cleanup
-    await client.delete({ index: 'categories', type: 'doc', id: categoryId });
+    await client.delete({ index: 'categories', id: categoryId });
   });
 });

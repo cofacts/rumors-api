@@ -7,7 +7,6 @@ Object {
       "articleCategories": Object {
         "edges": Array [
           Object {
-            "cursor": "WyJHZXRDYXRlZ29yeTIiXQ==",
             "node": Object {
               "articleId": "GetCategory2",
               "category": Object {
@@ -19,10 +18,6 @@ Object {
             "score": null,
           },
         ],
-        "pageInfo": Object {
-          "firstCursor": "WyJHZXRDYXRlZ29yeTIiXQ==",
-          "lastCursor": "WyJHZXRDYXRlZ29yeTIiXQ==",
-        },
         "totalCount": 1,
       },
       "title": "性少數與愛滋病",
@@ -38,7 +33,6 @@ Object {
       "articleCategories": Object {
         "edges": Array [
           Object {
-            "cursor": "WyJHZXRDYXRlZ29yeTEiXQ==",
             "node": Object {
               "articleId": "GetCategory1",
               "category": Object {
@@ -50,10 +44,6 @@ Object {
             "score": null,
           },
         ],
-        "pageInfo": Object {
-          "firstCursor": "WyJHZXRDYXRlZ29yeTEiXQ==",
-          "lastCursor": "WyJHZXRDYXRlZ29yeTEiXQ==",
-        },
         "totalCount": 1,
       },
       "title": "性少數與愛滋病",

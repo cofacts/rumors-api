@@ -3,6 +3,7 @@
  *
  */
 import { HTTPError } from 'fets';
+import { errors } from '@elastic/elasticsearch';
 
 import client from 'util/client';
 
@@ -21,62 +22,54 @@ async function appendBadgeToList(
   const now = new Date().toISOString();
 
   try {
-    const {
-      body: { result: setbadgeIdResult },
-    } = await client.update({
+    const setbadgeIdResult = await client.update({
       index: 'users',
-      type: 'doc',
       id: userId,
-      body: {
-        script: {
-          source: `
-            if (ctx._source.badges == null) {
-              ctx._source.badges = [];
+      script: {
+        source: `
+          if (ctx._source.badges == null) {
+            ctx._source.badges = [];
+          }
+          
+          // Check if badge with same ID already exists
+          boolean badgeExists = false;
+          for (badge in ctx._source.badges) {
+            if (badge.badgeId == params.badge.badgeId) {
+              badgeExists = true;
+              break;
             }
-            
-            // Check if badge with same ID already exists
-            boolean badgeExists = false;
-            for (badge in ctx._source.badges) {
-              if (badge.badgeId == params.badge.badgeId) {
-                badgeExists = true;
-                break;
-              }
-            }
-            
-            // Only add badge if it doesn't already exist
-            if (!badgeExists) {
-              ctx._source.badges.add(params.badge);
-              return "updated";
-            } else {
-              // Return noop if badge already exists
-              return "noop";
-            }
-          `,
-          params: {
-            badge: {
-              badgeId: badgeId,
-              badgeMetaData: badgeMetaData,
-              createdAt: now,
-              isDisplayed: true,
-              updatedAt: now,
-            },
+          }
+          
+          // Only add badge if it doesn't already exist
+          if (!badgeExists) {
+            ctx._source.badges.add(params.badge);
+          } else {
+            // Set operation to noop if badge already exists
+            ctx.op = 'noop';
+          }
+        `,
+        params: {
+          badge: {
+            badgeId: badgeId,
+            badgeMetaData: badgeMetaData,
+            createdAt: now,
+            isDisplayed: true,
+            updatedAt: now,
           },
         },
       },
     });
 
     /* istanbul ignore if */
-    if (setbadgeIdResult === 'noop') {
+    if (setbadgeIdResult.result === 'noop') {
       console.log(`Info: user ID ${userId} already has set the same badgeId.`);
     }
   } catch (e) {
     console.log(e);
     /* istanbul ignore else */
     if (
-      e &&
-      typeof e === 'object' &&
-      'message' in e &&
-      e.message === 'document_missing_exception'
+      e instanceof errors.ResponseError &&
+      e.body?.error?.type === 'document_missing_exception'
     ) {
       throw new HTTPError(400, `User with ID=${userId} does not exist`);
     }
@@ -94,11 +87,8 @@ async function appendBadgeToList(
  */
 async function verifyBadgeIssuer(badgeId: string, requestUserId: string) {
   try {
-    const {
-      body: { _source: badge },
-    } = await client.get({
+    const { _source: badge } = await client.get<{ issuers?: string[] }>({
       index: 'badges',
-      type: 'doc',
       id: badgeId,
     });
 
@@ -136,12 +126,11 @@ async function main({
 }): Promise<awardBadgeReturnValue> {
   // Check if user exists first
   try {
-    const { body } = await client.get({
+    const result = await client.get({
       index: 'users',
-      type: 'doc',
       id: userId,
     });
-    if (!body._source) {
+    if (!result._source) {
       throw new HTTPError(400, `User with ID=${userId} does not exist`);
     }
   } catch (e) {

@@ -57,7 +57,6 @@ export default {
 
     return {
       index: 'analytics',
-      type: 'doc',
       body,
       ...otherParams,
     };

@@ -58,7 +58,7 @@ it('collects categories of interest after a timestamp', async () => {
   `);
 
   // Cleanup
-  await client.delete({ index: 'users', type: 'doc', id: reviewerUserId });
+  await client.delete({ index: 'users', id: reviewerUserId });
 });
 
 afterEach(() => unloadFixtures(fixtures));

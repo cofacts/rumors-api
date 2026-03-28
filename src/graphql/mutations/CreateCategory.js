@@ -25,12 +25,9 @@ export default {
       createdAt: new Date(),
     };
 
-    const {
-      body: { result, _id: id },
-    } = await client.index({
+    const { result, _id: id } = await client.index({
       index: 'categories',
-      type: 'doc',
-      body: categoryBody,
+      document: categoryBody,
     });
 
     if (result !== 'created') {

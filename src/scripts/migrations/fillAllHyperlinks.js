@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 import 'util/catchUnhandledRejection';
 
-import client from 'util/client';
+import client, { getTotalCount } from 'util/client';
 
 import { updateReplyHyperlinks } from 'graphql/mutations/CreateReply';
 import { updateArticleHyperlinks } from 'graphql/mutations/CreateArticle';
@@ -40,7 +40,7 @@ async function fetchAllDocs(indexName) {
     },
   });
   docs = hits.hits;
-  total = hits.total;
+  total = getTotalCount(hits.total);
   scrollId = _scroll_id;
 
   while (docs.length < total) {

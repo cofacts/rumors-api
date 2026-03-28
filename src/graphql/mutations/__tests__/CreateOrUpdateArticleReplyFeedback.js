@@ -58,9 +58,8 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
       appId,
     });
 
-    const { body: conn } = await client.get({
+    const conn = await client.get({
       index: 'articlereplyfeedbacks',
-      type: 'doc',
       id,
     });
     expect(conn._source).toMatchInlineSnapshot(`
@@ -79,9 +78,8 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
       }
     `);
 
-    const { body: article } = await client.get({
+    const article = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(article._source.articleReplies).toMatchInlineSnapshot(`
@@ -104,7 +102,6 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     // Cleanup
     await client.delete({
       index: 'articlereplyfeedbacks',
-      type: 'doc',
       id,
     });
     await resetFrom(fixtures, '/articles/doc/article1');
@@ -155,10 +152,8 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
       appId,
     });
 
-    expect(
-      (await client.get({ index: 'articlereplyfeedbacks', type: 'doc', id }))
-        .body._source
-    ).toMatchInlineSnapshot(`
+    expect((await client.get({ index: 'articlereplyfeedbacks', id }))._source)
+      .toMatchInlineSnapshot(`
       Object {
         "appId": "testClient",
         "articleId": "article1",
@@ -225,9 +220,8 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
       appId,
     });
 
-    const { body: conn } = await client.get({
+    const conn = await client.get({
       index: 'articlereplyfeedbacks',
-      type: 'doc',
       id,
     });
     expect(conn._source).toMatchInlineSnapshot(`
@@ -246,9 +240,8 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
       }
     `);
 
-    const { body: article } = await client.get({
+    const article = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(article._source.articleReplies).toMatchInlineSnapshot(`
@@ -271,7 +264,6 @@ describe('CreateOrUpdateArticleReplyFeedback', () => {
     // Cleanup
     await client.delete({
       index: 'articlereplyfeedbacks',
-      type: 'doc',
       id,
     });
     await resetFrom(fixtures, '/articles/doc/article1');

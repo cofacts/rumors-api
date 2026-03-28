@@ -1,6 +1,6 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import { getCursor, createTranscript } from 'graphql/util';
+import { createTranscript } from 'graphql/util';
 import fixtures from '../__fixtures__/ListArticles';
 import mediaManager from 'util/mediaManager';
 
@@ -24,6 +24,26 @@ describe('ListArticles', () => {
     createTranscript.mockClear();
   });
 
+  const getCursor = async (id) => {
+    const {
+      data: {
+        ListArticles: { edges },
+      },
+    } = await gql`
+      {
+        ListArticles {
+          edges {
+            node {
+              id
+            }
+            cursor
+          }
+        }
+      }
+    `();
+    return edges.find(({ node }) => node.id === id).cursor;
+  };
+
   it('lists all articles', async () => {
     expect(
       await gql`
@@ -34,11 +54,6 @@ describe('ListArticles', () => {
               node {
                 id
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -58,10 +73,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -78,10 +89,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -224,10 +231,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -700,13 +703,9 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
-      `({ cursor: getCursor(['listArticleTest2']) })
+      `({ cursor: await getCursor('listArticleTest2') })
     ).toMatchSnapshot();
   });
 
@@ -721,13 +720,9 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
-      `({ cursor: getCursor(['listArticleTest2']) })
+      `({ cursor: await getCursor('listArticleTest2') })
     ).toMatchSnapshot();
   });
 
@@ -742,13 +737,9 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
-      `({ cursor: getCursor(['listArticleTest2']) })
+      `({ cursor: await getCursor('listArticleTest2') })
     ).toMatchSnapshot();
   });
 
@@ -773,10 +764,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -797,10 +784,6 @@ describe('ListArticles', () => {
               }
             }
             totalCount
-            pageInfo {
-              firstCursor
-              lastCursor
-            }
           }
         }
       `()
@@ -1039,7 +1022,6 @@ describe('ListArticles', () => {
             filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
           ) {
             edges {
-              score
               mediaSimilarity
               node {
                 id
@@ -1064,7 +1046,6 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest5",
                 },
-                "score": 100,
               },
               Object {
                 "mediaSimilarity": 0.5,
@@ -1074,7 +1055,6 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest6",
                 },
-                "score": 60.03248,
               },
               Object {
                 "mediaSimilarity": 0,
@@ -1084,7 +1064,6 @@ describe('ListArticles', () => {
                   "attachmentUrl": null,
                   "id": "listArticleTest1",
                 },
-                "score": 5.419564,
               },
             ],
           },
@@ -1112,11 +1091,6 @@ describe('ListArticles', () => {
                   id
                 }
               }
-              cursor
-            }
-            pageInfo {
-              firstCursor
-              lastCursor
             }
           }
         }
@@ -1143,7 +1117,6 @@ describe('ListArticles', () => {
             filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
           ) {
             edges {
-              score
               node {
                 id
                 articleType
@@ -1192,7 +1165,6 @@ describe('ListArticles', () => {
             }
           ) {
             edges {
-              score
               mediaSimilarity
               node {
                 id
@@ -1225,7 +1197,6 @@ describe('ListArticles', () => {
                   "attachmentHash": "",
                   "id": "listArticleTest1",
                 },
-                "score": 18.921206,
               },
             ],
           },

@@ -44,11 +44,8 @@ describe('revokeBadge', () => {
       }
     `);
 
-    const {
-      body: { _source: userWithBadge },
-    } = await client.get({
+    const { _source: userWithBadge } = await client.get({
       index: 'users',
-      type: 'doc',
       id: 'user-with-badge',
     });
 
@@ -71,11 +68,8 @@ describe('revokeBadge', () => {
       }
     `);
 
-    const {
-      body: { _source: userWithBadge },
-    } = await client.get({
+    const { _source: userWithBadge } = await client.get({
       index: 'users',
-      type: 'doc',
       id: 'user-with-badge',
     });
 
@@ -98,11 +92,8 @@ describe('revokeBadge', () => {
       }
     `);
 
-    const {
-      body: { _source: userWithoutBadge },
-    } = await client.get({
+    const { _source: userWithoutBadge } = await client.get({
       index: 'users',
-      type: 'doc',
       id: 'user-without-badge',
     });
 
@@ -124,11 +115,8 @@ describe('revokeBadge', () => {
       }
     `);
 
-    const {
-      body: { _source: userWithBadge },
-    } = await client.get({
+    const { _source: userWithBadge } = await client.get({
       index: 'users',
-      type: 'doc',
       id: 'user-with-wrong-badge',
     });
 

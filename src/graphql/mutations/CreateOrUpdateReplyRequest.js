@@ -56,26 +56,21 @@ export async function createOrUpdateReplyRequest({
 
   const replyRequestStatus = getContentDefaultStatus(user);
 
-  const {
-    body: { result },
-  } = await client.update({
+  const { result } = await client.update({
     index: 'replyrequests',
-    type: 'doc',
     id,
-    body: {
-      doc: updatedDoc,
-      upsert: {
-        articleId,
-        userId: user.id,
-        appId: user.appId,
-        reason,
-        feedbacks: [],
-        positiveFeedbackCount: 0,
-        negativeFeedbackCount: 0,
-        createdAt: now,
-        updatedAt: now,
-        status: replyRequestStatus,
-      },
+    doc: updatedDoc,
+    upsert: {
+      articleId,
+      userId: user.id,
+      appId: user.appId,
+      reason,
+      feedbacks: [],
+      positiveFeedbackCount: 0,
+      negativeFeedbackCount: 0,
+      createdAt: now,
+      updatedAt: now,
+      status: replyRequestStatus,
     },
     refresh: 'true',
   });
@@ -86,27 +81,21 @@ export async function createOrUpdateReplyRequest({
   //
   const article = await (async () => {
     if (replyRequestStatus !== 'NORMAL') {
-      return (
-        await client.get({
-          index: 'articles',
-          type: 'doc',
-          id: articleId,
-        })
-      ).body;
+      return await client.get({
+        index: 'articles',
+        id: articleId,
+      });
     }
 
-    const { body: articleUpdateResult } = await client.update({
+    const articleUpdateResult = await client.update({
       index: 'articles',
-      type: 'doc',
       id: articleId,
-      body: {
-        script: {
-          source: `
-            ${isCreated ? 'ctx._source.replyRequestCount += 1;' : ''}
-            ctx._source.lastRequestedAt = params.now;
-          `,
-          params: { now },
-        },
+      script: {
+        source: `
+        ${isCreated ? 'ctx._source.replyRequestCount += 1;' : ''}
+        ctx._source.lastRequestedAt = params.now;
+      `,
+        params: { now },
       },
       _source: true,
     });

@@ -19,25 +19,23 @@ async function* getAllDocs<T extends object>(
     index,
     scroll,
     size,
-    body: {
-      query,
-    },
+    query,
   });
 
   while (true) {
-    const docs = resp.body.hits.hits;
+    const docs = resp.hits.hits;
     if (docs.length === 0) break;
     for (const doc of docs) {
-      yield doc;
+      yield doc as { _id: string; _source: T };
     }
 
-    if (!resp.body._scroll_id) {
+    if (!resp._scroll_id) {
       break;
     }
 
     resp = await client.scroll({
       scroll,
-      scroll_id: resp.body._scroll_id,
+      scroll_id: resp._scroll_id,
     });
   }
 }

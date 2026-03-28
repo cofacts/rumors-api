@@ -178,7 +178,6 @@ export default {
     // should return search context for resolveEdges & resolvePageInfo
     return {
       index: 'replies',
-      type: 'doc',
       body,
       ...otherParams,
     };

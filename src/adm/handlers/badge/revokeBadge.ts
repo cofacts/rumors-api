@@ -3,6 +3,7 @@
  *
  */
 import { HTTPError } from 'fets';
+import { errors } from '@elastic/elasticsearch';
 
 import client from 'util/client';
 
@@ -16,19 +17,14 @@ async function removeBadgeFromList(userId: string, badgeId: string) {
   const now = new Date().toISOString();
 
   try {
-    const {
-      body: { result: removeBadgeResult },
-    } = await client.update({
+    const removeBadgeResult = await client.update({
       index: 'users',
-      type: 'doc',
       id: userId,
-      body: {
-        script: {
-          source: `
-            if (ctx._source.badges == null) {
-              return "noop";
-            }
-            
+      script: {
+        source: `
+          if (ctx._source.badges == null) {
+            ctx.op = 'noop';
+          } else {
             // Find the badge with the given ID
             int badgeIndex = -1;
             for (int i = 0; i < ctx._source.badges.length; i++) {
@@ -41,22 +37,21 @@ async function removeBadgeFromList(userId: string, badgeId: string) {
             // Remove the badge if found
             if (badgeIndex >= 0) {
               ctx._source.badges.remove(badgeIndex);
-              return "updated";
             } else {
-              // Return noop if badge doesn't exist
-              return "noop";
+              // Set operation to noop if badge doesn't exist
+              ctx.op = 'noop';
             }
-          `,
-          params: {
-            badgeId: badgeId,
-            now: now,
-          },
+          }
+        `,
+        params: {
+          badgeId: badgeId,
+          now: now,
         },
       },
     });
 
     /* istanbul ignore if */
-    if (removeBadgeResult === 'noop') {
+    if (removeBadgeResult.result === 'noop') {
       console.log(
         `Info: user ID ${userId} does not have badge with ID ${badgeId}.`
       );
@@ -65,10 +60,8 @@ async function removeBadgeFromList(userId: string, badgeId: string) {
     console.log(e);
     /* istanbul ignore else */
     if (
-      e &&
-      typeof e === 'object' &&
-      'message' in e &&
-      e.message === 'document_missing_exception'
+      e instanceof errors.ResponseError &&
+      e.body?.error?.type === 'document_missing_exception'
     ) {
       throw new HTTPError(400, `User with ID=${userId} does not exist`);
     }
@@ -86,11 +79,8 @@ async function removeBadgeFromList(userId: string, badgeId: string) {
  */
 async function verifyBadgeIssuer(badgeId: string, requestUserId: string) {
   try {
-    const {
-      body: { _source: badge },
-    } = await client.get({
+    const { _source: badge } = await client.get<{ issuers?: string[] }>({
       index: 'badges',
-      type: 'doc',
       id: badgeId,
     });
 

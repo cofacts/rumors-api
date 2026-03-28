@@ -8,7 +8,7 @@ const defaultDuration = 365;
 export default () =>
   new DataLoader(
     async (statsQueries) => {
-      const body = [];
+      const searches = [];
       const defaultEndDate = new Date();
       const defaultStartDate = startOfWeek(
         subDays(defaultEndDate, defaultDuration)
@@ -19,11 +19,10 @@ export default () =>
       };
       statsQueries.forEach(({ userId, dateRange = defaultDateRange }) => {
         if (!userId) throw new Error('userId is required');
-        body.push({
+        searches.push({
           index: ['replyrequests', 'replies', 'articlereplyfeedbacks'],
-          type: 'doc',
         });
-        body.push({
+        searches.push({
           query: {
             bool: {
               must: [
@@ -42,7 +41,7 @@ export default () =>
             contributions: {
               date_histogram: {
                 field: 'createdAt',
-                interval: 'day',
+                calendar_interval: 'day',
                 min_doc_count: 1,
                 format: 'yyyy-MM-dd',
                 time_zone: process.env.TIMEZONE || '+08:00',
@@ -54,9 +53,9 @@ export default () =>
 
       return (
         await client.msearch({
-          body,
+          searches,
         })
-      ).body.responses.map(
+      ).responses.map(
         ({
           aggregations: {
             contributions: { buckets },

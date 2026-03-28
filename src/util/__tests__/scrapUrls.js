@@ -13,10 +13,8 @@ describe('scrapping & storage', () => {
   afterAll(async () => {
     await client.deleteByQuery({
       index: 'urls',
-      body: {
-        query: {
-          match_all: {},
-        },
+      query: {
+        match_all: {},
       },
     });
   });
@@ -66,15 +64,11 @@ describe('scrapping & storage', () => {
     await client.indices.refresh({ index: 'urls' });
 
     const {
-      body: {
-        hits: { hits: urls },
-      },
+      hits: { hits: urls },
     } = await client.search({
       index: 'urls',
-      body: {
-        query: {
-          match_all: {},
-        },
+      query: {
+        match_all: {},
       },
     });
 

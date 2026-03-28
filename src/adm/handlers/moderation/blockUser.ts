@@ -5,8 +5,9 @@
  * Please announce that the user will be blocked openly with a URL first.
  */
 import { HTTPError } from 'fets';
+import { errors } from '@elastic/elasticsearch';
 
-import client from 'util/client';
+import client, { getTotalCount } from 'util/client';
 import getAllDocs from 'util/getAllDocs';
 import { updateArticleReplyStatus } from 'graphql/mutations/UpdateArticleReplyStatus';
 import { updateArticleReplyByFeedbacks } from 'graphql/mutations/CreateOrUpdateArticleReplyFeedback';
@@ -23,15 +24,10 @@ import type { ArticleReplyFeedback } from 'rumors-db/schema/articlereplyfeedback
  */
 async function writeBlockedReasonToUser(userId: string, blockedReason: string) {
   try {
-    const {
-      body: { result: setBlockedReasonResult },
-    } = await client.update({
+    const { result: setBlockedReasonResult } = await client.update({
       index: 'users',
-      type: 'doc',
       id: userId,
-      body: {
-        doc: { blockedReason },
-      },
+      doc: { blockedReason },
     });
 
     /* istanbul ignore if */
@@ -43,10 +39,8 @@ async function writeBlockedReasonToUser(userId: string, blockedReason: string) {
   } catch (e) {
     /* istanbul ignore else */
     if (
-      e &&
-      typeof e === 'object' &&
-      'message' in e &&
-      e.message === 'document_missing_exception'
+      e instanceof errors.ResponseError &&
+      e.body?.error?.type === 'document_missing_exception'
     ) {
       throw new HTTPError(400, `User with ID=${userId} does not exist`);
     }
@@ -76,15 +70,12 @@ async function processReplyRequests(userId: string) {
   }
 
   /* Bulk update reply reqeuests status */
-  const { body: updateByQueryResult } = await client.updateByQuery({
+  const updateByQueryResult = await client.updateByQuery({
     index: 'replyrequests',
-    type: 'doc',
-    body: {
-      query: NORMAL_REPLY_REQUEST_QUERY,
-      script: {
-        lang: 'painless',
-        source: `ctx._source.status = 'BLOCKED';`,
-      },
+    query: NORMAL_REPLY_REQUEST_QUERY,
+    script: {
+      lang: 'painless',
+      source: `ctx._source.status = 'BLOCKED';`,
     },
     refresh: true,
   });
@@ -98,43 +89,40 @@ async function processReplyRequests(userId: string) {
 
   for (const [i, articleId] of articleIdsWithNormalReplyRequests.entries()) {
     const {
-      body: {
-        hits: { total },
-        aggregations: {
-          lastRequestedAt: { value_as_string: lastRequestedAt },
-        },
-      },
+      hits: { total },
+      aggregations,
     } = await client.search({
       index: 'replyrequests',
       size: 0,
-      body: {
-        query: {
-          bool: {
-            must: [{ term: { status: 'NORMAL' } }, { term: { articleId } }],
-          },
+      query: {
+        bool: {
+          must: [{ term: { status: 'NORMAL' } }, { term: { articleId } }],
         },
-        aggs: {
-          lastRequestedAt: { max: { field: 'createdAt' } },
-        },
+      },
+      aggs: {
+        lastRequestedAt: { max: { field: 'createdAt' } },
       },
     });
 
+    const lastRequestedAt = (
+      aggregations?.lastRequestedAt as { value_as_string?: string }
+    )?.value_as_string;
+
     await client.update({
       index: 'articles',
-      type: 'doc',
       id: articleId,
-      body: {
-        doc: {
-          lastRequestedAt,
-          replyRequestCount: total,
-        },
+      doc: {
+        lastRequestedAt,
+        replyRequestCount: getTotalCount(total),
       },
     });
 
     console.log(
       `[${i + 1}/${
         articleIdsWithNormalReplyRequests.length
-      }] article ${articleId}: changed to ${total} reply requests, last requested at ${lastRequestedAt}`
+      }] article ${articleId}: changed to ${getTotalCount(
+        total
+      )} reply requests, last requested at ${lastRequestedAt}`
     );
   }
 
@@ -231,15 +219,12 @@ async function processArticleReplyFeedbacks(userId: string) {
   }
 
   /* Bulk update feedback status */
-  const { body: updateByQueryResult } = await client.updateByQuery({
+  const updateByQueryResult = await client.updateByQuery({
     index: 'articlereplyfeedbacks',
-    type: 'doc',
-    body: {
-      query: NORMAL_FEEDBACK_QUERY,
-      script: {
-        lang: 'painless',
-        source: `ctx._source.status = 'BLOCKED';`,
-      },
+    query: NORMAL_FEEDBACK_QUERY,
+    script: {
+      lang: 'painless',
+      source: `ctx._source.status = 'BLOCKED';`,
     },
     refresh: true,
   });
@@ -300,15 +285,12 @@ async function processArticles(userId: string) {
   };
 
   /* Bulk update reply reqeuests status */
-  const { body: updateByQueryResult } = await client.updateByQuery({
+  const updateByQueryResult = await client.updateByQuery({
     index: 'articles',
-    type: 'doc',
-    body: {
-      query: NORMAL_ARTICLE_QUERY,
-      script: {
-        lang: 'painless',
-        source: `ctx._source.status = 'BLOCKED';`,
-      },
+    query: NORMAL_ARTICLE_QUERY,
+    script: {
+      lang: 'painless',
+      source: `ctx._source.status = 'BLOCKED';`,
     },
     refresh: true,
   });
@@ -332,10 +314,12 @@ async function main({
   blockedReason: string;
 }): Promise<BlockUserReturnValue> {
   await writeBlockedReasonToUser(userId, blockedReason);
-  const { updated: updatedArticles } = await processArticles(userId);
-  const { updated: updatedReplyRequests } = await processReplyRequests(userId);
+  const { updated: updatedArticles = 0 } = await processArticles(userId);
+  const { updated: updatedReplyRequests = 0 } = await processReplyRequests(
+    userId
+  );
   const updatedArticleReplies = await processArticleReplies(userId);
-  const { updated: updateArticleReplyFeedbacks } =
+  const { updated: updateArticleReplyFeedbacks = 0 } =
     await processArticleReplyFeedbacks(userId);
 
   return {

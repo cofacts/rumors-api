@@ -24,11 +24,8 @@ it('adds article category and feedbacks as expected', async () => {
   );
   MockDate.reset();
 
-  const {
-    body: { _source: articleDoc },
-  } = await client.get({
+  const { _source: articleDoc } = await client.get({
     index: 'articles',
-    type: 'doc',
     id: 'a1',
   });
 
@@ -82,9 +79,7 @@ it('adds article category and feedbacks as expected', async () => {
   `);
 
   const {
-    body: {
-      hits: { total, hits: articleCategoryFeedbacks },
-    },
+    hits: { total, hits: articleCategoryFeedbacks },
   } = await client.search({
     index: 'articlecategoryfeedbacks',
     body: {
@@ -96,7 +91,7 @@ it('adds article category and feedbacks as expected', async () => {
     },
   });
 
-  expect(total).toBe(4);
+  expect(total.value).toBe(4);
 
   // Test if existing feedback is modified
   //
@@ -146,6 +141,6 @@ it('adds article category and feedbacks as expected', async () => {
       },
     },
   });
-  await client.delete({ index: 'users', type: 'doc', id: reviewer.id });
-  await client.delete({ index: 'users', type: 'doc', id: annotator.id });
+  await client.delete({ index: 'users', id: reviewer.id });
+  await client.delete({ index: 'users', id: annotator.id });
 });

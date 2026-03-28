@@ -8,7 +8,7 @@ const defaultDuration = 31;
 export default () =>
   new DataLoader(
     async (statsQueries) => {
-      const body = [];
+      const searches = [];
       const defaultEndDate = new Date();
       const defaultStartDate = subDays(defaultEndDate, defaultDuration);
       const defaultDateRange = {
@@ -19,8 +19,10 @@ export default () =>
         ({ docId, docType, dateRange = defaultDateRange }) => {
           if (!docId) throw new Error('docId is required');
           if (!docType) throw new Error('docType is required');
-          body.push({ index: 'analytics', type: 'doc' });
-          body.push({
+          searches.push({ index: 'analytics' });
+          searches.push({
+            size: 90,
+            sort: [{ date: 'asc' }],
             query: {
               bool: {
                 must: [
@@ -36,17 +38,15 @@ export default () =>
                 ],
               },
             },
-            sort: [{ date: 'asc' }],
-            size: 90,
           });
         }
       );
 
       return (
         await client.msearch({
-          body,
+          searches,
         })
-      ).body.responses.map(({ hits: { hits: analytics } }) =>
+      ).responses.map(({ hits: { hits: analytics } }) =>
         analytics.map((row) => row._source)
       );
     },

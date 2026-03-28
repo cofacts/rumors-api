@@ -53,39 +53,36 @@ export async function updateArticleReplyByFeedbacks(
       [0, 0]
     );
 
-  const { body: articleReplyUpdateResult } = await client.update({
+  const articleReplyUpdateResult = await client.update<Article>({
     index: 'articles',
-    type: 'doc',
     id: articleId,
-    body: {
-      script: {
-        source: `
-          int idx = 0;
-          int replyCount = ctx._source.articleReplies.size();
-          for(; idx < replyCount; idx += 1) {
-            HashMap articleReply = ctx._source.articleReplies.get(idx);
-            if( articleReply.get('replyId').equals(params.replyId) ) {
-              break;
-            }
+    script: {
+      source: `
+        int idx = 0;
+        int replyCount = ctx._source.articleReplies.size();
+        for(; idx < replyCount; idx += 1) {
+          HashMap articleReply = ctx._source.articleReplies.get(idx);
+          if( articleReply.get('replyId').equals(params.replyId) ) {
+            break;
           }
+        }
 
-          if( idx === replyCount ) {
-            ctx.op = 'none';
-          } else {
-            ctx._source.articleReplies.get(idx).put(
-              'positiveFeedbackCount', params.positiveFeedbackCount);
-            ctx._source.articleReplies.get(idx).put(
-              'negativeFeedbackCount', params.negativeFeedbackCount);
-          }
-        `,
-        params: {
-          replyId,
-          positiveFeedbackCount,
-          negativeFeedbackCount,
-        },
+        if( idx === replyCount ) {
+          ctx.op = 'none';
+        } else {
+          ctx._source.articleReplies.get(idx).put(
+            'positiveFeedbackCount', params.positiveFeedbackCount);
+          ctx._source.articleReplies.get(idx).put(
+            'negativeFeedbackCount', params.negativeFeedbackCount);
+        }
+      `,
+      params: {
+        replyId,
+        positiveFeedbackCount,
+        negativeFeedbackCount,
       },
     },
-    _source: 'true',
+    _source: true,
   });
 
   /* istanbul ignore if */
@@ -93,9 +90,22 @@ export async function updateArticleReplyByFeedbacks(
     throw new Error(`Cannot article ${articleId}'s feedback count`);
   }
 
-  return articleReplyUpdateResult.get._source.articleReplies.find(
-    (articleReply: ArticleReplyType) => articleReply.replyId === replyId
+  const source = articleReplyUpdateResult.get?._source;
+  if (!source) {
+    throw new Error(`Cannot get updated article ${articleId}`);
+  }
+
+  const articleReply = (source as Article).articleReplies.find(
+    (ar: ArticleReplyType) => ar.replyId === replyId
   );
+
+  if (!articleReply) {
+    throw new Error(
+      `Cannot find article reply with replyId ${replyId} in article ${articleId}`
+    );
+  }
+
+  return articleReply;
 }
 
 export default {
@@ -135,29 +145,24 @@ export default {
       appId: user.appId,
     });
 
-    const {
-      body: { result },
-    } = await client.update({
+    const { result } = await client.update({
       index: 'articlereplyfeedbacks',
-      type: 'doc',
       id,
-      body: {
-        doc: {
-          score: vote,
-          comment: comment,
-          updatedAt: now,
-        },
-        upsert: {
-          articleId,
-          replyId,
-          userId: user.id,
-          appId: user.appId,
-          score: vote,
-          createdAt: now,
-          updatedAt: now,
-          comment: comment,
-          status: getContentDefaultStatus(user),
-        },
+      doc: {
+        score: vote,
+        comment: comment,
+        updatedAt: now,
+      },
+      upsert: {
+        articleId,
+        replyId,
+        userId: user.id,
+        appId: user.appId,
+        score: vote,
+        createdAt: now,
+        updatedAt: now,
+        comment: comment,
+        status: getContentDefaultStatus(user),
       },
       refresh: 'true', // We are searching for articlereplyfeedbacks immediately
     });
@@ -166,17 +171,18 @@ export default {
       // Fill in reply & article reply author ID
       //
 
-      const [{ userId: replyUserId }, article] =
-        (await loaders.docLoader.loadMany([
-          {
-            index: 'replies',
-            id: replyId,
-          },
-          {
-            index: 'articles',
-            id: articleId,
-          },
-        ])) as [Reply, Article];
+      const [reply, article] = (await loaders.docLoader.loadMany([
+        {
+          index: 'replies',
+          id: replyId,
+        },
+        {
+          index: 'articles',
+          id: articleId,
+        },
+      ])) as unknown as [Reply, Article];
+
+      const { userId: replyUserId } = reply;
 
       const ar = article.articleReplies.find((ar) => ar.replyId === replyId);
 
@@ -191,13 +197,10 @@ export default {
 
       await client.update({
         index: 'articlereplyfeedbacks',
-        type: 'doc',
         id,
-        body: {
-          doc: {
-            replyUserId,
-            articleReplyUserId,
-          },
+        doc: {
+          replyUserId,
+          articleReplyUserId,
         },
       });
     }

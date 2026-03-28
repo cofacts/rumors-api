@@ -75,70 +75,56 @@ Object {
     "ListAnalytics": Object {
       "edges": Array [
         Object {
-          "cursor": "WyJyZXBseV9yZXBseUlkMl8yMDIwLTAxLTAzIl0=",
           "node": Object {
             "id": "reply_replyId2_2020-01-03",
           },
         },
         Object {
-          "cursor": "WyJyZXBseV9yZXBseUlkMl8yMDIwLTAxLTAyIl0=",
           "node": Object {
             "id": "reply_replyId2_2020-01-02",
           },
         },
         Object {
-          "cursor": "WyJyZXBseV9yZXBseUlkMl8yMDIwLTAxLTAxIl0=",
           "node": Object {
             "id": "reply_replyId2_2020-01-01",
           },
         },
         Object {
-          "cursor": "WyJyZXBseV9yZXBseUlkMV8yMDIwLTAxLTA2Il0=",
           "node": Object {
             "id": "reply_replyId1_2020-01-06",
           },
         },
         Object {
-          "cursor": "WyJhcnRpY2xlX2FydGljbGVJZDFfMjAyMC0wMS0wNSJd",
           "node": Object {
             "id": "article_articleId1_2020-01-05",
           },
         },
         Object {
-          "cursor": "WyJhcnRpY2xlX2FydGljbGVJZDFfMjAyMC0wMS0wNCJd",
           "node": Object {
             "id": "article_articleId1_2020-01-04",
           },
         },
         Object {
-          "cursor": "WyJhcnRpY2xlX2FydGljbGVJZDFfMjAyMC0wMS0wMyJd",
           "node": Object {
             "id": "article_articleId1_2020-01-03",
           },
         },
         Object {
-          "cursor": "WyJhcnRpY2xlX2FydGljbGUwXzIwMjAtMDEtMTEiXQ==",
           "node": Object {
             "id": "article_article0_2020-01-11",
           },
         },
         Object {
-          "cursor": "WyJhcnRpY2xlX2FydGljbGUwXzIwMjAtMDEtMTAiXQ==",
           "node": Object {
             "id": "article_article0_2020-01-10",
           },
         },
         Object {
-          "cursor": "WyJhcnRpY2xlX2FydGljbGUwXzIwMjAtMDEtMDkiXQ==",
           "node": Object {
             "id": "article_article0_2020-01-09",
           },
         },
       ],
-      "pageInfo": Object {
-        "firstCursor": "WyJyZXBseV9yZXBseUlkMl8yMDIwLTAxLTAzIl0=",
-        "lastCursor": "WyJhcnRpY2xlX2FydGljbGUwXzIwMTktMTItMTAiXQ==",
-      },
       "totalCount": 40,
     },
   },

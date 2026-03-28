@@ -20,19 +20,16 @@ export function updateReplyHyperlinks(replyId, scrapResults) {
 
   return client.update({
     index: 'replies',
-    type: 'doc',
     id: replyId,
-    body: {
-      doc: {
-        hyperlinks: scrapResults.map(
-          ({ url, normalizedUrl, title, summary }) => ({
-            url,
-            normalizedUrl,
-            title,
-            summary,
-          })
-        ),
-      },
+    doc: {
+      hyperlinks: scrapResults.map(
+        ({ url, normalizedUrl, title, summary }) => ({
+          url,
+          normalizedUrl,
+          title,
+          summary,
+        })
+      ),
     },
   });
 }
@@ -80,10 +77,9 @@ export default {
     const newReplyPromise = client
       .index({
         index: 'replies',
-        type: 'doc',
-        body: replyBody,
+        document: replyBody,
       })
-      .then(({ body: { result, _id } }) => {
+      .then(({ result, _id }) => {
         if (result !== 'created') {
           throw new Error(`Cannot create reply: ${result}`);
         }

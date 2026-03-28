@@ -40,9 +40,8 @@ describe('CreateOrUpdateReplyRequest', () => {
     expect(data).toMatchSnapshot();
 
     const id = getReplyRequestId({ articleId, userId, appId });
-    const { body: request } = await client.get({
+    const request = await client.get({
       index: 'replyrequests',
-      type: 'doc',
       id,
     });
     expect(request._source).toMatchInlineSnapshot(`
@@ -60,9 +59,8 @@ describe('CreateOrUpdateReplyRequest', () => {
       }
     `);
 
-    const { body: article } = await client.get({
+    const article = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(article._source).toMatchInlineSnapshot(`
@@ -74,7 +72,7 @@ describe('CreateOrUpdateReplyRequest', () => {
     `);
 
     // Cleanup
-    await client.delete({ index: 'replyrequests', type: 'doc', id });
+    await client.delete({ index: 'replyrequests', id });
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
 
@@ -117,9 +115,8 @@ describe('CreateOrUpdateReplyRequest', () => {
     expect(errors).toBeUndefined();
     expect(data).toMatchSnapshot();
 
-    const { body: conn } = await client.get({
+    const conn = await client.get({
       index: 'replyrequests',
-      type: 'doc',
       id,
     });
     expect(conn._source).toMatchInlineSnapshot(`
@@ -137,9 +134,8 @@ describe('CreateOrUpdateReplyRequest', () => {
       }
     `);
 
-    const { body: article } = await client.get({
+    const article = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
     expect(article._source).toMatchInlineSnapshot(`
@@ -151,7 +147,7 @@ describe('CreateOrUpdateReplyRequest', () => {
     `);
 
     // Cleanup
-    await client.delete({ index: 'replyrequests', type: 'doc', id });
+    await client.delete({ index: 'replyrequests', id });
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
 
@@ -194,9 +190,8 @@ describe('CreateOrUpdateReplyRequest', () => {
     expect(data).toMatchSnapshot();
 
     const id = getReplyRequestId({ articleId, userId, appId });
-    const { body: request } = await client.get({
+    const request = await client.get({
       index: 'replyrequests',
-      type: 'doc',
       id,
     });
 
@@ -216,9 +211,8 @@ describe('CreateOrUpdateReplyRequest', () => {
       }
     `);
 
-    const { body: article } = await client.get({
+    const article = await client.get({
       index: 'articles',
-      type: 'doc',
       id: articleId,
     });
 
@@ -232,7 +226,7 @@ describe('CreateOrUpdateReplyRequest', () => {
     `);
 
     // Cleanup
-    await client.delete({ index: 'replyrequests', type: 'doc', id });
+    await client.delete({ index: 'replyrequests', id });
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
   });
 

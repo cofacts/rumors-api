@@ -42,25 +42,22 @@ export async function createOrUpdateArticleCategoryFeedback({
 
   await client.update({
     index: 'articlecategoryfeedbacks',
-    type: 'doc',
     id,
-    body: {
-      doc: {
-        score: vote,
-        comment: comment,
-        updatedAt: now,
-      },
-      upsert: {
-        articleId,
-        categoryId,
-        userId: user.id,
-        appId: user.appId,
-        score: vote,
-        createdAt: now,
-        updatedAt: now,
-        comment: comment,
-        status: getContentDefaultStatus(user),
-      },
+    doc: {
+      score: vote,
+      comment: comment,
+      updatedAt: now,
+    },
+    upsert: {
+      articleId,
+      categoryId,
+      userId: user.id,
+      appId: user.appId,
+      score: vote,
+      createdAt: now,
+      updatedAt: now,
+      comment: comment,
+      status: getContentDefaultStatus(user),
     },
     refresh: 'true', // We are searching for articlecategoryfeedbacks immediately
   });
@@ -84,36 +81,33 @@ export async function createOrUpdateArticleCategoryFeedback({
       [0, 0]
     );
 
-  const { body: articleCategoryUpdateResult } = await client.update({
+  const articleCategoryUpdateResult = await client.update({
     index: 'articles',
-    type: 'doc',
     id: articleId,
-    body: {
-      script: {
-        source: `
-            int idx = 0;
-            int categoryCount = ctx._source.articleCategories.size();
-            for(; idx < categoryCount; idx += 1) {
-              HashMap articleCategory = ctx._source.articleCategories.get(idx);
-              if( articleCategory.get('categoryId').equals(params.categoryId) ) {
-                break;
-              }
+    script: {
+      source: `
+          int idx = 0;
+          int categoryCount = ctx._source.articleCategories.size();
+          for(; idx < categoryCount; idx += 1) {
+            HashMap articleCategory = ctx._source.articleCategories.get(idx);
+            if( articleCategory.get('categoryId').equals(params.categoryId) ) {
+              break;
             }
+          }
 
-            if( idx === categoryCount ) {
-              ctx.op = 'none';
-            } else {
-              ctx._source.articleCategories.get(idx).put(
-                'positiveFeedbackCount', params.positiveFeedbackCount);
-              ctx._source.articleCategories.get(idx).put(
-                'negativeFeedbackCount', params.negativeFeedbackCount);
-            }
-          `,
-        params: {
-          categoryId,
-          positiveFeedbackCount,
-          negativeFeedbackCount,
-        },
+          if( idx === categoryCount ) {
+            ctx.op = 'none';
+          } else {
+            ctx._source.articleCategories.get(idx).put(
+              'positiveFeedbackCount', params.positiveFeedbackCount);
+            ctx._source.articleCategories.get(idx).put(
+              'negativeFeedbackCount', params.negativeFeedbackCount);
+          }
+        `,
+      params: {
+        categoryId,
+        positiveFeedbackCount,
+        negativeFeedbackCount,
       },
     },
     _source: true,
