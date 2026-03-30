@@ -13,7 +13,7 @@ RUN npm install
 #
 COPY . .
 
-RUN node_modules/.bin/babel src -d build --extensions ".ts,.js"
+RUN node_modules/.bin/babel src -d build --extensions ".ts,.js" --ignore "**/__fixtures__/**" --ignore "**/__tests__/**"
 RUN npm prune --production
 
 #########################################
