@@ -1,5 +1,6 @@
 *
 !.babelrc
+!babel.config.js
 !ecosystem.config.js
 !package.json
 !package-lock.json
