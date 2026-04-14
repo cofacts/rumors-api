@@ -1,32 +1,32 @@
 /* MediaManager related integration tests */
-import path from "path";
-import http from "http";
-import handler from "serve-handler";
-import fetch from "node-fetch";
+import path from 'path';
+import http from 'http';
+import handler from 'serve-handler';
+import fetch from 'node-fetch';
 
-import gql from "util/GraphQL";
-import client from "util/client";
-import delayForMs from "util/delayForMs";
-import { getReplyRequestId } from "graphql/mutations/CreateOrUpdateReplyRequest";
-import replaceMedia from "scripts/replaceMedia";
+import gql from 'util/GraphQL';
+import client from 'util/client';
+import delayForMs from 'util/delayForMs';
+import { getReplyRequestId } from 'graphql/mutations/CreateOrUpdateReplyRequest';
+import replaceMedia from 'scripts/replaceMedia';
 
 if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
   // File server serving test input file in __fixtures__/media-integration
   //
   const server = http.createServer((req, res) =>
     handler(req, res, {
-      public: path.join(__dirname, "../__fixtures__/media-integration"),
-    }),
+      public: path.join(__dirname, '../__fixtures__/media-integration'),
+    })
   );
-  server.on("error", console.error);
-  let serverUrl = "";
+  server.on('error', console.error);
+  let serverUrl = '';
 
   beforeAll(async () => {
     // Start up file server
     serverUrl = await new Promise((resolve, reject) => {
       server.listen(() => {
         const addr = server.address();
-        if (typeof addr === "string" || addr === null) {
+        if (typeof addr === 'string' || addr === null) {
           return reject(`server.listen return wrong address: ${addr}`);
         }
         resolve(`http://localhost:${addr.port}`);
@@ -41,10 +41,10 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     console.info(`[Media Integration] file server closed.`);
   });
 
-  it("blocks mismatched articleType", async () => {
+  it('blocks mismatched articleType', async () => {
     // Simulates user login
     const context = {
-      user: { id: "foo", appId: "WEBSITE" },
+      user: { id: 'foo', appId: 'WEBSITE' },
     };
 
     const createMediaArticleResult = await gql`
@@ -61,7 +61,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
       {
         mediaUrl: `${serverUrl}/small.jpg`, // An image, does not match VIDEO articleType
       },
-      context,
+      context
     );
 
     expect(createMediaArticleResult.errors).toMatchInlineSnapshot(`
@@ -71,10 +71,10 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     `);
   });
 
-  it("creates image article and can get signed URL", async () => {
+  it('creates image article and can get signed URL', async () => {
     // Simulates user login
     const context = {
-      user: { id: "foo", appId: "WEBSITE" },
+      user: { id: 'foo', appId: 'WEBSITE' },
     };
 
     const createMediaArticleResult = await gql`
@@ -91,7 +91,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
       {
         mediaUrl: `${serverUrl}/small.jpg`,
       },
-      context,
+      context
     );
 
     expect(createMediaArticleResult.errors).toBeUndefined();
@@ -110,43 +110,43 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
 
     expect(getArticleResult.errors).toBeUndefined();
     expect(
-      getArticleResult.data.GetArticle.attachmentHash,
+      getArticleResult.data.GetArticle.attachmentHash
     ).toMatchInlineSnapshot(
-      `"image.vDph4g.__-AD6SDgAebG8cbwifBB-Dj0yPjo8ETgAOAA4P_8_8"`,
+      `"image.vDph4g.__-AD6SDgAebG8cbwifBB-Dj0yPjo8ETgAOAA4P_8_8"`
     );
-    expect(typeof getArticleResult.data.GetArticle.originalUrl).toBe("string");
+    expect(typeof getArticleResult.data.GetArticle.originalUrl).toBe('string');
 
     // Test can fetch thumbnail meta data
     let resp;
     while (
       !resp ||
-      resp.headers.get("Content-Type").startsWith("application/xml") // GCS returns XML for error
+      resp.headers.get('Content-Type').startsWith('application/xml') // GCS returns XML for error
     ) {
       resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl);
       await delayForMs(1000); // Wait for upload to finish
     }
 
-    expect(resp.headers.get("Content-Type")).toMatchInlineSnapshot(
-      `"image/jpeg"`,
+    expect(resp.headers.get('Content-Type')).toMatchInlineSnapshot(
+      `"image/jpeg"`
     );
-    expect(resp.headers.get("Content-Length")).toMatchInlineSnapshot(`"8196"`);
+    expect(resp.headers.get('Content-Length')).toMatchInlineSnapshot(`"8196"`);
 
     await delayForMs(1000); // Wait for setMetadata operation to finish
 
     // Expect metadata being set
     resp = await fetch(getArticleResult.data.GetArticle.thumbnailUrl); // Fetch again for latest header
-    expect(resp.headers.get("Cache-Control")).toMatchInlineSnapshot(
-      `"public, max-age=31536000, immutable"`,
+    expect(resp.headers.get('Cache-Control')).toMatchInlineSnapshot(
+      `"public, max-age=31536000, immutable"`
     );
 
     // Cleanup
     await client.delete({
-      index: "articles",
+      index: 'articles',
       id: articleId,
     });
 
     await client.delete({
-      index: "replyrequests",
+      index: 'replyrequests',
       id: getReplyRequestId({
         articleId,
         userId: context.user.id,
@@ -155,10 +155,10 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     });
   }, 15000);
 
-  it("can replace media for article", async () => {
+  it('can replace media for article', async () => {
     // Simulates user login
     const context = {
-      user: { id: "foo", appId: "WEBSITE" },
+      user: { id: 'foo', appId: 'WEBSITE' },
     };
 
     const createMediaArticleResult = await gql`
@@ -175,7 +175,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
       {
         mediaUrl: `${serverUrl}/small.jpg`,
       },
-      context,
+      context
     );
 
     const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
@@ -193,7 +193,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
       let resp;
       while (
         !resp ||
-        resp.headers.get("Content-Type").startsWith("application/xml") // GCS returns XML for error
+        resp.headers.get('Content-Type').startsWith('application/xml') // GCS returns XML for error
       ) {
         resp = await fetch(articleBeforeReplace.data.GetArticle.thumbnailUrl);
         await delayForMs(1000); // Wait for upload to finish
@@ -214,19 +214,19 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     `({ articleId }, context);
 
     expect(
-      articleAfterReplace.data.GetArticle.attachmentHash,
+      articleAfterReplace.data.GetArticle.attachmentHash
     ).toMatchInlineSnapshot(
-      `"image.vDjh4g.__-AD6SDgAeTEcED___AA_Ej8y_Dg8EDgAOAA4P_8_8"`,
+      `"image.vDjh4g.__-AD6SDgAeTEcED___AA_Ej8y_Dg8EDgAOAA4P_8_8"`
     );
 
     // Cleanup
     await client.delete({
-      index: "articles",
+      index: 'articles',
       id: articleId,
     });
 
     await client.delete({
-      index: "replyrequests",
+      index: 'replyrequests',
       id: getReplyRequestId({
         articleId,
         userId: context.user.id,
