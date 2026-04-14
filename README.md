@@ -29,7 +29,7 @@ $ docker-compose run --rm --entrypoint="npm i" api
 ```
 
 #### OAuth2
-If you want to test OAuth2 authentication, you will need to fill in login credentials in `.env`. Please apply for the keys in Facebook, Twitter and Github respectively.
+If you want to test OAuth2 authentication, you will need to fill in login credentials in `.env`. Please apply for the keys in Facebook, Github and Google respectively.
 
 #### Media
 Cofacts API uses Google cloud storage to store user reported media files (image, audio, video files).

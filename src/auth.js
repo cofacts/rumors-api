@@ -1,7 +1,6 @@
 import passport from 'koa-passport';
 import client, { processMeta, getTotalCount } from 'util/client';
 import FacebookStrategy from 'passport-facebook';
-import TwitterStrategy from 'passport-twitter';
 import GithubStrategy from 'passport-github2';
 import GoogleStrategy from 'passport-google-oauth20';
 import InstagramStrategy from 'passport-instagram-graph';
@@ -32,7 +31,7 @@ passport.deserializeUser((userId, done) => {
  * If still not applicable, create a user with currently given profile.
  *
  * @param {object} profile - passport profile object
- * @param {'facebookId'|'githubId'|'twitterId'|'googleId'|'instagramId'} fieldName - The elasticsearch ID field name in user document
+ * @param {'facebookId'|'githubId'|'googleId'|'instagramId'} fieldName - The elasticsearch ID field name in user document
  */
 export async function verifyProfile(profile, fieldName) {
   // Find user with such user id
@@ -125,26 +124,6 @@ if (process.env.FACEBOOK_APP_ID) {
   );
 }
 
-if (process.env.TWITTER_CONSUMER_KEY) {
-  passport.use(
-    new TwitterStrategy(
-      {
-        consumerKey: process.env.TWITTER_CONSUMER_KEY,
-        consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-        callbackURL: process.env.TWITTER_CALLBACK_URL,
-
-        // https://github.com/jaredhanson/passport-twitter/issues/67#issuecomment-275288663
-        userProfileURL:
-          'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
-      },
-      (token, tokenSecret, profile, done) =>
-        verifyProfile(profile, 'twitterId')
-          .then((user) => done(null, user))
-          .catch(done)
-    )
-  );
-}
-
 if (process.env.GITHUB_CLIENT_ID) {
   passport.use(
     new GithubStrategy(
@@ -215,7 +194,6 @@ export const loginRouter = Router()
     return next();
   })
   .get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
-  .get('/twitter', passport.authenticate('twitter'))
   .get('/github', passport.authenticate('github', { scope: ['user:email'] }))
   .get('/google', passport.authenticate('google', { scope: ['profile email'] }))
   .get(
@@ -278,7 +256,6 @@ export const authRouter = Router()
     ctx.session.redirect = undefined;
   })
   .get('/facebook', handlePassportCallback('facebook'))
-  .get('/twitter', handlePassportCallback('twitter'))
   .get('/github', handlePassportCallback('github'))
   .get('/google', handlePassportCallback('google'))
   .get('/instagram', handlePassportCallback('instagram'));

@@ -60,7 +60,6 @@
     "passport-github2": "^0.1.10",
     "passport-google-oauth20": "^2.0.0",
     "passport-instagram-graph": "^1.0.1",
-    "passport-twitter": "^1.0.4",
     "pino": "^7.11.0",
     "pm2": "^4.0.0",
     "prosemirror-schema-basic": "^1.2.2",

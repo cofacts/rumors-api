@@ -23,13 +23,13 @@ describe('verifyProfile', () => {
 
   it('authenticates user via same email of existing user; also updates profile ID', async () => {
     const passportProfile = {
-      provider: 'twitter',
-      id: 'secret-twitter-id',
+      provider: 'github',
+      id: 'secret-github-id',
       emails: [{ type: 'office', value: 'secret@secret.com' }],
     };
 
     MockDate.set(FIXED_DATE);
-    expect(await verifyProfile(passportProfile, 'twitterId')).toMatchSnapshot();
+    expect(await verifyProfile(passportProfile, 'githubId')).toMatchSnapshot();
     MockDate.reset();
   });
 
