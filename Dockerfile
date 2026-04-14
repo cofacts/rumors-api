@@ -3,18 +3,21 @@
 FROM node:24-alpine AS builder
 WORKDIR /srv/www
 
+# Install bun for faster dependency installation
+RUN npm i -g bun
+
 # make node_modules cached.
 # Src: https://nodesource.com/blog/8-protips-to-start-killing-it-when-dockerizing-node-js/
 #
-COPY package.json package-lock.json ./
-RUN npm install
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 
 # Other files, so that other files do not interfere with node_modules cache
 #
 COPY . .
 
 RUN node_modules/.bin/babel src -d build --extensions ".ts,.js" --ignore "**/__tests__/**,**/__fixtures__/**"
-RUN npm prune --production
+RUN bun install --frozen-lockfile --production
 
 #########################################
 FROM node:24-alpine
@@ -28,5 +31,5 @@ COPY --from=builder /srv/www/build ./build
 COPY src/jade ./build/jade
 COPY src/adm/README.md ./build/adm/README.md
 COPY src/util/protobuf ./build/util/protobuf
-COPY package.json package-lock.json ecosystem.config.js ./
+COPY package.json ecosystem.config.js ./
 COPY static ./static
