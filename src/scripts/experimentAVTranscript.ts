@@ -116,7 +116,7 @@ function levenshteinDistance(str1: string, str2: string): number {
 
 /* istanbul ignore if */
 if (require.main === module) {
-  const argv = yargs
+  const argv = yargs(process.argv.slice(2))
     .options({
       datasetName: {
         description: 'Name of the Langfuse dataset to use',
