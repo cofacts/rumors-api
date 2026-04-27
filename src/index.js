@@ -17,6 +17,7 @@ import contextFactory from './contextFactory';
 
 import CookieStore from './CookieStore';
 import { loginRouter, authRouter } from './auth';
+import tokenRoute from './tokenRoute';
 import jwksRoute from './jwksRoute';
 import rollbar from './rollbarInstance';
 import { AUTH_ERROR_MSG } from './util/user';
@@ -72,6 +73,9 @@ router.use('/login', loginRouter.routes(), loginRouter.allowedMethods());
 router.use('/callback', authRouter.routes(), authRouter.allowedMethods());
 
 router.get('/.well-known/jwks.json', jwksRoute);
+
+router.options('/auth/token', checkHeaders());
+router.post('/auth/token', checkHeaders(), tokenRoute);
 
 router.options('/logout', checkHeaders());
 router.post('/logout', checkHeaders(), (ctx) => {
