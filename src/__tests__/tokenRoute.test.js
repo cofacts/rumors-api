@@ -101,14 +101,26 @@ describe('tokenRoute', () => {
 
   it('does not swallow signLongLivedJWT errors as 401 (sign failure surfaces, not masked)', async () => {
     const code = await signShortLivedJWT('user-sign-fail');
-    const jwtModule = await import('../lib/jwt');
-    const spy = jest
-      .spyOn(jwtModule, 'signLongLivedJWT')
-      .mockRejectedValueOnce(new Error('KMS unavailable'));
+
+    let tokenRouteWithFailingSign;
+    jest.isolateModules(() => {
+      jest.doMock('../lib/jwt', () => {
+        const actual = jest.requireActual('../lib/jwt');
+        return {
+          ...actual,
+          signLongLivedJWT: jest
+            .fn()
+            .mockRejectedValue(new Error('KMS unavailable')),
+        };
+      });
+      const mod = require('../tokenRoute');
+      tokenRouteWithFailingSign = mod.default ?? mod;
+    });
 
     const ctx = { request: { body: { code } }, status: undefined, body: null };
-    await expect(tokenRoute(ctx)).rejects.toThrow('KMS unavailable');
+    await expect(tokenRouteWithFailingSign(ctx)).rejects.toThrow(
+      'KMS unavailable'
+    );
     expect(ctx.status).not.toBe(401);
-    spy.mockRestore();
   });
 });
