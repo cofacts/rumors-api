@@ -9,13 +9,16 @@ export default async function tokenRoute(ctx) {
     return;
   }
 
+  let payload;
   try {
-    const payload = await verifyJWT(code, { expectedUse: TOKEN_USE_AUTH_CODE });
-    const userId = payload.sub;
-    const token = await signLongLivedJWT(userId);
-    ctx.body = { token };
+    payload = await verifyJWT(code, { expectedUse: TOKEN_USE_AUTH_CODE });
   } catch (err) {
     ctx.status = 401;
     ctx.body = { error: 'Invalid or expired code' };
+    return;
   }
+
+  const userId = payload.sub;
+  const token = await signLongLivedJWT(userId);
+  ctx.body = { token };
 }

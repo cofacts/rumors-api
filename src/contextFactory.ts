@@ -36,7 +36,11 @@ export default async function contextFactory({ ctx }: ContextFactoryArgs) {
     }
   }
 
-  const userId = queryUserId ?? bearerUserId ?? sessionUserId;
+  // A verified Bearer token represents a cryptographically proven identity and
+  // must override `?userId=` (which is only trusted under the legacy
+  // App-Secret + appId flow). Otherwise a caller with any valid Bearer token
+  // could impersonate other users by appending `?userId=…` to the request.
+  const userId = bearerUserId ?? queryUserId ?? sessionUserId;
 
   let currentUser = null;
   if (appId && userId) {

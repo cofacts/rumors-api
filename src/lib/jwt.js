@@ -79,9 +79,7 @@ export async function signShortLivedJWT(userId) {
 }
 
 export async function signLongLivedJWT(userId) {
-  const cookieMaxAgeMs = process.env.COOKIE_MAXAGE
-    ? Number(process.env.COOKIE_MAXAGE)
-    : 1209600000;
+  const cookieMaxAgeMs = parseInt(process.env.COOKIE_MAXAGE, 10) || 1209600000;
   const cookieMaxAgeSec = Math.floor(cookieMaxAgeMs / 1000);
 
   const privateKey = await getPrivateKey();

@@ -8,16 +8,11 @@ import InstagramStrategy from 'passport-instagram-graph';
 import Router from 'koa-router';
 import { signShortLivedJWT } from './lib/jwt';
 
-let allowedCallbackUrls = null;
-const getAllowedCallbackUrls = () => {
-  if (!allowedCallbackUrls) {
-    allowedCallbackUrls = (process.env.ALLOWED_CALLBACK_URLS || '')
-      .split(',')
-      .map((u) => u.trim())
-      .filter(Boolean);
-  }
-  return allowedCallbackUrls;
-};
+const getAllowedCallbackUrls = () =>
+  (process.env.ALLOWED_CALLBACK_URLS || '')
+    .split(',')
+    .map((u) => u.trim())
+    .filter(Boolean);
 
 /**
  * Serialize to session
@@ -295,6 +290,14 @@ export const authRouter = Router()
 
     if (ctx.session.redirectTo) {
       const userId = ctx.state.user?.userId;
+      if (!userId) {
+        const err = new Error(
+          'Authenticated user has no id; cannot mint authorization code'
+        );
+        err.status = 401;
+        err.expose = true;
+        throw err;
+      }
       const code = await signShortLivedJWT(userId);
       const redirectUrl = new URL(ctx.session.redirectTo);
       redirectUrl.searchParams.set('code', code);
