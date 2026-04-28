@@ -111,24 +111,35 @@ describe('contextFactory Bearer auth', () => {
     );
   });
 
-  it('queryUserId has highest priority: uses queryUserId over Bearer and session', async () => {
+  it('Bearer takes precedence over queryUserId: rejects impersonation via ?userId=', async () => {
     const token = await signLongLivedJWT('bearer-user');
     const ctx = {
       appId: 'RUMORS_SITE',
-      query: { userId: 'query-user' },
+      query: { userId: 'victim-user' },
       state: { user: { userId: 'session-user' } },
       request: { headers: { authorization: `Bearer ${token}` } },
       get: jest.fn().mockReturnValue(''),
     };
     await contextFactory({ ctx });
     expect(createOrUpdateUser).toHaveBeenCalledWith(
-      expect.objectContaining({ userId: 'query-user' })
-    );
-    expect(createOrUpdateUser).not.toHaveBeenCalledWith(
       expect.objectContaining({ userId: 'bearer-user' })
     );
     expect(createOrUpdateUser).not.toHaveBeenCalledWith(
-      expect.objectContaining({ userId: 'session-user' })
+      expect.objectContaining({ userId: 'victim-user' })
+    );
+  });
+
+  it('queryUserId still works without Bearer (legacy App-Secret flow)', async () => {
+    const ctx = {
+      appId: 'RUMORS_SITE',
+      query: { userId: 'query-user' },
+      state: { user: { userId: 'session-user' } },
+      request: { headers: {} },
+      get: jest.fn().mockReturnValue(''),
+    };
+    await contextFactory({ ctx });
+    expect(createOrUpdateUser).toHaveBeenCalledWith(
+      expect.objectContaining({ userId: 'query-user' })
     );
   });
 

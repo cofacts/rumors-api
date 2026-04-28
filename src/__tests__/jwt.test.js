@@ -85,6 +85,38 @@ describe('signLongLivedJWT', () => {
     const payload = await verifyJWT(token);
     expect(payload.token_use).toBe('access');
   });
+
+  it('falls back to default 14d expiry when COOKIE_MAXAGE is not a number', async () => {
+    const original = process.env.COOKIE_MAXAGE;
+    process.env.COOKIE_MAXAGE = 'not-a-number';
+    try {
+      jest.resetModules();
+      const jwtModule = await import('../lib/jwt.js');
+      const token = await jwtModule.signLongLivedJWT('user-bad-maxage');
+      const payload = await jwtModule.verifyJWT(token);
+      expect(payload.exp - payload.iat).toBe(1209600);
+    } finally {
+      if (original === undefined) delete process.env.COOKIE_MAXAGE;
+      else process.env.COOKIE_MAXAGE = original;
+      jest.resetModules();
+    }
+  });
+
+  it('honors COOKIE_MAXAGE when it parses to a positive integer', async () => {
+    const original = process.env.COOKIE_MAXAGE;
+    process.env.COOKIE_MAXAGE = '60000';
+    try {
+      jest.resetModules();
+      const jwtModule = await import('../lib/jwt.js');
+      const token = await jwtModule.signLongLivedJWT('user-custom-maxage');
+      const payload = await jwtModule.verifyJWT(token);
+      expect(payload.exp - payload.iat).toBe(60);
+    } finally {
+      if (original === undefined) delete process.env.COOKIE_MAXAGE;
+      else process.env.COOKIE_MAXAGE = original;
+      jest.resetModules();
+    }
+  });
 });
 
 describe('verifyJWT', () => {

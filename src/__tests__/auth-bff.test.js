@@ -204,4 +204,21 @@ describe('authRouter middleware', () => {
     });
     expect(next).not.toHaveBeenCalled();
   });
+
+  it('throws 401 when authenticated user object has no id (does not mint JWT with undefined sub)', async () => {
+    const ctx = makeCtx({
+      session: {
+        redirectTo: 'https://cofacts.ai/callback',
+        state: 'some-state',
+      },
+      state: { user: {} },
+    });
+
+    const next = jest.fn().mockResolvedValue(undefined);
+
+    await expect(authMiddleware(ctx, next)).rejects.toMatchObject({
+      status: 401,
+    });
+    expect(ctx.redirect).not.toHaveBeenCalled();
+  });
 });
