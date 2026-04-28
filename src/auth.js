@@ -241,7 +241,7 @@ export const loginRouter = Router()
       }
     } else {
       const err = new Error(
-        '`redirect` must present in query string and start with `/`'
+        'Either `redirect_to` (BFF flow) or `redirect` (legacy, must start with `/`) is required'
       );
       err.status = 400;
       err.expose = true;
