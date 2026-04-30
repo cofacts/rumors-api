@@ -69,6 +69,48 @@ describe('loginRouter middleware', () => {
     expect(next).not.toHaveBeenCalled();
   });
 
+  it('accepts redirect_to matching ALLOWED_CALLBACK_PATTERN', async () => {
+    const prev = process.env.ALLOWED_CALLBACK_PATTERN;
+    process.env.ALLOWED_CALLBACK_PATTERN =
+      'https://pr-\\d+---cofacts-ai-sgnrxas52q-de\\.a\\.run\\.app/api/auth/callback';
+
+    const next = jest.fn().mockResolvedValue(undefined);
+    const ctx = makeCtx({
+      query: {
+        redirect_to:
+          'https://pr-99---cofacts-ai-sgnrxas52q-de.a.run.app/api/auth/callback',
+        state: 'st',
+      },
+    });
+
+    await loginMiddleware(ctx, next);
+
+    expect(ctx.session.redirectTo).toBe(
+      'https://pr-99---cofacts-ai-sgnrxas52q-de.a.run.app/api/auth/callback'
+    );
+    expect(next).toHaveBeenCalledTimes(1);
+    process.env.ALLOWED_CALLBACK_PATTERN = prev;
+  });
+
+  it('throws 400 when redirect_to does not match ALLOWED_CALLBACK_PATTERN', async () => {
+    const prev = process.env.ALLOWED_CALLBACK_PATTERN;
+    process.env.ALLOWED_CALLBACK_PATTERN =
+      'https://pr-\\d+---cofacts-ai-sgnrxas52q-de\\.a\\.run\\.app/api/auth/callback';
+
+    const next = jest.fn();
+    const ctx = makeCtx({
+      query: {
+        redirect_to: 'https://evil.com/api/auth/callback',
+      },
+    });
+
+    await expect(
+      Promise.resolve().then(() => loginMiddleware(ctx, next))
+    ).rejects.toMatchObject({ status: 400 });
+    expect(next).not.toHaveBeenCalled();
+    process.env.ALLOWED_CALLBACK_PATTERN = prev;
+  });
+
   it('proceeds (state optional) when redirect_to is valid but state is absent', async () => {
     const next = jest.fn().mockResolvedValue(undefined);
     const ctx = makeCtx({

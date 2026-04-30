@@ -14,6 +14,13 @@ const getAllowedCallbackUrls = () =>
     .map((u) => u.trim())
     .filter(Boolean);
 
+const isAllowedCallbackUrl = (url) => {
+  if (getAllowedCallbackUrls().includes(url)) return true;
+  const pattern = process.env.ALLOWED_CALLBACK_PATTERN;
+  if (pattern) return new RegExp(`^${pattern}$`).test(url);
+  return false;
+};
+
 /**
  * Serialize to session
  */
@@ -209,7 +216,7 @@ export const loginRouter = Router()
     // Memorize redirect in session
     //
     if (ctx.query.redirect_to) {
-      if (!getAllowedCallbackUrls().includes(ctx.query.redirect_to)) {
+      if (!isAllowedCallbackUrl(ctx.query.redirect_to)) {
         const err = new Error(
           '`redirect_to` is not in the allowed callback URLs'
         );
