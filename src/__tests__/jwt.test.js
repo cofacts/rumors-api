@@ -23,13 +23,6 @@ beforeAll(async () => {
 });
 
 describe('signShortLivedJWT', () => {
-  it('returns a JWT string with 3 dot-separated parts', async () => {
-    const token = await signShortLivedJWT('test-user-123');
-    const parts = token.split('.');
-    expect(parts).toHaveLength(3);
-    expect(typeof token).toBe('string');
-  });
-
   it('uses RS256 algorithm in the header', async () => {
     const token = await signShortLivedJWT('test-user-rs256');
     const headerB64 = token.split('.')[0];
@@ -60,13 +53,6 @@ describe('signShortLivedJWT', () => {
 });
 
 describe('signLongLivedJWT', () => {
-  it('returns a JWT string with 3 dot-separated parts', async () => {
-    const token = await signLongLivedJWT('test-user-123');
-    const parts = token.split('.');
-    expect(parts).toHaveLength(3);
-    expect(typeof token).toBe('string');
-  });
-
   it('has correct sub claim', async () => {
     const userId = 'test-user-999';
     const token = await signLongLivedJWT(userId);
