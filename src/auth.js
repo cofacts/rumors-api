@@ -6,6 +6,20 @@ import GithubStrategy from 'passport-github2';
 import GoogleStrategy from 'passport-google-oauth20';
 import InstagramStrategy from 'passport-instagram-graph';
 import Router from 'koa-router';
+import { signShortLivedJWT } from './lib/jwt';
+
+const getAllowedCallbackUrls = () =>
+  (process.env.ALLOWED_CALLBACK_URLS || '')
+    .split(',')
+    .map((u) => u.trim())
+    .filter(Boolean);
+
+const isAllowedCallbackUrl = (url) => {
+  if (getAllowedCallbackUrls().includes(url)) return true;
+  const pattern = process.env.ALLOWED_CALLBACK_PATTERN;
+  if (pattern) return new RegExp(`^${pattern}$`).test(url);
+  return false;
+};
 
 /**
  * Serialize to session
@@ -201,17 +215,45 @@ export const loginRouter = Router()
   .use((ctx, next) => {
     // Memorize redirect in session
     //
-    if (!ctx.query.redirect || !ctx.query.redirect.startsWith('/')) {
+    if (ctx.query.redirect_to) {
+      if (!isAllowedCallbackUrl(ctx.query.redirect_to)) {
+        const err = new Error(
+          '`redirect_to` is not in the allowed callback URLs'
+        );
+        err.status = 400;
+        err.expose = true;
+        throw err;
+      }
+      ctx.session.redirectTo = ctx.query.redirect_to;
+      ctx.session.state = ctx.query.state;
+      ctx.session.appId = ctx.query.appId || 'RUMORS_SITE';
+    } else if (ctx.query.redirect) {
+      if (!ctx.query.redirect.startsWith('/')) {
+        const err = new Error(
+          '`redirect` must present in query string and start with `/`'
+        );
+        err.status = 400;
+        err.expose = true;
+        throw err;
+      }
+      ctx.session.appId = ctx.query.appId || 'RUMORS_SITE';
+      ctx.session.redirect = ctx.query.redirect;
+      const referer = ctx.get('Referer');
+      if (referer) {
+        try {
+          ctx.session.origin = new URL(referer).origin;
+        } catch (e) {
+          // Ignore invalid Referer
+        }
+      }
+    } else {
       const err = new Error(
-        '`redirect` must present in query string and start with `/`'
+        'Either `redirect_to` (BFF flow) or `redirect` (legacy, must start with `/`) is required'
       );
       err.status = 400;
       err.expose = true;
       throw err;
     }
-    ctx.session.appId = ctx.query.appId || 'RUMORS_SITE';
-    ctx.session.redirect = ctx.query.redirect;
-    ctx.session.origin = new URL(ctx.get('Referer')).origin;
     return next();
   })
   .get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
@@ -239,7 +281,10 @@ export const authRouter = Router()
   .use(async (ctx, next) => {
     // Perform redirect after login
     //
-    if (!ctx.session.redirect || !ctx.session.appId) {
+    if (
+      (!ctx.session.redirect || !ctx.session.appId) &&
+      !ctx.session.redirectTo
+    ) {
       const err = new Error(
         '`appId` and `redirect` must be set before. Did you forget to go to /login/*?'
       );
@@ -250,32 +295,57 @@ export const authRouter = Router()
 
     await next();
 
-    let basePath = '';
-    if (
-      ctx.session.appId === 'RUMORS_SITE' ||
-      ctx.session.appId === 'DEVELOPMENT_FRONTEND'
-    ) {
-      const validOrigins = (
-        process.env.RUMORS_SITE_REDIRECT_ORIGIN || ''
-      ).split(',');
+    if (ctx.session.redirectTo) {
+      const userId = ctx.state.user?.userId;
+      if (!userId) {
+        const err = new Error(
+          'Authenticated user has no id; cannot mint authorization code'
+        );
+        err.status = 401;
+        err.expose = true;
+        throw err;
+      }
+      const code = await signShortLivedJWT(userId);
+      const redirectUrl = new URL(ctx.session.redirectTo);
+      redirectUrl.searchParams.set('code', code);
+      if (ctx.session.state) {
+        redirectUrl.searchParams.set('state', ctx.session.state);
+      }
+      ctx.redirect(redirectUrl.href);
+      // eslint-disable-next-line require-atomic-updates
+      ctx.session.redirectTo = undefined;
+      // eslint-disable-next-line require-atomic-updates
+      ctx.session.state = undefined;
+      // eslint-disable-next-line require-atomic-updates
+      ctx.session.appId = undefined;
+    } else {
+      let basePath = '';
+      if (
+        ctx.session.appId === 'RUMORS_SITE' ||
+        ctx.session.appId === 'DEVELOPMENT_FRONTEND'
+      ) {
+        const validOrigins = (
+          process.env.RUMORS_SITE_REDIRECT_ORIGIN || ''
+        ).split(',');
 
-      basePath =
-        validOrigins.find((o) => o === ctx.session.origin) || validOrigins[0];
+        basePath =
+          validOrigins.find((o) => o === ctx.session.origin) || validOrigins[0];
+      }
+
+      // TODO: Get basePath from DB for other client apps
+      try {
+        ctx.redirect(new URL(ctx.session.redirect, basePath).href);
+      } catch (err) {
+        err.status = 400;
+        err.expose = true;
+        throw err;
+      }
+
+      // eslint-disable-next-line require-atomic-updates
+      ctx.session.appId = undefined;
+      // eslint-disable-next-line require-atomic-updates
+      ctx.session.redirect = undefined;
     }
-
-    // TODO: Get basePath from DB for other client apps
-    try {
-      ctx.redirect(new URL(ctx.session.redirect, basePath).href);
-    } catch (err) {
-      err.status = 400;
-      err.expose = true;
-      throw err;
-    }
-
-    // eslint-disable-next-line require-atomic-updates
-    ctx.session.appId = undefined;
-    // eslint-disable-next-line require-atomic-updates
-    ctx.session.redirect = undefined;
   })
   .get('/facebook', handlePassportCallback('facebook'))
   .get('/twitter', handlePassportCallback('twitter'))
