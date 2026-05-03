@@ -15,8 +15,21 @@ jest.mock('util/client', () => ({
   getTotalCount: jest.fn(),
 }));
 
+// Mock passport so provider route tests can assert the options passed to
+// passport.authenticate() without triggering a real OAuth round-trip.
+jest.mock('koa-passport', () => {
+  const passportMock = {
+    authenticate: jest.fn(() => jest.fn()),
+    serializeUser: jest.fn(),
+    deserializeUser: jest.fn(),
+    use: jest.fn(),
+  };
+  return { default: passportMock, ...passportMock };
+});
+
 import { loginRouter, authRouter } from '../auth';
 import { verifyJWT } from '../lib/jwt';
+import passport from 'koa-passport';
 
 function makeCtx(overrides = {}) {
   return {
@@ -26,8 +39,13 @@ function makeCtx(overrides = {}) {
     redirect: jest.fn(),
     request: { headers: {} },
     get: jest.fn(() => ''),
+    secure: false,
     ...overrides,
   };
+}
+
+function encodeBffState({ r, s = '' }) {
+  return Buffer.from(JSON.stringify({ r, s })).toString('base64url');
 }
 
 describe('loginRouter middleware', () => {
@@ -37,7 +55,7 @@ describe('loginRouter middleware', () => {
     loginMiddleware = loginRouter.stack[0].stack[0];
   });
 
-  it('stores redirectTo + state in session when redirect_to is in ALLOWED_CALLBACK_URLS', async () => {
+  it('stores bffInfo in ctx.state (not session) when redirect_to is in ALLOWED_CALLBACK_URLS', async () => {
     const next = jest.fn().mockResolvedValue(undefined);
     const ctx = makeCtx({
       query: {
@@ -48,8 +66,13 @@ describe('loginRouter middleware', () => {
 
     await loginMiddleware(ctx, next);
 
-    expect(ctx.session.redirectTo).toBe('https://cofacts.ai/callback');
-    expect(ctx.session.state).toBe('my-state-123');
+    expect(ctx.state.bffInfo).toEqual({
+      r: 'https://cofacts.ai/callback',
+      s: 'my-state-123',
+    });
+    // Must NOT touch legacy session
+    expect(ctx.session.redirectTo).toBeUndefined();
+    expect(ctx.session.state).toBeUndefined();
     expect(next).toHaveBeenCalledTimes(1);
   });
 
@@ -85,9 +108,10 @@ describe('loginRouter middleware', () => {
 
     await loginMiddleware(ctx, next);
 
-    expect(ctx.session.redirectTo).toBe(
+    expect(ctx.state.bffInfo.r).toBe(
       'https://pr-99---cofacts-ai-sgnrxas52q-de.a.run.app/api/auth/callback'
     );
+    expect(ctx.session.redirectTo).toBeUndefined();
     expect(next).toHaveBeenCalledTimes(1);
     process.env.ALLOWED_CALLBACK_PATTERN = prev;
   });
@@ -111,7 +135,7 @@ describe('loginRouter middleware', () => {
     process.env.ALLOWED_CALLBACK_PATTERN = prev;
   });
 
-  it('proceeds (state optional) when redirect_to is valid but state is absent', async () => {
+  it('sets bffInfo.s to empty string when state is absent', async () => {
     const next = jest.fn().mockResolvedValue(undefined);
     const ctx = makeCtx({
       query: {
@@ -121,8 +145,9 @@ describe('loginRouter middleware', () => {
 
     await loginMiddleware(ctx, next);
 
-    expect(ctx.session.redirectTo).toBe('http://localhost:3000/callback');
-    expect(ctx.session.state).toBeUndefined();
+    expect(ctx.state.bffInfo.r).toBe('http://localhost:3000/callback');
+    expect(ctx.state.bffInfo.s).toBe('');
+    expect(ctx.session.redirectTo).toBeUndefined();
     expect(next).toHaveBeenCalledTimes(1);
   });
 
@@ -140,6 +165,7 @@ describe('loginRouter middleware', () => {
 
     expect(ctx.session.redirect).toBe('/some-path');
     expect(ctx.session.appId).toBe('TEST_APP');
+    expect(ctx.state.bffInfo).toBeUndefined();
     expect(next).toHaveBeenCalledTimes(1);
   });
 
@@ -165,14 +191,16 @@ describe('authRouter middleware', () => {
 
   it('redirects to redirectTo with code and state after passport callback', async () => {
     const userId = 'user-abc-123';
-    const state = 'oauth-state-xyz';
+    const clientState = 'oauth-state-xyz';
 
     const ctx = makeCtx({
-      session: {
-        redirectTo: 'https://cofacts.ai/callback',
-        state,
+      query: {
+        state: encodeBffState({
+          r: 'https://cofacts.ai/callback',
+          s: clientState,
+        }),
       },
-      state: { user: { userId } },
+      state: { user: { id: userId } },
     });
 
     const next = jest.fn().mockResolvedValue(undefined);
@@ -183,7 +211,7 @@ describe('authRouter middleware', () => {
     const redirectedUrl = ctx.redirect.mock.calls[0][0];
     const url = new URL(redirectedUrl);
     expect(url.origin + url.pathname).toBe('https://cofacts.ai/callback');
-    expect(url.searchParams.get('state')).toBe(state);
+    expect(url.searchParams.get('state')).toBe(clientState);
     expect(url.searchParams.get('code')).toBeTruthy();
   });
 
@@ -191,11 +219,13 @@ describe('authRouter middleware', () => {
     const userId = 'user-jwt-test-456';
 
     const ctx = makeCtx({
-      session: {
-        redirectTo: 'https://cofacts.ai/callback',
-        state: 'some-state',
+      query: {
+        state: encodeBffState({
+          r: 'https://cofacts.ai/callback',
+          s: 'some-state',
+        }),
       },
-      state: { user: { userId } },
+      state: { user: { id: userId } },
     });
 
     const next = jest.fn().mockResolvedValue(undefined);
@@ -214,29 +244,31 @@ describe('authRouter middleware', () => {
     expect(ttl).toBeLessThanOrEqual(62);
   });
 
-  it('clears session.redirectTo and session.state after redirect', async () => {
+  it('does not mutate legacy session fields during BFF redirect', async () => {
     const ctx = makeCtx({
-      session: {
-        redirectTo: 'https://cofacts.ai/callback',
-        state: 'state-to-clear',
-        appId: 'SOME_APP',
+      query: {
+        state: encodeBffState({ r: 'https://cofacts.ai/callback', s: 'st' }),
       },
-      state: { user: { userId: 'user-clear-test' } },
+      session: {
+        appId: 'RUMORS_SITE',
+        redirect: '/existing-legacy-redirect',
+      },
+      state: { user: { id: 'user-isolation-test' } },
     });
 
     const next = jest.fn().mockResolvedValue(undefined);
 
     await authMiddleware(ctx, next);
 
-    expect(ctx.session.redirectTo).toBeUndefined();
-    expect(ctx.session.state).toBeUndefined();
-    expect(ctx.session.appId).toBeUndefined();
+    // Legacy session must be left completely intact
+    expect(ctx.session.appId).toBe('RUMORS_SITE');
+    expect(ctx.session.redirect).toBe('/existing-legacy-redirect');
   });
 
-  it('throws 400 when neither session.redirect+appId nor session.redirectTo is set', async () => {
+  it('throws 400 when neither BFF state nor legacy session fields are set', async () => {
     const ctx = makeCtx({
       session: {},
-      state: { user: { userId: 'user-no-session' } },
+      state: { user: { id: 'user-no-session' } },
     });
 
     const next = jest.fn();
@@ -249,9 +281,8 @@ describe('authRouter middleware', () => {
 
   it('throws 401 when authenticated user object has no id (does not mint JWT with undefined sub)', async () => {
     const ctx = makeCtx({
-      session: {
-        redirectTo: 'https://cofacts.ai/callback',
-        state: 'some-state',
+      query: {
+        state: encodeBffState({ r: 'https://cofacts.ai/callback' }),
       },
       state: { user: {} },
     });
@@ -263,4 +294,52 @@ describe('authRouter middleware', () => {
     });
     expect(ctx.redirect).not.toHaveBeenCalled();
   });
+});
+
+describe('loginRouter provider routes — BFF composite state forwarding', () => {
+  // loginRouter stack: [0] use-middleware, [1] facebook, [2] twitter,
+  //                    [3] github, [4] google, [5] instagram
+  const PROVIDERS = [
+    { name: 'facebook', stackIndex: 1 },
+    { name: 'github', stackIndex: 3 },
+    { name: 'google', stackIndex: 4 },
+  ];
+
+  beforeEach(() => {
+    passport.authenticate.mockClear();
+    // Return a no-op middleware so the route handler doesn't throw
+    passport.authenticate.mockReturnValue(jest.fn());
+  });
+
+  for (const { name, stackIndex } of PROVIDERS) {
+    it(`${name}: passes encoded BFF state to passport.authenticate when ctx.state.bffInfo is set`, async () => {
+      const bffInfo = {
+        r: 'https://cofacts.ai/callback',
+        s: 'client-state',
+      };
+      const ctx = makeCtx({ state: { bffInfo } });
+      const next = jest.fn();
+
+      const routeHandler = loginRouter.stack[stackIndex].stack[0];
+      await routeHandler(ctx, next);
+
+      expect(passport.authenticate).toHaveBeenCalledTimes(1);
+      const [, options] = passport.authenticate.mock.calls[0];
+      expect(options.state).toBe(
+        Buffer.from(JSON.stringify(bffInfo)).toString('base64url')
+      );
+    });
+
+    it(`${name}: omits state option when ctx.state.bffInfo is absent (legacy flow)`, async () => {
+      const ctx = makeCtx({ state: {} });
+      const next = jest.fn();
+
+      const routeHandler = loginRouter.stack[stackIndex].stack[0];
+      await routeHandler(ctx, next);
+
+      expect(passport.authenticate).toHaveBeenCalledTimes(1);
+      const [, options] = passport.authenticate.mock.calls[0];
+      expect(options.state).toBeUndefined();
+    });
+  }
 });
