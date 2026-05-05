@@ -6,6 +6,68 @@ import GithubStrategy from 'passport-github2';
 import GoogleStrategy from 'passport-google-oauth20';
 import InstagramStrategy from 'passport-instagram-graph';
 import Router from 'koa-router';
+import { signShortLivedJWT } from './lib/jwt';
+
+// BFF (Backend-for-Frontend) OAuth: lets multiple frontends (cofacts.ai,
+// rumors-site) share one API-side OAuth registration. Redirect info is
+// encoded into the OAuth `state` param as base64url(JSON({r, s})), so flows
+// from different frontends do not clobber each other in koa:sess. Login CSRF
+// is mitigated by `r` having to pass isAllowedCallbackUrl().
+function encodeBffOAuthState(bffInfo) {
+  return Buffer.from(JSON.stringify({ r: bffInfo.r, s: bffInfo.s })).toString(
+    'base64url'
+  );
+}
+
+function decodeBffStateFromQuery(ctx) {
+  const state = ctx.query.state;
+  if (!state) return null;
+  try {
+    const decoded = JSON.parse(
+      Buffer.from(state, 'base64url').toString('utf-8')
+    );
+    if (typeof decoded.r === 'string' && isAllowedCallbackUrl(decoded.r)) {
+      return decoded;
+    }
+  } catch {
+    // malformed state → fall through to legacy session-based flow
+  }
+  return null;
+}
+
+function bffLoginMiddleware(ctx) {
+  if (!isAllowedCallbackUrl(ctx.query.redirect_to)) {
+    const err = new Error('`redirect_to` is not in the allowed callback URLs');
+    err.status = 400;
+    err.expose = true;
+    throw err;
+  }
+  ctx.state.bffInfo = {
+    r: ctx.query.redirect_to,
+    s: ctx.query.state || '',
+  };
+}
+
+const bffAwareAuthenticate = (strategy, options) => (ctx, next) => {
+  const bffInfo = ctx.state.bffInfo;
+  const finalOptions = bffInfo
+    ? { ...options, state: encodeBffOAuthState(bffInfo) }
+    : options;
+  return passport.authenticate(strategy, finalOptions)(ctx, next);
+};
+
+const getAllowedCallbackUrls = () =>
+  (process.env.ALLOWED_CALLBACK_URLS || '')
+    .split(',')
+    .map((u) => u.trim())
+    .filter(Boolean);
+
+const isAllowedCallbackUrl = (url) => {
+  if (getAllowedCallbackUrls().includes(url)) return true;
+  const pattern = process.env.ALLOWED_CALLBACK_PATTERN;
+  if (pattern) return new RegExp(`^${pattern}$`).test(url);
+  return false;
+};
 
 /**
  * Serialize to session
@@ -196,28 +258,48 @@ if (process.env.INSTAGRAM_CLIENT_ID) {
 }
 
 // Exports route handlers
-//
+
+function legacyLoginMiddleware(ctx) {
+  if (!ctx.query.redirect.startsWith('/')) {
+    const err = new Error(
+      '`redirect` must present in query string and start with `/`'
+    );
+    err.status = 400;
+    err.expose = true;
+    throw err;
+  }
+  ctx.session.appId = ctx.query.appId || 'RUMORS_SITE';
+  ctx.session.redirect = ctx.query.redirect;
+  const referer = ctx.get('Referer');
+  if (referer) {
+    try {
+      ctx.session.origin = new URL(referer).origin;
+    } catch (e) {
+      // Ignore invalid Referer
+    }
+  }
+}
+
 export const loginRouter = Router()
   .use((ctx, next) => {
-    // Memorize redirect in session
-    //
-    if (!ctx.query.redirect || !ctx.query.redirect.startsWith('/')) {
+    if (ctx.query.redirect_to) {
+      bffLoginMiddleware(ctx);
+    } else if (ctx.query.redirect) {
+      legacyLoginMiddleware(ctx);
+    } else {
       const err = new Error(
-        '`redirect` must present in query string and start with `/`'
+        'Either `redirect_to` (BFF flow) or `redirect` (legacy, must start with `/`) is required'
       );
       err.status = 400;
       err.expose = true;
       throw err;
     }
-    ctx.session.appId = ctx.query.appId || 'RUMORS_SITE';
-    ctx.session.redirect = ctx.query.redirect;
-    ctx.session.origin = new URL(ctx.get('Referer')).origin;
     return next();
   })
-  .get('/facebook', passport.authenticate('facebook', { scope: ['email'] }))
+  .get('/facebook', bffAwareAuthenticate('facebook', { scope: ['email'] }))
   .get('/twitter', passport.authenticate('twitter'))
-  .get('/github', passport.authenticate('github', { scope: ['user:email'] }))
-  .get('/google', passport.authenticate('google', { scope: ['profile email'] }))
+  .get('/github', bffAwareAuthenticate('github', { scope: ['user:email'] }))
+  .get('/google', bffAwareAuthenticate('google', { scope: ['profile email'] }))
   .get(
     '/instagram',
     passport.authenticate('instagram', { scope: ['user_profile'] })
@@ -232,13 +314,38 @@ const handlePassportCallback = (strategy) => (ctx, next) =>
       throw err;
     }
 
-    ctx.login(user);
+    // BFF flow: do not write passport.user into the legacy koa:sess cookie.
+    // The OAuth state carries all redirect info, so session is not needed.
+    const isBffFlow = Boolean(ctx.state.bffStateFromQuery);
+    return ctx.login(user, { session: !isBffFlow });
   })(ctx, next);
 
 export const authRouter = Router()
   .use(async (ctx, next) => {
-    // Perform redirect after login
-    //
+    const bffStateFromQuery = decodeBffStateFromQuery(ctx);
+    ctx.state.bffStateFromQuery = bffStateFromQuery;
+
+    if (bffStateFromQuery) {
+      await next();
+      const userId = ctx.state.user?.id;
+      if (!userId) {
+        const err = new Error(
+          'Authenticated user has no id; cannot mint authorization code'
+        );
+        err.status = 401;
+        err.expose = true;
+        throw err;
+      }
+      const code = await signShortLivedJWT(userId);
+      const redirectUrl = new URL(bffStateFromQuery.r);
+      redirectUrl.searchParams.set('code', code);
+      if (bffStateFromQuery.s) {
+        redirectUrl.searchParams.set('state', bffStateFromQuery.s);
+      }
+      ctx.redirect(redirectUrl.href);
+      return;
+    }
+
     if (!ctx.session.redirect || !ctx.session.appId) {
       const err = new Error(
         '`appId` and `redirect` must be set before. Did you forget to go to /login/*?'
