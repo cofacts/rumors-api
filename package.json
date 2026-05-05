@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "pm2-dev start --timestamp process-dev.json",
     "seed": "cd src/rumors-db && npm run seed",
-    "pretest": "npm run rumors-db:install && npm run rumors-db:test && mkdir -p build",
+    "pretest": "npm run rumors-db:install && npm run rumors-db:prepare && mkdir -p build",
     "test": "NODE_OPTIONS=\"--experimental-vm-modules\" NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 jest --runInBand",
     "posttest": "NODE_ENV=test ELASTICSEARCH_URL=http://localhost:62223 babel-node --extensions .ts,.js test/postTest.js",
     "start": "pm2-runtime start ecosystem.config.js --env production",
@@ -21,7 +21,7 @@
     "lint:fix": "eslint --fix src/.",
     "typecheck": "tsc",
     "rumors-db:pull": "cd src/rumors-db && git pull",
-    "rumors-db:test": "cd src/rumors-db && ELASTICSEARCH_URL=http://localhost:62223 npm t",
+    "rumors-db:prepare": "cd src/rumors-db && ELASTICSEARCH_URL=http://localhost:62223 npm run prepare-test-db",
     "rumors-db:install": "cd src/rumors-db && npm i"
   },
   "dependencies": {
