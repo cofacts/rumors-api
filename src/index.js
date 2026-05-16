@@ -80,7 +80,7 @@ router.get('/.well-known/oauth-authorization-server', (ctx) => {
   const origin = process.env.API_ORIGIN || ctx.request.origin;
   ctx.body = {
     issuer: origin,
-    authorization_endpoint: `${origin}/oauth/authorize`,
+    authorization_endpoint: `${origin}/mcp/login`,
     token_endpoint: `${origin}/auth/token`,
     jwks_uri: `${origin}/.well-known/jwks.json`,
     response_types_supported: ['code'],
@@ -89,7 +89,7 @@ router.get('/.well-known/oauth-authorization-server', (ctx) => {
   };
 });
 
-router.get('/oauth/authorize', oauthAuthorizeRoute);
+router.get('/mcp/login', oauthAuthorizeRoute);
 
 router.all('/mcp', handleMcpRequest);
 
