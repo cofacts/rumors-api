@@ -62,7 +62,7 @@ const getAllowedCallbackUrls = () =>
     .map((u) => u.trim())
     .filter(Boolean);
 
-const isAllowedCallbackUrl = (url) => {
+export const isAllowedCallbackUrl = (url) => {
   if (getAllowedCallbackUrls().includes(url)) return true;
   const pattern = process.env.ALLOWED_CALLBACK_PATTERN;
   if (pattern) return new RegExp(`^${pattern}$`).test(url);
