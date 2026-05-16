@@ -19,8 +19,7 @@ import CookieStore from './CookieStore';
 import { loginRouter, authRouter } from './auth';
 import tokenRoute from './tokenRoute';
 import jwksRoute from './jwksRoute';
-import oauthAuthorizeRoute from './oauthAuthorizeRoute';
-import { handleMcpRequest } from './mcpServer';
+import mcpRouter from './mcpRouter';
 import rollbar from './rollbarInstance';
 import { AUTH_ERROR_MSG } from './util/user';
 
@@ -82,16 +81,16 @@ router.get('/.well-known/oauth-authorization-server', (ctx) => {
     issuer: origin,
     authorization_endpoint: `${origin}/mcp/login`,
     token_endpoint: `${origin}/auth/token`,
+    registration_endpoint: `${origin}/mcp/register`,
     jwks_uri: `${origin}/.well-known/jwks.json`,
     response_types_supported: ['code'],
+    code_challenge_methods_supported: ['S256'],
     grant_types_supported: ['authorization_code'],
     token_endpoint_auth_methods_supported: ['none'],
   };
 });
 
-router.get('/mcp/login', oauthAuthorizeRoute);
-
-router.all('/mcp', handleMcpRequest);
+router.use('/mcp', mcpRouter.routes(), mcpRouter.allowedMethods());
 
 router.options('/auth/token', checkHeaders());
 router.post('/auth/token', checkHeaders(), tokenRoute);

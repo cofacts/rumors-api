@@ -68,10 +68,12 @@ async function getKid() {
 export const TOKEN_USE_AUTH_CODE = 'auth_code';
 export const TOKEN_USE_ACCESS = 'access';
 
-export async function signShortLivedJWT(userId) {
+export async function signShortLivedJWT(userId, { codeChallenge } = {}) {
+  const claims = { sub: userId, token_use: TOKEN_USE_AUTH_CODE };
+  if (codeChallenge) claims.code_challenge = codeChallenge;
   const privateKey = await getPrivateKey();
   const kid = await getKid();
-  return new SignJWT({ sub: userId, token_use: TOKEN_USE_AUTH_CODE })
+  return new SignJWT(claims)
     .setProtectedHeader({ alg: ALG, kid })
     .setIssuedAt()
     .setExpirationTime('60s')

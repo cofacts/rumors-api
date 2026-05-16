@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import {
   verifyJWT,
   signLongLivedJWT,
@@ -6,7 +7,7 @@ import {
 } from './lib/jwt';
 
 export default async function tokenRoute(ctx) {
-  const { code } = ctx.request.body;
+  const { code, code_verifier } = ctx.request.body;
 
   if (!code) {
     ctx.status = 400;
@@ -21,6 +22,20 @@ export default async function tokenRoute(ctx) {
     ctx.status = 401;
     ctx.body = { error: 'Invalid or expired code' };
     return;
+  }
+
+  if (payload.code_challenge) {
+    if (!code_verifier) {
+      ctx.status = 400;
+      ctx.body = { error: 'code_verifier required' };
+      return;
+    }
+    const computed = createHash('sha256').update(code_verifier).digest('base64url');
+    if (computed !== payload.code_challenge) {
+      ctx.status = 401;
+      ctx.body = { error: 'invalid_code_verifier' };
+      return;
+    }
   }
 
   const userId = payload.sub;
