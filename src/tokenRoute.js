@@ -24,6 +24,8 @@ export default async function tokenRoute(ctx) {
     return;
   }
 
+  // PKCE flow: auth code carries code_challenge, so the caller must prove they
+  // hold the original code_verifier (SHA256(verifier) == code_challenge).
   if (payload.code_challenge) {
     if (!code_verifier) {
       ctx.status = 400;
@@ -44,10 +46,10 @@ export default async function tokenRoute(ctx) {
   const token = await signLongLivedJWT(userId);
   const maxAgeSec = getCookieMaxAgeSec();
   ctx.body = {
-    // Legacy
+    // 1st-party flow (cofacts.ai)
     token,
 
-    // OAuth2 compatible
+    // OAuth2 compatible (PKCE flow)
     access_token: token,
     token_type: 'Bearer',
     expires_in: maxAgeSec,
