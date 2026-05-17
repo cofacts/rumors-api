@@ -30,7 +30,9 @@ export default async function tokenRoute(ctx) {
       ctx.body = { error: 'code_verifier required' };
       return;
     }
-    const computed = createHash('sha256').update(code_verifier).digest('base64url');
+    const computed = createHash('sha256')
+      .update(code_verifier)
+      .digest('base64url');
     if (computed !== payload.code_challenge) {
       ctx.status = 401;
       ctx.body = { error: 'invalid_code_verifier' };

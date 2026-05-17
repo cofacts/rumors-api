@@ -45,12 +45,16 @@ mcpRouter.get('/login', (ctx) => {
     }
     try {
       const u = new URL(redirect_uri);
-      const isLoopback = u.hostname === 'localhost' || u.hostname === '127.0.0.1';
+      const isLoopback =
+        u.hostname === 'localhost' || u.hostname === '127.0.0.1';
       if (u.protocol !== 'https:' && !(u.protocol === 'http:' && isLoopback))
         throw new Error();
     } catch {
       ctx.status = 400;
-      ctx.body = { error: 'invalid_request', error_description: 'invalid redirect_uri' };
+      ctx.body = {
+        error: 'invalid_request',
+        error_description: 'invalid redirect_uri',
+      };
       return;
     }
 
@@ -78,7 +82,9 @@ mcpRouter.get('/login', (ctx) => {
   const buttons = PROVIDERS.filter(([, , envKey]) => process.env[envKey])
     .map(
       ([id, label]) =>
-        `<a href="/login/${id}?redirect_to=${encodeURIComponent(redirectTo)}${stateParam}" style="display:block;margin:8px 0;padding:12px 20px;background:#4285f4;color:#fff;text-decoration:none;border-radius:4px;text-align:center;font-family:sans-serif">${label}</a>`
+        `<a href="/login/${id}?redirect_to=${encodeURIComponent(
+          redirectTo
+        )}${stateParam}" style="display:block;margin:8px 0;padding:12px 20px;background:#4285f4;color:#fff;text-decoration:none;border-radius:4px;text-align:center;font-family:sans-serif">${label}</a>`
     )
     .join('\n');
 
