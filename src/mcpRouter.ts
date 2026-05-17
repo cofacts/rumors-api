@@ -30,6 +30,23 @@ const PROVIDERS: [string, string, string][] = [
   ['instagram', 'Instagram', 'INSTAGRAM_CLIENT_ID'],
 ];
 
+/**
+ * We support two MCP client types:
+ * - Cloud connectors (e.g. claude.ai): redirect_uri must be HTTPS
+ * - Local coding agents (e.g. Claude Code, Cursor): redirect_uri must be loopback (localhost / 127.0.0.1)
+ *
+ * Plain HTTP to non-loopback is rejected to prevent auth code interception.
+ */
+function isValidMcpRedirectUri(uri: string): boolean {
+  try {
+    const u = new URL(uri);
+    const isLoopback = u.hostname === 'localhost' || u.hostname === '127.0.0.1';
+    return u.protocol === 'https:' || (u.protocol === 'http:' && isLoopback);
+  } catch {
+    return false;
+  }
+}
+
 const mcpRouter = new Router();
 
 // MCP protocol endpoint
@@ -55,18 +72,15 @@ mcpRouter.get('/login', (ctx: Context) => {
     return renderError('Invalid request: missing required parameters.');
   }
 
+  // PKCE requires S256 (code_challenge = BASE64URL(SHA256(verifier))).
+  // Reject "plain" (code_challenge = verifier) — it offers no protection.
   if (code_challenge_method !== 'S256') {
     return renderError(
       'Invalid request: only S256 code_challenge_method is supported.'
     );
   }
 
-  try {
-    const u = new URL(redirect_uri);
-    const isLoopback = u.hostname === 'localhost' || u.hostname === '127.0.0.1';
-    if (u.protocol !== 'https:' && !(u.protocol === 'http:' && isLoopback))
-      throw new Error();
-  } catch {
+  if (!isValidMcpRedirectUri(redirect_uri)) {
     return renderError(
       'Invalid request: redirect_uri must be a loopback address or HTTPS URL.'
     );
@@ -149,12 +163,7 @@ mcpRouter.get('/callback', async (ctx: Context) => {
 
   const { r: actualCb, cc: codeChallenge, os: originalState } = mcpState;
 
-  try {
-    const u = new URL(actualCb);
-    const isLoopback = u.hostname === 'localhost' || u.hostname === '127.0.0.1';
-    if (u.protocol !== 'https:' && !(u.protocol === 'http:' && isLoopback))
-      throw new Error();
-  } catch {
+  if (!isValidMcpRedirectUri(actualCb)) {
     ctx.status = 400;
     ctx.body = { error: 'invalid_callback' };
     return;
