@@ -1,8 +1,13 @@
+import path from 'path';
 import type { Context } from 'koa';
 import Router from 'koa-router';
-import { isAllowedCallbackUrl } from './auth';
+import pug from 'pug';
 import { handleMcpRequest } from './mcpServer';
 import { verifyJWT, signShortLivedJWT, TOKEN_USE_AUTH_CODE } from './lib/jwt';
+
+const renderMcpLogin = pug.compileFile(
+  path.join(__dirname, 'jade/mcpLogin.jade')
+);
 
 /**
  * Payload embedded as base64url-encoded JSON in the OAuth `state` parameter
@@ -40,81 +45,62 @@ mcpRouter.get('/login', (ctx: Context) => {
     | string
     | undefined;
 
-  if (response_type !== 'code' || !redirect_uri) {
+  const renderError = (description: string) => {
     ctx.status = 400;
-    ctx.body = { error: 'invalid_request' };
-    return;
+    ctx.type = 'text/html';
+    ctx.body = renderMcpLogin({ error: description });
+  };
+
+  if (response_type !== 'code' || !redirect_uri || !code_challenge) {
+    return renderError('Invalid request: missing required parameters.');
   }
 
-  let redirectTo: string, stateParam: string;
-
-  if (code_challenge) {
-    // PKCE flow — any valid HTTP/HTTPS redirect_uri allowed
-    if (code_challenge_method !== 'S256') {
-      ctx.status = 400;
-      ctx.body = {
-        error: 'invalid_request',
-        error_description: 'Only S256 code_challenge_method is supported',
-      };
-      return;
-    }
-    try {
-      const u = new URL(redirect_uri);
-      const isLoopback =
-        u.hostname === 'localhost' || u.hostname === '127.0.0.1';
-      if (u.protocol !== 'https:' && !(u.protocol === 'http:' && isLoopback))
-        throw new Error();
-    } catch {
-      ctx.status = 400;
-      ctx.body = {
-        error: 'invalid_request',
-        error_description: 'invalid redirect_uri',
-      };
-      return;
-    }
-
-    const mcpState = Buffer.from(
-      JSON.stringify({ r: redirect_uri, cc: code_challenge, os: state || '' })
-    ).toString('base64url');
-
-    const origin = process.env.API_ORIGIN || ctx.request.origin;
-    redirectTo = `${origin}/mcp/callback`;
-    stateParam = `&state=${encodeURIComponent(mcpState)}`;
-  } else {
-    // 1st party flow — redirect_uri must be whitelisted
-    if (!isAllowedCallbackUrl(redirect_uri)) {
-      ctx.status = 400;
-      ctx.body = {
-        error: 'invalid_request',
-        error_description: 'redirect_uri not allowed',
-      };
-      return;
-    }
-    redirectTo = redirect_uri;
-    stateParam = state ? `&state=${encodeURIComponent(state)}` : '';
+  if (code_challenge_method !== 'S256') {
+    return renderError(
+      'Invalid request: only S256 code_challenge_method is supported.'
+    );
   }
 
-  const buttons = PROVIDERS.filter(([, , envKey]) => process.env[envKey])
-    .map(
-      ([id, label]) =>
-        `<a href="/login/${id}?redirect_to=${encodeURIComponent(
-          redirectTo
-        )}${stateParam}" style="display:block;margin:8px 0;padding:12px 20px;background:#4285f4;color:#fff;text-decoration:none;border-radius:4px;text-align:center;font-family:sans-serif">${label}</a>`
-    )
-    .join('\n');
+  try {
+    const u = new URL(redirect_uri);
+    const isLoopback = u.hostname === 'localhost' || u.hostname === '127.0.0.1';
+    if (u.protocol !== 'https:' && !(u.protocol === 'http:' && isLoopback))
+      throw new Error();
+  } catch {
+    return renderError(
+      'Invalid request: redirect_uri must be a loopback address or HTTPS URL.'
+    );
+  }
+
+  const mcpState = Buffer.from(
+    JSON.stringify({ r: redirect_uri, cc: code_challenge, os: state || '' })
+  ).toString('base64url');
+
+  const origin = process.env.API_ORIGIN || ctx.request.origin;
+  const redirectTo = `${origin}/mcp/callback`;
+  const stateParam = `&state=${encodeURIComponent(mcpState)}`;
+
+  const providers = PROVIDERS.filter(([, , envKey]) => process.env[envKey]).map(
+    ([id, label]) => ({
+      id,
+      label,
+      href: `/login/${id}?redirect_to=${encodeURIComponent(
+        redirectTo
+      )}${stateParam}`,
+    })
+  );
 
   ctx.type = 'text/html';
-  ctx.body = `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><title>Log in to Cofacts</title></head>
-<body style="font-family:sans-serif;max-width:360px;margin:80px auto;padding:20px">
-  <h2 style="margin-bottom:24px">Log in to Cofacts</h2>
-  ${buttons}
-</body>
-</html>`;
+  ctx.body = renderMcpLogin({ providers });
 });
 
-// Dynamic client registration (RFC 7591)
+// Dynamic client registration (RFC 7591).
+// MCP clients (Claude Code, Cursor, etc.) call this before starting the OAuth
+// flow to obtain a client_id. We don't persist registrations — all clients
+// share the same fixed client_id — because PKCE already binds the token
+// exchange to the original requester, making per-client registration
+// unnecessary for security. The endpoint exists solely so clients don't stall
+// when they expect a registration_endpoint in the OAuth metadata.
 mcpRouter.post('/register', (ctx: Context) => {
   const { redirect_uris = [], client_name } =
     (ctx.request.body as {
@@ -123,6 +109,15 @@ mcpRouter.post('/register', (ctx: Context) => {
       /** Human-readable name for the client application. */
       client_name?: string;
     }) || {};
+
+  console.log(
+    JSON.stringify({
+      msg: 'MCP client registration',
+      client_name: client_name || null,
+      redirect_uris,
+    })
+  );
+
   ctx.status = 201;
   ctx.body = {
     client_id: 'mcp-public-client',
