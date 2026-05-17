@@ -39,7 +39,7 @@ jspm_packages
 .node_repl_history
 
 # docker-compose test data
-esdata
+esdata-v9
 
 # local config
 config/local-*
