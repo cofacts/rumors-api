@@ -70,6 +70,7 @@ export const TOKEN_USE_ACCESS = 'access';
 
 export async function signShortLivedJWT(userId, { codeChallenge } = {}) {
   const claims = { sub: userId, token_use: TOKEN_USE_AUTH_CODE };
+  // PKCE flow: embed code_challenge so /auth/token can verify code_verifier later.
   if (codeChallenge) claims.code_challenge = codeChallenge;
   const privateKey = await getPrivateKey();
   const kid = await getKid();
