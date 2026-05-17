@@ -1,9 +1,24 @@
+import type { Context } from 'koa';
 import Router from 'koa-router';
 import { isAllowedCallbackUrl } from './auth';
 import { handleMcpRequest } from './mcpServer';
 import { verifyJWT, signShortLivedJWT, TOKEN_USE_AUTH_CODE } from './lib/jwt';
 
-const PROVIDERS = [
+/**
+ * Payload embedded as base64url-encoded JSON in the OAuth `state` parameter
+ * during the PKCE bounce flow. Carries the context needed to complete the
+ * redirect after the social login provider returns to /mcp/callback.
+ */
+interface McpState {
+  /** Actual redirect URI registered by the MCP client (final destination after auth). */
+  r: string;
+  /** PKCE code_challenge sent by the MCP client at the start of the flow. */
+  cc: string;
+  /** Original `state` value sent by the MCP client; forwarded unchanged to the redirect URI. */
+  os: string;
+}
+
+const PROVIDERS: [string, string, string][] = [
   ['google', 'Google', 'GOOGLE_CLIENT_ID'],
   ['facebook', 'Facebook', 'FACEBOOK_APP_ID'],
   ['github', 'GitHub', 'GITHUB_CLIENT_ID'],
@@ -16,14 +31,14 @@ const mcpRouter = new Router();
 mcpRouter.all('/', handleMcpRequest);
 
 // OAuth authorization: provider selection page
-mcpRouter.get('/login', (ctx) => {
-  const {
-    response_type,
-    redirect_uri,
-    state,
-    code_challenge,
-    code_challenge_method,
-  } = ctx.query;
+mcpRouter.get('/login', (ctx: Context) => {
+  const response_type = ctx.query.response_type as string | undefined;
+  const redirect_uri = ctx.query.redirect_uri as string | undefined;
+  const state = ctx.query.state as string | undefined;
+  const code_challenge = ctx.query.code_challenge as string | undefined;
+  const code_challenge_method = ctx.query.code_challenge_method as
+    | string
+    | undefined;
 
   if (response_type !== 'code' || !redirect_uri) {
     ctx.status = 400;
@@ -31,7 +46,7 @@ mcpRouter.get('/login', (ctx) => {
     return;
   }
 
-  let redirectTo, stateParam;
+  let redirectTo: string, stateParam: string;
 
   if (code_challenge) {
     // PKCE flow — any valid HTTP/HTTPS redirect_uri allowed
@@ -100,8 +115,14 @@ mcpRouter.get('/login', (ctx) => {
 });
 
 // Dynamic client registration (RFC 7591)
-mcpRouter.post('/register', (ctx) => {
-  const { redirect_uris = [], client_name } = ctx.request.body || {};
+mcpRouter.post('/register', (ctx: Context) => {
+  const { redirect_uris = [], client_name } =
+    (ctx.request.body as {
+      /** Redirect URIs the client intends to use (RFC 7591 §2). */
+      redirect_uris?: string[];
+      /** Human-readable name for the client application. */
+      client_name?: string;
+    }) || {};
   ctx.status = 201;
   ctx.body = {
     client_id: 'mcp-public-client',
@@ -116,12 +137,15 @@ mcpRouter.post('/register', (ctx) => {
 
 // PKCE bounce: verifies incoming auth code, re-signs with code_challenge claim,
 // then redirects to the actual MCP client callback URL.
-mcpRouter.get('/callback', async (ctx) => {
-  const { code, state } = ctx.query;
+mcpRouter.get('/callback', async (ctx: Context) => {
+  const code = ctx.query.code as string | undefined;
+  const state = ctx.query.state as string | undefined;
 
-  let mcpState;
+  let mcpState: McpState;
   try {
-    mcpState = JSON.parse(Buffer.from(state, 'base64url').toString('utf-8'));
+    mcpState = JSON.parse(
+      Buffer.from(state as string, 'base64url').toString('utf-8')
+    ) as McpState;
   } catch {
     ctx.status = 400;
     ctx.body = { error: 'invalid_state' };
@@ -143,14 +167,18 @@ mcpRouter.get('/callback', async (ctx) => {
 
   let payload;
   try {
-    payload = await verifyJWT(code, { expectedUse: TOKEN_USE_AUTH_CODE });
+    payload = await verifyJWT(code as string, {
+      expectedUse: TOKEN_USE_AUTH_CODE,
+    });
   } catch {
     ctx.status = 401;
     ctx.body = { error: 'invalid_code' };
     return;
   }
 
-  const newCode = await signShortLivedJWT(payload.sub, { codeChallenge });
+  const newCode = await signShortLivedJWT(payload.sub as string, {
+    codeChallenge,
+  });
   const redirectUrl = new URL(actualCb);
   redirectUrl.searchParams.set('code', newCode);
   if (originalState) redirectUrl.searchParams.set('state', originalState);
