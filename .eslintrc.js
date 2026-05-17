@@ -16,6 +16,11 @@ module.exports = {
         singleQuote: true,
       },
     ],
+    // @modelcontextprotocol/sdk v1 exports McpServer and StreamableHTTPServerTransport via deep
+    // paths only (e.g. /server/mcp.js). The eslint-plugin-import resolver does not support the
+    // "./*" wildcard in package.json exports, so it falsely flags these as unresolved.
+    // See: https://github.com/modelcontextprotocol/typescript-sdk/blob/v1.29.0/docs/server.md
+    'import/no-unresolved': ['error', { ignore: ['^@modelcontextprotocol/sdk/'] }],
   },
   settings: {
     'import/resolver': {
