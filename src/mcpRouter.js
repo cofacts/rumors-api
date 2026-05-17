@@ -45,7 +45,9 @@ mcpRouter.get('/login', (ctx) => {
     }
     try {
       const u = new URL(redirect_uri);
-      if (u.protocol !== 'http:' && u.protocol !== 'https:') throw new Error();
+      const isLoopback = u.hostname === 'localhost' || u.hostname === '127.0.0.1';
+      if (u.protocol !== 'https:' && !(u.protocol === 'http:' && isLoopback))
+        throw new Error();
     } catch {
       ctx.status = 400;
       ctx.body = { error: 'invalid_request', error_description: 'invalid redirect_uri' };
@@ -124,7 +126,9 @@ mcpRouter.get('/callback', async (ctx) => {
 
   try {
     const u = new URL(actualCb);
-    if (u.protocol !== 'http:' && u.protocol !== 'https:') throw new Error();
+    const isLoopback = u.hostname === 'localhost' || u.hostname === '127.0.0.1';
+    if (u.protocol !== 'https:' && !(u.protocol === 'http:' && isLoopback))
+      throw new Error();
   } catch {
     ctx.status = 400;
     ctx.body = { error: 'invalid_callback' };
