@@ -75,6 +75,9 @@ router.use('/callback', authRouter.routes(), authRouter.allowedMethods());
 
 router.get('/.well-known/jwks.json', jwksRoute);
 
+// RFC 8414 OAuth Authorization Server Metadata. Path must stay at the origin
+// root — MCP clients always discover it at {origin}/.well-known/oauth-authorization-server
+// regardless of where the MCP endpoint is mounted.
 router.get('/.well-known/oauth-authorization-server', (ctx) => {
   const origin = process.env.API_ORIGIN || ctx.request.origin;
   ctx.body = {
