@@ -127,7 +127,7 @@ export const getAvailableAvatarTypes = (user: User | undefined) => {
 };
 
 export const isBackendApp = (appId: UserAppIdPair['appId']) =>
-  appId !== 'WEBSITE' && appId !== 'DEVELOPMENT_FRONTEND';
+  appId !== 'WEBSITE' && appId !== 'DEVELOPMENT_FRONTEND' && appId !== 'MCP';
 
 // 6 for appId prefix and 43 for 256bit hashed userId with base64 encoding.
 const BACKEND_USER_ID_LEN = 6 + 43;
