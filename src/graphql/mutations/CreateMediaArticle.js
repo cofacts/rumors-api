@@ -1,6 +1,6 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { assertUser, getContentDefaultStatus } from 'util/user';
-import { uploadMedia, getAIResponse } from 'graphql/util';
+import { uploadMedia, getAIResponse, createTranscript } from 'graphql/util';
 import client, { getTotalCount } from 'util/client';
 import { errors } from '@elastic/elasticsearch';
 import { schema } from 'prosemirror-schema-basic';
@@ -184,8 +184,16 @@ export default {
 
       // Write AI transcript to article & ydoc
       Promise.all([aritcleIdPromise, aiResponsePromise])
-        .then(([articleId, aiResponse]) => {
+        .then(async ([articleId, aiResponse]) => {
           if (!aiResponse) {
+            aiResponse = await createTranscript(
+              { id: mediaEntry.id, type: articleType.toLowerCase() },
+              mediaEntry,
+              user
+            );
+          }
+
+          if (!aiResponse || aiResponse.status !== 'SUCCESS') {
             throw new Error('AI transcript not found');
           }
 
