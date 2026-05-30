@@ -8,23 +8,28 @@ import fixtures from '../__fixtures__/CreateMediaArticle';
 import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
 import mediaManager from 'util/mediaManager';
 import archiveUrlsFromText from 'util/archiveUrlsFromText';
-import { createTranscript } from 'graphql/util';
+import * as graphqlUtil from 'graphql/util';
 
 jest.mock('util/mediaManager');
 jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
-jest.mock('graphql/util', () => ({
-  ...jest.requireActual('graphql/util'),
-  createTranscript: jest.fn(),
-}));
 
 describe('creation', () => {
-  beforeAll(() => loadFixtures(fixtures));
+  let createTranscript;
+  beforeAll(async () => {
+    createTranscript = jest
+      .spyOn(graphqlUtil, 'createTranscript')
+      .mockResolvedValue(undefined);
+    await loadFixtures(fixtures);
+  });
   beforeEach(() => {
     mediaManager.insert.mockClear();
     archiveUrlsFromText.mockClear();
     createTranscript.mockClear();
   });
-  afterAll(() => unloadFixtures(fixtures));
+  afterAll(async () => {
+    jest.restoreAllMocks();
+    await unloadFixtures(fixtures);
+  });
 
   it('creates a media article, a reply request, a ydoc and fills in OCR result', async () => {
     MockDate.set(1485593157011);
