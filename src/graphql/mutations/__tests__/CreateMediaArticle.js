@@ -193,103 +193,100 @@ describe('creation', () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'foo';
+    let articleId;
 
-    mediaManager.insert.mockImplementationOnce(async () => ({
-      id: 'mock_hash_no_ai_response',
-      url: 'http://foo.com/new_image.jpeg',
-      type: 'image',
-    }));
+    try {
+      mediaManager.insert.mockImplementationOnce(async () => ({
+        id: 'mock_hash_no_ai_response',
+        url: 'http://foo.com/new_image.jpeg',
+        type: 'image',
+      }));
 
-    createTranscript.mockResolvedValueOnce({
-      id: 'new-transcript-id',
-      status: 'SUCCESS',
-      text: 'Transcript from createTranscript',
-    });
+      createTranscript.mockResolvedValueOnce({
+        id: 'new-transcript-id',
+        status: 'SUCCESS',
+        text: 'Transcript from createTranscript',
+      });
 
-    const { data, errors } = await gql`
-      mutation (
-        $mediaUrl: String!
-        $articleType: ArticleTypeEnum!
-        $reference: ArticleReferenceInput!
-      ) {
-        CreateMediaArticle(
-          mediaUrl: $mediaUrl
-          articleType: $articleType
-          reference: $reference
-          reason: "test reason"
+      const { data, errors } = await gql`
+        mutation (
+          $mediaUrl: String!
+          $articleType: ArticleTypeEnum!
+          $reference: ArticleReferenceInput!
         ) {
-          id
+          CreateMediaArticle(
+            mediaUrl: $mediaUrl
+            articleType: $articleType
+            reference: $reference
+            reason: "test reason"
+          ) {
+            id
+          }
         }
-      }
-    `(
-      {
-        mediaUrl: 'http://foo.com/new_image.jpeg',
-        articleType: 'IMAGE',
-        reference: { type: 'LINE' },
-      },
-      { user: { id: userId, appId } }
-    );
-    MockDate.reset();
+      `(
+        {
+          mediaUrl: 'http://foo.com/new_image.jpeg',
+          articleType: 'IMAGE',
+          reference: { type: 'LINE' },
+        },
+        { user: { id: userId, appId } }
+      );
 
-    expect(errors).toBeUndefined();
+      expect(errors).toBeUndefined();
+      articleId = data.CreateMediaArticle.id;
 
-    // Expect createTranscript was called with correct arguments
-    expect(createTranscript).toHaveBeenCalledWith(
-      { id: 'mock_hash_no_ai_response', type: 'image' },
-      expect.objectContaining({ id: 'mock_hash_no_ai_response' }),
-      expect.objectContaining({ id: userId })
-    );
+      // Expect createTranscript was called with correct arguments
+      expect(createTranscript).toHaveBeenCalledWith(
+        { id: 'mock_hash_no_ai_response', type: 'image' },
+        expect.objectContaining({ id: 'mock_hash_no_ai_response' }),
+        expect.objectContaining({ id: userId })
+      );
 
-    // Expect archiveUrlsFromText is called with the transcript text
-    expect(archiveUrlsFromText.mock.calls).toMatchInlineSnapshot(`
-      Array [
+      // Expect archiveUrlsFromText is called with the transcript text
+      expect(archiveUrlsFromText.mock.calls).toMatchInlineSnapshot(`
         Array [
-          "Transcript from createTranscript",
-        ],
-      ]
-    `);
+          Array [
+            "Transcript from createTranscript",
+          ],
+        ]
+      `);
 
-    const { _source: article } = await client.get({
-      index: 'articles',
-      id: data.CreateMediaArticle.id,
-    });
+      const { _source: article } = await client.get({
+        index: 'articles',
+        id: articleId,
+      });
 
-    expect(article.text).toBe('Transcript from createTranscript');
+      expect(article.text).toBe('Transcript from createTranscript');
 
-    const {
-      _source: { ydoc: encodedYdoc },
-    } = await client.get({
-      index: 'ydocs',
-      id: data.CreateMediaArticle.id,
-    });
+      const {
+        _source: { ydoc: encodedYdoc },
+      } = await client.get({
+        index: 'ydocs',
+        id: articleId,
+      });
 
-    const ydoc = new Y.Doc();
-    Y.applyUpdate(ydoc, Buffer.from(encodedYdoc, 'base64'));
-    expect(ydoc.getXmlFragment('prosemirror')).toMatchInlineSnapshot(
-      `"<paragraph>Transcript from createTranscript</paragraph>"`
-    );
+      const ydoc = new Y.Doc();
+      Y.applyUpdate(ydoc, Buffer.from(encodedYdoc, 'base64'));
+      expect(ydoc.getXmlFragment('prosemirror')).toMatchInlineSnapshot(
+        `"<paragraph>Transcript from createTranscript</paragraph>"`
+      );
+    } finally {
+      MockDate.reset();
 
-    // Cleanup
-    await client.delete({
-      index: 'articles',
-      id: data.CreateMediaArticle.id,
-    });
+      if (articleId) {
+        const replyRequestId = getReplyRequestId({
+          articleId,
+          userId,
+          appId,
+        });
 
-    const replyRequestId = getReplyRequestId({
-      articleId: data.CreateMediaArticle.id,
-      userId,
-      appId,
-    });
-
-    await client.delete({
-      index: 'replyrequests',
-      id: replyRequestId,
-    });
-
-    await client.delete({
-      index: 'ydocs',
-      id: data.CreateMediaArticle.id,
-    });
+        await Promise.all([
+          client.delete({ index: 'articles', id: articleId }),
+          client.delete({ index: 'replyrequests', id: replyRequestId }),
+          client.delete({ index: 'ydocs', id: articleId }),
+        ]);
+      }
+    }
   });
 
   it('avoids creating duplicated media articles and adds replyRequests automatically', async () => {
