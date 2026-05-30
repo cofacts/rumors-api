@@ -8,17 +8,28 @@ import fixtures from '../__fixtures__/CreateMediaArticle';
 import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
 import mediaManager from 'util/mediaManager';
 import archiveUrlsFromText from 'util/archiveUrlsFromText';
+import * as graphqlUtil from 'graphql/util';
 
 jest.mock('util/mediaManager');
 jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
 
 describe('creation', () => {
-  beforeAll(() => loadFixtures(fixtures));
+  let createTranscript;
+  beforeAll(async () => {
+    createTranscript = jest
+      .spyOn(graphqlUtil, 'createTranscript')
+      .mockResolvedValue(undefined);
+    await loadFixtures(fixtures);
+  });
   beforeEach(() => {
     mediaManager.insert.mockClear();
     archiveUrlsFromText.mockClear();
+    createTranscript.mockClear();
   });
-  afterAll(() => unloadFixtures(fixtures));
+  afterAll(async () => {
+    jest.restoreAllMocks();
+    await unloadFixtures(fixtures);
+  });
 
   it('creates a media article, a reply request, a ydoc and fills in OCR result', async () => {
     MockDate.set(1485593157011);
@@ -70,6 +81,9 @@ describe('creation', () => {
         ],
       ]
     `);
+
+    // Expect createTranscript is NOT called when AI response already exists
+    expect(createTranscript).not.toHaveBeenCalled();
 
     // Expect archiveUrlsFromText is called with OCR result
     expect(archiveUrlsFromText.mock.calls).toMatchInlineSnapshot(`
@@ -178,6 +192,106 @@ describe('creation', () => {
       index: 'ydocs',
       id: data.CreateMediaArticle.id,
     });
+  });
+
+  it('calls createTranscript when no AI response exists, and writes transcript to article', async () => {
+    MockDate.set(1485593157011);
+    const userId = 'test';
+    const appId = 'foo';
+    let articleId;
+
+    try {
+      mediaManager.insert.mockImplementationOnce(async () => ({
+        id: 'mock_hash_no_ai_response',
+        url: 'http://foo.com/new_image.jpeg',
+        type: 'image',
+      }));
+
+      createTranscript.mockResolvedValueOnce({
+        id: 'new-transcript-id',
+        status: 'SUCCESS',
+        text: 'Transcript from createTranscript',
+      });
+
+      const { data, errors } = await gql`
+        mutation (
+          $mediaUrl: String!
+          $articleType: ArticleTypeEnum!
+          $reference: ArticleReferenceInput!
+        ) {
+          CreateMediaArticle(
+            mediaUrl: $mediaUrl
+            articleType: $articleType
+            reference: $reference
+            reason: "test reason"
+          ) {
+            id
+          }
+        }
+      `(
+        {
+          mediaUrl: 'http://foo.com/new_image.jpeg',
+          articleType: 'IMAGE',
+          reference: { type: 'LINE' },
+        },
+        { user: { id: userId, appId } }
+      );
+
+      expect(errors).toBeUndefined();
+      articleId = data.CreateMediaArticle.id;
+
+      // Expect createTranscript was called with correct arguments
+      expect(createTranscript).toHaveBeenCalledWith(
+        { id: 'mock_hash_no_ai_response', type: 'image' },
+        expect.objectContaining({ id: 'mock_hash_no_ai_response' }),
+        expect.objectContaining({ id: userId })
+      );
+
+      // Expect archiveUrlsFromText is called with the transcript text
+      expect(archiveUrlsFromText.mock.calls).toMatchInlineSnapshot(`
+        Array [
+          Array [
+            "Transcript from createTranscript",
+          ],
+        ]
+      `);
+
+      const { _source: article } = await client.get({
+        index: 'articles',
+        id: articleId,
+      });
+
+      expect(article.text).toBe('Transcript from createTranscript');
+
+      const {
+        _source: { ydoc: encodedYdoc },
+      } = await client.get({
+        index: 'ydocs',
+        id: articleId,
+      });
+
+      const ydoc = new Y.Doc();
+      Y.applyUpdate(ydoc, Buffer.from(encodedYdoc, 'base64'));
+      expect(ydoc.getXmlFragment('prosemirror')).toMatchInlineSnapshot(
+        `"<paragraph>Transcript from createTranscript</paragraph>"`
+      );
+    } finally {
+      MockDate.reset();
+
+      if (articleId) {
+        const replyRequestId = getReplyRequestId({
+          articleId,
+          userId,
+          appId,
+        });
+
+        await Promise.all([
+          client.delete({ index: 'articles', id: articleId }),
+          client.delete({ index: 'replyrequests', id: replyRequestId }),
+          client.delete({ index: 'ydocs', id: articleId }),
+        ]);
+      }
+    }
   });
 
   it('avoids creating duplicated media articles and adds replyRequests automatically', async () => {
