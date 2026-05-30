@@ -194,7 +194,9 @@ export default {
           }
 
           if (!aiResponse || aiResponse.status !== 'SUCCESS') {
-            throw new Error('AI transcript not found');
+            throw new Error(
+              `AI transcript failed: ${aiResponse?.text || 'Unknown error'}`
+            );
           }
 
           // Archive URLs in transcript; don't wait for it
