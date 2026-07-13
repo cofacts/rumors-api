@@ -3,10 +3,13 @@ import {
   GraphQLList,
   GraphQLBoolean,
   GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLFloat,
   GraphQLNonNull,
 } from 'graphql';
 import client from 'util/client';
 import mediaManager from 'util/mediaManager';
+import { createEmbedding, getQueryEmbeddingCacheId } from 'util/embedding';
 
 import {
   createFilterType,
@@ -20,6 +23,7 @@ import {
   getRangeFieldParamFromArithmeticExpression,
   createCommonListFilter,
   attachCommonListFilter,
+  buildKnnQuery,
   DEFAULT_ARTICLE_STATUSES,
   DEFAULT_ARTICLE_REPLY_STATUSES,
   getAIResponse,
@@ -37,6 +41,59 @@ const {
   ids: dontcare, // eslint-disable-line no-unused-vars
   ...articleReplyCommonFilterArgs
 } = createCommonListFilter('articleReplies');
+
+// Fallback mime type per media type when the response has no content-type.
+const DEFAULT_MEDIA_MIME_TYPE = {
+  image: 'image/jpeg',
+  audio: 'audio/mpeg',
+  video: 'video/mp4',
+};
+
+/**
+ * Resolve query-side embedding vectors for a media search (kNN retrieval).
+ *
+ * Reuses the doc-side embedding cached in airesponses under the media's content
+ * hash — the same key CreateMediaArticle / the backfill write under — so a media
+ * that's already in the system needs neither a fetch nor an embedding call.
+ *
+ * On a cache miss `mediaUrl` is handed to Vertex as-is: `fileData.fileUri`
+ * accepts any publicly-readable https URL, and for LINE queries `mediaUrl` is
+ * rumors-line-bot's public getcontent URL. So a search neither downloads the
+ * bytes nor persists the query media anywhere.
+ *
+ * @param {object} param
+ * @param {import('@cofacts/media-manager').SearchResult} param.queryResult
+ * @param {string} param.mediaUrl - the queried media URL
+ * @param {object} param.user
+ * @returns {Promise<number[][]>} one vector per chunk (empty if not embeddable)
+ */
+async function resolveMediaQueryVectors({ queryResult, mediaUrl, user }) {
+  const { id: mediaHash, type: mediaType } = queryResult.queryInfo;
+
+  // Only image/audio/video are embeddable (media-manager also has a `file` type).
+  if (!DEFAULT_MEDIA_MIME_TYPE[mediaType]) return [];
+
+  const cached = await getAIResponse({ type: 'EMBEDDING', docId: mediaHash });
+  if (cached?.status === 'SUCCESS' && cached.embeddings?.length > 0) {
+    return cached.embeddings.map((c) => c.vector);
+  }
+
+  // Cache miss: hand the URL to Vertex directly — HEAD only, for the
+  // content-type. Vertex fetches the bytes itself.
+  const mimeType = await fetch(mediaUrl, { method: 'HEAD' })
+    .then(
+      (res) =>
+        res.headers.get('content-type') || DEFAULT_MEDIA_MIME_TYPE[mediaType]
+    )
+    .catch(() => DEFAULT_MEDIA_MIME_TYPE[mediaType]);
+
+  const chunks = await createEmbedding(
+    { id: mediaHash, type: mediaType },
+    [{ mimeType, fileUri: mediaUrl }],
+    user
+  );
+  return chunks.map((c) => c.vector);
+}
 
 /**
  * Create more_like_this query for article index
@@ -164,6 +221,17 @@ export default {
         mediaUrl: {
           type: GraphQLString,
           description: 'Show the media article similar to the input url',
+        },
+        mediaDuration: {
+          type: GraphQLInt,
+          description:
+            'Duration of `mediaUrl` content in seconds. Optional; only used by the embedding (hybrid search) flow when querying audio/video.',
+        },
+        embedding: {
+          type: GraphQLFloat,
+          description:
+            'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
+            'to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).',
         },
         transcript: {
           description:
@@ -596,8 +664,11 @@ export default {
       });
     }
 
+    // Hoisted so the kNN block below can reuse the media query result.
+    let mediaQueryResult = null;
     if (filter.mediaUrl) {
       const queryResult = await mediaManager.query({ url: filter.mediaUrl });
+      mediaQueryResult = queryResult;
       const similarityMap = queryResult.hits.reduce((map, hit) => {
         map[hit.entry.id] = hit.similarity;
         return map;
@@ -702,6 +773,53 @@ export default {
         minimum_should_match: 1, // At least 1 "should" query should present
       },
     };
+
+    // kNN-retrieval + BM25 ranking. Opt in by passing `filter.embedding` as the
+    // minimum cosine similarity: kNN narrows the candidate set, then the existing
+    // should-queries rank them — text `moreLikeThis`, or for a media search the
+    // perceptual-hash function_score + transcript moreLikeThis. Omit for BM25-only.
+    if (filter.embedding != null) {
+      try {
+        let queryVectors = [];
+
+        if (filter.moreLikeThis?.like) {
+          // Text query: vectorize the query text (RETRIEVAL_QUERY, cached).
+          const queryChunks = await createEmbedding(
+            {
+              id: getQueryEmbeddingCacheId(filter.moreLikeThis.like),
+              type: 'text',
+            },
+            [{ text: filter.moreLikeThis.like }],
+            user,
+            { taskType: 'RETRIEVAL_QUERY' }
+          );
+          queryVectors = queryChunks.map((c) => c.vector);
+        } else if (mediaQueryResult) {
+          // Media query: reuse the doc-side embedding by content hash, or
+          // upload + embed on a cache miss (see resolveMediaQueryVectors).
+          queryVectors = await resolveMediaQueryVectors({
+            queryResult: mediaQueryResult,
+            mediaUrl: filter.mediaUrl,
+            user,
+          });
+        }
+
+        if (queryVectors.length > 0) {
+          // Add kNN as a candidate-retrieval filter so only semantically-near
+          // docs survive; the `should` scoring then decides the ordering.
+          body.query.bool.filter.push(
+            buildKnnQuery({ queryVectors, similarity: filter.embedding })
+          );
+          // Ranking is driven by the should-queries, but retrieval is driven by
+          // kNN — don't require a should match, or we'd intersect the two result
+          // sets instead of ranking the kNN candidates (some score 0 on BM25).
+          body.query.bool.minimum_should_match = 0;
+        }
+      } catch (e) {
+        // kNN must never break BM25 — log and fall through to the BM25 body.query.
+        console.warn('[ListArticles] kNN embedding failed:', e);
+      }
+    }
 
     // should return search context for resolveEdges & resolvePageInfo
     return {

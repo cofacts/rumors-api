@@ -1,5 +1,12 @@
 jest.mock('util/grpc');
 jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
+jest.mock('util/embedding', () => ({
+  createEmbedding: jest
+    .fn()
+    .mockResolvedValue([{ vector: new Array(768).fill(0.01) }]),
+  getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
+  getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
+}));
 
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
@@ -62,6 +69,14 @@ describe('CreateReply', () => {
       id: replyId,
     });
     expect(reply._source).toMatchSnapshot('reply without hyperlinks');
+
+    // Embeddings excluded from default _source in ES 9; verify via includes.
+    const { _source: withEmb } = await client.get({
+      index: 'replies',
+      id: replyId,
+      _source_includes: ['embeddings'],
+    });
+    expect(withEmb.embeddings?.[0]?.vector?.length).toBe(768);
 
     const article = await client.get({
       index: 'articles',

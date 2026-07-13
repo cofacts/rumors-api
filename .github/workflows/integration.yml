@@ -1,0 +1,48 @@
+name: Integration tests
+
+# Runs the full test suite WITH cloud credentials, so the env-guarded integration
+# suites (GCS / Vision / Gemini / BigQuery) actually execute. These make real,
+# billable API calls and depend on external services, so they are deliberately
+# kept off the per-push/PR gate (see ci.yml) and run on a schedule / on demand.
+on:
+  workflow_dispatch:
+  schedule:
+    # 18:00 UTC daily (= 02:00 Asia/Taipei)
+    - cron: '0 18 * * *'
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    services:
+      rumors-test-db:
+        image: elasticsearch:9.2.2
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: 'false'
+        ports:
+          - 62223:9200
+
+    permissions: # Required by google-github-actions/auth
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.GC_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GC_SERVICE_ACCOUNT }}
+      - run: npm ci
+      - run: npm run test
+        env:
+          GCS_CREDENTIALS: ${{ secrets.GCS_CREDENTIALS }}
+          GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+          GCS_MEDIA_FOLDER: github/${{ github.run_number }}_${{ github.run_attempt }}/
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          TEST_DATASET: rumors_api_test_dataset

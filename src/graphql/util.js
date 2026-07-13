@@ -1,6 +1,4 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
-import { GoogleGenAI } from '@google/genai';
-import { GoogleAuth } from 'google-auth-library';
 import fetch from 'node-fetch';
 import sharp from 'sharp';
 import {
@@ -25,8 +23,9 @@ import Connection from './interfaces/Connection';
 import Edge from './interfaces/Edge';
 import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
-import client from 'util/client';
+import client, { getTotalCount } from 'util/client';
 import delayForMs from 'util/delayForMs';
+import { createGenAI } from 'util/genai';
 import langfuse from 'util/langfuse';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
@@ -109,6 +108,38 @@ export const moreLikeThisInput = new GraphQLInputObjectType({
     },
   },
 });
+
+const KNN_NUM_CANDIDATES = 100;
+
+/**
+ * Build a nested-kNN bool/should query, one nested-knn clause per query chunk.
+ * Intended as a candidate-retrieval `filter` clause on the BM25 bool query: a
+ * doc survives when any query chunk is within `similarity` of one of its stored
+ * embeddings, and the BM25 `should` score then decides the ordering.
+ *
+ * @param {object} param
+ * @param {number[][]} param.queryVectors - one vector per query chunk
+ * @param {number} param.similarity - min cosine similarity for KNN hits
+ * @returns {object} a bool/should query suitable as a `filter` clause
+ */
+export function buildKnnQuery({ queryVectors, similarity }) {
+  const nestedKnnQueries = queryVectors.map((qv) => ({
+    nested: {
+      path: 'embeddings',
+      score_mode: 'max',
+      query: {
+        knn: {
+          field: 'embeddings.vector',
+          query_vector: qv,
+          num_candidates: KNN_NUM_CANDIDATES,
+          similarity,
+        },
+      },
+    },
+  }));
+
+  return { bool: { should: nestedKnnQueries } };
+}
 
 export const userAndExistInput = new GraphQLInputObjectType({
   name: 'UserAndExistInput',
@@ -240,6 +271,13 @@ export function getSearchAfterFromCursor(cursor) {
   return JSON.parse(Buffer.from(cursor, 'base64').toString('utf8'));
 }
 
+/** Recursively detect a `knn` clause anywhere in an ES query tree. */
+function containsKnnClause(node) {
+  if (!node || typeof node !== 'object') return false;
+  if ('knn' in node) return true;
+  return Object.values(node).some(containsKnnClause);
+}
+
 async function defaultResolveTotalCount({
   first, // eslint-disable-line no-unused-vars
   before, // eslint-disable-line no-unused-vars
@@ -248,6 +286,20 @@ async function defaultResolveTotalCount({
   ...searchContext
 }) {
   try {
+    // The `_count` API (and `_search` with size:0) reject a kNN query — Lucene's
+    // vector query needs k > 0 ("numHits must be > 0"). So for kNN search we run
+    // an actual search capped at KNN_NUM_CANDIDATES and count the matched hits.
+    if (body?.query && containsKnnClause(body.query)) {
+      const resp = await client.search({
+        ...searchContext,
+        query: body.query,
+        size: KNN_NUM_CANDIDATES,
+        _source: false,
+        track_total_hits: true,
+      });
+      return getTotalCount(resp.hits.total);
+    }
+
     const countParams = {
       ...searchContext,
     };
@@ -285,23 +337,29 @@ export async function defaultResolveEdges(
       sort: before
         ? reverseSortArgs(searchContext.body.sort)
         : searchContext.body.sort,
-      highlight: {
-        order: 'score',
-        fields: {
-          text: {
-            number_of_fragments: 1, // Return only 1 piece highlight text
-            fragment_size: 200, // word count of highlighted fragment
-            type: 'plain',
-          },
-          reference: {
-            number_of_fragments: 1, // Return only 1 piece highlight text
-            fragment_size: 200, // word count of highlighted fragment
-            type: 'plain',
-          },
-        },
-        pre_tags: ['<HIGHLIGHT>'],
-        post_tags: ['</HIGHLIGHT>'],
-      },
+
+      // Callers may set `body.highlight = false` to opt out (e.g. kNN search,
+      // where highlighting a dense_vector query is unsupported by Lucene).
+      highlight:
+        searchContext.body.highlight === false
+          ? undefined
+          : {
+              order: 'score',
+              fields: {
+                text: {
+                  number_of_fragments: 1, // Return only 1 piece highlight text
+                  fragment_size: 200, // word count of highlighted fragment
+                  type: 'plain',
+                },
+                reference: {
+                  number_of_fragments: 1, // Return only 1 piece highlight text
+                  fragment_size: 200, // word count of highlighted fragment
+                  type: 'plain',
+                },
+              },
+              pre_tags: ['<HIGHLIGHT>'],
+              post_tags: ['</HIGHLIGHT>'],
+            },
     },
   });
 
@@ -565,7 +623,7 @@ export function attachCommonListFilter(
  * Returns null if there is no successful nor latest loading AI response.
  *
  * @param {object} param
- * @param {'AI_REPLY' | 'TRANSCRIPT'} param.type
+ * @param {'AI_REPLY' | 'TRANSCRIPT' | 'EMBEDDING'} param.type
  * @param {string} param.docId
  * @returns {AIReponse | null}
  */
@@ -645,22 +703,24 @@ export async function getAIResponse({ type, docId }) {
 
 /**
  * Creates a loading AI Response.
- * Returns an updater function that can be used to record real AI response.
- *
+ * Returns `{ update, getAIResponseId }` that can be used to finalize / look up
+ * the created record.
  *
  * @param {object} loadingResponseBody
- * @param {string} loadingResponseBody.request
- * @param {string} loadingResponseBody.type
+ * @param {'AI_REPLY' | 'TRANSCRIPT' | 'EMBEDDING'} loadingResponseBody.type
  * @param {string} loadingResponseBody.docId
- * @param {object} loadingResponseBody.user
+ * @param {?object} [loadingResponseBody.user] - Optional. Anonymous read-path
+ *   callers (e.g. ListArticles hybrid search by a logged-out visitor) may omit
+ *   it; the cache record is still written, just without userId/appId audit.
  *
- * @returns {(responseBody) => Promise<AIResponse>} updater function that updates the created AI
- *   response and returns the updated result
+ * @returns {{
+ *   update: (responseBody: any) => Promise<any>,
+ *   getAIResponseId: () => Promise<string>,
+ * }}
  */
 export function createAIResponse({ user, ...loadingResponseBody }) {
   const newResponse = {
-    userId: user.id,
-    appId: user.appId,
+    ...(user ? { userId: user.id, appId: user.appId } : {}),
     status: 'LOADING',
     createdAt: new Date(),
     ...loadingResponseBody,
@@ -846,11 +906,11 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
  * Transcribes audio/video content using Gemini model
  *
  * @param {object} params
- * @param {string} params.fileUri - The URI starting with gs://
+ * @param {string} params.fileUri - A URI Vertex can read: a `gs://` URI or a publicly-readable https URL
  * @param {string} params.mimeType - The mime type of the file
  * @param {import('@langfuse/langfuse').Trace} params.langfuseTrace - Langfuse trace object
  * @param {string} params.modelName - Name of the Gemini model
- * @param {string} params.location - Location of the model
+ * @param {string} params.location - Regional endpoint of the model
  * @returns {Promise<{text: string, usage: {promptTokens?: number, completionTokens?: number, totalTokens?: number}}>}
  */
 export async function transcribeAV({
@@ -860,13 +920,7 @@ export async function transcribeAV({
   modelName,
   location,
 }) {
-  const project = await new GoogleAuth().getProjectId();
-  // Use the new GoogleGenAI SDK with vertexai option
-  const genAI = new GoogleGenAI({
-    vertexai: true,
-    project,
-    location,
-  });
+  const genAI = await createGenAI(location);
 
   /**@type {import('@google/genai').GenerateContentParameters} */
   const generateContentArgs = {
@@ -959,7 +1013,8 @@ Your text will be used for indexing these media files, so please follow these ru
 }
 
 const TRANSCRIPT_MODELS = [
-  // Combinations that are faster than gemini-2.0-flash-001 @ us
+  // Ordered by preference; on quota (429) or a retired/inaccessible model
+  // (404) we fall through to the next.
   { model: 'gemini-3.1-flash-lite', location: 'global' },
   { model: 'gemini-2.5-flash', location: 'global' },
 ];
@@ -1033,55 +1088,30 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
       case 'video':
       case 'audio': {
         const aiResponseId = await getAIResponseId();
-        const fileUrl =
-          typeof fileUrlOrMediaEntry === 'string'
-            ? fileUrlOrMediaEntry
-            : fileUrlOrMediaEntry.getUrl();
+        const defaultMimeType =
+          queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg';
 
-        const mimeTypePromise = fetch(fileUrl, { method: 'HEAD' })
-          .then((res) => res.headers.get('content-type'))
-          .catch(() =>
-            queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
-          );
-
-        let mediaEntry;
+        // Resolve the media to a URI Vertex fetches itself — we never move the
+        // bytes. `fileData.fileUri` takes a `gs://` URI or a publicly-readable
+        // https URL, which covers both callers:
+        // - MediaEntry (already in our GCS, e.g. admin backfill): its own
+        //   `gs://` URI.
+        // - string URL (search): the caller's media URL as-is. For LINE queries
+        //   this is rumors-line-bot's public getcontent URL.
+        let fileUri;
         let mimeType;
-        if (typeof fileUrlOrMediaEntry !== 'string') {
-          mediaEntry = fileUrlOrMediaEntry;
-          mimeType = await mimeTypePromise;
+        if (typeof fileUrlOrMediaEntry === 'string') {
+          fileUri = fileUrlOrMediaEntry;
+          // HEAD only — we want the content-type, not the body.
+          mimeType = await fetch(fileUri, { method: 'HEAD' })
+            .then((res) => res.headers.get('content-type') || defaultMimeType)
+            .catch(() => defaultMimeType);
         } else {
-          [mediaEntry, mimeType] = await Promise.all([
-            // Upload to GCS first and get the file.
-            // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
-            new Promise((resolve) => {
-              let isUploadStopped = false;
-              let mediaEntryToResolve = undefined;
-              uploadMedia({
-                mediaUrl: fileUrl,
-                articleType: queryInfo.type.toUpperCase(),
-                onUploadStop: () => {
-                  isUploadStopped = true;
-                  if (mediaEntryToResolve) resolve(mediaEntryToResolve);
-                },
-              }).then((mediaEntry) => {
-                if (isUploadStopped) {
-                  resolve(mediaEntry);
-                } else {
-                  // Initialize mediaEntry so that we can pick it up when upload stop
-                  mediaEntryToResolve = mediaEntry;
-                }
-              });
-            }),
-            mimeTypePromise,
-          ]);
+          const file = fileUrlOrMediaEntry.getFile();
+          const [metadata] = await file.getMetadata();
+          mimeType = metadata.contentType || defaultMimeType;
+          fileUri = file.cloudStorageURI.href;
         }
-
-        // The URI starting with gs://
-        const fileUri = mediaEntry.getFile().cloudStorageURI.href;
-
-        // Try to get mimeType from GCS metadata first
-        const [metadata] = await mediaEntry.getFile().getMetadata();
-        mimeType = metadata.contentType || (await mimeTypePromise);
 
         console.log('[createTranscript] using mimeType:', mimeType);
 

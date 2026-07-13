@@ -14,6 +14,9 @@ exports[`CreateReply creates replies and associates itself with specified articl
 Object {
   "appId": "test",
   "createdAt": "2017-01-28T08:45:57.011Z",
+  "embeddings": Array [
+    Object {},
+  ],
   "reference": "http://shouldscrap.com/",
   "text": "FOO FOO",
   "type": "RUMOR",

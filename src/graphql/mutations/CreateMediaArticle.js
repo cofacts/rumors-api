@@ -13,12 +13,28 @@ import MutationResult from 'graphql/models/MutationResult';
 import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 import archiveUrlsFromText from 'util/archiveUrlsFromText';
+import { createEmbedding } from 'util/embedding';
 
 const AI_TRANSCRIBER_DESCRIPTION = JSON.stringify({
   id: 'ai-transcript',
   appId: 'RUMORS_AI',
   name: 'AI Transcript',
 });
+
+// Maps a media articleType to the createEmbedding content type. TEXT is absent
+// (media articles only) — its presence gates whether we embed on create.
+const EMBEDDING_MEDIA_TYPE = {
+  IMAGE: 'image',
+  AUDIO: 'audio',
+  VIDEO: 'video',
+};
+
+// Fallback mime type per media articleType when GCS metadata lacks contentType.
+const DEFAULT_MEDIA_MIME_TYPE = {
+  IMAGE: 'image/jpeg',
+  AUDIO: 'audio/mpeg',
+  VIDEO: 'video/mp4',
+};
 
 /**
  * Creates a new article in ElasticSearch,
@@ -92,11 +108,14 @@ async function createNewMediaArticle({
  * @returns result of article & ydoc operation
  */
 export function writeAITranscript(articleId, text) {
-  // Write aiResponse to articles
+  // Write aiResponse to articles. Races against createOrUpdateReplyRequest's
+  // script-update on the same article (replyRequestCount += 1) and against
+  // the embedding write — `doc:{text}` is idempotent, so retry on conflict.
   const writeToArticleTextPromise = client.update({
     index: 'articles',
     id: articleId,
     doc: { text },
+    retry_on_conflict: 3,
   });
 
   // Prosemirror editor state with AI response text
@@ -172,6 +191,45 @@ export default {
       docId: mediaEntry.id,
     });
 
+    // Generate embeddings for hybrid search. IMAGE/AUDIO/VIDEO all embed from
+    // the uploaded media file — audio/video as a single vector capped at
+    // EMBEDDING_MEDIA_MAX_SEC (see createEmbedding), so no duration is needed.
+    const embeddingType = EMBEDDING_MEDIA_TYPE[articleType];
+    const embeddingApplied = embeddingType
+      ? aritcleIdPromise
+          .then(async (articleId) => {
+            const file = mediaEntry.getFile();
+            const [metadata] = await file.getMetadata();
+            const mimeType =
+              metadata.contentType || DEFAULT_MEDIA_MIME_TYPE[articleType];
+            // Hand Vertex the object's own `gs://` URI — it reads the bucket
+            // directly, so there's no download / staging on our side.
+            const fileUri = file.cloudStorageURI.href;
+
+            const embeddings = await createEmbedding(
+              { id: mediaEntry.id, type: embeddingType },
+              [{ mimeType, fileUri }],
+              user
+            );
+            // writeAITranscript runs in parallel and also partial-updates
+            // this article (text field). Without retry, concurrent updates
+            // race on _seq_no and one side gets HTTP 409.
+            return client.update({
+              index: 'articles',
+              id: articleId,
+              doc: { embeddings },
+              retry_on_conflict: 3,
+            });
+          })
+          // Embedding failure must not fail the mutation — backfill will retry
+          .catch((e) =>
+            console.warn(
+              `[CreateMediaArticle] embedding for ${mediaEntry.id}:`,
+              e instanceof errors.ResponseError ? e.meta : e
+            )
+          )
+      : Promise.resolve();
+
     await Promise.all([
       // Update reply request
       aritcleIdPromise.then((articleId) =>
@@ -208,6 +266,8 @@ export default {
             e instanceof errors.ResponseError ? e.meta : e
           )
         ),
+
+      embeddingApplied,
     ]);
 
     return { id: await aritcleIdPromise };
