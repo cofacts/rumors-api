@@ -1,7 +1,13 @@
 import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { assertUser, getContentDefaultStatus } from 'util/user';
-import { uploadMedia, getAIResponse } from 'graphql/util';
+import {
+  getOrUploadMedia,
+  getAIResponse,
+  createTranscript,
+  VALID_ARTICLE_TYPE_TO_MEDIA_TYPE,
+} from 'graphql/util';
 import client, { getTotalCount } from 'util/client';
+import mediaManager from 'util/mediaManager';
 import { errors } from '@elastic/elasticsearch';
 import { schema } from 'prosemirror-schema-basic';
 import Y from 'yjs';
@@ -13,6 +19,7 @@ import MutationResult from 'graphql/models/MutationResult';
 import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 import archiveUrlsFromText from 'util/archiveUrlsFromText';
+import { createMediaEmbedding } from 'util/embedding';
 
 const AI_TRANSCRIBER_DESCRIPTION = JSON.stringify({
   id: 'ai-transcript',
@@ -29,7 +36,8 @@ const AI_TRANSCRIBER_DESCRIPTION = JSON.stringify({
  * @param {ArticleTypeEnum} param.articleType
  * @param {ArticleReferenceInput} param.reference
  * @param {object} user - The user submitting this article
- * @returns {Promise<string>} the new article's ID
+ * @returns {Promise<{articleId: string, isNew: boolean}>} the article's ID, and
+ *   whether it is created by this call
  */
 async function createNewMediaArticle({
   mediaEntry,
@@ -56,7 +64,7 @@ async function createNewMediaArticle({
   });
 
   if (getTotalCount(matchedArticle.hits.total)) {
-    return matchedArticle.hits.hits[0]._id;
+    return { articleId: matchedArticle.hits.hits[0]._id, isNew: false };
   }
 
   // use elasticsearch created id
@@ -83,7 +91,7 @@ async function createNewMediaArticle({
     refresh: 'true', // Many use cases would search after media creation, thus refresh here
   });
 
-  return articleId;
+  return { articleId, isNew: true };
 }
 
 /**
@@ -94,7 +102,8 @@ async function createNewMediaArticle({
 export function writeAITranscript(articleId, text) {
   // Write aiResponse to articles. Races against createOrUpdateReplyRequest's
   // script-update on the same article, which the caller runs concurrently with
-  // this. Writing `text` is idempotent, so retrying on conflict is safe.
+  // this, and against the embedding write. Writing `text` is idempotent, so
+  // retrying on conflict is safe.
   const writeToArticleTextPromise = client.update({
     index: 'articles',
     id: articleId,
@@ -158,22 +167,77 @@ export default {
   ) {
     assertUser(user);
 
-    const mediaEntry = await uploadMedia({
-      mediaUrl,
-      articleType,
-    });
+    const mediaType = VALID_ARTICLE_TYPE_TO_MEDIA_TYPE[articleType];
 
-    const aritcleIdPromise = createNewMediaArticle({
+    const queryResult = await mediaManager.query({ url: mediaUrl });
+    if (!mediaType || mediaType !== queryResult.queryInfo.type) {
+      throw new Error(
+        `Specified article type is "${articleType}", but the media file is a ${queryResult.queryInfo.type}.`
+      );
+    }
+
+    // Media manager is the one that knows whether the file is there: get the
+    // stored media entry (e.g. the media has been searched before), or upload
+    // the media and wait until its file is readable. Transcript and embedding
+    // below then share that file, and deal with nothing but their own text /
+    // vectors (including whether they are made before).
+    const mediaEntry = await getOrUploadMedia({
+      mediaUrl,
+      queryResult,
+      user,
+    });
+    const queryInfo = { id: mediaEntry.id, type: mediaType };
+
+    const articlePromise = createNewMediaArticle({
       mediaEntry,
       articleType,
       reference,
       user,
     });
+    const aritcleIdPromise = articlePromise.then(({ articleId }) => articleId);
 
-    const aiResponsePromise = getAIResponse({
-      type: 'TRANSCRIPT',
-      docId: mediaEntry.id,
-    });
+    // An existing article is not transcribed again, as its text may have been
+    // edited already; only the transcript made before is applied.
+    const aiResponsePromise = articlePromise
+      .then(({ isNew }) =>
+        isNew
+          ? createTranscript(queryInfo, mediaEntry, user)
+          : getAIResponse({ type: 'TRANSCRIPT', docId: mediaEntry.id })
+      )
+      .then((aiResponse) =>
+        aiResponse?.status === 'SUCCESS' ? aiResponse : null
+      );
+
+    // Embeddings for hybrid search; audio/video as a single vector capped at
+    // EMBEDDING_MEDIA_MAX_SEC (see createEmbedding). Only a new article is
+    // embedded; existing ones without embeddings are left to the backfill.
+    const embeddingApplied = articlePromise
+      .then(async ({ articleId, isNew }) => {
+        if (!isNew) return;
+
+        const embeddings = await createMediaEmbedding(
+          queryInfo,
+          mediaEntry,
+          user
+        );
+
+        // writeAITranscript runs in parallel and also partial-updates
+        // this article (text field). Without retry, concurrent updates
+        // race on _seq_no and one side gets HTTP 409.
+        return client.update({
+          index: 'articles',
+          id: articleId,
+          doc: { embeddings },
+          retry_on_conflict: 3,
+        });
+      })
+      // Embedding failure must not fail the mutation — backfill will retry
+      .catch((e) =>
+        console.warn(
+          `[CreateMediaArticle] embedding for ${mediaEntry.id}:`,
+          e instanceof errors.ResponseError ? e.meta : e
+        )
+      );
 
     await Promise.all([
       // Update reply request
@@ -211,6 +275,8 @@ export default {
             e instanceof errors.ResponseError ? e.meta : e
           )
         ),
+
+      embeddingApplied,
     ]);
 
     return { id: await aritcleIdPromise };

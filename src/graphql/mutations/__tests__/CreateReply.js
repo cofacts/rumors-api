@@ -1,5 +1,12 @@
 jest.mock('util/grpc');
 jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
+jest.mock('util/embedding', () => ({
+  createEmbedding: jest
+    .fn()
+    .mockResolvedValue([{ vector: new Array(768).fill(0.01) }]),
+  getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
+  getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
+}));
 
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
@@ -61,7 +68,21 @@ describe('CreateReply', () => {
       index: 'replies',
       id: replyId,
     });
-    expect(reply._source).toMatchSnapshot('reply without hyperlinks');
+    // ES 9 strips `dense_vector` from the default `_source`, but what is left
+    // behind depends on index state: a fresh index yields `embeddings: [{}]`,
+    // a refreshed one drops the key entirely. Keep it out of the snapshot and
+    // assert on it properly below instead.
+    const replySource = { ...reply._source };
+    delete replySource.embeddings;
+    expect(replySource).toMatchSnapshot('reply without hyperlinks');
+
+    // Vectors are excluded from the default _source above; verify via includes.
+    const { _source: withEmb } = await client.get({
+      index: 'replies',
+      id: replyId,
+      _source_includes: ['embeddings'],
+    });
+    expect(withEmb.embeddings?.[0]?.vector?.length).toBe(768);
 
     const article = await client.get({
       index: 'articles',

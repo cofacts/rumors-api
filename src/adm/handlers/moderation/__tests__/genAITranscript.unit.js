@@ -135,7 +135,8 @@ describe('genAITranscript (unit)', () => {
     expect(createTranscript).toHaveBeenCalledWith(
       { id: 'hash-no-text', type: 'image' },
       { id: 'hash-no-text' },
-      expect.objectContaining({ appId: 'RUMORS_ADMIN' })
+      expect.objectContaining({ appId: 'RUMORS_ADMIN' }),
+      { force: true }
     );
     expect(writeAITranscript).toHaveBeenCalledWith('media-no-text', 'hello');
     expect(count).toBe(1);

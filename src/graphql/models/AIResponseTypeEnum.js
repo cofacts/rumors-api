@@ -13,5 +13,11 @@ export default new GraphQLEnumType({
       description: 'AI transcribed text of the specified article.',
       value: 'TRANSCRIPT',
     },
+
+    EMBEDDING: {
+      description:
+        'AI generated embedding vectors of the specified article, reply, or search query. Used as cache for hybrid search.',
+      value: 'EMBEDDING',
+    },
   },
 });
