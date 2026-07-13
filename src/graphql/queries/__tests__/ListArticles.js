@@ -1,6 +1,8 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import { createTranscript } from 'graphql/util';
+import { createEmbedding } from 'util/embedding';
+import ListArticles from '../ListArticles';
 import fixtures from '../__fixtures__/ListArticles';
 import mediaManager from 'util/mediaManager';
 
@@ -16,6 +18,12 @@ jest.mock('graphql/util', () => {
     createTranscript: jest.fn(),
   };
 });
+
+jest.mock('util/embedding', () => ({
+  createEmbedding: jest.fn(),
+  getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
+  getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
+}));
 
 describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
@@ -1208,4 +1216,185 @@ describe('ListArticles', () => {
   });
 
   afterAll(() => unloadFixtures(fixtures));
+});
+
+describe('ListArticles kNN retriever', () => {
+  // These tests bypass `gql` and call ListArticles.resolve directly to inspect
+  // the search-request body it produces — no ES roundtrip, no fixtures needed.
+  const baseContext = {
+    loaders: { urlLoader: { load: jest.fn().mockResolvedValue(null) } },
+    userId: 'u',
+    appId: 'a',
+    user: { id: 'u', appId: 'a' },
+  };
+
+  beforeEach(() => {
+    createEmbedding.mockReset();
+    mediaManager.query.mockReset();
+    mediaManager.insert.mockReset();
+  });
+
+  it('runs plain BM25 when embedding is omitted', async () => {
+    const result = await ListArticles.resolve(
+      {},
+      { filter: { moreLikeThis: { like: 'covid vaccine' } } },
+      baseContext
+    );
+
+    expect(result.body.query).toBeDefined();
+    // BM25 path: no nested-knn filter, minimum_should_match stays at 1.
+    expect(result.body.query.bool.minimum_should_match).toBe(1);
+    expect(
+      result.body.query.bool.filter.some((clause) => clause?.bool?.should)
+    ).toBe(false);
+    expect(createEmbedding).not.toHaveBeenCalled();
+  });
+
+  it('adds kNN as a candidate filter and ranks by BM25 when embedding is a similarity', async () => {
+    createEmbedding.mockResolvedValue([{ vector: [0.11, 0.22, 0.33] }]);
+
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          moreLikeThis: { like: 'covid vaccine' },
+          embedding: 0.7,
+        },
+      },
+      baseContext
+    );
+
+    // Cache key + RETRIEVAL_QUERY taskType
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+    const [queryInfo, parts, , options] = createEmbedding.mock.calls[0];
+    expect(queryInfo.type).toBe('text');
+    expect(queryInfo.id).toMatch(/^query-text:/);
+    expect(parts).toEqual([{ text: 'covid vaccine' }]);
+    expect(options).toEqual({ taskType: 'RETRIEVAL_QUERY' });
+
+    // BM25 should-queries stay in place for ranking; retrieval is restricted by
+    // a nested-kNN filter, and minimum_should_match drops to 0.
+    expect(result.body.retriever).toBeUndefined();
+    expect(result.body.query.bool.should[0].nested).toBeUndefined();
+    expect(result.body.query.bool.minimum_should_match).toBe(0);
+
+    const knnFilter = result.body.query.bool.filter.find(
+      (clause) => clause?.bool?.should?.[0]?.nested
+    );
+    const nestedKnn = knnFilter.bool.should[0].nested;
+    expect(nestedKnn.path).toBe('embeddings');
+    expect(nestedKnn.score_mode).toBe('max');
+    expect(nestedKnn.query.knn).toMatchObject({
+      field: 'embeddings.vector',
+      query_vector: [0.11, 0.22, 0.33],
+      similarity: 0.7,
+    });
+  });
+
+  it('falls through to BM25 when createEmbedding throws', async () => {
+    createEmbedding.mockRejectedValue(new Error('vertex offline'));
+
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          moreLikeThis: { like: 'covid' },
+          embedding: 0.6,
+        },
+      },
+      baseContext
+    );
+
+    expect(result.body.query).toBeDefined();
+    expect(result.body.query.bool.should[0].nested).toBeUndefined();
+    expect(result.body.retriever).toBeUndefined();
+  });
+
+  it('reuses the doc-side embedding (cached by media hash) for a media kNN query', async () => {
+    // Media already in the system → its embedding is cached in airesponses under
+    // the content hash. resolveMediaQueryVectors reuses it: no upload, no embed.
+    await loadFixtures({
+      '/airesponses/doc/knn-media-reuse': {
+        type: 'EMBEDDING',
+        docId: 'media-hash-reuse',
+        status: 'SUCCESS',
+        createdAt: '2026-01-01T00:00:00.000Z',
+        embeddings: [{ vector: [0.9, 0.8, 0.7] }],
+      },
+    });
+    mediaManager.query.mockResolvedValueOnce({
+      queryInfo: { id: 'media-hash-reuse', type: 'image' },
+      hits: [],
+    });
+
+    const result = await ListArticles.resolve(
+      {},
+      { filter: { mediaUrl: 'https://example.com/x.jpg', embedding: 0.75 } },
+      baseContext
+    );
+
+    // Reuse path: neither uploaded nor freshly embedded.
+    expect(mediaManager.insert).not.toHaveBeenCalled();
+    expect(createEmbedding).not.toHaveBeenCalled();
+
+    expect(result.body.query.bool.minimum_should_match).toBe(0);
+    const knnFilter = result.body.query.bool.filter.find(
+      (c) => c?.bool?.should?.[0]?.nested
+    );
+    expect(knnFilter.bool.should[0].nested.query.knn).toMatchObject({
+      query_vector: [0.9, 0.8, 0.7],
+      similarity: 0.75,
+    });
+
+    await unloadFixtures({ '/airesponses/doc/knn-media-reuse': {} });
+  });
+
+  it('hands the query URL straight to Vertex on a cache miss, then adds kNN', async () => {
+    // No cached embedding for this hash → pass mediaUrl through as the
+    // `fileData.fileUri`, then kNN. No download, no GCS upload (no orphan file).
+    mediaManager.query.mockResolvedValueOnce({
+      queryInfo: { id: 'media-hash-miss', type: 'image' },
+      hits: [],
+    });
+    const fetchMock = jest.spyOn(global, 'fetch').mockResolvedValueOnce({
+      ok: true,
+      headers: { get: () => 'image/png' },
+    });
+    createEmbedding.mockResolvedValueOnce([{ vector: [0.1, 0.2] }]);
+
+    const result = await ListArticles.resolve(
+      {},
+      { filter: { mediaUrl: 'https://example.com/y.jpg', embedding: 0.6 } },
+      baseContext
+    );
+
+    // No GCS upload → no orphan; only a HEAD goes out, for the content-type.
+    expect(mediaManager.insert).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledWith('https://example.com/y.jpg', {
+      method: 'HEAD',
+    });
+
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+    // Embedded under the media content hash (doc-side key, so it's reusable next time).
+    expect(createEmbedding.mock.calls[0][0]).toEqual({
+      id: 'media-hash-miss',
+      type: 'image',
+    });
+    // mimeType from the HEAD header; the URL itself is what Vertex fetches.
+    expect(createEmbedding.mock.calls[0][1][0]).toEqual({
+      mimeType: 'image/png',
+      fileUri: 'https://example.com/y.jpg',
+    });
+
+    expect(result.body.query.bool.minimum_should_match).toBe(0);
+    const knnFilter = result.body.query.bool.filter.find(
+      (c) => c?.bool?.should?.[0]?.nested
+    );
+    expect(knnFilter.bool.should[0].nested.query.knn).toMatchObject({
+      query_vector: [0.1, 0.2],
+      similarity: 0.6,
+    });
+
+    fetchMock.mockRestore();
+  });
 });

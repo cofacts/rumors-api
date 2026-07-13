@@ -8,6 +8,16 @@ import { getArticleId } from 'graphql/mutations/CreateArticle';
 import archiveUrlsFromText from 'util/archiveUrlsFromText';
 
 jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
+jest.mock('util/embedding', () => ({
+  // 768-dim vector to match the dense_vector mapping; the actual values are
+  // irrelevant — snapshots use a property matcher (expect.any(Array)) to keep
+  // them out of the .snap file.
+  createEmbedding: jest
+    .fn()
+    .mockResolvedValue([{ vector: new Array(768).fill(0.01) }]),
+  getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
+  getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
+}));
 
 describe('creation', () => {
   beforeEach(async () => {
@@ -49,6 +59,16 @@ describe('creation', () => {
 
     expect(article.replyRequestCount).toBe(1);
     expect(article).toMatchSnapshot();
+
+    // Embeddings live in the kNN index but are excluded from default _source
+    // in ES 9 (synthetic source for dense_vector). Verify presence by
+    // explicitly requesting them.
+    const { _source: withEmb } = await client.get({
+      index: 'articles',
+      id: data.CreateArticle.id,
+      _source_includes: ['embeddings'],
+    });
+    expect(withEmb.embeddings?.[0]?.vector?.length).toBe(768);
 
     // Make sure archiveUrlsFromText is called with article text
     expect(archiveUrlsFromText.mock.calls).toMatchInlineSnapshot(`

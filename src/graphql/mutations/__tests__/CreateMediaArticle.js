@@ -8,9 +8,29 @@ import fixtures from '../__fixtures__/CreateMediaArticle';
 import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
 import mediaManager from 'util/mediaManager';
 import archiveUrlsFromText from 'util/archiveUrlsFromText';
+import { createEmbedding } from 'util/embedding';
 
 jest.mock('util/mediaManager');
 jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
+jest.mock('util/embedding', () => ({
+  createEmbedding: jest
+    .fn()
+    .mockResolvedValue([{ vector: new Array(768).fill(0.01) }]),
+  getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
+  getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
+}));
+
+// Minimal MediaEntry shape for tests: enough to satisfy CreateMediaArticle's
+// post-create embedding pass (getFile().cloudStorageURI / getMetadata()).
+const mockMediaEntry = ({ id, url, type }) => ({
+  id,
+  url,
+  type,
+  getFile: () => ({
+    cloudStorageURI: { href: `gs://test-bucket/${id}` },
+    getMetadata: async () => [{ contentType: 'image/jpeg' }],
+  }),
+});
 
 describe('creation', () => {
   beforeAll(() => loadFixtures(fixtures));
@@ -25,11 +45,13 @@ describe('creation', () => {
     const userId = 'test';
     const appId = 'foo';
 
-    mediaManager.insert.mockImplementationOnce(async () => ({
-      id: 'mock_image_hash',
-      url: 'http://foo.com/output_image.jpeg',
-      type: 'image',
-    }));
+    mediaManager.insert.mockImplementationOnce(async () =>
+      mockMediaEntry({
+        id: 'mock_image_hash',
+        url: 'http://foo.com/output_image.jpeg',
+        type: 'image',
+      })
+    );
 
     const { data, errors } = await gql`
       mutation (
@@ -115,6 +137,14 @@ describe('creation', () => {
       }
     `);
 
+    // Embeddings excluded from default _source in ES 9; verify via includes.
+    const { _source: withEmb } = await client.get({
+      index: 'articles',
+      id: data.CreateMediaArticle.id,
+      _source_includes: ['embeddings'],
+    });
+    expect(withEmb.embeddings?.[0]?.vector?.length).toBe(768);
+
     const replyRequestId = getReplyRequestId({
       articleId: data.CreateMediaArticle.id,
       userId,
@@ -180,17 +210,98 @@ describe('creation', () => {
     });
   });
 
+  it('embeds AUDIO articles from the uploaded media file (single capped vector)', async () => {
+    MockDate.set(1485593157011);
+    const userId = 'test';
+    const appId = 'foo';
+
+    createEmbedding.mockClear();
+    mediaManager.insert.mockImplementationOnce(async () => ({
+      id: 'mock_audio_hash',
+      url: 'http://foo.com/output_audio.mp3',
+      type: 'audio',
+      getFile: () => ({
+        cloudStorageURI: { href: 'gs://test-bucket/mock_audio_hash' },
+        getMetadata: async () => [{ contentType: 'audio/mpeg' }],
+      }),
+    }));
+
+    const { data, errors } = await gql`
+      mutation (
+        $mediaUrl: String!
+        $articleType: ArticleTypeEnum!
+        $reference: ArticleReferenceInput!
+      ) {
+        CreateMediaArticle(
+          mediaUrl: $mediaUrl
+          articleType: $articleType
+          reference: $reference
+        ) {
+          id
+        }
+      }
+    `(
+      {
+        mediaUrl: 'http://foo.com/input_audio.mp3',
+        articleType: 'AUDIO',
+        reference: { type: 'LINE' },
+      },
+      { user: { id: userId, appId } }
+    );
+    MockDate.reset();
+
+    expect(errors).toBeUndefined();
+
+    // Audio embeds from the media file with type 'audio' — no duration passed;
+    // createEmbedding caps it internally.
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+    expect(createEmbedding.mock.calls[0][0]).toEqual({
+      id: 'mock_audio_hash',
+      type: 'audio',
+    });
+    const audioPart = createEmbedding.mock.calls[0][1][0];
+    expect(audioPart.mimeType).toBe('audio/mpeg');
+    // Doc-side passes the object's own gs:// URI (no signing, no upload).
+    expect(audioPart.fileUri).toBe('gs://test-bucket/mock_audio_hash');
+
+    // The resulting vector is stored on the article.
+    const { _source: withEmb } = await client.get({
+      index: 'articles',
+      id: data.CreateMediaArticle.id,
+      _source_includes: ['embeddings'],
+    });
+    expect(withEmb.embeddings?.[0]?.vector?.length).toBe(768);
+
+    const replyRequestId = getReplyRequestId({
+      articleId: data.CreateMediaArticle.id,
+      userId,
+      appId,
+    });
+
+    // Cleanup
+    await client.delete({
+      index: 'articles',
+      id: data.CreateMediaArticle.id,
+    });
+    await client.delete({
+      index: 'replyrequests',
+      id: replyRequestId,
+    });
+  });
+
   it('avoids creating duplicated media articles and adds replyRequests automatically', async () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'foo';
 
-    mediaManager.insert.mockImplementationOnce(async () => ({
-      // Duplicate hash
-      id: fixtures['/articles/doc/image1'].attachmentHash,
-      url: fixtures['/articles/doc/image1'].attachmentUrl,
-      type: 'image',
-    }));
+    mediaManager.insert.mockImplementationOnce(async () =>
+      mockMediaEntry({
+        // Duplicate hash
+        id: fixtures['/articles/doc/image1'].attachmentHash,
+        url: fixtures['/articles/doc/image1'].attachmentUrl,
+        type: 'image',
+      })
+    );
 
     const { data, errors } = await gql`
       mutation (
@@ -317,11 +428,13 @@ describe('creation', () => {
     const userId = 'iAmSpammer';
     const appId = 'foo';
 
-    mediaManager.insert.mockImplementationOnce(async () => ({
-      id: 'mock_image_hash_spam',
-      url: 'http://foo.com/output_image_spam.jpeg',
-      type: 'image',
-    }));
+    mediaManager.insert.mockImplementationOnce(async () =>
+      mockMediaEntry({
+        id: 'mock_image_hash_spam',
+        url: 'http://foo.com/output_image_spam.jpeg',
+        type: 'image',
+      })
+    );
 
     const { data } = await gql`
       mutation (
