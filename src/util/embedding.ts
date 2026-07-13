@@ -1,0 +1,238 @@
+import { h64 } from 'xxhashjs';
+
+import { createAIResponse, getAIResponse } from 'graphql/util';
+import { createGenAI } from 'util/genai';
+
+const xxhash64 = h64();
+
+/**
+ * Cache key for a reply doc's embedding. Hash of (text, reference) so
+ * resubmissions of the same content hit the airesponses cache. Prefixed to
+ * avoid collisions with article doc IDs (= text hashes without prefix).
+ */
+export function getReplyEmbeddingCacheId(
+  text: string,
+  reference?: string | null
+): string {
+  return (
+    'reply:' +
+    xxhash64
+      .update(`${text}\n${reference || ''}`)
+      .digest()
+      .toString(36)
+  );
+}
+
+/**
+ * Cache key for a search-query embedding (read path). Different namespace
+ * from doc-side cache keys so query-time embeddings don't collide.
+ */
+export function getQueryEmbeddingCacheId(text: string): string {
+  return 'query-text:' + xxhash64.update(text).digest().toString(36);
+}
+
+/**
+ * Audio/video are embedded as a single vector capped at this many seconds.
+ * Gemini Embedding 2 caps media input at ~80s (audio hard limit; video ~81s
+ * once the audio track is extracted) within its 8192-token window, silently
+ * truncating the rest. We pass this as an explicit `endOffset` so the bound is
+ * intentional and no duration probe is needed — content past this point is not
+ * represented in the vector (the full text is still covered by transcript BM25).
+ */
+export const EMBEDDING_MEDIA_MAX_SEC = 80;
+
+/**
+ * Output dimensionality. Uses Matryoshka Representation Learning (MRL) to
+ * truncate the model's native 3072 dims — trades a small amount of retrieval
+ * quality for substantially smaller HNSW graphs and lower per-doc storage.
+ */
+export const EMBEDDING_DIMS = 768;
+
+const EMBEDDING_MODEL = 'gemini-embedding-2';
+
+/**
+ * `gemini-embedding-2` is served **only** from the `global` endpoint — a
+ * regional one (`us-central1`, `asia-east1`, …) 404s. Not configurable on
+ * purpose; there is no other location to point at.
+ */
+const EMBEDDING_LOCATION = 'global';
+
+export type EmbeddingTextPart = { text: string };
+
+/**
+ * A media part. `fileUri` is the `gs://` URI of a media entry in our own bucket,
+ * which Vertex reads directly. Query-side media is uploaded as a media entry
+ * first (see `uploadMediaAndWait`).
+ */
+export type EmbeddingMediaPart = { mimeType: string; fileUri: string };
+export type EmbeddingPart = EmbeddingTextPart | EmbeddingMediaPart;
+
+export type EmbeddingChunk = {
+  vector: number[];
+  startOffsetSec?: number;
+  endOffsetSec?: number;
+};
+
+type EmbeddingTaskType = 'RETRIEVAL_DOCUMENT' | 'RETRIEVAL_QUERY';
+
+export type CreateEmbeddingQueryInfo = {
+  /** Used as `docId` for the airesponses cache record. */
+  id: string;
+  /**
+   * text/image -> embed the content as-is. audio/video -> a single vector over
+   * the first EMBEDDING_MEDIA_MAX_SEC seconds of the file (see the constant).
+   */
+  type: 'text' | 'image' | 'audio' | 'video';
+};
+
+export type CreateEmbeddingOptions = {
+  /** Defaults to RETRIEVAL_DOCUMENT (write path). Pass RETRIEVAL_QUERY for search queries. */
+  taskType?: EmbeddingTaskType;
+};
+
+type User = { id: string; appId: string };
+
+/** Fallback mime type per media type when GCS metadata lacks contentType. */
+const DEFAULT_MEDIA_MIME_TYPE = {
+  image: 'image/jpeg',
+  audio: 'audio/mpeg',
+  video: 'video/mp4',
+};
+
+/** The part of a media-manager MediaEntry that embedding reads. */
+type EmbeddableMediaEntry = {
+  getFile: () => {
+    getMetadata: () => Promise<[{ contentType?: string }, ...unknown[]]>;
+    cloudStorageURI: { href: string };
+  };
+};
+
+function isMediaPart(part: EmbeddingPart): part is EmbeddingMediaPart {
+  return 'fileUri' in part;
+}
+
+/**
+ * Generate (or load from cache) embedding chunks for the given content.
+ *
+ * Cache layer: airesponses doc keyed by (type=EMBEDDING, docId=queryInfo.id).
+ * Same get-or-create + LOADING-wait semantics as createTranscript, so concurrent
+ * callers for the same docId share work.
+ */
+export async function createEmbedding(
+  queryInfo: CreateEmbeddingQueryInfo,
+  parts: EmbeddingPart[],
+  user?: User | null,
+  options: CreateEmbeddingOptions = {}
+): Promise<EmbeddingChunk[]> {
+  const cached = await getAIResponse({
+    type: 'EMBEDDING',
+    docId: queryInfo.id,
+  });
+  if (
+    cached &&
+    cached.status === 'SUCCESS' &&
+    Array.isArray(cached.embeddings) &&
+    cached.embeddings.length > 0
+  ) {
+    return cached.embeddings as EmbeddingChunk[];
+  }
+
+  const { update } = createAIResponse({
+    user,
+    type: 'EMBEDDING',
+    docId: queryInfo.id,
+  });
+
+  try {
+    const genAI = await createGenAI(EMBEDDING_LOCATION);
+    const taskType: EmbeddingTaskType =
+      options.taskType ?? 'RETRIEVAL_DOCUMENT';
+
+    // Audio/video are embedded as a single vector capped at the first
+    // EMBEDDING_MEDIA_MAX_SEC seconds via an explicit `endOffset` — Gemini can't
+    // embed longer media in one call, and this avoids needing a duration probe.
+    // Text/image embed the whole content as-is.
+    const isTimedMedia =
+      queryInfo.type === 'audio' || queryInfo.type === 'video';
+
+    const partsForCall = parts.map((p) => {
+      if (!isMediaPart(p)) return { text: p.text };
+
+      return {
+        fileData: { fileUri: p.fileUri, mimeType: p.mimeType },
+        ...(isTimedMedia
+          ? {
+              videoMetadata: {
+                startOffset: '0s',
+                endOffset: `${EMBEDDING_MEDIA_MAX_SEC}s`,
+              },
+            }
+          : {}),
+      };
+    });
+
+    // `gemini-embedding-2` only exposes `:embedContent` — the legacy
+    // `:predict` endpoint (what `PredictionServiceClient` and older
+    // text-embedding models use) is not served for this model, and the model
+    // card doesn't call that out. `models.embedContent` maps to the right one.
+    const response = await genAI.models.embedContent({
+      model: EMBEDDING_MODEL,
+      contents: [{ role: 'user', parts: partsForCall }],
+      config: {
+        outputDimensionality: EMBEDDING_DIMS,
+        taskType,
+      },
+    });
+
+    const vector = response.embeddings?.[0]?.values;
+    if (!vector || vector.length === 0) {
+      throw new Error('[createEmbedding] Empty vector returned');
+    }
+    const chunks: EmbeddingChunk[] = [{ vector }];
+
+    await update({ status: 'SUCCESS', embeddings: chunks });
+    return chunks;
+  } catch (e) {
+    console.error('[createEmbedding]', e);
+    await update({
+      status: 'ERROR',
+      text: e instanceof Error ? e.toString() : String(e),
+    });
+    throw e;
+  }
+}
+
+/**
+ * Embed a media that is in media manager, under its content hash, so that the
+ * vector is shared by every place that sees the same media (search, article
+ * creation, backfill).
+ *
+ * Whether the file is there is media manager's business: the caller hands over
+ * a media entry whose file is readable, and this only turns it into vectors
+ * (cached like any other embedding, see {@link createEmbedding}).
+ *
+ * @param queryInfo - type and media entry ID of the media
+ * @param mediaEntry - the image, audio or video to embed
+ * @param user - the user who requested the embedding
+ */
+export async function createMediaEmbedding(
+  queryInfo: { id: string; type: 'image' | 'audio' | 'video' },
+  mediaEntry: EmbeddableMediaEntry,
+  user?: User | null
+): Promise<EmbeddingChunk[]> {
+  const file = mediaEntry.getFile();
+  const [metadata] = await file.getMetadata();
+
+  return createEmbedding(
+    queryInfo,
+    [
+      {
+        mimeType:
+          metadata.contentType || DEFAULT_MEDIA_MIME_TYPE[queryInfo.type],
+        // Vertex reads the object by its own `gs://` URI.
+        fileUri: file.cloudStorageURI.href,
+      },
+    ],
+    user
+  );
+}

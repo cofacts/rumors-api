@@ -98,7 +98,9 @@ async function genAITranscript({
             type: article.articleType.toLowerCase(),
           },
           mediaEntry,
-          SYSTEM_USER
+          SYSTEM_USER,
+          // Existing transcripts are handled above, according to `force`.
+          { force: true }
         );
 
         if (transcriptResponse.status === 'SUCCESS') {

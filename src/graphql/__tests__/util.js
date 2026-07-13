@@ -6,6 +6,7 @@ import client from 'util/client';
 
 import {
   createTranscript,
+  uploadMediaAndWait,
   getRangeFieldParamFromArithmeticExpression,
 } from '../util';
 
@@ -97,7 +98,7 @@ if (process.env.GCS_BUCKET_NAME) {
           id: 'foo',
           type: 'file',
         },
-        'https://some-url',
+        null,
         { id: 'foo', appId: 'WEBSITE' }
       );
       MockDate.reset();
@@ -136,7 +137,11 @@ if (process.env.GCS_BUCKET_NAME) {
           id: 'foo',
           type: 'image',
         },
-        FIXTURES_URLS['ocr-test.jpg'],
+        await uploadMediaAndWait({
+          mediaUrl: FIXTURES_URLS['ocr-test.jpg'],
+          articleType: 'IMAGE',
+          user: { id: 'user-id', appId: 'app-id' },
+        }),
         { id: 'user-id', appId: 'app-id' }
       );
 
@@ -177,7 +182,11 @@ if (process.env.GCS_BUCKET_NAME) {
           id: 'direct-sales',
           type: 'audio',
         },
-        FIXTURES_URLS['audio-test.m4a'],
+        await uploadMediaAndWait({
+          mediaUrl: FIXTURES_URLS['audio-test.m4a'],
+          articleType: 'AUDIO',
+          user: { id: 'user-id', appId: 'app-id' },
+        }),
         { id: 'user-id', appId: 'app-id' }
       );
 
@@ -224,7 +233,11 @@ if (process.env.GCS_BUCKET_NAME) {
           id: 'ginger',
           type: 'video',
         },
-        FIXTURES_URLS['video-subtitles-only.mp4'],
+        await uploadMediaAndWait({
+          mediaUrl: FIXTURES_URLS['video-subtitles-only.mp4'],
+          articleType: 'VIDEO',
+          user: { id: 'user-id', appId: 'app-id' },
+        }),
         { id: 'user-id', appId: 'app-id' }
       );
 
@@ -268,7 +281,11 @@ if (process.env.GCS_BUCKET_NAME) {
           id: 'tiktok',
           type: 'video',
         },
-        FIXTURES_URLS['video-complex.mp4'],
+        await uploadMediaAndWait({
+          mediaUrl: FIXTURES_URLS['video-complex.mp4'],
+          articleType: 'VIDEO',
+          user: { id: 'user-id', appId: 'app-id' },
+        }),
         { id: 'user-id', appId: 'app-id' }
       );
 

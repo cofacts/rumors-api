@@ -100,8 +100,8 @@ export async function createOrUpdateReplyRequest({
       // This is a contended counter, and ES updates are optimistically locked:
       // a concurrent writer bumps _seq_no and this update fails outright.
       // Two sources of contention, both real:
-      // - CreateMediaArticle fires writeAITranscript() against the same article
-      //   in the same tick as this call.
+      // - CreateMediaArticle fires writeAITranscript() and the embedding write
+      //   against the same article in the same tick as this call.
       // - A message going viral means many users request a reply for the same
       //   article within seconds of each other.
       // A retry re-runs the script against the fresh version, so increments are

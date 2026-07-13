@@ -35,9 +35,6 @@ jest.mock('util/genai', () => ({
   })),
 }));
 
-// Only used for the content-type sniff on a plain URL.
-jest.mock('node-fetch', () => jest.fn());
-
 jest.mock('util/mediaManager', () => ({
   __esModule: true,
   default: { insert: jest.fn(), get: jest.fn() },
@@ -47,9 +44,13 @@ jest.mock('util/mediaManager', () => ({
 
 // Imported after the mocks are declared (jest hoists jest.mock above imports).
 import mediaManager from 'util/mediaManager';
-import { uploadMedia, createTranscript } from 'graphql/util';
+import {
+  uploadMedia,
+  uploadMediaAndWait,
+  getOrUploadMedia,
+  createTranscript,
+} from 'graphql/util';
 import { ImageAnnotatorClient } from '@google-cloud/vision';
-import fetch from 'node-fetch';
 
 const mockDocumentTextDetection = new ImageAnnotatorClient()
   .documentTextDetection;
@@ -141,24 +142,197 @@ describe('uploadMedia (unit)', () => {
   });
 });
 
+describe('uploadMediaAndWait (unit)', () => {
+  beforeEach(() => mediaManager.insert.mockReset());
+
+  const fakeMediaEntry = { variants: [], getFile: jest.fn() };
+
+  it('resolves only after the upload stops', async () => {
+    let stopUpload;
+    mediaManager.insert.mockImplementation(async (opts) => {
+      stopUpload = () => opts.onUploadStop(null);
+      return fakeMediaEntry;
+    });
+
+    const resolved = jest.fn();
+    const promise = uploadMediaAndWait({
+      mediaUrl: 'http://x/a.mp4',
+      articleType: 'VIDEO',
+      user,
+    }).then(resolved);
+
+    // insert() has returned the entry, but the file is still uploading.
+    await new Promise((resolve) => setImmediate(resolve));
+    expect(resolved).not.toHaveBeenCalled();
+
+    stopUpload();
+    await promise;
+    expect(resolved).toHaveBeenCalledWith(fakeMediaEntry);
+  });
+
+  it('resolves when the file already exists, which stops the upload before insert() returns', async () => {
+    // Silence the expected error log from uploadMedia's onUploadStop.
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    mediaManager.insert.mockImplementation(async (opts) => {
+      opts.onUploadStop(new Error('File already exists'));
+      return fakeMediaEntry;
+    });
+
+    await expect(
+      uploadMediaAndWait({
+        mediaUrl: 'http://x/a.mp4',
+        articleType: 'VIDEO',
+        user,
+      })
+    ).resolves.toBe(fakeMediaEntry);
+    consoleError.mockRestore();
+  });
+
+  it('uploads nothing without a logged-in user', async () => {
+    await expect(
+      uploadMediaAndWait({ mediaUrl: 'http://x/a.mp4', articleType: 'VIDEO' })
+    ).rejects.toThrow('userId is not set via query string.');
+    expect(mediaManager.insert).not.toHaveBeenCalled();
+  });
+
+  it('rejects when the media cannot be inserted', async () => {
+    mediaManager.insert.mockRejectedValue(new Error('No content type header'));
+
+    await expect(
+      uploadMediaAndWait({
+        mediaUrl: 'http://x/a',
+        articleType: 'VIDEO',
+        user,
+      })
+    ).rejects.toThrow('No content type header');
+  });
+});
+
+describe('getOrUploadMedia (unit)', () => {
+  beforeEach(() => mediaManager.insert.mockReset());
+
+  const queryInfo = { id: 'video.hash', type: 'video' };
+
+  it('returns the stored media entry without uploading', async () => {
+    const storedEntry = { id: 'video.hash', variants: ['original'] };
+
+    await expect(
+      getOrUploadMedia({
+        mediaUrl: 'http://x/a.mp4',
+        queryResult: {
+          queryInfo,
+          hits: [{ similarity: 1, entry: storedEntry }],
+        },
+        user,
+      })
+    ).resolves.toBe(storedEntry);
+    expect(mediaManager.insert).not.toHaveBeenCalled();
+  });
+
+  it('uploads when media manager only has other media', async () => {
+    const uploadedEntry = { variants: [], getFile: jest.fn() };
+    mediaManager.insert.mockImplementation(async (opts) => {
+      setImmediate(() => opts.onUploadStop(null));
+      return uploadedEntry;
+    });
+
+    await expect(
+      getOrUploadMedia({
+        mediaUrl: 'http://x/a.mp4',
+        queryResult: {
+          queryInfo,
+          // A similar image, or an entry whose original file is not there yet
+          hits: [
+            { similarity: 0.9, entry: { id: 'video.other', variants: [] } },
+            { similarity: 1, entry: { id: 'video.hash', variants: [] } },
+          ],
+        },
+        user,
+      })
+    ).resolves.toBe(uploadedEntry);
+    expect(mediaManager.insert.mock.calls[0][0].url).toBe('http://x/a.mp4');
+  });
+
+  it('requires a logged-in user to upload', async () => {
+    await expect(
+      getOrUploadMedia({
+        mediaUrl: 'http://x/a.mp4',
+        queryResult: { queryInfo, hits: [] },
+      })
+    ).rejects.toThrow('userId is not set via query string.');
+    expect(mediaManager.insert).not.toHaveBeenCalled();
+  });
+});
+
 describe('createTranscript (unit)', () => {
+  /** An image media entry on GCS */
+  const imageEntry = (href) => ({
+    getFile: () => ({ cloudStorageURI: { href } }),
+  });
+
   beforeEach(() => {
     mockDocumentTextDetection.mockReset();
     mockGenerateContent.mockReset();
     mediaManager.insert.mockReset();
-    fetch.mockReset();
   });
 
   it('throws when no user is given', async () => {
     await expect(
-      createTranscript({ id: 'unit-nouser', type: 'image' }, 'gs://b/a.jpg')
+      createTranscript(
+        { id: 'unit-nouser', type: 'image' },
+        imageEntry('gs://b/a.jpg')
+      )
     ).rejects.toThrow('[createTranscript] user is required');
+  });
+
+  it('returns the transcript made before, without generating', async () => {
+    mockDocumentTextDetection.mockResolvedValue([{ fullTextAnnotation: null }]);
+    const first = await transcribe(
+      { id: 'unit-existing', type: 'image' },
+      imageEntry('gs://bucket/existing.jpg'),
+      user
+    );
+    // createAIResponse does not refresh the index; make it searchable.
+    await client.indices.refresh({ index: 'airesponses' });
+    mockDocumentTextDetection.mockClear();
+
+    const second = await createTranscript(
+      { id: 'unit-existing', type: 'image' },
+      // Not even read: no file is needed for a transcript made before
+      null,
+      user
+    );
+
+    expect(second.id).toBe(first.id);
+    expect(mockDocumentTextDetection).not.toHaveBeenCalled();
+  });
+
+  it('generates again when forced', async () => {
+    mockDocumentTextDetection.mockResolvedValue([{ fullTextAnnotation: null }]);
+    const first = await transcribe(
+      { id: 'unit-forced', type: 'image' },
+      imageEntry('gs://bucket/forced.jpg'),
+      user
+    );
+    await client.indices.refresh({ index: 'airesponses' });
+
+    const second = await transcribe(
+      { id: 'unit-forced', type: 'image' },
+      imageEntry('gs://bucket/forced.jpg'),
+      user,
+      { force: true }
+    );
+
+    expect(second.id).not.toBe(first.id);
+    expect(mockDocumentTextDetection).toHaveBeenCalledTimes(2);
   });
 
   it('returns ERROR for unsupported types', async () => {
     const { status, text } = await transcribe(
       { id: 'unit-unsupported', type: 'file' },
-      'https://some-url',
+      null,
       user
     );
     expect({ status, text }).toEqual({
@@ -226,7 +400,7 @@ describe('createTranscript (unit)', () => {
 
       const { status, text } = await transcribe(
         { id: 'unit-ocr', type: 'image' },
-        'gs://bucket/img.jpg',
+        imageEntry('gs://bucket/img.jpg'),
         user
       );
 
@@ -244,7 +418,7 @@ describe('createTranscript (unit)', () => {
       ]);
       const { status, text } = await transcribe(
         { id: 'unit-ocr-empty', type: 'image' },
-        'gs://bucket/blank.jpg',
+        imageEntry('gs://bucket/blank.jpg'),
         user
       );
       expect({ status, text }).toEqual({ status: 'SUCCESS', text: '' });
@@ -256,7 +430,7 @@ describe('createTranscript (unit)', () => {
       ]);
       const { status, text } = await transcribe(
         { id: 'unit-ocr-nopages', type: 'image' },
-        'gs://bucket/nopages.jpg',
+        imageEntry('gs://bucket/nopages.jpg'),
         user
       );
       expect({ status, text }).toEqual({ status: 'SUCCESS', text: '' });
@@ -268,7 +442,7 @@ describe('createTranscript (unit)', () => {
       ]);
       const { status, text } = await transcribe(
         { id: 'unit-ocr-err', type: 'image' },
-        'gs://bucket/bad.jpg',
+        imageEntry('gs://bucket/bad.jpg'),
         user
       );
       expect({ status, text }).toEqual({
@@ -281,32 +455,13 @@ describe('createTranscript (unit)', () => {
       mockDocumentTextDetection.mockResolvedValue([{ error: {} }]);
       const { status, text } = await transcribe(
         { id: 'unit-ocr-err-nomsg', type: 'image' },
-        'gs://bucket/bad2.jpg',
+        imageEntry('gs://bucket/bad2.jpg'),
         user
       );
       expect({ status, text }).toEqual({
         status: 'ERROR',
         text: 'Vision API error',
       });
-    });
-
-    it('reads the image URI from a MediaEntry object', async () => {
-      mockDocumentTextDetection.mockResolvedValue([
-        { fullTextAnnotation: null },
-      ]);
-      const mediaEntry = {
-        getFile: () => ({
-          cloudStorageURI: { href: 'gs://bucket/from-entry.jpg' },
-        }),
-      };
-      await transcribe(
-        { id: 'unit-ocr-entry', type: 'image' },
-        mediaEntry,
-        user
-      );
-      expect(mockDocumentTextDetection).toHaveBeenCalledWith(
-        'gs://bucket/from-entry.jpg'
-      );
     });
   });
 
@@ -357,7 +512,7 @@ describe('createTranscript (unit)', () => {
       );
     });
 
-    it('reads a MediaEntry contentType from GCS metadata, without a HEAD request', async () => {
+    it('reads the contentType from GCS metadata', async () => {
       mockGenerateContent.mockResolvedValue(geminiReplies('ok'));
 
       await transcribe(
@@ -366,8 +521,6 @@ describe('createTranscript (unit)', () => {
         user
       );
 
-      // The bytes are already ours; nothing needs sniffing over the wire.
-      expect(fetch).not.toHaveBeenCalled();
       expect(
         mockGenerateContent.mock.calls[0][0].contents[0].parts[0].fileData
           .mimeType
@@ -389,101 +542,24 @@ describe('createTranscript (unit)', () => {
       ).toBe('audio/mpeg');
     });
 
-    it('hands a plain URL to Vertex as-is, without copying it to GCS', async () => {
-      fetch.mockResolvedValue({
-        ok: true,
-        status: 200,
-        headers: { get: () => 'video/mp4' },
-      });
-      mockGenerateContent.mockResolvedValue(geminiReplies('from url'));
-
+    it('returns ERROR, without calling Vertex, when the file cannot be read', async () => {
       const { status, text } = await transcribe(
-        { id: 'unit-av-url', type: 'video' },
-        'https://media/remote.mp4',
-        user
-      );
-
-      // Vertex fetches the (publicly readable) URL itself, so we neither upload
-      // nor proxy the bytes -- only a HEAD goes out, for the content type.
-      expect(mediaManager.insert).not.toHaveBeenCalled();
-      expect(fetch).toHaveBeenCalledWith('https://media/remote.mp4', {
-        method: 'HEAD',
-      });
-      expect(mockGenerateContent.mock.calls[0][0].contents[0].parts[0]).toEqual(
+        { id: 'unit-av-nofile', type: 'video' },
         {
-          fileData: {
-            fileUri: 'https://media/remote.mp4',
-            mimeType: 'video/mp4',
-          },
-        }
-      );
-      expect({ status, text }).toEqual({ status: 'SUCCESS', text: 'from url' });
-    });
-
-    it('falls back to a type default when the HEAD sniff fails', async () => {
-      fetch.mockRejectedValue(new Error('network down'));
-      mockGenerateContent.mockResolvedValue(geminiReplies('ok'));
-
-      await transcribe(
-        { id: 'unit-av-headfail', type: 'audio' },
-        'https://media/remote.mp3',
-        user
-      );
-
-      expect(
-        mockGenerateContent.mock.calls[0][0].contents[0].parts[0].fileData
-          .mimeType
-      ).toBe('audio/mpeg');
-    });
-
-    it('fails early, without calling Vertex, when the URL returns 4xx', async () => {
-      // node-fetch resolves on 4xx; the error page's own content-type must not
-      // be mistaken for the media's.
-      fetch.mockResolvedValue({
-        ok: false,
-        status: 404,
-        statusText: 'Not Found',
-        headers: { get: () => 'text/plain; charset=utf-8' },
-      });
-
-      const secretUrl = 'https://line-bot/getcontent?token=secret-jwt';
-      const { status, text } = await transcribe(
-        { id: 'unit-av-head404', type: 'video' },
-        secretUrl,
+          getFile: () => ({
+            getMetadata: async () => {
+              throw new Error('No such object');
+            },
+            cloudStorageURI: { href: 'gs://bucket/missing.mp4' },
+          }),
+        },
         user
       );
 
       expect(mockGenerateContent).not.toHaveBeenCalled();
       expect(status).toBe('ERROR');
-      expect(text).toContain('HEAD returned 404 Not Found');
-      // Persisted to the aiResponse doc, so the tokenized URL must not leak.
-      expect(text).not.toContain('secret-jwt');
+      expect(text).toContain('No such object');
     });
-
-    it.each([405, 501])(
-      'falls back to a type default when the server rejects HEAD with %i',
-      async (httpStatus) => {
-        // Vertex fetches with GET, so a server that only rejects HEAD is fine.
-        fetch.mockResolvedValue({
-          ok: false,
-          status: httpStatus,
-          headers: { get: () => 'text/html' },
-        });
-        mockGenerateContent.mockResolvedValue(geminiReplies('ok'));
-
-        const { status } = await transcribe(
-          { id: `unit-av-head${httpStatus}`, type: 'video' },
-          'https://media/no-head.mp4',
-          user
-        );
-
-        expect(status).toBe('SUCCESS');
-        expect(
-          mockGenerateContent.mock.calls[0][0].contents[0].parts[0].fileData
-            .mimeType
-        ).toBe('video/mp4');
-      }
-    );
 
     it('falls back to the next model on 429 RESOURCE_EXHAUSTED', async () => {
       mockGenerateContent

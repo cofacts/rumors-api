@@ -13,8 +13,10 @@ import { GoogleAuth } from 'google-auth-library';
  *
  * Note there is no Files API on Vertex: media is referenced by
  * `fileData.fileUri`, which takes either a `gs://` URI (readable by the
- * project's Vertex service agent) or a publicly-readable https URL. Vertex
- * fetches it itself, so we never upload or proxy media bytes.
+ * project's Vertex service agent) or a publicly-readable https URL. Audio and
+ * video fetched by https URL are capped at 15 MB, while `gs://` allows up to
+ * 2 GB, so media that is not in our bucket yet is uploaded there first (see
+ * `uploadMediaAndWait`).
  *
  * @param location Regional endpoint, e.g. `us-central1` or `global`.
  */
