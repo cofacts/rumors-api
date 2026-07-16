@@ -284,7 +284,8 @@ if (process.env.GCS_BUCKET_NAME) {
 
       // Traditional / Simplified Chinese is not stable
       try {
-        expect(text).toMatch(/教你秒变失踪人口|教你秒變失踪人口/);
+        expect(text).toMatch(/教你秒变|教你秒變/);
+        expect(text).toMatch(/失踪人口|失蹤人口/);
         expect(text).toMatch(/就会变成空号|就會變成空號/);
         expect(text).toMatch(/你学会了吗|你學會了嗎/);
       } finally {
