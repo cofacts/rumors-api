@@ -960,7 +960,7 @@ Your text will be used for indexing these media files, so please follow these ru
 
 const TRANSCRIPT_MODELS = [
   // Combinations that are faster than gemini-2.0-flash-001 @ us
-  { model: 'gemini-3.1-flash-lite-preview', location: 'global' },
+  { model: 'gemini-3.1-flash-lite', location: 'global' },
   { model: 'gemini-2.5-flash', location: 'global' },
 ];
 
@@ -1091,6 +1091,7 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
           input: fileUri,
         });
 
+        let lastError;
         for (const { model, location } of TRANSCRIPT_MODELS) {
           try {
             const { text, usage } = await transcribeAV({
@@ -1105,13 +1106,20 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
           } catch (e) {
             console.error('[createTranscript]', e);
 
-            if (
+            const isQuotaExceeded =
               e.message.includes('429') &&
-              e.message.includes('RESOURCE_EXHAUSTED')
-            ) {
+              e.message.includes('RESOURCE_EXHAUSTED');
+            // Model retired or not available to the project
+            const isModelNotFound =
+              e.message.includes('404') || e.message.includes('NOT_FOUND');
+
+            if (isQuotaExceeded || isModelNotFound) {
               console.warn(
-                `[createTranscript] Model ${model} @ ${location} quota exceeded, trying next model.`
+                `[createTranscript] Model ${model} @ ${location} ${
+                  isQuotaExceeded ? 'quota exceeded' : 'not found'
+                }, trying next model.`
               );
+              lastError = e;
               continue; // Try the next model
             }
 
@@ -1122,7 +1130,7 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
         // If all models fail
         return update({
           status: 'ERROR',
-          text: 'All models failed due to quota limits.',
+          text: `All models failed. Last error: ${lastError}`,
         });
       }
       default:
