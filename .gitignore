@@ -54,4 +54,4 @@ gha-creds-*.json
 gcs.json
 
 # Claude Code local guidance
-CLAUDE.md
+CLAUDE.local.md
