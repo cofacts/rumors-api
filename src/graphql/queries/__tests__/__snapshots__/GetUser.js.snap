@@ -5,14 +5,14 @@ Object {
   "data": Object {
     "GetUser": Object {
       "email": "hi@me.com",
-      "level": 3,
+      "level": 4,
       "name": "current user",
       "points": Object {
-        "currentLevel": 3,
-        "nextLevel": 5,
-        "total": 3,
+        "currentLevel": 5,
+        "nextLevel": 8,
+        "total": 5,
       },
-      "repliedArticleCount": 2,
+      "repliedArticleCount": 3,
       "votedArticleReplyCount": 3,
     },
   },

@@ -49,6 +49,23 @@ export default {
       { status: 'NORMAL', appId: 'WEBSITE', userId: 'other-user' },
     ],
   },
+  '/articles/doc/api-doc': {
+    articleReplies: [
+      // Article replies written through the GraphQL API without `x-app-id:
+      // RUMORS_SITE` are stamped with a non-WEBSITE appId, but still count
+      // toward the author's level & repliedArticleCount.
+      {
+        status: 'NORMAL',
+        appId: 'DEVELOPMENT_FRONTEND',
+        userId: 'current-user',
+      },
+      {
+        status: 'NORMAL',
+        appId: 'DEVELOPMENT_BACKEND',
+        userId: 'current-user',
+      },
+    ],
+  },
   '/articles/doc/not-this-doc': {
     articleReplies: [
       { status: 'DELETED', appId: 'WEBSITE', userId: 'current-user' },
