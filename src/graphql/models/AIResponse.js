@@ -58,6 +58,9 @@ const AIResponse = new GraphQLInterfaceType({
 
       case 'TRANSCRIPT':
         return AITranscript;
+
+      case 'EMBEDDING':
+        return AIEmbedding;
     }
   },
 });
@@ -87,6 +90,17 @@ export const AITranscript = new GraphQLObjectType({
   name: 'AITranscript',
   description:
     'Transcript from OCR or speech-to-text AI models for the specified MediaEntry ID as docId.',
+  interfaces: [Node, AIResponse],
+  fields: {
+    ...commonAiResponseFields,
+  },
+});
+
+export const AIEmbedding = new GraphQLObjectType({
+  name: 'AIEmbedding',
+  description:
+    'AI generated embedding vectors for the specified docId, used as cache for hybrid search. ' +
+    'The vector data itself is not exposed via GraphQL — only the cache metadata is queryable.',
   interfaces: [Node, AIResponse],
   fields: {
     ...commonAiResponseFields,

@@ -57,8 +57,8 @@ async function main({
       fileUri,
       mimeType,
       langfuseTrace: trace,
-      location,
       modelName: model,
+      location,
     });
 
     // Link execution trace to dataset item

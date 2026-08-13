@@ -4,6 +4,7 @@ import { h64 } from 'xxhashjs';
 import { assertUser, getContentDefaultStatus } from 'util/user';
 import client from 'util/client';
 import scrapUrls from 'util/scrapUrls';
+import { createEmbedding } from 'util/embedding';
 
 import { ArticleReferenceInput } from 'graphql/models/ArticleReference';
 import MutationResult from 'graphql/models/MutationResult';
@@ -46,6 +47,39 @@ async function createNewArticle({ text, reference: originalReference, user }) {
     appId: user.appId,
   };
 
+  // Embedding cache key = articleId (= text hash), so resubmitting the same text
+  // hits the AIResponse cache. Failure is non-fatal: we log and proceed without
+  // the field — the backfill script will pick it up later.
+  const embeddings = await createEmbedding(
+    { id: articleId, type: 'text' },
+    [{ text }],
+    user
+  ).catch((e) => {
+    console.warn(`[CreateArticle] embedding for ${articleId}:`, e);
+    return null;
+  });
+
+  const upsertDoc = {
+    text,
+    createdAt: now,
+    updatedAt: now,
+    userId: user.id,
+    appId: user.appId,
+    references: [reference],
+    articleReplies: [],
+    articleCategories: [],
+    normalArticleReplyCount: 0,
+    normalArticleCategoryCount: 0,
+    replyRequestCount: 0,
+    hyperlinks: [],
+    articleType: 'TEXT',
+    attachmentUrl: '',
+    attachmentHash: '',
+    status: getContentDefaultStatus(user),
+    contributors: [],
+  };
+  if (embeddings) upsertDoc.embeddings = embeddings;
+
   const { result } = await client.update({
     index: 'articles',
     id: articleId,
@@ -60,25 +94,7 @@ async function createNewArticle({ text, reference: originalReference, user }) {
         reference,
       },
     },
-    upsert: {
-      text,
-      createdAt: now,
-      updatedAt: now,
-      userId: user.id,
-      appId: user.appId,
-      references: [reference],
-      articleReplies: [],
-      articleCategories: [],
-      normalArticleReplyCount: 0,
-      normalArticleCategoryCount: 0,
-      replyRequestCount: 0,
-      hyperlinks: [],
-      articleType: 'TEXT',
-      attachmentUrl: '',
-      attachmentHash: '',
-      status: getContentDefaultStatus(user),
-      contributors: [],
-    },
+    upsert: upsertDoc,
     refresh: 'true', // Make sure the data is indexed when we create ReplyRequest
   });
 

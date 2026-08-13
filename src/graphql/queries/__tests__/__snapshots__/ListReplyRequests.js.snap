@@ -127,6 +127,15 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "replyrequests2",
+            "user": Object {
+              "id": "user1",
+              "name": "user 1",
+            },
+          },
+        },
+        Object {
+          "node": Object {
             "id": "replyrequests4",
             "user": Object {
               "id": "user2",
@@ -137,15 +146,6 @@ Object {
         Object {
           "node": Object {
             "id": "replyrequests3",
-            "user": Object {
-              "id": "user1",
-              "name": "user 1",
-            },
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "replyrequests2",
             "user": Object {
               "id": "user1",
               "name": "user 1",
@@ -239,6 +239,11 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
+            "id": "replyrequests3",
+          },
+        },
+        Object {
+          "node": Object {
             "id": "replyrequests1",
           },
         },
@@ -256,12 +261,7 @@ Object {
       "edges": Array [
         Object {
           "node": Object {
-            "id": "replyrequests4",
-          },
-        },
-        Object {
-          "node": Object {
-            "id": "replyrequests3",
+            "id": "replyrequests2",
           },
         },
       ],

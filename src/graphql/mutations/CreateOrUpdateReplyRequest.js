@@ -97,6 +97,10 @@ export async function createOrUpdateReplyRequest({
       `,
         params: { now },
       },
+      // Races against CreateMediaArticle's concurrent transcript/embedding
+      // writes on the same article. The script re-runs against the fresh doc
+      // version on conflict, so the increment still applies exactly once.
+      retry_on_conflict: 3,
       _source: true,
     });
     if (articleUpdateResult.result !== 'updated') {
