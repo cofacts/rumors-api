@@ -35,17 +35,27 @@ export default {
     avatarType: 'OpenPeeps',
     avatarData: '{"key":"value"}',
   },
+  // The appId of an article reply varies with the app it was submitted from,
+  // but has no effect on the author's level & repliedArticleCount.
   '/articles/doc/some-doc': {
     articleReplies: [
       // replies to the same doc only count as 1 for repliedArticleCount
       { status: 'NORMAL', appId: 'WEBSITE', userId: 'current-user' },
-      { status: 'NORMAL', appId: 'WEBSITE', userId: 'current-user' },
+      {
+        status: 'NORMAL',
+        appId: 'DEVELOPMENT_FRONTEND',
+        userId: 'current-user',
+      },
       { status: 'NORMAL', appId: 'WEBSITE', userId: 'other-user' },
     ],
   },
   '/articles/doc/another-doc': {
     articleReplies: [
-      { status: 'NORMAL', appId: 'WEBSITE', userId: 'current-user' },
+      {
+        status: 'NORMAL',
+        appId: 'DEVELOPMENT_BACKEND',
+        userId: 'current-user',
+      },
       { status: 'NORMAL', appId: 'WEBSITE', userId: 'other-user' },
     ],
   },

@@ -20,7 +20,6 @@ export default () =>
                 bool: {
                   must: [
                     { term: { 'articleReplies.userId': userId } },
-                    { term: { 'articleReplies.appId': 'WEBSITE' } },
                     { term: { 'articleReplies.status': 'NORMAL' } },
                   ],
                 },

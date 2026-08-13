@@ -18,7 +18,9 @@ export default () =>
      * @returns {Promise<LevelInfo[]>} - LevelInfo of each user
      */
     async (userIds) => {
-      // Currently "point" is defined as number of authored article replies.
+      // Currently "point" is defined as number of authored article replies,
+      // regardless of the app the article reply was submitted from --
+      // `articleReplies.userId` is already a globally unique DB user id.
       const searches = [];
       userIds.forEach((userId) => {
         searches.push({ index: 'articles' });
@@ -37,11 +39,6 @@ export default () =>
                         {
                           term: {
                             'articleReplies.userId': userId,
-                          },
-                        },
-                        {
-                          term: {
-                            'articleReplies.appId': 'WEBSITE',
                           },
                         },
                         {
