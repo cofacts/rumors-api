@@ -297,12 +297,12 @@ describe('authRouter middleware', () => {
 });
 
 describe('loginRouter provider routes — BFF composite state forwarding', () => {
-  // loginRouter stack: [0] use-middleware, [1] facebook, [2] twitter,
-  //                    [3] github, [4] google, [5] instagram
+  // loginRouter stack: [0] use-middleware, [1] facebook, [2] github,
+  //                    [3] google, [4] instagram
   const PROVIDERS = [
     { name: 'facebook', stackIndex: 1 },
-    { name: 'github', stackIndex: 3 },
-    { name: 'google', stackIndex: 4 },
+    { name: 'github', stackIndex: 2 },
+    { name: 'google', stackIndex: 3 },
   ];
 
   beforeEach(() => {
