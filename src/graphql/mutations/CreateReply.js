@@ -97,6 +97,9 @@ export default {
     const scrapPromise = scrapUrls(`${text} ${reference}`, {
       cacheLoader: loaders.urlLoader,
       client,
+    }).catch(() => {
+      // Missing hyperlinks indicate loading, so persist an empty list on failure.
+      return [];
     });
 
     // Dependencies

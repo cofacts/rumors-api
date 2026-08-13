@@ -155,6 +155,57 @@ describe('CreateReply', () => {
     await client.delete({ index: 'replies', id: replyId });
   });
 
+  it('fills hyperlinks with an empty array when URL scraping fails', async () => {
+    const articleId = 'setReplyTest1';
+    const appId = 'url-scraping-failure-test';
+
+    try {
+      const { data, errors } = await gql`
+        mutation (
+          $articleId: String!
+          $text: String!
+          $type: ReplyTypeEnum!
+          $reference: String!
+        ) {
+          CreateReply(
+            articleId: $articleId
+            text: $text
+            type: $type
+            reference: $reference
+            waitForHyperlinks: true
+          ) {
+            id
+          }
+        }
+      `(
+        {
+          articleId,
+          text: 'URL scraping should fail',
+          type: 'RUMOR',
+          reference: 'http://scraping-should-fail.com',
+        },
+        { user: { id: 'test', appId } }
+      );
+
+      expect(errors).toBeUndefined();
+
+      const reply = await client.get({
+        index: 'replies',
+        id: data.CreateReply.id,
+      });
+
+      expect(reply._source.hyperlinks).toEqual([]);
+    } finally {
+      await client.indices.refresh({ index: 'replies' });
+      await client.deleteByQuery({
+        index: 'replies',
+        query: { term: { appId } },
+        refresh: true,
+      });
+      await resetFrom(fixtures, `/articles/doc/${articleId}`);
+    }
+  });
+
   it('should throw error since a reference is required for type !== NOT_ARTICLE', async () => {
     MockDate.set(1485593157011);
     const articleId = 'setReplyTest1';
