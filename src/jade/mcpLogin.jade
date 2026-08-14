@@ -1,0 +1,15 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    title Log in to Cofacts
+  body(style="font-family:sans-serif;max-width:360px;margin:80px auto;padding:20px")
+    h2(style="margin-bottom:24px") Log in to Cofacts
+    if error
+      p(style="color:#c00")= error
+    else
+      each provider in providers
+        a(
+          href=provider.href
+          style="display:block;margin:8px 0;padding:12px 20px;background:#4285f4;color:#fff;text-decoration:none;border-radius:4px;text-align:center;font-family:sans-serif"
+        )= provider.label

@@ -68,19 +68,27 @@ async function getKid() {
 export const TOKEN_USE_AUTH_CODE = 'auth_code';
 export const TOKEN_USE_ACCESS = 'access';
 
-export async function signShortLivedJWT(userId) {
+export async function signShortLivedJWT(userId, { codeChallenge } = {}) {
+  const claims = { sub: userId, token_use: TOKEN_USE_AUTH_CODE };
+  // PKCE flow: embed code_challenge so /auth/token can verify code_verifier later.
+  if (codeChallenge) claims.code_challenge = codeChallenge;
   const privateKey = await getPrivateKey();
   const kid = await getKid();
-  return new SignJWT({ sub: userId, token_use: TOKEN_USE_AUTH_CODE })
+  return new SignJWT(claims)
     .setProtectedHeader({ alg: ALG, kid })
     .setIssuedAt()
     .setExpirationTime('60s')
     .sign(privateKey);
 }
 
+export function getCookieMaxAgeSec() {
+  return Math.floor(
+    (parseInt(process.env.COOKIE_MAXAGE, 10) || 1209600000) / 1000
+  );
+}
+
 export async function signLongLivedJWT(userId) {
-  const cookieMaxAgeMs = parseInt(process.env.COOKIE_MAXAGE, 10) || 1209600000;
-  const cookieMaxAgeSec = Math.floor(cookieMaxAgeMs / 1000);
+  const cookieMaxAgeSec = getCookieMaxAgeSec();
 
   const privateKey = await getPrivateKey();
   const kid = await getKid();

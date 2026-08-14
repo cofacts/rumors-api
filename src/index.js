@@ -19,6 +19,7 @@ import CookieStore from './CookieStore';
 import { loginRouter, authRouter } from './auth';
 import tokenRoute from './tokenRoute';
 import jwksRoute from './jwksRoute';
+import mcpRouter from './mcpRouter';
 import rollbar from './rollbarInstance';
 import { AUTH_ERROR_MSG } from './util/user';
 
@@ -73,6 +74,26 @@ router.use('/login', loginRouter.routes(), loginRouter.allowedMethods());
 router.use('/callback', authRouter.routes(), authRouter.allowedMethods());
 
 router.get('/.well-known/jwks.json', jwksRoute);
+
+// RFC 8414 OAuth Authorization Server Metadata. Path must stay at the origin
+// root — MCP clients always discover it at {origin}/.well-known/oauth-authorization-server
+// regardless of where the MCP endpoint is mounted.
+router.get('/.well-known/oauth-authorization-server', (ctx) => {
+  const origin = process.env.API_ORIGIN || ctx.request.origin;
+  ctx.body = {
+    issuer: origin,
+    authorization_endpoint: `${origin}/mcp/login`,
+    token_endpoint: `${origin}/auth/token`,
+    registration_endpoint: `${origin}/mcp/register`,
+    jwks_uri: `${origin}/.well-known/jwks.json`,
+    response_types_supported: ['code'],
+    code_challenge_methods_supported: ['S256'],
+    grant_types_supported: ['authorization_code'],
+    token_endpoint_auth_methods_supported: ['none'],
+  };
+});
+
+router.use('/mcp', mcpRouter.routes(), mcpRouter.allowedMethods());
 
 router.options('/auth/token', checkHeaders());
 router.post('/auth/token', checkHeaders(), tokenRoute);

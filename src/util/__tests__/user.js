@@ -297,5 +297,21 @@ describe('user utils', () => {
       expect(isCreated).toBe(false);
       expect(user).toMatchSnapshot();
     });
+
+    it('uses ES_DOC_ID directly for MCP users, preserving appId attribution', async () => {
+      MockDate.set(1602291600000);
+
+      const userId = 'web-user';
+      const appId = 'MCP';
+
+      const { user, isCreated } = await createOrUpdateUser({
+        userId,
+        appId,
+      });
+
+      expect(isCreated).toBe(false);
+      expect(user.id).toBe(userId);
+      expect(user.appId).toBe('MCP');
+    });
   });
 });
