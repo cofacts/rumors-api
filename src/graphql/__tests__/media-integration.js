@@ -234,4 +234,11 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
       }),
     });
   }, 15000);
+} else {
+  // Skipped in the default (no-credential) CI run to avoid real GCS calls
+  // (cost + flakiness). Exercised by the integration workflow, which sets
+  // GCS_CREDENTIALS and GCS_BUCKET_NAME.
+  describe.skip('MediaManager integration (requires GCS credentials)', () => {
+    it('runs only when GCS credentials are configured', () => {});
+  });
 }

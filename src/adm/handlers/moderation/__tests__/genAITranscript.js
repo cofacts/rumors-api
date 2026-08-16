@@ -230,4 +230,11 @@ if (process.env.GCS_BUCKET_NAME) {
       expect(updatedArticle.text).toMatch(/葉黃[素樹]軟糖|叶黄[素树]软糖/);
     }, 120000);
   });
+} else {
+  // Skipped in the default (no-credential) CI run to avoid real GCS/Vision/
+  // Gemini calls (cost + flakiness). Exercised by the integration workflow,
+  // which sets GCS_BUCKET_NAME.
+  describe.skip('genAITranscript integration (requires GCS_BUCKET_NAME)', () => {
+    it('runs only when GCS credentials are configured', () => {});
+  });
 }

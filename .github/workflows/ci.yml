@@ -1,27 +1,28 @@
 name: CI test
 
 on:
-  # Triggers the workflow on push or pull request events but only for the dev branch
+  # Triggers the workflow on push or pull request events
   - pull_request
   - push
   # Allows you to run this workflow manually from the Actions tab
   - workflow_dispatch
 
+# This workflow intentionally runs WITHOUT any cloud credentials. The suites that
+# hit real external services (GCS / Vision / Gemini / BigQuery) are env-guarded
+# and therefore skipped here — they run in integration.yml instead. Keeping them
+# out of the per-push/PR gate avoids per-run API cost and external-service
+# flakiness (e.g. STS token "Premature close").
 jobs:
   install-and-test:
     runs-on: ubuntu-latest
     services:
       rumors-test-db:
-        image: elasticsearch:9.2.2
+        image: elasticsearch:9.3.2
         env:
           discovery.type: single-node
           xpack.security.enabled: 'false'
         ports:
           - 62223:9200
-
-    permissions: # Required by google-github-actions/auth
-      contents: 'read'
-      id-token: 'write'
 
     steps:
       - uses: actions/checkout@v4
@@ -31,20 +32,10 @@ jobs:
         with:
           node-version: '24'
           cache: 'npm'
-      - uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: ${{ secrets.GC_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GC_SERVICE_ACCOUNT }}
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test -- --coverage
-        env:
-          GCS_CREDENTIALS: ${{ secrets.GCS_CREDENTIALS }}
-          GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
-          GCS_MEDIA_FOLDER: github/${{ github.run_number }}_${{ github.run_attempt }}/
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          TEST_DATASET: rumors_api_test_dataset
       - name: Update coveralls
         uses: coverallsapp/github-action@master
         with:

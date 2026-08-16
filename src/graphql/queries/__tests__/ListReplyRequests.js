@@ -5,6 +5,9 @@ import fixtures from '../__fixtures__/ListReplyRequests';
 describe('ListReplyRequests', () => {
   beforeAll(() => loadFixtures(fixtures));
 
+  // Sort by the (unique) createdAt so ordering is deterministic. Without an
+  // orderBy the default sort is purely `_shard_doc`, which is non-deterministic
+  // across index builds and makes these snapshots/cursors flaky on ES v9.
   const getCursor = async (id) => {
     const {
       data: {
@@ -12,7 +15,7 @@ describe('ListReplyRequests', () => {
       },
     } = await gql`
       {
-        ListReplyRequests {
+        ListReplyRequests(orderBy: [{ createdAt: DESC }]) {
           edges {
             node {
               id
@@ -29,7 +32,7 @@ describe('ListReplyRequests', () => {
     expect(
       await gql`
         {
-          ListReplyRequests {
+          ListReplyRequests(orderBy: [{ createdAt: DESC }]) {
             totalCount
             edges {
               node {
@@ -170,7 +173,7 @@ describe('ListReplyRequests', () => {
     expect(
       await gql`
         query ($cursor: String) {
-          ListReplyRequests(after: $cursor) {
+          ListReplyRequests(after: $cursor, orderBy: [{ createdAt: DESC }]) {
             edges {
               node {
                 id
@@ -179,7 +182,7 @@ describe('ListReplyRequests', () => {
             totalCount
           }
         }
-      `({ cursor: await getCursor('replyrequests2') })
+      `({ cursor: await getCursor('replyrequests4') })
     ).toMatchSnapshot();
   });
 
@@ -187,7 +190,7 @@ describe('ListReplyRequests', () => {
     expect(
       await gql`
         query ($cursor: String) {
-          ListReplyRequests(before: $cursor) {
+          ListReplyRequests(before: $cursor, orderBy: [{ createdAt: DESC }]) {
             edges {
               node {
                 id
@@ -196,7 +199,7 @@ describe('ListReplyRequests', () => {
             totalCount
           }
         }
-      `({ cursor: await getCursor('replyrequests2') })
+      `({ cursor: await getCursor('replyrequests4') })
     ).toMatchSnapshot();
   });
 

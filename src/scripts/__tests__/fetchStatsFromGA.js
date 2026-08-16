@@ -56,7 +56,12 @@ async function loadBqTable(table, rows, schema) {
   });
 }
 
-describe('fetchStatsFromGA', () => {
+// Needs a real BigQuery dataset (TEST_DATASET). Skipped in the default
+// (no-credential) CI run; exercised by the integration workflow. The pure-unit
+// `createBatchTransform` suite below always runs.
+const describeWithBq = process.env.TEST_DATASET ? describe : describe.skip;
+
+describeWithBq('fetchStatsFromGA', () => {
   it('rejects wrong startDate & endDate settings', async () => {
     await expect(
       fetchStatsFromGA({

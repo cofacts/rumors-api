@@ -3,7 +3,7 @@
 version: "2"
 services:
   db-v9:
-    image: elasticsearch:9.2.2
+    image: elasticsearch:9.3.2
     ports:
       - "62222:9200"
     volumes:
@@ -13,11 +13,12 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # Prevent elasticsearch eating up too much memory
       # - "reindex.remote.whitelist=host.docker.internal:62222,ip:62222" # Allow reindex from old ES
       - "discovery.type=single-node" # Single node mode for development
+      - "xpack.security.enabled=false" # ES 8+ enables HTTPS by default; disable for plaintext local dev
     extra_hosts:
       - "host.docker.internal:host-gateway" # Allow container to access host machine
 
   kibana:
-    image: kibana:9.2.2
+    image: kibana:9.3.2
     depends_on:
       - db-v9
     environment:

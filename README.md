@@ -121,7 +121,7 @@ $ docker run -d \
   --name "rumors-test-db" \
   -e "discovery.type=single-node" \
   -e "xpack.security.enabled=false" \
-  elasticsearch:9.2.2
+  elasticsearch:9.3.2
 
 # discovery.type=single-node: ES 7+ expects multi-node cluster by default.
 #   Single-node mode skips bootstrap checks (e.g. minimum master nodes) and
