@@ -21,11 +21,11 @@ Object {
   "_score": undefined,
   "email": "secret@secret.com",
   "facebookId": "secret-fb-id",
+  "githubId": "secret-github-id",
   "highlight": undefined,
   "id": "test-user",
   "inner_hits": undefined,
   "name": "test user",
-  "twitterId": "secret-twitter-id",
   "updatedAt": "1989-06-04T00:00:00.000Z",
 }
 `;
