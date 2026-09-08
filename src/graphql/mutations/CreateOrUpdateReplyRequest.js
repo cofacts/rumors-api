@@ -97,6 +97,17 @@ export async function createOrUpdateReplyRequest({
       `,
         params: { now },
       },
+      // This is a contended counter, and ES updates are optimistically locked:
+      // a concurrent writer bumps _seq_no and this update fails outright.
+      // Two sources of contention, both real:
+      // - CreateMediaArticle fires writeAITranscript() against the same article
+      //   in the same tick as this call.
+      // - A message going viral means many users request a reply for the same
+      //   article within seconds of each other.
+      // A retry re-runs the script against the fresh version, so increments are
+      // never lost. Budget for a burst rather than just the transcript race --
+      // retries only cost anything when a conflict actually happens.
+      retry_on_conflict: 10,
       _source: true,
     });
     if (articleUpdateResult.result !== 'updated') {
