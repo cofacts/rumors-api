@@ -2,8 +2,26 @@ import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures, resetFrom } from 'util/fixtures';
 import client from 'util/client';
 import MockDate from 'mockdate';
-import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
+import {
+  getReplyRequestId,
+  createOrUpdateReplyRequest,
+} from '../CreateOrUpdateReplyRequest';
 import fixtures from '../__fixtures__/CreateOrUpdateReplyRequest';
+
+/** Drops the reply requests of an article and zeroes its counter. */
+async function cleanUpConcurrentTest(articleId) {
+  await client.deleteByQuery({
+    index: 'replyrequests',
+    query: { term: { articleId } },
+    refresh: true,
+  });
+  await client.update({
+    index: 'articles',
+    id: articleId,
+    doc: { replyRequestCount: 0 },
+    refresh: 'true',
+  });
+}
 
 describe('CreateOrUpdateReplyRequest', () => {
   beforeAll(() => loadFixtures(fixtures));
@@ -149,6 +167,37 @@ describe('CreateOrUpdateReplyRequest', () => {
     // Cleanup
     await client.delete({ index: 'replyrequests', id });
     await resetFrom(fixtures, `/articles/doc/${articleId}`);
+  });
+
+  it('increments replyRequestCount exactly once per concurrent requester', async () => {
+    // The article update is a script update, and CreateMediaArticle fires
+    // `writeAITranscript` against the same article in the same tick. Without
+    // `retry_on_conflict`, concurrent updates collide on _seq_no and ES raises
+    // version_conflict_engine_exception -- which is unhandled here, so it
+    // surfaces as a failed mutation. Ten distinct users is enough to make the
+    // collision reliable rather than occasional.
+    const articleId = 'createReplyRequestConcurrent';
+    const users = Array.from({ length: 10 }, (_, i) => ({
+      id: `concurrent-user-${i}`,
+      appId: 'test',
+    }));
+
+    // Only a first-time requester increments the counter, so start from a
+    // clean slate -- otherwise a previous failed run leaves reply requests
+    // behind and this passes vacuously.
+    await cleanUpConcurrentTest(articleId);
+
+    const results = await Promise.all(
+      users.map((user) => createOrUpdateReplyRequest({ articleId, user }))
+    );
+
+    // Every call created a new reply request, so every call must have counted.
+    expect(results.every(({ isCreated }) => isCreated)).toBe(true);
+
+    const { _source } = await client.get({ index: 'articles', id: articleId });
+    expect(_source.replyRequestCount).toBe(users.length);
+
+    await cleanUpConcurrentTest(articleId);
   });
 
   it('inserts blocked reply request without updating article count', async () => {

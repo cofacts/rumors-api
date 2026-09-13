@@ -92,11 +92,14 @@ async function createNewMediaArticle({
  * @returns result of article & ydoc operation
  */
 export function writeAITranscript(articleId, text) {
-  // Write aiResponse to articles
+  // Write aiResponse to articles. Races against createOrUpdateReplyRequest's
+  // script-update on the same article, which the caller runs concurrently with
+  // this. Writing `text` is idempotent, so retrying on conflict is safe.
   const writeToArticleTextPromise = client.update({
     index: 'articles',
     id: articleId,
     doc: { text },
+    retry_on_conflict: 3,
   });
 
   // Prosemirror editor state with AI response text
