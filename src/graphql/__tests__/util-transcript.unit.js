@@ -2,7 +2,7 @@
  * Mocked unit tests for the media-upload / transcription helpers in graphql/util.
  *
  * Their integration counterparts (media-integration.js, genAITranscript.js) hit
- * real GCS / Vision / Gemini and only run in the integration workflow, so with
+ * real GCS / Vision / Vertex and only run in the integration workflow, so with
  * the CI split these branches were no longer covered on a normal PR run. Here we
  * mock the paid SDKs so the branching logic is exercised on every CI run at no
  * API cost.
@@ -25,22 +25,17 @@ jest.mock('@google-cloud/vision', () => {
   };
 });
 
-// transcribeAV constructs GoogleGenAI per call, so the shared closure fn is the
-// only stable handle on it.
-jest.mock('@google/genai', () => {
-  const generateContent = jest.fn();
-  return {
-    GoogleGenAI: jest.fn(() => ({ models: { generateContent } })),
-  };
-});
-
-jest.mock('google-auth-library', () => ({
-  GoogleAuth: jest.fn(() => ({
-    getProjectId: jest.fn().mockResolvedValue('test-project'),
+// Mocking our own `createGenAI` seam covers @google/genai and the ADC lookup in
+// google-auth-library at once, so no credentials are needed. The `mock` prefix
+// is what lets jest's hoisting allow the reference from inside the factory.
+const mockGenerateContent = jest.fn();
+jest.mock('util/genai', () => ({
+  createGenAI: jest.fn(async () => ({
+    models: { generateContent: mockGenerateContent },
   })),
 }));
 
-// Only used for the HEAD content-type sniff.
+// Only used for the content-type sniff on a plain URL.
 jest.mock('node-fetch', () => jest.fn());
 
 jest.mock('util/mediaManager', () => ({
@@ -54,12 +49,10 @@ jest.mock('util/mediaManager', () => ({
 import mediaManager from 'util/mediaManager';
 import { uploadMedia, createTranscript } from 'graphql/util';
 import { ImageAnnotatorClient } from '@google-cloud/vision';
-import { GoogleGenAI } from '@google/genai';
 import fetch from 'node-fetch';
 
 const mockDocumentTextDetection = new ImageAnnotatorClient()
   .documentTextDetection;
-const mockGenerateContent = new GoogleGenAI().models.generateContent;
 
 const user = { id: 'user-id', appId: 'app-id' };
 
@@ -320,8 +313,6 @@ describe('createTranscript (unit)', () => {
   describe('audio / video transcript', () => {
     /** A media entry already on GCS; Vertex reads its gs:// URI directly. */
     const entryWith = (metadata) => ({
-      // used for the HEAD content-type sniff
-      getUrl: () => 'https://cdn/entry.mp4',
       getFile: () => ({
         getMetadata: async () => [metadata],
         cloudStorageURI: { href: 'gs://bucket/entry.mp4' },
@@ -335,7 +326,6 @@ describe('createTranscript (unit)', () => {
     });
 
     it('transcribes via Gemini and returns text + usage', async () => {
-      fetch.mockResolvedValue({ headers: { get: () => 'video/mp4' } });
       mockGenerateContent.mockResolvedValue(
         geminiReplies('spoken words', {
           promptTokenCount: 10,
@@ -367,8 +357,7 @@ describe('createTranscript (unit)', () => {
       );
     });
 
-    it('prefers the GCS metadata contentType over the HEAD sniff', async () => {
-      fetch.mockResolvedValue({ headers: { get: () => 'video/webm' } });
+    it('reads a MediaEntry contentType from GCS metadata, without a HEAD request', async () => {
       mockGenerateContent.mockResolvedValue(geminiReplies('ok'));
 
       await transcribe(
@@ -377,34 +366,19 @@ describe('createTranscript (unit)', () => {
         user
       );
 
+      // The bytes are already ours; nothing needs sniffing over the wire.
+      expect(fetch).not.toHaveBeenCalled();
       expect(
         mockGenerateContent.mock.calls[0][0].contents[0].parts[0].fileData
           .mimeType
       ).toBe('video/quicktime');
     });
 
-    it('falls back to the HEAD content-type when metadata lacks one', async () => {
-      fetch.mockResolvedValue({ headers: { get: () => 'audio/ogg' } });
+    it('falls back to a type default when the GCS metadata lacks a contentType', async () => {
       mockGenerateContent.mockResolvedValue(geminiReplies('ok'));
 
       await transcribe(
-        { id: 'unit-av-head', type: 'audio' },
-        entryWith({}),
-        user
-      );
-
-      expect(
-        mockGenerateContent.mock.calls[0][0].contents[0].parts[0].fileData
-          .mimeType
-      ).toBe('audio/ogg');
-    });
-
-    it('falls back to a type default when both metadata and HEAD fail', async () => {
-      fetch.mockRejectedValue(new Error('network down'));
-      mockGenerateContent.mockResolvedValue(geminiReplies('ok'));
-
-      await transcribe(
-        { id: 'unit-av-headfail', type: 'audio' },
+        { id: 'unit-av-nometadata', type: 'audio' },
         entryWith({}),
         user
       );
@@ -415,46 +389,103 @@ describe('createTranscript (unit)', () => {
       ).toBe('audio/mpeg');
     });
 
-    it('uploads to GCS first when given a plain URL', async () => {
-      fetch.mockResolvedValue({ headers: { get: () => 'video/mp4' } });
+    it('hands a plain URL to Vertex as-is, without copying it to GCS', async () => {
+      fetch.mockResolvedValue({
+        ok: true,
+        status: 200,
+        headers: { get: () => 'video/mp4' },
+      });
       mockGenerateContent.mockResolvedValue(geminiReplies('from url'));
 
-      const uploaded = {
-        variants: [],
-        getFile: () => ({
-          getMetadata: async () => [{ contentType: 'video/mp4' }],
-          cloudStorageURI: { href: 'gs://bucket/uploaded.mp4' },
-        }),
-      };
-      mediaManager.insert.mockImplementation(async (opts) => {
-        // media-manager signals the upload finished only after insert resolves
-        setTimeout(() => opts.onUploadStop(null), 0);
-        return uploaded;
-      });
-
       const { status, text } = await transcribe(
-        { id: 'unit-av-upload', type: 'video' },
+        { id: 'unit-av-url', type: 'video' },
         'https://media/remote.mp4',
         user
       );
 
-      expect(mediaManager.insert).toHaveBeenCalledTimes(1);
-      expect(mediaManager.insert.mock.calls[0][0].url).toBe(
-        'https://media/remote.mp4'
-      );
+      // Vertex fetches the (publicly readable) URL itself, so we neither upload
+      // nor proxy the bytes -- only a HEAD goes out, for the content type.
+      expect(mediaManager.insert).not.toHaveBeenCalled();
       expect(fetch).toHaveBeenCalledWith('https://media/remote.mp4', {
         method: 'HEAD',
       });
-      // Gemini reads the uploaded gs:// URI, not the original URL
-      expect(
-        mockGenerateContent.mock.calls[0][0].contents[0].parts[0].fileData
-          .fileUri
-      ).toBe('gs://bucket/uploaded.mp4');
+      expect(mockGenerateContent.mock.calls[0][0].contents[0].parts[0]).toEqual(
+        {
+          fileData: {
+            fileUri: 'https://media/remote.mp4',
+            mimeType: 'video/mp4',
+          },
+        }
+      );
       expect({ status, text }).toEqual({ status: 'SUCCESS', text: 'from url' });
     });
 
+    it('falls back to a type default when the HEAD sniff fails', async () => {
+      fetch.mockRejectedValue(new Error('network down'));
+      mockGenerateContent.mockResolvedValue(geminiReplies('ok'));
+
+      await transcribe(
+        { id: 'unit-av-headfail', type: 'audio' },
+        'https://media/remote.mp3',
+        user
+      );
+
+      expect(
+        mockGenerateContent.mock.calls[0][0].contents[0].parts[0].fileData
+          .mimeType
+      ).toBe('audio/mpeg');
+    });
+
+    it('fails early, without calling Vertex, when the URL returns 4xx', async () => {
+      // node-fetch resolves on 4xx; the error page's own content-type must not
+      // be mistaken for the media's.
+      fetch.mockResolvedValue({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found',
+        headers: { get: () => 'text/plain; charset=utf-8' },
+      });
+
+      const secretUrl = 'https://line-bot/getcontent?token=secret-jwt';
+      const { status, text } = await transcribe(
+        { id: 'unit-av-head404', type: 'video' },
+        secretUrl,
+        user
+      );
+
+      expect(mockGenerateContent).not.toHaveBeenCalled();
+      expect(status).toBe('ERROR');
+      expect(text).toContain('HEAD returned 404 Not Found');
+      // Persisted to the aiResponse doc, so the tokenized URL must not leak.
+      expect(text).not.toContain('secret-jwt');
+    });
+
+    it.each([405, 501])(
+      'falls back to a type default when the server rejects HEAD with %i',
+      async (httpStatus) => {
+        // Vertex fetches with GET, so a server that only rejects HEAD is fine.
+        fetch.mockResolvedValue({
+          ok: false,
+          status: httpStatus,
+          headers: { get: () => 'text/html' },
+        });
+        mockGenerateContent.mockResolvedValue(geminiReplies('ok'));
+
+        const { status } = await transcribe(
+          { id: `unit-av-head${httpStatus}`, type: 'video' },
+          'https://media/no-head.mp4',
+          user
+        );
+
+        expect(status).toBe('SUCCESS');
+        expect(
+          mockGenerateContent.mock.calls[0][0].contents[0].parts[0].fileData
+            .mimeType
+        ).toBe('video/mp4');
+      }
+    );
+
     it('falls back to the next model on 429 RESOURCE_EXHAUSTED', async () => {
-      fetch.mockResolvedValue({ headers: { get: () => 'audio/mpeg' } });
       mockGenerateContent
         .mockRejectedValueOnce(new Error('429 RESOURCE_EXHAUSTED'))
         .mockResolvedValueOnce(geminiReplies('second model'));
@@ -472,8 +503,25 @@ describe('createTranscript (unit)', () => {
       expect(mockGenerateContent).toHaveBeenCalledTimes(2);
     });
 
+    it('falls back to the next model on 404 NOT_FOUND (model retired)', async () => {
+      mockGenerateContent
+        .mockRejectedValueOnce(new Error('404 NOT_FOUND'))
+        .mockResolvedValueOnce(geminiReplies('after retirement'));
+
+      const { status, text } = await transcribe(
+        { id: 'unit-av-404', type: 'video' },
+        mediaEntry,
+        user
+      );
+
+      expect({ status, text }).toEqual({
+        status: 'SUCCESS',
+        text: 'after retirement',
+      });
+      expect(mockGenerateContent).toHaveBeenCalledTimes(2);
+    });
+
     it('returns ERROR without retrying on non-quota Gemini errors', async () => {
-      fetch.mockResolvedValue({ headers: { get: () => 'video/mp4' } });
       mockGenerateContent.mockRejectedValue(new Error('bad request'));
 
       const { status, text } = await transcribe(
@@ -489,7 +537,6 @@ describe('createTranscript (unit)', () => {
     });
 
     it('returns ERROR when every model hits its quota', async () => {
-      fetch.mockResolvedValue({ headers: { get: () => 'video/mp4' } });
       mockGenerateContent.mockRejectedValue(
         new Error('429 RESOURCE_EXHAUSTED')
       );

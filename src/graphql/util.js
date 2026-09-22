@@ -1,6 +1,4 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
-import { GoogleGenAI } from '@google/genai';
-import { GoogleAuth } from 'google-auth-library';
 import fetch from 'node-fetch';
 import sharp from 'sharp';
 import {
@@ -27,6 +25,7 @@ import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
 import delayForMs from 'util/delayForMs';
+import { createGenAI } from 'util/genai';
 import langfuse from 'util/langfuse';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
@@ -846,11 +845,11 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
  * Transcribes audio/video content using Gemini model
  *
  * @param {object} params
- * @param {string} params.fileUri - The URI starting with gs://
+ * @param {string} params.fileUri - A URI Vertex can read: a `gs://` URI or a publicly-readable https URL
  * @param {string} params.mimeType - The mime type of the file
  * @param {import('@langfuse/langfuse').Trace} params.langfuseTrace - Langfuse trace object
  * @param {string} params.modelName - Name of the Gemini model
- * @param {string} params.location - Location of the model
+ * @param {string} params.location - Regional endpoint of the model
  * @returns {Promise<{text: string, usage: {promptTokens?: number, completionTokens?: number, totalTokens?: number}}>}
  */
 export async function transcribeAV({
@@ -860,13 +859,7 @@ export async function transcribeAV({
   modelName,
   location,
 }) {
-  const project = await new GoogleAuth().getProjectId();
-  // Use the new GoogleGenAI SDK with vertexai option
-  const genAI = new GoogleGenAI({
-    vertexai: true,
-    project,
-    location,
-  });
+  const genAI = await createGenAI(location);
 
   /**@type {import('@google/genai').GenerateContentParameters} */
   const generateContentArgs = {
@@ -959,7 +952,8 @@ Your text will be used for indexing these media files, so please follow these ru
 }
 
 const TRANSCRIPT_MODELS = [
-  // Combinations that are faster than gemini-2.0-flash-001 @ us
+  // Ordered by preference; on quota (429) or a retired/inaccessible model
+  // (404) we fall through to the next.
   { model: 'gemini-3.1-flash-lite', location: 'global' },
   { model: 'gemini-2.5-flash', location: 'global' },
 ];
@@ -1033,55 +1027,53 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
       case 'video':
       case 'audio': {
         const aiResponseId = await getAIResponseId();
-        const fileUrl =
-          typeof fileUrlOrMediaEntry === 'string'
-            ? fileUrlOrMediaEntry
-            : fileUrlOrMediaEntry.getUrl();
+        const defaultMimeType =
+          queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg';
 
-        const mimeTypePromise = fetch(fileUrl, { method: 'HEAD' })
-          .then((res) => res.headers.get('content-type'))
-          .catch(() =>
-            queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
-          );
-
-        let mediaEntry;
+        // Resolve the media to a URI Vertex fetches itself — we never move the
+        // bytes. `fileData.fileUri` takes a `gs://` URI or a publicly-readable
+        // https URL, which covers both callers:
+        // - MediaEntry (already in our GCS, e.g. admin backfill): its own
+        //   `gs://` URI.
+        // - string URL (search): the caller's media URL as-is. For LINE queries
+        //   this is rumors-line-bot's public getcontent URL.
+        let fileUri;
         let mimeType;
-        if (typeof fileUrlOrMediaEntry !== 'string') {
-          mediaEntry = fileUrlOrMediaEntry;
-          mimeType = await mimeTypePromise;
+        if (typeof fileUrlOrMediaEntry === 'string') {
+          fileUri = fileUrlOrMediaEntry;
+          // HEAD only — we want the content-type, not the body.
+          let res;
+          try {
+            res = await fetch(fileUri, { method: 'HEAD' });
+          } catch (e) {
+            // A network error on our side says nothing about whether Vertex can
+            // reach the URL, so fall back and let Vertex try.
+            console.warn('[createTranscript] HEAD request failed:', e.message);
+          }
+
+          if (!res || res.status === 405 || res.status === 501) {
+            // No response, or the server just doesn't implement HEAD. Vertex
+            // fetches with GET, so fall back and let Vertex try.
+            mimeType = defaultMimeType;
+          } else if (!res.ok) {
+            // node-fetch resolves on 4xx/5xx. Vertex fetches this URL itself, so
+            // if we can't reach it neither can it — fail here, while the status
+            // is still visible, rather than let Vertex's media-fetch 404 be
+            // misread as a retired model below. The URL is left out on purpose:
+            // this message is persisted to the aiResponse doc, and for LINE
+            // queries the URL carries a short-lived token for private media.
+            throw new Error(
+              `[createTranscript] media URL is not fetchable: HEAD returned ${res.status} ${res.statusText}`
+            );
+          } else {
+            mimeType = res.headers.get('content-type') || defaultMimeType;
+          }
         } else {
-          [mediaEntry, mimeType] = await Promise.all([
-            // Upload to GCS first and get the file.
-            // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
-            new Promise((resolve) => {
-              let isUploadStopped = false;
-              let mediaEntryToResolve = undefined;
-              uploadMedia({
-                mediaUrl: fileUrl,
-                articleType: queryInfo.type.toUpperCase(),
-                onUploadStop: () => {
-                  isUploadStopped = true;
-                  if (mediaEntryToResolve) resolve(mediaEntryToResolve);
-                },
-              }).then((mediaEntry) => {
-                if (isUploadStopped) {
-                  resolve(mediaEntry);
-                } else {
-                  // Initialize mediaEntry so that we can pick it up when upload stop
-                  mediaEntryToResolve = mediaEntry;
-                }
-              });
-            }),
-            mimeTypePromise,
-          ]);
+          const file = fileUrlOrMediaEntry.getFile();
+          const [metadata] = await file.getMetadata();
+          mimeType = metadata.contentType || defaultMimeType;
+          fileUri = file.cloudStorageURI.href;
         }
-
-        // The URI starting with gs://
-        const fileUri = mediaEntry.getFile().cloudStorageURI.href;
-
-        // Try to get mimeType from GCS metadata first
-        const [metadata] = await mediaEntry.getFile().getMetadata();
-        mimeType = metadata.contentType || (await mimeTypePromise);
 
         console.log('[createTranscript] using mimeType:', mimeType);
 
