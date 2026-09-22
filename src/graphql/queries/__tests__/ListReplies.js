@@ -1,6 +1,14 @@
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import gql from 'util/GraphQL';
+import { createEmbedding } from 'util/embedding';
+import ListReplies from '../ListReplies';
 import fixtures from '../__fixtures__/ListReplies';
+
+jest.mock('util/embedding', () => ({
+  createEmbedding: jest.fn(),
+  getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
+  getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
+}));
 
 describe('ListReplies', () => {
   beforeAll(() => loadFixtures(fixtures));
@@ -394,4 +402,67 @@ describe('ListReplies', () => {
   });
 
   afterAll(() => unloadFixtures(fixtures));
+});
+
+describe('ListReplies kNN retriever', () => {
+  // Bypass `gql` and call resolve directly to inspect the search-request body.
+  const baseContext = {
+    loaders: { urlLoader: { load: jest.fn().mockResolvedValue(null) } },
+    userId: 'u',
+    appId: 'a',
+    user: { id: 'u', appId: 'a' },
+  };
+
+  beforeEach(() => {
+    createEmbedding.mockReset();
+  });
+
+  it('runs plain BM25 when embedding is omitted', async () => {
+    const result = await ListReplies.resolve(
+      {},
+      { filter: { moreLikeThis: { like: 'foo bar' } } },
+      baseContext
+    );
+
+    expect(result.body.query).toBeDefined();
+    expect(result.body.query.bool.minimum_should_match).toBe(1);
+    expect(
+      result.body.query.bool.filter.some((clause) => clause?.bool?.should)
+    ).toBe(false);
+    expect(createEmbedding).not.toHaveBeenCalled();
+  });
+
+  it('adds kNN as a candidate filter and ranks by BM25 when embedding is a similarity', async () => {
+    createEmbedding.mockResolvedValue([{ vector: [0.5, 0.5] }]);
+
+    const result = await ListReplies.resolve(
+      {},
+      {
+        filter: {
+          moreLikeThis: { like: 'foo bar' },
+          embedding: 0.65,
+        },
+      },
+      baseContext
+    );
+
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+    expect(result.body.retriever).toBeUndefined();
+
+    // BM25 should-queries stay for ranking; retrieval is restricted by a
+    // nested-kNN filter and minimum_should_match drops to 0.
+    expect(result.body.query.bool.should[0].nested).toBeUndefined();
+    expect(result.body.query.bool.minimum_should_match).toBe(0);
+
+    const knnFilter = result.body.query.bool.filter.find(
+      (clause) => clause?.bool?.should?.[0]?.nested
+    );
+    const nestedKnn = knnFilter.bool.should[0].nested;
+    expect(nestedKnn.path).toBe('embeddings');
+    expect(nestedKnn.query.knn).toMatchObject({
+      field: 'embeddings.vector',
+      query_vector: [0.5, 0.5],
+      similarity: 0.65,
+    });
+  });
 });

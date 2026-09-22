@@ -44,7 +44,7 @@ services:
       ELASTICSEARCH_URL: "http://db-v9:9200"
       URL_RESOLVER_URL: "url-resolver:4000"
     ports:
-      - "5000:5000"
+      - "5001:5001"
       - "5500:5500"
 
   site:
@@ -52,4 +52,4 @@ services:
     ports:
       - "3000:3000"
     environment:
-      PUBLIC_API_URL: http://localhost:5000
+      PUBLIC_API_URL: http://localhost:5001
