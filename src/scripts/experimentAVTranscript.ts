@@ -5,8 +5,8 @@
  *   npx tsx src/scripts/experimentAVTranscript.ts \
  *     --runName "experiment-1" \
  *     [--datasetName "audio and video messages"] \
- *     [--model "gemini-1.5-pro-002"] \
- *     [--location "asia-east1"]
+ *     [--model "gemini-3.1-flash-lite"] \
+ *     [--location "global"]
  *
  * Required args:
  *   --runName: Name to identify this experiment run in Langfuse
@@ -24,8 +24,8 @@ import langfuse from 'util/langfuse';
 
 // Default arguments
 const DATASET_NAME = 'audio and video messages';
-const MODEL = 'gemini-1.5-pro-002';
-const LOCATION = 'asia-east1';
+const MODEL = 'gemini-3.1-flash-lite';
+const LOCATION = 'global';
 
 async function main({
   datasetName = DATASET_NAME,
