@@ -890,9 +890,7 @@ Your text will be used for indexing these media files, so please follow these ru
       systemInstruction:
         'You are a transcriber that provide precise transcript to video and audio content.',
       responseModalities: ['TEXT'],
-      temperature: 0.5, // Raise a bit to reduce looping (repeated text) error
       maxOutputTokens: 2048, // Stop looping output early
-      thinkingConfig: { thinkingBudget: 0 }, // TODO: thinkingConfig is for Gemini 2.5 fallback. Can be removed once Gemini 2.5 is phased out.
       safetySettings: [
         {
           category: 'HARM_CATEGORY_HATE_SPEECH',
@@ -917,9 +915,7 @@ Your text will be used for indexing these media files, so please follow these ru
   const generation = langfuseTrace.generation({
     name: 'gemini-transcript',
     modelParameters: {
-      temperature: generateContentArgs.config.temperature,
       maxOutputTokens: generateContentArgs.config.maxOutputTokens,
-      thinkingBudget: generateContentArgs.config.thinkingConfig?.thinkingBudget,
       safetySettings: JSON.stringify(generateContentArgs.config.safetySettings),
     },
     input: JSON.stringify({
@@ -955,7 +951,7 @@ const TRANSCRIPT_MODELS = [
   // Ordered by preference; on quota (429) or a retired/inaccessible model
   // (404) we fall through to the next.
   { model: 'gemini-3.1-flash-lite', location: 'global' },
-  { model: 'gemini-2.5-flash', location: 'global' },
+  { model: 'gemini-3.5-flash-lite', location: 'global' },
 ];
 
 /**
