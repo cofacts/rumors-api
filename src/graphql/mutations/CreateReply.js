@@ -5,6 +5,7 @@ import { assertUser } from 'util/user';
 import client from 'util/client';
 import scrapUrls from 'util/scrapUrls';
 import archiveUrlsFromText from 'util/archiveUrlsFromText';
+import { createEmbedding, getReplyEmbeddingCacheId } from 'util/embedding';
 
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 import MutationResult from 'graphql/models/MutationResult';
@@ -65,6 +66,18 @@ export default {
       id: articleId,
     });
 
+    // Generate embeddings inline so the reply doc lands in one ES write.
+    // Cache key is hash(text, reference); resubmissions of the same content
+    // hit the airesponses cache. Failure is non-fatal — backfill picks it up.
+    const embeddings = await createEmbedding(
+      { id: getReplyEmbeddingCacheId(text, reference), type: 'text' },
+      [{ text: `${text}\n${reference || ''}`.trim() }],
+      user
+    ).catch((e) => {
+      console.warn('[CreateReply] embedding:', e);
+      return null;
+    });
+
     const replyBody = {
       userId: user.id,
       appId: user.appId,
@@ -72,6 +85,7 @@ export default {
       text,
       reference,
       createdAt: new Date(),
+      ...(embeddings ? { embeddings } : {}),
     };
 
     const newReplyPromise = client
