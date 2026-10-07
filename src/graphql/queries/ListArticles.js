@@ -3,7 +3,6 @@ import {
   GraphQLList,
   GraphQLBoolean,
   GraphQLInputObjectType,
-  GraphQLInt,
   GraphQLFloat,
   GraphQLNonNull,
 } from 'graphql';
@@ -179,11 +178,6 @@ export default {
           type: GraphQLString,
           description:
             'Show the media article similar to the input url. The transcript and embedding of the media are only created when logged in; otherwise only the ones made before are used.',
-        },
-        mediaDuration: {
-          type: GraphQLInt,
-          description:
-            'Duration of `mediaUrl` content in seconds. Optional; only used by the embedding (hybrid search) flow when querying audio/video.',
         },
         embedding: {
           type: GraphQLFloat,
