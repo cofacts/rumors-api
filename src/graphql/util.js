@@ -109,6 +109,12 @@ export const moreLikeThisInput = new GraphQLInputObjectType({
   },
 });
 
+/**
+ * Both `k` and `num_candidates` of the kNN query. `k` must be set explicitly:
+ * when omitted, ES uses the search request's `size` as `k`, capping the kNN
+ * candidates at the page size, so the next page (search_after) comes back empty
+ * and `_count` (totalCount) returns 0.
+ */
 const KNN_NUM_CANDIDATES = 100;
 
 /**
@@ -116,6 +122,9 @@ const KNN_NUM_CANDIDATES = 100;
  * Intended as a candidate-retrieval `filter` clause on the BM25 bool query: a
  * doc survives when any query chunk is within `similarity` of one of its stored
  * embeddings, and the BM25 `should` score then decides the ordering.
+ *
+ * The candidates per query chunk are therefore up to KNN_NUM_CANDIDATES nearest
+ * docs above `similarity`, regardless of the page size.
  *
  * @param {object} param
  * @param {number[][]} param.queryVectors - one vector per query chunk
@@ -131,6 +140,7 @@ export function buildKnnQuery({ queryVectors, similarity }) {
         knn: {
           field: 'embeddings.vector',
           query_vector: qv,
+          k: KNN_NUM_CANDIDATES,
           num_candidates: KNN_NUM_CANDIDATES,
           similarity,
         },

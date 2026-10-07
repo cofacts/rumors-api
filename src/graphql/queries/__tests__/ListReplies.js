@@ -462,6 +462,8 @@ describe('ListReplies kNN retriever', () => {
     expect(nestedKnn.query.knn).toMatchObject({
       field: 'embeddings.vector',
       query_vector: [0.5, 0.5],
+      k: 100,
+      num_candidates: 100,
       similarity: 0.65,
     });
   });
@@ -556,5 +558,92 @@ describe('ListReplies kNN search with highlight', () => {
 
     // No BM25 match, no highlight
     expect(edges[1].highlight).toMatchObject({ text: null, reference: null });
+  });
+});
+
+describe('ListReplies kNN pagination', () => {
+  // Goes through `gql` and hits ES, to check that the kNN candidates are not
+  // capped at the page size (`first`): totalCount and the next page must see
+  // all kNN matches.
+
+  /** A 768-dim vector (the dims of `embeddings.vector`) with given leading values */
+  const vector = (...head) => [...head, ...Array(768 - head.length).fill(0)];
+
+  const knnFixtures = {
+    '/replies/doc/knnPage1': {
+      text: 'durian milkshake',
+      reference: 'book',
+      type: 'NOT_ARTICLE',
+      createdAt: '2020-02-07T00:00:04.000Z',
+      embeddings: [{ vector: vector(1) }],
+    },
+    '/replies/doc/knnPage2': {
+      text: 'mango lassi',
+      reference: 'book',
+      type: 'NOT_ARTICLE',
+      createdAt: '2020-02-07T00:00:03.000Z',
+      embeddings: [{ vector: vector(0.95, 0.3) }],
+    },
+    '/replies/doc/knnPage3': {
+      text: 'papaya juice',
+      reference: 'book',
+      type: 'NOT_ARTICLE',
+      createdAt: '2020-02-07T00:00:02.000Z',
+      embeddings: [{ vector: vector(0.9, 0.4) }],
+    },
+    // Not similar enough to the query vector
+    '/replies/doc/knnPageFar': {
+      text: 'car insurance',
+      reference: 'book',
+      type: 'NOT_ARTICLE',
+      createdAt: '2020-02-07T00:00:01.000Z',
+      embeddings: [{ vector: vector(0, 1) }],
+    },
+  };
+
+  beforeAll(() => loadFixtures(knnFixtures));
+  beforeEach(() => {
+    createEmbedding.mockReset();
+    createEmbedding.mockResolvedValue([{ vector: vector(1) }]);
+  });
+  afterAll(() => unloadFixtures(knnFixtures));
+
+  const query = gql`
+    query ($after: String) {
+      ListReplies(
+        filter: { moreLikeThis: { like: "fruit drink" }, embedding: 0.8 }
+        orderBy: [{ createdAt: DESC }]
+        first: 2
+        after: $after
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+          }
+          cursor
+        }
+      }
+    }
+  `;
+
+  it('paginates through and counts all kNN matches', async () => {
+    const page1 = await query();
+    expect(page1.errors).toBeUndefined();
+    expect(page1.data.ListReplies.totalCount).toBe(3);
+    const page1Edges = page1.data.ListReplies.edges;
+    expect(page1Edges.map(({ node }) => node.id)).toEqual([
+      'knnPage1',
+      'knnPage2',
+    ]);
+
+    const page2 = await query({
+      after: page1Edges[page1Edges.length - 1].cursor,
+    });
+    expect(page2.errors).toBeUndefined();
+    expect(page2.data.ListReplies.totalCount).toBe(3);
+    expect(page2.data.ListReplies.edges.map(({ node }) => node.id)).toEqual([
+      'knnPage3',
+    ]);
   });
 });
