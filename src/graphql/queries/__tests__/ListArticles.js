@@ -1249,8 +1249,10 @@ describe('ListArticles', () => {
 });
 
 describe('ListArticles kNN retriever', () => {
-  // These tests bypass `gql` and call ListArticles.resolve directly to inspect
-  // the search-request body it produces — no ES roundtrip, no fixtures needed.
+  // These tests bypass `gql` and call ListArticles.resolve directly to check
+  // which embedding / transcript is made or read for the search — no ES
+  // roundtrip. How kNN selects and ranks the results is tested against ES in
+  // "ListArticles kNN ranking" below.
   const baseContext = {
     loaders: { urlLoader: { load: jest.fn().mockResolvedValue(null) } },
     userId: 'u',
@@ -1268,64 +1270,13 @@ describe('ListArticles kNN retriever', () => {
   });
   afterAll(() => unloadFixtures(knnRetrieverFixtures));
 
-  it('runs plain BM25 when embedding is omitted', async () => {
-    const result = await ListArticles.resolve(
-      {},
-      { filter: { moreLikeThis: { like: 'covid vaccine' } } },
-      baseContext
-    );
-
-    expect(result.body.query).toBeDefined();
-    // BM25 path: no nested-knn filter, minimum_should_match stays at 1.
-    expect(result.body.query.bool.minimum_should_match).toBe(1);
-    expect(
-      result.body.query.bool.filter.some((clause) => clause?.bool?.should)
-    ).toBe(false);
-    expect(createEmbedding).not.toHaveBeenCalled();
-  });
-
-  it('adds kNN as a candidate filter and ranks by BM25 when embedding is a similarity', async () => {
-    createEmbedding.mockResolvedValue([{ vector: [0.11, 0.22, 0.33] }]);
-
-    const result = await ListArticles.resolve(
-      {},
-      {
-        filter: {
-          moreLikeThis: { like: 'covid vaccine' },
-          embedding: 0.7,
-        },
-      },
-      baseContext
-    );
-
-    // Cache key + RETRIEVAL_QUERY taskType
-    expect(createEmbedding).toHaveBeenCalledTimes(1);
-    const [queryInfo, parts, , options] = createEmbedding.mock.calls[0];
-    expect(queryInfo.type).toBe('text');
-    expect(queryInfo.id).toMatch(/^query-text:/);
-    expect(parts).toEqual([{ text: 'covid vaccine' }]);
-    expect(options).toEqual({ taskType: 'RETRIEVAL_QUERY' });
-
-    // BM25 should-queries stay in place for ranking; retrieval is restricted by
-    // a nested-kNN filter, and minimum_should_match drops to 0.
-    expect(result.body.retriever).toBeUndefined();
-    expect(result.body.query.bool.should[0].nested).toBeUndefined();
-    expect(result.body.query.bool.minimum_should_match).toBe(0);
-
-    const knnFilter = result.body.query.bool.filter.find(
-      (clause) => clause?.bool?.should?.[0]?.nested
-    );
-    const nestedKnn = knnFilter.bool.should[0].nested;
-    expect(nestedKnn.path).toBe('embeddings');
-    expect(nestedKnn.score_mode).toBe('max');
-    expect(nestedKnn.query.knn).toMatchObject({
-      field: 'embeddings.vector',
-      query_vector: [0.11, 0.22, 0.33],
-      k: 100,
-      num_candidates: 100,
-      similarity: 0.7,
-    });
-  });
+  /**
+   * @returns {number[] | undefined} the query vector of the kNN applied to the
+   *   search request, or undefined when kNN is not applied
+   */
+  const getKnnVector = (result) =>
+    result.body.query.bool.filter.find((c) => c?.bool?.should?.[0]?.nested)
+      ?.bool.should[0].nested.query.knn.query_vector;
 
   it('falls through to BM25 when createEmbedding throws', async () => {
     createEmbedding.mockRejectedValue(new Error('vertex offline'));
@@ -1341,15 +1292,9 @@ describe('ListArticles kNN retriever', () => {
       baseContext
     );
 
-    expect(result.body.query).toBeDefined();
-    expect(result.body.query.bool.should[0].nested).toBeUndefined();
-    expect(result.body.retriever).toBeUndefined();
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+    expect(getKnnVector(result)).toBeUndefined();
   });
-
-  /** The nested-kNN filter clause of a search request body, if any */
-  const getKnn = (result) =>
-    result.body.query.bool.filter.find((c) => c?.bool?.should?.[0]?.nested)
-      ?.bool.should[0].nested.query.knn;
 
   it('uploads the media that media manager does not have, then adds kNN', async () => {
     const queryInfo = { id: 'media-hash-miss', type: 'image' };
@@ -1382,11 +1327,7 @@ describe('ListArticles kNN retriever', () => {
       baseContext.user
     );
 
-    expect(result.body.query.bool.minimum_should_match).toBe(0);
-    expect(getKnn(result)).toMatchObject({
-      query_vector: [0.1, 0.2],
-      similarity: 0.6,
-    });
+    expect(getKnnVector(result)).toEqual([0.1, 0.2]);
   });
 
   it('uploads nothing when media manager already has the file', async () => {
@@ -1420,7 +1361,7 @@ describe('ListArticles kNN retriever', () => {
       storedEntry,
       baseContext.user
     );
-    expect(getKnn(result)).toMatchObject({ query_vector: [0.7, 0.8] });
+    expect(getKnnVector(result)).toEqual([0.7, 0.8]);
   });
 
   it('shares one media entry between transcript and embedding', async () => {
@@ -1455,12 +1396,7 @@ describe('ListArticles kNN retriever', () => {
       mediaEntry,
       baseContext.user
     );
-
-    // Transcript ranks by BM25, embedding restricts the candidates.
-    expect(
-      result.body.query.bool.should.some((clause) => clause.more_like_this)
-    ).toBe(true);
-    expect(getKnn(result)).toMatchObject({ query_vector: [0.3, 0.4] });
+    expect(getKnnVector(result)).toEqual([0.3, 0.4]);
   });
 
   it('keeps the transcript when only the embedding fails', async () => {
@@ -1486,12 +1422,11 @@ describe('ListArticles kNN retriever', () => {
       baseContext
     );
 
+    // The transcript is still searched for, without kNN.
     expect(
       result.body.query.bool.should.some((clause) => clause.more_like_this)
     ).toBe(true);
-    // No kNN: plain BM25.
-    expect(result.body.query.bool.minimum_should_match).toBe(1);
-    expect(getKnn(result)).toBeUndefined();
+    expect(getKnnVector(result)).toBeUndefined();
   });
 
   it('searches without creating anything when the media cannot be uploaded', async () => {
@@ -1514,7 +1449,7 @@ describe('ListArticles kNN retriever', () => {
 
     expect(createTranscript).not.toHaveBeenCalled();
     expect(createMediaEmbedding).not.toHaveBeenCalled();
-    expect(result.body.query.bool.minimum_should_match).toBe(1);
+    expect(getKnnVector(result)).toBeUndefined();
   });
 
   it('reads the embedding made before when the media cannot be uploaded', async () => {
@@ -1531,36 +1466,7 @@ describe('ListArticles kNN retriever', () => {
     );
 
     expect(createMediaEmbedding).not.toHaveBeenCalled();
-
-    expect(result.body.query.bool.minimum_should_match).toBe(0);
-    expect(getKnn(result)).toMatchObject({
-      query_vector: [0.9, 0.8, 0.7],
-      similarity: 0.75,
-    });
-  });
-
-  it('only reads the transcript and embedding made before when not logged in', async () => {
-    mediaManager.query.mockResolvedValueOnce({
-      queryInfo: { id: 'media-hash-anonymous', type: 'image' },
-      hits: [],
-    });
-
-    const result = await ListArticles.resolve(
-      {},
-      { filter: { mediaUrl: 'https://example.com/y.jpg', embedding: 0.75 } },
-      { ...baseContext, userId: undefined, user: undefined }
-    );
-
-    // The media is still looked up, but nothing is uploaded nor generated.
-    expect(mediaManager.query).toHaveBeenCalledTimes(1);
-    expect(mediaManager.insert).not.toHaveBeenCalled();
-    expect(createTranscript).not.toHaveBeenCalled();
-    expect(createMediaEmbedding).not.toHaveBeenCalled();
-
-    expect(getKnn(result)).toMatchObject({
-      query_vector: [0.1, 0.2, 0.3],
-      similarity: 0.75,
-    });
+    expect(getKnnVector(result)).toEqual([0.9, 0.8, 0.7]);
   });
 
   it('uses the media embedding even when a text query is given along with it', async () => {
@@ -1588,10 +1494,7 @@ describe('ListArticles kNN retriever', () => {
     );
     // The text is not vectorized; it only ranks by BM25.
     expect(createEmbedding).not.toHaveBeenCalled();
-    expect(
-      result.body.query.bool.should.some((clause) => clause.more_like_this)
-    ).toBe(true);
-    expect(getKnn(result)).toMatchObject({ query_vector: [0.5, 0.6] });
+    expect(getKnnVector(result)).toEqual([0.5, 0.6]);
   });
 
   it('falls back to the text embedding when the media has none', async () => {
@@ -1617,7 +1520,7 @@ describe('ListArticles kNN retriever', () => {
 
     expect(createEmbedding).toHaveBeenCalledTimes(1);
     expect(createEmbedding.mock.calls[0][0].type).toBe('text');
-    expect(getKnn(result)).toMatchObject({ query_vector: [0.5] });
+    expect(getKnnVector(result)).toEqual([0.5]);
   });
 });
 
@@ -1864,6 +1767,8 @@ describe('ListArticles kNN ranking', () => {
       expect(edges[0].score).toBeGreaterThan(0);
       expect(edges[1].score).toBe(0);
 
+      // The media is still looked up, but nothing is uploaded nor generated.
+      expect(mediaManager.query).toHaveBeenCalledTimes(1);
       expect(mediaManager.insert).not.toHaveBeenCalled();
       expect(createTranscript).not.toHaveBeenCalled();
       expect(createMediaEmbedding).not.toHaveBeenCalled();

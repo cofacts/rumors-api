@@ -1,7 +1,6 @@
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import gql from 'util/GraphQL';
 import { createEmbedding } from 'util/embedding';
-import ListReplies from '../ListReplies';
 import fixtures, {
   knnHighlightFixtures,
   knnPageFixtures,
@@ -409,71 +408,6 @@ describe('ListReplies', () => {
   afterAll(() => unloadFixtures(fixtures));
 });
 
-describe('ListReplies kNN retriever', () => {
-  // Bypass `gql` and call resolve directly to inspect the search-request body.
-  const baseContext = {
-    loaders: { urlLoader: { load: jest.fn().mockResolvedValue(null) } },
-    userId: 'u',
-    appId: 'a',
-    user: { id: 'u', appId: 'a' },
-  };
-
-  beforeEach(() => {
-    createEmbedding.mockReset();
-  });
-
-  it('runs plain BM25 when embedding is omitted', async () => {
-    const result = await ListReplies.resolve(
-      {},
-      { filter: { moreLikeThis: { like: 'foo bar' } } },
-      baseContext
-    );
-
-    expect(result.body.query).toBeDefined();
-    expect(result.body.query.bool.minimum_should_match).toBe(1);
-    expect(
-      result.body.query.bool.filter.some((clause) => clause?.bool?.should)
-    ).toBe(false);
-    expect(createEmbedding).not.toHaveBeenCalled();
-  });
-
-  it('adds kNN as a candidate filter and ranks by BM25 when embedding is a similarity', async () => {
-    createEmbedding.mockResolvedValue([{ vector: [0.5, 0.5] }]);
-
-    const result = await ListReplies.resolve(
-      {},
-      {
-        filter: {
-          moreLikeThis: { like: 'foo bar' },
-          embedding: 0.65,
-        },
-      },
-      baseContext
-    );
-
-    expect(createEmbedding).toHaveBeenCalledTimes(1);
-    expect(result.body.retriever).toBeUndefined();
-
-    // BM25 should-queries stay for ranking; retrieval is restricted by a
-    // nested-kNN filter and minimum_should_match drops to 0.
-    expect(result.body.query.bool.should[0].nested).toBeUndefined();
-    expect(result.body.query.bool.minimum_should_match).toBe(0);
-
-    const knnFilter = result.body.query.bool.filter.find(
-      (clause) => clause?.bool?.should?.[0]?.nested
-    );
-    const nestedKnn = knnFilter.bool.should[0].nested;
-    expect(nestedKnn.path).toBe('embeddings');
-    expect(nestedKnn.query.knn).toMatchObject({
-      field: 'embeddings.vector',
-      query_vector: [0.5, 0.5],
-      k: 100,
-      num_candidates: 100,
-      similarity: 0.65,
-    });
-  });
-});
-
 describe('ListReplies kNN search with highlight', () => {
   // Unlike the kNN retriever tests above, these go through `gql` and hit ES, so
   // that the highlight on the kNN search request is exercised too.
@@ -625,14 +559,24 @@ describe('ListReplies kNN as a hard filter', () => {
   it('excludes keyword matches without a similar embedding', async () => {
     const { data, errors } = await query({ embedding: 0.8 });
     expect(errors).toBeUndefined();
-    expect(createEmbedding).toHaveBeenCalledTimes(1);
     expect(data.ListReplies.edges.map(({ node }) => node.id)).toEqual([
       'knnHardFilterSemantic',
     ]);
 
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+    const [queryInfo, parts, , options] = createEmbedding.mock.calls[0];
+    expect(queryInfo).toEqual({
+      id: expect.stringMatching(/^query-text:/),
+      type: 'text',
+    });
+    expect(parts).toEqual([{ text: 'earthquake drill schedule' }]);
+    expect(options).toEqual({ taskType: 'RETRIEVAL_QUERY' });
+
     // Without kNN, the keyword match is found.
+    createEmbedding.mockClear();
     const { data: bm25Data, errors: bm25Errors } = await query();
     expect(bm25Errors).toBeUndefined();
+    expect(createEmbedding).not.toHaveBeenCalled();
     expect(bm25Data.ListReplies.edges.map(({ node }) => node.id)).toEqual([
       'knnHardFilterNoEmbedding',
     ]);

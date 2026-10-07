@@ -385,8 +385,8 @@ export default {
 // The fixtures below are loaded only in the kNN tests that need them, to keep
 // the snapshots of the default fixtures unaffected.
 
-// Embeddings made before for media, read by the kNN retriever tests when
-// nothing can be uploaded or generated.
+// Embedding made before for media, read by the kNN retriever test when the
+// media cannot be uploaded.
 //
 export const knnRetrieverFixtures = {
   '/airesponses/doc/knn-media-reuse': {
@@ -395,13 +395,6 @@ export const knnRetrieverFixtures = {
     status: 'SUCCESS',
     createdAt: '2026-01-01T00:00:00.000Z',
     embeddings: [{ vector: [0.9, 0.8, 0.7] }],
-  },
-  '/airesponses/doc/knn-media-anonymous': {
-    type: 'EMBEDDING',
-    docId: 'media-hash-anonymous',
-    status: 'SUCCESS',
-    createdAt: '2026-01-01T00:00:00.000Z',
-    embeddings: [{ vector: [0.1, 0.2, 0.3] }],
   },
 };
 
