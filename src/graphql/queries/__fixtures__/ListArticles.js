@@ -1,4 +1,4 @@
-export default {
+const fixtures = {
   '/articles/doc/listArticleTest1': {
     userId: 'user1',
     appId: 'app1',
@@ -380,8 +380,10 @@ export default {
   },
 };
 
+export default fixtures;
+
 // Legacy text article that predates the attachmentHash field (the field is absent, not '').
-// Its text matches the transcript of listArticleTest6, so it is hit by media search.
+// It shares listArticleTest6's text, so the media search for listArticleTest6 hits it via the transcript.
 // Loaded only in the test that needs it, to keep other snapshots unaffected.
 //
 export const noAttachmentHashFixtures = {
@@ -393,7 +395,7 @@ export const noAttachmentHashFixtures = {
     normalArticleCategoryCount: 0,
     updatedAt: 1,
     createdAt: '2020-02-11T00:00:00.000Z',
-    text: '微之，微之！此夕此心，君知之乎！',
+    text: fixtures['/articles/doc/listArticleTest6'].text,
     articleReplies: [],
     articleCategories: [],
     articleType: 'TEXT',
