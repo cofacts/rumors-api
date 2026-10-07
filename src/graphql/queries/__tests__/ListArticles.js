@@ -7,6 +7,8 @@ import fixtures, {
   knnRetrieverFixtures,
   knnHighlightFixtures,
   knnPageFixtures,
+  knnRankingFixtures,
+  knnMediaRankingFixtures,
 } from '../__fixtures__/ListArticles';
 import { queryVector } from 'util/vectors';
 import mediaManager from 'util/mediaManager';
@@ -1735,5 +1737,137 @@ describe('ListArticles kNN pagination', () => {
     expect(page2.data.ListArticles.edges.map(({ node }) => node.id)).toEqual([
       'knnPage3',
     ]);
+  });
+});
+
+describe('ListArticles kNN ranking', () => {
+  // Goes through `gql` and hits ES with hand-crafted vectors, to check that kNN
+  // only selects the candidates (by the similarity threshold) while the BM25
+  // score of the should-queries decides their order.
+
+  beforeEach(() => {
+    createEmbedding.mockReset();
+    createMediaEmbedding.mockReset();
+    createTranscript.mockReset();
+    mediaManager.query.mockReset();
+    mediaManager.insert.mockReset();
+  });
+
+  describe('text search', () => {
+    beforeAll(() => loadFixtures(knnRankingFixtures));
+    beforeEach(() => {
+      createEmbedding.mockResolvedValue([{ vector: queryVector }]);
+    });
+    afterAll(() => unloadFixtures(knnRankingFixtures));
+
+    const query = gql`
+      query ($embedding: Float) {
+        ListArticles(
+          filter: {
+            moreLikeThis: { like: "durian mooncake festival" }
+            embedding: $embedding
+          }
+          orderBy: [{ _score: DESC }]
+        ) {
+          edges {
+            score
+            node {
+              id
+            }
+          }
+        }
+      }
+    `;
+
+    it('ranks the kNN matches by BM25 instead of vector similarity', async () => {
+      const { data, errors } = await query({ embedding: 0.8 });
+      expect(errors).toBeUndefined();
+
+      // Similarity: NoKeyword 0.99 > WeakKeyword 0.95 > StrongKeyword 0.85,
+      // but the order follows the keywords. Far (0.1) and BelowThreshold (0.75)
+      // are not similar enough.
+      const { edges } = data.ListArticles;
+      expect(edges.map(({ node }) => node.id)).toEqual([
+        'knnRankStrongKeyword',
+        'knnRankWeakKeyword',
+        'knnRankNoKeyword',
+      ]);
+      expect(edges[1].score).toBeGreaterThan(0);
+      expect(edges[2].score).toBe(0);
+
+      expect(createEmbedding).toHaveBeenCalledTimes(1);
+      const [queryInfo, parts, , options] = createEmbedding.mock.calls[0];
+      expect(queryInfo).toEqual({
+        id: expect.stringMatching(/^query-text:/),
+        type: 'text',
+      });
+      expect(parts).toEqual([{ text: 'durian mooncake festival' }]);
+      expect(options).toEqual({ taskType: 'RETRIEVAL_QUERY' });
+    });
+
+    it('finds keyword matches only when kNN is not applied', async () => {
+      const { data, errors } = await query();
+      expect(errors).toBeUndefined();
+      expect(createEmbedding).not.toHaveBeenCalled();
+
+      const ids = data.ListArticles.edges.map(({ node }) => node.id);
+      expect(ids).toEqual(
+        expect.arrayContaining([
+          'knnRankStrongKeyword',
+          'knnRankWeakKeyword',
+          'knnRankBelowThreshold',
+        ])
+      );
+      expect(ids).not.toContain('knnRankNoKeyword');
+      expect(ids).not.toContain('knnRankFar');
+    });
+  });
+
+  describe('media search', () => {
+    beforeAll(() => loadFixtures(knnMediaRankingFixtures));
+    afterAll(() => unloadFixtures(knnMediaRankingFixtures));
+
+    it('ranks the kNN matches by the transcript, using the transcript and embedding made before', async () => {
+      // No similar media, so the order comes from the transcript only.
+      mediaManager.query.mockResolvedValueOnce({
+        queryInfo: { id: 'knn-media-rank-hash', type: 'image' },
+        hits: [],
+      });
+
+      // Not logged in: nothing is uploaded nor generated, and what is made
+      // before is read from airesponses.
+      const { data, errors } = await gql`
+        {
+          ListArticles(
+            filter: {
+              mediaUrl: "https://example.com/knn-media-rank.jpg"
+              embedding: 0.8
+            }
+            orderBy: [{ _score: DESC }]
+          ) {
+            edges {
+              score
+              node {
+                id
+              }
+            }
+          }
+        }
+      `();
+      expect(errors).toBeUndefined();
+
+      const { edges } = data.ListArticles;
+      expect(edges.map(({ node }) => node.id)).toEqual([
+        'knnMediaRankTranscript',
+        'knnMediaRankNoTranscript',
+      ]);
+      expect(edges[0].score).toBeGreaterThan(0);
+      expect(edges[1].score).toBe(0);
+
+      expect(mediaManager.insert).not.toHaveBeenCalled();
+      expect(createTranscript).not.toHaveBeenCalled();
+      expect(createMediaEmbedding).not.toHaveBeenCalled();
+      expect(createEmbedding).not.toHaveBeenCalled();
+    });
   });
 });

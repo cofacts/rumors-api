@@ -5,6 +5,7 @@ import ListReplies from '../ListReplies';
 import fixtures, {
   knnHighlightFixtures,
   knnPageFixtures,
+  knnHardFilterFixtures,
 } from '../__fixtures__/ListReplies';
 import { queryVector } from 'util/vectors';
 
@@ -583,6 +584,57 @@ describe('ListReplies kNN pagination', () => {
     expect(page2.data.ListReplies.totalCount).toBe(3);
     expect(page2.data.ListReplies.edges.map(({ node }) => node.id)).toEqual([
       'knnPage3',
+    ]);
+  });
+});
+
+describe('ListReplies kNN as a hard filter', () => {
+  // Goes through `gql` and hits ES with hand-crafted vectors.
+
+  beforeAll(() => loadFixtures(knnHardFilterFixtures));
+  beforeEach(() => {
+    createEmbedding.mockReset();
+    createEmbedding.mockResolvedValue([{ vector: queryVector }]);
+  });
+  afterAll(() => unloadFixtures(knnHardFilterFixtures));
+
+  const query = gql`
+    query ($embedding: Float) {
+      ListReplies(
+        filter: {
+          moreLikeThis: { like: "earthquake drill schedule" }
+          embedding: $embedding
+        }
+        orderBy: [{ _score: DESC }]
+      ) {
+        edges {
+          score
+          node {
+            id
+          }
+        }
+      }
+    }
+  `;
+
+  // kNN is applied as a hard filter, so a document that matches the keywords
+  // perfectly is still excluded when its embedding is far away or missing
+  // (e.g. not backfilled yet). This is a side effect of the current design,
+  // not a goal. If we later find a ranking that combines kNN and keyword
+  // relevance, revisit this test and its fixtures.
+  it('excludes keyword matches without a similar embedding', async () => {
+    const { data, errors } = await query({ embedding: 0.8 });
+    expect(errors).toBeUndefined();
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+    expect(data.ListReplies.edges.map(({ node }) => node.id)).toEqual([
+      'knnHardFilterSemantic',
+    ]);
+
+    // Without kNN, the keyword match is found.
+    const { data: bm25Data, errors: bm25Errors } = await query();
+    expect(bm25Errors).toBeUndefined();
+    expect(bm25Data.ListReplies.edges.map(({ node }) => node.id)).toEqual([
+      'knnHardFilterNoEmbedding',
     ]);
   });
 });

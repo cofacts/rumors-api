@@ -1,4 +1,4 @@
-import { vectorWithSimilarity } from 'util/vectors';
+import { queryVector, vectorWithSimilarity } from 'util/vectors';
 
 export default {
   '/articles/doc/listArticleTest1': {
@@ -462,5 +462,103 @@ export const knnPageFixtures = {
     text: 'car insurance',
     createdAt: '2020-02-04T00:00:01.000Z',
     embeddings: [{ vector: vectorWithSimilarity(0) }],
+  },
+};
+
+// Text search "durian mooncake festival" with kNN similarity 0.8. The more
+// similar the vector, the less the keywords match, so that the order of the
+// results tells whether BM25 or kNN ranks them.
+//
+export const knnRankingFixtures = {
+  // Matches all keywords, repeatedly in a short text; least similar of the kNN matches.
+  '/articles/doc/knnRankStrongKeyword': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'Durian mooncake festival! Durian mooncake sold out at the festival.',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.85) }],
+  },
+  // Matches all keywords once in a long text, thus lower BM25 score.
+  '/articles/doc/knnRankWeakKeyword': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text:
+      'The night market by the river opens every weekend with food stalls, ' +
+      'street music, lanterns and games for children, and this year there ' +
+      'is a durian stall, a mooncake stall and a small festival stage too.',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.95) }],
+  },
+  // Matches no keywords; most similar.
+  '/articles/doc/knnRankNoKeyword': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'Lunar calendar celebration with pastries',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.99) }],
+  },
+  // Matches neither.
+  '/articles/doc/knnRankFar': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'Car insurance premium',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.1) }],
+  },
+  // Matches all keywords, but slightly below the similarity threshold.
+  // (Above it if the threshold were on kNN _score, (1 + cosine) / 2 = 0.875.)
+  '/articles/doc/knnRankBelowThreshold': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'Durian mooncake festival',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.75) }],
+  },
+};
+
+// Media search with kNN similarity 0.8, not logged in. The transcript and
+// embedding of the media are made before.
+//
+export const knnMediaRankingFixtures = {
+  '/airesponses/doc/knn-media-rank-transcript': {
+    type: 'TRANSCRIPT',
+    docId: 'knn-media-rank-hash',
+    status: 'SUCCESS',
+    text: 'Typhoon evacuation shelter announcement',
+    createdAt: '2026-01-01T00:00:00.000Z',
+  },
+  '/airesponses/doc/knn-media-rank-embedding': {
+    type: 'EMBEDDING',
+    docId: 'knn-media-rank-hash',
+    status: 'SUCCESS',
+    embeddings: [{ vector: queryVector }],
+    createdAt: '2026-01-01T00:00:00.000Z',
+  },
+  // Matches the transcript; less similar.
+  '/articles/doc/knnMediaRankTranscript': {
+    status: 'NORMAL',
+    articleType: 'IMAGE',
+    attachmentHash: 'knn-media-rank-other-hash-1',
+    text: 'Typhoon evacuation shelter announcement from the city government',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.9) }],
+  },
+  // Does not match the transcript; more similar.
+  '/articles/doc/knnMediaRankNoTranscript': {
+    status: 'NORMAL',
+    articleType: 'IMAGE',
+    attachmentHash: 'knn-media-rank-other-hash-2',
+    text: 'A cat sleeping on the sofa',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.99) }],
+  },
+  // Matches neither.
+  '/articles/doc/knnMediaRankFar': {
+    status: 'NORMAL',
+    articleType: 'IMAGE',
+    attachmentHash: 'knn-media-rank-other-hash-3',
+    text: 'Stock market news',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.1) }],
   },
 };

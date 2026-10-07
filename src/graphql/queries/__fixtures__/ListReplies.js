@@ -118,3 +118,23 @@ export const knnPageFixtures = {
     embeddings: [{ vector: vectorWithSimilarity(0) }],
   },
 };
+
+// Search "earthquake drill schedule" with kNN similarity 0.8.
+//
+export const knnHardFilterFixtures = {
+  // Matches no keywords, but similar.
+  '/replies/doc/knnHardFilterSemantic': {
+    text: 'When the ground shakes, take cover under a table',
+    reference: 'Disaster preparedness handbook',
+    type: 'NOT_ARTICLE',
+    createdAt: '2020-02-08T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.99) }],
+  },
+  // Matches all keywords, but has no embeddings (e.g. not backfilled yet).
+  '/replies/doc/knnHardFilterNoEmbedding': {
+    text: 'Earthquake drill schedule: the earthquake drill starts at 9am',
+    reference: 'Earthquake drill schedule',
+    type: 'NOT_ARTICLE',
+    createdAt: '2020-02-08T00:00:00.000Z',
+  },
+};
