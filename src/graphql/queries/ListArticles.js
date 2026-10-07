@@ -633,7 +633,7 @@ export default {
           // `doc.containsKey()` only checks the field exists in the mapping; documents without a value
           // (e.g. legacy text articles hit by transcript full-text search) must be guarded with `.size()`,
           // otherwise `.value` throws and fails the whole search.
-          source: `doc.containsKey('attachmentHash') && doc['attachmentHash'].size() > 0 ? params.similarityMap.get(doc['attachmentHash'].value) : null`,
+          source: `doc.containsKey('attachmentHash') && !doc['attachmentHash'].isEmpty() ? params.similarityMap.get(doc['attachmentHash'].value) : null`,
           params: { similarityMap },
         },
       };
@@ -654,12 +654,13 @@ export default {
           script_score: {
             script: {
               lang: 'painless',
-              // The `terms` query above only matches docs whose attachmentHash is in similarityMap,
-              // but still guard against missing values / map entries so the script can never throw.
+              // script_score only runs on docs matched by the `terms` query above, so attachmentHash
+              // always has a value that is a key of similarityMap; no null handling needed.
+              // (Unlike script_fields.mediaSimilarity, which runs on every hit, including text-only matches.)
               //
               // `mediaSimilarity` cannot be used here because it only exists after search complete.
               //
-              source: `${MULTIPLIER} * (doc['attachmentHash'].size() > 0 ? params.similarityMap.getOrDefault(doc['attachmentHash'].value, 0) : 0)`,
+              source: `${MULTIPLIER} * params.similarityMap.get(doc['attachmentHash'].value)`,
               params: { similarityMap },
             },
           },

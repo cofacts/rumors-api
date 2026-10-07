@@ -1121,38 +1121,44 @@ describe('ListArticles', () => {
     // but is matched by full-text search using the transcript of listArticleTest6.
     // The mediaSimilarity script must not throw on it.
     //
-    const result = await gql`
-      {
-        ListArticles(
-          orderBy: [{ _score: DESC }]
-          filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
-        ) {
-          edges {
-            mediaSimilarity
-            node {
-              id
-              attachmentHash
+    let result;
+    try {
+      result = await gql`
+        {
+          ListArticles(
+            orderBy: [{ _score: DESC }]
+            filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
+          ) {
+            edges {
+              mediaSimilarity
+              node {
+                id
+                attachmentHash
+              }
             }
           }
         }
-      }
-    `({}, { appId: 'WEBSITE' });
-
-    await unloadFixtures(noAttachmentHashFixtures);
+      `({}, { appId: 'WEBSITE' });
+    } finally {
+      await unloadFixtures(noAttachmentHashFixtures);
+    }
 
     expect(result.errors).toBeUndefined();
-    expect(result.data.ListArticles.edges).toEqual(
-      expect.arrayContaining([
-        {
-          mediaSimilarity: 1,
-          node: { id: 'listArticleTest6', attachmentHash: 'ffff8001' },
-        },
-        {
-          mediaSimilarity: 0,
-          node: { id: 'listArticleNoAttachmentHash', attachmentHash: null },
-        },
-      ])
-    );
+    expect(result.data.ListArticles.edges).toEqual([
+      // Media hit is boosted above the text-only hit
+      {
+        mediaSimilarity: 1,
+        node: { id: 'listArticleTest6', attachmentHash: 'ffff8001' },
+      },
+      {
+        mediaSimilarity: 0,
+        node: { id: 'listArticleNoAttachmentHash', attachmentHash: null },
+      },
+      {
+        mediaSimilarity: 0,
+        node: { id: 'listArticleTest1', attachmentHash: '' },
+      },
+    ]);
   });
 
   it('lists all articles with cooccurrences', async () => {
