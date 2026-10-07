@@ -183,7 +183,9 @@ export default {
           type: GraphQLFloat,
           description:
             'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
-            'to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).',
+            'to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default). ' +
+            'kNN retrieves at most the 100 nearest documents above the given similarity, ' +
+            'so `totalCount` and pagination stop there even if more documents are similar enough.',
         },
         transcript: {
           description:
