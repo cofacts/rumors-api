@@ -434,9 +434,12 @@ const Article = new GraphQLObjectType({
                   lang: 'painless',
                   params: { similarityMap },
                   source:
-                    // Boost the score by 10, we want to prioritize media search hits
+                    // Boost the score by 10, we want to prioritize media search hits.
                     //
-                    "10 * params.similarityMap.get(doc['attachmentHash'].value)",
+                    // The `terms` query above only matches docs whose attachmentHash is in similarityMap,
+                    // but still guard against missing values / map entries so the script can never throw.
+                    //
+                    "10 * (doc['attachmentHash'].size() > 0 ? params.similarityMap.getOrDefault(doc['attachmentHash'].value, 0) : 0)",
                 },
               },
             },
