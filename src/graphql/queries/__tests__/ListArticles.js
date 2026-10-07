@@ -3,7 +3,9 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import { createTranscript } from 'graphql/util';
 import { createEmbedding, createMediaEmbedding } from 'util/embedding';
 import ListArticles from '../ListArticles';
-import fixtures from '../__fixtures__/ListArticles';
+import fixtures, {
+  noAttachmentHashFixtures,
+} from '../__fixtures__/ListArticles';
 import mediaManager from 'util/mediaManager';
 
 jest.mock('util/mediaManager');
@@ -1093,6 +1095,70 @@ describe('ListArticles', () => {
     // Transcript already fetched from articles, no transcript is generated
     //
     expect(createTranscript).toHaveBeenCalledTimes(0);
+  });
+
+  it('filters by mediaUrl when hits include articles without attachmentHash', async () => {
+    await loadFixtures(noAttachmentHashFixtures);
+
+    mediaManager.query.mockImplementationOnce(async () => ({
+      queryInfo: {
+        type: 'image',
+        id: fixtures['/articles/doc/listArticleTest6'].attachmentHash,
+      },
+      hits: [
+        {
+          similarity: 1,
+          entry: {
+            id: fixtures['/articles/doc/listArticleTest6'].attachmentHash,
+            type: 'image',
+            url: 'http://foo/image2.jpeg',
+          },
+        },
+      ],
+    }));
+
+    // listArticleNoAttachmentHash has no attachmentHash field at all,
+    // but is matched by full-text search using the transcript of listArticleTest6.
+    // The mediaSimilarity script must not throw on it.
+    //
+    let result;
+    try {
+      result = await gql`
+        {
+          ListArticles(
+            orderBy: [{ _score: DESC }]
+            filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
+          ) {
+            edges {
+              mediaSimilarity
+              node {
+                id
+                attachmentHash
+              }
+            }
+          }
+        }
+      `({}, { appId: 'WEBSITE' });
+    } finally {
+      await unloadFixtures(noAttachmentHashFixtures);
+    }
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data.ListArticles.edges).toEqual([
+      // Media hit is boosted above the text-only hit
+      {
+        mediaSimilarity: 1,
+        node: { id: 'listArticleTest6', attachmentHash: 'ffff8001' },
+      },
+      {
+        mediaSimilarity: 0,
+        node: { id: 'listArticleNoAttachmentHash', attachmentHash: null },
+      },
+      {
+        mediaSimilarity: 0,
+        node: { id: 'listArticleTest1', attachmentHash: '' },
+      },
+    ]);
   });
 
   it('lists all articles with cooccurrences', async () => {
