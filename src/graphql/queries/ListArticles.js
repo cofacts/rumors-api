@@ -3,10 +3,16 @@ import {
   GraphQLList,
   GraphQLBoolean,
   GraphQLInputObjectType,
+  GraphQLFloat,
   GraphQLNonNull,
 } from 'graphql';
 import client from 'util/client';
 import mediaManager from 'util/mediaManager';
+import {
+  createEmbedding,
+  createMediaEmbedding,
+  getQueryEmbeddingCacheId,
+} from 'util/embedding';
 
 import {
   createFilterType,
@@ -20,10 +26,13 @@ import {
   getRangeFieldParamFromArithmeticExpression,
   createCommonListFilter,
   attachCommonListFilter,
+  buildKnnQuery,
   DEFAULT_ARTICLE_STATUSES,
   DEFAULT_ARTICLE_REPLY_STATUSES,
   getAIResponse,
   createTranscript,
+  getOrUploadMedia,
+  VALID_ARTICLE_TYPE_TO_MEDIA_TYPE,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import ArticleStatusEnum from 'graphql/models/ArticleStatusEnum';
@@ -37,6 +46,10 @@ const {
   ids: dontcare, // eslint-disable-line no-unused-vars
   ...articleReplyCommonFilterArgs
 } = createCommonListFilter('articleReplies');
+
+// The media types that can be transcribed and embedded (media-manager also has
+// a `file` type).
+const SUPPORTED_MEDIA_TYPES = Object.values(VALID_ARTICLE_TYPE_TO_MEDIA_TYPE);
 
 /**
  * Create more_like_this query for article index
@@ -163,7 +176,14 @@ export default {
         },
         mediaUrl: {
           type: GraphQLString,
-          description: 'Show the media article similar to the input url',
+          description:
+            'Show the media article similar to the input url. The transcript and embedding of the media are only created when logged in; otherwise only the ones made before are used.',
+        },
+        embedding: {
+          type: GraphQLFloat,
+          description:
+            'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
+            'to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).',
         },
         transcript: {
           description:
@@ -179,9 +199,9 @@ export default {
               },
               shouldCreate: {
                 type: GraphQLBoolean,
-                defaultValue: false,
+                // FIXME: No deprecationReason for input object types yet
                 description:
-                  'Only used when `filter.mediaUrl` is provided. Generates transcript if provided `filter.mediaUrl` is not transcribed previously.',
+                  '[Deprecated] No longer read. The transcript is always generated when `filter.mediaUrl` is not transcribed previously.',
               },
             },
           }),
@@ -596,6 +616,8 @@ export default {
       });
     }
 
+    // Hoisted so the kNN block below can use the vectors of the queried media.
+    let mediaQueryVectors = [];
     if (filter.mediaUrl) {
       const queryResult = await mediaManager.query({ url: filter.mediaUrl });
       const similarityMap = queryResult.hits.reduce((map, hit) => {
@@ -663,27 +685,68 @@ export default {
         );
       }
 
-      // When no transcript found from similar articles, try getting it from AI responses.
+      const { queryInfo } = queryResult;
+      const isSupportedMedia = SUPPORTED_MEDIA_TYPES.includes(queryInfo.type);
+
+      // What this query needs from the media itself.
+      // - Transcript: when no transcript is found from similar articles. The
+      //   one made before is used, or it is made right away.
+      // - Embedding: for kNN. The media takes precedence over a text query
+      //   (see the kNN block below).
       //
-      if (!transcript) {
-        let aiResponse = await getAIResponse({
-          type: 'TRANSCRIPT',
-          docId: queryResult.queryInfo.id,
-        });
+      const needsTranscript = !transcript;
+      const needsEmbedding = filter.embedding != null && isSupportedMedia;
 
-        if (!aiResponse && filter.transcript?.shouldCreate) {
-          aiResponse = await createTranscript(
-            queryResult.queryInfo,
-            filter.mediaUrl,
-            user
-          );
+      // Media manager is the one that knows whether the file is there: get the
+      // stored media entry, or upload the media when there is none. Transcript
+      // and embedding below then share that file, and deal with nothing but
+      // their own text / vectors (including whether they are made before).
+      //
+      // The file is stored permanently and is what CreateMediaArticle uses if
+      // the media is submitted afterwards, thus it takes a logged-in user.
+      // When not logged in or the media cannot be uploaded, the transcript and
+      // embedding made before can still be read.
+      //
+      let mediaEntry = null;
+      if (user && isSupportedMedia && (needsTranscript || needsEmbedding)) {
+        try {
+          mediaEntry = await getOrUploadMedia({
+            mediaUrl: filter.mediaUrl,
+            queryResult,
+            user,
+          });
+        } catch (e) {
+          // Must never break the search; go on with what is made before.
+          console.warn('[ListArticles] cannot upload media:', e);
         }
+      }
 
-        if (aiResponse && aiResponse.status === 'SUCCESS') {
-          // Note: it is possible for `aiResponses.text` to be '';
-          // it means that the media doesn't have detectable text.
-          transcript = aiResponse.text;
-        }
+      const [aiResponse, embeddingChunks] = await Promise.all([
+        !needsTranscript
+          ? null
+          : mediaEntry
+          ? createTranscript(queryInfo, mediaEntry, user)
+          : getAIResponse({ type: 'TRANSCRIPT', docId: queryInfo.id }),
+
+        !needsEmbedding
+          ? null
+          : (mediaEntry
+              ? createMediaEmbedding(queryInfo, mediaEntry, user)
+              : getAIResponse({ type: 'EMBEDDING', docId: queryInfo.id }).then(
+                  (existing) => existing?.embeddings
+                )
+            ).catch((e) => {
+              // kNN must never break BM25 — go on without kNN.
+              console.warn('[ListArticles] kNN embedding failed:', e);
+              return null;
+            }),
+      ]);
+      mediaQueryVectors = (embeddingChunks ?? []).map((c) => c.vector);
+
+      if (aiResponse && aiResponse.status === 'SUCCESS') {
+        // Note: it is possible for `aiResponses.text` to be '';
+        // it means that the media doesn't have detectable text.
+        transcript = aiResponse.text;
       }
 
       // Add transcript to query
@@ -707,6 +770,47 @@ export default {
         minimum_should_match: 1, // At least 1 "should" query should present
       },
     };
+
+    // kNN-retrieval + BM25 ranking. Opt in by passing `filter.embedding` as the
+    // minimum cosine similarity: kNN narrows the candidate set, then the existing
+    // should-queries rank them — text `moreLikeThis`, or for a media search the
+    // perceptual-hash function_score + transcript moreLikeThis. Omit for BM25-only.
+    if (filter.embedding != null) {
+      try {
+        // Media query: resolved along with the transcript above. It takes
+        // precedence over a text query given along with it.
+        let queryVectors = mediaQueryVectors;
+
+        if (queryVectors.length === 0 && filter.moreLikeThis?.like) {
+          // Text query: vectorize the query text (RETRIEVAL_QUERY, cached).
+          const queryChunks = await createEmbedding(
+            {
+              id: getQueryEmbeddingCacheId(filter.moreLikeThis.like),
+              type: 'text',
+            },
+            [{ text: filter.moreLikeThis.like }],
+            user,
+            { taskType: 'RETRIEVAL_QUERY' }
+          );
+          queryVectors = queryChunks.map((c) => c.vector);
+        }
+
+        if (queryVectors.length > 0) {
+          // Add kNN as a candidate-retrieval filter so only semantically-near
+          // docs survive; the `should` scoring then decides the ordering.
+          body.query.bool.filter.push(
+            buildKnnQuery({ queryVectors, similarity: filter.embedding })
+          );
+          // Ranking is driven by the should-queries, but retrieval is driven by
+          // kNN — don't require a should match, or we'd intersect the two result
+          // sets instead of ranking the kNN candidates (some score 0 on BM25).
+          body.query.bool.minimum_should_match = 0;
+        }
+      } catch (e) {
+        // kNN must never break BM25 — log and fall through to the BM25 body.query.
+        console.warn('[ListArticles] kNN embedding failed:', e);
+      }
+    }
 
     // should return search context for resolveEdges & resolvePageInfo
     return {

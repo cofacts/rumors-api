@@ -31,4 +31,11 @@ export default {
     status: 'SUCCESS',
     createdAt: '2020-01-01T00:00:00.000Z',
   },
+  '/airesponses/doc/embedding': {
+    docId: 'some-article',
+    type: 'EMBEDDING',
+    status: 'SUCCESS',
+    embeddings: [{ vector: [0.1, 0.2] }],
+    createdAt: '2020-01-05T00:00:00.000Z',
+  },
 };

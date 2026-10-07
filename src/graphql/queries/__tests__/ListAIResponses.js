@@ -106,4 +106,28 @@ describe('ListAIResponses', () => {
       `()
     ).toMatchSnapshot('only transcripts');
   });
+
+  it('resolves EMBEDDING responses as AIEmbedding', async () => {
+    const { data, errors } = await gql`
+      {
+        ListAIResponses(filter: { types: [EMBEDDING] }) {
+          edges {
+            node {
+              __typename
+              id
+              type
+              status
+            }
+          }
+        }
+      }
+    `();
+    expect(errors).toBeUndefined();
+    expect(data.ListAIResponses.edges).toHaveLength(1);
+    expect(data.ListAIResponses.edges[0].node).toMatchObject({
+      __typename: 'AIEmbedding',
+      type: 'EMBEDDING',
+      status: 'SUCCESS',
+    });
+  });
 });

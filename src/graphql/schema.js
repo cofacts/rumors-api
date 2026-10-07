@@ -17,6 +17,7 @@ import ListAIResponses from './queries/ListAIResponses';
 import ListCooccurrences from './queries/ListCooccurrences';
 import ValidateSlug from './queries/ValidateSlug';
 import GetBadge from './queries/GetBadge';
+import { AIEmbedding } from './models/AIResponse';
 
 // Set individual objects
 import CreateArticle from './mutations/CreateArticle';
@@ -36,6 +37,10 @@ import UpdateArticleCategoryStatus from './mutations/UpdateArticleCategoryStatus
 import UpdateUser from './mutations/UpdateUser';
 
 export default new GraphQLSchema({
+  // AIEmbedding is only reachable via the AIResponse interface and no field
+  // references it directly, so it must be registered explicitly. Otherwise
+  // AIResponse.resolveType fails for EMBEDDING responses.
+  types: [AIEmbedding],
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
