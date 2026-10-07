@@ -275,6 +275,7 @@ async function defaultResolveTotalCount({
   first, // eslint-disable-line no-unused-vars
   before, // eslint-disable-line no-unused-vars
   after, // eslint-disable-line no-unused-vars
+  highlightQuery, // eslint-disable-line no-unused-vars
   body,
   ...searchContext
 }) {
@@ -296,7 +297,7 @@ async function defaultResolveTotalCount({
 }
 
 export async function defaultResolveEdges(
-  { first, before, after, ...searchContext },
+  { first, before, after, highlightQuery, ...searchContext },
   args,
   { loaders }
 ) {
@@ -332,6 +333,10 @@ export async function defaultResolveEdges(
         },
         pre_tags: ['<HIGHLIGHT>'],
         post_tags: ['</HIGHLIGHT>'],
+
+        // The plain highlighter cannot extract terms from some queries (e.g. knn),
+        // so the search context can provide a query without them to highlight with.
+        ...(highlightQuery ? { highlight_query: highlightQuery } : {}),
       },
     },
   });
@@ -356,6 +361,7 @@ async function defaultResolveLastCursor(
     first, // eslint-disable-line no-unused-vars
     before, // eslint-disable-line no-unused-vars
     after, // eslint-disable-line no-unused-vars
+    highlightQuery, // eslint-disable-line no-unused-vars
     ...searchContext
   },
   args,
@@ -380,6 +386,7 @@ async function defaultResolveFirstCursor(
     first, // eslint-disable-line no-unused-vars
     before, // eslint-disable-line no-unused-vars
     after, // eslint-disable-line no-unused-vars
+    highlightQuery, // eslint-disable-line no-unused-vars
     ...searchContext
   },
   args,

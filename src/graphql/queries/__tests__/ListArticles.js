@@ -1631,3 +1631,105 @@ describe('ListArticles kNN retriever', () => {
     expect(getKnn(result)).toMatchObject({ query_vector: [0.5] });
   });
 });
+
+describe('ListArticles kNN search with highlight', () => {
+  // Unlike the kNN retriever tests above, these go through `gql` and hit ES, so
+  // that the highlight on the kNN search request is exercised too.
+
+  /** A 768-dim vector (the dims of `embeddings.vector`) with given leading values */
+  const vector = (...head) => [...head, ...Array(768 - head.length).fill(0)];
+
+  const knnFixtures = {
+    // Matches the query both by BM25 and by kNN
+    '/articles/doc/knnHighlightBoth': {
+      status: 'NORMAL',
+      text: 'kiwifruit smoothie recipe with banana',
+      createdAt: '2020-02-03T00:00:00.000Z',
+      hyperlinks: [
+        {
+          url: 'http://kiwi.example.com',
+          normalizedUrl: 'http://kiwi.example.com/',
+          title: 'Best kiwifruit smoothie',
+          summary: 'A summary',
+        },
+      ],
+      embeddings: [{ vector: vector(1) }],
+    },
+    // Matches the query by kNN only
+    '/articles/doc/knnHighlightSemantic': {
+      status: 'NORMAL',
+      text: 'tropical fruit beverage',
+      createdAt: '2020-02-03T00:00:00.000Z',
+      embeddings: [{ vector: vector(0.95, 0.3) }],
+    },
+    // Matches the query by BM25 only
+    '/articles/doc/knnHighlightFar': {
+      status: 'NORMAL',
+      text: 'kiwifruit smoothie recipe',
+      createdAt: '2020-02-03T00:00:00.000Z',
+      embeddings: [{ vector: vector(0, 1) }],
+    },
+  };
+
+  beforeAll(() => loadFixtures(knnFixtures));
+  beforeEach(() => {
+    createEmbedding.mockReset();
+    createEmbedding.mockResolvedValue([{ vector: vector(1) }]);
+  });
+  afterAll(() => unloadFixtures(knnFixtures));
+
+  const query = gql`
+    query ($embedding: Float) {
+      ListArticles(
+        filter: {
+          moreLikeThis: { like: "kiwifruit smoothie recipe" }
+          embedding: $embedding
+        }
+        orderBy: [{ _score: DESC }]
+      ) {
+        edges {
+          node {
+            id
+          }
+          highlight {
+            text
+            hyperlinks {
+              url
+              title
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  it('returns the BM25 highlights when kNN is applied', async () => {
+    const { data, errors } = await query({ embedding: 0.8 });
+    expect(errors).toBeUndefined();
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+
+    const { edges } = data.ListArticles;
+    expect(edges.map(({ node }) => node.id)).toEqual([
+      'knnHighlightBoth',
+      'knnHighlightSemantic',
+    ]);
+
+    // Highlights are the same as the ones without kNN
+    const {
+      data: {
+        ListArticles: { edges: bm25Edges },
+      },
+    } = await query();
+    const bm25Highlight = bm25Edges.find(
+      ({ node }) => node.id === 'knnHighlightBoth'
+    ).highlight;
+    expect(bm25Highlight.text).toMatch('<HIGHLIGHT>kiwifruit</HIGHLIGHT>');
+    expect(bm25Highlight.hyperlinks[0].title).toMatch(
+      '<HIGHLIGHT>kiwifruit</HIGHLIGHT>'
+    );
+    expect(edges[0].highlight).toEqual(bm25Highlight);
+
+    // No BM25 match, no highlight
+    expect(edges[1].highlight).toMatchObject({ text: null });
+  });
+});

@@ -186,6 +186,7 @@ export default {
     // kNN-retrieval + BM25 ranking. Opt in by passing `filter.embedding` as the
     // minimum cosine similarity: kNN narrows the candidate set, then the existing
     // BM25 should-queries score/order those candidates. Omit for BM25-only.
+    let highlightQuery;
     if (filter.embedding != null && filter.moreLikeThis?.like) {
       try {
         const queryChunks = await createEmbedding(
@@ -200,6 +201,11 @@ export default {
         const queryVectors = queryChunks.map((c) => c.vector);
 
         if (queryVectors.length > 0) {
+          // The plain highlighter extracts terms from the query and throws on the
+          // knn query, failing the whole search; highlight with the query before
+          // kNN is added instead.
+          highlightQuery = structuredClone(body.query);
+
           // Add kNN as a candidate-retrieval filter so only semantically-near
           // docs survive; BM25 `should` scoring then decides the ordering.
           body.query.bool.filter.push(
@@ -219,6 +225,7 @@ export default {
     return {
       index: 'replies',
       body,
+      highlightQuery,
       ...otherParams,
     };
   },

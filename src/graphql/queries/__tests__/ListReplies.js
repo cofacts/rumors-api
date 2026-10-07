@@ -466,3 +466,95 @@ describe('ListReplies kNN retriever', () => {
     });
   });
 });
+
+describe('ListReplies kNN search with highlight', () => {
+  // Unlike the kNN retriever tests above, these go through `gql` and hit ES, so
+  // that the highlight on the kNN search request is exercised too.
+
+  /** A 768-dim vector (the dims of `embeddings.vector`) with given leading values */
+  const vector = (...head) => [...head, ...Array(768 - head.length).fill(0)];
+
+  const knnFixtures = {
+    // Matches the query both by BM25 and by kNN
+    '/replies/doc/knnHighlightBoth': {
+      text: 'kiwifruit smoothie recipe with banana',
+      reference: 'kiwifruit recipe book',
+      type: 'NOT_ARTICLE',
+      createdAt: '2020-02-06T00:00:00.000Z',
+      embeddings: [{ vector: vector(1) }],
+    },
+    // Matches the query by kNN only
+    '/replies/doc/knnHighlightSemantic': {
+      text: 'tropical fruit beverage',
+      reference: 'drink book',
+      type: 'NOT_ARTICLE',
+      createdAt: '2020-02-06T00:00:00.000Z',
+      embeddings: [{ vector: vector(0.95, 0.3) }],
+    },
+    // Matches the query by BM25 only
+    '/replies/doc/knnHighlightFar': {
+      text: 'kiwifruit smoothie recipe',
+      reference: 'kiwifruit recipe book',
+      type: 'NOT_ARTICLE',
+      createdAt: '2020-02-06T00:00:00.000Z',
+      embeddings: [{ vector: vector(0, 1) }],
+    },
+  };
+
+  beforeAll(() => loadFixtures(knnFixtures));
+  beforeEach(() => {
+    createEmbedding.mockReset();
+    createEmbedding.mockResolvedValue([{ vector: vector(1) }]);
+  });
+  afterAll(() => unloadFixtures(knnFixtures));
+
+  const query = gql`
+    query ($embedding: Float) {
+      ListReplies(
+        filter: {
+          moreLikeThis: { like: "kiwifruit smoothie recipe" }
+          embedding: $embedding
+        }
+        orderBy: [{ _score: DESC }]
+      ) {
+        edges {
+          node {
+            id
+          }
+          highlight {
+            text
+            reference
+          }
+        }
+      }
+    }
+  `;
+
+  it('returns the BM25 highlights when kNN is applied', async () => {
+    const { data, errors } = await query({ embedding: 0.8 });
+    expect(errors).toBeUndefined();
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+
+    const { edges } = data.ListReplies;
+    expect(edges.map(({ node }) => node.id)).toEqual([
+      'knnHighlightBoth',
+      'knnHighlightSemantic',
+    ]);
+
+    // Highlights are the same as the ones without kNN
+    const {
+      data: {
+        ListReplies: { edges: bm25Edges },
+      },
+    } = await query();
+    const bm25Highlight = bm25Edges.find(
+      ({ node }) => node.id === 'knnHighlightBoth'
+    ).highlight;
+    expect(bm25Highlight.text).toMatch('<HIGHLIGHT>kiwifruit</HIGHLIGHT>');
+    expect(bm25Highlight.reference).toMatch('<HIGHLIGHT>kiwifruit</HIGHLIGHT>');
+    expect(edges[0].highlight).toEqual(bm25Highlight);
+
+    // No BM25 match, no highlight
+    expect(edges[1].highlight).toMatchObject({ text: null, reference: null });
+  });
+});
