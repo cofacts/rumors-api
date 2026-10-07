@@ -183,7 +183,9 @@ export default {
           type: GraphQLFloat,
           description:
             'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
-            'to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).',
+            'to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default). ' +
+            'kNN retrieves at most the 100 nearest documents above the given similarity, ' +
+            'so `totalCount` and pagination stop there even if more documents are similar enough.',
         },
         transcript: {
           description:
@@ -770,6 +772,7 @@ export default {
     // minimum cosine similarity: kNN narrows the candidate set, then the existing
     // should-queries rank them — text `moreLikeThis`, or for a media search the
     // perceptual-hash function_score + transcript moreLikeThis. Omit for BM25-only.
+    let highlightQuery;
     if (filter.embedding != null) {
       try {
         // Media query: resolved along with the transcript above. It takes
@@ -791,6 +794,11 @@ export default {
         }
 
         if (queryVectors.length > 0) {
+          // The plain highlighter extracts terms from the query and throws on the
+          // knn query, failing the whole search; highlight with the query before
+          // kNN is added instead.
+          highlightQuery = structuredClone(body.query);
+
           // Add kNN as a candidate-retrieval filter so only semantically-near
           // docs survive; the `should` scoring then decides the ordering.
           body.query.bool.filter.push(
@@ -811,6 +819,7 @@ export default {
     return {
       index: 'articles',
       body,
+      highlightQuery,
       ...otherParams,
     };
   },
