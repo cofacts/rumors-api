@@ -3,7 +3,12 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import { createTranscript } from 'graphql/util';
 import { createEmbedding, createMediaEmbedding } from 'util/embedding';
 import ListArticles from '../ListArticles';
-import fixtures from '../__fixtures__/ListArticles';
+import fixtures, {
+  knnRetrieverFixtures,
+  knnHighlightFixtures,
+  knnPageFixtures,
+} from '../__fixtures__/ListArticles';
+import { queryVector } from 'util/vectors';
 import mediaManager from 'util/mediaManager';
 
 jest.mock('util/mediaManager');
@@ -1251,6 +1256,7 @@ describe('ListArticles kNN retriever', () => {
     user: { id: 'u', appId: 'a' },
   };
 
+  beforeAll(() => loadFixtures(knnRetrieverFixtures));
   beforeEach(() => {
     createEmbedding.mockReset();
     createMediaEmbedding.mockReset();
@@ -1258,6 +1264,7 @@ describe('ListArticles kNN retriever', () => {
     mediaManager.query.mockReset();
     mediaManager.insert.mockReset();
   });
+  afterAll(() => unloadFixtures(knnRetrieverFixtures));
 
   it('runs plain BM25 when embedding is omitted', async () => {
     const result = await ListArticles.resolve(
@@ -1509,15 +1516,6 @@ describe('ListArticles kNN retriever', () => {
   });
 
   it('reads the embedding made before when the media cannot be uploaded', async () => {
-    await loadFixtures({
-      '/airesponses/doc/knn-media-reuse': {
-        type: 'EMBEDDING',
-        docId: 'media-hash-reuse',
-        status: 'SUCCESS',
-        createdAt: '2026-01-01T00:00:00.000Z',
-        embeddings: [{ vector: [0.9, 0.8, 0.7] }],
-      },
-    });
     mediaManager.query.mockResolvedValueOnce({
       queryInfo: { id: 'media-hash-reuse', type: 'image' },
       hits: [],
@@ -1537,20 +1535,9 @@ describe('ListArticles kNN retriever', () => {
       query_vector: [0.9, 0.8, 0.7],
       similarity: 0.75,
     });
-
-    await unloadFixtures({ '/airesponses/doc/knn-media-reuse': {} });
   });
 
   it('only reads the transcript and embedding made before when not logged in', async () => {
-    await loadFixtures({
-      '/airesponses/doc/knn-media-anonymous': {
-        type: 'EMBEDDING',
-        docId: 'media-hash-anonymous',
-        status: 'SUCCESS',
-        createdAt: '2026-01-01T00:00:00.000Z',
-        embeddings: [{ vector: [0.1, 0.2, 0.3] }],
-      },
-    });
     mediaManager.query.mockResolvedValueOnce({
       queryInfo: { id: 'media-hash-anonymous', type: 'image' },
       hits: [],
@@ -1572,8 +1559,6 @@ describe('ListArticles kNN retriever', () => {
       query_vector: [0.1, 0.2, 0.3],
       similarity: 0.75,
     });
-
-    await unloadFixtures({ '/airesponses/doc/knn-media-anonymous': {} });
   });
 
   it('uses the media embedding even when a text query is given along with it', async () => {
@@ -1638,47 +1623,12 @@ describe('ListArticles kNN search with highlight', () => {
   // Unlike the kNN retriever tests above, these go through `gql` and hit ES, so
   // that the highlight on the kNN search request is exercised too.
 
-  /** A 768-dim vector (the dims of `embeddings.vector`) with given leading values */
-  const vector = (...head) => [...head, ...Array(768 - head.length).fill(0)];
-
-  const knnFixtures = {
-    // Matches the query both by BM25 and by kNN
-    '/articles/doc/knnHighlightBoth': {
-      status: 'NORMAL',
-      text: 'kiwifruit smoothie recipe with banana',
-      createdAt: '2020-02-03T00:00:00.000Z',
-      hyperlinks: [
-        {
-          url: 'http://kiwi.example.com',
-          normalizedUrl: 'http://kiwi.example.com/',
-          title: 'Best kiwifruit smoothie',
-          summary: 'A summary',
-        },
-      ],
-      embeddings: [{ vector: vector(1) }],
-    },
-    // Matches the query by kNN only
-    '/articles/doc/knnHighlightSemantic': {
-      status: 'NORMAL',
-      text: 'tropical fruit beverage',
-      createdAt: '2020-02-03T00:00:00.000Z',
-      embeddings: [{ vector: vector(0.95, 0.3) }],
-    },
-    // Matches the query by BM25 only
-    '/articles/doc/knnHighlightFar': {
-      status: 'NORMAL',
-      text: 'kiwifruit smoothie recipe',
-      createdAt: '2020-02-03T00:00:00.000Z',
-      embeddings: [{ vector: vector(0, 1) }],
-    },
-  };
-
-  beforeAll(() => loadFixtures(knnFixtures));
+  beforeAll(() => loadFixtures(knnHighlightFixtures));
   beforeEach(() => {
     createEmbedding.mockReset();
-    createEmbedding.mockResolvedValue([{ vector: vector(1) }]);
+    createEmbedding.mockResolvedValue([{ vector: queryVector }]);
   });
-  afterAll(() => unloadFixtures(knnFixtures));
+  afterAll(() => unloadFixtures(knnHighlightFixtures));
 
   const query = gql`
     query ($embedding: Float) {
@@ -1741,43 +1691,12 @@ describe('ListArticles kNN pagination', () => {
   // capped at the page size (`first`): totalCount and the next page must see
   // all kNN matches.
 
-  /** A 768-dim vector (the dims of `embeddings.vector`) with given leading values */
-  const vector = (...head) => [...head, ...Array(768 - head.length).fill(0)];
-
-  const knnFixtures = {
-    '/articles/doc/knnPage1': {
-      status: 'NORMAL',
-      text: 'durian milkshake',
-      createdAt: '2020-02-04T00:00:04.000Z',
-      embeddings: [{ vector: vector(1) }],
-    },
-    '/articles/doc/knnPage2': {
-      status: 'NORMAL',
-      text: 'mango lassi',
-      createdAt: '2020-02-04T00:00:03.000Z',
-      embeddings: [{ vector: vector(0.95, 0.3) }],
-    },
-    '/articles/doc/knnPage3': {
-      status: 'NORMAL',
-      text: 'papaya juice',
-      createdAt: '2020-02-04T00:00:02.000Z',
-      embeddings: [{ vector: vector(0.9, 0.4) }],
-    },
-    // Not similar enough to the query vector
-    '/articles/doc/knnPageFar': {
-      status: 'NORMAL',
-      text: 'car insurance',
-      createdAt: '2020-02-04T00:00:01.000Z',
-      embeddings: [{ vector: vector(0, 1) }],
-    },
-  };
-
-  beforeAll(() => loadFixtures(knnFixtures));
+  beforeAll(() => loadFixtures(knnPageFixtures));
   beforeEach(() => {
     createEmbedding.mockReset();
-    createEmbedding.mockResolvedValue([{ vector: vector(1) }]);
+    createEmbedding.mockResolvedValue([{ vector: queryVector }]);
   });
-  afterAll(() => unloadFixtures(knnFixtures));
+  afterAll(() => unloadFixtures(knnPageFixtures));
 
   const query = gql`
     query ($after: String) {

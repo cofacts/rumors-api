@@ -2,7 +2,11 @@ import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import gql from 'util/GraphQL';
 import { createEmbedding } from 'util/embedding';
 import ListReplies from '../ListReplies';
-import fixtures from '../__fixtures__/ListReplies';
+import fixtures, {
+  knnHighlightFixtures,
+  knnPageFixtures,
+} from '../__fixtures__/ListReplies';
+import { queryVector } from 'util/vectors';
 
 jest.mock('util/embedding', () => ({
   createEmbedding: jest.fn(),
@@ -473,42 +477,12 @@ describe('ListReplies kNN search with highlight', () => {
   // Unlike the kNN retriever tests above, these go through `gql` and hit ES, so
   // that the highlight on the kNN search request is exercised too.
 
-  /** A 768-dim vector (the dims of `embeddings.vector`) with given leading values */
-  const vector = (...head) => [...head, ...Array(768 - head.length).fill(0)];
-
-  const knnFixtures = {
-    // Matches the query both by BM25 and by kNN
-    '/replies/doc/knnHighlightBoth': {
-      text: 'kiwifruit smoothie recipe with banana',
-      reference: 'kiwifruit recipe book',
-      type: 'NOT_ARTICLE',
-      createdAt: '2020-02-06T00:00:00.000Z',
-      embeddings: [{ vector: vector(1) }],
-    },
-    // Matches the query by kNN only
-    '/replies/doc/knnHighlightSemantic': {
-      text: 'tropical fruit beverage',
-      reference: 'drink book',
-      type: 'NOT_ARTICLE',
-      createdAt: '2020-02-06T00:00:00.000Z',
-      embeddings: [{ vector: vector(0.95, 0.3) }],
-    },
-    // Matches the query by BM25 only
-    '/replies/doc/knnHighlightFar': {
-      text: 'kiwifruit smoothie recipe',
-      reference: 'kiwifruit recipe book',
-      type: 'NOT_ARTICLE',
-      createdAt: '2020-02-06T00:00:00.000Z',
-      embeddings: [{ vector: vector(0, 1) }],
-    },
-  };
-
-  beforeAll(() => loadFixtures(knnFixtures));
+  beforeAll(() => loadFixtures(knnHighlightFixtures));
   beforeEach(() => {
     createEmbedding.mockReset();
-    createEmbedding.mockResolvedValue([{ vector: vector(1) }]);
+    createEmbedding.mockResolvedValue([{ vector: queryVector }]);
   });
-  afterAll(() => unloadFixtures(knnFixtures));
+  afterAll(() => unloadFixtures(knnHighlightFixtures));
 
   const query = gql`
     query ($embedding: Float) {
@@ -566,47 +540,12 @@ describe('ListReplies kNN pagination', () => {
   // capped at the page size (`first`): totalCount and the next page must see
   // all kNN matches.
 
-  /** A 768-dim vector (the dims of `embeddings.vector`) with given leading values */
-  const vector = (...head) => [...head, ...Array(768 - head.length).fill(0)];
-
-  const knnFixtures = {
-    '/replies/doc/knnPage1': {
-      text: 'durian milkshake',
-      reference: 'book',
-      type: 'NOT_ARTICLE',
-      createdAt: '2020-02-07T00:00:04.000Z',
-      embeddings: [{ vector: vector(1) }],
-    },
-    '/replies/doc/knnPage2': {
-      text: 'mango lassi',
-      reference: 'book',
-      type: 'NOT_ARTICLE',
-      createdAt: '2020-02-07T00:00:03.000Z',
-      embeddings: [{ vector: vector(0.95, 0.3) }],
-    },
-    '/replies/doc/knnPage3': {
-      text: 'papaya juice',
-      reference: 'book',
-      type: 'NOT_ARTICLE',
-      createdAt: '2020-02-07T00:00:02.000Z',
-      embeddings: [{ vector: vector(0.9, 0.4) }],
-    },
-    // Not similar enough to the query vector
-    '/replies/doc/knnPageFar': {
-      text: 'car insurance',
-      reference: 'book',
-      type: 'NOT_ARTICLE',
-      createdAt: '2020-02-07T00:00:01.000Z',
-      embeddings: [{ vector: vector(0, 1) }],
-    },
-  };
-
-  beforeAll(() => loadFixtures(knnFixtures));
+  beforeAll(() => loadFixtures(knnPageFixtures));
   beforeEach(() => {
     createEmbedding.mockReset();
-    createEmbedding.mockResolvedValue([{ vector: vector(1) }]);
+    createEmbedding.mockResolvedValue([{ vector: queryVector }]);
   });
-  afterAll(() => unloadFixtures(knnFixtures));
+  afterAll(() => unloadFixtures(knnPageFixtures));
 
   const query = gql`
     query ($after: String) {
