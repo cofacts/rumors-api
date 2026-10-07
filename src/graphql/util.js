@@ -1,7 +1,4 @@
 import { ImageAnnotatorClient } from '@google-cloud/vision';
-import { GoogleGenAI } from '@google/genai';
-import { GoogleAuth } from 'google-auth-library';
-import fetch from 'node-fetch';
 import sharp from 'sharp';
 import {
   GraphQLInputObjectType,
@@ -26,7 +23,9 @@ import Edge from './interfaces/Edge';
 import PageInfo from './interfaces/PageInfo';
 import Highlights from './models/Highlights';
 import client from 'util/client';
+import { assertUser } from 'util/user';
 import delayForMs from 'util/delayForMs';
+import { createGenAI } from 'util/genai';
 import langfuse from 'util/langfuse';
 
 // https://www.graph.cool/docs/tutorials/designing-powerful-apis-with-graphql-query-parameters-aing7uech3
@@ -109,6 +108,38 @@ export const moreLikeThisInput = new GraphQLInputObjectType({
     },
   },
 });
+
+const KNN_NUM_CANDIDATES = 100;
+
+/**
+ * Build a nested-kNN bool/should query, one nested-knn clause per query chunk.
+ * Intended as a candidate-retrieval `filter` clause on the BM25 bool query: a
+ * doc survives when any query chunk is within `similarity` of one of its stored
+ * embeddings, and the BM25 `should` score then decides the ordering.
+ *
+ * @param {object} param
+ * @param {number[][]} param.queryVectors - one vector per query chunk
+ * @param {number} param.similarity - min cosine similarity for KNN hits
+ * @returns {object} a bool/should query suitable as a `filter` clause
+ */
+export function buildKnnQuery({ queryVectors, similarity }) {
+  const nestedKnnQueries = queryVectors.map((qv) => ({
+    nested: {
+      path: 'embeddings',
+      score_mode: 'max',
+      query: {
+        knn: {
+          field: 'embeddings.vector',
+          query_vector: qv,
+          num_candidates: KNN_NUM_CANDIDATES,
+          similarity,
+        },
+      },
+    },
+  }));
+
+  return { bool: { should: nestedKnnQueries } };
+}
 
 export const userAndExistInput = new GraphQLInputObjectType({
   name: 'UserAndExistInput',
@@ -565,7 +596,7 @@ export function attachCommonListFilter(
  * Returns null if there is no successful nor latest loading AI response.
  *
  * @param {object} param
- * @param {'AI_REPLY' | 'TRANSCRIPT'} param.type
+ * @param {'AI_REPLY' | 'TRANSCRIPT' | 'EMBEDDING'} param.type
  * @param {string} param.docId
  * @returns {AIReponse | null}
  */
@@ -645,19 +676,23 @@ export async function getAIResponse({ type, docId }) {
 
 /**
  * Creates a loading AI Response.
- * Returns an updater function that can be used to record real AI response.
- *
+ * Returns `{ update, getAIResponseId }` that can be used to finalize / look up
+ * the created record.
  *
  * @param {object} loadingResponseBody
- * @param {string} loadingResponseBody.request
- * @param {string} loadingResponseBody.type
+ * @param {'AI_REPLY' | 'TRANSCRIPT' | 'EMBEDDING'} loadingResponseBody.type
  * @param {string} loadingResponseBody.docId
- * @param {object} loadingResponseBody.user
+ * @param {object} loadingResponseBody.user - the user who requested the AI
+ *   response. Required, so that every AI response has userId / appId.
  *
- * @returns {(responseBody) => Promise<AIResponse>} updater function that updates the created AI
- *   response and returns the updated result
+ * @returns {{
+ *   update: (responseBody: any) => Promise<any>,
+ *   getAIResponseId: () => Promise<string>,
+ * }}
  */
 export function createAIResponse({ user, ...loadingResponseBody }) {
+  if (!user) throw new Error('[createAIResponse] user is required');
+
   const newResponse = {
     userId: user.id,
     appId: user.appId,
@@ -727,10 +762,26 @@ const METADATA = {
   cacheControl: 'public, max-age=31536000, immutable',
 };
 
-const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
+/**
+ * Maps a media articleType to its media-manager media type, which is also the
+ * media type that createTranscript and createMediaEmbedding take. TEXT is
+ * absent (it has no media file).
+ *
+ * @type {Record<string, MediaType.image | MediaType.video | MediaType.audio>}
+ */
+export const VALID_ARTICLE_TYPE_TO_MEDIA_TYPE = {
   IMAGE: MediaType.image,
   VIDEO: MediaType.video,
   AUDIO: MediaType.audio,
+};
+
+/**
+ * Fallback mime type per media type when GCS metadata lacks contentType.
+ */
+export const DEFAULT_MEDIA_MIME_TYPE = {
+  [MediaType.image]: 'image/jpeg',
+  [MediaType.audio]: 'audio/mpeg',
+  [MediaType.video]: 'video/mp4',
 };
 
 /**
@@ -800,6 +851,78 @@ export async function uploadMedia({ mediaUrl, articleType, onUploadStop }) {
   return mediaEntry;
 }
 
+/**
+ * Upload media like {@link uploadMedia}, but resolve only when the file can be
+ * read at the media entry's path, so that Vision / Vertex can be handed its
+ * `gs://` URI right away.
+ *
+ * media-manager stores a file once per content hash. When the same file is
+ * already there, it reports `onUploadStop` with an "already exists" error
+ * before `insert()` even returns; the existing file is readable, so the error
+ * is ignored here. For a real upload failure the entry is still resolved, and
+ * whoever reads the missing file handles the error.
+ *
+ * The file is stored permanently, so a logged-in user is required.
+ *
+ * @param {object} param
+ * @param {string} param.mediaUrl
+ * @param {ArticleTypeEnum} param.articleType
+ * @param {object} param.user - the user that the media is uploaded for
+ * @returns {Promise<MediaEntry>}
+ */
+export function uploadMediaAndWait({ mediaUrl, articleType, user }) {
+  return new Promise((resolve, reject) => {
+    assertUser(user);
+
+    let isUploadStopped = false;
+    let mediaEntryToResolve = undefined;
+    uploadMedia({
+      mediaUrl,
+      articleType,
+      onUploadStop: () => {
+        isUploadStopped = true;
+        if (mediaEntryToResolve) resolve(mediaEntryToResolve);
+      },
+    }).then((mediaEntry) => {
+      if (isUploadStopped) {
+        resolve(mediaEntry);
+      } else {
+        // Initialize mediaEntry so that we can pick it up when upload stop
+        mediaEntryToResolve = mediaEntry;
+      }
+    }, reject);
+  });
+}
+
+/**
+ * Get the media entry behind `mediaUrl` with its file readable, so that the
+ * transcript and the embedding can share it. The media is uploaded only when
+ * media manager does not have the file yet; otherwise the stored one is used
+ * as-is, without transferring the media again.
+ *
+ * @param {object} param
+ * @param {string} param.mediaUrl
+ * @param {SearchResult} param.queryResult - result of mediaManager.query() on mediaUrl
+ * @param {object} param.user - required when the media needs uploading
+ * @returns {Promise<MediaEntry>}
+ */
+export async function getOrUploadMedia({ mediaUrl, queryResult, user }) {
+  const { id, type } = queryResult.queryInfo;
+
+  const existingHit = queryResult.hits.find(
+    ({ entry }) =>
+      entry.id === id &&
+      entry.variants?.includes(variants.DEFAULT_ORIGINAL_VARIANT_NAME)
+  );
+  if (existingHit) return existingHit.entry;
+
+  return uploadMediaAndWait({
+    mediaUrl,
+    articleType: type.toUpperCase(),
+    user,
+  });
+}
+
 const imageAnnotator = new ImageAnnotatorClient();
 const OCR_CONFIDENCE_THRESHOLD = 0.75;
 
@@ -850,7 +973,7 @@ function extractTextFromFullTextAnnotation(fullTextAnnotation) {
  * @param {string} params.mimeType - The mime type of the file
  * @param {import('@langfuse/langfuse').Trace} params.langfuseTrace - Langfuse trace object
  * @param {string} params.modelName - Name of the Gemini model
- * @param {string} params.location - Location of the model
+ * @param {string} params.location - Regional endpoint of the model
  * @returns {Promise<{text: string, usage: {promptTokens?: number, completionTokens?: number, totalTokens?: number}}>}
  */
 export async function transcribeAV({
@@ -860,13 +983,7 @@ export async function transcribeAV({
   modelName,
   location,
 }) {
-  const project = await new GoogleAuth().getProjectId();
-  // Use the new GoogleGenAI SDK with vertexai option
-  const genAI = new GoogleGenAI({
-    vertexai: true,
-    project,
-    location,
-  });
+  const genAI = await createGenAI(location);
 
   /**@type {import('@google/genai').GenerateContentParameters} */
   const generateContentArgs = {
@@ -955,18 +1072,42 @@ Your text will be used for indexing these media files, so please follow these ru
 }
 
 const TRANSCRIPT_MODELS = [
-  // Combinations that are faster than gemini-2.0-flash-001 @ us
+  // Ordered by preference; on quota (429) or a retired/inaccessible model
+  // (404) we fall through to the next.
   { model: 'gemini-3.1-flash-lite', location: 'global' },
   { model: 'gemini-3.5-flash-lite', location: 'global' },
 ];
 
 /**
- * @param {object} queryInfo - contains type and media entry ID of contents after fileUrl
- * @param {string|object} fileUrlOrMediaEntry - the audio, image or video file to process, or the MediaEntry object
+ * Get the transcript of a media that is in media manager: the one made before
+ * for the same media if there is any, or a newly generated one.
+ *
+ * Whether the file is there is media manager's business: the caller hands over
+ * a media entry whose file is readable, and this only turns it into text.
+ *
+ * @param {object} queryInfo - contains type and media entry ID of the media
+ * @param {MediaEntry} mediaEntry - the audio, image or video to process. It must
+ *   be fully uploaded already; Vision / Vertex read it by its `gs://` URI.
  * @param {object} user - the user who requested the transcription
+ * @param {object} [options]
+ * @param {boolean} [options.force] - generate even if there is a transcript already
  */
-export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
+export async function createTranscript(
+  queryInfo,
+  mediaEntry,
+  user,
+  { force = false } = {}
+) {
   if (!user) throw new Error('[createTranscript] user is required');
+
+  if (!force) {
+    // Also waits for the transcript that is being generated by someone else.
+    const existing = await getAIResponse({
+      type: 'TRANSCRIPT',
+      docId: queryInfo.id,
+    });
+    if (existing) return existing;
+  }
 
   const { update, getAIResponseId } = createAIResponse({
     user,
@@ -977,10 +1118,7 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
   try {
     switch (queryInfo.type) {
       case 'image': {
-        const imageUri =
-          typeof fileUrlOrMediaEntry === 'string'
-            ? fileUrlOrMediaEntry
-            : fileUrlOrMediaEntry.getFile().cloudStorageURI.href;
+        const imageUri = mediaEntry.getFile().cloudStorageURI.href;
 
         const [response] = await imageAnnotator.documentTextDetection(imageUri);
         console.info('[createTranscript] Request', queryInfo.id, imageUri);
@@ -1029,55 +1167,13 @@ export async function createTranscript(queryInfo, fileUrlOrMediaEntry, user) {
       case 'video':
       case 'audio': {
         const aiResponseId = await getAIResponseId();
-        const fileUrl =
-          typeof fileUrlOrMediaEntry === 'string'
-            ? fileUrlOrMediaEntry
-            : fileUrlOrMediaEntry.getUrl();
-
-        const mimeTypePromise = fetch(fileUrl, { method: 'HEAD' })
-          .then((res) => res.headers.get('content-type'))
-          .catch(() =>
-            queryInfo.type === 'video' ? 'video/mp4' : 'audio/mpeg'
-          );
-
-        let mediaEntry;
-        let mimeType;
-        if (typeof fileUrlOrMediaEntry !== 'string') {
-          mediaEntry = fileUrlOrMediaEntry;
-          mimeType = await mimeTypePromise;
-        } else {
-          [mediaEntry, mimeType] = await Promise.all([
-            // Upload to GCS first and get the file.
-            // Here we wait until the file is fully uploaded, so that LLM can read the file without error.
-            new Promise((resolve) => {
-              let isUploadStopped = false;
-              let mediaEntryToResolve = undefined;
-              uploadMedia({
-                mediaUrl: fileUrl,
-                articleType: queryInfo.type.toUpperCase(),
-                onUploadStop: () => {
-                  isUploadStopped = true;
-                  if (mediaEntryToResolve) resolve(mediaEntryToResolve);
-                },
-              }).then((mediaEntry) => {
-                if (isUploadStopped) {
-                  resolve(mediaEntry);
-                } else {
-                  // Initialize mediaEntry so that we can pick it up when upload stop
-                  mediaEntryToResolve = mediaEntry;
-                }
-              });
-            }),
-            mimeTypePromise,
-          ]);
-        }
-
-        // The URI starting with gs://
-        const fileUri = mediaEntry.getFile().cloudStorageURI.href;
-
-        // Try to get mimeType from GCS metadata first
-        const [metadata] = await mediaEntry.getFile().getMetadata();
-        mimeType = metadata.contentType || (await mimeTypePromise);
+        // Hand Vertex the media entry's own `gs://` URI — it reads the bucket
+        // directly. (A public https URL is capped at 15 MB for audio / video.)
+        const file = mediaEntry.getFile();
+        const [metadata] = await file.getMetadata();
+        const mimeType =
+          metadata.contentType || DEFAULT_MEDIA_MIME_TYPE[queryInfo.type];
+        const fileUri = file.cloudStorageURI.href;
 
         console.log('[createTranscript] using mimeType:', mimeType);
 

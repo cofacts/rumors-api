@@ -8,15 +8,73 @@ import fixtures from '../__fixtures__/CreateMediaArticle';
 import { getReplyRequestId } from '../CreateOrUpdateReplyRequest';
 import mediaManager from 'util/mediaManager';
 import archiveUrlsFromText from 'util/archiveUrlsFromText';
+import { createMediaEmbedding } from 'util/embedding';
+import { createTranscript } from 'graphql/util';
 
 jest.mock('util/mediaManager');
 jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
 
+// Just mock createTranscript, keep others normal
+jest.mock('graphql/util', () => ({
+  __esModule: true,
+  ...jest.requireActual('../../util'),
+  createTranscript: jest.fn(),
+}));
+jest.mock('util/embedding', () => ({
+  createMediaEmbedding: jest
+    .fn()
+    .mockResolvedValue([{ vector: new Array(768).fill(0.01) }]),
+  getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
+  getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
+}));
+
+// Minimal MediaEntry shape for tests. CreateMediaArticle only passes it on to
+// transcript and embedding, and does not read its file by itself.
+const mockMediaEntry = ({ id, url, type }) => ({
+  id,
+  url,
+  type,
+  variants: [],
+  getFile: jest.fn(),
+});
+
+/** Makes the next mediaManager.query() report whether the media is stored */
+function mockQuery(mediaEntry, { isStored }) {
+  mediaManager.query.mockResolvedValueOnce({
+    queryInfo: { id: mediaEntry.id, type: mediaEntry.type },
+    hits: isStored
+      ? [
+          {
+            similarity: 1,
+            entry: { ...mediaEntry, variants: ['original'] },
+          },
+        ]
+      : [],
+  });
+}
+
+/**
+ * Media manager does not have the media yet: the next mediaManager.insert()
+ * resolves to the media entry, and reports that its upload has completed
+ * afterwards.
+ */
+function mockInsert(mediaEntry) {
+  mockQuery(mediaEntry, { isStored: false });
+  mediaManager.insert.mockImplementationOnce(async ({ onUploadStop }) => {
+    setImmediate(() => onUploadStop(null));
+    return mediaEntry;
+  });
+  return mediaEntry;
+}
+
 describe('creation', () => {
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
-    mediaManager.insert.mockClear();
+    mediaManager.insert.mockReset();
+    mediaManager.query.mockReset();
     archiveUrlsFromText.mockClear();
+    createMediaEmbedding.mockClear();
+    createTranscript.mockReset();
   });
   afterAll(() => unloadFixtures(fixtures));
 
@@ -25,11 +83,18 @@ describe('creation', () => {
     const userId = 'test';
     const appId = 'foo';
 
-    mediaManager.insert.mockImplementationOnce(async () => ({
-      id: 'mock_image_hash',
-      url: 'http://foo.com/output_image.jpeg',
-      type: 'image',
-    }));
+    // The real one: returns the transcript made when the media was searched
+    // (see fixtures), without generating.
+    createTranscript.mockImplementationOnce(
+      jest.requireActual('../../util').createTranscript
+    );
+    mockInsert(
+      mockMediaEntry({
+        id: 'mock_image_hash',
+        url: 'http://foo.com/output_image.jpeg',
+        type: 'image',
+      })
+    );
 
     const { data, errors } = await gql`
       mutation (
@@ -115,6 +180,14 @@ describe('creation', () => {
       }
     `);
 
+    // Embeddings excluded from default _source in ES 9; verify via includes.
+    const { _source: withEmb } = await client.get({
+      index: 'articles',
+      id: data.CreateMediaArticle.id,
+      _source_includes: ['embeddings'],
+    });
+    expect(withEmb.embeddings?.[0]?.vector?.length).toBe(768);
+
     const replyRequestId = getReplyRequestId({
       articleId: data.CreateMediaArticle.id,
       userId,
@@ -180,17 +253,343 @@ describe('creation', () => {
     });
   });
 
+  it('embeds AUDIO articles from the uploaded media entry', async () => {
+    MockDate.set(1485593157011);
+    const userId = 'test';
+    const appId = 'foo';
+
+    const mediaEntry = mockInsert(
+      mockMediaEntry({
+        id: 'mock_audio_hash',
+        url: 'http://foo.com/output_audio.mp3',
+        type: 'audio',
+      })
+    );
+
+    const { data, errors } = await gql`
+      mutation (
+        $mediaUrl: String!
+        $articleType: ArticleTypeEnum!
+        $reference: ArticleReferenceInput!
+      ) {
+        CreateMediaArticle(
+          mediaUrl: $mediaUrl
+          articleType: $articleType
+          reference: $reference
+        ) {
+          id
+        }
+      }
+    `(
+      {
+        mediaUrl: 'http://foo.com/input_audio.mp3',
+        articleType: 'AUDIO',
+        reference: { type: 'LINE' },
+      },
+      { user: { id: userId, appId } }
+    );
+    MockDate.reset();
+
+    expect(errors).toBeUndefined();
+
+    expect(createMediaEmbedding).toHaveBeenCalledTimes(1);
+    expect(createMediaEmbedding).toHaveBeenCalledWith(
+      { id: 'mock_audio_hash', type: 'audio' },
+      mediaEntry,
+      { id: userId, appId }
+    );
+
+    // The resulting vector is stored on the article.
+    const { _source: withEmb } = await client.get({
+      index: 'articles',
+      id: data.CreateMediaArticle.id,
+      _source_includes: ['embeddings'],
+    });
+    expect(withEmb.embeddings?.[0]?.vector?.length).toBe(768);
+
+    const replyRequestId = getReplyRequestId({
+      articleId: data.CreateMediaArticle.id,
+      userId,
+      appId,
+    });
+
+    // Cleanup
+    await client.delete({
+      index: 'articles',
+      id: data.CreateMediaArticle.id,
+    });
+    await client.delete({
+      index: 'replyrequests',
+      id: replyRequestId,
+    });
+  });
+
+  it('waits for the upload, then generates the transcript and embedding of a new media', async () => {
+    const userId = 'test';
+    const appId = 'foo';
+
+    const mediaEntry = mockMediaEntry({
+      id: 'mock_video_hash',
+      url: 'http://foo.com/output_video.mp4',
+      type: 'video',
+    });
+    let isUploaded = false;
+    mockQuery(mediaEntry, { isStored: false });
+    mediaManager.insert.mockImplementationOnce(async ({ onUploadStop }) => {
+      setTimeout(() => {
+        isUploaded = true;
+        onUploadStop(null);
+      }, 50);
+      return mediaEntry;
+    });
+
+    // Both read the file, thus must not start before the upload completes.
+    createTranscript.mockImplementationOnce(async () => {
+      expect(isUploaded).toBe(true);
+      return { id: 'new-transcript', status: 'SUCCESS', text: 'spoken words' };
+    });
+    createMediaEmbedding.mockImplementationOnce(async () => {
+      expect(isUploaded).toBe(true);
+      return [{ vector: new Array(768).fill(0.02) }];
+    });
+
+    const { data, errors } = await gql`
+      mutation (
+        $mediaUrl: String!
+        $articleType: ArticleTypeEnum!
+        $reference: ArticleReferenceInput!
+      ) {
+        CreateMediaArticle(
+          mediaUrl: $mediaUrl
+          articleType: $articleType
+          reference: $reference
+        ) {
+          id
+        }
+      }
+    `(
+      {
+        mediaUrl: 'http://foo.com/input_video.mp4',
+        articleType: 'VIDEO',
+        reference: { type: 'LINE' },
+      },
+      { user: { id: userId, appId } }
+    );
+
+    expect(errors).toBeUndefined();
+
+    // Both get the same media entry.
+    expect(createTranscript).toHaveBeenCalledTimes(1);
+    expect(createTranscript).toHaveBeenCalledWith(
+      { id: 'mock_video_hash', type: 'video' },
+      mediaEntry,
+      { id: userId, appId }
+    );
+    expect(createMediaEmbedding).toHaveBeenCalledTimes(1);
+    expect(createMediaEmbedding).toHaveBeenCalledWith(
+      { id: 'mock_video_hash', type: 'video' },
+      mediaEntry,
+      { id: userId, appId }
+    );
+
+    const articleId = data.CreateMediaArticle.id;
+    const { _source: article } = await client.get({
+      index: 'articles',
+      id: articleId,
+      _source_includes: ['text', 'embeddings'],
+    });
+    expect(article.text).toBe('spoken words');
+    expect(article.embeddings?.[0]?.vector?.length).toBe(768);
+
+    // Cleanup
+    await client.delete({ index: 'articles', id: articleId });
+    await client.delete({ index: 'ydocs', id: articleId });
+    await client.delete({
+      index: 'replyrequests',
+      id: getReplyRequestId({ articleId, userId, appId }),
+    });
+  });
+
+  it('uploads nothing when media manager already has the file', async () => {
+    const userId = 'test';
+    const appId = 'foo';
+
+    // E.g. the media has been searched before submission.
+    mockQuery(
+      mockMediaEntry({
+        id: 'mock_stored_audio_hash',
+        url: 'http://foo.com/stored_audio.mp3',
+        type: 'audio',
+      }),
+      { isStored: true }
+    );
+    createTranscript.mockResolvedValueOnce({
+      id: 'new-transcript',
+      status: 'SUCCESS',
+      text: 'stored words',
+    });
+
+    const { data, errors } = await gql`
+      mutation (
+        $mediaUrl: String!
+        $articleType: ArticleTypeEnum!
+        $reference: ArticleReferenceInput!
+      ) {
+        CreateMediaArticle(
+          mediaUrl: $mediaUrl
+          articleType: $articleType
+          reference: $reference
+        ) {
+          id
+        }
+      }
+    `(
+      {
+        mediaUrl: 'http://foo.com/input_audio.mp3',
+        articleType: 'AUDIO',
+        reference: { type: 'LINE' },
+      },
+      { user: { id: userId, appId } }
+    );
+
+    expect(errors).toBeUndefined();
+    expect(mediaManager.insert).not.toHaveBeenCalled();
+
+    // Transcript and embedding get the stored media entry.
+    expect(createTranscript.mock.calls[0][1].id).toBe('mock_stored_audio_hash');
+    expect(createMediaEmbedding.mock.calls[0][1].id).toBe(
+      'mock_stored_audio_hash'
+    );
+
+    const articleId = data.CreateMediaArticle.id;
+    const { _source: article } = await client.get({
+      index: 'articles',
+      id: articleId,
+      _source_includes: ['text', 'attachmentHash', 'embeddings'],
+    });
+    expect(article.attachmentHash).toBe('mock_stored_audio_hash');
+    expect(article.text).toBe('stored words');
+    expect(article.embeddings?.[0]?.vector?.length).toBe(768);
+
+    // Cleanup
+    await client.delete({ index: 'articles', id: articleId });
+    await client.delete({ index: 'ydocs', id: articleId });
+    await client.delete({
+      index: 'replyrequests',
+      id: getReplyRequestId({ articleId, userId, appId }),
+    });
+  });
+
+  it('rejects when the article type does not match the media file', async () => {
+    const userId = 'test';
+    const appId = 'foo';
+
+    mockQuery({ id: 'mock_audio_hash_2', type: 'audio' }, { isStored: true });
+
+    const { errors } = await gql`
+      mutation (
+        $mediaUrl: String!
+        $articleType: ArticleTypeEnum!
+        $reference: ArticleReferenceInput!
+      ) {
+        CreateMediaArticle(
+          mediaUrl: $mediaUrl
+          articleType: $articleType
+          reference: $reference
+        ) {
+          id
+        }
+      }
+    `(
+      {
+        mediaUrl: 'http://foo.com/input_audio.mp3',
+        articleType: 'IMAGE',
+        reference: { type: 'LINE' },
+      },
+      { user: { id: userId, appId } }
+    );
+
+    expect(errors).toMatchInlineSnapshot(`
+      Array [
+        [GraphQLError: Specified article type is "IMAGE", but the media file is a audio.],
+      ]
+    `);
+    expect(mediaManager.insert).not.toHaveBeenCalled();
+  });
+
+  it('creates the article without text when the transcript fails', async () => {
+    const userId = 'test';
+    const appId = 'foo';
+
+    mockInsert(
+      mockMediaEntry({
+        id: 'mock_image_hash_no_transcript',
+        url: 'http://foo.com/output_image2.jpeg',
+        type: 'image',
+      })
+    );
+    createTranscript.mockResolvedValueOnce({
+      id: 'failed-transcript',
+      status: 'ERROR',
+      text: 'Error: Vision API error',
+    });
+
+    const { data, errors } = await gql`
+      mutation (
+        $mediaUrl: String!
+        $articleType: ArticleTypeEnum!
+        $reference: ArticleReferenceInput!
+      ) {
+        CreateMediaArticle(
+          mediaUrl: $mediaUrl
+          articleType: $articleType
+          reference: $reference
+        ) {
+          id
+        }
+      }
+    `(
+      {
+        mediaUrl: 'http://foo.com/input_image2.jpeg',
+        articleType: 'IMAGE',
+        reference: { type: 'LINE' },
+      },
+      { user: { id: userId, appId } }
+    );
+
+    expect(errors).toBeUndefined();
+    expect(createTranscript).toHaveBeenCalledTimes(1);
+
+    const articleId = data.CreateMediaArticle.id;
+    const { _source: article } = await client.get({
+      index: 'articles',
+      id: articleId,
+    });
+    // The error message must not end up as the article text.
+    expect(article.text).toBe('');
+    expect(archiveUrlsFromText).not.toHaveBeenCalled();
+
+    // Cleanup
+    await client.delete({ index: 'articles', id: articleId });
+    await client.delete({
+      index: 'replyrequests',
+      id: getReplyRequestId({ articleId, userId, appId }),
+    });
+  });
+
   it('avoids creating duplicated media articles and adds replyRequests automatically', async () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'foo';
 
-    mediaManager.insert.mockImplementationOnce(async () => ({
-      // Duplicate hash
-      id: fixtures['/articles/doc/image1'].attachmentHash,
-      url: fixtures['/articles/doc/image1'].attachmentUrl,
-      type: 'image',
-    }));
+    mockInsert(
+      mockMediaEntry({
+        // Duplicate hash
+        id: fixtures['/articles/doc/image1'].attachmentHash,
+        url: fixtures['/articles/doc/image1'].attachmentUrl,
+        type: 'image',
+      })
+    );
 
     const { data, errors } = await gql`
       mutation (
@@ -221,6 +620,10 @@ describe('creation', () => {
     // Expects no new article is created,
     // and it returns the existing ID
     expect(data.CreateMediaArticle.id).toBe('image1');
+
+    // An existing article is neither transcribed nor embedded again.
+    expect(createTranscript).not.toHaveBeenCalled();
+    expect(createMediaEmbedding).not.toHaveBeenCalled();
 
     const articleId = data.CreateMediaArticle.id;
     const { _source: article } = await client.get({
@@ -277,6 +680,7 @@ describe('creation', () => {
     const userId = 'test';
     const appId = 'foo';
 
+    mockQuery({ id: 'mock_image_hash', type: 'image' }, { isStored: false });
     mediaManager.insert.mockImplementationOnce(async () => {
       throw new Error('Some MediaManager error');
     });
@@ -317,11 +721,13 @@ describe('creation', () => {
     const userId = 'iAmSpammer';
     const appId = 'foo';
 
-    mediaManager.insert.mockImplementationOnce(async () => ({
-      id: 'mock_image_hash_spam',
-      url: 'http://foo.com/output_image_spam.jpeg',
-      type: 'image',
-    }));
+    mockInsert(
+      mockMediaEntry({
+        id: 'mock_image_hash_spam',
+        url: 'http://foo.com/output_image_spam.jpeg',
+        type: 'image',
+      })
+    );
 
     const { data } = await gql`
       mutation (

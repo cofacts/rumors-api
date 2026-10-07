@@ -1,4 +1,4 @@
-import { GraphQLList } from 'graphql';
+import { GraphQLList, GraphQLFloat } from 'graphql';
 import client from 'util/client';
 
 import {
@@ -9,8 +9,10 @@ import {
   getSortArgs,
   pagingArgs,
   moreLikeThisInput,
+  buildKnnQuery,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
+import { createEmbedding, getQueryEmbeddingCacheId } from 'util/embedding';
 
 import { ReplyConnection } from 'graphql/models/Reply';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
@@ -22,6 +24,12 @@ export default {
         ...createCommonListFilter('replies'),
         moreLikeThis: {
           type: moreLikeThisInput,
+        },
+        embedding: {
+          type: GraphQLFloat,
+          description:
+            'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
+            'to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).',
         },
         type: {
           type: ReplyTypeEnum,
@@ -43,7 +51,7 @@ export default {
   async resolve(
     rootValue,
     { filter = {}, orderBy = [], ...otherParams },
-    { userId, appId, loaders }
+    { userId, appId, loaders, user }
   ) {
     const body = {
       sort: getSortArgs(orderBy),
@@ -174,6 +182,38 @@ export default {
         minimum_should_match: 1, // At least 1 "should" query should present
       },
     };
+
+    // kNN-retrieval + BM25 ranking. Opt in by passing `filter.embedding` as the
+    // minimum cosine similarity: kNN narrows the candidate set, then the existing
+    // BM25 should-queries score/order those candidates. Omit for BM25-only.
+    if (filter.embedding != null && filter.moreLikeThis?.like) {
+      try {
+        const queryChunks = await createEmbedding(
+          {
+            id: getQueryEmbeddingCacheId(filter.moreLikeThis.like),
+            type: 'text',
+          },
+          [{ text: filter.moreLikeThis.like }],
+          user,
+          { taskType: 'RETRIEVAL_QUERY' }
+        );
+        const queryVectors = queryChunks.map((c) => c.vector);
+
+        if (queryVectors.length > 0) {
+          // Add kNN as a candidate-retrieval filter so only semantically-near
+          // docs survive; BM25 `should` scoring then decides the ordering.
+          body.query.bool.filter.push(
+            buildKnnQuery({ queryVectors, similarity: filter.embedding })
+          );
+          // Ranking is driven by BM25, but retrieval is driven by kNN — don't
+          // require a BM25 term match, or we'd intersect kNN ∩ BM25 instead of
+          // ranking the kNN candidates (some of which score 0 on BM25).
+          body.query.bool.minimum_should_match = 0;
+        }
+      } catch (e) {
+        console.warn('[ListReplies] kNN embedding failed:', e);
+      }
+    }
 
     // should return search context for resolveEdges & resolvePageInfo
     return {

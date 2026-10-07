@@ -1,6 +1,8 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import { createTranscript } from 'graphql/util';
+import { createEmbedding, createMediaEmbedding } from 'util/embedding';
+import ListArticles from '../ListArticles';
 import fixtures from '../__fixtures__/ListArticles';
 import mediaManager from 'util/mediaManager';
 
@@ -16,6 +18,27 @@ jest.mock('graphql/util', () => {
     createTranscript: jest.fn(),
   };
 });
+
+/**
+ * Makes mediaManager.insert() act like an upload that has completed.
+ *
+ * @returns {object} the media entry that insert() resolves to
+ */
+function mockUploadedMedia() {
+  const mediaEntry = { variants: [], getFile: jest.fn() };
+  mediaManager.insert.mockImplementationOnce(async ({ onUploadStop }) => {
+    setImmediate(() => onUploadStop(null));
+    return mediaEntry;
+  });
+  return mediaEntry;
+}
+
+jest.mock('util/embedding', () => ({
+  createEmbedding: jest.fn(),
+  createMediaEmbedding: jest.fn(),
+  getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
+  getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
+}));
 
 describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
@@ -1026,13 +1049,12 @@ describe('ListArticles', () => {
               node {
                 id
                 articleType
-                attachmentUrl # Original but not logged in, expects null
                 attachmentHash
               }
             }
           }
         }
-      `({}, { appId: 'WEBSITE' })
+      `({}, { user: { id: 'user-id', appId: 'WEBSITE' } })
     ).toMatchInlineSnapshot(`
       Object {
         "data": Object {
@@ -1043,7 +1065,6 @@ describe('ListArticles', () => {
                 "node": Object {
                   "articleType": "IMAGE",
                   "attachmentHash": "ffff8000",
-                  "attachmentUrl": null,
                   "id": "listArticleTest5",
                 },
               },
@@ -1052,7 +1073,6 @@ describe('ListArticles', () => {
                 "node": Object {
                   "articleType": "IMAGE",
                   "attachmentHash": "ffff8001",
-                  "attachmentUrl": null,
                   "id": "listArticleTest6",
                 },
               },
@@ -1061,7 +1081,6 @@ describe('ListArticles', () => {
                 "node": Object {
                   "articleType": "TEXT",
                   "attachmentHash": "",
-                  "attachmentUrl": null,
                   "id": "listArticleTest1",
                 },
               },
@@ -1108,6 +1127,14 @@ describe('ListArticles', () => {
       hits: [],
     }));
 
+    // The transcript is created, but the media has no detectable text.
+    mockUploadedMedia();
+    createTranscript.mockImplementationOnce(async () => ({
+      id: 'transcript-id',
+      status: 'SUCCESS',
+      text: '',
+    }));
+
     // Expect to return nothing
     expect(
       await gql`
@@ -1125,7 +1152,7 @@ describe('ListArticles', () => {
             }
           }
         }
-      `({}, { appId: 'WEBSITE' })
+      `({}, { user: { id: 'user-id', appId: 'WEBSITE' } })
     ).toMatchInlineSnapshot(`
       Object {
         "data": Object {
@@ -1137,7 +1164,7 @@ describe('ListArticles', () => {
     `);
   });
 
-  it('filters by mediaUrl with no media manager but creates transcripts', async () => {
+  it('filters by mediaUrl with no media manager hits but creates transcripts', async () => {
     // Assume no hits
     mediaManager.query.mockImplementationOnce(async () => ({
       queryInfo: {
@@ -1147,6 +1174,7 @@ describe('ListArticles', () => {
       hits: [],
     }));
 
+    const mediaEntry = mockUploadedMedia();
     createTranscript.mockImplementationOnce(async () => ({
       id: 'transcript-id',
       status: 'SUCCESS',
@@ -1159,10 +1187,7 @@ describe('ListArticles', () => {
         {
           ListArticles(
             orderBy: [{ _score: DESC }]
-            filter: {
-              mediaUrl: "http://foo.com/input_image.jpeg"
-              transcript: { shouldCreate: true }
-            }
+            filter: { mediaUrl: "http://foo.com/input_image.jpeg" }
           ) {
             edges {
               mediaSimilarity
@@ -1177,7 +1202,7 @@ describe('ListArticles', () => {
             }
           }
         }
-      `({}, { appId: 'WEBSITE' })
+      `({}, { user: { id: 'user-id', appId: 'WEBSITE' } })
     ).toMatchInlineSnapshot(`
       Object {
         "data": Object {
@@ -1204,8 +1229,405 @@ describe('ListArticles', () => {
       }
     `);
 
+    // The media is uploaded as a media entry, which the transcript reads from.
+    expect(mediaManager.insert).toHaveBeenCalledTimes(1);
+    expect(mediaManager.insert.mock.calls[0][0].url).toBe(
+      'http://foo.com/input_image.jpeg'
+    );
     expect(createTranscript).toHaveBeenCalledTimes(1);
+    expect(createTranscript.mock.calls[0][1]).toBe(mediaEntry);
   });
 
   afterAll(() => unloadFixtures(fixtures));
+});
+
+describe('ListArticles kNN retriever', () => {
+  // These tests bypass `gql` and call ListArticles.resolve directly to inspect
+  // the search-request body it produces — no ES roundtrip, no fixtures needed.
+  const baseContext = {
+    loaders: { urlLoader: { load: jest.fn().mockResolvedValue(null) } },
+    userId: 'u',
+    appId: 'a',
+    user: { id: 'u', appId: 'a' },
+  };
+
+  beforeEach(() => {
+    createEmbedding.mockReset();
+    createMediaEmbedding.mockReset();
+    createTranscript.mockReset();
+    mediaManager.query.mockReset();
+    mediaManager.insert.mockReset();
+  });
+
+  it('runs plain BM25 when embedding is omitted', async () => {
+    const result = await ListArticles.resolve(
+      {},
+      { filter: { moreLikeThis: { like: 'covid vaccine' } } },
+      baseContext
+    );
+
+    expect(result.body.query).toBeDefined();
+    // BM25 path: no nested-knn filter, minimum_should_match stays at 1.
+    expect(result.body.query.bool.minimum_should_match).toBe(1);
+    expect(
+      result.body.query.bool.filter.some((clause) => clause?.bool?.should)
+    ).toBe(false);
+    expect(createEmbedding).not.toHaveBeenCalled();
+  });
+
+  it('adds kNN as a candidate filter and ranks by BM25 when embedding is a similarity', async () => {
+    createEmbedding.mockResolvedValue([{ vector: [0.11, 0.22, 0.33] }]);
+
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          moreLikeThis: { like: 'covid vaccine' },
+          embedding: 0.7,
+        },
+      },
+      baseContext
+    );
+
+    // Cache key + RETRIEVAL_QUERY taskType
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+    const [queryInfo, parts, , options] = createEmbedding.mock.calls[0];
+    expect(queryInfo.type).toBe('text');
+    expect(queryInfo.id).toMatch(/^query-text:/);
+    expect(parts).toEqual([{ text: 'covid vaccine' }]);
+    expect(options).toEqual({ taskType: 'RETRIEVAL_QUERY' });
+
+    // BM25 should-queries stay in place for ranking; retrieval is restricted by
+    // a nested-kNN filter, and minimum_should_match drops to 0.
+    expect(result.body.retriever).toBeUndefined();
+    expect(result.body.query.bool.should[0].nested).toBeUndefined();
+    expect(result.body.query.bool.minimum_should_match).toBe(0);
+
+    const knnFilter = result.body.query.bool.filter.find(
+      (clause) => clause?.bool?.should?.[0]?.nested
+    );
+    const nestedKnn = knnFilter.bool.should[0].nested;
+    expect(nestedKnn.path).toBe('embeddings');
+    expect(nestedKnn.score_mode).toBe('max');
+    expect(nestedKnn.query.knn).toMatchObject({
+      field: 'embeddings.vector',
+      query_vector: [0.11, 0.22, 0.33],
+      similarity: 0.7,
+    });
+  });
+
+  it('falls through to BM25 when createEmbedding throws', async () => {
+    createEmbedding.mockRejectedValue(new Error('vertex offline'));
+
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          moreLikeThis: { like: 'covid' },
+          embedding: 0.6,
+        },
+      },
+      baseContext
+    );
+
+    expect(result.body.query).toBeDefined();
+    expect(result.body.query.bool.should[0].nested).toBeUndefined();
+    expect(result.body.retriever).toBeUndefined();
+  });
+
+  /** The nested-kNN filter clause of a search request body, if any */
+  const getKnn = (result) =>
+    result.body.query.bool.filter.find((c) => c?.bool?.should?.[0]?.nested)
+      ?.bool.should[0].nested.query.knn;
+
+  it('uploads the media that media manager does not have, then adds kNN', async () => {
+    const queryInfo = { id: 'media-hash-miss', type: 'image' };
+    mediaManager.query.mockResolvedValueOnce({ queryInfo, hits: [] });
+    const mediaEntry = mockUploadedMedia();
+    createMediaEmbedding.mockResolvedValueOnce([{ vector: [0.1, 0.2] }]);
+
+    const result = await ListArticles.resolve(
+      {},
+      { filter: { mediaUrl: 'https://example.com/y.jpg', embedding: 0.6 } },
+      baseContext
+    );
+
+    expect(mediaManager.insert).toHaveBeenCalledTimes(1);
+    expect(mediaManager.insert.mock.calls[0][0].url).toBe(
+      'https://example.com/y.jpg'
+    );
+    // The transcript is made from the same media entry.
+    expect(createTranscript).toHaveBeenCalledWith(
+      queryInfo,
+      mediaEntry,
+      baseContext.user
+    );
+
+    // Embedding only gets the media entry; it knows nothing about the upload.
+    expect(createMediaEmbedding).toHaveBeenCalledTimes(1);
+    expect(createMediaEmbedding).toHaveBeenCalledWith(
+      queryInfo,
+      mediaEntry,
+      baseContext.user
+    );
+
+    expect(result.body.query.bool.minimum_should_match).toBe(0);
+    expect(getKnn(result)).toMatchObject({
+      query_vector: [0.1, 0.2],
+      similarity: 0.6,
+    });
+  });
+
+  it('uploads nothing when media manager already has the file', async () => {
+    const queryInfo = { id: 'media-hash-stored', type: 'image' };
+    const storedEntry = {
+      ...queryInfo,
+      variants: ['original'],
+      getFile: jest.fn(),
+    };
+    mediaManager.query.mockResolvedValueOnce({
+      queryInfo,
+      hits: [{ similarity: 1, entry: storedEntry }],
+    });
+    createMediaEmbedding.mockResolvedValueOnce([{ vector: [0.7, 0.8] }]);
+
+    const result = await ListArticles.resolve(
+      {},
+      { filter: { mediaUrl: 'https://example.com/y.jpg', embedding: 0.6 } },
+      {
+        ...baseContext,
+        loaders: {
+          ...baseContext.loaders,
+          searchResultLoader: { loadMany: jest.fn().mockResolvedValue([[]]) },
+        },
+      }
+    );
+
+    expect(mediaManager.insert).not.toHaveBeenCalled();
+    expect(createMediaEmbedding).toHaveBeenCalledWith(
+      queryInfo,
+      storedEntry,
+      baseContext.user
+    );
+    expect(getKnn(result)).toMatchObject({ query_vector: [0.7, 0.8] });
+  });
+
+  it('shares one media entry between transcript and embedding', async () => {
+    const queryInfo = { id: 'media-hash-both', type: 'video' };
+    mediaManager.query.mockResolvedValueOnce({ queryInfo, hits: [] });
+    const mediaEntry = mockUploadedMedia();
+    createTranscript.mockResolvedValueOnce({
+      status: 'SUCCESS',
+      text: 'spoken words',
+    });
+    createMediaEmbedding.mockResolvedValueOnce([{ vector: [0.3, 0.4] }]);
+
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          mediaUrl: 'https://example.com/z.mp4',
+          embedding: 0.6,
+        },
+      },
+      baseContext
+    );
+
+    expect(mediaManager.insert).toHaveBeenCalledTimes(1);
+    expect(createTranscript).toHaveBeenCalledWith(
+      queryInfo,
+      mediaEntry,
+      baseContext.user
+    );
+    expect(createMediaEmbedding).toHaveBeenCalledWith(
+      queryInfo,
+      mediaEntry,
+      baseContext.user
+    );
+
+    // Transcript ranks by BM25, embedding restricts the candidates.
+    expect(
+      result.body.query.bool.should.some((clause) => clause.more_like_this)
+    ).toBe(true);
+    expect(getKnn(result)).toMatchObject({ query_vector: [0.3, 0.4] });
+  });
+
+  it('keeps the transcript when only the embedding fails', async () => {
+    mediaManager.query.mockResolvedValueOnce({
+      queryInfo: { id: 'media-hash-embed-fail', type: 'audio' },
+      hits: [],
+    });
+    mockUploadedMedia();
+    createTranscript.mockResolvedValueOnce({
+      status: 'SUCCESS',
+      text: 'spoken words',
+    });
+    createMediaEmbedding.mockRejectedValueOnce(new Error('vertex offline'));
+
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          mediaUrl: 'https://example.com/z.mp3',
+          embedding: 0.6,
+        },
+      },
+      baseContext
+    );
+
+    expect(
+      result.body.query.bool.should.some((clause) => clause.more_like_this)
+    ).toBe(true);
+    // No kNN: plain BM25.
+    expect(result.body.query.bool.minimum_should_match).toBe(1);
+    expect(getKnn(result)).toBeUndefined();
+  });
+
+  it('searches without creating anything when the media cannot be uploaded', async () => {
+    mediaManager.query.mockResolvedValueOnce({
+      queryInfo: { id: 'media-hash-upload-fail', type: 'video' },
+      hits: [],
+    });
+    mediaManager.insert.mockRejectedValueOnce(new Error('upload failed'));
+
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          mediaUrl: 'https://example.com/z.mp4',
+          embedding: 0.6,
+        },
+      },
+      baseContext
+    );
+
+    expect(createTranscript).not.toHaveBeenCalled();
+    expect(createMediaEmbedding).not.toHaveBeenCalled();
+    expect(result.body.query.bool.minimum_should_match).toBe(1);
+  });
+
+  it('reads the embedding made before when the media cannot be uploaded', async () => {
+    await loadFixtures({
+      '/airesponses/doc/knn-media-reuse': {
+        type: 'EMBEDDING',
+        docId: 'media-hash-reuse',
+        status: 'SUCCESS',
+        createdAt: '2026-01-01T00:00:00.000Z',
+        embeddings: [{ vector: [0.9, 0.8, 0.7] }],
+      },
+    });
+    mediaManager.query.mockResolvedValueOnce({
+      queryInfo: { id: 'media-hash-reuse', type: 'image' },
+      hits: [],
+    });
+    mediaManager.insert.mockRejectedValueOnce(new Error('upload failed'));
+
+    const result = await ListArticles.resolve(
+      {},
+      { filter: { mediaUrl: 'https://example.com/x.jpg', embedding: 0.75 } },
+      baseContext
+    );
+
+    expect(createMediaEmbedding).not.toHaveBeenCalled();
+
+    expect(result.body.query.bool.minimum_should_match).toBe(0);
+    expect(getKnn(result)).toMatchObject({
+      query_vector: [0.9, 0.8, 0.7],
+      similarity: 0.75,
+    });
+
+    await unloadFixtures({ '/airesponses/doc/knn-media-reuse': {} });
+  });
+
+  it('only reads the transcript and embedding made before when not logged in', async () => {
+    await loadFixtures({
+      '/airesponses/doc/knn-media-anonymous': {
+        type: 'EMBEDDING',
+        docId: 'media-hash-anonymous',
+        status: 'SUCCESS',
+        createdAt: '2026-01-01T00:00:00.000Z',
+        embeddings: [{ vector: [0.1, 0.2, 0.3] }],
+      },
+    });
+    mediaManager.query.mockResolvedValueOnce({
+      queryInfo: { id: 'media-hash-anonymous', type: 'image' },
+      hits: [],
+    });
+
+    const result = await ListArticles.resolve(
+      {},
+      { filter: { mediaUrl: 'https://example.com/y.jpg', embedding: 0.75 } },
+      { ...baseContext, userId: undefined, user: undefined }
+    );
+
+    // The media is still looked up, but nothing is uploaded nor generated.
+    expect(mediaManager.query).toHaveBeenCalledTimes(1);
+    expect(mediaManager.insert).not.toHaveBeenCalled();
+    expect(createTranscript).not.toHaveBeenCalled();
+    expect(createMediaEmbedding).not.toHaveBeenCalled();
+
+    expect(getKnn(result)).toMatchObject({
+      query_vector: [0.1, 0.2, 0.3],
+      similarity: 0.75,
+    });
+
+    await unloadFixtures({ '/airesponses/doc/knn-media-anonymous': {} });
+  });
+
+  it('uses the media embedding even when a text query is given along with it', async () => {
+    const queryInfo = { id: 'media-hash-media-first', type: 'image' };
+    mediaManager.query.mockResolvedValueOnce({ queryInfo, hits: [] });
+    const mediaEntry = mockUploadedMedia();
+    createMediaEmbedding.mockResolvedValueOnce([{ vector: [0.5, 0.6] }]);
+
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          moreLikeThis: { like: 'covid' },
+          mediaUrl: 'https://example.com/y.jpg',
+          embedding: 0.6,
+        },
+      },
+      baseContext
+    );
+
+    expect(createMediaEmbedding).toHaveBeenCalledWith(
+      queryInfo,
+      mediaEntry,
+      baseContext.user
+    );
+    // The text is not vectorized; it only ranks by BM25.
+    expect(createEmbedding).not.toHaveBeenCalled();
+    expect(
+      result.body.query.bool.should.some((clause) => clause.more_like_this)
+    ).toBe(true);
+    expect(getKnn(result)).toMatchObject({ query_vector: [0.5, 0.6] });
+  });
+
+  it('falls back to the text embedding when the media has none', async () => {
+    mediaManager.query.mockResolvedValueOnce({
+      queryInfo: { id: 'media-hash-text-fallback', type: 'image' },
+      hits: [],
+    });
+    mockUploadedMedia();
+    createMediaEmbedding.mockRejectedValueOnce(new Error('vertex offline'));
+    createEmbedding.mockResolvedValueOnce([{ vector: [0.5] }]);
+
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          moreLikeThis: { like: 'covid' },
+          mediaUrl: 'https://example.com/y.jpg',
+          embedding: 0.6,
+        },
+      },
+      baseContext
+    );
+
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+    expect(createEmbedding.mock.calls[0][0].type).toBe('text');
+    expect(getKnn(result)).toMatchObject({ query_vector: [0.5] });
+  });
 });
