@@ -112,15 +112,25 @@ export const moreLikeThisInput = new GraphQLInputObjectType({
 const KNN_NUM_CANDIDATES = 100;
 
 /**
+ * How many nearest neighbors each shard contributes per query chunk. Set
+ * explicitly: when omitted, ES falls back to the request's `size`, which makes
+ * the set of kNN hits (and thus `totalCount`) change with the page size.
+ */
+const KNN_K = 100;
+
+/** Names the clause built by buildKnnQuery, so that it can be told apart. */
+const KNN_QUERY_NAME = 'knn';
+
+/**
  * Build a nested-kNN bool/should query, one nested-knn clause per query chunk.
- * Intended as a candidate-retrieval `filter` clause on the BM25 bool query: a
- * doc survives when any query chunk is within `similarity` of one of its stored
- * embeddings, and the BM25 `should` score then decides the ordering.
+ * Intended as one more `should` clause next to the BM25 ones: a doc matches it
+ * when any query chunk is within `similarity` of one of its stored embeddings,
+ * and is among the `KNN_K` nearest of its shard.
  *
  * @param {object} param
  * @param {number[][]} param.queryVectors - one vector per query chunk
  * @param {number} param.similarity - min cosine similarity for KNN hits
- * @returns {object} a bool/should query suitable as a `filter` clause
+ * @returns {object} a bool/should query suitable as a `should` clause
  */
 export function buildKnnQuery({ queryVectors, similarity }) {
   const nestedKnnQueries = queryVectors.map((qv) => ({
@@ -131,6 +141,7 @@ export function buildKnnQuery({ queryVectors, similarity }) {
         knn: {
           field: 'embeddings.vector',
           query_vector: qv,
+          k: KNN_K,
           num_candidates: KNN_NUM_CANDIDATES,
           similarity,
         },
@@ -138,7 +149,27 @@ export function buildKnnQuery({ queryVectors, similarity }) {
     },
   }));
 
-  return { bool: { should: nestedKnnQueries } };
+  return { bool: { should: nestedKnnQueries, _name: KNN_QUERY_NAME } };
+}
+
+/**
+ * The query to highlight with, when the search query has a kNN clause from
+ * {@link buildKnnQuery}. The `plain` highlighter cannot walk a kNN query — the
+ * whole search fails with `unsupported_operation_exception` — and there is no
+ * term to highlight in it anyway.
+ *
+ * @param {object} query - the search query
+ * @returns {object | undefined} the query less its kNN clause; undefined when
+ *   there is no kNN clause, so that the search query itself is highlighted
+ */
+function getHighlightQuery(query) {
+  const isKnn = (clause) => clause?.bool?._name === KNN_QUERY_NAME;
+  const should = query?.bool?.should;
+  if (!Array.isArray(should) || !should.some(isKnn)) return undefined;
+
+  return {
+    bool: { ...query.bool, should: should.filter((c) => !isKnn(c)) },
+  };
 }
 
 export const userAndExistInput = new GraphQLInputObjectType({
@@ -318,6 +349,7 @@ export async function defaultResolveEdges(
         : searchContext.body.sort,
       highlight: {
         order: 'score',
+        highlight_query: getHighlightQuery(searchContext.body.query),
         fields: {
           text: {
             number_of_fragments: 1, // Return only 1 piece highlight text
@@ -682,6 +714,8 @@ export async function getAIResponse({ type, docId }) {
  * @param {object} loadingResponseBody
  * @param {'AI_REPLY' | 'TRANSCRIPT' | 'EMBEDDING'} loadingResponseBody.type
  * @param {string} loadingResponseBody.docId
+ * @param {string} [loadingResponseBody.request] - the request to AI endpoint,
+ *   for record. For EMBEDDING, the settings the vectors are made with.
  * @param {object} loadingResponseBody.user - the user who requested the AI
  *   response. Required, so that every AI response has userId / appId.
  *
