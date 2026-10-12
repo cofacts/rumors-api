@@ -427,12 +427,12 @@ describe('ListReplies kNN retriever', () => {
     expect(result.body.query).toBeDefined();
     expect(result.body.query.bool.minimum_should_match).toBe(1);
     expect(
-      result.body.query.bool.filter.some((clause) => clause?.bool?.should)
+      result.body.query.bool.should.some((clause) => clause?.bool?.should)
     ).toBe(false);
     expect(createEmbedding).not.toHaveBeenCalled();
   });
 
-  it('adds kNN as a candidate filter and ranks by BM25 when embedding is a similarity', async () => {
+  it('adds kNN next to BM25 when embedding is a similarity', async () => {
     createEmbedding.mockResolvedValue([{ vector: [0.5, 0.5] }]);
 
     const result = await ListReplies.resolve(
@@ -447,22 +447,88 @@ describe('ListReplies kNN retriever', () => {
     );
 
     expect(createEmbedding).toHaveBeenCalledTimes(1);
+    expect(createEmbedding.mock.calls[0][3]).toEqual({ role: 'query' });
     expect(result.body.retriever).toBeUndefined();
 
-    // BM25 should-queries stay for ranking; retrieval is restricted by a
-    // nested-kNN filter and minimum_should_match drops to 0.
-    expect(result.body.query.bool.should[0].nested).toBeUndefined();
-    expect(result.body.query.bool.minimum_should_match).toBe(0);
+    // kNN is one more should-query next to the BM25 ones, so either side can
+    // bring a reply in. It is never a filter.
+    expect(result.body.query.bool.minimum_should_match).toBe(1);
+    expect(
+      result.body.query.bool.filter.some((clause) => clause?.bool?.should)
+    ).toBe(false);
 
-    const knnFilter = result.body.query.bool.filter.find(
+    const nestedKnn = result.body.query.bool.should.find(
       (clause) => clause?.bool?.should?.[0]?.nested
-    );
-    const nestedKnn = knnFilter.bool.should[0].nested;
+    ).bool.should[0].nested;
     expect(nestedKnn.path).toBe('embeddings');
     expect(nestedKnn.query.knn).toMatchObject({
       field: 'embeddings.vector',
       query_vector: [0.5, 0.5],
+      k: 100,
       similarity: 0.65,
     });
+  });
+
+  it('returns what either BM25 or kNN finds', async () => {
+    /** A unit vector along the given axis */
+    const unitVector = (axis) =>
+      Array.from({ length: 768 }, (_, i) => (i === axis ? 1 : 0));
+    const reply = { type: 'RUMOR', createdAt: '2026-01-01T00:00:00.000Z' };
+    const hybridFixtures = {
+      // BM25 finds it; has no embedding yet.
+      '/replies/doc/hybrid-bm25-only': {
+        ...reply,
+        text: 'zebracorn sighting confirmed near the harbor',
+      },
+      // Only kNN finds it: no shared term, but a near vector.
+      '/replies/doc/hybrid-knn-only': {
+        ...reply,
+        text: 'completely different wording',
+        embeddings: [{ vector: unitVector(0) }],
+      },
+      // Neither finds it: no shared term, and a far vector.
+      '/replies/doc/hybrid-neither': {
+        ...reply,
+        text: 'unrelated content',
+        embeddings: [{ vector: unitVector(1) }],
+      },
+    };
+    await loadFixtures(hybridFixtures);
+    createEmbedding.mockResolvedValue([{ vector: unitVector(0) }]);
+
+    try {
+      const { data, errors } = await gql`
+        {
+          ListReplies(
+            filter: {
+              moreLikeThis: {
+                like: "zebracorn sighting"
+                minimumShouldMatch: "1"
+              }
+              embedding: 0.7
+            }
+            orderBy: [{ _score: DESC }]
+          ) {
+            totalCount
+            edges {
+              node {
+                id
+              }
+            }
+          }
+        }
+      `({}, { user: baseContext.user });
+
+      expect(errors).toBeUndefined();
+      // By score, BM25 matches come first: BM25 scores are unbounded, kNN's
+      // are at most 1.
+      expect(data.ListReplies.edges.map(({ node }) => node.id)).toEqual([
+        'hybrid-bm25-only',
+        'hybrid-knn-only',
+      ]);
+      expect(data.ListReplies.totalCount).toBe(2);
+    } finally {
+      await unloadFixtures(hybridFixtures);
+    }
   });
 });

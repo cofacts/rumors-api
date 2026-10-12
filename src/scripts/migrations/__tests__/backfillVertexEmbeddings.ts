@@ -290,6 +290,35 @@ describe('backfillVertexEmbeddings', () => {
     expect(mockBulk).toHaveBeenCalledTimes(1);
   });
 
+  it('walks the docs that already have embeddings with --reembed', async () => {
+    mockCount.mockResolvedValueOnce({ count: 1 });
+    mockGetAllDocs.mockReturnValueOnce(
+      docsGen([{ _id: 'art1', _source: { text: 'foo' } }])
+    );
+    mockCreateEmbedding.mockResolvedValue([{ vector: [0.1] }]);
+
+    await main({
+      index: 'articles',
+      concurrency: 1,
+      batchSize: 100,
+      from: '2026-01-01T00:00:00Z',
+      reembed: true,
+    });
+
+    // No "already embedded" exclusion; other filters still apply.
+    const query = mockGetAllDocs.mock.calls[0][1] as {
+      bool: { must_not?: unknown[]; filter?: unknown[] };
+    };
+    expect(query.bool.must_not).toBeUndefined();
+    expect(query.bool.filter).toEqual([
+      { range: { createdAt: { gte: '2026-01-01T00:00:00Z' } } },
+    ]);
+    expect(mockBulk.mock.calls[0][0].operations).toEqual([
+      { update: { _index: 'articles', _id: 'art1' } },
+      { doc: { embeddings: [{ vector: [0.1] }] } },
+    ]);
+  });
+
   it('filters replies by createdAt for --from, as replies have no updatedAt', async () => {
     mockGetAllDocs.mockReturnValueOnce(docsGen([]));
 
