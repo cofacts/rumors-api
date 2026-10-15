@@ -38,6 +38,8 @@ function mockUploadedMedia() {
 jest.mock('util/embedding', () => ({
   createEmbedding: jest.fn(),
   createMediaEmbedding: jest.fn(),
+  // Reads airesponses for real
+  getCachedEmbedding: jest.requireActual('util/embedding').getCachedEmbedding,
   getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
   getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
 }));
@@ -1333,15 +1335,13 @@ describe('ListArticles kNN retriever', () => {
     );
 
     expect(result.body.query).toBeDefined();
-    // BM25 path: no nested-knn filter, minimum_should_match stays at 1.
+    // BM25 path: no nested-knn clause.
     expect(result.body.query.bool.minimum_should_match).toBe(1);
-    expect(
-      result.body.query.bool.filter.some((clause) => clause?.bool?.should)
-    ).toBe(false);
+    expect(getKnn(result)).toBeUndefined();
     expect(createEmbedding).not.toHaveBeenCalled();
   });
 
-  it('adds kNN as a candidate filter and ranks by BM25 when embedding is a similarity', async () => {
+  it('adds kNN next to BM25 when embedding is a similarity', async () => {
     createEmbedding.mockResolvedValue([{ vector: [0.11, 0.22, 0.33] }]);
 
     const result = await ListArticles.resolve(
@@ -1355,24 +1355,26 @@ describe('ListArticles kNN retriever', () => {
       baseContext
     );
 
-    // Cache key + RETRIEVAL_QUERY taskType
+    // Cache key + embedded as a query
     expect(createEmbedding).toHaveBeenCalledTimes(1);
     const [queryInfo, parts, , options] = createEmbedding.mock.calls[0];
     expect(queryInfo.type).toBe('text');
     expect(queryInfo.id).toMatch(/^query-text:/);
     expect(parts).toEqual([{ text: 'covid vaccine' }]);
-    expect(options).toEqual({ taskType: 'RETRIEVAL_QUERY' });
+    expect(options).toEqual({ role: 'query' });
 
-    // BM25 should-queries stay in place for ranking; retrieval is restricted by
-    // a nested-kNN filter, and minimum_should_match drops to 0.
+    // kNN is one more should-query next to the BM25 ones, so either side can
+    // bring a doc in. It is never a filter.
     expect(result.body.retriever).toBeUndefined();
-    expect(result.body.query.bool.should[0].nested).toBeUndefined();
-    expect(result.body.query.bool.minimum_should_match).toBe(0);
+    expect(result.body.query.bool.should[0].more_like_this).toBeDefined();
+    expect(result.body.query.bool.minimum_should_match).toBe(1);
+    expect(
+      result.body.query.bool.filter.some((clause) => clause?.bool?.should)
+    ).toBe(false);
 
-    const knnFilter = result.body.query.bool.filter.find(
+    const nestedKnn = result.body.query.bool.should.find(
       (clause) => clause?.bool?.should?.[0]?.nested
-    );
-    const nestedKnn = knnFilter.bool.should[0].nested;
+    ).bool.should[0].nested;
     expect(nestedKnn.path).toBe('embeddings');
     expect(nestedKnn.score_mode).toBe('max');
     expect(nestedKnn.query.knn).toMatchObject({
@@ -1380,6 +1382,80 @@ describe('ListArticles kNN retriever', () => {
       query_vector: [0.11, 0.22, 0.33],
       similarity: 0.7,
     });
+    // Explicit, so that the kNN hits do not vary with the page size.
+    expect(nestedKnn.query.knn.k).toBe(100);
+  });
+
+  it('returns what either BM25 or kNN finds', async () => {
+    /** A unit vector along the given axis */
+    const unitVector = (axis) =>
+      Array.from({ length: 768 }, (_, i) => (i === axis ? 1 : 0));
+    const article = {
+      status: 'NORMAL',
+      articleType: 'TEXT',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+      replyRequestCount: 1,
+      normalArticleReplyCount: 0,
+      articleReplies: [],
+      hyperlinks: [],
+    };
+    const hybridFixtures = {
+      // BM25 finds it; has no embedding yet.
+      '/articles/doc/hybrid-bm25-only': {
+        ...article,
+        text: 'zebracorn sighting confirmed near the harbor',
+      },
+      // Only kNN finds it: no shared term, but a near vector.
+      '/articles/doc/hybrid-knn-only': {
+        ...article,
+        text: 'completely different wording',
+        embeddings: [{ vector: unitVector(0) }],
+      },
+      // Neither finds it: no shared term, and a far vector.
+      '/articles/doc/hybrid-neither': {
+        ...article,
+        text: 'unrelated content',
+        embeddings: [{ vector: unitVector(1) }],
+      },
+    };
+    await loadFixtures(hybridFixtures);
+    createEmbedding.mockResolvedValue([{ vector: unitVector(0) }]);
+
+    try {
+      const { data, errors } = await gql`
+        {
+          ListArticles(
+            filter: {
+              moreLikeThis: {
+                like: "zebracorn sighting"
+                minimumShouldMatch: "1"
+              }
+              embedding: 0.7
+            }
+            orderBy: [{ _score: DESC }]
+          ) {
+            totalCount
+            edges {
+              node {
+                id
+              }
+            }
+          }
+        }
+      `({}, { user: baseContext.user });
+
+      expect(errors).toBeUndefined();
+      // By score, BM25 matches come first: BM25 scores are unbounded, kNN's
+      // are at most 1.
+      expect(data.ListArticles.edges.map(({ node }) => node.id)).toEqual([
+        'hybrid-bm25-only',
+        'hybrid-knn-only',
+      ]);
+      expect(data.ListArticles.totalCount).toBe(2);
+    } finally {
+      await unloadFixtures(hybridFixtures);
+    }
   });
 
   it('falls through to BM25 when createEmbedding throws', async () => {
@@ -1401,9 +1477,9 @@ describe('ListArticles kNN retriever', () => {
     expect(result.body.retriever).toBeUndefined();
   });
 
-  /** The nested-kNN filter clause of a search request body, if any */
+  /** The nested-kNN should clause of a search request body, if any */
   const getKnn = (result) =>
-    result.body.query.bool.filter.find((c) => c?.bool?.should?.[0]?.nested)
+    result.body.query.bool.should.find((c) => c?.bool?.should?.[0]?.nested)
       ?.bool.should[0].nested.query.knn;
 
   it('uploads the media that media manager does not have, then adds kNN', async () => {
@@ -1437,7 +1513,6 @@ describe('ListArticles kNN retriever', () => {
       baseContext.user
     );
 
-    expect(result.body.query.bool.minimum_should_match).toBe(0);
     expect(getKnn(result)).toMatchObject({
       query_vector: [0.1, 0.2],
       similarity: 0.6,
@@ -1511,7 +1586,7 @@ describe('ListArticles kNN retriever', () => {
       baseContext.user
     );
 
-    // Transcript ranks by BM25, embedding restricts the candidates.
+    // Transcript and embedding each bring their own matches.
     expect(
       result.body.query.bool.should.some((clause) => clause.more_like_this)
     ).toBe(true);
@@ -1545,7 +1620,6 @@ describe('ListArticles kNN retriever', () => {
       result.body.query.bool.should.some((clause) => clause.more_like_this)
     ).toBe(true);
     // No kNN: plain BM25.
-    expect(result.body.query.bool.minimum_should_match).toBe(1);
     expect(getKnn(result)).toBeUndefined();
   });
 
@@ -1569,7 +1643,7 @@ describe('ListArticles kNN retriever', () => {
 
     expect(createTranscript).not.toHaveBeenCalled();
     expect(createMediaEmbedding).not.toHaveBeenCalled();
-    expect(result.body.query.bool.minimum_should_match).toBe(1);
+    expect(getKnn(result)).toBeUndefined();
   });
 
   it('reads the embedding made before when the media cannot be uploaded', async () => {
@@ -1579,6 +1653,7 @@ describe('ListArticles kNN retriever', () => {
         docId: 'media-hash-reuse',
         status: 'SUCCESS',
         createdAt: '2026-01-01T00:00:00.000Z',
+        request: 'gemini-embedding-2/768/raw-v1',
         embeddings: [{ vector: [0.9, 0.8, 0.7] }],
       },
     });
@@ -1596,7 +1671,6 @@ describe('ListArticles kNN retriever', () => {
 
     expect(createMediaEmbedding).not.toHaveBeenCalled();
 
-    expect(result.body.query.bool.minimum_should_match).toBe(0);
     expect(getKnn(result)).toMatchObject({
       query_vector: [0.9, 0.8, 0.7],
       similarity: 0.75,
@@ -1612,6 +1686,7 @@ describe('ListArticles kNN retriever', () => {
         docId: 'media-hash-anonymous',
         status: 'SUCCESS',
         createdAt: '2026-01-01T00:00:00.000Z',
+        request: 'gemini-embedding-2/768/raw-v1',
         embeddings: [{ vector: [0.1, 0.2, 0.3] }],
       },
     });

@@ -29,7 +29,8 @@ export default {
           type: GraphQLFloat,
           description:
             'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
-            'to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).',
+            'to also retrieve the nearest neighbors via kNN, in addition to what BM25 matches. ' +
+            'Omit for BM25-only (default).',
         },
         type: {
           type: ReplyTypeEnum,
@@ -183,9 +184,9 @@ export default {
       },
     };
 
-    // kNN-retrieval + BM25 ranking. Opt in by passing `filter.embedding` as the
-    // minimum cosine similarity: kNN narrows the candidate set, then the existing
-    // BM25 should-queries score/order those candidates. Omit for BM25-only.
+    // Hybrid of BM25 and kNN. Opt in by passing `filter.embedding` as the
+    // minimum cosine similarity: the nearest neighbors are retrieved in addition
+    // to what the BM25 should-queries match. Omit for BM25-only.
     if (filter.embedding != null && filter.moreLikeThis?.like) {
       try {
         const queryChunks = await createEmbedding(
@@ -195,20 +196,18 @@ export default {
           },
           [{ text: filter.moreLikeThis.like }],
           user,
-          { taskType: 'RETRIEVAL_QUERY' }
+          { role: 'query' }
         );
         const queryVectors = queryChunks.map((c) => c.vector);
 
         if (queryVectors.length > 0) {
-          // Add kNN as a candidate-retrieval filter so only semantically-near
-          // docs survive; BM25 `should` scoring then decides the ordering.
-          body.query.bool.filter.push(
+          // kNN is one more should-query, so a reply is returned when either
+          // side finds it; as a filter it would drop the replies that have no
+          // embedding yet. Scores add up: the kNN score is at most 1 while BM25
+          // is unbounded, so replies only kNN finds come after the BM25 matches.
+          body.query.bool.should.push(
             buildKnnQuery({ queryVectors, similarity: filter.embedding })
           );
-          // Ranking is driven by BM25, but retrieval is driven by kNN — don't
-          // require a BM25 term match, or we'd intersect kNN ∩ BM25 instead of
-          // ranking the kNN candidates (some of which score 0 on BM25).
-          body.query.bool.minimum_should_match = 0;
         }
       } catch (e) {
         console.warn('[ListReplies] kNN embedding failed:', e);
