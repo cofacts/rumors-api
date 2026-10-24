@@ -28,6 +28,15 @@ jest.mock('google-auth-library', () => ({
   })),
 }));
 
+// The google-auth-library mock above also replaces the copy that
+// @google-cloud/storage uses, so keep the real MediaManager out of this test.
+jest.mock('util/mediaManager', () => ({
+  __esModule: true,
+  default: { insert: jest.fn(), get: jest.fn() },
+  IMAGE_PREVIEW: 'webp600w',
+  IMAGE_THUMBNAIL: 'jpg240h',
+}));
+
 import {
   createEmbedding,
   createMediaEmbedding,

@@ -1,10 +1,10 @@
 /** Extract URLs from text and send to Internet Archive Wayback Machine */
 
-import urlRegex from 'url-regex';
+import urlRegex from 'url-regex-safe';
 import { removeFBCLIDIfExist } from './scrapUrls';
 
 export default async function archiveUrlsFromText(text: string) {
-  const originalUrls = text.match(urlRegex()) || [];
+  const originalUrls = text.match(urlRegex({ strict: true })) || [];
   if (originalUrls.length === 0) return [];
 
   // Normalize URLs before sending to cache or scrapper to increase cache hit
