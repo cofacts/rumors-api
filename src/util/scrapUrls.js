@@ -1,5 +1,5 @@
 import rollbar from 'rollbarInstance';
-import urlRegex from 'url-regex';
+import urlRegex from 'url-regex-safe';
 import DataLoader from 'dataloader';
 import url from 'url';
 
@@ -25,7 +25,7 @@ async function scrapUrls(
   text,
   { cacheLoader, client, noFetch = false, scrapLimit = 5 } = {}
 ) {
-  const originalUrls = text.match(urlRegex()) || [];
+  const originalUrls = text.match(urlRegex({ strict: true })) || [];
   if (originalUrls.length === 0) return [];
 
   // Normalize URLs before sending to cache or scrapper to increase cache hit

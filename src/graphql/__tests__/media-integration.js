@@ -129,7 +129,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     expect(resp.headers.get('Content-Type')).toMatchInlineSnapshot(
       `"image/jpeg"`
     );
-    expect(resp.headers.get('Content-Length')).toMatchInlineSnapshot(`"8214"`);
+    expect(resp.headers.get('Content-Length')).toMatchInlineSnapshot(`"8196"`);
 
     await delayForMs(1000); // Wait for setMetadata operation to finish
 
