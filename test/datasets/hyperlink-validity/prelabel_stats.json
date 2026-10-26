@@ -1,0 +1,27 @@
+{
+ "totalUniqueUrls": 167612,
+ "byRule": {
+  "unknown/None": 130610,
+  "empty/no_title_summary": 17006,
+  "generic_page/dup_title_same_domain": 6044,
+  "blocked/block_title2": 2938,
+  "login_wall/fb_login_title": 2739,
+  "blocked/cf_challenge": 2093,
+  "generic_page/yt_default": 1975,
+  "not_found/http_404": 1075,
+  "not_found/nf_summary": 829,
+  "not_found/nf_title": 820,
+  "error_page/err_title": 249,
+  "error_page/unsupported_browser": 234,
+  "blocked/bot_summary": 206,
+  "partial/fb_login_chrome": 174,
+  "blocked/http_403": 154,
+  "login_wall/fb_login_summary": 151,
+  "login_wall/generic_login": 130,
+  "generic_page/site_home_title": 123,
+  "blocked/http_429": 33,
+  "blocked/http_401": 21,
+  "login_wall/fb_footer": 5,
+  "not_found/http_410": 3
+ }
+}
