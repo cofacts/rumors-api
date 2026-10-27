@@ -109,7 +109,12 @@ export const moreLikeThisInput = new GraphQLInputObjectType({
   },
 });
 
-const KNN_NUM_CANDIDATES = 100;
+/**
+ * HNSW candidates per shard. On production data (2026-10-25 snapshot, 233k
+ * text articles), 100 found 93.8% of the exact top 10, 200 found 96.3% at
+ * about 1.5x the latency, and 500 found 98.1% at about 3x.
+ */
+const KNN_NUM_CANDIDATES = 200;
 
 /**
  * How many nearest neighbors each shard contributes per query chunk. Set
@@ -272,6 +277,20 @@ export function getSortArgs(orderBy, fieldFnMap = {}) {
       return (fieldFnMap[field] || defaultFieldFn)(order);
     })
     .concat({ _shard_doc: { order: 'desc' } }); // enforce at least 1 sort order for pagination
+}
+
+/**
+ * The orderBy of a list that can be a search. A search with no orderBy given
+ * is sorted by relevance; otherwise getSortArgs would leave only `_shard_doc`,
+ * that is, index order.
+ *
+ * @param {object[] | null | undefined} orderBy - the orderBy argument
+ * @param {boolean} isSearch - whether the list has a query that affects scores
+ * @returns {object[]} orderBy to pass to getSortArgs
+ */
+export function getSearchOrderBy(orderBy, isSearch) {
+  if (orderBy?.length) return orderBy;
+  return isSearch ? [{ _score: 'desc' }] : [];
 }
 
 // sort: [{fieldName: {order: 'desc'}}, {fieldName2: {order: 'desc'}}, ...]

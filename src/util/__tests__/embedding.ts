@@ -245,6 +245,36 @@ describe('createEmbedding', () => {
     });
   });
 
+  it('versions query and document text apart', async () => {
+    expect(getEmbeddingVersion('text', 'query')).not.toBe(
+      getEmbeddingVersion('text', 'document')
+    );
+    expect(getEmbeddingVersion('text')).toBe(
+      getEmbeddingVersion('text', 'document')
+    );
+
+    // A vector made as a document is not served as a query, and vice versa.
+    await loadFixtures({
+      '/airesponses/doc/role-doc': {
+        type: 'EMBEDDING',
+        docId: 'role-doc',
+        status: 'SUCCESS',
+        userId: 'foo',
+        appId: 'WEBSITE',
+        createdAt: '2026-01-01T00:00:00.000Z',
+        request: getEmbeddingVersion('text', 'document'),
+        embeddings: [{ vector: [0.1, 0.2, 0.3] }],
+      },
+    });
+    const queryInfo = { id: 'role-doc', type: 'text' } as const;
+    expect(await getCachedEmbedding(queryInfo)).toEqual([
+      { vector: [0.1, 0.2, 0.3] },
+    ]);
+    expect(await getCachedEmbedding(queryInfo, { role: 'query' })).toBeNull();
+
+    await unloadFixtures({ '/airesponses/doc/role-doc': {} });
+  });
+
   it('embeds a gs:// media part as a single capped vector', async () => {
     mockEmbedContent.mockResolvedValue({
       embeddings: [{ values: [0.5, 0.5] }],

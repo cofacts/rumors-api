@@ -7,6 +7,7 @@ import {
   attachCommonListFilter,
   createSortType,
   getSortArgs,
+  getSearchOrderBy,
   pagingArgs,
   moreLikeThisInput,
   buildKnnQuery,
@@ -30,7 +31,9 @@ export default {
           description:
             'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
             'to also retrieve the nearest neighbors via kNN, in addition to what BM25 matches. ' +
-            'Omit for BM25-only (default).',
+            'Omit for BM25-only (default). ' +
+            '`totalCount` then also counts the nearest neighbors (up to 100 per query vector), ' +
+            'so it no longer tells how many match the keywords.',
         },
         type: {
           type: ReplyTypeEnum,
@@ -46,6 +49,8 @@ export default {
     },
     orderBy: {
       type: createSortType('ListReplyOrderBy', ['_score', 'createdAt']),
+      description:
+        'Defaults to `_score` descending when `filter.moreLikeThis` is given.',
     },
     ...pagingArgs,
   },
@@ -55,7 +60,7 @@ export default {
     { userId, appId, loaders, user }
   ) {
     const body = {
-      sort: getSortArgs(orderBy),
+      sort: getSortArgs(getSearchOrderBy(orderBy, !!filter.moreLikeThis)),
       track_scores: true, // for _score sorting
     };
 
@@ -205,6 +210,7 @@ export default {
           // side finds it; as a filter it would drop the replies that have no
           // embedding yet. Scores add up: the kNN score is at most 1 while BM25
           // is unbounded, so replies only kNN finds come after the BM25 matches.
+          // Keep minimumShouldMatch strict for that reason (see ListArticles).
           body.query.bool.should.push(
             buildKnnQuery({ queryVectors, similarity: filter.embedding })
           );

@@ -1757,6 +1757,29 @@ describe('ListArticles kNN ranking', () => {
       }
     `;
 
+    it('sorts by relevance when orderBy is not given', async () => {
+      const { data: sorted } = await query({ embedding: 0.8 });
+      const { data, errors } = await gql`
+        query ($embedding: Float) {
+          ListArticles(
+            filter: {
+              moreLikeThis: { like: "durian mooncake festival" }
+              embedding: $embedding
+            }
+          ) {
+            edges {
+              score
+              node {
+                id
+              }
+            }
+          }
+        }
+      `({ embedding: 0.8 });
+      expect(errors).toBeUndefined();
+      expect(data).toEqual(sorted);
+    });
+
     it('returns what either BM25 or kNN finds, ranked by BM25', async () => {
       const { data, errors } = await query({ embedding: 0.8 });
       expect(errors).toBeUndefined();
