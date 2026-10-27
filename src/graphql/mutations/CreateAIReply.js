@@ -68,7 +68,7 @@ export async function createNewAIReply({
   const createdMonth = monthFormatter.format(new Date(article.createdAt));
 
   const completionRequest = {
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-5.6-terra',
     messages: [
       {
         role: 'system',
