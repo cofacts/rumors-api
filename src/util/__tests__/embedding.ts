@@ -184,7 +184,7 @@ describe('createEmbedding', () => {
     expect(callArg.model).toBe('gemini-embedding-2');
     // The task goes in a text prefix; the write path embeds a document.
     expect(callArg.contents[0].parts[0]).toEqual({
-      text: 'title: none | text: hello world',
+      text: 'task: sentence similarity | query: hello world',
     });
 
     // gemini-embedding-2 is global-only; a regional endpoint 404s.
@@ -221,11 +221,11 @@ describe('createEmbedding', () => {
     expect(hits[0]._source?.status).toBe('SUCCESS');
     expect(hits[0]._source?.embeddings).toEqual([{ vector: [0.7, 0.8, 0.9] }]);
     expect(hits[0]._source?.request).toBe(
-      'gemini-embedding-2/768/task-prefix-v1'
+      'gemini-embedding-2/768/similarity-prefix-v1'
     );
   });
 
-  it('prefixes a search query with the query task', async () => {
+  it('prefixes a search query with the same task as documents', async () => {
     mockEmbedContent.mockResolvedValue({
       embeddings: [{ values: [0.1, 0.1] }],
     });
@@ -241,8 +241,38 @@ describe('createEmbedding', () => {
       contents: { parts: { text: string }[] }[];
     };
     expect(params.contents[0].parts[0]).toEqual({
-      text: 'task: search result | query: hello world',
+      text: 'task: sentence similarity | query: hello world',
     });
+  });
+
+  it('versions query and document text apart', async () => {
+    expect(getEmbeddingVersion('text', 'query')).not.toBe(
+      getEmbeddingVersion('text', 'document')
+    );
+    expect(getEmbeddingVersion('text')).toBe(
+      getEmbeddingVersion('text', 'document')
+    );
+
+    // A vector made as a document is not served as a query, and vice versa.
+    await loadFixtures({
+      '/airesponses/doc/role-doc': {
+        type: 'EMBEDDING',
+        docId: 'role-doc',
+        status: 'SUCCESS',
+        userId: 'foo',
+        appId: 'WEBSITE',
+        createdAt: '2026-01-01T00:00:00.000Z',
+        request: getEmbeddingVersion('text', 'document'),
+        embeddings: [{ vector: [0.1, 0.2, 0.3] }],
+      },
+    });
+    const queryInfo = { id: 'role-doc', type: 'text' } as const;
+    expect(await getCachedEmbedding(queryInfo)).toEqual([
+      { vector: [0.1, 0.2, 0.3] },
+    ]);
+    expect(await getCachedEmbedding(queryInfo, { role: 'query' })).toBeNull();
+
+    await unloadFixtures({ '/airesponses/doc/role-doc': {} });
   });
 
   it('embeds a gs:// media part as a single capped vector', async () => {

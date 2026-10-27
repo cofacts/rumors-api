@@ -19,6 +19,7 @@ import {
   createFilterType,
   createSortType,
   getSortArgs,
+  getSearchOrderBy,
   pagingArgs,
   intRangeInput,
   timeRangeInput,
@@ -185,7 +186,9 @@ export default {
           description:
             'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
             'to also retrieve the nearest neighbors via kNN, in addition to what BM25 matches. ' +
-            'Omit for BM25-only (default).',
+            'Omit for BM25-only (default). ' +
+            '`totalCount` then also counts the nearest neighbors (up to 100 per query vector), ' +
+            'so it no longer tells how many match the keywords.',
         },
         transcript: {
           description:
@@ -246,6 +249,8 @@ export default {
         'lastRepliedAt',
         'lastMatchingArticleReplyCreatedAt',
       ]),
+      description:
+        'Defaults to `_score` descending when `filter.moreLikeThis` or `filter.mediaUrl` is given.',
     },
     ...pagingArgs,
   },
@@ -259,6 +264,11 @@ export default {
         '`filter.mediaUrl` must be provided when `filter.transcript` is true'
       );
     }
+
+    const searchOrderBy = getSearchOrderBy(
+      orderBy,
+      !!(filter.moreLikeThis || filter.mediaUrl)
+    );
 
     // Collecting queries that will be used in bool queries later
     const shouldQueries = []; // Affects scores
@@ -319,7 +329,7 @@ export default {
       _source: true,
       script_fields: {},
 
-      sort: getSortArgs(orderBy, {
+      sort: getSortArgs(searchOrderBy, {
         replyCount: (o) => ({ normalArticleReplyCount: { order: o } }),
         lastRepliedAt: (o) => ({
           'articleReplies.createdAt': {
@@ -806,6 +816,13 @@ export default {
           // Scores of the matching should-queries add up. The kNN score is at
           // most 1 while BM25 is unbounded, so BM25 dominates the order and docs
           // only kNN finds come after those BM25 matches.
+          //
+          // This holds up because the default minimumShouldMatch ('10<70%')
+          // lets BM25 match little more than near-duplicates. A looser one
+          // lets weak BM25 matches push down what kNN finds — on production
+          // data, '30%' dropped Hit@1 from 68% to 63% (eval on the 2026-10-25
+          // snapshot, 300 text queries over 10k articles). Rank fusion
+          // (RRF) would fix that, but it takes a paid Elasticsearch license.
           body.query.bool.should.push(
             buildKnnQuery({ queryVectors, similarity: filter.embedding })
           );

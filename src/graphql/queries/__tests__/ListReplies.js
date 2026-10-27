@@ -71,6 +71,30 @@ describe('ListReplies', () => {
     ).toMatchSnapshot();
   });
 
+  it('sorts by relevance when moreLikeThis is given without orderBy', async () => {
+    const query = (orderBy) =>
+      gql`
+        query ($orderBy: [ListReplyOrderBy]) {
+          ListReplies(
+            filter: { moreLikeThis: { like: "foo", minimumShouldMatch: "5%" } }
+            orderBy: $orderBy
+          ) {
+            edges {
+              score
+              node {
+                id
+              }
+            }
+          }
+        }
+      `({ orderBy });
+
+    const { data, errors } = await query(undefined);
+    expect(errors).toBeUndefined();
+    expect(data.ListReplies.edges.length).toBeGreaterThan(1);
+    expect(data).toEqual((await query([{ _score: 'DESC' }])).data);
+  });
+
   it('filters', async () => {
     expect(
       await gql`

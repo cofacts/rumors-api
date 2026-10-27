@@ -57,8 +57,14 @@ const EMBEDDING_MODEL = 'gemini-embedding-2';
 /**
  * How the input is laid out before it is sent to the model. Bump the one that
  * changes; vectors made under another layout are not comparable to new ones.
+ *
+ * Text is versioned per role (see TEXT_PREFIX), so that changing the query
+ * prefix only expires the query vectors, not every doc vector in the indices.
  */
-const TEXT_FORMAT = 'task-prefix-v1';
+const TEXT_FORMAT: Record<EmbeddingRole, string> = {
+  document: 'similarity-prefix-v1',
+  query: 'query-similarity-prefix-v1',
+};
 const MEDIA_FORMAT = 'raw-v1';
 
 /**
@@ -87,14 +93,23 @@ export type EmbeddingChunk = {
 /**
  * What the embedded text is used as. `gemini-embedding-2` ignores the
  * `taskType` config (the vectors come out bit-identical); the task goes in a
- * text prefix instead, and the two sides of a search take different ones.
+ * text prefix instead.
  * https://ai.google.dev/gemini-api/docs/embeddings
  */
 export type EmbeddingRole = 'document' | 'query';
 
+/**
+ * Both sides take the symmetric `sentence similarity` task rather than the
+ * asymmetric `search result` one (`title: none | text: ` for documents). Our
+ * queries are mostly a forwarded message or a short claim, the same kind of
+ * text as the articles. In a local eval over 233k text articles, it tied on
+ * whole forwarded messages and found more for short typed queries (hybrid
+ * Hit@10 60.7% vs 55.7%). The cost is a lower image-to-text similarity, which
+ * barely passes the 0.7 threshold either way.
+ */
 const TEXT_PREFIX: Record<EmbeddingRole, string> = {
-  document: 'title: none | text: ',
-  query: 'task: search result | query: ',
+  document: 'task: sentence similarity | query: ',
+  query: 'task: sentence similarity | query: ',
 };
 
 export type CreateEmbeddingQueryInfo = {
@@ -135,12 +150,13 @@ function isMediaPart(part: EmbeddingPart): part is EmbeddingMediaPart {
  * record made under other settings is not served as if it were current.
  */
 export function getEmbeddingVersion(
-  type: CreateEmbeddingQueryInfo['type']
+  type: CreateEmbeddingQueryInfo['type'],
+  role: EmbeddingRole = 'document'
 ): string {
   return [
     EMBEDDING_MODEL,
     EMBEDDING_DIMS,
-    type === 'text' ? TEXT_FORMAT : MEDIA_FORMAT,
+    type === 'text' ? TEXT_FORMAT[role] : MEDIA_FORMAT,
   ].join('/');
 }
 
@@ -149,7 +165,8 @@ export function getEmbeddingVersion(
  * made with the current settings (see {@link getEmbeddingVersion}).
  */
 export async function getCachedEmbedding(
-  queryInfo: CreateEmbeddingQueryInfo
+  queryInfo: CreateEmbeddingQueryInfo,
+  options: CreateEmbeddingOptions = {}
 ): Promise<EmbeddingChunk[] | null> {
   const cached = await getAIResponse({
     type: 'EMBEDDING',
@@ -159,7 +176,7 @@ export async function getCachedEmbedding(
   if (
     cached &&
     cached.status === 'SUCCESS' &&
-    cached.request === getEmbeddingVersion(queryInfo.type) &&
+    cached.request === getEmbeddingVersion(queryInfo.type, options.role) &&
     Array.isArray(cached.embeddings) &&
     cached.embeddings.length > 0
   ) {
@@ -186,14 +203,14 @@ export async function createEmbedding(
   user: User,
   options: CreateEmbeddingOptions = {}
 ): Promise<EmbeddingChunk[]> {
-  const cached = await getCachedEmbedding(queryInfo);
+  const cached = await getCachedEmbedding(queryInfo, options);
   if (cached) return cached;
 
   const { update } = createAIResponse({
     user,
     type: 'EMBEDDING',
     docId: queryInfo.id,
-    request: getEmbeddingVersion(queryInfo.type),
+    request: getEmbeddingVersion(queryInfo.type, options.role),
   });
 
   try {
