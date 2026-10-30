@@ -68,7 +68,7 @@ export async function createNewAIReply({
   const createdMonth = monthFormatter.format(new Date(article.createdAt));
 
   const completionRequest = {
-    model: 'gpt-5.6-terra',
+    model: 'gpt-6.1-terra',
     messages: [
       {
         role: 'system',
@@ -85,7 +85,6 @@ export async function createNewAIReply({
       },
     ],
     user: user.id,
-    temperature: 0,
     ...completionOptions,
   };
 
