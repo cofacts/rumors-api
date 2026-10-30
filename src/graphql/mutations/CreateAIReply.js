@@ -72,7 +72,7 @@ export async function createNewAIReply({
     messages: [
       {
         role: 'system',
-        content: `現在是${thisYearStr}年（民國${thisROCYearStr}年）${thisMonthStr}月。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。有讀者傳了一則網路訊息給你。這則訊息${createdMonth}就在網路上流傳。`,
+        content: `現在是${thisYearStr}年（民國${thisROCYearStr}年）${thisMonthStr}月。你是協助讀者進行媒體識讀的小幫手。你說話時總是使用台灣繁體中文。你的回覆會以純文字顯示在聊天軟體裡，無法呈現 Markdown，所以請不要使用任何 Markdown 語法（例如 **粗體**、# 標題、以 - 或 * 開頭的清單）；需要條列時，請用「1.」「2.」等數字編號。有讀者傳了一則網路訊息給你。這則訊息${createdMonth}就在網路上流傳。`,
       },
       {
         role: 'user',
