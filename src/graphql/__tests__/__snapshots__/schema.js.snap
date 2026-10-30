@@ -1,0 +1,1755 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GraphQL schema matches the snapshot 1`] = `
+"\\"\\"\\"
+AI generated embedding vectors for the specified docId, used as cache for hybrid search. The vector data itself is not exposed via GraphQL — only the cache metadata is queryable.
+\\"\\"\\"
+type AIEmbedding implements Node & AIResponse {
+  id: ID!
+
+  \\"\\"\\"The id for the document that this AI response is for.\\"\\"\\"
+  docId: ID
+
+  \\"\\"\\"AI response type\\"\\"\\"
+  type: AIResponseTypeEnum!
+
+  \\"\\"\\"The user triggered this AI response\\"\\"\\"
+  user: User
+
+  \\"\\"\\"Processing status of AI\\"\\"\\"
+  status: AIResponseStatusEnum!
+
+  \\"\\"\\"AI response text. Populated after status becomes SUCCESS.\\"\\"\\"
+  text: String
+  createdAt: String!
+  updatedAt: String
+}
+
+\\"\\"\\"Basic entity. Modeled after Relay's GraphQL Server Specification.\\"\\"\\"
+interface Node {
+  id: ID!
+}
+
+\\"\\"\\"Denotes an AI processed response and its processing status.\\"\\"\\"
+interface AIResponse implements Node {
+  id: ID!
+
+  \\"\\"\\"The id for the document that this AI response is for.\\"\\"\\"
+  docId: ID
+
+  \\"\\"\\"AI response type\\"\\"\\"
+  type: AIResponseTypeEnum!
+
+  \\"\\"\\"The user triggered this AI response\\"\\"\\"
+  user: User
+
+  \\"\\"\\"Processing status of AI\\"\\"\\"
+  status: AIResponseStatusEnum!
+
+  \\"\\"\\"AI response text. Populated after status becomes SUCCESS.\\"\\"\\"
+  text: String
+  createdAt: String!
+  updatedAt: String
+}
+
+enum AIResponseTypeEnum {
+  \\"\\"\\"The AI Response is an automated analysis / reply of an article.\\"\\"\\"
+  AI_REPLY
+
+  \\"\\"\\"AI transcribed text of the specified article.\\"\\"\\"
+  TRANSCRIPT
+
+  \\"\\"\\"
+  AI generated embedding vectors of the specified article, reply, or search query. Used as cache for hybrid search.
+  \\"\\"\\"
+  EMBEDDING
+}
+
+type User implements Node {
+  id: ID!
+  slug: String
+
+  \\"\\"\\"Returns only for current user. Returns \`null\` otherwise.\\"\\"\\"
+  email: String
+  name: String
+  bio: String
+
+  \\"\\"\\"returns avatar url from facebook, github or gravatar\\"\\"\\"
+  avatarUrl: String
+
+  \\"\\"\\"
+  return avatar data as JSON string, currently only used when avatarType is OpenPeeps
+  \\"\\"\\"
+  avatarData: String
+  avatarType: AvatarTypeEnum
+
+  \\"\\"\\"Returns only for current user. Returns \`null\` otherwise.\\"\\"\\"
+  availableAvatarTypes: [String]
+  appId: String
+
+  \\"\\"\\"Returns only for current user. Returns \`null\` otherwise.\\"\\"\\"
+  appUserId: String
+
+  \\"\\"\\"Returns only for current user. Returns \`null\` otherwise.\\"\\"\\"
+  facebookId: String
+
+  \\"\\"\\"Returns only for current user. Returns \`null\` otherwise.\\"\\"\\"
+  githubId: String
+
+  \\"\\"\\"Returns only for current user. Returns \`null\` otherwise.\\"\\"\\"
+  twitterId: String
+
+  \\"\\"\\"Number of articles this user has replied to\\"\\"\\"
+  repliedArticleCount: Int!
+
+  \\"\\"\\"Number of article replies this user has given feedbacks\\"\\"\\"
+  votedArticleReplyCount: Int!
+  level: Int!
+  points: PointInfo!
+  createdAt: String
+  updatedAt: String
+  lastActiveAt: String
+
+  \\"\\"\\"List of contributions made by the user\\"\\"\\"
+  contributions(
+    \\"\\"\\"List only the contributions between the specific time range.\\"\\"\\"
+    dateRange: TimeRangeInput
+  ): [Contribution]
+
+  \\"\\"\\"If not null, the user is blocked with the announcement in this string.\\"\\"\\"
+  blockedReason: String
+
+  \\"\\"\\"Badges awarded to the user.\\"\\"\\"
+  badges: [UserAwardedBadge!]!
+
+  \\"\\"\\"returns badge background image url\\"\\"\\"
+  majorBadgeBorderUrl: String
+
+  \\"\\"\\"returns badge icon url\\"\\"\\"
+  majorBadgeId: String
+
+  \\"\\"\\"returns badge icon url\\"\\"\\"
+  majorBadgeImageUrl: String
+
+  \\"\\"\\"returns badge name\\"\\"\\"
+  majorBadgeName: String
+}
+
+enum AvatarTypeEnum {
+  OpenPeeps
+  Gravatar
+  Facebook
+  Github
+}
+
+\\"\\"\\"Information of a user's point. Only available for current user.\\"\\"\\"
+type PointInfo {
+  \\"\\"\\"Points earned by the current user\\"\\"\\"
+  total: Int!
+
+  \\"\\"\\"Points required for current level\\"\\"\\"
+  currentLevel: Int!
+
+  \\"\\"\\"Points required for next level. null when there is no next level.\\"\\"\\"
+  nextLevel: Int!
+}
+
+type Contribution {
+  date: String
+  count: Int
+}
+
+\\"\\"\\"
+List only the entries that were created between the specific time range. The time range value is in elasticsearch date format (https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html)
+\\"\\"\\"
+input TimeRangeInput {
+  LT: String
+  LTE: String
+  GT: String
+  GTE: String
+  EQ: String
+}
+
+type UserAwardedBadge {
+  badgeId: String!
+  badgeMetaData: String!
+  isDisplayed: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum AIResponseStatusEnum {
+  LOADING
+  SUCCESS
+  ERROR
+}
+
+type Query {
+  GetArticle(id: String): Article
+  GetReply(id: String): Reply
+
+  \\"\\"\\"
+  
+      Gets specified user. If id is not given, returns the currently logged-in user.
+      Note that some fields like email is not visible to other users.
+    
+  \\"\\"\\"
+  GetUser(id: String, slug: String): User
+  GetCategory(id: String): Category
+  GetYdoc(id: String!): Ydoc
+  GetBadge(id: String): Badge
+  ListArticles(
+    filter: ListArticleFilter
+    orderBy: [ListArticleOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): ArticleConnection
+  ListReplies(
+    filter: ListReplyFilter
+    orderBy: [ListReplyOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): ReplyConnection
+  ListCategories(
+    orderBy: [ListCategoryOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): ListCategoryConnection
+  ListArticleReplyFeedbacks(
+    filter: ListArticleReplyFeedbackFilter
+    orderBy: [ListArticleReplyFeedbackOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): ListArticleReplyFeedbackConnection
+  ListReplyRequests(
+    filter: ListReplyRequestFilter
+    orderBy: [ListReplyRequestOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): ListReplyRequestConnection
+  ListBlockedUsers(
+    filter: ListBlockedUsersFilter
+    orderBy: [ListBlockedUsersOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): UserConnection!
+  ListAnalytics(
+    filter: ListAnalyticsFilter
+    orderBy: [ListAnalyticsOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): AnalyticsConnection!
+  ListAIResponses(
+    filter: ListAIResponsesFilter
+    orderBy: [ListAIResponsesOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): AIResponseConnection!
+  ListCooccurrences(
+    filter: ListCooccurrenceFilter
+    orderBy: [ListCooccurrenceOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): ListCooccurrenceConnection
+  ValidateSlug(slug: String!): ValidationResult
+}
+
+type Article implements Node {
+  id: ID!
+  text: String
+
+  \\"\\"\\"May be null for legacy articles\\"\\"\\"
+  createdAt: String
+  updatedAt: String
+  status: ReplyRequestStatusEnum!
+  references: [ArticleReference]
+
+  \\"\\"\\"Number of normal article replies\\"\\"\\"
+  replyCount: Int!
+
+  \\"\\"\\"
+  Connections between this article and replies. Sorted by the logic described in https://github.com/cofacts/rumors-line-bot/issues/78.
+  \\"\\"\\"
+  articleReplies(
+    \\"\\"\\"
+    Deprecated. Please use statuses instead. When specified, returns only article replies with the specified status
+    \\"\\"\\"
+    status: ArticleReplyStatusEnum
+
+    \\"\\"\\"Returns only article replies with the specified statuses\\"\\"\\"
+    statuses: [ArticleReplyStatusEnum!] = [NORMAL]
+
+    \\"\\"\\"Show only articleReplies created by a specific app.\\"\\"\\"
+    appId: String
+
+    \\"\\"\\"Show only articleReplies created by the specific user.\\"\\"\\"
+    userId: String
+
+    \\"\\"\\"Show only articleReplies created by the specified users.\\"\\"\\"
+    userIds: [String!]
+
+    \\"\\"\\"Only list the articleReplies created by the currently logged in user\\"\\"\\"
+    selfOnly: Boolean
+  ): [ArticleReply!]!
+
+  \\"\\"\\"
+  Automated reply from AI before human fact checkers compose an fact check
+  \\"\\"\\"
+  aiReplies: [AIReply!]!
+
+  \\"\\"\\"Automated transcript\\"\\"\\"
+  aiTranscripts: [AITranscript!]!
+  articleCategories(
+    \\"\\"\\"
+    Deprecated. Please use statuses instead. When specified, returns only article categories with the specified status
+    \\"\\"\\"
+    status: ArticleCategoryStatusEnum
+
+    \\"\\"\\"Returns only article categories with the specified statuses\\"\\"\\"
+    statuses: [ArticleCategoryStatusEnum!] = [NORMAL]
+  ): [ArticleCategory!]!
+
+  \\"\\"\\"Number of normal article categories\\"\\"\\"
+  categoryCount: Int!
+  replyRequests(
+    \\"\\"\\"Returns only article replies with the specified statuses\\"\\"\\"
+    statuses: [ReplyRequestStatusEnum!] = [NORMAL]
+  ): [ReplyRequest]
+  replyRequestCount: Int
+  lastRequestedAt: String
+
+  \\"\\"\\"
+  If the current user has requested for reply for this article. Null if not logged in.
+  \\"\\"\\"
+  requestedForReply: Boolean
+
+  \\"\\"\\"The user submitted this article\\"\\"\\"
+  user: User
+  relatedArticles(
+    filter: RelatedArticleFilter
+    orderBy: [RelatedArticleOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): ArticleConnection!
+
+  \\"\\"\\"Hyperlinks in article text\\"\\"\\"
+  hyperlinks: [Hyperlink]
+
+  \\"\\"\\"Activities analytics for the given article\\"\\"\\"
+  stats(
+    \\"\\"\\"List only the activities between the specific time range.\\"\\"\\"
+    dateRange: TimeRangeInput
+  ): [Analytics]
+
+  \\"\\"\\"Message event type\\"\\"\\"
+  articleType: ArticleTypeEnum!
+
+  \\"\\"\\"Attachment URL for this article.\\"\\"\\"
+  attachmentUrl(variant: AttachmentVariantEnum): String
+
+  \\"\\"\\"Attachment hash to search or identify files\\"\\"\\"
+  attachmentHash: String
+  cooccurrences: [Cooccurrence!]
+
+  \\"\\"\\"Transcript contributors of the article\\"\\"\\"
+  contributors: [Contributor!]!
+
+  \\"\\"\\"Time when the article was last transcribed\\"\\"\\"
+  transcribedAt: String
+}
+
+enum ReplyRequestStatusEnum {
+  NORMAL
+
+  \\"\\"\\"Created by a blocked user violating terms of use.\\"\\"\\"
+  BLOCKED
+}
+
+type ArticleReference {
+  createdAt: String!
+  type: ArticleReferenceTypeEnum!
+  permalink: String
+}
+
+\\"\\"\\"Where this article is collected from.\\"\\"\\"
+enum ArticleReferenceTypeEnum {
+  \\"\\"\\"
+  The article is collected from the Internet, with a link to the article available.
+  \\"\\"\\"
+  URL
+
+  \\"\\"\\"The article is collected from conversations in LINE messengers.\\"\\"\\"
+  LINE
+}
+
+\\"\\"\\"The linkage between an Article and a Reply\\"\\"\\"
+type ArticleReply {
+  replyId: String!
+  reply: Reply
+
+  \\"\\"\\"Cached reply type value stored in ArticleReply\\"\\"\\"
+  replyType: ReplyTypeEnum
+  articleId: String!
+  article: Article
+
+  \\"\\"\\"The user who conencted this reply and this article.\\"\\"\\"
+  user: User
+  userId: String!
+  appId: String!
+  canUpdateStatus: Boolean!
+  feedbackCount: Int!
+  positiveFeedbackCount: Int!
+  negativeFeedbackCount: Int!
+  feedbacks(
+    \\"\\"\\"Returns only aricle reply feedbacks with the specified statuses\\"\\"\\"
+    statuses: [ArticleReplyFeedbackStatusEnum!] = [NORMAL]
+  ): [ArticleReplyFeedback!]!
+
+  \\"\\"\\"
+  The feedback of current user. null when not logged in or not voted yet.
+  \\"\\"\\"
+  ownVote: FeedbackVote
+  status: ArticleReplyStatusEnum!
+
+  \\"\\"\\"May be null for legacy article-replies\\"\\"\\"
+  createdAt: String
+  updatedAt: String
+}
+
+type Reply implements Node {
+  id: ID!
+
+  \\"\\"\\"The user submitted this reply version\\"\\"\\"
+  user: User
+
+  \\"\\"\\"May be null for legacy replies\\"\\"\\"
+  createdAt: String
+  text: String
+  type: ReplyTypeEnum!
+
+  \\"\\"\\"
+  The status of this reply, calculated from its author and article replies.
+  \\"\\"\\"
+  status: ArticleReplyStatusEnum!
+  reference: String
+  articleReplies(
+    \\"\\"\\"Deprecated. Please use statuses instead.\\"\\"\\"
+    status: ArticleReplyStatusEnum
+
+    \\"\\"\\"Returns only article replies with the specified statuses\\"\\"\\"
+    statuses: [ArticleReplyStatusEnum!] = [NORMAL]
+  ): [ArticleReply!]!
+
+  \\"\\"\\"
+  Hyperlinks in reply text or reference. May be empty array if no URLs are included. \`null\` when hyperlinks are still fetching.
+  \\"\\"\\"
+  hyperlinks: [Hyperlink]
+
+  \\"\\"\\"Replies that has similar text or references of this current reply\\"\\"\\"
+  similarReplies(
+    orderBy: [SimilarReplyOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): ReplyConnection!
+}
+
+\\"\\"\\"Reflects how the replier categories the replied article.\\"\\"\\"
+enum ReplyTypeEnum {
+  \\"\\"\\"The replier thinks that the article contains false information.\\"\\"\\"
+  RUMOR
+
+  \\"\\"\\"The replier thinks that the articles contains no false information.\\"\\"\\"
+  NOT_RUMOR
+
+  \\"\\"\\"
+  The replier thinks that the article is actually not a complete article on the internet or passed around in messengers.
+  \\"\\"\\"
+  NOT_ARTICLE
+
+  \\"\\"\\"
+  The replier thinks that the article contains personal viewpoint and is not objective.
+  \\"\\"\\"
+  OPINIONATED
+}
+
+enum ArticleReplyStatusEnum {
+  NORMAL
+  DELETED
+
+  \\"\\"\\"Created by a blocked user violating terms of use.\\"\\"\\"
+  BLOCKED
+}
+
+\\"\\"\\"Data behind a hyperlink\\"\\"\\"
+type Hyperlink {
+  \\"\\"\\"URL in text\\"\\"\\"
+  url: String
+
+  \\"\\"\\"URL normalized by scrapUrl\\"\\"\\"
+  normalizedUrl: String
+  title: String
+  summary: String
+  topImageUrl: String
+  fetchedAt: String
+  status: String
+  error: String
+}
+
+type ReplyConnection implements Connection {
+  \\"\\"\\"
+  The total count of the entire collection, regardless of \\"before\\", \\"after\\".
+  \\"\\"\\"
+  totalCount: Int!
+  edges: [ReplyConnectionEdge!]!
+  pageInfo: ReplyConnectionPageInfo!
+}
+
+\\"\\"\\"
+Connection model for a list of nodes. Modeled after Relay's GraphQL Server Specification.
+\\"\\"\\"
+interface Connection {
+  edges: [Edge!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+\\"\\"\\"Edge in Connection. Modeled after GraphQL connection model.\\"\\"\\"
+interface Edge {
+  node: Node!
+  cursor: String!
+}
+
+\\"\\"\\"PageInfo in Connection. Modeled after GraphQL connection model.\\"\\"\\"
+interface PageInfo {
+  \\"\\"\\"
+  The cursor pointing to the first node of the entire collection, regardless of \\"before\\" and \\"after\\". Can be used to determine if is in the last page. Null when the collection is empty.
+  \\"\\"\\"
+  firstCursor: String
+
+  \\"\\"\\"
+  The cursor pointing to the last node of the entire collection, regardless of \\"before\\" and \\"after\\". Can be used to determine if is in the last page. Null when the collection is empty.
+  \\"\\"\\"
+  lastCursor: String
+}
+
+type ReplyConnectionEdge implements Edge {
+  node: Reply!
+  cursor: String!
+  score: Float
+  highlight: Highlights
+}
+
+type Highlights {
+  \\"\\"\\"Article or Reply text\\"\\"\\"
+  text: String
+
+  \\"\\"\\"Reply reference\\"\\"\\"
+  reference: String
+
+  \\"\\"\\"Article or Reply hyperlinks\\"\\"\\"
+  hyperlinks: [Hyperlink]
+}
+
+type ReplyConnectionPageInfo implements PageInfo {
+  lastCursor: String
+  firstCursor: String
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input SimilarReplyOrderBy {
+  _score: SortOrderEnum
+  createdAt: SortOrderEnum
+}
+
+enum SortOrderEnum {
+  ASC
+  DESC
+}
+
+\\"\\"\\"User feedback to an ArticleReply\\"\\"\\"
+type ArticleReplyFeedback implements Node {
+  id: ID!
+  user: User
+  userId: String
+  appId: String
+
+  \\"\\"\\"User ID of the reply's author\\"\\"\\"
+  replyUserId: String!
+
+  \\"\\"\\"User ID of the article-reply's author\\"\\"\\"
+  articleReplyUserId: String!
+  comment: String
+  createdAt: String
+  updatedAt: String
+  status: ArticleReplyFeedbackStatusEnum!
+
+  \\"\\"\\"User's vote on the articleReply\\"\\"\\"
+  vote: FeedbackVote
+
+  \\"\\"\\"
+  One of 1, 0 and -1. Representing upvote, neutral and downvote, respectively
+  \\"\\"\\"
+  score: Int @deprecated(reason: \\"Use vote instead\\")
+
+  \\"\\"\\"The scored article-reply's article\\"\\"\\"
+  article: Article
+
+  \\"\\"\\"The scored article-reply's reply\\"\\"\\"
+  reply: Reply
+
+  \\"\\"\\"The scored article-reply\\"\\"\\"
+  articleReply: ArticleReply
+}
+
+enum ArticleReplyFeedbackStatusEnum {
+  NORMAL
+
+  \\"\\"\\"Created by a blocked user violating terms of use.\\"\\"\\"
+  BLOCKED
+}
+
+enum FeedbackVote {
+  UPVOTE
+  NEUTRAL
+  DOWNVOTE
+}
+
+\\"\\"\\"A ChatGPT reply for an article with no human fact-checks yet\\"\\"\\"
+type AIReply implements Node & AIResponse {
+  id: ID!
+
+  \\"\\"\\"The id for the document that this AI response is for.\\"\\"\\"
+  docId: ID
+
+  \\"\\"\\"AI response type\\"\\"\\"
+  type: AIResponseTypeEnum!
+
+  \\"\\"\\"The user triggered this AI response\\"\\"\\"
+  user: User
+
+  \\"\\"\\"Processing status of AI\\"\\"\\"
+  status: AIResponseStatusEnum!
+
+  \\"\\"\\"AI response text. Populated after status becomes SUCCESS.\\"\\"\\"
+  text: String
+  createdAt: String!
+  updatedAt: String
+
+  \\"\\"\\"
+  The usage returned from OpenAI. Populated after status becomes SUCCESS.
+  \\"\\"\\"
+  usage: OpenAICompletionUsage
+}
+
+type OpenAICompletionUsage {
+  promptTokens: Int!
+  completionTokens: Int!
+  totalTokens: Int!
+}
+
+\\"\\"\\"
+Transcript from OCR or speech-to-text AI models for the specified MediaEntry ID as docId.
+\\"\\"\\"
+type AITranscript implements Node & AIResponse {
+  id: ID!
+
+  \\"\\"\\"The id for the document that this AI response is for.\\"\\"\\"
+  docId: ID
+
+  \\"\\"\\"AI response type\\"\\"\\"
+  type: AIResponseTypeEnum!
+
+  \\"\\"\\"The user triggered this AI response\\"\\"\\"
+  user: User
+
+  \\"\\"\\"Processing status of AI\\"\\"\\"
+  status: AIResponseStatusEnum!
+
+  \\"\\"\\"AI response text. Populated after status becomes SUCCESS.\\"\\"\\"
+  text: String
+  createdAt: String!
+  updatedAt: String
+}
+
+\\"\\"\\"The linkage between an Article and a Category\\"\\"\\"
+type ArticleCategory implements Node {
+  id: ID!
+  categoryId: String
+  category: Category
+  articleId: String
+  article: Article
+
+  \\"\\"\\"The user who updated this category with this article.\\"\\"\\"
+  user: User
+  userId: String!
+  appId: String!
+  canUpdateStatus: Boolean
+  feedbackCount: Int
+  positiveFeedbackCount: Int
+  negativeFeedbackCount: Int
+  feedbacks: [ArticleCategoryFeedback]
+
+  \\"\\"\\"
+  The feedback of current user. null when not logged in or not voted yet.
+  \\"\\"\\"
+  ownVote: FeedbackVote
+  status: ArticleCategoryStatusEnum
+  aiModel: String
+  aiConfidence: Float
+  createdAt: String
+  updatedAt: String
+}
+
+\\"\\"\\"Category label for specific topic\\"\\"\\"
+type Category implements Node {
+  id: ID!
+  title: String
+  description: String
+  createdAt: String
+  updatedAt: String
+  articleCategories(
+    \\"\\"\\"
+    When specified, returns only article categories with the specified status
+    \\"\\"\\"
+    status: ArticleCategoryStatusEnum
+    orderBy: [CategoryArticleCategoriesOrderBy]
+
+    \\"\\"\\"Returns only first <first> results\\"\\"\\"
+    first: Int = 10
+
+    \\"\\"\\"
+    Specify a cursor, returns results after this cursor. cannot be used with \\"before\\".
+    \\"\\"\\"
+    after: String
+
+    \\"\\"\\"
+    Specify a cursor, returns results before this cursor. cannot be used with \\"after\\".
+    \\"\\"\\"
+    before: String
+  ): ArticleCategoryConnection
+}
+
+type ArticleCategoryConnection implements Connection {
+  \\"\\"\\"
+  The total count of the entire collection, regardless of \\"before\\", \\"after\\".
+  \\"\\"\\"
+  totalCount: Int!
+  edges: [ArticleCategoryConnectionEdge!]!
+  pageInfo: ArticleCategoryConnectionPageInfo!
+}
+
+type ArticleCategoryConnectionEdge implements Edge {
+  node: ArticleCategory!
+  cursor: String!
+  score: Float
+  highlight: Highlights
+}
+
+type ArticleCategoryConnectionPageInfo implements PageInfo {
+  lastCursor: String
+  firstCursor: String
+}
+
+enum ArticleCategoryStatusEnum {
+  NORMAL
+  DELETED
+
+  \\"\\"\\"Created by a blocked user violating terms of use.\\"\\"\\"
+  BLOCKED
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input CategoryArticleCategoriesOrderBy {
+  createdAt: SortOrderEnum
+}
+
+\\"\\"\\"User feedback to an ArticleCategory\\"\\"\\"
+type ArticleCategoryFeedback {
+  id: String
+  user: User
+  comment: String
+
+  \\"\\"\\"User's vote on the articleCategory\\"\\"\\"
+  vote: FeedbackVote
+  createdAt: String
+  updatedAt: String
+}
+
+type ReplyRequest implements Node {
+  id: ID!
+  articleId: ID!
+  userId: String
+  appId: String
+
+  \\"\\"\\"The author of reply request.\\"\\"\\"
+  user: User
+  reason: String
+  feedbackCount: Int
+  positiveFeedbackCount: Int
+  negativeFeedbackCount: Int
+  createdAt: String
+  updatedAt: String
+
+  \\"\\"\\"
+  The feedback of current user. null when not logged in or not voted yet.
+  \\"\\"\\"
+  ownVote: FeedbackVote
+  article: Article!
+  status: ReplyRequestStatusEnum!
+}
+
+type ArticleConnection implements Connection {
+  \\"\\"\\"
+  The total count of the entire collection, regardless of \\"before\\", \\"after\\".
+  \\"\\"\\"
+  totalCount: Int!
+  edges: [ArticleConnectionEdge!]!
+  pageInfo: ArticleConnectionPageInfo!
+}
+
+type ArticleConnectionEdge implements Edge {
+  node: Article!
+  cursor: String!
+  score: Float
+  highlight: Highlights
+
+  \\"\\"\\"
+  The search hit's similarity with provided mediaUrl.
+            Ranges from 0 to 1. 0 if mediaUrl is not provided, or the hit is not matched by mediaUrl.
+  \\"\\"\\"
+  mediaSimilarity: Float!
+}
+
+type ArticleConnectionPageInfo implements PageInfo {
+  lastCursor: String
+  firstCursor: String
+}
+
+input RelatedArticleFilter {
+  replyCount: RangeInput
+}
+
+\\"\\"\\"List only the entries whose field match the criteria.\\"\\"\\"
+input RangeInput {
+  LT: Int
+  LTE: Int
+  GT: Int
+  GTE: Int
+  EQ: Int
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input RelatedArticleOrderBy {
+  _score: SortOrderEnum
+  updatedAt: SortOrderEnum
+}
+
+type Analytics implements Node {
+  id: ID!
+
+  \\"\\"\\"The id for the document that this analytic datapoint is for.\\"\\"\\"
+  docId: ID!
+
+  \\"\\"\\"Type of document that this analytic datapoint is for.\\"\\"\\"
+  type: AnalyticsDocTypeEnum!
+
+  \\"\\"\\"The day this analytic datapoint is represented, in YYYY-MM-DD format\\"\\"\\"
+  date: String!
+  lineUser: Int
+  lineVisit: Int
+  webUser: Int
+  webVisit: Int
+
+  \\"\\"\\"Sum of LIFF visitor count from all sources\\"\\"\\"
+  liffUser: Int!
+
+  \\"\\"\\"Sum of LIFF view count from all sources\\"\\"\\"
+  liffVisit: Int!
+  liff: [AnalyticsLiffEntry!]!
+
+  \\"\\"\\"Author of the document that this analytic datapoint measures.\\"\\"\\"
+  docUserId: ID
+
+  \\"\\"\\"
+  Authoring app ID of the document that this analytic datapoint measures.
+  \\"\\"\\"
+  docAppId: ID
+}
+
+enum AnalyticsDocTypeEnum {
+  ARTICLE
+  REPLY
+}
+
+type AnalyticsLiffEntry {
+  \\"\\"\\"utm_source for this LIFF stat entry. Empty string if not set.\\"\\"\\"
+  source: String!
+  user: Int!
+  visit: Int!
+}
+
+enum ArticleTypeEnum {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+}
+
+enum AttachmentVariantEnum {
+  \\"\\"\\"The original file. Only available to logged-in users.\\"\\"\\"
+  ORIGINAL
+
+  \\"\\"\\"Downsized file. Fixed-width webp for images; other type TBD.\\"\\"\\"
+  PREVIEW
+
+  \\"\\"\\"
+  Tiny, static image representing the attachment. Fixed-height jpeg for images; other types TBD.
+  \\"\\"\\"
+  THUMBNAIL
+}
+
+type Cooccurrence implements Node {
+  id: ID!
+  userId: String!
+  appId: String!
+  articles: [Article!]!
+  articleIds: [String!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Contributor {
+  \\"\\"\\"The user who contributed to this article.\\"\\"\\"
+  user: User
+  userId: String!
+  appId: String!
+  updatedAt: String
+}
+
+type Ydoc {
+  \\"\\"\\"Binary that stores as base64 encoded string\\"\\"\\"
+  data: String
+
+  \\"\\"\\"Ydoc snapshots which are used to restore to specific version\\"\\"\\"
+  versions: [YdocVersion]
+}
+
+type YdocVersion {
+  createdAt: String
+
+  \\"\\"\\"Binary that stores as base64 encoded string\\"\\"\\"
+  snapshot: String
+}
+
+type Badge {
+  id: ID
+  name: String
+  displayName: String
+  description: String
+  link: String
+  icon: String
+  borderImage: String
+  createdAt: String
+  updatedAt: String
+  issuers: [String!]!
+}
+
+input ListArticleFilter {
+  \\"\\"\\"Show only articles created by a specific app.\\"\\"\\"
+  appId: String
+
+  \\"\\"\\"Show only articles created by the specific user.\\"\\"\\"
+  userId: String
+
+  \\"\\"\\"Show only articles created by the specified users.\\"\\"\\"
+  userIds: [String!]
+
+  \\"\\"\\"
+  List only the articles that were created between the specific time range.
+  \\"\\"\\"
+  createdAt: TimeRangeInput
+
+  \\"\\"\\"If given, only list out articles with specific IDs\\"\\"\\"
+  ids: [ID!]
+
+  \\"\\"\\"Only list the articles created by the currently logged in user\\"\\"\\"
+  selfOnly: Boolean
+
+  \\"\\"\\"List only the articles whose number of replies matches the criteria.\\"\\"\\"
+  replyCount: RangeInput
+
+  \\"\\"\\"List only the articles whose number of categories match the criteria.\\"\\"\\"
+  categoryCount: RangeInput
+
+  \\"\\"\\"
+  List only articles that match any of the specified categories.ArticleCategories that are deleted or has more negative feedbacks than positive ones are not taken into account.
+  \\"\\"\\"
+  categoryIds: [String]
+
+  \\"\\"\\"List all articles related to a given string.\\"\\"\\"
+  moreLikeThis: MoreLikeThisInput
+
+  \\"\\"\\"List only the articles whose number of replies matches the criteria.\\"\\"\\"
+  replyRequestCount: RangeInput
+
+  \\"\\"\\"
+  [Deprecated] use articleReply filter instead. List only the articles that were replied between the specific time range.
+  \\"\\"\\"
+  repliedAt: TimeRangeInput
+
+  \\"\\"\\"
+  Specify an articleId here to show only articles from the sender of that specified article.
+  \\"\\"\\"
+  fromUserOfArticleId: String
+
+  \\"\\"\\"Show only articles with(out) article replies created by specified user\\"\\"\\"
+  articleRepliesFrom: UserAndExistInput
+
+  \\"\\"\\"
+  Show only articles with(out) article transcript contributed by specified user
+  \\"\\"\\"
+  transcribedBy: UserAndExistInput
+
+  \\"\\"\\"
+  
+              When true, return only articles with any article replies that has more positive feedback than negative.
+              When false, return articles with none of its article replies that has more positive feedback, including those with no replies yet.
+              In both scenario, deleted article replies are not taken into account.
+            
+  \\"\\"\\"
+  hasArticleReplyWithMorePositiveFeedback: Boolean
+
+  \\"\\"\\"
+  [Deprecated] use articleReply filter instead. List the articles with replies of certain types
+  \\"\\"\\"
+  replyTypes: [ReplyTypeEnum]
+
+  \\"\\"\\"List the articles with certain types\\"\\"\\"
+  articleTypes: [ArticleTypeEnum]
+
+  \\"\\"\\"
+  Show the media article similar to the input url. The transcript and embedding of the media are only created when logged in; otherwise only the ones made before are used.
+  \\"\\"\\"
+  mediaUrl: String
+
+  \\"\\"\\"
+  Opt-in hybrid search. Provide the minimum cosine similarity (e.g. \`0.7\`) to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).
+  \\"\\"\\"
+  embedding: Float
+
+  \\"\\"\\"
+  Specifies how the transcript of \`mediaUrl\` can be used to search. Can only specify \`transcript\` when \`mediaUrl\` is specified.
+  \\"\\"\\"
+  transcript: TranscriptFilter
+
+  \\"\\"\\"Show articles with article replies matching this criteria\\"\\"\\"
+  articleReply: ArticleReplyFilterInput
+
+  \\"\\"\\"Returns only articles with the specified statuses\\"\\"\\"
+  statuses: [ArticleStatusEnum!] = [NORMAL]
+}
+
+\\"\\"\\"
+Parameters for Elasticsearch more_like_this query.
+See: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-mlt-query.html
+\\"\\"\\"
+input MoreLikeThisInput {
+  \\"\\"\\"The text string to search for.\\"\\"\\"
+  like: String
+
+  \\"\\"\\"
+  more_like_this query's \\"minimum_should_match\\" query param.
+  See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html for possible values.
+  \\"\\"\\"
+  minimumShouldMatch: String
+}
+
+input UserAndExistInput {
+  userId: String!
+
+  \\"\\"\\"
+  
+          When true (or not specified), return only entries with the specified user's involvement.
+          When false, return only entries that the specified user did not involve.
+        
+  \\"\\"\\"
+  exists: Boolean = true
+}
+
+input TranscriptFilter {
+  \\"\\"\\"
+  more_like_this query's \\"minimum_should_match\\" query param for the transcript of \`mediaUrl\`
+  See https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html for possible values.
+  \\"\\"\\"
+  minimumShouldMatch: String
+
+  \\"\\"\\"
+  [Deprecated] No longer read. The transcript is always generated when \`filter.mediaUrl\` is not transcribed previously.
+  \\"\\"\\"
+  shouldCreate: Boolean
+}
+
+input ArticleReplyFilterInput {
+  \\"\\"\\"Show only articleReplies created by a specific app.\\"\\"\\"
+  appId: String
+
+  \\"\\"\\"Show only articleReplies created by the specific user.\\"\\"\\"
+  userId: String
+
+  \\"\\"\\"Show only articleReplies created by the specified users.\\"\\"\\"
+  userIds: [String!]
+
+  \\"\\"\\"
+  List only the articleReplies that were created between the specific time range.
+  \\"\\"\\"
+  createdAt: TimeRangeInput
+
+  \\"\\"\\"Only list the articleReplies created by the currently logged in user\\"\\"\\"
+  selfOnly: Boolean
+  statuses: [ArticleReplyStatusEnum!] = [NORMAL]
+  replyTypes: [ReplyTypeEnum]
+}
+
+enum ArticleStatusEnum {
+  NORMAL
+
+  \\"\\"\\"Created by a blocked user violating terms of use.\\"\\"\\"
+  BLOCKED
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input ListArticleOrderBy {
+  _score: SortOrderEnum
+  updatedAt: SortOrderEnum
+  createdAt: SortOrderEnum
+  replyRequestCount: SortOrderEnum
+  replyCount: SortOrderEnum
+  lastRequestedAt: SortOrderEnum
+  lastRepliedAt: SortOrderEnum
+  lastMatchingArticleReplyCreatedAt: SortOrderEnum
+}
+
+input ListReplyFilter {
+  \\"\\"\\"Show only replies created by a specific app.\\"\\"\\"
+  appId: String
+
+  \\"\\"\\"Show only replies created by the specific user.\\"\\"\\"
+  userId: String
+
+  \\"\\"\\"Show only replies created by the specified users.\\"\\"\\"
+  userIds: [String!]
+
+  \\"\\"\\"
+  List only the replies that were created between the specific time range.
+  \\"\\"\\"
+  createdAt: TimeRangeInput
+
+  \\"\\"\\"If given, only list out replies with specific IDs\\"\\"\\"
+  ids: [ID!]
+
+  \\"\\"\\"Only list the replies created by the currently logged in user\\"\\"\\"
+  selfOnly: Boolean
+  moreLikeThis: MoreLikeThisInput
+
+  \\"\\"\\"
+  Opt-in hybrid search. Provide the minimum cosine similarity (e.g. \`0.7\`) to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).
+  \\"\\"\\"
+  embedding: Float
+
+  \\"\\"\\"[Deprecated] use types instead.\\"\\"\\"
+  type: ReplyTypeEnum
+
+  \\"\\"\\"List the replies of certain types\\"\\"\\"
+  types: [ReplyTypeEnum]
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input ListReplyOrderBy {
+  _score: SortOrderEnum
+  createdAt: SortOrderEnum
+}
+
+type ListCategoryConnection implements Connection {
+  \\"\\"\\"
+  The total count of the entire collection, regardless of \\"before\\", \\"after\\".
+  \\"\\"\\"
+  totalCount: Int!
+  edges: [ListCategoryConnectionEdge!]!
+  pageInfo: ListCategoryConnectionPageInfo!
+}
+
+type ListCategoryConnectionEdge implements Edge {
+  node: Category!
+  cursor: String!
+  score: Float
+  highlight: Highlights
+}
+
+type ListCategoryConnectionPageInfo implements PageInfo {
+  lastCursor: String
+  firstCursor: String
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input ListCategoryOrderBy {
+  createdAt: SortOrderEnum
+}
+
+type ListArticleReplyFeedbackConnection implements Connection {
+  \\"\\"\\"
+  The total count of the entire collection, regardless of \\"before\\", \\"after\\".
+  \\"\\"\\"
+  totalCount: Int!
+  edges: [ListArticleReplyFeedbackConnectionEdge!]!
+  pageInfo: ListArticleReplyFeedbackConnectionPageInfo!
+}
+
+type ListArticleReplyFeedbackConnectionEdge implements Edge {
+  node: ArticleReplyFeedback!
+  cursor: String!
+  score: Float
+  highlight: Highlights
+}
+
+type ListArticleReplyFeedbackConnectionPageInfo implements PageInfo {
+  lastCursor: String
+  firstCursor: String
+}
+
+input ListArticleReplyFeedbackFilter {
+  \\"\\"\\"Show only article reply feedbacks created by a specific app.\\"\\"\\"
+  appId: String
+
+  \\"\\"\\"Show only article reply feedbacks created by the specific user.\\"\\"\\"
+  userId: String
+
+  \\"\\"\\"Show only article reply feedbacks created by the specified users.\\"\\"\\"
+  userIds: [String!]
+
+  \\"\\"\\"
+  List only the article reply feedbacks that were created between the specific time range.
+  \\"\\"\\"
+  createdAt: TimeRangeInput
+
+  \\"\\"\\"If given, only list out article reply feedbacks with specific IDs\\"\\"\\"
+  ids: [ID!]
+
+  \\"\\"\\"
+  Only list the article reply feedbacks created by the currently logged in user
+  \\"\\"\\"
+  selfOnly: Boolean
+  articleId: String
+  replyId: String
+
+  \\"\\"\\"Search for comment field using more_like_this query\\"\\"\\"
+  moreLikeThis: MoreLikeThisInput
+
+  \\"\\"\\"When specified, list only article reply feedbacks with specified vote\\"\\"\\"
+  vote: [FeedbackVote]
+
+  \\"\\"\\"
+  List only the article reply feedbacks that were last updated within the specific time range.
+  \\"\\"\\"
+  updatedAt: TimeRangeInput
+
+  \\"\\"\\"List only the article reply feedbacks with the selected statuses\\"\\"\\"
+  statuses: [ArticleReplyFeedbackStatusEnum!] = [NORMAL]
+
+  \\"\\"\\"List only the feedbacks to the replies created by this user ID\\"\\"\\"
+  replyUserId: String
+
+  \\"\\"\\"List only the feedbacks to the article-replies created by this user ID\\"\\"\\"
+  articleReplyUserId: String
+
+  \\"\\"\\"
+  List only the feedbacks whose \`replyUserId\` *or* \`articleReplyUserId\` is this user ID
+  \\"\\"\\"
+  authorId: String
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input ListArticleReplyFeedbackOrderBy {
+  createdAt: SortOrderEnum
+  updatedAt: SortOrderEnum
+  vote: SortOrderEnum
+
+  \\"\\"\\"Full text relevance for comment field queries\\"\\"\\"
+  _score: SortOrderEnum
+}
+
+type ListReplyRequestConnection implements Connection {
+  \\"\\"\\"
+  The total count of the entire collection, regardless of \\"before\\", \\"after\\".
+  \\"\\"\\"
+  totalCount: Int!
+  edges: [ListReplyRequestConnectionEdge!]!
+  pageInfo: ListReplyRequestConnectionPageInfo!
+}
+
+type ListReplyRequestConnectionEdge implements Edge {
+  node: ReplyRequest!
+  cursor: String!
+  score: Float
+  highlight: Highlights
+}
+
+type ListReplyRequestConnectionPageInfo implements PageInfo {
+  lastCursor: String
+  firstCursor: String
+}
+
+input ListReplyRequestFilter {
+  \\"\\"\\"Show only reply requests created by a specific app.\\"\\"\\"
+  appId: String
+
+  \\"\\"\\"Show only reply requests created by the specific user.\\"\\"\\"
+  userId: String
+
+  \\"\\"\\"Show only reply requests created by the specified users.\\"\\"\\"
+  userIds: [String!]
+
+  \\"\\"\\"
+  List only the reply requests that were created between the specific time range.
+  \\"\\"\\"
+  createdAt: TimeRangeInput
+
+  \\"\\"\\"If given, only list out reply requests with specific IDs\\"\\"\\"
+  ids: [ID!]
+
+  \\"\\"\\"Only list the reply requests created by the currently logged in user\\"\\"\\"
+  selfOnly: Boolean
+  articleId: String
+
+  \\"\\"\\"List only reply requests with specified statuses\\"\\"\\"
+  statuses: [ReplyRequestStatusEnum!] = [NORMAL]
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input ListReplyRequestOrderBy {
+  createdAt: SortOrderEnum
+  vote: SortOrderEnum
+}
+
+type UserConnection implements Connection {
+  \\"\\"\\"
+  The total count of the entire collection, regardless of \\"before\\", \\"after\\".
+  \\"\\"\\"
+  totalCount: Int!
+  edges: [UserConnectionEdge!]!
+  pageInfo: UserConnectionPageInfo!
+}
+
+type UserConnectionEdge implements Edge {
+  node: User!
+  cursor: String!
+  score: Float
+  highlight: Highlights
+}
+
+type UserConnectionPageInfo implements PageInfo {
+  lastCursor: String
+  firstCursor: String
+}
+
+input ListBlockedUsersFilter {
+  \\"\\"\\"
+  List only the blocked users that were registered between the specific time range.
+  \\"\\"\\"
+  createdAt: TimeRangeInput
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input ListBlockedUsersOrderBy {
+  createdAt: SortOrderEnum
+}
+
+type AnalyticsConnection implements Connection {
+  \\"\\"\\"
+  The total count of the entire collection, regardless of \\"before\\", \\"after\\".
+  \\"\\"\\"
+  totalCount: Int!
+  edges: [AnalyticsConnectionEdge!]!
+  pageInfo: AnalyticsConnectionPageInfo!
+}
+
+type AnalyticsConnectionEdge implements Edge {
+  node: Analytics!
+  cursor: String!
+  score: Float
+  highlight: Highlights
+}
+
+type AnalyticsConnectionPageInfo implements PageInfo {
+  lastCursor: String
+  firstCursor: String
+}
+
+input ListAnalyticsFilter {
+  \\"\\"\\"List only the activities between the specific time range.\\"\\"\\"
+  date: TimeRangeInput
+  type: AnalyticsDocTypeEnum
+  docId: ID
+  docUserId: ID
+  docAppId: ID
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input ListAnalyticsOrderBy {
+  date: SortOrderEnum
+}
+
+type AIResponseConnection implements Connection {
+  \\"\\"\\"
+  The total count of the entire collection, regardless of \\"before\\", \\"after\\".
+  \\"\\"\\"
+  totalCount: Int!
+  edges: [AIResponseConnectionEdge!]!
+  pageInfo: AIResponseConnectionPageInfo!
+}
+
+type AIResponseConnectionEdge implements Edge {
+  node: AIResponse!
+  cursor: String!
+  score: Float
+  highlight: Highlights
+}
+
+type AIResponseConnectionPageInfo implements PageInfo {
+  lastCursor: String
+  firstCursor: String
+}
+
+input ListAIResponsesFilter {
+  \\"\\"\\"Show only AI responses created by a specific app.\\"\\"\\"
+  appId: String
+
+  \\"\\"\\"Show only AI responses created by the specific user.\\"\\"\\"
+  userId: String
+
+  \\"\\"\\"Show only AI responses created by the specified users.\\"\\"\\"
+  userIds: [String!]
+
+  \\"\\"\\"
+  List only the AI responses that were created between the specific time range.
+  \\"\\"\\"
+  createdAt: TimeRangeInput
+
+  \\"\\"\\"If given, only list out AI responses with specific IDs\\"\\"\\"
+  ids: [ID!]
+
+  \\"\\"\\"Only list the AI responses created by the currently logged in user\\"\\"\\"
+  selfOnly: Boolean
+
+  \\"\\"\\"If specified, only return AI repsonses with the specified types.\\"\\"\\"
+  types: [AIResponseTypeEnum!]
+
+  \\"\\"\\"If specified, only return AI repsonses under the specified doc IDs.\\"\\"\\"
+  docIds: [ID!]
+
+  \\"\\"\\"If specified, only return AI repsonses under the specified statuses.\\"\\"\\"
+  statuses: [AIResponseStatusEnum!]
+
+  \\"\\"\\"List only the AI responses updated within the specific time range.\\"\\"\\"
+  updatedAt: TimeRangeInput
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input ListAIResponsesOrderBy {
+  createdAt: SortOrderEnum
+  updatedAt: SortOrderEnum
+}
+
+type ListCooccurrenceConnection implements Connection {
+  \\"\\"\\"
+  The total count of the entire collection, regardless of \\"before\\", \\"after\\".
+  \\"\\"\\"
+  totalCount: Int!
+  edges: [ListCooccurrenceConnectionEdge!]!
+  pageInfo: ListCooccurrenceConnectionPageInfo!
+}
+
+type ListCooccurrenceConnectionEdge implements Edge {
+  node: Cooccurrence!
+  cursor: String!
+  score: Float
+  highlight: Highlights
+}
+
+type ListCooccurrenceConnectionPageInfo implements PageInfo {
+  lastCursor: String
+  firstCursor: String
+}
+
+input ListCooccurrenceFilter {
+  \\"\\"\\"
+  List only the cooccurrence that were last updated within the specific time range.
+  \\"\\"\\"
+  updatedAt: TimeRangeInput
+}
+
+\\"\\"\\"
+An entry of orderBy argument. Specifies field name and the sort order. Only one field name is allowd per entry.
+\\"\\"\\"
+input ListCooccurrenceOrderBy {
+  createdAt: SortOrderEnum
+  updatedAt: SortOrderEnum
+}
+
+type ValidationResult {
+  success: Boolean!
+  error: SlugErrorEnum
+}
+
+\\"\\"\\"Slug of canot\\"\\"\\"
+enum SlugErrorEnum {
+  \\"\\"\\"Slug is empty\\"\\"\\"
+  EMPTY
+
+  \\"\\"\\"Slug have leading or trailing spaces or line ends\\"\\"\\"
+  NOT_TRIMMED
+
+  \\"\\"\\"Slug has URI component inside, which can be misleading to browsers\\"\\"\\"
+  HAS_URI_COMPONENT
+
+  \\"\\"\\"Slug has already been taken by someone else\\"\\"\\"
+  TAKEN
+}
+
+type Mutation {
+  \\"\\"\\"Create an article and/or a replyRequest\\"\\"\\"
+  CreateArticle(
+    text: String!
+    reference: ArticleReferenceInput!
+
+    \\"\\"\\"
+    The reason why the user want to submit this article. Mandatory for 1st sender
+    \\"\\"\\"
+    reason: String
+  ): MutationResult
+
+  \\"\\"\\"Create a media article and/or a replyRequest\\"\\"\\"
+  CreateMediaArticle(
+    mediaUrl: String!
+    articleType: ArticleTypeEnum!
+    reference: ArticleReferenceInput!
+
+    \\"\\"\\"The reason why the user want to submit this article\\"\\"\\"
+    reason: String
+  ): MutationResult
+
+  \\"\\"\\"Create a reply that replies to the specified article.\\"\\"\\"
+  CreateReply(
+    articleId: String!
+    text: String!
+    type: ReplyTypeEnum!
+    reference: String
+
+    \\"\\"\\"If CreateReply should resolve after hyperlinks are resolved.\\"\\"\\"
+    waitForHyperlinks: Boolean = false
+  ): MutationResult
+
+  \\"\\"\\"
+  Create an AI reply for a specific article. If existed, returns an existing one. If information in the article is not sufficient for AI, return null.
+  \\"\\"\\"
+  CreateAIReply(articleId: String!): AIReply
+
+  \\"\\"\\"Connects specified reply and specified article.\\"\\"\\"
+  CreateArticleReply(articleId: String!, replyId: String!): [ArticleReply]
+
+  \\"\\"\\"Create a category\\"\\"\\"
+  CreateCategory(title: String!, description: String!): MutationResult
+
+  \\"\\"\\"Adds specified category to specified article.\\"\\"\\"
+  CreateArticleCategory(articleId: String!, categoryId: String!, aiModel: String, aiConfidence: Float): [ArticleCategory]
+
+  \\"\\"\\"Create or update a reply request for the given article\\"\\"\\"
+  CreateReplyRequest(
+    articleId: String!
+
+    \\"\\"\\"The reason why the user want to submit this article\\"\\"\\"
+    reason: String
+  ): Article @deprecated(reason: \\"Use CreateOrUpdateReplyRequest instead\\")
+
+  \\"\\"\\"Create or update a reply request for the given article\\"\\"\\"
+  CreateOrUpdateReplyRequest(
+    articleId: String!
+
+    \\"\\"\\"The reason why the user want to submit this article\\"\\"\\"
+    reason: String
+  ): Article
+
+  \\"\\"\\"Create or update a feedback on an article-reply connection\\"\\"\\"
+  CreateOrUpdateArticleReplyFeedback(articleId: String!, replyId: String!, vote: FeedbackVote!, comment: String): ArticleReply
+
+  \\"\\"\\"Create or update a feedback on an article-category connection\\"\\"\\"
+  CreateOrUpdateArticleCategoryFeedback(articleId: String!, categoryId: String!, vote: FeedbackVote!, comment: String): ArticleCategory
+
+  \\"\\"\\"Create or update a feedback on a reply request reason\\"\\"\\"
+  CreateOrUpdateReplyRequestFeedback(replyRequestId: String!, vote: FeedbackVote!): ReplyRequest
+
+  \\"\\"\\"Create or update a cooccurrence for the given articles\\"\\"\\"
+  CreateOrUpdateCooccurrence(articleIds: [String!]): Cooccurrence
+
+  \\"\\"\\"Change status of specified articleReplies\\"\\"\\"
+  UpdateArticleReplyStatus(articleId: String!, replyId: String!, status: ArticleReplyStatusEnum!): [ArticleReply]
+
+  \\"\\"\\"Change status of specified articleCategory\\"\\"\\"
+  UpdateArticleCategoryStatus(articleId: String!, categoryId: String!, status: ArticleCategoryStatusEnum!): [ArticleCategory]
+
+  \\"\\"\\"Change attribute of a user\\"\\"\\"
+  UpdateUser(name: String, slug: String, avatarType: AvatarTypeEnum, avatarData: String, bio: String): User
+}
+
+type MutationResult {
+  id: String
+}
+
+input ArticleReferenceInput {
+  type: ArticleReferenceTypeEnum!
+  permalink: String
+}
+"
+`;
