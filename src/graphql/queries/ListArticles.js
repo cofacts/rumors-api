@@ -11,6 +11,7 @@ import mediaManager from 'util/mediaManager';
 import {
   createEmbedding,
   createMediaEmbedding,
+  getCachedEmbedding,
   getQueryEmbeddingCacheId,
 } from 'util/embedding';
 
@@ -18,6 +19,7 @@ import {
   createFilterType,
   createSortType,
   getSortArgs,
+  getSearchOrderBy,
   pagingArgs,
   intRangeInput,
   timeRangeInput,
@@ -183,7 +185,10 @@ export default {
           type: GraphQLFloat,
           description:
             'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
-            'to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).',
+            'to also retrieve the nearest neighbors via kNN, in addition to what BM25 matches. ' +
+            'Omit for BM25-only (default). ' +
+            '`totalCount` then also counts the nearest neighbors (up to 100 per query vector), ' +
+            'so it no longer tells how many match the keywords.',
         },
         transcript: {
           description:
@@ -244,6 +249,8 @@ export default {
         'lastRepliedAt',
         'lastMatchingArticleReplyCreatedAt',
       ]),
+      description:
+        'Defaults to `_score` descending when `filter.moreLikeThis` or `filter.mediaUrl` is given.',
     },
     ...pagingArgs,
   },
@@ -257,6 +264,11 @@ export default {
         '`filter.mediaUrl` must be provided when `filter.transcript` is true'
       );
     }
+
+    const searchOrderBy = getSearchOrderBy(
+      orderBy,
+      !!(filter.moreLikeThis || filter.mediaUrl)
+    );
 
     // Collecting queries that will be used in bool queries later
     const shouldQueries = []; // Affects scores
@@ -317,7 +329,7 @@ export default {
       _source: true,
       script_fields: {},
 
-      sort: getSortArgs(orderBy, {
+      sort: getSortArgs(searchOrderBy, {
         replyCount: (o) => ({ normalArticleReplyCount: { order: o } }),
         lastRepliedAt: (o) => ({
           'articleReplies.createdAt': {
@@ -733,9 +745,7 @@ export default {
           ? null
           : (mediaEntry
               ? createMediaEmbedding(queryInfo, mediaEntry, user)
-              : getAIResponse({ type: 'EMBEDDING', docId: queryInfo.id }).then(
-                  (existing) => existing?.embeddings
-                )
+              : getCachedEmbedding(queryInfo)
             ).catch((e) => {
               // kNN must never break BM25 — go on without kNN.
               console.warn('[ListArticles] kNN embedding failed:', e);
@@ -772,10 +782,11 @@ export default {
       },
     };
 
-    // kNN-retrieval + BM25 ranking. Opt in by passing `filter.embedding` as the
-    // minimum cosine similarity: kNN narrows the candidate set, then the existing
-    // should-queries rank them — text `moreLikeThis`, or for a media search the
-    // perceptual-hash function_score + transcript moreLikeThis. Omit for BM25-only.
+    // Hybrid of BM25 and kNN. Opt in by passing `filter.embedding` as the
+    // minimum cosine similarity: the nearest neighbors are retrieved in addition
+    // to what the existing should-queries match — text `moreLikeThis`, or for a
+    // media search the perceptual-hash function_score + transcript moreLikeThis.
+    // Omit for BM25-only.
     if (filter.embedding != null) {
       try {
         // Media query: resolved along with the transcript above. It takes
@@ -783,7 +794,7 @@ export default {
         let queryVectors = mediaQueryVectors;
 
         if (queryVectors.length === 0 && filter.moreLikeThis?.like) {
-          // Text query: vectorize the query text (RETRIEVAL_QUERY, cached).
+          // Text query: vectorize the query text (as a query, cached).
           const queryChunks = await createEmbedding(
             {
               id: getQueryEmbeddingCacheId(filter.moreLikeThis.like),
@@ -791,21 +802,30 @@ export default {
             },
             [{ text: filter.moreLikeThis.like }],
             user,
-            { taskType: 'RETRIEVAL_QUERY' }
+            { role: 'query' }
           );
           queryVectors = queryChunks.map((c) => c.vector);
         }
 
         if (queryVectors.length > 0) {
-          // Add kNN as a candidate-retrieval filter so only semantically-near
-          // docs survive; the `should` scoring then decides the ordering.
-          body.query.bool.filter.push(
+          // kNN is one more should-query, so a doc is returned when either side
+          // finds it. It must not be a filter: that drops every doc kNN cannot
+          // reach even when BM25 matches it — docs with no embedding yet, and
+          // media docs under a text query (cross-modal similarity runs low).
+          //
+          // Scores of the matching should-queries add up. The kNN score is at
+          // most 1 while BM25 is unbounded, so BM25 dominates the order and docs
+          // only kNN finds come after those BM25 matches.
+          //
+          // This holds up because the default minimumShouldMatch ('10<70%')
+          // lets BM25 match little more than near-duplicates. A looser one
+          // lets weak BM25 matches push down what kNN finds — on production
+          // data, '30%' dropped Hit@1 from 68% to 63% (eval on the 2026-10-25
+          // snapshot, 300 text queries over 10k articles). Rank fusion
+          // (RRF) would fix that, but it takes a paid Elasticsearch license.
+          body.query.bool.should.push(
             buildKnnQuery({ queryVectors, similarity: filter.embedding })
           );
-          // Ranking is driven by the should-queries, but retrieval is driven by
-          // kNN — don't require a should match, or we'd intersect the two result
-          // sets instead of ranking the kNN candidates (some score 0 on BM25).
-          body.query.bool.minimum_should_match = 0;
         }
       } catch (e) {
         // kNN must never break BM25 — log and fall through to the BM25 body.query.

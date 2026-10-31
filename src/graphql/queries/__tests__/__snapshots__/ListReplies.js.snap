@@ -8,21 +8,21 @@ Object {
         Object {
           "highlight": Object {
             "hyperlinks": Array [],
-            "reference": "<HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT>",
-            "text": null,
-          },
-          "node": Object {
-            "id": "moreLikeThis2",
-          },
-        },
-        Object {
-          "highlight": Object {
-            "hyperlinks": Array [],
             "reference": null,
             "text": "<HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT>",
           },
           "node": Object {
             "id": "moreLikeThis1",
+          },
+        },
+        Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": "<HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT>",
+            "text": null,
+          },
+          "node": Object {
+            "id": "moreLikeThis2",
           },
         },
       ],
@@ -67,21 +67,11 @@ Object {
         Object {
           "highlight": Object {
             "hyperlinks": Array [],
-            "reference": null,
-            "text": "<HIGHLIGHT>bar</HIGHLIGHT>",
+            "reference": "<HIGHLIGHT>bar</HIGHLIGHT> <HIGHLIGHT>bar</HIGHLIGHT>",
+            "text": null,
           },
           "node": Object {
-            "id": "rumor",
-          },
-        },
-        Object {
-          "highlight": Object {
-            "hyperlinks": Array [],
-            "reference": null,
-            "text": "<HIGHLIGHT>bar</HIGHLIGHT>",
-          },
-          "node": Object {
-            "id": "userFoo",
+            "id": "moreLikeThis1",
           },
         },
         Object {
@@ -97,11 +87,21 @@ Object {
         Object {
           "highlight": Object {
             "hyperlinks": Array [],
-            "reference": "<HIGHLIGHT>bar</HIGHLIGHT> <HIGHLIGHT>bar</HIGHLIGHT>",
-            "text": null,
+            "reference": null,
+            "text": "<HIGHLIGHT>bar</HIGHLIGHT>",
           },
           "node": Object {
-            "id": "moreLikeThis1",
+            "id": "rumor",
+          },
+        },
+        Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": null,
+            "text": "<HIGHLIGHT>bar</HIGHLIGHT>",
+          },
+          "node": Object {
+            "id": "userFoo",
           },
         },
       ],
@@ -208,23 +208,23 @@ Object {
         Object {
           "highlight": Object {
             "hyperlinks": Array [],
-            "reference": "<HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT>",
-            "text": null,
-          },
-          "node": Object {
-            "id": "moreLikeThis2",
-            "text": "bar bar bar",
-          },
-        },
-        Object {
-          "highlight": Object {
-            "hyperlinks": Array [],
             "reference": null,
             "text": "<HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT>",
           },
           "node": Object {
             "id": "moreLikeThis1",
             "text": "foo foo",
+          },
+        },
+        Object {
+          "highlight": Object {
+            "hyperlinks": Array [],
+            "reference": "<HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT> <HIGHLIGHT>foo</HIGHLIGHT>",
+            "text": null,
+          },
+          "node": Object {
+            "id": "moreLikeThis2",
+            "text": "bar bar bar",
           },
         },
       ],

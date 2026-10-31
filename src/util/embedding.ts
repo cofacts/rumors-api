@@ -55,6 +55,19 @@ export const EMBEDDING_DIMS = 768;
 const EMBEDDING_MODEL = 'gemini-embedding-2';
 
 /**
+ * How the input is laid out before it is sent to the model. Bump the one that
+ * changes; vectors made under another layout are not comparable to new ones.
+ *
+ * Text is versioned per role (see TEXT_PREFIX), so that changing the query
+ * prefix only expires the query vectors, not every doc vector in the indices.
+ */
+const TEXT_FORMAT: Record<EmbeddingRole, string> = {
+  document: 'task-prefix-v1',
+  query: 'query-task-prefix-v1',
+};
+const MEDIA_FORMAT = 'raw-v1';
+
+/**
  * `gemini-embedding-2` is served **only** from the `global` endpoint — a
  * regional one (`us-central1`, `asia-east1`, …) 404s. Not configurable on
  * purpose; there is no other location to point at.
@@ -77,7 +90,18 @@ export type EmbeddingChunk = {
   endOffsetSec?: number;
 };
 
-type EmbeddingTaskType = 'RETRIEVAL_DOCUMENT' | 'RETRIEVAL_QUERY';
+/**
+ * What the embedded text is used as. `gemini-embedding-2` ignores the
+ * `taskType` config (the vectors come out bit-identical); the task goes in a
+ * text prefix instead, and the two sides of a search take different ones.
+ * https://ai.google.dev/gemini-api/docs/embeddings
+ */
+export type EmbeddingRole = 'document' | 'query';
+
+const TEXT_PREFIX: Record<EmbeddingRole, string> = {
+  document: 'title: none | text: ',
+  query: 'task: search result | query: ',
+};
 
 export type CreateEmbeddingQueryInfo = {
   /** Used as `docId` for the airesponses cache record. */
@@ -90,8 +114,11 @@ export type CreateEmbeddingQueryInfo = {
 };
 
 export type CreateEmbeddingOptions = {
-  /** Defaults to RETRIEVAL_DOCUMENT (write path). Pass RETRIEVAL_QUERY for search queries. */
-  taskType?: EmbeddingTaskType;
+  /**
+   * Defaults to `document` (write path). Pass `query` for search queries.
+   * Only text is prefixed; media is embedded as-is on both sides.
+   */
+  role?: EmbeddingRole;
 };
 
 type User = { id: string; appId: string };
@@ -109,9 +136,52 @@ function isMediaPart(part: EmbeddingPart): part is EmbeddingMediaPart {
 }
 
 /**
+ * Identifies the model, dimensions and input layout a vector is made with.
+ * Stored in the `request` field of the airesponses cache record, so that a
+ * record made under other settings is not served as if it were current.
+ */
+export function getEmbeddingVersion(
+  type: CreateEmbeddingQueryInfo['type'],
+  role: EmbeddingRole = 'document'
+): string {
+  return [
+    EMBEDDING_MODEL,
+    EMBEDDING_DIMS,
+    type === 'text' ? TEXT_FORMAT[role] : MEDIA_FORMAT,
+  ].join('/');
+}
+
+/**
+ * Read the embedding chunks made before for the given content, if they are
+ * made with the current settings (see {@link getEmbeddingVersion}).
+ */
+export async function getCachedEmbedding(
+  queryInfo: CreateEmbeddingQueryInfo,
+  options: CreateEmbeddingOptions = {}
+): Promise<EmbeddingChunk[] | null> {
+  const cached = await getAIResponse({
+    type: 'EMBEDDING',
+    docId: queryInfo.id,
+  });
+
+  if (
+    cached &&
+    cached.status === 'SUCCESS' &&
+    cached.request === getEmbeddingVersion(queryInfo.type, options.role) &&
+    Array.isArray(cached.embeddings) &&
+    cached.embeddings.length > 0
+  ) {
+    return cached.embeddings as EmbeddingChunk[];
+  }
+
+  return null;
+}
+
+/**
  * Generate (or load from cache) embedding chunks for the given content.
  *
- * Cache layer: airesponses doc keyed by (type=EMBEDDING, docId=queryInfo.id).
+ * Cache layer: airesponses doc keyed by (type=EMBEDDING, docId=queryInfo.id),
+ * valid only for the settings it is made with (see {@link getEmbeddingVersion}).
  * Same get-or-create + LOADING-wait semantics as createTranscript, so concurrent
  * callers for the same docId share work.
  *
@@ -124,29 +194,20 @@ export async function createEmbedding(
   user: User,
   options: CreateEmbeddingOptions = {}
 ): Promise<EmbeddingChunk[]> {
-  const cached = await getAIResponse({
-    type: 'EMBEDDING',
-    docId: queryInfo.id,
-  });
-  if (
-    cached &&
-    cached.status === 'SUCCESS' &&
-    Array.isArray(cached.embeddings) &&
-    cached.embeddings.length > 0
-  ) {
-    return cached.embeddings as EmbeddingChunk[];
-  }
+  const cached = await getCachedEmbedding(queryInfo, options);
+  if (cached) return cached;
 
   const { update } = createAIResponse({
     user,
     type: 'EMBEDDING',
     docId: queryInfo.id,
+    request: getEmbeddingVersion(queryInfo.type, options.role),
   });
 
   try {
     const genAI = await createGenAI(EMBEDDING_LOCATION);
-    const taskType: EmbeddingTaskType =
-      options.taskType ?? 'RETRIEVAL_DOCUMENT';
+    const textPrefix =
+      queryInfo.type === 'text' ? TEXT_PREFIX[options.role ?? 'document'] : '';
 
     // Audio/video are embedded as a single vector capped at the first
     // EMBEDDING_MEDIA_MAX_SEC seconds via an explicit `endOffset` — Gemini can't
@@ -156,7 +217,7 @@ export async function createEmbedding(
       queryInfo.type === 'audio' || queryInfo.type === 'video';
 
     const partsForCall = parts.map((p) => {
-      if (!isMediaPart(p)) return { text: p.text };
+      if (!isMediaPart(p)) return { text: textPrefix + p.text };
 
       return {
         fileData: { fileUri: p.fileUri, mimeType: p.mimeType },
@@ -180,7 +241,6 @@ export async function createEmbedding(
       contents: [{ role: 'user', parts: partsForCall }],
       config: {
         outputDimensionality: EMBEDDING_DIMS,
-        taskType,
       },
     });
 

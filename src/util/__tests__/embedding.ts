@@ -42,6 +42,8 @@ import {
   createMediaEmbedding,
   getReplyEmbeddingCacheId,
   getQueryEmbeddingCacheId,
+  getEmbeddingVersion,
+  getCachedEmbedding,
 } from '../embedding';
 
 const user = { id: 'test-user', appId: 'WEBSITE' };
@@ -92,6 +94,7 @@ describe('createEmbedding', () => {
         appId: 'WEBSITE',
         createdAt: '2026-01-01T00:00:00.000Z',
         updatedAt: '2026-01-01T00:00:00.000Z',
+        request: getEmbeddingVersion('text'),
         embeddings: cachedChunks,
       },
     });
@@ -106,6 +109,57 @@ describe('createEmbedding', () => {
     expect(mockEmbedContent).not.toHaveBeenCalled();
 
     await unloadFixtures({ '/airesponses/doc/cached-doc': {} });
+  });
+
+  it('does not reuse embeddings made under other settings', async () => {
+    const staleRecord = {
+      type: 'EMBEDDING',
+      docId: 'stale-doc',
+      status: 'SUCCESS',
+      userId: 'foo',
+      appId: 'WEBSITE',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      embeddings: [{ vector: [0.1, 0.2, 0.3] }],
+    };
+    await loadFixtures({
+      // Made before settings were recorded
+      '/airesponses/doc/stale-doc-1': staleRecord,
+      // Made with another input layout
+      '/airesponses/doc/stale-doc-2': {
+        ...staleRecord,
+        request: 'gemini-embedding-2/768/some-older-layout',
+      },
+    });
+    mockEmbedContent.mockResolvedValue({
+      embeddings: [{ values: [0.4, 0.5, 0.6] }],
+    });
+
+    const queryInfo = { id: 'stale-doc', type: 'text' } as const;
+    expect(await getCachedEmbedding(queryInfo)).toBeNull();
+
+    expect(
+      await createEmbedding(queryInfo, [{ text: 'some text' }], user)
+    ).toEqual([{ vector: [0.4, 0.5, 0.6] }]);
+    expect(mockEmbedContent).toHaveBeenCalledTimes(1);
+
+    // The new record carries the current settings, and is the one served from
+    // now on.
+    await client.indices.refresh({ index: 'airesponses' });
+    expect(await getCachedEmbedding(queryInfo)).toEqual([
+      { vector: [0.4, 0.5, 0.6] },
+    ]);
+    await createEmbedding(queryInfo, [{ text: 'some text' }], user);
+    expect(mockEmbedContent).toHaveBeenCalledTimes(1);
+
+    // Text and media settings are versioned apart.
+    expect(
+      await getCachedEmbedding({ id: 'stale-doc', type: 'image' })
+    ).toBeNull();
+
+    await unloadFixtures({
+      '/airesponses/doc/stale-doc-1': {},
+      '/airesponses/doc/stale-doc-2': {},
+    });
   });
 
   it('calls Vertex AI on cache miss and persists embeddings to airesponses', async () => {
@@ -125,19 +179,20 @@ describe('createEmbedding', () => {
     const callArg = mockEmbedContent.mock.calls[0][0] as {
       model: string;
       contents: { parts: { text: string }[] }[];
-      config: { outputDimensionality: number; taskType: string };
+      config: { outputDimensionality: number };
     };
     expect(callArg.model).toBe('gemini-embedding-2');
-    expect(callArg.contents[0].parts[0]).toEqual({ text: 'hello world' });
+    // The task goes in a text prefix; the write path embeds a document.
+    expect(callArg.contents[0].parts[0]).toEqual({
+      text: 'title: none | text: hello world',
+    });
 
     // gemini-embedding-2 is global-only; a regional endpoint 404s.
     expect(GoogleGenAI).toHaveBeenCalledWith(
       expect.objectContaining({ vertexai: true, location: 'global' })
     );
-    expect(callArg.config).toEqual({
-      outputDimensionality: 768,
-      taskType: 'RETRIEVAL_DOCUMENT',
-    });
+    // No `taskType`: gemini-embedding-2 ignores it.
+    expect(callArg.config).toEqual({ outputDimensionality: 768 });
 
     expect(result).toEqual([{ vector: [0.7, 0.8, 0.9] }]);
 
@@ -149,6 +204,7 @@ describe('createEmbedding', () => {
       type: string;
       docId: string;
       status: string;
+      request: string;
       embeddings: { vector: number[] }[];
     }>({
       index: 'airesponses',
@@ -164,6 +220,59 @@ describe('createEmbedding', () => {
     expect(hits).toHaveLength(1);
     expect(hits[0]._source?.status).toBe('SUCCESS');
     expect(hits[0]._source?.embeddings).toEqual([{ vector: [0.7, 0.8, 0.9] }]);
+    expect(hits[0]._source?.request).toBe(
+      'gemini-embedding-2/768/task-prefix-v1'
+    );
+  });
+
+  it('prefixes a search query with the query task', async () => {
+    mockEmbedContent.mockResolvedValue({
+      embeddings: [{ values: [0.1, 0.1] }],
+    });
+
+    await createEmbedding(
+      { id: 'query-doc', type: 'text' },
+      [{ text: 'hello world' }],
+      user,
+      { role: 'query' }
+    );
+
+    const params = mockEmbedContent.mock.calls[0][0] as {
+      contents: { parts: { text: string }[] }[];
+    };
+    expect(params.contents[0].parts[0]).toEqual({
+      text: 'task: search result | query: hello world',
+    });
+  });
+
+  it('versions query and document text apart', async () => {
+    expect(getEmbeddingVersion('text', 'query')).not.toBe(
+      getEmbeddingVersion('text', 'document')
+    );
+    expect(getEmbeddingVersion('text')).toBe(
+      getEmbeddingVersion('text', 'document')
+    );
+
+    // A vector made as a document is not served as a query, and vice versa.
+    await loadFixtures({
+      '/airesponses/doc/role-doc': {
+        type: 'EMBEDDING',
+        docId: 'role-doc',
+        status: 'SUCCESS',
+        userId: 'foo',
+        appId: 'WEBSITE',
+        createdAt: '2026-01-01T00:00:00.000Z',
+        request: getEmbeddingVersion('text', 'document'),
+        embeddings: [{ vector: [0.1, 0.2, 0.3] }],
+      },
+    });
+    const queryInfo = { id: 'role-doc', type: 'text' } as const;
+    expect(await getCachedEmbedding(queryInfo)).toEqual([
+      { vector: [0.1, 0.2, 0.3] },
+    ]);
+    expect(await getCachedEmbedding(queryInfo, { role: 'query' })).toBeNull();
+
+    await unloadFixtures({ '/airesponses/doc/role-doc': {} });
   });
 
   it('embeds a gs:// media part as a single capped vector', async () => {
@@ -196,6 +305,9 @@ describe('createEmbedding', () => {
       startOffset: '0s',
       endOffset: '80s',
     });
+    // Media is embedded as-is: no text prefix is added along with it.
+    expect(params.contents[0].parts).toHaveLength(1);
+    expect(part).not.toHaveProperty('text');
     // One whole-file vector, no per-chunk offsets stored.
     expect(result).toEqual([{ vector: [0.5, 0.5] }]);
   });
@@ -230,7 +342,7 @@ describe('createEmbedding', () => {
         [{ text: 'anonymous query' }],
         // JS callers (ListArticles / ListReplies) pass null when not logged in
         null as unknown as typeof user,
-        { taskType: 'RETRIEVAL_QUERY' }
+        { role: 'query' }
       )
     ).rejects.toThrow('user is required');
 
