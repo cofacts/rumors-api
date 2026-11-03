@@ -101,6 +101,9 @@ describe('ListReplies', () => {
         {
           ListReplies(
             filter: { moreLikeThis: { like: "foo", minimumShouldMatch: "5%" } }
+            # The two hits match in different fields and score close; their
+            # _score order depends on the index stats, so pin the order.
+            orderBy: [{ createdAt: DESC }]
           ) {
             edges {
               node {
@@ -356,6 +359,7 @@ describe('ListReplies', () => {
         {
           ListReplies(
             filter: { type: NOT_ARTICLE, moreLikeThis: { like: "foo" } }
+            orderBy: [{ createdAt: DESC }]
           ) {
             edges {
               node {
