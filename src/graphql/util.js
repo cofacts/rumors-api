@@ -157,26 +157,6 @@ export function buildKnnQuery({ queryVectors, similarity }) {
   return { bool: { should: nestedKnnQueries, _name: KNN_QUERY_NAME } };
 }
 
-/**
- * The query to highlight with, when the search query has a kNN clause from
- * {@link buildKnnQuery}. The `plain` highlighter cannot walk a kNN query — the
- * whole search fails with `unsupported_operation_exception` — and there is no
- * term to highlight in it anyway.
- *
- * @param {object} query - the search query
- * @returns {object | undefined} the query less its kNN clause; undefined when
- *   there is no kNN clause, so that the search query itself is highlighted
- */
-function getHighlightQuery(query) {
-  const isKnn = (clause) => clause?.bool?._name === KNN_QUERY_NAME;
-  const should = query?.bool?.should;
-  if (!Array.isArray(should) || !should.some(isKnn)) return undefined;
-
-  return {
-    bool: { ...query.bool, should: should.filter((c) => !isKnn(c)) },
-  };
-}
-
 export const userAndExistInput = new GraphQLInputObjectType({
   name: 'UserAndExistInput',
   fields: {
@@ -325,6 +305,7 @@ async function defaultResolveTotalCount({
   first, // eslint-disable-line no-unused-vars
   before, // eslint-disable-line no-unused-vars
   after, // eslint-disable-line no-unused-vars
+  highlightQuery, // eslint-disable-line no-unused-vars
   body,
   ...searchContext
 }) {
@@ -345,8 +326,16 @@ async function defaultResolveTotalCount({
   }
 }
 
+/**
+ * @param {object} searchContext - returned by the List* query resolvers. Besides
+ *   the Elasticsearch search params, it may carry `highlightQuery`: the query to
+ *   highlight with in place of `body.query`. A list query with a kNN clause sets
+ *   it to its query less that clause, because the `plain` highlighter cannot
+ *   walk a kNN query (the whole search fails with
+ *   `unsupported_operation_exception`), and there is no term to highlight in it.
+ */
 export async function defaultResolveEdges(
-  { first, before, after, ...searchContext },
+  { first, before, after, highlightQuery, ...searchContext },
   args,
   { loaders }
 ) {
@@ -368,7 +357,7 @@ export async function defaultResolveEdges(
         : searchContext.body.sort,
       highlight: {
         order: 'score',
-        highlight_query: getHighlightQuery(searchContext.body.query),
+        highlight_query: highlightQuery,
         fields: {
           text: {
             number_of_fragments: 1, // Return only 1 piece highlight text
@@ -407,6 +396,7 @@ async function defaultResolveLastCursor(
     first, // eslint-disable-line no-unused-vars
     before, // eslint-disable-line no-unused-vars
     after, // eslint-disable-line no-unused-vars
+    highlightQuery, // eslint-disable-line no-unused-vars
     ...searchContext
   },
   args,
@@ -431,6 +421,7 @@ async function defaultResolveFirstCursor(
     first, // eslint-disable-line no-unused-vars
     before, // eslint-disable-line no-unused-vars
     after, // eslint-disable-line no-unused-vars
+    highlightQuery, // eslint-disable-line no-unused-vars
     ...searchContext
   },
   args,

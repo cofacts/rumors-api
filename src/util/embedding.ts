@@ -146,8 +146,8 @@ function isMediaPart(part: EmbeddingPart): part is EmbeddingMediaPart {
 
 /**
  * Identifies the model, dimensions and input layout a vector is made with.
- * Stored in the `request` field of the airesponses cache record, so that a
- * record made under other settings is not served as if it were current.
+ * Part of the cache key (see {@link getEmbeddingCacheDocId}), so that a record
+ * made under other settings is not served as if it were current.
  */
 export function getEmbeddingVersion(
   type: CreateEmbeddingQueryInfo['type'],
@@ -161,8 +161,22 @@ export function getEmbeddingVersion(
 }
 
 /**
+ * The `docId` of the airesponses cache record: the content id plus the
+ * settings version, so that the same content under the same settings maps to
+ * one record. Keeping the version in the key (rather than checking it after
+ * reading) lets concurrent callers wait on a LOADING record of the current
+ * settings, instead of each calling Vertex AI while an older SUCCESS exists.
+ */
+export function getEmbeddingCacheDocId(
+  queryInfo: CreateEmbeddingQueryInfo,
+  role: EmbeddingRole = 'document'
+): string {
+  return `${queryInfo.id}@${getEmbeddingVersion(queryInfo.type, role)}`;
+}
+
+/**
  * Read the embedding chunks made before for the given content, if they are
- * made with the current settings (see {@link getEmbeddingVersion}).
+ * made with the current settings (see {@link getEmbeddingCacheDocId}).
  */
 export async function getCachedEmbedding(
   queryInfo: CreateEmbeddingQueryInfo,
@@ -170,13 +184,12 @@ export async function getCachedEmbedding(
 ): Promise<EmbeddingChunk[] | null> {
   const cached = await getAIResponse({
     type: 'EMBEDDING',
-    docId: queryInfo.id,
+    docId: getEmbeddingCacheDocId(queryInfo, options.role),
   });
 
   if (
     cached &&
     cached.status === 'SUCCESS' &&
-    cached.request === getEmbeddingVersion(queryInfo.type, options.role) &&
     Array.isArray(cached.embeddings) &&
     cached.embeddings.length > 0
   ) {
@@ -189,8 +202,8 @@ export async function getCachedEmbedding(
 /**
  * Generate (or load from cache) embedding chunks for the given content.
  *
- * Cache layer: airesponses doc keyed by (type=EMBEDDING, docId=queryInfo.id),
- * valid only for the settings it is made with (see {@link getEmbeddingVersion}).
+ * Cache layer: airesponses doc keyed by type=EMBEDDING and a docId made of
+ * queryInfo.id and the current settings (see {@link getEmbeddingCacheDocId}).
  * Same get-or-create + LOADING-wait semantics as createTranscript, so concurrent
  * callers for the same docId share work.
  *
@@ -209,7 +222,8 @@ export async function createEmbedding(
   const { update } = createAIResponse({
     user,
     type: 'EMBEDDING',
-    docId: queryInfo.id,
+    docId: getEmbeddingCacheDocId(queryInfo, options.role),
+    // For the record; the version is already in docId.
     request: getEmbeddingVersion(queryInfo.type, options.role),
   });
 

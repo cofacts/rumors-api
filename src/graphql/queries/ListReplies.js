@@ -192,6 +192,9 @@ export default {
     // Hybrid of BM25 and kNN. Opt in by passing `filter.embedding` as the
     // minimum cosine similarity: the nearest neighbors are retrieved in addition
     // to what the BM25 should-queries match. Omit for BM25-only.
+    // Set when a kNN clause is added: the highlighter cannot walk one.
+    let highlightQuery;
+
     if (filter.embedding != null && filter.moreLikeThis?.like) {
       try {
         const queryChunks = await createEmbedding(
@@ -211,6 +214,9 @@ export default {
           // embedding yet. Scores add up: the kNN score is at most 1 while BM25
           // is unbounded, so replies only kNN finds come after the BM25 matches.
           // Keep minimumShouldMatch strict for that reason (see ListArticles).
+          highlightQuery = {
+            bool: { ...body.query.bool, should: [...body.query.bool.should] },
+          };
           body.query.bool.should.push(
             buildKnnQuery({ queryVectors, similarity: filter.embedding })
           );
@@ -224,6 +230,7 @@ export default {
     return {
       index: 'replies',
       body,
+      highlightQuery,
       ...otherParams,
     };
   },

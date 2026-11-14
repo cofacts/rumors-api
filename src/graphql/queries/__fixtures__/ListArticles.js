@@ -414,7 +414,7 @@ export const noAttachmentHashFixtures = {
 export const knnRetrieverFixtures = {
   '/airesponses/doc/knn-media-reuse': {
     type: 'EMBEDDING',
-    docId: 'media-hash-reuse',
+    docId: 'media-hash-reuse@gemini-embedding-2/768/raw-v1',
     status: 'SUCCESS',
     createdAt: '2026-01-01T00:00:00.000Z',
     request: 'gemini-embedding-2/768/raw-v1',
@@ -554,7 +554,7 @@ export const knnMediaRankingFixtures = {
   },
   '/airesponses/doc/knn-media-rank-embedding': {
     type: 'EMBEDDING',
-    docId: 'knn-media-rank-hash',
+    docId: 'knn-media-rank-hash@gemini-embedding-2/768/raw-v1',
     status: 'SUCCESS',
     request: 'gemini-embedding-2/768/raw-v1',
     embeddings: [{ vector: queryVector }],

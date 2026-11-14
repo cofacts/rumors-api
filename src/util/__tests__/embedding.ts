@@ -43,6 +43,7 @@ import {
   getReplyEmbeddingCacheId,
   getQueryEmbeddingCacheId,
   getEmbeddingVersion,
+  getEmbeddingCacheDocId,
   getCachedEmbedding,
 } from '../embedding';
 
@@ -88,7 +89,7 @@ describe('createEmbedding', () => {
     await loadFixtures({
       '/airesponses/doc/cached-doc': {
         type: 'EMBEDDING',
-        docId: 'cached-doc',
+        docId: getEmbeddingCacheDocId({ id: 'cached-doc', type: 'text' }),
         status: 'SUCCESS',
         userId: 'foo',
         appId: 'WEBSITE',
@@ -114,7 +115,6 @@ describe('createEmbedding', () => {
   it('does not reuse embeddings made under other settings', async () => {
     const staleRecord = {
       type: 'EMBEDDING',
-      docId: 'stale-doc',
       status: 'SUCCESS',
       userId: 'foo',
       appId: 'WEBSITE',
@@ -122,12 +122,12 @@ describe('createEmbedding', () => {
       embeddings: [{ vector: [0.1, 0.2, 0.3] }],
     };
     await loadFixtures({
-      // Made before settings were recorded
-      '/airesponses/doc/stale-doc-1': staleRecord,
+      // Made before the settings were in the key
+      '/airesponses/doc/stale-doc-1': { ...staleRecord, docId: 'stale-doc' },
       // Made with another input layout
       '/airesponses/doc/stale-doc-2': {
         ...staleRecord,
-        request: 'gemini-embedding-2/768/some-older-layout',
+        docId: 'stale-doc@gemini-embedding-2/768/some-older-layout',
       },
     });
     mockEmbedContent.mockResolvedValue({
@@ -212,7 +212,11 @@ describe('createEmbedding', () => {
         bool: {
           must: [
             { term: { type: 'EMBEDDING' } },
-            { term: { docId: 'fresh-doc' } },
+            {
+              term: {
+                docId: 'fresh-doc@gemini-embedding-2/768/similarity-prefix-v1',
+              },
+            },
           ],
         },
       },
@@ -257,7 +261,7 @@ describe('createEmbedding', () => {
     await loadFixtures({
       '/airesponses/doc/role-doc': {
         type: 'EMBEDDING',
-        docId: 'role-doc',
+        docId: getEmbeddingCacheDocId({ id: 'role-doc', type: 'text' }),
         status: 'SUCCESS',
         userId: 'foo',
         appId: 'WEBSITE',
@@ -357,7 +361,7 @@ describe('createEmbedding', () => {
         bool: {
           must: [
             { term: { type: 'EMBEDDING' } },
-            { term: { docId: 'anon-doc' } },
+            { prefix: { docId: 'anon-doc' } },
           ],
         },
       },
@@ -386,7 +390,14 @@ describe('createEmbedding', () => {
         bool: {
           must: [
             { term: { type: 'EMBEDDING' } },
-            { term: { docId: 'unit-empty-vec' } },
+            {
+              term: {
+                docId: getEmbeddingCacheDocId({
+                  id: 'unit-empty-vec',
+                  type: 'text',
+                }),
+              },
+            },
           ],
         },
       },

@@ -787,6 +787,9 @@ export default {
     // to what the existing should-queries match — text `moreLikeThis`, or for a
     // media search the perceptual-hash function_score + transcript moreLikeThis.
     // Omit for BM25-only.
+    // Set when a kNN clause is added: the highlighter cannot walk one.
+    let highlightQuery;
+
     if (filter.embedding != null) {
       try {
         // Media query: resolved along with the transcript above. It takes
@@ -823,6 +826,9 @@ export default {
           // data, '30%' dropped Hit@1 from 68% to 63% (eval on the 2026-10-25
           // snapshot, 300 text queries over 10k articles). Rank fusion
           // (RRF) would fix that, but it takes a paid Elasticsearch license.
+          highlightQuery = {
+            bool: { ...body.query.bool, should: [...body.query.bool.should] },
+          };
           body.query.bool.should.push(
             buildKnnQuery({ queryVectors, similarity: filter.embedding })
           );
@@ -837,6 +843,7 @@ export default {
     return {
       index: 'articles',
       body,
+      highlightQuery,
       ...otherParams,
     };
   },
