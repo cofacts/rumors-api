@@ -8,7 +8,7 @@
   Usage:
     node build/scripts/migrations/backfillVertexEmbeddings.js \
       [--index articles|replies|both] [--limit N] [--concurrency 5] \
-      [--batch-size 20] [--from 2026-01-01T00:00:00Z]
+      [--batch-size 20] [--from 2026-01-01T00:00:00Z] [--reembed]
 
   Notes:
   - --from filters by `createdAt`, the only date field both indices have
@@ -16,6 +16,10 @@
   - IMAGE/AUDIO/VIDEO articles embed from their uploaded media file. Audio/video
     are capped to a single vector by createEmbedding (EMBEDDING_MEDIA_MAX_SEC),
     so no duration source is needed.
+  - --reembed also walks the docs that already have `embeddings`, for after the
+    embedding settings change (model, dimensions, input layout). Vectors still
+    valid for the current settings come from the airesponses cache, so only the
+    stale ones cost a Vertex call.
   - On 429 / RESOURCE_EXHAUSTED, retries up to 3 times with exponential backoff.
 */
 
@@ -47,6 +51,7 @@ export type BackfillOptions = {
   concurrency: number;
   batchSize: number;
   from?: string;
+  reembed?: boolean;
 };
 
 type ArticleSource = {
@@ -170,14 +175,18 @@ async function backfillIndex(
       // `embeddings` is a nested field: its entries live in separate hidden
       // docs, so a top-level `exists` never matches and must go through
       // a `nested` query.
-      must_not: [
-        {
-          nested: {
-            path: 'embeddings',
-            query: { match_all: {} },
-          },
-        },
-      ],
+      ...(opts.reembed
+        ? {}
+        : {
+            must_not: [
+              {
+                nested: {
+                  path: 'embeddings',
+                  query: { match_all: {} },
+                },
+              },
+            ],
+          }),
       ...(filterClauses.length ? { filter: filterClauses } : {}),
     },
   };
@@ -185,7 +194,9 @@ async function backfillIndex(
   const { count: total } = await client.count({ index: indexName, query });
   const target = opts.limit ? Math.min(total, opts.limit) : total;
   console.info(
-    `[backfill] ${indexName}: ${target} doc(s) to process (without embeddings: ${total})`
+    `[backfill] ${indexName}: ${target} doc(s) to process (${
+      opts.reembed ? 'all' : 'without embeddings'
+    }: ${total})`
   );
 
   const bar = new SingleBar({ stopOnComplete: true });
@@ -298,6 +309,12 @@ if (require.main === module) {
         type: 'string',
         description: 'Only process docs with createdAt >= this ISO timestamp.',
       },
+      reembed: {
+        type: 'boolean',
+        default: false,
+        description:
+          'Also process docs that already have embeddings, to replace the ones made under older embedding settings.',
+      },
     })
     .help('help')
     .parseSync();
@@ -308,6 +325,7 @@ if (require.main === module) {
     concurrency: argv.concurrency,
     batchSize: argv['batch-size'],
     from: argv.from,
+    reembed: argv.reembed,
   }).catch((e) => {
     console.error(e);
     process.exit(1);

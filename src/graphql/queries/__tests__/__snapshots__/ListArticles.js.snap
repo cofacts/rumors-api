@@ -114,6 +114,16 @@ Object {
       "edges": Array [
         Object {
           "highlight": Object {
+            "hyperlinks": Array [],
+            "text": "<HIGHLIGHT>臣亮言</HIGHLIGHT>：<HIGHLIGHT>先帝創業未半</HIGHLIGHT>，<HIGHLIGHT>而中道崩殂</HIGHLIGHT>。<HIGHLIGHT>今天下三分</HIGHLIGHT>，<HIGHLIGHT>益州</HIGHLIGHT> <HIGHLIGHT>疲弊</HIGHLIGHT>，<HIGHLIGHT>此誠危急存亡之秋也</HIGHLIGHT>。",
+          },
+          "node": Object {
+            "hyperlinks": null,
+            "id": "listArticleTest2",
+          },
+        },
+        Object {
+          "highlight": Object {
             "hyperlinks": Array [
               Object {
                 "summary": "<HIGHLIGHT>今天下三分</HIGHLIGHT>，<HIGHLIGHT>益州</HIGHLIGHT> <HIGHLIGHT>疲弊</HIGHLIGHT>，<HIGHLIGHT>此誠危急存亡之秋也</HIGHLIGHT>。",
@@ -139,16 +149,6 @@ Object {
               },
             ],
             "id": "listArticleTest4",
-          },
-        },
-        Object {
-          "highlight": Object {
-            "hyperlinks": Array [],
-            "text": "<HIGHLIGHT>臣亮言</HIGHLIGHT>：<HIGHLIGHT>先帝創業未半</HIGHLIGHT>，<HIGHLIGHT>而中道崩殂</HIGHLIGHT>。<HIGHLIGHT>今天下三分</HIGHLIGHT>，<HIGHLIGHT>益州</HIGHLIGHT> <HIGHLIGHT>疲弊</HIGHLIGHT>，<HIGHLIGHT>此誠危急存亡之秋也</HIGHLIGHT>。",
-          },
-          "node": Object {
-            "hyperlinks": null,
-            "id": "listArticleTest2",
           },
         },
       ],
