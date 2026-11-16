@@ -9,6 +9,17 @@ import {
 } from '@jest/globals';
 import archiveUrlsFromText from '../archiveUrlsFromText';
 
+function jsonResponse(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+function getArchivedUrl(reqInit?: RequestInit) {
+  return (reqInit?.body as FormData).get('url') as string;
+}
+
 describe('archiveUrlsFromText', () => {
   let realEnvs: { [key: string]: string | undefined };
   let mockedFetch: jest.Spied<typeof fetch>;
@@ -21,10 +32,12 @@ describe('archiveUrlsFromText', () => {
         process.env.INTERNET_ARCHIVE_S3_ACCESS_KEY,
       INTERNET_ARCHIVE_S3_SECRET_KEY:
         process.env.INTERNET_ARCHIVE_S3_SECRET_KEY,
+      ARCHIVE_RETRY_BASE_MS: process.env.ARCHIVE_RETRY_BASE_MS,
     };
 
     process.env.INTERNET_ARCHIVE_S3_ACCESS_KEY = 'test-access-key';
     process.env.INTERNET_ARCHIVE_S3_SECRET_KEY = 'test-secret';
+    process.env.ARCHIVE_RETRY_BASE_MS = '1'; // Don't wait in tests
   });
 
   beforeEach(() => {
@@ -37,6 +50,11 @@ describe('archiveUrlsFromText', () => {
       realEnvs.INTERNET_ARCHIVE_S3_ACCESS_KEY;
     process.env.INTERNET_ARCHIVE_S3_SECRET_KEY =
       realEnvs.INTERNET_ARCHIVE_S3_SECRET_KEY;
+    if (realEnvs.ARCHIVE_RETRY_BASE_MS === undefined) {
+      delete process.env.ARCHIVE_RETRY_BASE_MS;
+    } else {
+      process.env.ARCHIVE_RETRY_BASE_MS = realEnvs.ARCHIVE_RETRY_BASE_MS;
+    }
   });
 
   it('expect URL in text are archived', async () => {
@@ -50,9 +68,7 @@ describe('archiveUrlsFromText', () => {
       // Extract URL to archive from fetched URL
       const urlToArchive = (reqInit?.body as FormData).get('url');
 
-      return {
-        json: async () => ({ job_id: '123', url: urlToArchive }),
-      } as Response;
+      return jsonResponse({ job_id: '123', url: urlToArchive });
     });
 
     const text =
@@ -133,13 +149,11 @@ describe('archiveUrlsFromText', () => {
   });
 
   it('expect errors can be handled', async () => {
-    mockedFetch.mockImplementation(
-      async () =>
-        ({
-          json: async () => ({
-            message: 'You need to be logged in to use Save Page Now.',
-          }),
-        } as Response)
+    mockedFetch.mockImplementation(async () =>
+      jsonResponse(
+        { message: 'You need to be logged in to use Save Page Now.' },
+        401
+      )
     );
 
     const text =
@@ -165,5 +179,84 @@ describe('archiveUrlsFromText', () => {
     const results = await archiveUrlsFromText(text);
     expect(results).toEqual([]);
     expect(mockedFetch).not.toBeCalled();
+  });
+  it('retries when SPN2 session limit is reached', async () => {
+    let calls = 0;
+    mockedFetch.mockImplementation(async (_, reqInit) => {
+      calls += 1;
+      if (calls < 3) {
+        return jsonResponse({
+          status: 'error',
+          status_ext: 'error:user-session-limit',
+          message:
+            'You have already reached the limit of active Save Page Now sessions.',
+        });
+      }
+      return jsonResponse({ job_id: 'spn2-ok', url: getArchivedUrl(reqInit) });
+    });
+
+    const results = await archiveUrlsFromText('See https://retry.example.com');
+    expect(mockedFetch).toHaveBeenCalledTimes(3);
+    expect(results).toEqual([
+      { job_id: 'spn2-ok', url: 'https://retry.example.com/' },
+    ]);
+  });
+
+  it('does not retry final errors and gives up after max attempts', async () => {
+    mockedFetch.mockImplementation(async () =>
+      jsonResponse({ status: 'error', status_ext: 'error:blocked-url' })
+    );
+    await archiveUrlsFromText('See https://blocked.example.com');
+    expect(mockedFetch).toHaveBeenCalledTimes(1);
+
+    mockedFetch.mockClear();
+    mockedFetch.mockImplementation(async () =>
+      jsonResponse({ status: 'error', status_ext: 'error:user-session-limit' })
+    );
+    const [result] = await archiveUrlsFromText('See https://busy.example.com');
+    expect(mockedFetch).toHaveBeenCalledTimes(5);
+    expect(result.status_ext).toBe('error:user-session-limit');
+  });
+
+  it('handles non-JSON responses and network errors without throwing', async () => {
+    let calls = 0;
+    mockedFetch.mockImplementation(async (_, reqInit) => {
+      calls += 1;
+      if (calls === 1)
+        return new Response('<html>Bad gateway</html>', { status: 502 });
+      if (calls === 2) throw new TypeError('fetch failed');
+      return jsonResponse({ job_id: 'spn2-ok', url: getArchivedUrl(reqInit) });
+    });
+
+    const results = await archiveUrlsFromText('See https://flaky.example.com');
+    expect(mockedFetch).toHaveBeenCalledTimes(3);
+    expect(results[0].job_id).toBe('spn2-ok');
+  });
+
+  it('submits URLs one at a time, across calls, without duplicates', async () => {
+    let inFlight = 0;
+    let maxInFlight = 0;
+    mockedFetch.mockImplementation(async (_, reqInit) => {
+      inFlight += 1;
+      maxInFlight = Math.max(maxInFlight, inFlight);
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      inFlight -= 1;
+      return jsonResponse({ job_id: 'spn2-ok', url: getArchivedUrl(reqInit) });
+    });
+
+    await Promise.all([
+      archiveUrlsFromText('https://a.example.com https://b.example.com'),
+      archiveUrlsFromText('https://c.example.com https://a.example.com'),
+    ]);
+
+    expect(maxInFlight).toBe(1);
+    const archived = mockedFetch.mock.calls.map(([, init]) =>
+      getArchivedUrl(init)
+    );
+    expect(archived.sort()).toEqual([
+      'https://a.example.com/',
+      'https://b.example.com/',
+      'https://c.example.com/',
+    ]);
   });
 });
