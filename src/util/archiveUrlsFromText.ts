@@ -18,15 +18,18 @@ export type SPNResult = {
 
 /**
  * SPN2 limits each account to a few captures in progress at the same time
- * (3 for our account, see /save/status/user). A slot is held until IA finishes
- * capturing the page, not until the POST returns, so limiting concurrent POSTs
- * alone cannot avoid `error:user-session-limit`.
+ * (3 for our account). A slot is held until IA finishes capturing the page, not
+ * until the POST returns, so limiting concurrent POSTs alone cannot avoid
+ * `error:user-session-limit`.
  *
- * Instead we:
- * 1. submit URLs one at a time through a single queue, so URLs from one
- *    message do not hit SPN2 at the same instant;
- * 2. retry with exponential backoff when SPN2 reports a temporary error
- *    (session limit, overload, non-JSON / 5xx responses, network errors).
+ * Following IA's recommendation, we:
+ * 1. submit URLs one at a time through a single queue;
+ * 2. before each submission, ask `/save/status/user` how many slots are
+ *    `available`, wait while there are none, and stop for the day once
+ *    `daily_captures_limit` is reached;
+ * 3. still retry with exponential backoff when SPN2 reports a temporary error
+ *    (session limit, overload, non-JSON / 5xx responses, network errors), as
+ *    the status check can be stale or fail.
  *
  * The queue lives in memory; pending URLs are lost on restart.
  */
@@ -51,6 +54,72 @@ function getRetryBaseMs() {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/** How often to re-check `/save/status/user` while no slot is available */
+function getStatusPollMs() {
+  return Number(process.env.ARCHIVE_STATUS_POLL_MS ?? 5_000);
+}
+
+/** Give up waiting for a slot after this many checks and let the POST decide */
+function getStatusMaxPolls() {
+  return Number(process.env.ARCHIVE_STATUS_MAX_POLLS ?? 24);
+}
+
+type UserStatus = {
+  processing: number;
+  available: number;
+  daily_captures: number;
+  daily_captures_limit: number;
+};
+
+const SPN_AUTH_HEADER = () =>
+  `LOW ${process.env.INTERNET_ARCHIVE_S3_ACCESS_KEY}:${process.env.INTERNET_ARCHIVE_S3_SECRET_KEY}`;
+
+/** @returns null if the status cannot be determined */
+async function getUserStatus(): Promise<UserStatus | null> {
+  try {
+    const resp = await fetch(
+      // Query string avoids stale cached response, see SPN2 docs
+      `https://web.archive.org/save/status/user?_t=${Date.now()}`,
+      {
+        headers: {
+          Accept: 'application/json',
+          Authorization: SPN_AUTH_HEADER(),
+        },
+      }
+    );
+    if (!resp.ok) return null;
+    const status = await resp.json();
+    if (
+      typeof status?.available !== 'number' ||
+      typeof status?.daily_captures !== 'number' ||
+      typeof status?.daily_captures_limit !== 'number'
+    ) {
+      return null;
+    }
+    return status;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Wait until SPN2 has a free slot.
+ * If the status is unavailable or no slot frees up in time, proceed anyway;
+ * the POST and its retry will handle it.
+ */
+async function waitForSlot(): Promise<'ok' | 'daily-limit'> {
+  for (let i = 0; i < getStatusMaxPolls(); i += 1) {
+    const status = await getUserStatus();
+    if (!status) return 'ok';
+    if (status.daily_captures >= status.daily_captures_limit) {
+      return 'daily-limit';
+    }
+    if (status.available > 0) return 'ok';
+    await sleep(getStatusPollMs());
+  }
+  return 'ok';
+}
+
 async function submitOnce(url: string): Promise<SPNResult> {
   const formData = new FormData();
   formData.append('url', url);
@@ -64,7 +133,7 @@ async function submitOnce(url: string): Promise<SPNResult> {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        Authorization: `LOW ${process.env.INTERNET_ARCHIVE_S3_ACCESS_KEY}:${process.env.INTERNET_ARCHIVE_S3_SECRET_KEY}`,
+        Authorization: SPN_AUTH_HEADER(),
       },
       body: formData,
     });
@@ -93,6 +162,15 @@ async function submitOnce(url: string): Promise<SPNResult> {
 async function submitWithRetry(url: string): Promise<SPNResult> {
   let result: SPNResult = {};
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
+    if ((await waitForSlot()) === 'daily-limit') {
+      result = {
+        status: 'error',
+        status_ext: 'error:daily-limit-reached',
+        message: 'daily_captures_limit reached; will not submit until tomorrow',
+      };
+      break;
+    }
+
     result = await submitOnce(url);
     const retryable =
       !result.job_id && RETRYABLE_STATUS_EXT.has(result.status_ext ?? '');
