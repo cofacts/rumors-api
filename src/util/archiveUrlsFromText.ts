@@ -28,8 +28,10 @@ export type SPNResult = {
  *    `available`, wait while there are none, and stop for the day once
  *    `daily_captures_limit` is reached;
  * 3. still retry with exponential backoff when SPN2 reports a temporary error
- *    (session limit, overload, non-JSON / 5xx responses, network errors), as
- *    the status check can be stale or fail.
+ *    (session limit, overload, 5xx / 408 / 429 responses that are not JSON,
+ *    network errors), as the status check can be stale or fail;
+ * 4. give up on a URL after a time budget (3 minutes by default), so one URL
+ *    that keeps failing cannot hold up every URL queued behind it.
  *
  * The queue lives in memory; pending URLs are lost on restart.
  */
@@ -47,21 +49,36 @@ const RETRYABLE_STATUS_EXT = new Set([
   'error:network',
 ]);
 
+/**
+ * Read a positive number from env.
+ * Empty, non-numeric, zero or negative values fall back to the default; a bad
+ * value must not silently turn off throttling or backoff.
+ */
+function positiveNumberFromEnv(name: string, defaultValue: number) {
+  const value = Number(process.env[name]);
+  return Number.isFinite(value) && value > 0 ? value : defaultValue;
+}
+
 /** Base delay for retries; doubles each attempt (15s, 30s, 60s, 120s by default) */
 function getRetryBaseMs() {
-  return Number(process.env.ARCHIVE_RETRY_BASE_MS ?? 15_000);
+  return positiveNumberFromEnv('ARCHIVE_RETRY_BASE_MS', 15_000);
+}
+
+/** Total time one URL may spend in the queue (waiting for slots + retrying) */
+function getUrlBudgetMs() {
+  return positiveNumberFromEnv('ARCHIVE_URL_BUDGET_MS', 180_000);
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** How often to re-check `/save/status/user` while no slot is available */
 function getStatusPollMs() {
-  return Number(process.env.ARCHIVE_STATUS_POLL_MS ?? 5_000);
+  return positiveNumberFromEnv('ARCHIVE_STATUS_POLL_MS', 5_000);
 }
 
 /** Give up waiting for a slot after this many checks and let the POST decide */
 function getStatusMaxPolls() {
-  return Number(process.env.ARCHIVE_STATUS_MAX_POLLS ?? 24);
+  return positiveNumberFromEnv('ARCHIVE_STATUS_MAX_POLLS', 24);
 }
 
 type UserStatus = {
@@ -104,10 +121,11 @@ async function getUserStatus(): Promise<UserStatus | null> {
 
 /**
  * Wait until SPN2 has a free slot.
- * If the status is unavailable or no slot frees up in time, proceed anyway;
- * the POST and its retry will handle it.
+ * If the status is unavailable, no slot frees up in time, or the URL's time
+ * budget (`deadline`, epoch ms) is used up, proceed anyway; the POST and its
+ * retry will handle it.
  */
-async function waitForSlot(): Promise<'ok' | 'daily-limit'> {
+async function waitForSlot(deadline: number): Promise<'ok' | 'daily-limit'> {
   for (let i = 0; i < getStatusMaxPolls(); i += 1) {
     const status = await getUserStatus();
     if (!status) return 'ok';
@@ -115,6 +133,7 @@ async function waitForSlot(): Promise<'ok' | 'daily-limit'> {
       return 'daily-limit';
     }
     if (status.available > 0) return 'ok';
+    if (Date.now() + getStatusPollMs() > deadline) return 'ok';
     await sleep(getStatusPollMs());
   }
   return 'ok';
@@ -145,24 +164,47 @@ async function submitOnce(url: string): Promise<SPNResult> {
     };
   }
 
-  const body = await resp.text();
+  let body: string;
   try {
-    return JSON.parse(body);
-  } catch {
-    // Non-JSON response, e.g. an HTML error page from a proxy
+    body = await resp.text();
+  } catch (e) {
+    // Connection dropped while reading the response
     return {
       status: 'error',
-      status_ext:
-        resp.status >= 500 ? 'error:internal-server-error' : 'error:non-json',
-      message: `HTTP ${resp.status}: ${body.slice(0, 200)}`,
+      status_ext: 'error:network',
+      message: e instanceof Error ? e.message : String(e),
     };
   }
+
+  try {
+    const parsed = JSON.parse(body);
+    // `null`, numbers, strings and arrays are valid JSON but not SPN2 results
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      return parsed;
+    }
+  } catch {
+    // Fall through to the non-JSON handling below
+  }
+
+  // Not JSON, e.g. an HTML error page from a proxy. Only temporary conditions
+  // are worth retrying.
+  let statusExt = 'error:non-json';
+  if (resp.status >= 500) statusExt = 'error:internal-server-error';
+  else if (resp.status === 408 || resp.status === 429) {
+    statusExt = 'error:too-many-requests';
+  }
+  return {
+    status: 'error',
+    status_ext: statusExt,
+    message: `HTTP ${resp.status}: ${body.slice(0, 200)}`,
+  };
 }
 
 async function submitWithRetry(url: string): Promise<SPNResult> {
   let result: SPNResult = {};
+  const deadline = Date.now() + getUrlBudgetMs();
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
-    if ((await waitForSlot()) === 'daily-limit') {
+    if ((await waitForSlot(deadline)) === 'daily-limit') {
       result = {
         status: 'error',
         status_ext: 'error:daily-limit-reached',
@@ -176,7 +218,9 @@ async function submitWithRetry(url: string): Promise<SPNResult> {
       !result.job_id && RETRYABLE_STATUS_EXT.has(result.status_ext ?? '');
     if (!retryable || attempt === MAX_ATTEMPTS) break;
 
-    await sleep(getRetryBaseMs() * 2 ** (attempt - 1));
+    const delay = getRetryBaseMs() * 2 ** (attempt - 1);
+    if (Date.now() + delay > deadline) break; // Out of time budget
+    await sleep(delay);
   }
 
   if (result.job_id) {

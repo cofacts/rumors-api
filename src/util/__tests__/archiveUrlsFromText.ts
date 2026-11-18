@@ -43,6 +43,7 @@ describe('archiveUrlsFromText', () => {
     'ARCHIVE_RETRY_BASE_MS',
     'ARCHIVE_STATUS_POLL_MS',
     'ARCHIVE_STATUS_MAX_POLLS',
+    'ARCHIVE_URL_BUDGET_MS',
   ];
   let realEnvs: { [key: string]: string | undefined };
   let mockedFetch: jest.Spied<typeof fetch>;
@@ -96,6 +97,7 @@ describe('archiveUrlsFromText', () => {
   beforeEach(() => {
     mockedFetch.mockReset();
     delete process.env.ARCHIVE_STATUS_MAX_POLLS;
+    delete process.env.ARCHIVE_URL_BUDGET_MS;
   });
 
   afterAll(() => {
@@ -446,6 +448,140 @@ describe('archiveUrlsFromText', () => {
 
       expect(saveCalls()).toHaveLength(1);
       expect(result.job_id).toBe('spn2-ok');
+    });
+  });
+  describe('robustness', () => {
+    it('does not throw when the response body is JSON null', async () => {
+      mockSPN({ save: () => new Response('null', { status: 200 }) });
+      const [result] = await archiveUrlsFromText(
+        'See https://null.example.com'
+      );
+      expect(result.status).toBe('error');
+      expect(result.job_id).toBeUndefined();
+    });
+
+    it('treats a failure while reading the response body as a retryable network error', async () => {
+      let calls = 0;
+      mockSPN({
+        save: (reqInit) => {
+          calls += 1;
+          if (calls === 1) {
+            const body = new ReadableStream({
+              start(controller) {
+                controller.error(new TypeError('terminated'));
+              },
+            });
+            return new Response(body, { status: 200 });
+          }
+          return jsonResponse({
+            job_id: 'spn2-ok',
+            url: getArchivedUrl(reqInit),
+          });
+        },
+      });
+
+      const [result] = await archiveUrlsFromText(
+        'See https://reset.example.com'
+      );
+      expect(saveCalls()).toHaveLength(2);
+      expect(result.job_id).toBe('spn2-ok');
+    });
+
+    it('retries non-JSON 429/408 responses but not other non-JSON 4xx', async () => {
+      let calls = 0;
+      mockSPN({
+        save: (reqInit) => {
+          calls += 1;
+          if (calls === 1)
+            return new Response('<html>slow down</html>', { status: 429 });
+          if (calls === 2)
+            return new Response('<html>timeout</html>', { status: 408 });
+          return jsonResponse({
+            job_id: 'spn2-ok',
+            url: getArchivedUrl(reqInit),
+          });
+        },
+      });
+      const [retried] = await archiveUrlsFromText(
+        'See https://html429.example.com'
+      );
+      expect(saveCalls()).toHaveLength(3);
+      expect(retried.job_id).toBe('spn2-ok');
+
+      mockedFetch.mockClear();
+      mockSPN({
+        save: () => new Response('<html>denied</html>', { status: 403 }),
+      });
+      const [final] = await archiveUrlsFromText(
+        'See https://html403.example.com'
+      );
+      expect(saveCalls()).toHaveLength(1);
+      expect(final.status_ext).toBe('error:non-json');
+    });
+
+    it.each([[''], ['abc'], ['0'], ['-3']])(
+      'falls back to defaults when ARCHIVE_STATUS_MAX_POLLS is %p',
+      async (value) => {
+        process.env.ARCHIVE_STATUS_MAX_POLLS = value;
+        mockSPN({
+          save: (reqInit) =>
+            jsonResponse({ job_id: 'spn2-ok', url: getArchivedUrl(reqInit) }),
+        });
+        await archiveUrlsFromText(`See https://env${value.length}.example.com`);
+        // Status check must not be silently skipped
+        expect(statusCalls().length).toBeGreaterThan(0);
+      }
+    );
+
+    it('gives up on a URL after the per-URL time budget so it cannot block the queue for long', async () => {
+      const realBudget = process.env.ARCHIVE_URL_BUDGET_MS;
+      const realBase = process.env.ARCHIVE_RETRY_BASE_MS;
+      process.env.ARCHIVE_URL_BUDGET_MS = '60';
+      process.env.ARCHIVE_RETRY_BASE_MS = '40'; // 40, 80, ... > 60 budget
+      try {
+        mockSPN({
+          save: () =>
+            jsonResponse({
+              status: 'error',
+              status_ext: 'error:user-session-limit',
+            }),
+        });
+        const [result] = await archiveUrlsFromText(
+          'See https://budget.example.com'
+        );
+        expect(saveCalls().length).toBeGreaterThanOrEqual(1);
+        expect(saveCalls().length).toBeLessThan(5);
+        expect(result.status_ext).toBe('error:user-session-limit');
+      } finally {
+        if (realBudget === undefined) delete process.env.ARCHIVE_URL_BUDGET_MS;
+        else process.env.ARCHIVE_URL_BUDGET_MS = realBudget;
+        process.env.ARCHIVE_RETRY_BASE_MS = realBase;
+      }
+    });
+
+    it('stops waiting for a free slot once the per-URL time budget is used up', async () => {
+      const realBudget = process.env.ARCHIVE_URL_BUDGET_MS;
+      const realPoll = process.env.ARCHIVE_STATUS_POLL_MS;
+      process.env.ARCHIVE_URL_BUDGET_MS = '60';
+      process.env.ARCHIVE_STATUS_POLL_MS = '20';
+      try {
+        mockSPN({
+          status: () =>
+            jsonResponse({ ...FREE_STATUS, processing: 3, available: 0 }),
+          save: (reqInit) =>
+            jsonResponse({ job_id: 'spn2-ok', url: getArchivedUrl(reqInit) }),
+        });
+        const [result] = await archiveUrlsFromText(
+          'See https://slots.example.com'
+        );
+        // Default would poll 24 times; budget allows only a few
+        expect(statusCalls().length).toBeLessThan(10);
+        expect(result.job_id).toBe('spn2-ok');
+      } finally {
+        if (realBudget === undefined) delete process.env.ARCHIVE_URL_BUDGET_MS;
+        else process.env.ARCHIVE_URL_BUDGET_MS = realBudget;
+        process.env.ARCHIVE_STATUS_POLL_MS = realPoll;
+      }
     });
   });
 });
