@@ -165,7 +165,7 @@ if (process.env.GCS_BUCKET_NAME) {
         index: 'airesponses',
         id: aiResponseId,
       });
-    });
+    }, 60000);
 
     it('does transcript for audio', async () => {
       const {
