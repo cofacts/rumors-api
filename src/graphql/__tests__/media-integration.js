@@ -166,6 +166,12 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
       id: articleId,
     });
 
+    // CreateMediaArticle also creates a ydoc (same id) for the article
+    await client.delete({
+      index: 'ydocs',
+      id: articleId,
+    });
+
     await client.delete({
       index: 'replyrequests',
       id: getReplyRequestId({
@@ -243,6 +249,12 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     // Cleanup
     await client.delete({
       index: 'articles',
+      id: articleId,
+    });
+
+    // CreateMediaArticle also creates a ydoc (same id) for the article
+    await client.delete({
+      index: 'ydocs',
       id: articleId,
     });
 
