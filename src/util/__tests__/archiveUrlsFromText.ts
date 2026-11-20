@@ -44,6 +44,7 @@ describe('archiveUrlsFromText', () => {
     'ARCHIVE_STATUS_POLL_MS',
     'ARCHIVE_STATUS_MAX_POLLS',
     'ARCHIVE_URL_BUDGET_MS',
+    'ARCHIVE_REQUEST_TIMEOUT_MS',
   ];
   let realEnvs: { [key: string]: string | undefined };
   let mockedFetch: jest.Spied<typeof fetch>;
@@ -98,6 +99,7 @@ describe('archiveUrlsFromText', () => {
     mockedFetch.mockReset();
     delete process.env.ARCHIVE_STATUS_MAX_POLLS;
     delete process.env.ARCHIVE_URL_BUDGET_MS;
+    delete process.env.ARCHIVE_REQUEST_TIMEOUT_MS;
   });
 
   afterAll(() => {
@@ -140,7 +142,8 @@ describe('archiveUrlsFromText', () => {
     // Check if https://web.archive.org/save is called with expected params and headers
     //
     const calls = saveCalls().map((call) => {
-      const [url, init] = call;
+      const [url, { signal, ...init } = {}] = call;
+      expect(signal).toBeInstanceOf(AbortSignal);
       const body = init?.body as FormData;
       const bodyEntries: Record<string, unknown> = {};
       if (body && typeof body.forEach === 'function') {
@@ -583,5 +586,93 @@ describe('archiveUrlsFromText', () => {
         process.env.ARCHIVE_STATUS_POLL_MS = realPoll;
       }
     });
+  });
+  describe('request timeout', () => {
+    /** A fetch that never answers, but honors the abort signal like real fetch */
+    const hang = (reqInit?: RequestInit) =>
+      new Promise<Response>((_, reject) => {
+        reqInit?.signal?.addEventListener('abort', () =>
+          reject(reqInit.signal?.reason)
+        );
+      });
+
+    it('aborts a hung POST and retries it as a network error', async () => {
+      process.env.ARCHIVE_REQUEST_TIMEOUT_MS = '20';
+      let calls = 0;
+      mockedFetch.mockImplementation(async (url, reqInit) => {
+        if (
+          String(url).startsWith('https://web.archive.org/save/status/user')
+        ) {
+          return jsonResponse(FREE_STATUS);
+        }
+        calls += 1;
+        if (calls < 3) return hang(reqInit);
+        return jsonResponse({
+          job_id: 'spn2-ok',
+          url: getArchivedUrl(reqInit),
+        });
+      });
+
+      const [result] = await archiveUrlsFromText(
+        'See https://hang.example.com'
+      );
+      expect(saveCalls()).toHaveLength(3);
+      expect(result.job_id).toBe('spn2-ok');
+    });
+
+    it('gives up with a network error when every attempt hangs', async () => {
+      process.env.ARCHIVE_REQUEST_TIMEOUT_MS = '10';
+      mockedFetch.mockImplementation(async (url, reqInit) => {
+        if (
+          String(url).startsWith('https://web.archive.org/save/status/user')
+        ) {
+          return jsonResponse(FREE_STATUS);
+        }
+        return hang(reqInit);
+      });
+
+      const [result] = await archiveUrlsFromText(
+        'See https://hang2.example.com'
+      );
+      expect(saveCalls()).toHaveLength(5);
+      expect(result.status_ext).toBe('error:network');
+    });
+
+    it('submits anyway when the status check hangs', async () => {
+      process.env.ARCHIVE_REQUEST_TIMEOUT_MS = '20';
+      mockedFetch.mockImplementation(async (url, reqInit) => {
+        if (
+          String(url).startsWith('https://web.archive.org/save/status/user')
+        ) {
+          return hang(reqInit);
+        }
+        return jsonResponse({
+          job_id: 'spn2-ok',
+          url: getArchivedUrl(reqInit),
+        });
+      });
+
+      const [result] = await archiveUrlsFromText(
+        'See https://hang3.example.com'
+      );
+      expect(saveCalls()).toHaveLength(1);
+      expect(result.job_id).toBe('spn2-ok');
+    });
+
+    it.each([[''], ['abc'], ['0'], ['-1']])(
+      'falls back to the default timeout when ARCHIVE_REQUEST_TIMEOUT_MS is %p',
+      async (value) => {
+        process.env.ARCHIVE_REQUEST_TIMEOUT_MS = value;
+        mockSPN({
+          save: (reqInit) =>
+            jsonResponse({ job_id: 'spn2-ok', url: getArchivedUrl(reqInit) }),
+        });
+        const [result] = await archiveUrlsFromText(
+          `See https://timeout${value.length}.example.com`
+        );
+        expect(result.job_id).toBe('spn2-ok');
+        expect(saveCalls()[0][1]?.signal).toBeInstanceOf(AbortSignal);
+      }
+    );
   });
 });

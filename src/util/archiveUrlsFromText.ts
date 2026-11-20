@@ -30,7 +30,8 @@ export type SPNResult = {
  * 3. still retry with exponential backoff when SPN2 reports a temporary error
  *    (session limit, overload, 5xx / 408 / 429 responses that are not JSON,
  *    network errors), as the status check can be stale or fail;
- * 4. give up on a URL after a time budget (3 minutes by default), so one URL
+ * 4. time out each request to SPN2 (30 seconds by default), and give up on a
+ *    URL after a time budget (3 minutes by default), so one URL
  *    that keeps failing cannot hold up every URL queued behind it.
  *
  * The queue lives in memory; pending URLs are lost on restart.
@@ -62,6 +63,15 @@ function positiveNumberFromEnv(name: string, defaultValue: number) {
 /** Base delay for retries; doubles each attempt (15s, 30s, 60s, 120s by default) */
 function getRetryBaseMs() {
   return positiveNumberFromEnv('ARCHIVE_RETRY_BASE_MS', 15_000);
+}
+
+/**
+ * Timeout for each request to SPN2. A POST normally returns in about a second
+ * because SPN2 only queues the capture; without a timeout a hung connection
+ * would stall the serial queue and the time budget below would not help.
+ */
+function getRequestTimeoutMs() {
+  return positiveNumberFromEnv('ARCHIVE_REQUEST_TIMEOUT_MS', 30_000);
 }
 
 /** Total time one URL may spend in the queue (waiting for slots + retrying) */
@@ -102,6 +112,7 @@ async function getUserStatus(): Promise<UserStatus | null> {
           Accept: 'application/json',
           Authorization: SPN_AUTH_HEADER(),
         },
+        signal: AbortSignal.timeout(getRequestTimeoutMs()),
       }
     );
     if (!resp.ok) return null;
@@ -155,6 +166,8 @@ async function submitOnce(url: string): Promise<SPNResult> {
         Authorization: SPN_AUTH_HEADER(),
       },
       body: formData,
+      // Also covers reading the response body below
+      signal: AbortSignal.timeout(getRequestTimeoutMs()),
     });
   } catch (e) {
     return {
