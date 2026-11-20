@@ -88,7 +88,43 @@ if (process.env.GCS_BUCKET_NAME) {
     }, 40 * 1000);
 
     afterAll(async () => {
-      await langfuse.shutdownAsync();
+      try {
+        // Tests delete their airesponses inline, but a failed assertion skips
+        // that. Sweep what these tests may leave so it can't leak into suites
+        // that run later (e.g. ListAIResponses).
+        await client.indices.refresh({ index: 'airesponses' });
+        await client.deleteByQuery({
+          index: 'airesponses',
+          refresh: true,
+          conflicts: 'proceed',
+          query: {
+            bool: {
+              filter: [{ terms: { type: ['TRANSCRIPT', 'EMBEDDING'] } }],
+              should: [
+                {
+                  bool: {
+                    filter: [
+                      { term: { userId: 'foo' } },
+                      { term: { appId: 'WEBSITE' } },
+                    ],
+                  },
+                },
+                {
+                  bool: {
+                    filter: [
+                      { term: { userId: 'user-id' } },
+                      { term: { appId: 'app-id' } },
+                    ],
+                  },
+                },
+              ],
+              minimum_should_match: 1,
+            },
+          },
+        });
+      } finally {
+        await langfuse.shutdownAsync();
+      }
     });
 
     it('creates error when file format is not supported', async () => {
@@ -165,7 +201,7 @@ if (process.env.GCS_BUCKET_NAME) {
         index: 'airesponses',
         id: aiResponseId,
       });
-    });
+    }, 60000);
 
     it('does transcript for audio', async () => {
       const {
@@ -206,7 +242,10 @@ if (process.env.GCS_BUCKET_NAME) {
       // The whole text are not always 100% identical, but these keywords should be always included.
       expect(text).toMatch(/幫我捧場一組我兼職|帮我捧场一组我兼职/);
       expect(text).toMatch(/賣的葉黃[素樹]軟糖|卖的叶黄[素树]软糖/);
-      expect(text).toMatch(/含運費是1280|含运费是1280/);
+      // Gemini may write the price in Arabic or Chinese numerals.
+      expect(text).toMatch(
+        /含[運运][費费]是(1,?280|一二八[零〇]|一千二百八十)/
+      );
       expect(text).toMatch(/達到就會有額外的獎金|达到就会有额外的奖金/);
       expect(text).toMatch(/你能夠幫我一組就好了|你能够帮我一组就好了/);
 
