@@ -88,6 +88,35 @@ if (process.env.GCS_BUCKET_NAME) {
     }, 40 * 1000);
 
     afterAll(async () => {
+      // Tests delete their airesponses inline, but a failed assertion skips
+      // that. Sweep what these tests may leave so it can't leak into suites
+      // that run later (e.g. ListAIResponses).
+      await client.indices.refresh({ index: 'airesponses' });
+      await client.deleteByQuery({
+        index: 'airesponses',
+        refresh: true,
+        conflicts: 'proceed',
+        query: {
+          bool: {
+            filter: [
+              {
+                terms: {
+                  type: ['TRANSCRIPT', 'EMBEDDING'],
+                },
+              },
+              {
+                bool: {
+                  should: [
+                    { term: { userId: 'foo' } },
+                    { term: { userId: 'user-id' } },
+                  ],
+                  minimum_should_match: 1,
+                },
+              },
+            ],
+          },
+        },
+      });
       await langfuse.shutdownAsync();
     });
 
@@ -206,7 +235,9 @@ if (process.env.GCS_BUCKET_NAME) {
       // The whole text are not always 100% identical, but these keywords should be always included.
       expect(text).toMatch(/幫我捧場一組我兼職|帮我捧场一组我兼职/);
       expect(text).toMatch(/賣的葉黃[素樹]軟糖|卖的叶黄[素树]软糖/);
-      expect(text).toMatch(/含運費是1280|含运费是1280/);
+      expect(text).toMatch(
+        /含運費是(1280|一二八零)|含运费是(1280|一二八零)/
+      );
       expect(text).toMatch(/達到就會有額外的獎金|达到就会有额外的奖金/);
       expect(text).toMatch(/你能夠幫我一組就好了|你能够帮我一组就好了/);
 
