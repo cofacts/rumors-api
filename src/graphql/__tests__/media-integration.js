@@ -36,6 +36,27 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     console.info(`[Media Integration] file server listening at ${serverUrl}`);
   });
   afterAll(async () => {
+    // CreateMediaArticle generates the transcript and embedding in the
+    // background, and those write airesponses docs that these tests never
+    // clean up. Let the background work settle, then remove them so they
+    // don't leak into suites that run later (e.g. ListAIResponses).
+    await delayForMs(3000);
+    await client.indices.refresh({ index: 'airesponses' });
+    await client.deleteByQuery({
+      index: 'airesponses',
+      refresh: true,
+      conflicts: 'proceed',
+      query: {
+        bool: {
+          filter: [
+            { term: { userId: 'foo' } },
+            { term: { appId: 'WEBSITE' } },
+            { terms: { type: ['TRANSCRIPT', 'EMBEDDING'] } },
+          ],
+        },
+      },
+    });
+
     // File server teardown
     await new Promise((resolve) => server.close(resolve));
     console.info(`[Media Integration] file server closed.`);
@@ -153,7 +174,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
         appId: context.user.appId,
       }),
     });
-  }, 15000);
+  }, 60000);
 
   it('can replace media for article', async () => {
     // Simulates user login
@@ -233,7 +254,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
         appId: context.user.appId,
       }),
     });
-  }, 15000);
+  }, 60000);
 } else {
   // Skipped in the default (no-credential) CI run to avoid real GCS calls
   // (cost + flakiness). Exercised by the integration workflow, which sets
