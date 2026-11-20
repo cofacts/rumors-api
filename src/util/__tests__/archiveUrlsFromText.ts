@@ -97,6 +97,7 @@ describe('archiveUrlsFromText', () => {
 
   beforeEach(() => {
     mockedFetch.mockReset();
+    process.env.ARCHIVE_RETRY_BASE_MS = '1';
     delete process.env.ARCHIVE_STATUS_MAX_POLLS;
     delete process.env.ARCHIVE_URL_BUDGET_MS;
     delete process.env.ARCHIVE_REQUEST_TIMEOUT_MS;
@@ -659,8 +660,17 @@ describe('archiveUrlsFromText', () => {
       expect(result.job_id).toBe('spn2-ok');
     });
 
-    it.each([[''], ['abc'], ['0'], ['-1']])(
-      'falls back to the default timeout when ARCHIVE_REQUEST_TIMEOUT_MS is %p',
+    it.each([
+      [''],
+      ['abc'],
+      ['0'],
+      ['-1'],
+      ['1.5'],
+      ['0.5'],
+      ['1e10'],
+      ['Infinity'],
+    ])(
+      'does not break requests when ARCHIVE_REQUEST_TIMEOUT_MS is %p',
       async (value) => {
         process.env.ARCHIVE_REQUEST_TIMEOUT_MS = value;
         mockSPN({
@@ -671,8 +681,68 @@ describe('archiveUrlsFromText', () => {
           `See https://timeout${value.length}.example.com`
         );
         expect(result.job_id).toBe('spn2-ok');
+        // The status check must not be silently skipped, and the POST must be sent with a signal
+        expect(statusCalls().length).toBeGreaterThan(0);
         expect(saveCalls()[0][1]?.signal).toBeInstanceOf(AbortSignal);
       }
     );
+  });
+  describe('retries of JSON error responses without status_ext', () => {
+    it.each([[502], [503], [429], [408]])(
+      'retries HTTP %p with a message-only JSON body',
+      async (httpStatus) => {
+        let calls = 0;
+        mockSPN({
+          save: (reqInit) => {
+            calls += 1;
+            if (calls === 1) {
+              return jsonResponse({ message: 'Bad Gateway' }, httpStatus);
+            }
+            return jsonResponse({
+              job_id: 'spn2-ok',
+              url: getArchivedUrl(reqInit),
+            });
+          },
+        });
+        const [result] = await archiveUrlsFromText(
+          `See https://json${httpStatus}.example.com`
+        );
+        expect(saveCalls()).toHaveLength(2);
+        expect(result.job_id).toBe('spn2-ok');
+      }
+    );
+
+    it('keeps the status_ext SPN2 sent, even on a 5xx', async () => {
+      mockSPN({
+        save: () =>
+          jsonResponse(
+            { status: 'error', status_ext: 'error:blocked-url' },
+            503
+          ),
+      });
+      const [result] = await archiveUrlsFromText(
+        'See https://own-ext.example.com'
+      );
+      expect(saveCalls()).toHaveLength(1);
+      expect(result.status_ext).toBe('error:blocked-url');
+    });
+  });
+
+  describe('retry budget', () => {
+    it('with the default backoff-to-budget ratio, makes 4 attempts (the 5th would exceed the budget)', async () => {
+      // Same ratio as the defaults: base 15 : budget 180 -> attempts at 0, 15, 45, 105;
+      // the next delay (120) would end at 225 > 180.
+      process.env.ARCHIVE_RETRY_BASE_MS = '15';
+      process.env.ARCHIVE_URL_BUDGET_MS = '180';
+      mockSPN({
+        save: () =>
+          jsonResponse({
+            status: 'error',
+            status_ext: 'error:user-session-limit',
+          }),
+      });
+      await archiveUrlsFromText('See https://ratio.example.com');
+      expect(saveCalls()).toHaveLength(4);
+    });
   });
 });

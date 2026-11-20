@@ -28,11 +28,14 @@ export type SPNResult = {
  *    `available`, wait while there are none, and stop for the day once
  *    `daily_captures_limit` is reached;
  * 3. still retry with exponential backoff when SPN2 reports a temporary error
- *    (session limit, overload, 5xx / 408 / 429 responses that are not JSON,
- *    network errors), as the status check can be stale or fail;
+ *    (session limit, overload, HTTP 5xx / 408 / 429 whether or not the body is
+ *    JSON, network errors), as the status check can be stale or fail;
  * 4. time out each request to SPN2 (30 seconds by default), and give up on a
  *    URL after a time budget (3 minutes by default), so one URL
- *    that keeps failing cannot hold up every URL queued behind it.
+ *    that keeps failing cannot hold up every URL queued behind it. A retry is
+ *    skipped when its delay would pass the deadline, so with the defaults a URL
+ *    gets 4 attempts (3 if every request runs into its timeout), not
+ *    MAX_ATTEMPTS.
  *
  * The queue lives in memory; pending URLs are lost on restart.
  */
@@ -50,17 +53,24 @@ const RETRYABLE_STATUS_EXT = new Set([
   'error:network',
 ]);
 
+/** Largest delay `setTimeout` and `AbortSignal.timeout` accept (2^31 - 1 ms) */
+const MAX_TIMER_MS = 2 ** 31 - 1;
+
 /**
- * Read a positive number from env.
- * Empty, non-numeric, zero or negative values fall back to the default; a bad
- * value must not silently turn off throttling or backoff.
+ * Read a positive integer from env, at most `MAX_TIMER_MS`.
+ * Empty, non-numeric, zero, negative or infinite values fall back to the
+ * default, and fractions are rounded down: a bad value must not silently turn
+ * off throttling or backoff, and `AbortSignal.timeout` throws on fractions and
+ * on values above the maximum.
  */
 function positiveNumberFromEnv(name: string, defaultValue: number) {
-  const value = Number(process.env[name]);
-  return Number.isFinite(value) && value > 0 ? value : defaultValue;
+  const value = Math.floor(Number(process.env[name]));
+  return Number.isFinite(value) && value > 0
+    ? Math.min(value, MAX_TIMER_MS)
+    : defaultValue;
 }
 
-/** Base delay for retries; doubles each attempt (15s, 30s, 60s, 120s by default) */
+/** Base delay for retries; doubles each attempt (15s, 30s, 60s, 120s by default, as far as the time budget allows) */
 function getRetryBaseMs() {
   return positiveNumberFromEnv('ARCHIVE_RETRY_BASE_MS', 15_000);
 }
@@ -150,6 +160,14 @@ async function waitForSlot(deadline: number): Promise<'ok' | 'daily-limit'> {
   return 'ok';
 }
 
+/** Temporary HTTP statuses (5xx, 408, 429) map to an error that is retried */
+function retryableStatusExtFromHttp(httpStatus: number): string | undefined {
+  if (httpStatus >= 500) return 'error:internal-server-error';
+  if (httpStatus === 408 || httpStatus === 429)
+    return 'error:too-many-requests';
+  return undefined;
+}
+
 async function submitOnce(url: string): Promise<SPNResult> {
   const formData = new FormData();
   formData.append('url', url);
@@ -189,10 +207,17 @@ async function submitOnce(url: string): Promise<SPNResult> {
     };
   }
 
+  const httpStatusExt = retryableStatusExtFromHttp(resp.status);
+
   try {
     const parsed = JSON.parse(body);
     // `null`, numbers, strings and arrays are valid JSON but not SPN2 results
     if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      // e.g. a gateway answering 502 with {"message": "..."}: no status_ext
+      // from SPN2, but the HTTP status says it is worth retrying
+      if (!resp.ok && !parsed.status_ext && httpStatusExt) {
+        return { ...parsed, status: 'error', status_ext: httpStatusExt };
+      }
       return parsed;
     }
   } catch {
@@ -201,14 +226,9 @@ async function submitOnce(url: string): Promise<SPNResult> {
 
   // Not JSON, e.g. an HTML error page from a proxy. Only temporary conditions
   // are worth retrying.
-  let statusExt = 'error:non-json';
-  if (resp.status >= 500) statusExt = 'error:internal-server-error';
-  else if (resp.status === 408 || resp.status === 429) {
-    statusExt = 'error:too-many-requests';
-  }
   return {
     status: 'error',
-    status_ext: statusExt,
+    status_ext: httpStatusExt ?? 'error:non-json',
     message: `HTTP ${resp.status}: ${body.slice(0, 200)}`,
   };
 }
