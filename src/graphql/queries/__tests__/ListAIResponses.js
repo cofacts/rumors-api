@@ -1,10 +1,24 @@
+import client from 'util/client';
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import fixtures from '../__fixtures__/ListAIResponses';
 // import { getCursor } from 'graphql/util';
 
 describe('ListAIResponses', () => {
-  beforeAll(() => loadFixtures(fixtures));
+  beforeAll(async () => {
+    // TEMP DEBUG: dump leaked airesponses docs left by earlier suites
+    await client.indices.refresh({ index: 'airesponses' });
+    const { hits } = await client.search({
+      index: 'airesponses',
+      size: 50,
+      _source: ['type', 'docId', 'status', 'createdAt', 'appId', 'userId'],
+    });
+    console.log(
+      '[DEBUG-LEAK] airesponses before fixtures:',
+      JSON.stringify(hits.hits.map((h) => ({ id: h._id, ...h._source })), null, 1)
+    );
+    await loadFixtures(fixtures);
+  });
   afterAll(() => unloadFixtures(fixtures));
 
   it('lists all AI responses', async () => {
