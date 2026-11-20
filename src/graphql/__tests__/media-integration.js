@@ -116,6 +116,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     );
 
     expect(createMediaArticleResult.errors).toBeUndefined();
+    expect(createMediaArticleResult.errors).toBeUndefined();
     const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
 
     const getArticleResult = await gql`
@@ -205,6 +206,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
       context
     );
 
+    expect(createMediaArticleResult.errors).toBeUndefined();
     const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
 
     const articleBeforeReplace = await gql`
