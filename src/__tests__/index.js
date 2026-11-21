@@ -84,9 +84,7 @@ describe('apolloServer', () => {
 
     const { res, errors } = await getCurrentUser({
       appId,
-      userId,
-      state: { user: { id: userId } },
-      query: { userId },
+      state: { user: { userId } },
     });
 
     const expectedUser = {
@@ -116,7 +114,7 @@ describe('apolloServer', () => {
 
     const { res, errors } = await getCurrentUser({
       appId,
-      userId,
+      isAppSecretVerified: true,
       state: {},
       query: { userId },
     });
@@ -148,7 +146,7 @@ describe('apolloServer', () => {
 
     const { res, errors } = await getCurrentUser({
       appId,
-      userId,
+      isAppSecretVerified: true,
       state: {},
       query: { userId },
     });
@@ -172,5 +170,37 @@ describe('apolloServer', () => {
     expect(ctxUserId).toBe(expectedUser.id);
     expect(ctxAppUserId).toBe(userId);
     expect(ctxAppId).toBe(appId);
+  });
+
+  it('ignores ?userId= without app secret, preventing impersonation', async () => {
+    // Website user impersonation: website DB user IDs are public
+    for (const appId of ['WEBSITE', 'DEVELOPMENT_FRONTEND']) {
+      const { res, errors } = await getCurrentUser({
+        appId,
+        state: {},
+        query: { userId: 'testUser1' },
+      });
+      expect(errors).toBeUndefined();
+      expect(res).toBe(null);
+    }
+
+    // Backend user impersonation without valid secret
+    const { res, errors } = await getCurrentUser({
+      appId: 'DEVELOPMENT_BACKEND',
+      state: {},
+      query: { userId: 'testUser2' },
+    });
+    expect(errors).toBeUndefined();
+    expect(res).toBe(null);
+  });
+
+  it('uses session user instead of ?userId= without app secret', async () => {
+    const { res, errors } = await getCurrentUser({
+      appId: 'WEBSITE',
+      state: { user: { userId: 'testUser1' } },
+      query: { userId: 'someone-else' },
+    });
+    expect(errors).toBeUndefined();
+    expect(res).toMatchObject({ id: 'testUser1' });
   });
 });

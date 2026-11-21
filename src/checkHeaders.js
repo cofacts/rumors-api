@@ -6,6 +6,10 @@ async function checkSecret(ctx, next) {
     // Shortcut for official rumors-line-bot -- no DB queries
     ctx.appId = 'RUMORS_LINE_BOT';
 
+    // Only apps authenticated by secret can act on behalf of users via `?userId=`.
+    // See contextFactory.
+    ctx.isAppSecretVerified = true;
+
     // else if(secret) { ...
     // TODO: Fill up ctx.appId with app id after looking up DB with secret
   } else {
