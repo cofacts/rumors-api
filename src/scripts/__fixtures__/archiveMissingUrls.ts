@@ -5,12 +5,12 @@ const hoursAgo = (h: number) =>
   new Date(NOW.getTime() - h * 3600_000).toISOString();
 
 export default {
-  // In the window (24h–72h ago)
+  // In the default window (360h–168h ago)
   '/articles/doc/archiveMissingUrls-a1': {
     userId: 'user1',
     appId: 'app1',
     text: 'See https://has-snapshot.example.com/a and https://missing.example.com/b?fbclid=abc',
-    createdAt: hoursAgo(30),
+    createdAt: hoursAgo(200),
   },
   '/replies/doc/archiveMissingUrls-r1': {
     userId: 'user1',
@@ -19,20 +19,20 @@ export default {
     // Same URL as in a1 (after fbclid removal), but created earlier
     text: 'Same as https://missing.example.com/b',
     reference: 'https://reference.example.com/c',
-    createdAt: hoursAgo(40),
+    createdAt: hoursAgo(220),
   },
   '/replies/doc/archiveMissingUrls-r2': {
     userId: 'user1',
     appId: 'app1',
     type: 'NOT_ARTICLE',
     text: 'No URL here, and no reference',
-    createdAt: hoursAgo(50),
+    createdAt: hoursAgo(250),
   },
   '/articles/doc/archiveMissingUrls-a2': {
     userId: 'user1',
     appId: 'app1',
     text: 'CDX fails for https://cdx-error.example.com/d',
-    createdAt: hoursAgo(60),
+    createdAt: hoursAgo(300),
   },
 
   // Outside the window
@@ -40,13 +40,13 @@ export default {
     userId: 'user1',
     appId: 'app1',
     text: 'https://too-new.example.com',
-    createdAt: hoursAgo(10),
+    createdAt: hoursAgo(100),
   },
   '/articles/doc/archiveMissingUrls-too-old': {
     userId: 'user1',
     appId: 'app1',
     text: 'https://too-old.example.com',
-    createdAt: hoursAgo(100),
+    createdAt: hoursAgo(400),
   },
 };
 
@@ -56,7 +56,7 @@ export const manyUrlsFixtures = {
     userId: 'user1',
     appId: 'app1',
     text: 'https://many1.example.com https://many2.example.com https://many3.example.com',
-    createdAt: hoursAgo(48),
+    createdAt: hoursAgo(260),
   },
 };
 
@@ -69,6 +69,6 @@ export const lagFixtures = {
       { length: 10 },
       (_, i) => `https://lag${i}.example.com/page`
     ).join(' '),
-    createdAt: hoursAgo(36),
+    createdAt: hoursAgo(280),
   },
 };

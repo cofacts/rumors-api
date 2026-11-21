@@ -134,7 +134,9 @@ describe('archiveMissingUrls', () => {
     );
     expect(missingLookups).toHaveLength(1);
     expect(missingLookups[0].get('from')).toBe(
-      toWaybackTimestamp(new Date(NOW.getTime() - 40 * 3600_000))
+      toWaybackTimestamp(
+        new Date(fixtures['/replies/doc/archiveMissingUrls-r1'].createdAt)
+      )
     );
   });
 
