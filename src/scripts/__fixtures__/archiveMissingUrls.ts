@@ -28,6 +28,13 @@ export default {
     text: 'No URL here, and no reference',
     createdAt: hoursAgo(250),
   },
+  '/articles/doc/archiveMissingUrls-blocked': {
+    userId: 'spammer',
+    appId: 'app1',
+    status: 'BLOCKED',
+    text: 'Spam https://blocked-spam.example.com/x',
+    createdAt: hoursAgo(210),
+  },
   '/articles/doc/archiveMissingUrls-a2': {
     userId: 'user1',
     appId: 'app1',

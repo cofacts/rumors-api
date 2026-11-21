@@ -39,6 +39,21 @@ const CDX_ENDPOINT = 'https://web.archive.org/cdx/search/cdx';
 const CDX_TIMEOUT_MS = 30_000;
 
 /**
+ * SPN2 returns an existing capture instead of making a new one if the URL was
+ * captured within the last hour (`if_not_archived_within` defaults to 1 hour,
+ * per the SPN2 docs). Such a capture can be slightly older than the document,
+ * so look for captures from this long before the document was created.
+ */
+const SPN2_RECENT_CAPTURE_WINDOW_MS = 3600_000;
+
+/**
+ * When re-submitting, only submit if SPN2 has at least this many free capture
+ * slots. This script runs in its own process, separate from the API server's
+ * queue, so leaving one slot free keeps it from starving real-time captures.
+ */
+const MIN_AVAILABLE_SLOTS = 2;
+
+/**
  * Stop asking CDX after this many failed lookups in a row; it is most likely
  * rate limiting us, and continuing would make it worse.
  */
@@ -49,15 +64,21 @@ const MAX_CONSECUTIVE_CDX_FAILURES = 5;
  * captures are not visible in CDX yet rather than missing, and re-submit
  * nothing. With `delay_wb_availability=1`, captures have taken about 4 days to
  * show up in CDX (observed 2026-11-21), not the ~12 hours the SPN2 docs state.
- * In normal operation some URLs in the window (news sites, government pages)
- * always have snapshots.
+ *
+ * This only catches the case where nothing in the window is visible. Captures
+ * made by others (for example IA's own crawls of news sites) still count as
+ * snapshots, so a delay that grows past the window can go unnoticed if some
+ * URLs were captured that way; our invisible captures are then re-submitted.
  */
 const MIN_CHECKED_FOR_LAG_GUARD = 10;
 
-/** Fields that rumors-api passes to archiveUrlsFromText, per index */
+/**
+ * Fields that rumors-api passes to archiveUrlsFromText, per index.
+ * Articles from blocked (spam) users are skipped; replies have no status.
+ */
 const SOURCES = [
-  { index: 'articles', fields: ['text'] },
-  { index: 'replies', fields: ['text', 'reference'] },
+  { index: 'articles', fields: ['text'], skipBlocked: true },
+  { index: 'replies', fields: ['text', 'reference'], skipBlocked: false },
 ] as const;
 
 type Options = {
@@ -135,10 +156,16 @@ async function collectUrls(from: Date, to: Date) {
   const urlSince = new Map<string, Date>();
   let docs = 0;
 
-  for (const { index, fields } of SOURCES) {
+  for (const { index, fields, skipBlocked } of SOURCES) {
     const query = {
-      range: {
-        createdAt: { gte: from.toISOString(), lt: to.toISOString() },
+      bool: {
+        filter: {
+          range: {
+            createdAt: { gte: from.toISOString(), lt: to.toISOString() },
+          },
+        },
+        // `match` works whether `status` is mapped as keyword or text
+        must_not: skipBlocked ? [{ match: { status: 'BLOCKED' } }] : [],
       },
     };
 
@@ -175,6 +202,9 @@ async function archiveMissingUrls({
   if (!(fromHours > toHours && toHours >= 0)) {
     throw new Error('fromHours must be greater than toHours, and toHours >= 0');
   }
+  if (!(Number.isFinite(cdxDelayMs) && cdxDelayMs >= 0)) {
+    throw new Error('cdxDelayMs must be a number >= 0');
+  }
 
   const now = Date.now();
   const from = new Date(now - fromHours * 3600_000);
@@ -198,7 +228,10 @@ async function archiveMissingUrls({
     if (lookups > 0) await delayForMs(cdxDelayMs);
     lookups += 1;
 
-    const hasSnapshot = await hasSnapshotSince(url, since);
+    const hasSnapshot = await hasSnapshotSince(
+      url,
+      new Date(since.getTime() - SPN2_RECENT_CAPTURE_WINDOW_MS)
+    );
     if (hasSnapshot === null) {
       unknown += 1;
       consecutiveFailures += 1;
@@ -245,7 +278,9 @@ async function archiveMissingUrls({
       console.info(`[archiveMissingUrls] missing: ${url}`)
     );
   } else {
-    const results: SPNResult[] = await archiveUrls(missing);
+    const results: SPNResult[] = await archiveUrls(missing, {
+      minAvailableSlots: MIN_AVAILABLE_SLOTS,
+    });
     results.forEach((result) => {
       const key = result.job_id
         ? 'job_id'
@@ -270,6 +305,14 @@ async function archiveMissingUrls({
 }
 
 export default archiveMissingUrls;
+
+/**
+ * Exit code for cron: 2 when the run could not do its job (CDX kept failing,
+ * or captures looked not visible yet), so the failure is not silent.
+ */
+export function exitCodeOf(summary: Summary) {
+  return summary.abortedLookups || summary.skippedLikelyLag ? 2 : 0;
+}
 
 /* istanbul ignore if */
 if (require.main === module) {
@@ -307,7 +350,7 @@ if (require.main === module) {
     .parseSync();
 
   archiveMissingUrls(argv)
-    .then(() => process.exit(0))
+    .then((summary) => process.exit(exitCodeOf(summary)))
     .catch((e) => {
       console.error(e);
       process.exit(1);

@@ -146,14 +146,17 @@ async function getUserStatus(): Promise<UserStatus | null> {
  * budget (`deadline`, epoch ms) is used up, proceed anyway; the POST and its
  * retry will handle it.
  */
-async function waitForSlot(deadline: number): Promise<'ok' | 'daily-limit'> {
+async function waitForSlot(
+  deadline: number,
+  minAvailable: number
+): Promise<'ok' | 'daily-limit'> {
   for (let i = 0; i < getStatusMaxPolls(); i += 1) {
     const status = await getUserStatus();
     if (!status) return 'ok';
     if (status.daily_captures >= status.daily_captures_limit) {
       return 'daily-limit';
     }
-    if (status.available > 0) return 'ok';
+    if (status.available >= minAvailable) return 'ok';
     if (Date.now() + getStatusPollMs() > deadline) return 'ok';
     await sleep(getStatusPollMs());
   }
@@ -233,11 +236,23 @@ async function submitOnce(url: string): Promise<SPNResult> {
   };
 }
 
-async function submitWithRetry(url: string): Promise<SPNResult> {
+export type ArchiveOptions = {
+  /**
+   * Only submit when SPN2 reports at least this many free capture slots.
+   * Defaults to 1. Processes other than the API server (e.g. scripts) can set
+   * it higher to leave slots for real-time captures.
+   */
+  minAvailableSlots?: number;
+};
+
+async function submitWithRetry(
+  url: string,
+  { minAvailableSlots = 1 }: ArchiveOptions
+): Promise<SPNResult> {
   let result: SPNResult = {};
   const deadline = Date.now() + getUrlBudgetMs();
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
-    if ((await waitForSlot(deadline)) === 'daily-limit') {
+    if ((await waitForSlot(deadline, minAvailableSlots)) === 'daily-limit') {
       result = {
         status: 'error',
         status_ext: 'error:daily-limit-reached',
@@ -272,11 +287,11 @@ let queueTail: Promise<unknown> = Promise.resolve();
 /** URL -> pending result, so the same URL is not queued twice */
 const pending = new Map<string, Promise<SPNResult>>();
 
-function enqueue(url: string): Promise<SPNResult> {
+function enqueue(url: string, options: ArchiveOptions): Promise<SPNResult> {
   const existing = pending.get(url);
   if (existing) return existing;
 
-  const job = queueTail.then(() => submitWithRetry(url));
+  const job = queueTail.then(() => submitWithRetry(url, options));
   queueTail = job.catch(() => undefined);
   pending.set(url, job);
   job.finally(() => pending.delete(url)).catch(() => undefined);
@@ -298,10 +313,13 @@ export function extractArchivableUrls(text: string | null | undefined) {
 }
 
 /** Queue URLs that are already normalized (see extractArchivableUrls) */
-export function archiveUrls(urls: string[]): Promise<SPNResult[]> {
+export function archiveUrls(
+  urls: string[],
+  options: ArchiveOptions = {}
+): Promise<SPNResult[]> {
   if (urls.length === 0) return Promise.resolve([]);
   console.info(`[archiveUrlsFromText] Archiving ${urls.length} URLs`);
-  return Promise.all(urls.map(enqueue));
+  return Promise.all(urls.map((url) => enqueue(url, options)));
 }
 
 export default async function archiveUrlsFromText(
