@@ -10,12 +10,16 @@
  * the Wayback CDX API whether each URL has a snapshot taken after the document
  * was created, and re-submits the URLs that do not.
  *
- * Captures are made with `delay_wb_availability=1`, so they only show up in the
- * Wayback Machine (and CDX) about 12 hours later. The default window therefore
- * ends 24 hours ago. It starts 72 hours ago so that one missed daily run does
- * not lose URLs; a URL that keeps failing is re-submitted at most twice.
+ * Captures are made with `delay_wb_availability=1`, so they show up in the
+ * Wayback Machine (and CDX) only later. The SPN2 docs say about 12 hours, but in
+ * 2026-11 it took about 4 days: of production captures accepted 29–87 hours
+ * earlier, 0 of 22 were in CDX, while most accepted 94–126 hours earlier were.
+ * The default window therefore covers documents created 15 to 7 days ago, and
+ * the script is meant to run weekly; the extra day overlaps the previous run in
+ * case a run is missed. A URL that keeps failing is re-submitted about once a
+ * week while it stays in the window, so at most twice.
  *
- * Meant to run daily from cron, e.g.
+ * Meant to run weekly from cron, e.g.
  *   docker compose exec -T api node build/scripts/archiveMissingUrls.js
  */
 import 'dotenv/config';
@@ -162,8 +166,8 @@ async function collectUrls(from: Date, to: Date) {
 }
 
 async function archiveMissingUrls({
-  fromHours = 72,
-  toHours = 24,
+  fromHours = 360,
+  toHours = 168,
   dryRun = false,
   cdxDelayMs = 3000,
   force = false,
@@ -274,13 +278,13 @@ if (require.main === module) {
       fromHours: {
         description: 'Start of the window, in hours before now',
         type: 'number',
-        default: 72,
+        default: 360,
       },
       toHours: {
         description:
-          'End of the window, in hours before now. Captures appear in CDX ~12 hours after capture.',
+          'End of the window, in hours before now. Delayed captures took ~4 days to appear in CDX in 2026-11.',
         type: 'number',
-        default: 24,
+        default: 168,
       },
       dryRun: {
         description: 'Only list the URLs that would be re-submitted',
