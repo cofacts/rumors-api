@@ -5,6 +5,7 @@ import fixtures from '../__fixtures__/index';
 import { createTestClient } from 'apollo-server-testing';
 import MockDate from 'mockdate';
 import GetUser from '../graphql/queries/GetUser';
+import { convertAppUserIdToUserId } from 'util/user';
 
 jest.mock('koa', () => {
   const Koa = jest.requireActual('koa');
@@ -184,14 +185,25 @@ describe('apolloServer', () => {
       expect(res).toBe(null);
     }
 
-    // Backend user impersonation without valid secret
-    const { res, errors } = await getCurrentUser({
-      appId: 'DEVELOPMENT_BACKEND',
-      state: {},
-      query: { userId: 'testUser2' },
-    });
-    expect(errors).toBeUndefined();
-    expect(res).toBe(null);
+    // Backend user impersonation without valid secret.
+    // RUMORS_LINE_BOT without secret is what `x-app-id: RUMORS_LINE_BOT` (LIFF) yields.
+    for (const appId of ['DEVELOPMENT_BACKEND', 'RUMORS_LINE_BOT']) {
+      const { res, errors } = await getCurrentUser({
+        appId,
+        state: {},
+        query: { userId: 'testUser2' },
+      });
+      expect(errors).toBeUndefined();
+      expect(res).toBe(null);
+
+      // No user doc should be created for the given app user ID
+      expect(
+        await client.exists({
+          index: 'users',
+          id: convertAppUserIdToUserId({ appId, appUserId: 'testUser2' }),
+        })
+      ).toBe(false);
+    }
   });
 
   it('uses session user instead of ?userId= without app secret', async () => {

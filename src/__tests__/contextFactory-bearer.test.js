@@ -131,6 +131,21 @@ describe('contextFactory Bearer auth', () => {
 
   it('queryUserId still works without Bearer (legacy App-Secret flow)', async () => {
     const ctx = {
+      appId: 'RUMORS_LINE_BOT',
+      isAppSecretVerified: true,
+      query: { userId: 'query-user' },
+      state: { user: { userId: 'session-user' } },
+      request: { headers: {} },
+      get: jest.fn().mockReturnValue(''),
+    };
+    await contextFactory({ ctx });
+    expect(createOrUpdateUser).toHaveBeenCalledWith(
+      expect.objectContaining({ userId: 'query-user' })
+    );
+  });
+
+  it('ignores queryUserId without verified app secret', async () => {
+    const ctx = {
       appId: 'RUMORS_SITE',
       query: { userId: 'query-user' },
       state: { user: { userId: 'session-user' } },
@@ -139,6 +154,9 @@ describe('contextFactory Bearer auth', () => {
     };
     await contextFactory({ ctx });
     expect(createOrUpdateUser).toHaveBeenCalledWith(
+      expect.objectContaining({ userId: 'session-user' })
+    );
+    expect(createOrUpdateUser).not.toHaveBeenCalledWith(
       expect.objectContaining({ userId: 'query-user' })
     );
   });
