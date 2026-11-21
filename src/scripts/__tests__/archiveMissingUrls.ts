@@ -11,6 +11,7 @@ import MockDate from 'mockdate';
 
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
 import archiveMissingUrls, {
+  exitCodeOf,
   hasSnapshotSince,
   toWaybackTimestamp,
 } from '../archiveMissingUrls';
@@ -127,15 +128,22 @@ describe('archiveMissingUrls', () => {
     const looked = cdxCalls().map((p) => p.get('url'));
     expect(looked).not.toContain('https://too-new.example.com/');
     expect(looked).not.toContain('https://too-old.example.com/');
+    // Articles from blocked users are skipped
+    expect(looked).not.toContain('https://blocked-spam.example.com/x');
 
     // A URL in several docs is looked up once, from the earliest creation time
     const missingLookups = cdxCalls().filter(
       (p) => p.get('url') === 'https://missing.example.com/b'
     );
     expect(missingLookups).toHaveLength(1);
+    // ... minus SPN2's 1-hour window for reusing a recent capture
     expect(missingLookups[0].get('from')).toBe(
       toWaybackTimestamp(
-        new Date(fixtures['/replies/doc/archiveMissingUrls-r1'].createdAt)
+        new Date(
+          new Date(
+            fixtures['/replies/doc/archiveMissingUrls-r1'].createdAt
+          ).getTime() - 3600_000
+        )
       )
     );
   });
@@ -205,6 +213,41 @@ describe('archiveMissingUrls', () => {
     expect(savedUrls()).toHaveLength(3);
   });
 
+  it('rejects a cdxDelayMs that would disable pacing', async () => {
+    await expect(archiveMissingUrls({ cdxDelayMs: NaN })).rejects.toThrow();
+    await expect(archiveMissingUrls({ cdxDelayMs: -1 })).rejects.toThrow();
+  });
+
+  it('leaves one SPN2 slot free for the API server when re-submitting', async () => {
+    // SPN2 reports 1 free slot twice, then 2: the script waits for 2
+    const available = [1, 1, 2, 2, 2, 2];
+    const order: string[] = [];
+    const base = mockedFetch.getMockImplementation();
+    mockedFetch.mockImplementation(async (url, init) => {
+      const u = String(url);
+      if (u.startsWith('https://web.archive.org/save/status/user')) {
+        order.push(`status:${available[0]}`);
+        return jsonResponse({
+          processing: 3 - (available[0] ?? 2),
+          available: available.shift() ?? 2,
+          daily_captures: 0,
+          daily_captures_limit: 30000,
+        });
+      }
+      if (u === SAVE) order.push('save');
+      if (!base) throw new Error('no base fetch mock');
+      return base(url, init);
+    });
+
+    await archiveMissingUrls({ cdxDelayMs: 0 });
+    expect(order.slice(0, 4)).toEqual([
+      'status:1',
+      'status:1',
+      'status:2',
+      'save',
+    ]);
+  });
+
   it('rejects an empty or inverted window', async () => {
     await expect(
       archiveMissingUrls({ fromHours: 24, toHours: 24 })
@@ -272,5 +315,23 @@ describe('toWaybackTimestamp', () => {
     expect(toWaybackTimestamp(new Date('2031-01-02T03:04:05.678Z'))).toBe(
       '20310102030405'
     );
+  });
+});
+
+describe('exitCodeOf', () => {
+  const base = {
+    docs: 1,
+    urls: 1,
+    withSnapshot: 1,
+    missing: [],
+    unknown: 0,
+    abortedLookups: false,
+    skippedLikelyLag: false,
+    resubmitted: {},
+  };
+  it('is 0 for a normal run, 2 when the run could not do its job', () => {
+    expect(exitCodeOf(base)).toBe(0);
+    expect(exitCodeOf({ ...base, abortedLookups: true })).toBe(2);
+    expect(exitCodeOf({ ...base, skippedLikelyLag: true })).toBe(2);
   });
 });
