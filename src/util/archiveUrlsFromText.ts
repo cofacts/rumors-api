@@ -283,16 +283,29 @@ function enqueue(url: string): Promise<SPNResult> {
   return job;
 }
 
-export default async function archiveUrlsFromText(
-  text: string
-): Promise<SPNResult[]> {
+/**
+ * URLs in the text, normalized the same way they are sent to SPN2.
+ * Shared with scripts/archiveMissingUrls so it looks up the same URLs.
+ */
+export function extractArchivableUrls(text: string | null | undefined) {
+  if (!text) return [];
   const originalUrls = text.match(urlRegex({ strict: true })) || [];
   if (originalUrls.length === 0) return [];
 
   // Normalize URLs before sending to cache or scrapper to increase cache hit
   //
-  const normalizedUrls = removeFBCLIDIfExist(originalUrls);
+  return removeFBCLIDIfExist(originalUrls) as string[];
+}
 
-  console.info(`[archiveUrlsFromText] Archiving ${normalizedUrls.length} URLs`);
-  return Promise.all(normalizedUrls.map(enqueue));
+/** Queue URLs that are already normalized (see extractArchivableUrls) */
+export function archiveUrls(urls: string[]): Promise<SPNResult[]> {
+  if (urls.length === 0) return Promise.resolve([]);
+  console.info(`[archiveUrlsFromText] Archiving ${urls.length} URLs`);
+  return Promise.all(urls.map(enqueue));
+}
+
+export default async function archiveUrlsFromText(
+  text: string
+): Promise<SPNResult[]> {
+  return archiveUrls(extractArchivableUrls(text));
 }
