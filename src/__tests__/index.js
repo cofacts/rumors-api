@@ -5,6 +5,7 @@ import fixtures from '../__fixtures__/index';
 import { createTestClient } from 'apollo-server-testing';
 import MockDate from 'mockdate';
 import GetUser from '../graphql/queries/GetUser';
+import { convertAppUserIdToUserId } from 'util/user';
 
 jest.mock('koa', () => {
   const Koa = jest.requireActual('koa');
@@ -84,9 +85,7 @@ describe('apolloServer', () => {
 
     const { res, errors } = await getCurrentUser({
       appId,
-      userId,
-      state: { user: { id: userId } },
-      query: { userId },
+      state: { user: { userId } },
     });
 
     const expectedUser = {
@@ -116,7 +115,7 @@ describe('apolloServer', () => {
 
     const { res, errors } = await getCurrentUser({
       appId,
-      userId,
+      isAppSecretVerified: true,
       state: {},
       query: { userId },
     });
@@ -148,7 +147,7 @@ describe('apolloServer', () => {
 
     const { res, errors } = await getCurrentUser({
       appId,
-      userId,
+      isAppSecretVerified: true,
       state: {},
       query: { userId },
     });
@@ -172,5 +171,48 @@ describe('apolloServer', () => {
     expect(ctxUserId).toBe(expectedUser.id);
     expect(ctxAppUserId).toBe(userId);
     expect(ctxAppId).toBe(appId);
+  });
+
+  it('ignores ?userId= without app secret, preventing impersonation', async () => {
+    // Website user impersonation: website DB user IDs are public
+    for (const appId of ['WEBSITE', 'DEVELOPMENT_FRONTEND']) {
+      const { res, errors } = await getCurrentUser({
+        appId,
+        state: {},
+        query: { userId: 'testUser1' },
+      });
+      expect(errors).toBeUndefined();
+      expect(res).toBe(null);
+    }
+
+    // Backend user impersonation without valid secret.
+    // RUMORS_LINE_BOT without secret is what `x-app-id: RUMORS_LINE_BOT` (LIFF) yields.
+    for (const appId of ['DEVELOPMENT_BACKEND', 'RUMORS_LINE_BOT']) {
+      const { res, errors } = await getCurrentUser({
+        appId,
+        state: {},
+        query: { userId: 'testUser2' },
+      });
+      expect(errors).toBeUndefined();
+      expect(res).toBe(null);
+
+      // No user doc should be created for the given app user ID
+      expect(
+        await client.exists({
+          index: 'users',
+          id: convertAppUserIdToUserId({ appId, appUserId: 'testUser2' }),
+        })
+      ).toBe(false);
+    }
+  });
+
+  it('uses session user instead of ?userId= without app secret', async () => {
+    const { res, errors } = await getCurrentUser({
+      appId: 'WEBSITE',
+      state: { user: { userId: 'testUser1' } },
+      query: { userId: 'someone-else' },
+    });
+    expect(errors).toBeUndefined();
+    expect(res).toMatchObject({ id: 'testUser1' });
   });
 });

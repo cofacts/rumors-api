@@ -1,10 +1,28 @@
+import crypto from 'crypto';
 import cors from 'kcors';
+
+/**
+ * Constant-time secret comparison. Never matches when expected secret is not configured.
+ */
+function isSecretMatch(given, expected) {
+  if (!given || !expected) return false;
+  const givenBuf = Buffer.from(given);
+  const expectedBuf = Buffer.from(expected);
+  return (
+    givenBuf.length === expectedBuf.length &&
+    crypto.timingSafeEqual(givenBuf, expectedBuf)
+  );
+}
 
 async function checkSecret(ctx, next) {
   const secret = ctx.get(process.env.HTTP_HEADER_APP_SECRET);
-  if (secret === process.env.RUMORS_LINE_BOT_SECRET) {
+  if (isSecretMatch(secret, process.env.RUMORS_LINE_BOT_SECRET)) {
     // Shortcut for official rumors-line-bot -- no DB queries
     ctx.appId = 'RUMORS_LINE_BOT';
+
+    // Only apps authenticated by secret can act on behalf of users via `?userId=`.
+    // See contextFactory.
+    ctx.isAppSecretVerified = true;
 
     // else if(secret) { ...
     // TODO: Fill up ctx.appId with app id after looking up DB with secret
