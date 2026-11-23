@@ -292,7 +292,7 @@ const router = createRouter({
     method: 'POST',
     path: '/moderation/article/transcript',
     description:
-      'Restore the transcripts of the given articles to versions saved in their edit history (see `GetYdoc(id).versions` in GraphQL API). Contributors who edited after the restored version are removed from the article.',
+      'Restore the transcripts of the given articles to versions saved in their edit history (see `GetYdoc(id).versions` in GraphQL API). Contributors whose edits are all after the restored version are removed from the article. Run it when nobody has the transcript editor open: collab-server keeps an open document in memory and writes it back over the restore. Block the vandal first, and check `GetYdoc(id).versions` again later.',
     schemas: {
       request: {
         json: Type.Object(
