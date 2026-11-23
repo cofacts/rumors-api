@@ -15,6 +15,7 @@ import revokeBadge from './handlers/badge/revokeBadge';
 import replaceMediaHandler from './handlers/moderation/replaceMedia';
 import genAIReplyHandler from './handlers/moderation/genAIReply';
 import genAITranscript from './handlers/moderation/genAITranscript';
+import restoreTranscript from './handlers/moderation/restoreTranscript';
 
 const shouldAuth = process.env.NODE_ENV === 'production';
 
@@ -286,6 +287,53 @@ const router = createRouter({
     },
     handler: async (request: Request) =>
       Response.json(await genAITranscript(await request.json())),
+  })
+  .route({
+    method: 'POST',
+    path: '/moderation/article/transcript',
+    description:
+      'Restore the transcripts of the given articles to versions saved in their edit history (see `GetYdoc(id).versions` in GraphQL API). Contributors who edited after the restored version are removed from the article.',
+    schemas: {
+      request: {
+        json: Type.Object(
+          {
+            articles: Type.Array(
+              Type.Object(
+                {
+                  articleId: Type.String({
+                    description: 'The ID of the article to restore',
+                  }),
+                  versionCreatedAt: Type.String({
+                    description:
+                      '`createdAt` of the transcript version to restore to',
+                  }),
+                },
+                { additionalProperties: false }
+              ),
+              { minItems: 1 }
+            ),
+          },
+          { additionalProperties: false }
+        ),
+      },
+      responses: {
+        200: Type.Object({
+          count: Type.Number({
+            description: 'Number of successfully restored articles',
+          }),
+          results: Type.Array(
+            Type.Object({
+              id: Type.String(),
+              status: Type.String(),
+              reason: Type.Optional(Type.String()),
+              removedContributorIds: Type.Optional(Type.Array(Type.String())),
+            })
+          ),
+        }),
+      },
+    },
+    handler: async (request: Request) =>
+      Response.json(await restoreTranscript(await request.json())),
   });
 
 createServer(router).listen(process.env.ADM_PORT, () => {
