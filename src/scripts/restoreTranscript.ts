@@ -174,8 +174,9 @@ async function restoreTranscript({
     fragment.insert(0, restoredNodes);
   });
 
-  // PermanentUserData records the deletions of a transaction in a setTimeout callback;
-  // wait for it so that the deleted spam is attributed to the restorer.
+  // PermanentUserData records the deletions of a transaction in a setTimeout callback (yjs 13.6.x,
+  // src/utils/PermanentUserData.js); wait for it so that the deleted spam is attributed to the
+  // restorer. The test on deletion attribution catches it if a yjs upgrade changes this.
   await new Promise((resolve) => setTimeout(resolve, 0));
 
   const text = ydocToPlainText(doc);
