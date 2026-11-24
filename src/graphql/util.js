@@ -808,8 +808,9 @@ const METADATA = {
 
 /**
  * Maps a media articleType to its media-manager media type, which is also the
- * media type that createTranscript and createMediaEmbedding take. TEXT is
- * absent (it has no media file).
+ * media type that createTranscript takes. createMediaEmbedding takes only the
+ * embedded ones (image, video; see EMBEDDED_MEDIA_TYPES in util/embedding).
+ * TEXT is absent (it has no media file).
  *
  * @type {Record<string, MediaType.image | MediaType.video | MediaType.audio>}
  */

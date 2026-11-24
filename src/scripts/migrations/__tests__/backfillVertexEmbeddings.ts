@@ -8,6 +8,9 @@ const mockBulk = jest
     }>
   >()
   .mockResolvedValue({ errors: false, items: [] });
+const mockUpdateByQuery = jest
+  .fn<(params: object) => Promise<{ updated?: number }>>()
+  .mockResolvedValue({ updated: 0 });
 const mockCount = jest
   .fn<(params: object) => Promise<{ count: number }>>()
   .mockResolvedValue({ count: 0 });
@@ -35,6 +38,8 @@ jest.mock('util/client', () => ({
   default: {
     bulk: (...args: unknown[]) => mockBulk(...(args as [never])),
     count: (...args: unknown[]) => mockCount(...(args as [never])),
+    updateByQuery: (...args: unknown[]) =>
+      mockUpdateByQuery(...(args as [never])),
   },
 }));
 
@@ -80,6 +85,7 @@ describe('backfillVertexEmbeddings', () => {
   beforeEach(() => {
     mockBulk.mockClear();
     mockCount.mockReset();
+    mockUpdateByQuery.mockClear();
     mockCreateEmbedding.mockReset();
     mockCreateMediaEmbedding.mockReset();
     mockGetAllDocs.mockReset();
@@ -172,6 +178,35 @@ describe('backfillVertexEmbeddings', () => {
       { update: { _index: 'articles', _id: 'vid1' } },
       { doc: { embeddings: [{ vector: [0.3] }] } },
     ]);
+  });
+
+  it('removes the embeddings made for AUDIO articles before', async () => {
+    mockUpdateByQuery.mockResolvedValueOnce({ updated: 2 });
+    mockGetAllDocs.mockReturnValueOnce(docsGen([]));
+
+    await main({ index: 'articles', concurrency: 1, batchSize: 100 });
+
+    expect(mockUpdateByQuery).toHaveBeenCalledTimes(1);
+    expect(mockUpdateByQuery.mock.calls[0][0]).toMatchObject({
+      index: 'articles',
+      query: {
+        bool: {
+          filter: [
+            { term: { articleType: 'AUDIO' } },
+            { nested: { path: 'embeddings', query: { match_all: {} } } },
+          ],
+        },
+      },
+      script: { source: "ctx._source.remove('embeddings')" },
+    });
+  });
+
+  it('leaves AUDIO articles alone when only replies are backfilled', async () => {
+    mockGetAllDocs.mockReturnValueOnce(docsGen([]));
+
+    await main({ index: 'replies', concurrency: 1, batchSize: 100 });
+
+    expect(mockUpdateByQuery).not.toHaveBeenCalled();
   });
 
   it('uses reply cache key for replies', async () => {

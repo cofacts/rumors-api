@@ -36,7 +36,8 @@ export function getQueryEmbeddingCacheId(text: string): string {
 }
 
 /**
- * Audio/video are embedded as a single vector capped at this many seconds.
+ * Video is embedded as a single vector capped at this many seconds (audio is
+ * not embedded; see EMBEDDED_MEDIA_TYPES).
  * Gemini Embedding 2 caps media input at ~80s (audio hard limit; video ~81s
  * once the audio track is extracted) within its 8192-token window, silently
  * truncating the rest. We pass this as an explicit `endOffset` so the bound is
@@ -116,10 +117,11 @@ export type CreateEmbeddingQueryInfo = {
   /** Used as `docId` for the airesponses cache record. */
   id: string;
   /**
-   * text/image -> embed the content as-is. audio/video -> a single vector over
-   * the first EMBEDDING_MEDIA_MAX_SEC seconds of the file (see the constant).
+   * text/image -> embed the content as-is. video -> a single vector over the
+   * first EMBEDDING_MEDIA_MAX_SEC seconds of the file (see the constant).
+   * Audio is not embedded (see EMBEDDED_MEDIA_TYPES).
    */
-  type: 'text' | 'image' | 'audio' | 'video';
+  type: 'text' | EmbeddedMediaType;
 };
 
 /**
@@ -230,6 +232,13 @@ export async function createEmbedding(
   user: User,
   options: CreateEmbeddingOptions = {}
 ): Promise<EmbeddingChunk[]> {
+  // The type rules out audio, but JS callers pass media types straight from
+  // media manager. Refuse before reading or writing the cache, and before any
+  // Vertex call, so a type we decided not to embed costs nothing.
+  if (queryInfo.type !== 'text' && !isEmbeddedMediaType(queryInfo.type)) {
+    throw new Error(`[createEmbedding] ${queryInfo.type} is not embedded`);
+  }
+
   const cached = await getCachedEmbedding(queryInfo, options);
   if (cached) return cached;
 
@@ -246,12 +255,11 @@ export async function createEmbedding(
     const textPrefix =
       queryInfo.type === 'text' ? TEXT_PREFIX[options.role ?? 'document'] : '';
 
-    // Audio/video are embedded as a single vector capped at the first
+    // Video is embedded as a single vector capped at the first
     // EMBEDDING_MEDIA_MAX_SEC seconds via an explicit `endOffset` — Gemini can't
     // embed longer media in one call, and this avoids needing a duration probe.
     // Text/image embed the whole content as-is.
-    const isTimedMedia =
-      queryInfo.type === 'audio' || queryInfo.type === 'video';
+    const isTimedMedia = queryInfo.type === 'video';
 
     const partsForCall = parts.map((p) => {
       if (!isMediaPart(p)) return { text: textPrefix + p.text };
@@ -318,7 +326,8 @@ export async function createMediaEmbedding(
   user: User
 ): Promise<EmbeddingChunk[]> {
   // Callers check isEmbeddedMediaType first; this keeps a JS caller that
-  // forgets from spending a Vertex call on a type we decided not to embed.
+  // forgets from reading the file of a type we decided not to embed.
+  // (createEmbedding refuses it too.)
   if (!isEmbeddedMediaType(queryInfo.type)) {
     throw new Error(`[createMediaEmbedding] ${queryInfo.type} is not embedded`);
   }

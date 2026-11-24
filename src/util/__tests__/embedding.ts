@@ -474,4 +474,22 @@ describe('createMediaEmbedding', () => {
     ).rejects.toThrow('audio is not embedded');
     expect(mockEmbedContent).not.toHaveBeenCalled();
   });
+
+  it('refuses audio in createEmbedding too, before the cache', async () => {
+    await expect(
+      createEmbedding(
+        // A JS caller can still pass audio; the type does not allow it.
+        { id: 'media-embedding-4', type: 'audio' as 'video' },
+        [{ mimeType: 'audio/mpeg', fileUri: 'gs://bucket/audio/x' }],
+        user
+      )
+    ).rejects.toThrow('audio is not embedded');
+    expect(mockEmbedContent).not.toHaveBeenCalled();
+    await client.indices.refresh({ index: 'airesponses' });
+    const { count } = await client.count({
+      index: 'airesponses',
+      query: { prefix: { docId: 'media-embedding-4' } },
+    });
+    expect(count).toBe(0);
+  });
 });
