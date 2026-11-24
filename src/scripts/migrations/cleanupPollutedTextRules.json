@@ -1,0 +1,33 @@
+{
+  "_comment": "Fixed texts from login walls / error pages / boilerplate (cofacts/rumors-api#415). Each regex is matched at the start of the trimmed field, after removing navPrefix. If \"fields\" is given, the rule only applies to those fields.",
+  "navPrefix": "^(跳到此頁面的區塊無障礙環境說明按 \\S+ \\+ / 可開啟這個功能表|Jump toPress \\S+ \\+ / to open this menu)",
+  "rules": [
+    {
+      "category": "login_wall",
+      "pattern": "^(註冊|Sign Up)?Notice ?你必須登入以繼續|^It looks like you were misusing this feature|このページを見るには、ログイン|機能の一時停止|Facebookにログイン|^NoticeYou must log in|登入或註冊即可查看|To continue using Facebook, get one of the browsers|^Security Check$|Sign UpLog InMessengerFacebook Lite|You.re Temporarily Blocked|misusing this feature by going too fast|^Log in or sign up to view|^Log ?in(to| to) Facebook|^登入 Facebook|你暂时被禁止使用此功能|你暫時被禁止使用此功能|^Facebook$|FacebookLog InLog InForgot Account|Please enter the code belowWhy am I seeing this|You must log in first|Log into your Facebook account to share|到 Facebook 上查看貼文|Facebookで投稿や写真などをチェック|^Sorry, we.re having trouble playing this video|Login • Instagram|Welcome back to Instagram|^LINE Login$|Sina Visitor System|See what.s happeningSee what.s happening|Say more with Threads|Join Threads to share ideas|Log in to Facebook|登入 Facebook|Facebook에 로그인|查看更多 Facebook 內容|You must log in to continue|你暫時遭到封鎖|登录或注册即可查看|^登录 Facebook，与好友|到 Facebook 查看帖子|Connect with friends and the world around you on Facebook|^Having trouble logging in\\?$|LoginEmail addressPasswordor try another login method|^\\s*登入\\s*$|^登入this\\.gbar_"
+    },
+    {
+      "category": "cookie_consent",
+      "pattern": "^三立新聞網為了提供更好的閱讀內容|To personalise content, tailor and measure ads|為了協助將內容個人化、量身打造和衡量廣告|Yahoo is (now )?(a )?part of (Verizon Media|Oath)|Oath and our partners need your consent|We use Cookie\\s+on our website|為了提供更好的閱讀內容，我們使用相關網站技術|By using Twitter.s services you agree to our Cookies|To help personalise content, tailor and measure ads"
+    },
+    {
+      "category": "bot_block",
+      "pattern": "^Access denied \\| \\S+ used Cloudflare|^About this page\\s+Our systems have detected unusual traffic|^Bloomberg - Are you a robot\\?|^回應說明：系統忙碌中|^Access Denied$|^Just a moment\\.\\.\\.$|Attention Required! \\| Cloudflare|Verify(ing)? you are human|Cloudflare WAF|如果您看到這個頁面，表示您的網路已遭到停止訪問|Why have I been blocked|unusual traffic from your computer network|ERROR: The request could not be satisfied|^Request blocked\\. We can.t connect|Please Wait\\.\\.\\. \\| Cloudflare|Checking if the site connection is secure|Performing security verification|^Human Verification$|Complete the security check before continuing|The URL you requested has been blocked|Please enable cookies\\.\\s+Access denied|used Cloudflare to restrict access|You don.t have permission to access \".*\" on this server|^Access denied$|^Attention Required|DDoS protection by|^Robot Check$|^Pardon Our Interruption|請稍候…|^Bot Verification$|^Request blocked\\.|Web Page Blocked!|Are you a robot\\?|^Please enable cookies\\.|You do not have access to www\\.|This process is automatic\\. Your browser will redirect|^429 Too Many Requests$|^Request Rejected$|系統忙碌中，請稍後再試|^Security Check Required$"
+    },
+    {
+      "category": "error_page",
+      "pattern": "^We.re sorry, The link deleted by user|^404 Not Found$|^403 Forbidden$|^502 (Server Error|Bad Gateway)$|^503 Service|The server encountered a temporary error|^406 - |^找不到網頁$|^PageNotFound$|We Looked EverywhereFor This Page|But maybe we can still help you find|^404 - 找不到檔案|^nginx$|^Invalid link$|The link deleted by user or it violated our policies|Dcard 無法正常載入|^找不到與「.*」相關的文章或頁面|^Page Not Found|^頁面不存在|^Not Found$|^Error$|^Oops|^500 Internal Server Error|^網頁不存在|找不到該頁面|^Bad Request$|^404 - Page Not Found$|您要尋找的資源可能已移除、名稱已變更|^Error - Page Not Found|^404: Page not found|^400 Bad Request$|您瀏覽的網頁不存在|该内容已被发布者删除|^Loading\\.\\.\\.$|^Page Redirect$|無法瀏覽此頁面你點擊進來的連結可能已失效|The link you followed may be broken|^找不到內容$|We.re unable to show this contentThe content may be private"
+    },
+    {
+      "category": "site_boilerplate",
+      "pattern": "YouTube でお気に入りの動画や音楽を楽しみ|在 YouTube 上盡情享受自己喜愛的影片和音樂|Enjoy the videos and music you love, upload original content|^ ?- YouTube$|^YouTube$|^SurveyCake$|Make your survey a piece of cake|^LINE Add Friend$|Add LINE Friends via QR Code|^Add LINE friend$|Scan QR code to add friend|^Imgur$|^Imgur: The magic of the Internet$|^TikTok - Make Your Day$|Join TikTok and see what I.ve been up to|建議您更新瀏覽器若要在我們的網站上享受最佳使用經驗|udn\\.com 提供即時新聞以及豐富的|本網站已依網站內容分級規定處理|^批踢踢實業坊$|^Telegram – a new era of messaging$|^Fast\\. Secure\\. Powerful\\.$|^X - The Everything App|^Google$|^Home$|^首頁$|^MSN Japan|MSN はニュース、天気|^LINE : Free Calls|Free MessagingWhenever, Wherever|LINE｜いつもあなたのそばに|メッセンジャーアプリを超え|リンクを開くにはこちらをタップ|^Today$|^LINE$|^LINE TODAY$|^LINE STORE$|刊登網站廣告 ︱網站總覽|^Search by typing & pressing enter$|^Post with \\d+ votes? and [\\d,]+ views?\\.$|立即下載免費電視 App|^隱私權保護與資訊安全政策|^Instagram$|^Threads$|^TikTok$|^X$|^Twitter$|^Dcard$|^Yahoo奇摩新聞$|^PicSee$|^詐騙與謠言頻傳的年代，「MyGoPen|^看見真實，才能打造美好的台灣！本中心參考國外|Discover the magic of the internet at Imgur|^Find local businesses, view maps|^Pi Network$|^Pi is a new digital currency being developed|當您註冊並成為KingNet國家網路醫藥網站|^縮短網址產生器 - reurl$|^Google URL Shortener$|Google 検索は次の言語でもご利用いただけます|^LINE｜always at your side\\.$|^More than just a messenger app\\. LINE|^LINE STORE is a web service|^SurveyCake Enterprise$|^Take this survey powered by surveymonkey|^Yahoo奇摩$|^Download these stickers from the Sticker Shop|^[.\\-]$|^mobile$|^Yahoo奇摩股市$"
+    },
+    {
+      "category": "site_name",
+      "pattern": "^Google Maps$|^衛生福利部(食品藥物管理署|中央健康保險署|國民健康署)?$|^行政院全球資訊網$|^國防部國防資訊網$|^首頁-衛生福利部疾病管制署$|^內政部警政署 165 全民防騙網$|^最新消息 - 外交部領事事務局$|^Cofacts 真的假的$|^蝦皮購物 \\| 花得更少買得更好$|^\\[周刊王CTWANT\\]$",
+      "fields": [
+        "summary"
+      ]
+    }
+  ]
+}
