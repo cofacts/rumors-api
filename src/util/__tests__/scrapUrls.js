@@ -76,6 +76,37 @@ describe('scrapping & storage', () => {
       'Docs stored to urls index'
     );
   }, 30000);
+
+  it('clears login wall title and summary before returning and storing', async () => {
+    const fbUrl = 'https://www.facebook.com/somepage/posts/123';
+    resolveUrl.__addMockResponse([
+      {
+        url: fbUrl,
+        canonical: fbUrl,
+        title: '登入 Facebook',
+        summary: '登入 Facebook，與好友、家人和你認識的人分享和保持聯繫。',
+        topImageUrl: '',
+        html: '<html></html>',
+        status: 200,
+      },
+    ]);
+
+    const [result] = await scrapUrls(fbUrl, { client });
+    resolveUrl.__reset();
+    expect(result.title).toBe('');
+    expect(result.summary).toBe('');
+
+    await client.indices.refresh({ index: 'urls' });
+    const {
+      hits: { hits },
+    } = await client.search({
+      index: 'urls',
+      query: { term: { url: fbUrl } },
+    });
+    expect(
+      hits.map(({ _source: { title, summary } }) => ({ title, summary }))
+    ).toEqual([{ title: '', summary: '' }]);
+  });
 });
 
 describe('caching', () => {

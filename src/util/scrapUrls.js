@@ -4,6 +4,7 @@ import DataLoader from 'dataloader';
 import url from 'url';
 
 import resolveUrl from './grpc';
+import { cleanScrapResult } from './pollutedText';
 
 /**
  * Extracts urls from a string.
@@ -81,7 +82,7 @@ async function scrapUrls(
         if (noFetch || scrappingCount >= scrapLimit) return null;
         scrappingCount += 1;
         return scrapLoader.load(result).then((scrapped) => ({
-          ...scrapped,
+          ...cleanScrapResult(scrapped),
           url: originalUrls[i],
           normalizedUrl: scrapped.url,
         }));
