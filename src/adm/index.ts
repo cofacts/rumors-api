@@ -324,7 +324,10 @@ const router = createRouter({
           results: Type.Array(
             Type.Object({
               id: Type.String(),
-              status: Type.String(),
+              status: Type.Union([
+                Type.Literal('SUCCESS'),
+                Type.Literal('ERROR'),
+              ]),
               reason: Type.Optional(Type.String()),
               removedContributorIds: Type.Optional(Type.Array(Type.String())),
             })

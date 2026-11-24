@@ -143,15 +143,19 @@ async function restoreTranscript({
     Buffer.from(targetVersion.snapshot, 'base64')
   );
   const versionDoc = Y.createDocFromSnapshot(doc, targetSnapshot);
+  if (!ydocToPlainText(versionDoc).trim())
+    throw new Error(
+      `Transcript version ${versionCreatedAt} of article ${articleId} is empty`
+    );
+
   const pud = new Y.PermanentUserData(doc);
 
   // Users who had edited the doc by the target version, so their text is (partly) restored.
-  const usersBeforeVersion = new Set(
-    [...targetSnapshot.sv.keys()].map((clientId) => {
-      const user = pud.getUserByClientId(clientId);
-      return user ? JSON.parse(user).id : undefined;
-    })
-  );
+  const usersBeforeVersion = new Set<string>();
+  for (const clientId of targetSnapshot.sv.keys()) {
+    const user = pud.getUserByClientId(clientId);
+    if (user) usersBeforeVersion.add(JSON.parse(user).id);
+  }
 
   pud.setUserMapping(doc, doc.clientID, TRANSCRIPT_RESTORER_DESCRIPTION);
 
@@ -164,11 +168,6 @@ async function restoreTranscript({
       (node): node is Y.XmlElement | Y.XmlText => !(node instanceof Y.XmlHook)
     )
     .map((node) => node.clone());
-
-  if (!ydocToPlainText(versionDoc).trim())
-    throw new Error(
-      `Transcript version ${versionCreatedAt} of article ${articleId} is empty`
-    );
 
   doc.transact(() => {
     fragment.delete(0, fragment.length);
@@ -202,26 +201,57 @@ async function restoreTranscript({
     refresh: true,
   });
 
-  const contributors = article?.contributors ?? [];
-  const keptContributors = contributors.filter(
+  const removedContributors = (article?.contributors ?? []).filter(
     // collab-server writes contributors' updatedAt before the version's createdAt on the same
     // disconnect, both with toISOString(), so string comparison works.
     ({ userId, updatedAt }) =>
-      usersBeforeVersion.has(userId) || updatedAt <= versionCreatedAt
+      !usersBeforeVersion.has(userId) && updatedAt > versionCreatedAt
   );
-  const removedContributorIds = contributors
-    .filter((c) => !keptContributors.includes(c))
-    .map(({ userId }) => userId);
 
-  await client.update({
-    index: 'articles',
-    id: articleId,
-    doc: { text, contributors: keptContributors, updatedAt: now },
-    retry_on_conflict: 3,
-    refresh: true,
-  });
+  try {
+    await client.update({
+      index: 'articles',
+      id: articleId,
+      script: {
+        // Remove only the contributor entries read above, so that entries collab-server writes
+        // in the meantime are kept.
+        source: `
+          if (ctx._source.contributors != null) {
+            ctx._source.contributors.removeIf(c ->
+              params.removed.containsKey(c.userId) && params.removed[c.userId] == c.updatedAt
+            );
+          }
+          ctx._source.text = params.text;
+          ctx._source.updatedAt = params.now;
+        `,
+        lang: 'painless',
+        params: {
+          removed: Object.fromEntries(
+            removedContributors.map(({ userId, updatedAt }) => [
+              userId,
+              updatedAt,
+            ])
+          ),
+          text,
+          now,
+        },
+      },
+      retry_on_conflict: 3,
+      refresh: true,
+    });
+  } catch (e) {
+    throw new Error(
+      `Transcript ydoc of article ${articleId} is restored, but updating the article failed. ` +
+        `Re-running the restore is safe (it adds one more restore version): ${
+          e instanceof Error ? e.message : e
+        }`
+    );
+  }
 
-  return { text, removedContributorIds };
+  return {
+    text,
+    removedContributorIds: removedContributors.map(({ userId }) => userId),
+  };
 }
 
 export default restoreTranscript;

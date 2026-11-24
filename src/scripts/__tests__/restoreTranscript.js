@@ -238,3 +238,71 @@ it('restores transcript to the given version', async () => {
     )
   );
 });
+
+it('keeps contributors written while restoring', async () => {
+  const realGet = client.get.bind(client);
+  const getSpy = jest.spyOn(client, 'get').mockImplementation(async (args) => {
+    const result = await realGet(args);
+    if (args.index === 'articles') {
+      // collab-server adds a contributor after restoreTranscript has read the article
+      await client.update({
+        index: 'articles',
+        id: 'vandalized',
+        script: {
+          source: 'ctx._source.contributors.add(params.c)',
+          params: {
+            c: {
+              userId: 'late-editor',
+              appId: 'WEBSITE',
+              updatedAt: '2026-11-23T12:00:00.000Z',
+            },
+          },
+        },
+        refresh: true,
+      });
+    }
+    return result;
+  });
+
+  try {
+    await restoreTranscript({
+      articleId: 'vandalized',
+      versionCreatedAt: '2026-11-19T00:00:00.000Z',
+    });
+  } finally {
+    getSpy.mockRestore();
+  }
+
+  const { _source: article } = await client.get({
+    index: 'articles',
+    id: 'vandalized',
+  });
+  expect(article.contributors.map(({ userId }) => userId)).toEqual([
+    'early-editor',
+    'editor',
+    'late-editor',
+  ]);
+});
+
+it('tells when the ydoc is restored but the article is not', async () => {
+  const realUpdate = client.update.bind(client);
+  const updateSpy = jest
+    .spyOn(client, 'update')
+    .mockImplementation(async (args) => {
+      if (args.index === 'articles') throw new Error('boom');
+      return realUpdate(args);
+    });
+
+  try {
+    await expect(
+      restoreTranscript({
+        articleId: 'vandalized',
+        versionCreatedAt: '2026-11-19T00:00:00.000Z',
+      })
+    ).rejects.toMatchInlineSnapshot(
+      `[Error: Transcript ydoc of article vandalized is restored, but updating the article failed. Re-running the restore is safe (it adds one more restore version): boom]`
+    );
+  } finally {
+    updateSpy.mockRestore();
+  }
+});
