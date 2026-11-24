@@ -19,7 +19,7 @@ import MutationResult from 'graphql/models/MutationResult';
 import { createOrUpdateReplyRequest } from './CreateOrUpdateReplyRequest';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';
 import archiveUrlsFromText from 'util/archiveUrlsFromText';
-import { createMediaEmbedding } from 'util/embedding';
+import { createMediaEmbedding, isEmbeddedMediaType } from 'util/embedding';
 
 const AI_TRANSCRIBER_DESCRIPTION = JSON.stringify({
   id: 'ai-transcript',
@@ -208,12 +208,13 @@ export default {
         aiResponse?.status === 'SUCCESS' ? aiResponse : null
       );
 
-    // Embeddings for hybrid search; audio/video as a single vector capped at
-    // EMBEDDING_MEDIA_MAX_SEC (see createEmbedding). Only a new article is
-    // embedded; existing ones without embeddings are left to the backfill.
+    // Embeddings for hybrid search; video as a single vector capped at
+    // EMBEDDING_MEDIA_MAX_SEC (see createEmbedding). Audio is not embedded
+    // (see EMBEDDED_MEDIA_TYPES). Only a new article is embedded; existing
+    // ones without embeddings are left to the backfill.
     const embeddingApplied = articlePromise
       .then(async ({ articleId, isNew }) => {
-        if (!isNew) return;
+        if (!isNew || !isEmbeddedMediaType(queryInfo.type)) return;
 
         const embeddings = await createMediaEmbedding(
           queryInfo,

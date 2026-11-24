@@ -455,11 +455,23 @@ describe('createMediaEmbedding', () => {
 
   it('falls back to a type default when GCS metadata lacks a contentType', async () => {
     await createMediaEmbedding(
-      { id: 'media-embedding-2', type: 'audio' },
+      { id: 'media-embedding-2', type: 'video' },
       entryWith({}),
       user
     );
 
-    expect(getSentFileData()).toMatchObject({ mimeType: 'audio/mpeg' });
+    expect(getSentFileData()).toMatchObject({ mimeType: 'video/mp4' });
+  });
+
+  it('refuses audio without calling Vertex AI', async () => {
+    await expect(
+      createMediaEmbedding(
+        // A JS caller can still pass audio; the type does not allow it.
+        { id: 'media-embedding-3', type: 'audio' as 'video' },
+        entryWith({ contentType: 'audio/mpeg' }),
+        user
+      )
+    ).rejects.toThrow('audio is not embedded');
+    expect(mockEmbedContent).not.toHaveBeenCalled();
   });
 });

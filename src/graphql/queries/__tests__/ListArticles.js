@@ -48,6 +48,7 @@ jest.mock('util/embedding', () => ({
   getCachedEmbedding: jest.requireActual('util/embedding').getCachedEmbedding,
   getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
   getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
+  isEmbeddedMediaType: jest.requireActual('util/embedding').isEmbeddedMediaType,
 }));
 
 describe('ListArticles', () => {
@@ -1466,9 +1467,39 @@ describe('ListArticles kNN retriever', () => {
     expect(getKnnVector(result)).toEqual([0.3, 0.4]);
   });
 
+  it('does not embed audio, and still searches its transcript', async () => {
+    mediaManager.query.mockResolvedValueOnce({
+      queryInfo: { id: 'media-hash-audio', type: 'audio' },
+      hits: [],
+    });
+    mockUploadedMedia();
+    createTranscript.mockResolvedValueOnce({
+      status: 'SUCCESS',
+      text: 'spoken words',
+    });
+
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          mediaUrl: 'https://example.com/z.mp3',
+          embedding: 0.6,
+        },
+      },
+      baseContext
+    );
+
+    // Audio is not embedded (cofacts/rumors-api#418): no Vertex call, no kNN.
+    expect(createMediaEmbedding).not.toHaveBeenCalled();
+    expect(getKnnVector(result)).toBeUndefined();
+    expect(
+      result.body.query.bool.should.some((clause) => clause.more_like_this)
+    ).toBe(true);
+  });
+
   it('keeps the transcript when only the embedding fails', async () => {
     mediaManager.query.mockResolvedValueOnce({
-      queryInfo: { id: 'media-hash-embed-fail', type: 'audio' },
+      queryInfo: { id: 'media-hash-embed-fail', type: 'video' },
       hits: [],
     });
     mockUploadedMedia();
@@ -1482,7 +1513,7 @@ describe('ListArticles kNN retriever', () => {
       {},
       {
         filter: {
-          mediaUrl: 'https://example.com/z.mp3',
+          mediaUrl: 'https://example.com/z.mp4',
           embedding: 0.6,
         },
       },

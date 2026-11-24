@@ -122,6 +122,20 @@ export type CreateEmbeddingQueryInfo = {
   type: 'text' | 'image' | 'audio' | 'video';
 };
 
+/**
+ * Media types that are embedded. Audio is left out on purpose
+ * (cofacts/rumors-api#418): Vertex rejects audio longer than about 3 minutes,
+ * and embedding the transcript instead would go stale once the transcript is
+ * edited, as nothing re-embeds it then. Audio is still found by its
+ * transcript through full-text search.
+ */
+export const EMBEDDED_MEDIA_TYPES = ['image', 'video'] as const;
+export type EmbeddedMediaType = (typeof EMBEDDED_MEDIA_TYPES)[number];
+
+export function isEmbeddedMediaType(type: unknown): type is EmbeddedMediaType {
+  return (EMBEDDED_MEDIA_TYPES as readonly unknown[]).includes(type);
+}
+
 export type CreateEmbeddingOptions = {
   /**
    * Defaults to `document` (write path). Pass `query` for search queries.
@@ -295,14 +309,20 @@ export async function createEmbedding(
  * (cached like any other embedding, see {@link createEmbedding}).
  *
  * @param queryInfo - type and media entry ID of the media
- * @param mediaEntry - the image, audio or video to embed
+ * @param mediaEntry - the image or video to embed (see EMBEDDED_MEDIA_TYPES)
  * @param user - the user who requested the embedding
  */
 export async function createMediaEmbedding(
-  queryInfo: { id: string; type: 'image' | 'audio' | 'video' },
+  queryInfo: { id: string; type: EmbeddedMediaType },
   mediaEntry: EmbeddableMediaEntry,
   user: User
 ): Promise<EmbeddingChunk[]> {
+  // Callers check isEmbeddedMediaType first; this keeps a JS caller that
+  // forgets from spending a Vertex call on a type we decided not to embed.
+  if (!isEmbeddedMediaType(queryInfo.type)) {
+    throw new Error(`[createMediaEmbedding] ${queryInfo.type} is not embedded`);
+  }
+
   const file = mediaEntry.getFile();
   const [metadata] = await file.getMetadata();
 
