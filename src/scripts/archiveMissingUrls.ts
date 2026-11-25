@@ -65,10 +65,13 @@ const MAX_CONSECUTIVE_CDX_FAILURES = 5;
  * nothing. With `delay_wb_availability=1`, captures have taken about 4 days to
  * show up in CDX (observed 2026-11-21), not the ~12 hours the SPN2 docs state.
  *
- * This only catches the case where nothing in the window is visible. Captures
- * made by others (for example IA's own crawls of news sites) still count as
- * snapshots, so a delay that grows past the window can go unnoticed if some
- * URLs were captured that way; our invisible captures are then re-submitted.
+ * The goal is that every URL has been archived by someone, not necessarily by
+ * us, so a capture made by others (for example IA's own crawl of a news site)
+ * counts as a snapshot. The guard exists only to avoid a burst of duplicate
+ * captures when none of our own delayed captures are visible yet. If the delay
+ * outgrows the window while some URLs have snapshots from others, our invisible
+ * captures are re-submitted once; that costs a few duplicate captures (SPN2
+ * allows 30k a day) and does not leave any URL unarchived.
  */
 const MIN_CHECKED_FOR_LAG_GUARD = 10;
 
