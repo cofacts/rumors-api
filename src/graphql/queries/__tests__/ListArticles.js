@@ -10,6 +10,7 @@ import fixtures, {
   knnPageFixtures,
   knnRankingFixtures,
   knnMediaRankingFixtures,
+  knnMediaTypeFixtures,
 } from '../__fixtures__/ListArticles';
 import { queryVector } from 'util/vectors';
 import mediaManager from 'util/mediaManager';
@@ -1915,5 +1916,76 @@ describe('ListArticles kNN ranking', () => {
       expect(createMediaEmbedding).not.toHaveBeenCalled();
       expect(createEmbedding).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe('ListArticles kNN per media type', () => {
+  beforeAll(() => loadFixtures(knnMediaTypeFixtures));
+  beforeEach(() => {
+    createEmbedding.mockReset();
+    createEmbedding.mockResolvedValue([{ vector: queryVector }]);
+  });
+  afterAll(() => unloadFixtures(knnMediaTypeFixtures));
+
+  const query = gql`
+    query ($filter: ListArticleFilter) {
+      ListArticles(filter: $filter, first: 200) {
+        totalCount
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  `;
+  const ids = ({ data }) => data.ListArticles.edges.map(({ node }) => node.id);
+  const user = { userId: 'u', appId: 'a' };
+
+  it('finds no media when the nearest neighbors are all text', async () => {
+    const result = await query(
+      {
+        filter: { moreLikeThis: { like: 'zzz' }, embedding: 0.7 },
+      },
+      user
+    );
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).not.toContain('knnMediaTypeVideo');
+    expect(ids(result)).not.toContain('knnMediaTypeImage');
+  });
+
+  it('finds the nearest of each media type with mediaEmbedding', async () => {
+    const result = await query(
+      {
+        filter: {
+          moreLikeThis: { like: 'zzz' },
+          embedding: 0.7,
+          mediaEmbedding: 0.7,
+        },
+      },
+      user
+    );
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toEqual(
+      expect.arrayContaining(['knnMediaTypeVideo', 'knnMediaTypeImage'])
+    );
+    expect(ids(result)).not.toContain('knnMediaTypeFarVideo');
+    // One query vector for both: text and media kNN.
+    expect(createEmbedding).toHaveBeenCalledTimes(1);
+  });
+
+  it('works without embedding, and follows articleTypes', async () => {
+    const result = await query(
+      {
+        filter: {
+          moreLikeThis: { like: 'zzz' },
+          mediaEmbedding: 0.7,
+          articleTypes: ['VIDEO'],
+        },
+      },
+      user
+    );
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toEqual(['knnMediaTypeVideo']);
   });
 });

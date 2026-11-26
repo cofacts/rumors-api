@@ -30,6 +30,7 @@ import {
   createCommonListFilter,
   attachCommonListFilter,
   buildKnnQuery,
+  KNN_MEDIA_ARTICLE_TYPES,
   DEFAULT_ARTICLE_STATUSES,
   DEFAULT_ARTICLE_REPLY_STATUSES,
   getAIResponse,
@@ -190,6 +191,17 @@ export default {
             'Omit for BM25-only (default). ' +
             '`totalCount` then also counts the nearest neighbors (up to 100 per query vector), ' +
             'so it no longer tells how many match the keywords.',
+        },
+        mediaEmbedding: {
+          type: GraphQLFloat,
+          description:
+            'Opt-in kNN over media for a text `moreLikeThis` query. Provide the minimum cosine similarity ' +
+            'to also retrieve, for each media type (IMAGE and VIDEO; only those in `articleTypes` when given), ' +
+            'the nearest articles of that type, up to 100 per type. ' +
+            'A text query vector sits far from media vectors, so with `embedding` alone the nearest neighbors ' +
+            'are almost always text articles. Cross-modal similarity runs lower than text-to-text, ' +
+            'so this is usually lower than `embedding`. Can be given without `embedding`. ' +
+            'Ignored for a `mediaUrl` search.',
         },
         transcript: {
           description:
@@ -794,7 +806,13 @@ export default {
     // Set when a kNN clause is added: the highlighter cannot walk one.
     let highlightQuery;
 
-    if (filter.embedding != null) {
+    const wantsMediaKnn =
+      filter.mediaEmbedding != null &&
+      mediaQueryVectors.length === 0 &&
+      !filter.mediaUrl &&
+      !!filter.moreLikeThis?.like;
+
+    if (filter.embedding != null || wantsMediaKnn) {
       try {
         // Media query: resolved along with the transcript above. It takes
         // precedence over a text query given along with it. When the media
@@ -816,7 +834,35 @@ export default {
           queryVectors = queryChunks.map((c) => c.vector);
         }
 
-        if (queryVectors.length > 0) {
+        const knnQueries = [];
+        if (queryVectors.length > 0 && filter.embedding != null) {
+          knnQueries.push(
+            buildKnnQuery({ queryVectors, similarity: filter.embedding })
+          );
+        }
+
+        // Text query against media: one kNN per media type, pre-filtered to
+        // that type. Without the pre-filter the k nearest of a text query are
+        // all text, so no media ever comes up. The filter must sit inside the
+        // knn clause: Elasticsearch does not push the outer bool.filter down
+        // into a nested knn.
+        if (queryVectors.length > 0 && wantsMediaKnn) {
+          const mediaTypes = KNN_MEDIA_ARTICLE_TYPES.filter(
+            (type) => !filter.articleTypes || filter.articleTypes.includes(type)
+          );
+          for (const articleType of mediaTypes) {
+            knnQueries.push(
+              buildKnnQuery({
+                queryVectors,
+                similarity: filter.mediaEmbedding,
+                filter: { term: { articleType } },
+                name: `knn-${articleType}`,
+              })
+            );
+          }
+        }
+
+        if (knnQueries.length > 0) {
           // kNN is one more should-query, so a doc is returned when either side
           // finds it. It must not be a filter: that drops every doc kNN cannot
           // reach even when BM25 matches it — docs with no embedding yet, and
@@ -835,9 +881,7 @@ export default {
           highlightQuery = {
             bool: { ...body.query.bool, should: [...body.query.bool.should] },
           };
-          body.query.bool.should.push(
-            buildKnnQuery({ queryVectors, similarity: filter.embedding })
-          );
+          body.query.bool.should.push(...knnQueries);
         }
       } catch (e) {
         // kNN must never break BM25 — log and fall through to the BM25 body.query.

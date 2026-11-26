@@ -1,6 +1,8 @@
 import gql from 'util/GraphQL';
 import { loadFixtures, unloadFixtures } from 'util/fixtures';
-import fixtures from '../__fixtures__/GetReplyAndArticle';
+import fixtures, {
+  knnRelatedFixtures,
+} from '../__fixtures__/GetReplyAndArticle';
 import mediaManager from 'util/mediaManager';
 
 jest.mock('util/mediaManager');
@@ -611,4 +613,64 @@ describe('GetReplyAndGetArticle', () => {
   });
 
   afterAll(() => unloadFixtures(fixtures));
+});
+
+describe('GetArticle relatedArticles with kNN', () => {
+  beforeAll(() => loadFixtures(knnRelatedFixtures));
+  afterAll(() => unloadFixtures(knnRelatedFixtures));
+
+  const query = gql`
+    query ($id: String!, $embedding: Float, $videoEmbedding: Float) {
+      GetArticle(id: $id) {
+        relatedArticles(
+          filter: { embedding: $embedding, videoEmbedding: $videoEmbedding }
+        ) {
+          totalCount
+          edges {
+            node {
+              id
+            }
+            highlight {
+              text
+            }
+          }
+        }
+      }
+    }
+  `;
+  const ids = ({ data }) =>
+    data.GetArticle.relatedArticles.edges.map(({ node }) => node.id);
+
+  it('finds the neighbors of the stored embeddings above the threshold', async () => {
+    const result = await query({ id: 'knnRelSelf', embedding: 0.85 });
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toEqual(['knnRelNear']);
+  });
+
+  it('uses videoEmbedding for a video article', async () => {
+    // knnRelNear (0.9) and knnRelFar (0.8) pass embedding 0.7; only knnRelNear
+    // passes videoEmbedding 0.85.
+    const result = await query({
+      id: 'knnRelSelf',
+      embedding: 0.7,
+      videoEmbedding: 0.85,
+    });
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toEqual(['knnRelNear']);
+
+    const loose = await query({ id: 'knnRelSelf', embedding: 0.7 });
+    expect(ids(loose).sort()).toEqual(['knnRelFar', 'knnRelNear']);
+  });
+
+  it('relates nothing by vector without embedding', async () => {
+    const result = await query({ id: 'knnRelSelf' });
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toEqual([]);
+  });
+
+  it('falls back to text similarity for an article without embeddings', async () => {
+    const result = await query({ id: 'knnRelNoEmbedding', embedding: 0.7 });
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toEqual([]);
+  });
 });

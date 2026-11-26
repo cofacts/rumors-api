@@ -24,8 +24,10 @@ import {
   DEFAULT_ARTICLE_REPLY_STATUSES,
   DEFAULT_ARTICLE_CATEGORY_STATUSES,
   DEFAULT_REPLY_REQUEST_STATUSES,
+  buildKnnQuery,
 } from 'graphql/util';
 
+import client from 'util/client';
 import Node from '../interfaces/Node';
 import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
@@ -317,6 +319,22 @@ const Article = new GraphQLObjectType({
         filter: {
           type: createFilterType('RelatedArticleFilter', {
             replyCount: { type: intRangeInput },
+            embedding: {
+              type: GraphQLFloat,
+              description:
+                'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
+                "to also retrieve the nearest neighbors of this article's stored embeddings via kNN, " +
+                'in addition to what the text and media similarity find (up to 100 per vector). ' +
+                'Articles that have no embeddings yet only get the latter. ' +
+                'See `videoEmbedding` for video articles.',
+            },
+            videoEmbedding: {
+              type: GraphQLFloat,
+              description:
+                'Used instead of `embedding` when this article is a VIDEO. ' +
+                'Video vectors sit closer to each other than text and image ones, ' +
+                'so a higher value such as `0.85` keeps unrelated videos out.',
+            },
           }),
         },
         orderBy: {
@@ -328,7 +346,7 @@ const Article = new GraphQLObjectType({
         ...pagingArgs,
       },
       async resolve(
-        { id, attachmentHash, status },
+        { id, attachmentHash, status, articleType },
         { filter = {}, orderBy = [{ _score: 'DESC' }], ...otherParams }
       ) {
         const body = {
@@ -453,9 +471,47 @@ const Article = new GraphQLObjectType({
           ];
         }
 
+        // Hybrid: the article's own stored vectors are the query, so this
+        // takes no Vertex call. See ListArticles for why kNN is a should-query.
+        let highlightQuery;
+        const similarity =
+          articleType === 'VIDEO' && filter.videoEmbedding != null
+            ? filter.videoEmbedding
+            : filter.embedding;
+        if (similarity != null) {
+          try {
+            const { _source } = await client.get({
+              index: 'articles',
+              id,
+              _source_includes: ['embeddings'],
+            });
+            const queryVectors = (_source?.embeddings ?? [])
+              .map(({ vector }) => vector)
+              .filter((vector) => vector?.length > 0);
+
+            if (queryVectors.length > 0) {
+              highlightQuery = {
+                bool: {
+                  ...body.query.bool,
+                  should: [...body.query.bool.should],
+                },
+              };
+              body.query.bool.should.push(
+                buildKnnQuery({ queryVectors, similarity })
+              );
+              // The article itself is its own nearest neighbor.
+              body.query.bool.must_not = [{ ids: { values: [id] } }];
+            }
+          } catch (e) {
+            // kNN must never break the rest of the search.
+            console.warn('[relatedArticles] kNN failed:', e);
+          }
+        }
+
         return {
           index: 'articles',
           body,
+          highlightQuery,
           ...otherParams,
         };
       },

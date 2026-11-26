@@ -127,6 +127,12 @@ const KNN_K = 100;
 const KNN_QUERY_NAME = 'knn';
 
 /**
+ * Article types that have embeddings and are searched one type at a time when
+ * a text query looks for media. AUDIO is not embedded.
+ */
+export const KNN_MEDIA_ARTICLE_TYPES = ['IMAGE', 'VIDEO'];
+
+/**
  * Build a nested-kNN bool/should query, one nested-knn clause per query chunk.
  * Intended as one more `should` clause next to the BM25 ones: a doc matches it
  * when any query chunk is within `similarity` of one of its stored embeddings,
@@ -135,9 +141,19 @@ const KNN_QUERY_NAME = 'knn';
  * @param {object} param
  * @param {number[][]} param.queryVectors - one vector per query chunk
  * @param {number} param.similarity - min cosine similarity for KNN hits
+ * @param {object} [param.filter] - pre-filter on the parent document (e.g.
+ *   `{ term: { articleType: 'VIDEO' } }`), so that the `KNN_K` nearest are
+ *   taken among the matching docs only. A filter in the enclosing bool query is
+ *   NOT applied before kNN; it only drops hits after the k nearest are taken.
+ * @param {string} [param.name] - `_name` of the returned query
  * @returns {object} a bool/should query suitable as a `should` clause
  */
-export function buildKnnQuery({ queryVectors, similarity }) {
+export function buildKnnQuery({
+  queryVectors,
+  similarity,
+  filter,
+  name = KNN_QUERY_NAME,
+}) {
   const nestedKnnQueries = queryVectors.map((qv) => ({
     nested: {
       path: 'embeddings',
@@ -149,12 +165,13 @@ export function buildKnnQuery({ queryVectors, similarity }) {
           k: KNN_K,
           num_candidates: KNN_NUM_CANDIDATES,
           similarity,
+          ...(filter ? { filter } : {}),
         },
       },
     },
   }));
 
-  return { bool: { should: nestedKnnQueries, _name: KNN_QUERY_NAME } };
+  return { bool: { should: nestedKnnQueries, _name: name } };
 }
 
 export const userAndExistInput = new GraphQLInputObjectType({

@@ -588,3 +588,47 @@ export const knnMediaRankingFixtures = {
     embeddings: [{ vector: vectorWithSimilarity(0.1) }],
   },
 };
+
+// Text search for media, with kNN similarity 0.7. More text docs than KNN_K
+// (100) are closer to the query than the video, so the video only comes up
+// when kNN is taken per media type.
+//
+export const knnMediaTypeFixtures = {
+  ...Object.fromEntries(
+    Array.from({ length: 105 }, (_, i) => [
+      `/articles/doc/knnMediaTypeText${i}`,
+      {
+        status: 'NORMAL',
+        articleType: 'TEXT',
+        text: `Unrelated sentence number ${i}`,
+        createdAt: '2020-02-05T00:00:00.000Z',
+        embeddings: [{ vector: vectorWithSimilarity(0.9) }],
+      },
+    ])
+  ),
+  '/articles/doc/knnMediaTypeVideo': {
+    status: 'NORMAL',
+    articleType: 'VIDEO',
+    text: '',
+    attachmentHash: 'knn-media-type-video',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.75) }],
+  },
+  '/articles/doc/knnMediaTypeImage': {
+    status: 'NORMAL',
+    articleType: 'IMAGE',
+    text: '',
+    attachmentHash: 'knn-media-type-image',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.72) }],
+  },
+  // Below the threshold.
+  '/articles/doc/knnMediaTypeFarVideo': {
+    status: 'NORMAL',
+    articleType: 'VIDEO',
+    text: '',
+    attachmentHash: 'knn-media-type-far-video',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.6) }],
+  },
+};
