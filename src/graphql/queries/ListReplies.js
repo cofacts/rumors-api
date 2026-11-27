@@ -16,7 +16,11 @@ import {
   getKnnK,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
-import { createEmbedding, getQueryEmbeddingCacheId } from 'util/embedding';
+import {
+  createEmbedding,
+  getQueryEmbeddingCacheId,
+  isUrlOnlyText,
+} from 'util/embedding';
 
 import { ReplyConnection } from 'graphql/models/Reply';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
@@ -201,7 +205,13 @@ export default {
       filter.embedding && 'textDocSimilarity' in filter.embedding
         ? filter.embedding.textDocSimilarity
         : DEFAULT_DOC_SIMILARITY.text.TEXT;
-    if (filter.embedding && similarity != null && filter.moreLikeThis?.like) {
+    if (
+      filter.embedding &&
+      similarity != null &&
+      filter.moreLikeThis?.like &&
+      // A URL-only query embeds as a URL string; see isUrlOnlyText.
+      !isUrlOnlyText(filter.moreLikeThis.like)
+    ) {
       // Outside the try below: a bad `k` is the client's error to see.
       const k = getKnnK(filter.embedding.k);
       try {

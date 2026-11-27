@@ -684,6 +684,13 @@ describe('GetArticle relatedArticles with kNN', () => {
     expect(ids(result)).toEqual(['knnRelNear']);
   });
 
+  it('skips kNN for a URL-only article', async () => {
+    // knnRelTextNear would be found by vector (see the legacy test above).
+    const result = await query({ id: 'knnRelUrlOnly', embedding: {} });
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).not.toContain('knnRelTextNear');
+  });
+
   it('relates nothing by vector without embedding', async () => {
     const result = await query({ id: 'knnRelSelf' });
     expect(result.errors).toBeUndefined();

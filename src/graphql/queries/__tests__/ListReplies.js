@@ -9,6 +9,7 @@ import fixtures, {
 import { queryVector } from 'util/vectors';
 
 jest.mock('util/embedding', () => ({
+  isUrlOnlyText: jest.requireActual('util/embedding').isUrlOnlyText,
   createEmbedding: jest.fn(),
   getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
   getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,

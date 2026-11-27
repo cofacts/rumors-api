@@ -21,6 +21,7 @@ jest.mock('graphql/util', () => ({
   createTranscript: jest.fn(),
 }));
 jest.mock('util/embedding', () => ({
+  isUrlOnlyText: jest.requireActual('util/embedding').isUrlOnlyText,
   createMediaEmbedding: jest
     .fn()
     .mockResolvedValue([{ vector: new Array(768).fill(0.01) }]),

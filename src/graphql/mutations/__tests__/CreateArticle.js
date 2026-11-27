@@ -9,6 +9,7 @@ import archiveUrlsFromText from 'util/archiveUrlsFromText';
 
 jest.mock('util/archiveUrlsFromText', () => jest.fn(() => []));
 jest.mock('util/embedding', () => ({
+  isUrlOnlyText: jest.requireActual('util/embedding').isUrlOnlyText,
   // 768-dim vector to match the dense_vector mapping; the actual values are
   // irrelevant — snapshots use a property matcher (expect.any(Array)) to keep
   // them out of the .snap file.

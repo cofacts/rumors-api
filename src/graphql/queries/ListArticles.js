@@ -12,6 +12,7 @@ import {
   createMediaEmbedding,
   getCachedEmbedding,
   getQueryEmbeddingCacheId,
+  isUrlOnlyText,
   isEmbeddedMediaType,
 } from 'util/embedding';
 
@@ -810,7 +811,12 @@ export default {
         let queryVectors = mediaQueryVectors;
         let docSimilarities = mediaDocSimilarities;
 
-        if (!filter.mediaUrl && filter.moreLikeThis?.like) {
+        if (
+          !filter.mediaUrl &&
+          filter.moreLikeThis?.like &&
+          // A URL-only query embeds as a URL string; see isUrlOnlyText.
+          !isUrlOnlyText(filter.moreLikeThis.like)
+        ) {
           docSimilarities = getDocSimilarities({
             queryType: 'text',
             embeddingFilter: filter.embedding,

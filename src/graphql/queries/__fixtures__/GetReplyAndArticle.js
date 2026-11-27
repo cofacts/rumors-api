@@ -326,6 +326,15 @@ export const knnRelatedFixtures = {
     embeddings: [{ vector: vectorWithSimilarity(0.95) }],
   },
   // A legacy text article: no articleType. Text -> TEXT applies.
+  // URL-only text article; its vector is as close as knnRelLegacy's.
+  '/articles/doc/knnRelUrlOnly': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'https://youtu.be/QoJeDjBfVFE?si=0waZA',
+    normalArticleReplyCount: 0,
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.99) }],
+  },
   '/articles/doc/knnRelLegacy': {
     status: 'NORMAL',
     text: 'Koala bicycle',

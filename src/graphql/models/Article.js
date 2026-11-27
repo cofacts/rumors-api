@@ -32,6 +32,7 @@ import {
 } from 'graphql/util';
 
 import client from 'util/client';
+import { isUrlOnlyText } from 'util/embedding';
 import Node from '../interfaces/Node';
 import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
@@ -341,7 +342,7 @@ const Article = new GraphQLObjectType({
         ...pagingArgs,
       },
       async resolve(
-        { id, attachmentHash, status, articleType },
+        { id, text, attachmentHash, status, articleType },
         { filter = {}, orderBy = [{ _score: 'DESC' }], ...otherParams }
       ) {
         const body = {
@@ -401,10 +402,15 @@ const Article = new GraphQLObjectType({
 
         // The article type is the query type of kNN (see DEFAULT_DOC_SIMILARITY);
         // legacy text articles may have no articleType.
-        const docSimilarities = getDocSimilarities({
-          queryType: (articleType || 'TEXT').toLowerCase(),
-          embeddingFilter: filter.embedding,
-        });
+        const queryType = (articleType || 'TEXT').toLowerCase();
+        // A URL-only article embeds as a URL string; see isUrlOnlyText.
+        const docSimilarities =
+          queryType === 'text' && isUrlOnlyText(text)
+            ? []
+            : getDocSimilarities({
+                queryType,
+                embeddingFilter: filter.embedding,
+              });
         const k = getKnnK(filter.embedding?.k);
 
         // Read along with the media manager query below. Fetched only when kNN
