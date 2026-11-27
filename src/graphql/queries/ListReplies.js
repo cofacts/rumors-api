@@ -188,12 +188,14 @@ export default {
       },
     };
 
-    // Hybrid of BM25 and kNN. Opt in by passing `filter.embedding` as the
-    // minimum cosine similarity: the nearest neighbors are retrieved in addition
-    // to what the BM25 should-queries match. Omit for BM25-only.
+    // Hybrid of BM25 and kNN. Opt in by passing `filter.embedding` (`{}` for the
+    // default threshold, the one of text -> TEXT in DEFAULT_DOC_SIMILARITY): the
+    // nearest neighbors are retrieved in addition to what the BM25
+    // should-queries match. Omit for BM25-only.
     // Set when a kNN clause is added: the highlighter cannot walk one.
     let highlightQuery;
 
+    // Given (even as null, which skips kNN) takes precedence over the default.
     const similarity =
       filter.embedding && 'textDocSimilarity' in filter.embedding
         ? filter.embedding.textDocSimilarity
@@ -221,7 +223,13 @@ export default {
             bool: { ...body.query.bool, should: [...body.query.bool.should] },
           };
           body.query.bool.should.push(
-            buildKnnQuery({ queryVectors, similarity })
+            buildKnnQuery({
+              queryVectors,
+              similarity,
+              // ES does not push the outer bool.filter into a nested knn; these
+              // are all top-level filters.
+              filter: { bool: { filter: [...filterQueries] } },
+            })
           );
         }
       } catch (e) {

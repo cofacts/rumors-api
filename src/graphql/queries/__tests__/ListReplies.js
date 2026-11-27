@@ -474,6 +474,23 @@ describe('ListReplies kNN search with highlight', () => {
     }
   `;
 
+  it('uses the default threshold with {}, and skips kNN with null', async () => {
+    // knnHighlightSemantic is found by kNN only.
+    const { data, errors } = await query({ embedding: {} });
+    expect(errors).toBeUndefined();
+    expect(data.ListReplies.edges.map(({ node }) => node.id)).toContain(
+      'knnHighlightSemantic'
+    );
+
+    createEmbedding.mockClear();
+    const skipped = await query({ embedding: { textDocSimilarity: null } });
+    expect(skipped.errors).toBeUndefined();
+    expect(
+      skipped.data.ListReplies.edges.map(({ node }) => node.id)
+    ).not.toContain('knnHighlightSemantic');
+    expect(createEmbedding).not.toHaveBeenCalled();
+  });
+
   it('returns the BM25 highlights when kNN is applied', async () => {
     const { data, errors } = await query({ embedding: emb(0.8) });
     expect(errors).toBeUndefined();

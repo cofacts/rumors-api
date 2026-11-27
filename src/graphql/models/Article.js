@@ -31,14 +31,6 @@ import {
 } from 'graphql/util';
 
 import client from 'util/client';
-
-/** The query type of kNN for each article type, see DEFAULT_DOC_SIMILARITY */
-const QUERY_TYPE_OF_ARTICLE_TYPE = {
-  TEXT: 'text',
-  IMAGE: 'image',
-  VIDEO: 'video',
-  AUDIO: 'audio',
-};
 import Node from '../interfaces/Node';
 import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
@@ -406,16 +398,28 @@ const Article = new GraphQLObjectType({
           track_scores: true, // required to always populate score
         };
 
+        // The article type is the query type of kNN (see DEFAULT_DOC_SIMILARITY);
+        // legacy text articles may have no articleType.
+        const docSimilarities = getDocSimilarities({
+          queryType: (articleType || 'TEXT').toLowerCase(),
+          embeddingFilter: filter.embedding,
+        });
+
         // Read along with the media manager query below. Fetched only when kNN
-        // may run; the vectors are not in the default _source.
-        const embeddingsPromise = filter.embedding
-          ? client
-              .get({ index: 'articles', id, _source_includes: ['embeddings'] })
-              .catch((e) => {
-                console.warn('[relatedArticles] cannot read embeddings:', e);
-                return {};
-              })
-          : null;
+        // is to run; the vectors are not in the default _source.
+        const embeddingsPromise =
+          docSimilarities.length > 0
+            ? client
+                .get({
+                  index: 'articles',
+                  id,
+                  _source_includes: ['embeddings'],
+                })
+                .catch((e) => {
+                  console.warn('[relatedArticles] cannot read embeddings:', e);
+                  return {};
+                })
+            : null;
 
         if (filter.replyCount) {
           body.query.bool.filter.push({
@@ -488,10 +492,6 @@ const Article = new GraphQLObjectType({
         // takes no Vertex call. See ListArticles for why kNN is one should-query
         // per doc type, with the filters inside the knn clause.
         let highlightQuery;
-        const docSimilarities = getDocSimilarities({
-          queryType: QUERY_TYPE_OF_ARTICLE_TYPE[articleType],
-          embeddingFilter: filter.embedding,
-        });
         if (docSimilarities.length > 0) {
           try {
             const { _source } = await embeddingsPromise;
@@ -515,13 +515,15 @@ const Article = new GraphQLObjectType({
                     filter: {
                       bool: {
                         filter: [articleTypeQuery(docType), ...knnPreFilters],
+                        // The article itself is its own nearest neighbor; keep
+                        // it from taking one of the k nearest.
+                        must_not: [{ ids: { values: [id] } }],
                       },
                     },
                     name: `knn-${docType}`,
                   })
                 )
               );
-              // The article itself is its own nearest neighbor.
               body.query.bool.must_not = [{ ids: { values: [id] } }];
             }
           } catch (e) {

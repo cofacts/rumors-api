@@ -867,7 +867,12 @@ export default {
                 filter: {
                   bool: {
                     filter: [
-                      articleTypeQuery(docType),
+                      // With articleTypes, the outer filter drops docs without
+                      // articleType; match that, so they cannot take up the k
+                      // nearest.
+                      filter.articleTypes
+                        ? { term: { articleType: docType } }
+                        : articleTypeQuery(docType),
                       { terms: { status: statuses } },
                     ],
                   },

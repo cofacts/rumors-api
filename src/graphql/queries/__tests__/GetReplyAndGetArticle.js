@@ -666,6 +666,14 @@ describe('GetArticle relatedArticles with kNN', () => {
     expect(ids(given)).toContain('knnRelTextNear');
   });
 
+  it('treats an article without articleType as text', async () => {
+    // knnRelTextNear (TEXT, 0.95 to the query vector) passes text -> TEXT.
+    const result = await query({ id: 'knnRelLegacy', embedding: {} });
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toContain('knnRelTextNear');
+    expect(ids(result)).not.toContain('knnRelLegacy');
+  });
+
   it('relates nothing by vector without embedding', async () => {
     const result = await query({ id: 'knnRelSelf' });
     expect(result.errors).toBeUndefined();
