@@ -7,7 +7,7 @@ import {
   it,
   expect,
 } from '@jest/globals';
-import archiveUrlsFromText from '../archiveUrlsFromText';
+import archiveUrlsFromText, { archiveUrls } from '../archiveUrlsFromText';
 
 const SAVE_URL = 'https://web.archive.org/save';
 
@@ -370,6 +370,35 @@ describe('archiveUrlsFromText', () => {
       const [result] = await archiveUrlsFromText(
         'See https://wait.example.com'
       );
+
+      expect(order).toEqual(['status', 'status', 'status', 'save']);
+      expect(result.job_id).toBe('spn2-ok');
+    });
+
+    it('waits for minAvailableSlots free slots when asked', async () => {
+      const slots = [1, 1, 2];
+      const order: string[] = [];
+      mockSPN({
+        status: () => {
+          order.push('status');
+          return jsonResponse({
+            ...FREE_STATUS,
+            processing: 3 - (slots[0] ?? 2),
+            available: slots.shift() ?? 2,
+          });
+        },
+        save: (reqInit) => {
+          order.push('save');
+          return jsonResponse({
+            job_id: 'spn2-ok',
+            url: getArchivedUrl(reqInit),
+          });
+        },
+      });
+
+      const [result] = await archiveUrls(['https://min-slots.example.com/'], {
+        minAvailableSlots: 2,
+      });
 
       expect(order).toEqual(['status', 'status', 'status', 'save']);
       expect(result.job_id).toBe('spn2-ok');
