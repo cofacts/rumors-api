@@ -119,6 +119,22 @@
     "setupFilesAfterEnv": [
       "./test/setup.js"
     ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,ts}",
+      "!src/rumors-db/**",
+      "!**/__tests__/**",
+      "!**/__fixtures__/**",
+      "!**/__mocks__/**"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/src/index\\.js$",
+      "/src/adm/index\\.ts$",
+      "/src/rollbarInstance\\.js$",
+      "/src/util/pseudonymDict\\.js$",
+      "/src/scripts/migrations/",
+      "/src/scripts/experiment"
+    ],
     "testSequencer": "./test/testSequencer.js",
     "snapshotFormat": {
       "printBasicPrototype": true,
