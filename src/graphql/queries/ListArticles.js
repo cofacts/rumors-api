@@ -32,6 +32,7 @@ import {
   ArticleEmbeddingFilterInput,
   getDocSimilarities,
   articleTypeQuery,
+  getKnnK,
   DEFAULT_ARTICLE_STATUSES,
   DEFAULT_ARTICLE_REPLY_STATUSES,
   getAIResponse,
@@ -802,6 +803,8 @@ export default {
     let highlightQuery;
 
     if (filter.embedding) {
+      // Outside the try below: a bad `k` is the client's error to see.
+      const k = getKnnK(filter.embedding.k);
       try {
         // Media query: the vectors are resolved along with the transcript above.
         let queryVectors = mediaQueryVectors;
@@ -878,6 +881,7 @@ export default {
                   },
                 },
                 name: `knn-${docType}`,
+                k,
               })
             )
           );

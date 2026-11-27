@@ -674,6 +674,16 @@ describe('GetArticle relatedArticles with kNN', () => {
     expect(ids(result)).not.toContain('knnRelLegacy');
   });
 
+  it('takes k nearest', async () => {
+    // knnRelNear 0.9 and knnRelFar 0.8 both pass 0.75; k = 1 keeps the nearer.
+    const result = await query({
+      id: 'knnRelSelf',
+      embedding: { videoDocSimilarity: 0.75, k: 1 },
+    });
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toEqual(['knnRelNear']);
+  });
+
   it('relates nothing by vector without embedding', async () => {
     const result = await query({ id: 'knnRelSelf' });
     expect(result.errors).toBeUndefined();

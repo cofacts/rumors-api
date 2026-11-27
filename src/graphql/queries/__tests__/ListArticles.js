@@ -2032,6 +2032,27 @@ describe('ListArticles kNN per doc type', () => {
     expect(createEmbedding).not.toHaveBeenCalled();
   });
 
+  it('takes k nearest of each doc type, and rejects k out of range', async () => {
+    const result = await query(
+      {
+        filter: {
+          moreLikeThis: { like: 'zzz' },
+          embedding: { k: 3 },
+          articleTypes: ['TEXT'],
+        },
+      },
+      user
+    );
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toHaveLength(3);
+
+    const tooMany = await query(
+      { filter: { moreLikeThis: { like: 'zzz' }, embedding: { k: 251 } } },
+      user
+    );
+    expect(tooMany.errors?.[0].message).toMatch('embedding.k');
+  });
+
   it('does not let blocked docs take up the k nearest', async () => {
     // 105 blocked text docs are closer than the normal one; the default
     // status filter is applied before kNN takes the nearest.

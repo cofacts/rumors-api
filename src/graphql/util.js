@@ -110,18 +110,50 @@ export const moreLikeThisInput = new GraphQLInputObjectType({
 });
 
 /**
- * HNSW candidates per shard. On production data (2026-10-25 snapshot, 233k
- * text articles), 100 found 93.8% of the exact top 10, 200 found 96.3% at
- * about 1.5x the latency, and 500 found 98.1% at about 3x.
+ * HNSW candidates per shard: how many vectors HNSW looks at, of which the `k`
+ * nearest are returned. Twice `k`, and at least 200. On production data
+ * (2026-10-25 snapshot, 233k text articles; #411 eval), 100 candidates found
+ * 93.8% of the exact top 10, 200 found 96.3% at about 1.5x the latency, and
+ * 500 found 98.1% at about 3x.
+ *
+ * @param {number} k
+ * @returns {number}
  */
-const KNN_NUM_CANDIDATES = 200;
+const getNumCandidates = (k) => Math.max(200, 2 * k);
 
 /**
- * How many nearest neighbors each shard contributes per query chunk. Set
- * explicitly: when omitted, ES falls back to the request's `size`, which makes
- * the set of kNN hits (and thus `totalCount`) change with the page size.
+ * How many nearest neighbors each kNN clause (one per doc type) takes, by
+ * default. Set explicitly: when omitted, ES falls back to the request's `size`,
+ * which makes the set of kNN hits (and thus `totalCount`) change with the page
+ * size. We have one shard, so this is also the count per clause.
  */
-const KNN_K = 100;
+export const KNN_DEFAULT_K = 100;
+
+/**
+ * The largest `k` a client may ask for: its 500 candidates are the most #411
+ * measured (about 3x the latency of the default).
+ */
+export const KNN_MAX_K = 250;
+
+const knnKField = (perWhat) => ({
+  type: GraphQLInt,
+  description:
+    `How many nearest neighbors kNN takes${
+      perWhat ? ` ${perWhat}` : ''
+    }, between 1 and ${KNN_MAX_K}. ` + `Defaults to ${KNN_DEFAULT_K}.`,
+});
+
+/**
+ * @param {number} [k] - `filter.embedding.k` as given
+ * @returns {number} k to use
+ */
+export function getKnnK(k) {
+  if (k == null) return KNN_DEFAULT_K;
+  if (!Number.isInteger(k) || k < 1 || k > KNN_MAX_K) {
+    throw new Error(`embedding.k must be between 1 and ${KNN_MAX_K}`);
+  }
+  return k;
+}
 
 /** Names the clause built by buildKnnQuery, so that it can be told apart. */
 const KNN_QUERY_NAME = 'knn';
@@ -170,7 +202,7 @@ export const ArticleEmbeddingFilterInput = new GraphQLInputObjectType({
     'Opt-in hybrid search: also retrieve the nearest neighbors via kNN, in addition to what BM25 matches. ' +
     'Pass `{}` to use the default threshold of each doc type, which depends on the type of the query. ' +
     'kNN runs separately for each doc type (TEXT, IMAGE, VIDEO; AUDIO is never searched by kNN), ' +
-    'up to 100 nearest neighbors each. ' +
+    'taking up to `k` nearest neighbors of each doc type. ' +
     'A doc type without a default threshold for the query type is not searched by kNN unless a threshold is given here. ' +
     'Docs only kNN finds come after the BM25 matches. ' +
     '`totalCount` then also counts the nearest neighbors, so it no longer tells how many match the keywords.',
@@ -178,6 +210,7 @@ export const ArticleEmbeddingFilterInput = new GraphQLInputObjectType({
     textDocSimilarity: docSimilarityField('TEXT'),
     imageDocSimilarity: docSimilarityField('IMAGE'),
     videoDocSimilarity: docSimilarityField('VIDEO'),
+    k: knnKField('for each doc type (TEXT, IMAGE and VIDEO each)'),
   },
 });
 
@@ -185,13 +218,14 @@ export const ReplyEmbeddingFilterInput = new GraphQLInputObjectType({
   name: 'ReplyEmbeddingFilter',
   description:
     'Opt-in hybrid search: also retrieve the nearest neighbors via kNN, in addition to what BM25 matches ' +
-    '(up to 100). Pass `{}` to use the default threshold. ' +
+    '(up to `k`). Pass `{}` to use the defaults. ' +
     '`totalCount` then also counts the nearest neighbors, so it no longer tells how many match the keywords.',
   fields: {
     textDocSimilarity: {
       type: GraphQLFloat,
       description: `Minimum cosine similarity for replies to be found by kNN. Defaults to ${DEFAULT_DOC_SIMILARITY.text.TEXT}.`,
     },
+    k: knnKField(''),
   },
 });
 
@@ -241,16 +275,17 @@ export function getDocSimilarities({
  * Build a nested-kNN bool/should query, one nested-knn clause per query chunk.
  * Intended as one more `should` clause next to the BM25 ones: a doc matches it
  * when any query chunk is within `similarity` of one of its stored embeddings,
- * and is among the `KNN_K` nearest of its shard.
+ * and is among the `k` nearest of its shard.
  *
  * @param {object} param
  * @param {number[][]} param.queryVectors - one vector per query chunk
  * @param {number} param.similarity - min cosine similarity for KNN hits
  * @param {object} [param.filter] - pre-filter on the parent document (e.g.
- *   `{ term: { articleType: 'VIDEO' } }`), so that the `KNN_K` nearest are
+ *   `{ term: { articleType: 'VIDEO' } }`), so that the `k` nearest are
  *   taken among the matching docs only. A filter in the enclosing bool query is
  *   NOT applied before kNN; it only drops hits after the k nearest are taken.
  * @param {string} [param.name] - `_name` of the returned query
+ * @param {number} [param.k] - nearest neighbors to take; see getKnnK
  * @returns {object} a bool/should query suitable as a `should` clause
  */
 export function buildKnnQuery({
@@ -258,6 +293,7 @@ export function buildKnnQuery({
   similarity,
   filter,
   name = KNN_QUERY_NAME,
+  k = KNN_DEFAULT_K,
 }) {
   const nestedKnnQueries = queryVectors.map((qv) => ({
     nested: {
@@ -267,8 +303,8 @@ export function buildKnnQuery({
         knn: {
           field: 'embeddings.vector',
           query_vector: qv,
-          k: KNN_K,
-          num_candidates: KNN_NUM_CANDIDATES,
+          k,
+          num_candidates: getNumCandidates(k),
           similarity,
           ...(filter ? { filter } : {}),
         },

@@ -28,6 +28,7 @@ import {
   ArticleEmbeddingFilterInput,
   getDocSimilarities,
   articleTypeQuery,
+  getKnnK,
 } from 'graphql/util';
 
 import client from 'util/client';
@@ -404,6 +405,7 @@ const Article = new GraphQLObjectType({
           queryType: (articleType || 'TEXT').toLowerCase(),
           embeddingFilter: filter.embedding,
         });
+        const k = getKnnK(filter.embedding?.k);
 
         // Read along with the media manager query below. Fetched only when kNN
         // is to run; the vectors are not in the default _source.
@@ -521,6 +523,7 @@ const Article = new GraphQLObjectType({
                       },
                     },
                     name: `knn-${docType}`,
+                    k,
                   })
                 )
               );

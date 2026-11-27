@@ -13,6 +13,7 @@ import {
   buildKnnQuery,
   ReplyEmbeddingFilterInput,
   DEFAULT_DOC_SIMILARITY,
+  getKnnK,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import { createEmbedding, getQueryEmbeddingCacheId } from 'util/embedding';
@@ -201,6 +202,8 @@ export default {
         ? filter.embedding.textDocSimilarity
         : DEFAULT_DOC_SIMILARITY.text.TEXT;
     if (filter.embedding && similarity != null && filter.moreLikeThis?.like) {
+      // Outside the try below: a bad `k` is the client's error to see.
+      const k = getKnnK(filter.embedding.k);
       try {
         const queryChunks = await createEmbedding(
           {
@@ -229,6 +232,7 @@ export default {
               // ES does not push the outer bool.filter into a nested knn; these
               // are all top-level filters.
               filter: { bool: { filter: [...filterQueries] } },
+              k,
             })
           );
         }
