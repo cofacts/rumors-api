@@ -1,4 +1,4 @@
-import { GraphQLList, GraphQLFloat } from 'graphql';
+import { GraphQLList } from 'graphql';
 import client from 'util/client';
 
 import {
@@ -11,6 +11,8 @@ import {
   pagingArgs,
   moreLikeThisInput,
   buildKnnQuery,
+  ReplyEmbeddingFilterInput,
+  DEFAULT_DOC_SIMILARITY,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import { createEmbedding, getQueryEmbeddingCacheId } from 'util/embedding';
@@ -27,13 +29,10 @@ export default {
           type: moreLikeThisInput,
         },
         embedding: {
-          type: GraphQLFloat,
+          type: ReplyEmbeddingFilterInput,
           description:
-            'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
-            'to also retrieve the nearest neighbors via kNN, in addition to what BM25 matches. ' +
-            'Omit for BM25-only (default). ' +
-            '`totalCount` then also counts the nearest neighbors (up to 100 per query vector), ' +
-            'so it no longer tells how many match the keywords.',
+            'Opt-in hybrid search with `moreLikeThis`; pass `{}` for the default threshold. ' +
+            'The query text embedding is only created when logged in. Omit for BM25-only (default).',
         },
         type: {
           type: ReplyTypeEnum,
@@ -195,7 +194,11 @@ export default {
     // Set when a kNN clause is added: the highlighter cannot walk one.
     let highlightQuery;
 
-    if (filter.embedding != null && filter.moreLikeThis?.like) {
+    const similarity =
+      filter.embedding && 'textDocSimilarity' in filter.embedding
+        ? filter.embedding.textDocSimilarity
+        : DEFAULT_DOC_SIMILARITY.text.TEXT;
+    if (filter.embedding && similarity != null && filter.moreLikeThis?.like) {
       try {
         const queryChunks = await createEmbedding(
           {
@@ -218,7 +221,7 @@ export default {
             bool: { ...body.query.bool, should: [...body.query.bool.should] },
           };
           body.query.bool.should.push(
-            buildKnnQuery({ queryVectors, similarity: filter.embedding })
+            buildKnnQuery({ queryVectors, similarity })
           );
         }
       } catch (e) {

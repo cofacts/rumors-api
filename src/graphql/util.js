@@ -127,10 +127,115 @@ const KNN_K = 100;
 const KNN_QUERY_NAME = 'knn';
 
 /**
- * Article types that have embeddings and are searched one type at a time when
- * a text query looks for media. AUDIO is not embedded.
+ * Default minimum cosine similarity of kNN hits, by the type of the query
+ * (text / image / video) and then by the article type of the doc. Pairs not
+ * listed are not searched by kNN unless the client gives a threshold for them:
+ * how high a truly similar pair of those types scores has not been measured,
+ * and a guessed threshold that is too low brings in unrelated docs.
+ *
+ * - text -> TEXT 0.75: #411 eval, 0.6-0.75 about the same (Hit@10).
+ * - text -> IMAGE / VIDEO 0.75: text-to-media eval (2026-11-27, 150 videos and
+ *   150 images; devops workspace text2video-threshold). At 0.7, ~128 unrelated
+ *   videos per keyword query; at 0.75, ~6.
+ * - image -> IMAGE 0.7: #411 eval and pr411-image-eval, 0.6-0.8 about the same.
+ * - video -> VIDEO 0.85: video kNN eval (2026-11-24). Video vectors sit close
+ *   to each other: at 0.7-0.8, every query brings in ~100 unrelated videos.
+ *
+ * Audio is never searched by kNN: it is not to be embedded (#418).
  */
-export const KNN_MEDIA_ARTICLE_TYPES = ['IMAGE', 'VIDEO'];
+export const DEFAULT_DOC_SIMILARITY = {
+  text: { TEXT: 0.75, IMAGE: 0.75, VIDEO: 0.75 },
+  image: { IMAGE: 0.7 },
+  video: { VIDEO: 0.85 },
+};
+
+/** Article types that have embeddings, with their field in the embedding filter */
+export const DOC_SIMILARITY_FIELDS = {
+  TEXT: 'textDocSimilarity',
+  IMAGE: 'imageDocSimilarity',
+  VIDEO: 'videoDocSimilarity',
+};
+
+const docSimilarityField = (docType) => ({
+  type: GraphQLFloat,
+  description:
+    `Minimum cosine similarity for ${docType} docs to be found by kNN. ` +
+    'Defaults to a value that depends on the type of the query (text, image or video); ' +
+    `\`null\` skips kNN on ${docType} docs.`,
+});
+
+export const ArticleEmbeddingFilterInput = new GraphQLInputObjectType({
+  name: 'ArticleEmbeddingFilter',
+  description:
+    'Opt-in hybrid search: also retrieve the nearest neighbors via kNN, in addition to what BM25 matches. ' +
+    'Pass `{}` to use the default threshold of each doc type, which depends on the type of the query. ' +
+    'kNN runs separately for each doc type (TEXT, IMAGE, VIDEO; AUDIO is never searched by kNN), ' +
+    'up to 100 nearest neighbors each. ' +
+    'A doc type without a default threshold for the query type is not searched by kNN unless a threshold is given here. ' +
+    'Docs only kNN finds come after the BM25 matches. ' +
+    '`totalCount` then also counts the nearest neighbors, so it no longer tells how many match the keywords.',
+  fields: {
+    textDocSimilarity: docSimilarityField('TEXT'),
+    imageDocSimilarity: docSimilarityField('IMAGE'),
+    videoDocSimilarity: docSimilarityField('VIDEO'),
+  },
+});
+
+export const ReplyEmbeddingFilterInput = new GraphQLInputObjectType({
+  name: 'ReplyEmbeddingFilter',
+  description:
+    'Opt-in hybrid search: also retrieve the nearest neighbors via kNN, in addition to what BM25 matches ' +
+    '(up to 100). Pass `{}` to use the default threshold. ' +
+    '`totalCount` then also counts the nearest neighbors, so it no longer tells how many match the keywords.',
+  fields: {
+    textDocSimilarity: {
+      type: GraphQLFloat,
+      description: `Minimum cosine similarity for replies to be found by kNN. Defaults to ${DEFAULT_DOC_SIMILARITY.text.TEXT}.`,
+    },
+  },
+});
+
+/**
+ * @param {string} docType - TEXT, IMAGE or VIDEO
+ * @returns {object} a query matching the articles of that type. TEXT also
+ *   matches articles without `articleType`, as legacy text articles may have none.
+ */
+export function articleTypeQuery(docType) {
+  return docType === 'TEXT'
+    ? {
+        bool: {
+          must_not: [{ terms: { articleType: ['IMAGE', 'VIDEO', 'AUDIO'] } }],
+        },
+      }
+    : { term: { articleType: docType } };
+}
+
+/**
+ * Decides which article types to search by kNN, and the threshold of each.
+ *
+ * @param {object} param
+ * @param {'text'|'image'|'video'|'audio'} param.queryType
+ * @param {object} param.embeddingFilter - `filter.embedding` (ArticleEmbeddingFilter)
+ * @param {string[]} [param.articleTypes] - `filter.articleTypes`; doc types
+ *   outside it are skipped, since their hits would be filtered out anyway.
+ * @returns {{docType: string, similarity: number}[]} empty when nothing is to be searched
+ */
+export function getDocSimilarities({
+  queryType,
+  embeddingFilter,
+  articleTypes,
+}) {
+  if (!embeddingFilter || queryType === 'audio') return [];
+  const defaults = DEFAULT_DOC_SIMILARITY[queryType] ?? {};
+
+  return Object.entries(DOC_SIMILARITY_FIELDS).flatMap(([docType, field]) => {
+    if (articleTypes && !articleTypes.includes(docType)) return [];
+    // Given (even as null) takes precedence over the default.
+    const similarity =
+      field in embeddingFilter ? embeddingFilter[field] : defaults[docType];
+    return similarity == null ? [] : [{ docType, similarity }];
+  });
+}
 
 /**
  * Build a nested-kNN bool/should query, one nested-knn clause per query chunk.

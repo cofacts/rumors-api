@@ -589,9 +589,10 @@ export const knnMediaRankingFixtures = {
   },
 };
 
-// Text search for media, with kNN similarity 0.7. More text docs than KNN_K
-// (100) are closer to the query than the video, so the video only comes up
-// when kNN is taken per media type.
+// Text search with kNN per doc type. More text docs than KNN_K (100) are
+// closer to the query than the video and the image, so these only come up
+// when kNN is taken per doc type. The bulk docs have no `text`, so that they do
+// not skew BM25 statistics of other tests (deleted docs count until a merge).
 //
 export const knnMediaTypeFixtures = {
   ...Object.fromEntries(
@@ -600,12 +601,31 @@ export const knnMediaTypeFixtures = {
       {
         status: 'NORMAL',
         articleType: 'TEXT',
-        text: `Unrelated sentence number ${i}`,
         createdAt: '2020-02-05T00:00:00.000Z',
         embeddings: [{ vector: vectorWithSimilarity(0.9) }],
       },
     ])
   ),
+  ...Object.fromEntries(
+    Array.from({ length: 105 }, (_, i) => [
+      `/articles/doc/knnMediaTypeBlockedText${i}`,
+      {
+        status: 'BLOCKED',
+        articleType: 'TEXT',
+        createdAt: '2020-02-05T00:00:00.000Z',
+        embeddings: [{ vector: vectorWithSimilarity(0.95) }],
+      },
+    ])
+  ),
+  // Closer than the normal text docs above but further than the blocked ones;
+  // only found when blocked docs do not take up the k nearest.
+  '/articles/doc/knnMediaTypeNormalText': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'Unrelated sentence, normal',
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.92) }],
+  },
   '/articles/doc/knnMediaTypeVideo': {
     status: 'NORMAL',
     articleType: 'VIDEO',
@@ -620,7 +640,7 @@ export const knnMediaTypeFixtures = {
     text: '',
     attachmentHash: 'knn-media-type-image',
     createdAt: '2020-02-05T00:00:00.000Z',
-    embeddings: [{ vector: vectorWithSimilarity(0.72) }],
+    embeddings: [{ vector: vectorWithSimilarity(0.76) }],
   },
   // Below the threshold.
   '/articles/doc/knnMediaTypeFarVideo': {

@@ -52,6 +52,13 @@ jest.mock('util/embedding', () => ({
   isEmbeddedMediaType: jest.requireActual('util/embedding').isEmbeddedMediaType,
 }));
 
+/** kNN thresholds for every doc type, as the embedding filter */
+const emb = (similarity) => ({
+  textDocSimilarity: similarity,
+  imageDocSimilarity: similarity,
+  videoDocSimilarity: similarity,
+});
+
 describe('ListArticles', () => {
   beforeAll(() => loadFixtures(fixtures));
   beforeEach(() => {
@@ -1355,7 +1362,7 @@ describe('ListArticles kNN retriever', () => {
       {
         filter: {
           moreLikeThis: { like: 'covid' },
-          embedding: 0.6,
+          embedding: emb(0.6),
         },
       },
       baseContext
@@ -1373,7 +1380,9 @@ describe('ListArticles kNN retriever', () => {
 
     const result = await ListArticles.resolve(
       {},
-      { filter: { mediaUrl: 'https://example.com/y.jpg', embedding: 0.6 } },
+      {
+        filter: { mediaUrl: 'https://example.com/y.jpg', embedding: emb(0.6) },
+      },
       baseContext
     );
 
@@ -1414,7 +1423,9 @@ describe('ListArticles kNN retriever', () => {
 
     const result = await ListArticles.resolve(
       {},
-      { filter: { mediaUrl: 'https://example.com/y.jpg', embedding: 0.6 } },
+      {
+        filter: { mediaUrl: 'https://example.com/y.jpg', embedding: emb(0.6) },
+      },
       {
         ...baseContext,
         loaders: {
@@ -1448,7 +1459,7 @@ describe('ListArticles kNN retriever', () => {
       {
         filter: {
           mediaUrl: 'https://example.com/z.mp4',
-          embedding: 0.6,
+          embedding: emb(0.6),
         },
       },
       baseContext
@@ -1484,7 +1495,7 @@ describe('ListArticles kNN retriever', () => {
       {
         filter: {
           mediaUrl: 'https://example.com/z.mp3',
-          embedding: 0.6,
+          embedding: emb(0.6),
         },
       },
       baseContext
@@ -1515,7 +1526,7 @@ describe('ListArticles kNN retriever', () => {
       {
         filter: {
           mediaUrl: 'https://example.com/z.mp4',
-          embedding: 0.6,
+          embedding: emb(0.6),
         },
       },
       baseContext
@@ -1540,7 +1551,7 @@ describe('ListArticles kNN retriever', () => {
       {
         filter: {
           mediaUrl: 'https://example.com/z.mp4',
-          embedding: 0.6,
+          embedding: emb(0.6),
         },
       },
       baseContext
@@ -1560,7 +1571,9 @@ describe('ListArticles kNN retriever', () => {
 
     const result = await ListArticles.resolve(
       {},
-      { filter: { mediaUrl: 'https://example.com/x.jpg', embedding: 0.75 } },
+      {
+        filter: { mediaUrl: 'https://example.com/x.jpg', embedding: emb(0.75) },
+      },
       baseContext
     );
 
@@ -1580,7 +1593,7 @@ describe('ListArticles kNN retriever', () => {
         filter: {
           moreLikeThis: { like: 'covid' },
           mediaUrl: 'https://example.com/y.jpg',
-          embedding: 0.6,
+          embedding: emb(0.6),
         },
       },
       baseContext
@@ -1596,14 +1609,15 @@ describe('ListArticles kNN retriever', () => {
     expect(getKnnVector(result)).toEqual([0.5, 0.6]);
   });
 
-  it('falls back to the text embedding when the media has none', async () => {
+  it('does not fall back to the text embedding when the media has none', async () => {
+    // The media is the kNN query; the text given along with it is searched by
+    // BM25 only.
     mediaManager.query.mockResolvedValueOnce({
       queryInfo: { id: 'media-hash-text-fallback', type: 'image' },
       hits: [],
     });
     mockUploadedMedia();
     createMediaEmbedding.mockRejectedValueOnce(new Error('vertex offline'));
-    createEmbedding.mockResolvedValueOnce([{ vector: [0.5] }]);
 
     const result = await ListArticles.resolve(
       {},
@@ -1611,15 +1625,14 @@ describe('ListArticles kNN retriever', () => {
         filter: {
           moreLikeThis: { like: 'covid' },
           mediaUrl: 'https://example.com/y.jpg',
-          embedding: 0.6,
+          embedding: emb(0.6),
         },
       },
       baseContext
     );
 
-    expect(createEmbedding).toHaveBeenCalledTimes(1);
-    expect(createEmbedding.mock.calls[0][0].type).toBe('text');
-    expect(getKnnVector(result)).toEqual([0.5]);
+    expect(createEmbedding).not.toHaveBeenCalled();
+    expect(getKnnVector(result)).toBeUndefined();
   });
 });
 
@@ -1635,7 +1648,7 @@ describe('ListArticles kNN search with highlight', () => {
   afterAll(() => unloadFixtures(knnHighlightFixtures));
 
   const query = gql`
-    query ($embedding: Float) {
+    query ($embedding: ArticleEmbeddingFilter) {
       ListArticles(
         filter: {
           moreLikeThis: { like: "kiwifruit smoothie recipe" }
@@ -1660,7 +1673,7 @@ describe('ListArticles kNN search with highlight', () => {
   `;
 
   it('returns the BM25 highlights when kNN is applied', async () => {
-    const { data, errors } = await query({ embedding: 0.8 });
+    const { data, errors } = await query({ embedding: emb(0.8) });
     expect(errors).toBeUndefined();
     expect(createEmbedding).toHaveBeenCalledTimes(1);
 
@@ -1713,7 +1726,14 @@ describe('ListArticles kNN pagination', () => {
   const query = gql`
     query ($after: String) {
       ListArticles(
-        filter: { moreLikeThis: { like: "fruit drink" }, embedding: 0.8 }
+        filter: {
+          moreLikeThis: { like: "fruit drink" }
+          embedding: {
+            textDocSimilarity: 0.8
+            imageDocSimilarity: 0.8
+            videoDocSimilarity: 0.8
+          }
+        }
         orderBy: [{ createdAt: DESC }]
         first: 2
         after: $after
@@ -1771,7 +1791,7 @@ describe('ListArticles kNN ranking', () => {
     afterAll(() => unloadFixtures(knnRankingFixtures));
 
     const query = gql`
-      query ($embedding: Float) {
+      query ($embedding: ArticleEmbeddingFilter) {
         ListArticles(
           filter: {
             moreLikeThis: { like: "durian mooncake festival" }
@@ -1790,9 +1810,9 @@ describe('ListArticles kNN ranking', () => {
     `;
 
     it('sorts by relevance when orderBy is not given', async () => {
-      const { data: sorted } = await query({ embedding: 0.8 });
+      const { data: sorted } = await query({ embedding: emb(0.8) });
       const { data, errors } = await gql`
-        query ($embedding: Float) {
+        query ($embedding: ArticleEmbeddingFilter) {
           ListArticles(
             filter: {
               moreLikeThis: { like: "durian mooncake festival" }
@@ -1807,13 +1827,13 @@ describe('ListArticles kNN ranking', () => {
             }
           }
         }
-      `({ embedding: 0.8 });
+      `({ embedding: emb(0.8) });
       expect(errors).toBeUndefined();
       expect(data).toEqual(sorted);
     });
 
     it('returns what either BM25 or kNN finds, ranked by BM25', async () => {
-      const { data, errors } = await query({ embedding: 0.8 });
+      const { data, errors } = await query({ embedding: emb(0.8) });
       expect(errors).toBeUndefined();
 
       // Similarity: NoKeyword 0.99 > WeakKeyword 0.95 > StrongKeyword 0.85,
@@ -1884,7 +1904,11 @@ describe('ListArticles kNN ranking', () => {
           ListArticles(
             filter: {
               mediaUrl: "https://example.com/knn-media-rank.jpg"
-              embedding: 0.8
+              embedding: {
+                textDocSimilarity: 0.8
+                imageDocSimilarity: 0.8
+                videoDocSimilarity: 0.8
+              }
             }
             orderBy: [{ _score: DESC }]
           ) {
@@ -1919,7 +1943,7 @@ describe('ListArticles kNN ranking', () => {
   });
 });
 
-describe('ListArticles kNN per media type', () => {
+describe('ListArticles kNN per doc type', () => {
   beforeAll(() => loadFixtures(knnMediaTypeFixtures));
   beforeEach(() => {
     createEmbedding.mockReset();
@@ -1930,7 +1954,6 @@ describe('ListArticles kNN per media type', () => {
   const query = gql`
     query ($filter: ListArticleFilter) {
       ListArticles(filter: $filter, first: 200) {
-        totalCount
         edges {
           node {
             id
@@ -1942,44 +1965,50 @@ describe('ListArticles kNN per media type', () => {
   const ids = ({ data }) => data.ListArticles.edges.map(({ node }) => node.id);
   const user = { userId: 'u', appId: 'a' };
 
-  it('finds no media when the nearest neighbors are all text', async () => {
+  it('finds the nearest of each doc type with the default thresholds', async () => {
+    // More than 100 text docs (0.9) are closer than the video (0.75) and the
+    // image (0.76); they still come up, since each doc type has its own kNN.
     const result = await query(
-      {
-        filter: { moreLikeThis: { like: 'zzz' }, embedding: 0.7 },
-      },
-      user
-    );
-    expect(result.errors).toBeUndefined();
-    expect(ids(result)).not.toContain('knnMediaTypeVideo');
-    expect(ids(result)).not.toContain('knnMediaTypeImage');
-  });
-
-  it('finds the nearest of each media type with mediaEmbedding', async () => {
-    const result = await query(
-      {
-        filter: {
-          moreLikeThis: { like: 'zzz' },
-          embedding: 0.7,
-          mediaEmbedding: 0.7,
-        },
-      },
+      { filter: { moreLikeThis: { like: 'zzz' }, embedding: {} } },
       user
     );
     expect(result.errors).toBeUndefined();
     expect(ids(result)).toEqual(
       expect.arrayContaining(['knnMediaTypeVideo', 'knnMediaTypeImage'])
     );
+    // Below the default 0.75 for text -> VIDEO.
     expect(ids(result)).not.toContain('knnMediaTypeFarVideo');
-    // One query vector for both: text and media kNN.
+    // Up to 100 per doc type.
+    expect(
+      ids(result).filter((id) => /^knnMediaType(Normal)?Text/.test(id))
+    ).toHaveLength(100);
+    // One query vector for every doc type.
     expect(createEmbedding).toHaveBeenCalledTimes(1);
   });
 
-  it('works without embedding, and follows articleTypes', async () => {
+  it('takes the threshold given for a doc type, and skips a doc type given null', async () => {
     const result = await query(
       {
         filter: {
           moreLikeThis: { like: 'zzz' },
-          mediaEmbedding: 0.7,
+          embedding: { videoDocSimilarity: 0.55, imageDocSimilarity: null },
+        },
+      },
+      user
+    );
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toEqual(
+      expect.arrayContaining(['knnMediaTypeVideo', 'knnMediaTypeFarVideo'])
+    );
+    expect(ids(result)).not.toContain('knnMediaTypeImage');
+  });
+
+  it('only searches the doc types in articleTypes, and makes no query vector when there is none', async () => {
+    const result = await query(
+      {
+        filter: {
+          moreLikeThis: { like: 'zzz' },
+          embedding: {},
           articleTypes: ['VIDEO'],
         },
       },
@@ -1987,5 +2016,37 @@ describe('ListArticles kNN per media type', () => {
     );
     expect(result.errors).toBeUndefined();
     expect(ids(result)).toEqual(['knnMediaTypeVideo']);
+
+    createEmbedding.mockClear();
+    const audioOnly = await query(
+      {
+        filter: {
+          moreLikeThis: { like: 'zzz' },
+          embedding: {},
+          articleTypes: ['AUDIO'],
+        },
+      },
+      user
+    );
+    expect(audioOnly.errors).toBeUndefined();
+    expect(createEmbedding).not.toHaveBeenCalled();
+  });
+
+  it('does not let blocked docs take up the k nearest', async () => {
+    // 105 blocked text docs are closer than the normal one; the default
+    // status filter is applied before kNN takes the nearest.
+    const result = await query(
+      {
+        filter: {
+          moreLikeThis: { like: 'zzz' },
+          embedding: {},
+          articleTypes: ['TEXT'],
+          statuses: ['NORMAL'],
+        },
+      },
+      user
+    );
+    expect(result.errors).toBeUndefined();
+    expect(ids(result)).toContain('knnMediaTypeNormalText');
   });
 });

@@ -317,6 +317,21 @@ export const knnRelatedFixtures = {
     createdAt: '2020-02-05T00:00:00.000Z',
     embeddings: [{ vector: vectorWithSimilarity(0.8) }],
   },
+  '/articles/doc/knnRelTextNear': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'Kangaroo hammock',
+    normalArticleReplyCount: 0,
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.95) }],
+  },
+  '/articles/doc/knnRelNoEmbeddingTwin': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'Echidna kayak paddle',
+    normalArticleReplyCount: 0,
+    createdAt: '2020-02-05T00:00:00.000Z',
+  },
   '/articles/doc/knnRelNoEmbedding': {
     status: 'NORMAL',
     articleType: 'TEXT',

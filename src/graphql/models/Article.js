@@ -25,9 +25,20 @@ import {
   DEFAULT_ARTICLE_CATEGORY_STATUSES,
   DEFAULT_REPLY_REQUEST_STATUSES,
   buildKnnQuery,
+  ArticleEmbeddingFilterInput,
+  getDocSimilarities,
+  articleTypeQuery,
 } from 'graphql/util';
 
 import client from 'util/client';
+
+/** The query type of kNN for each article type, see DEFAULT_DOC_SIMILARITY */
+const QUERY_TYPE_OF_ARTICLE_TYPE = {
+  TEXT: 'text',
+  IMAGE: 'image',
+  VIDEO: 'video',
+  AUDIO: 'audio',
+};
 import Node from '../interfaces/Node';
 import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
@@ -320,20 +331,11 @@ const Article = new GraphQLObjectType({
           type: createFilterType('RelatedArticleFilter', {
             replyCount: { type: intRangeInput },
             embedding: {
-              type: GraphQLFloat,
+              type: ArticleEmbeddingFilterInput,
               description:
-                'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
-                "to also retrieve the nearest neighbors of this article's stored embeddings via kNN, " +
-                'in addition to what the text and media similarity find (up to 100 per vector). ' +
-                'Articles that have no embeddings yet only get the latter. ' +
-                'See `videoEmbedding` for video articles.',
-            },
-            videoEmbedding: {
-              type: GraphQLFloat,
-              description:
-                'Used instead of `embedding` when this article is a VIDEO. ' +
-                'Video vectors sit closer to each other than text and image ones, ' +
-                'so a higher value such as `0.85` keeps unrelated videos out.',
+                "Opt-in hybrid search; pass `{}` for the default thresholds. This article's stored " +
+                'embeddings are the kNN query, and its article type is the query type. ' +
+                'Articles that have no embeddings yet get the text and media similarity only.',
             },
           }),
         },
@@ -404,6 +406,17 @@ const Article = new GraphQLObjectType({
           track_scores: true, // required to always populate score
         };
 
+        // Read along with the media manager query below. Fetched only when kNN
+        // may run; the vectors are not in the default _source.
+        const embeddingsPromise = filter.embedding
+          ? client
+              .get({ index: 'articles', id, _source_includes: ['embeddings'] })
+              .catch((e) => {
+                console.warn('[relatedArticles] cannot read embeddings:', e);
+                return {};
+              })
+          : null;
+
         if (filter.replyCount) {
           body.query.bool.filter.push({
             range: {
@@ -472,24 +485,22 @@ const Article = new GraphQLObjectType({
         }
 
         // Hybrid: the article's own stored vectors are the query, so this
-        // takes no Vertex call. See ListArticles for why kNN is a should-query.
+        // takes no Vertex call. See ListArticles for why kNN is one should-query
+        // per doc type, with the filters inside the knn clause.
         let highlightQuery;
-        const similarity =
-          articleType === 'VIDEO' && filter.videoEmbedding != null
-            ? filter.videoEmbedding
-            : filter.embedding;
-        if (similarity != null) {
+        const docSimilarities = getDocSimilarities({
+          queryType: QUERY_TYPE_OF_ARTICLE_TYPE[articleType],
+          embeddingFilter: filter.embedding,
+        });
+        if (docSimilarities.length > 0) {
           try {
-            const { _source } = await client.get({
-              index: 'articles',
-              id,
-              _source_includes: ['embeddings'],
-            });
+            const { _source } = await embeddingsPromise;
             const queryVectors = (_source?.embeddings ?? [])
               .map(({ vector }) => vector)
               .filter((vector) => vector?.length > 0);
 
             if (queryVectors.length > 0) {
+              const knnPreFilters = [...body.query.bool.filter];
               highlightQuery = {
                 bool: {
                   ...body.query.bool,
@@ -497,7 +508,18 @@ const Article = new GraphQLObjectType({
                 },
               };
               body.query.bool.should.push(
-                buildKnnQuery({ queryVectors, similarity })
+                ...docSimilarities.map(({ docType, similarity }) =>
+                  buildKnnQuery({
+                    queryVectors,
+                    similarity,
+                    filter: {
+                      bool: {
+                        filter: [articleTypeQuery(docType), ...knnPreFilters],
+                      },
+                    },
+                    name: `knn-${docType}`,
+                  })
+                )
               );
               // The article itself is its own nearest neighbor.
               body.query.bool.must_not = [{ ids: { values: [id] } }];

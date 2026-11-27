@@ -620,12 +620,9 @@ describe('GetArticle relatedArticles with kNN', () => {
   afterAll(() => unloadFixtures(knnRelatedFixtures));
 
   const query = gql`
-    query ($id: String!, $embedding: Float, $videoEmbedding: Float) {
+    query ($id: String!, $embedding: ArticleEmbeddingFilter) {
       GetArticle(id: $id) {
-        relatedArticles(
-          filter: { embedding: $embedding, videoEmbedding: $videoEmbedding }
-        ) {
-          totalCount
+        relatedArticles(filter: { embedding: $embedding }) {
           edges {
             node {
               id
@@ -641,25 +638,32 @@ describe('GetArticle relatedArticles with kNN', () => {
   const ids = ({ data }) =>
     data.GetArticle.relatedArticles.edges.map(({ node }) => node.id);
 
-  it('finds the neighbors of the stored embeddings above the threshold', async () => {
-    const result = await query({ id: 'knnRelSelf', embedding: 0.85 });
+  it('finds the neighbors of the stored embeddings, at the default threshold of a video', async () => {
+    // knnRelNear 0.9 passes video -> VIDEO 0.85; knnRelFar 0.8 does not.
+    const result = await query({ id: 'knnRelSelf', embedding: {} });
     expect(result.errors).toBeUndefined();
     expect(ids(result)).toEqual(['knnRelNear']);
   });
 
-  it('uses videoEmbedding for a video article', async () => {
-    // knnRelNear (0.9) and knnRelFar (0.8) pass embedding 0.7; only knnRelNear
-    // passes videoEmbedding 0.85.
+  it('takes the threshold given', async () => {
     const result = await query({
       id: 'knnRelSelf',
-      embedding: 0.7,
-      videoEmbedding: 0.85,
+      embedding: { videoDocSimilarity: 0.75 },
     });
     expect(result.errors).toBeUndefined();
-    expect(ids(result)).toEqual(['knnRelNear']);
+    expect(ids(result).sort()).toEqual(['knnRelFar', 'knnRelNear']);
+  });
 
-    const loose = await query({ id: 'knnRelSelf', embedding: 0.7 });
-    expect(ids(loose).sort()).toEqual(['knnRelFar', 'knnRelNear']);
+  it('does not search doc types without a default threshold for the query type', async () => {
+    // knnRelTextNear (TEXT, 0.95) is close, but video -> TEXT has no default.
+    const result = await query({ id: 'knnRelSelf', embedding: {} });
+    expect(ids(result)).not.toContain('knnRelTextNear');
+
+    const given = await query({
+      id: 'knnRelSelf',
+      embedding: { textDocSimilarity: 0.9 },
+    });
+    expect(ids(given)).toContain('knnRelTextNear');
   });
 
   it('relates nothing by vector without embedding', async () => {
@@ -669,8 +673,9 @@ describe('GetArticle relatedArticles with kNN', () => {
   });
 
   it('falls back to text similarity for an article without embeddings', async () => {
-    const result = await query({ id: 'knnRelNoEmbedding', embedding: 0.7 });
+    // knnRelNoEmbeddingTwin shares words with knnRelNoEmbedding.
+    const result = await query({ id: 'knnRelNoEmbedding', embedding: {} });
     expect(result.errors).toBeUndefined();
-    expect(ids(result)).toEqual([]);
+    expect(ids(result)).toEqual(['knnRelNoEmbeddingTwin']);
   });
 });

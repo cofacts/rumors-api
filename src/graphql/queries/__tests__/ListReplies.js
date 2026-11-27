@@ -14,6 +14,11 @@ jest.mock('util/embedding', () => ({
   getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
 }));
 
+/** kNN thresholds for every doc type, as the embedding filter */
+const emb = (similarity) => ({
+  textDocSimilarity: similarity,
+});
+
 describe('ListReplies', () => {
   beforeAll(() => loadFixtures(fixtures));
 
@@ -448,7 +453,7 @@ describe('ListReplies kNN search with highlight', () => {
   afterAll(() => unloadFixtures(knnHighlightFixtures));
 
   const query = gql`
-    query ($embedding: Float) {
+    query ($embedding: ReplyEmbeddingFilter) {
       ListReplies(
         filter: {
           moreLikeThis: { like: "kiwifruit smoothie recipe" }
@@ -470,7 +475,7 @@ describe('ListReplies kNN search with highlight', () => {
   `;
 
   it('returns the BM25 highlights when kNN is applied', async () => {
-    const { data, errors } = await query({ embedding: 0.8 });
+    const { data, errors } = await query({ embedding: emb(0.8) });
     expect(errors).toBeUndefined();
     expect(createEmbedding).toHaveBeenCalledTimes(1);
 
@@ -522,7 +527,10 @@ describe('ListReplies kNN pagination', () => {
   const query = gql`
     query ($after: String) {
       ListReplies(
-        filter: { moreLikeThis: { like: "fruit drink" }, embedding: 0.8 }
+        filter: {
+          moreLikeThis: { like: "fruit drink" }
+          embedding: { textDocSimilarity: 0.8 }
+        }
         orderBy: [{ createdAt: DESC }]
         first: 2
         after: $after
@@ -570,7 +578,7 @@ describe('ListReplies kNN with BM25', () => {
   afterAll(() => unloadFixtures(knnUnionFixtures));
 
   const query = gql`
-    query ($embedding: Float) {
+    query ($embedding: ReplyEmbeddingFilter) {
       ListReplies(
         filter: {
           moreLikeThis: { like: "earthquake drill schedule" }
@@ -591,7 +599,7 @@ describe('ListReplies kNN with BM25', () => {
   // kNN only adds to what BM25 finds, so a reply that matches the keywords is
   // still returned when it has no embedding (e.g. not backfilled yet).
   it('returns what either BM25 or kNN finds, BM25 matches first', async () => {
-    const { data, errors } = await query({ embedding: 0.8 });
+    const { data, errors } = await query({ embedding: emb(0.8) });
     expect(errors).toBeUndefined();
     const { edges } = data.ListReplies;
     expect(edges.map(({ node }) => node.id)).toEqual([
