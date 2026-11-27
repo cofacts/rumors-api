@@ -10,6 +10,34 @@ import delayForMs from 'util/delayForMs';
 import { getReplyRequestId } from 'graphql/mutations/CreateOrUpdateReplyRequest';
 import replaceMedia from 'scripts/replaceMedia';
 
+/**
+ * Deletes the article CreateMediaArticle made for `user`, with its ydoc and
+ * reply request. Missing docs are ignored (e.g. no ydoc when the transcript
+ * failed). Refreshes, because the tests upload the same small.jpg and
+ * CreateMediaArticle looks the article up by attachmentHash: a deleted but
+ * still searchable article would be reused, and the mutation then fails with
+ * document_missing_exception.
+ */
+function deleteArticleDocs(articleId, user) {
+  const opts = { ignore: [404] };
+  return Promise.all([
+    client.delete({ index: 'articles', id: articleId, refresh: 'true' }, opts),
+    client.delete({ index: 'ydocs', id: articleId, refresh: 'true' }, opts),
+    client.delete(
+      {
+        index: 'replyrequests',
+        id: getReplyRequestId({
+          articleId,
+          userId: user.id,
+          appId: user.appId,
+        }),
+        refresh: 'true',
+      },
+      opts
+    ),
+  ]);
+}
+
 if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
   // File server serving test input file in __fixtures__/media-integration
   //
@@ -35,7 +63,38 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
 
     console.info(`[Media Integration] file server listening at ${serverUrl}`);
   });
+
+  // Articles created by the tests below. Each test cleans up after itself,
+  // but a failed assertion skips that; afterAll removes whatever is left so it
+  // cannot leak into suites that run later (e.g. ListReplyRequests).
+  const createdArticleIds = new Set();
+  const USER = { id: 'foo', appId: 'WEBSITE' };
+
   afterAll(async () => {
+    await Promise.all(
+      [...createdArticleIds].map((articleId) =>
+        deleteArticleDocs(articleId, USER)
+      )
+    );
+
+    // CreateMediaArticle writes TRANSCRIPT / EMBEDDING airesponses (via
+    // createTranscript and createMediaEmbedding) that the tests never delete.
+    await client.indices.refresh({ index: 'airesponses' });
+    await client.deleteByQuery({
+      index: 'airesponses',
+      refresh: true,
+      conflicts: 'proceed',
+      query: {
+        bool: {
+          filter: [
+            { term: { userId: USER.id } },
+            { term: { appId: USER.appId } },
+            { terms: { type: ['TRANSCRIPT', 'EMBEDDING'] } },
+          ],
+        },
+      },
+    });
+
     // File server teardown
     await new Promise((resolve) => server.close(resolve));
     console.info(`[Media Integration] file server closed.`);
@@ -96,6 +155,7 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
 
     expect(createMediaArticleResult.errors).toBeUndefined();
     const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
+    createdArticleIds.add(articleId);
 
     const getArticleResult = await gql`
       query ($articleId: String!) {
@@ -140,20 +200,9 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     );
 
     // Cleanup
-    await client.delete({
-      index: 'articles',
-      id: articleId,
-    });
-
-    await client.delete({
-      index: 'replyrequests',
-      id: getReplyRequestId({
-        articleId,
-        userId: context.user.id,
-        appId: context.user.appId,
-      }),
-    });
-  }, 15000);
+    await deleteArticleDocs(articleId, context.user);
+    createdArticleIds.delete(articleId);
+  }, 60000);
 
   it('can replace media for article', async () => {
     // Simulates user login
@@ -178,7 +227,9 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
       context
     );
 
+    expect(createMediaArticleResult.errors).toBeUndefined();
     const articleId = createMediaArticleResult.data.CreateMediaArticle.id;
+    createdArticleIds.add(articleId);
 
     const articleBeforeReplace = await gql`
       query ($articleId: String!) {
@@ -220,20 +271,9 @@ if (process.env.GCS_CREDENTIALS && process.env.GCS_BUCKET_NAME) {
     );
 
     // Cleanup
-    await client.delete({
-      index: 'articles',
-      id: articleId,
-    });
-
-    await client.delete({
-      index: 'replyrequests',
-      id: getReplyRequestId({
-        articleId,
-        userId: context.user.id,
-        appId: context.user.appId,
-      }),
-    });
-  }, 15000);
+    await deleteArticleDocs(articleId, context.user);
+    createdArticleIds.delete(articleId);
+  }, 60000);
 } else {
   // Skipped in the default (no-credential) CI run to avoid real GCS calls
   // (cost + flakiness). Exercised by the integration workflow, which sets
