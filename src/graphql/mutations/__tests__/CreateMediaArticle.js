@@ -26,6 +26,7 @@ jest.mock('util/embedding', () => ({
     .mockResolvedValue([{ vector: new Array(768).fill(0.01) }]),
   getReplyEmbeddingCacheId: (text, ref) => `reply:${text}:${ref || ''}`,
   getQueryEmbeddingCacheId: (text) => `query-text:${text}`,
+  isEmbeddedMediaType: jest.requireActual('util/embedding').isEmbeddedMediaType,
 }));
 
 // Minimal MediaEntry shape for tests. CreateMediaArticle only passes it on to
@@ -253,7 +254,7 @@ describe('creation', () => {
     });
   });
 
-  it('embeds AUDIO articles from the uploaded media entry', async () => {
+  it('does not embed AUDIO articles', async () => {
     MockDate.set(1485593157011);
     const userId = 'test';
     const appId = 'foo';
@@ -292,20 +293,16 @@ describe('creation', () => {
 
     expect(errors).toBeUndefined();
 
-    expect(createMediaEmbedding).toHaveBeenCalledTimes(1);
-    expect(createMediaEmbedding).toHaveBeenCalledWith(
-      { id: 'mock_audio_hash', type: 'audio' },
-      mediaEntry,
-      { id: userId, appId }
-    );
-
-    // The resulting vector is stored on the article.
-    const { _source: withEmb } = await client.get({
+    // Audio is not embedded (cofacts/rumors-api#418); it is found by its
+    // transcript instead.
+    expect(createMediaEmbedding).not.toHaveBeenCalled();
+    const { _source: article } = await client.get({
       index: 'articles',
       id: data.CreateMediaArticle.id,
-      _source_includes: ['embeddings'],
+      _source_includes: ['embeddings', 'attachmentHash'],
     });
-    expect(withEmb.embeddings?.[0]?.vector?.length).toBe(768);
+    expect(article.attachmentHash).toBe(mediaEntry.id);
+    expect(article.embeddings).toBeUndefined();
 
     const replyRequestId = getReplyRequestId({
       articleId: data.CreateMediaArticle.id,
@@ -417,9 +414,9 @@ describe('creation', () => {
     // E.g. the media has been searched before submission.
     mockQuery(
       mockMediaEntry({
-        id: 'mock_stored_audio_hash',
-        url: 'http://foo.com/stored_audio.mp3',
-        type: 'audio',
+        id: 'mock_stored_video_hash',
+        url: 'http://foo.com/stored_video.mp4',
+        type: 'video',
       }),
       { isStored: true }
     );
@@ -445,8 +442,8 @@ describe('creation', () => {
       }
     `(
       {
-        mediaUrl: 'http://foo.com/input_audio.mp3',
-        articleType: 'AUDIO',
+        mediaUrl: 'http://foo.com/input_video.mp4',
+        articleType: 'VIDEO',
         reference: { type: 'LINE' },
       },
       { user: { id: userId, appId } }
@@ -456,9 +453,9 @@ describe('creation', () => {
     expect(mediaManager.insert).not.toHaveBeenCalled();
 
     // Transcript and embedding get the stored media entry.
-    expect(createTranscript.mock.calls[0][1].id).toBe('mock_stored_audio_hash');
+    expect(createTranscript.mock.calls[0][1].id).toBe('mock_stored_video_hash');
     expect(createMediaEmbedding.mock.calls[0][1].id).toBe(
-      'mock_stored_audio_hash'
+      'mock_stored_video_hash'
     );
 
     const articleId = data.CreateMediaArticle.id;
@@ -467,7 +464,7 @@ describe('creation', () => {
       id: articleId,
       _source_includes: ['text', 'attachmentHash', 'embeddings'],
     });
-    expect(article.attachmentHash).toBe('mock_stored_audio_hash');
+    expect(article.attachmentHash).toBe('mock_stored_video_hash');
     expect(article.text).toBe('stored words');
     expect(article.embeddings?.[0]?.vector?.length).toBe(768);
 

@@ -13,9 +13,13 @@
   Notes:
   - --from filters by `createdAt`, the only date field both indices have
     (replies cannot be edited, so they have no `updatedAt`).
-  - IMAGE/AUDIO/VIDEO articles embed from their uploaded media file. Audio/video
-    are capped to a single vector by createEmbedding (EMBEDDING_MEDIA_MAX_SEC),
-    so no duration source is needed.
+  - IMAGE/VIDEO articles embed from their uploaded media file. Video is capped
+    to a single vector by createEmbedding (EMBEDDING_MEDIA_MAX_SEC), so no
+    duration source is needed.
+  - AUDIO articles are not embedded (see EMBEDDED_MEDIA_TYPES in
+    util/embedding, cofacts/rumors-api#418); they are left out of the scan,
+    and the vectors made for them before are removed, so that stale ones
+    never answer a kNN query.
   - --reembed also walks the docs that already have `embeddings`, for after the
     embedding settings change (model, dimensions, input layout). Vectors still
     valid for the current settings come from the airesponses cache, so only the
@@ -37,6 +41,7 @@ import { VALID_ARTICLE_TYPE_TO_MEDIA_TYPE } from 'graphql/util';
 import {
   createEmbedding,
   createMediaEmbedding,
+  isEmbeddedMediaType,
   getReplyEmbeddingCacheId,
   EmbeddingChunk,
 } from 'util/embedding';
@@ -111,11 +116,12 @@ async function processArticle(doc: {
     );
   }
 
-  // IMAGE/AUDIO/VIDEO all embed from the uploaded media file. Audio/video are
-  // capped to a single vector by createEmbedding (EMBEDDING_MEDIA_MAX_SEC), so
-  // no duration source is needed.
+  // IMAGE/VIDEO embed from the uploaded media file. Video is capped to a single
+  // vector by createEmbedding (EMBEDDING_MEDIA_MAX_SEC), so no duration source
+  // is needed. AUDIO is not embedded; the scan query leaves it out, and this
+  // skips it in case one gets through.
   const mediaType = VALID_ARTICLE_TYPE_TO_MEDIA_TYPE[articleType];
-  if (mediaType) {
+  if (isEmbeddedMediaType(mediaType)) {
     if (!_source.attachmentHash) return null;
     const mediaEntry = await mediaManager.get(_source.attachmentHash);
     if (!mediaEntry) {
@@ -162,6 +168,31 @@ export async function flushBulk(ops: BulkOp[]): Promise<void> {
   }
 }
 
+/**
+ * Removes `embeddings` from AUDIO articles. Audio used to be embedded; such
+ * vectors are no longer made or refreshed (not even by --reembed), so leaving
+ * them would let kNN compare new query vectors with stale ones.
+ */
+async function clearAudioEmbeddings(): Promise<void> {
+  const { updated = 0 } = await client.updateByQuery({
+    index: 'articles',
+    query: {
+      bool: {
+        filter: [
+          { term: { articleType: 'AUDIO' } },
+          { nested: { path: 'embeddings', query: { match_all: {} } } },
+        ],
+      },
+    },
+    script: { lang: 'painless', source: "ctx._source.remove('embeddings')" },
+    conflicts: 'proceed',
+    refresh: true,
+  });
+  console.info(
+    `[backfill] removed embeddings from ${updated} AUDIO article(s)`
+  );
+}
+
 async function backfillIndex(
   indexName: 'articles' | 'replies',
   opts: BackfillOptions
@@ -170,23 +201,26 @@ async function backfillIndex(
   if (opts.from) {
     filterClauses.push({ range: { createdAt: { gte: opts.from } } });
   }
+  const mustNotClauses: Array<Record<string, unknown>> = [];
+  if (indexName === 'articles') {
+    // Audio is not embedded (see EMBEDDED_MEDIA_TYPES); leaving it out here
+    // keeps it out of the count and the scan.
+    mustNotClauses.push({ term: { articleType: 'AUDIO' } });
+  }
+  if (!opts.reembed) {
+    // `embeddings` is a nested field: its entries live in separate hidden
+    // docs, so a top-level `exists` never matches and must go through
+    // a `nested` query.
+    mustNotClauses.push({
+      nested: {
+        path: 'embeddings',
+        query: { match_all: {} },
+      },
+    });
+  }
   const query = {
     bool: {
-      // `embeddings` is a nested field: its entries live in separate hidden
-      // docs, so a top-level `exists` never matches and must go through
-      // a `nested` query.
-      ...(opts.reembed
-        ? {}
-        : {
-            must_not: [
-              {
-                nested: {
-                  path: 'embeddings',
-                  query: { match_all: {} },
-                },
-              },
-            ],
-          }),
+      ...(mustNotClauses.length ? { must_not: mustNotClauses } : {}),
       ...(filterClauses.length ? { filter: filterClauses } : {}),
     },
   };
@@ -279,6 +313,7 @@ async function backfillIndex(
 
 export default async function main(opts: BackfillOptions): Promise<void> {
   if (opts.index === 'articles' || opts.index === 'both') {
+    await clearAudioEmbeddings();
     await backfillIndex('articles', opts);
   }
   if (opts.index === 'replies' || opts.index === 'both') {

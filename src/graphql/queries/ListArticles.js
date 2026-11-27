@@ -13,6 +13,7 @@ import {
   createMediaEmbedding,
   getCachedEmbedding,
   getQueryEmbeddingCacheId,
+  isEmbeddedMediaType,
 } from 'util/embedding';
 
 import {
@@ -705,10 +706,13 @@ export default {
       // - Transcript: when no transcript is found from similar articles. The
       //   one made before is used, or it is made right away.
       // - Embedding: for kNN. The media takes precedence over a text query
-      //   (see the kNN block below).
+      //   (see the kNN block below). Audio is not embedded (see
+      //   EMBEDDED_MEDIA_TYPES), so an audio query has no media vector and
+      //   gets kNN only from `filter.moreLikeThis.like`, when it is given.
       //
       const needsTranscript = !transcript;
-      const needsEmbedding = filter.embedding != null && isSupportedMedia;
+      const needsEmbedding =
+        filter.embedding != null && isEmbeddedMediaType(queryInfo.type);
 
       // Media manager is the one that knows whether the file is there: get the
       // stored media entry, or upload the media when there is none. Transcript
@@ -793,7 +797,9 @@ export default {
     if (filter.embedding != null) {
       try {
         // Media query: resolved along with the transcript above. It takes
-        // precedence over a text query given along with it.
+        // precedence over a text query given along with it. When the media
+        // has no vector (audio, which is not embedded, or an embedding that
+        // could not be made or read), the text query is used instead.
         let queryVectors = mediaQueryVectors;
 
         if (queryVectors.length === 0 && filter.moreLikeThis?.like) {

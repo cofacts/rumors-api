@@ -8,6 +8,9 @@ const mockBulk = jest
     }>
   >()
   .mockResolvedValue({ errors: false, items: [] });
+const mockUpdateByQuery = jest
+  .fn<(params: object) => Promise<{ updated?: number }>>()
+  .mockResolvedValue({ updated: 0 });
 const mockCount = jest
   .fn<(params: object) => Promise<{ count: number }>>()
   .mockResolvedValue({ count: 0 });
@@ -35,6 +38,8 @@ jest.mock('util/client', () => ({
   default: {
     bulk: (...args: unknown[]) => mockBulk(...(args as [never])),
     count: (...args: unknown[]) => mockCount(...(args as [never])),
+    updateByQuery: (...args: unknown[]) =>
+      mockUpdateByQuery(...(args as [never])),
   },
 }));
 
@@ -50,6 +55,10 @@ jest.mock('util/embedding', () => ({
   getReplyEmbeddingCacheId: (text: string, ref?: string | null) =>
     `reply:${text}:${ref ?? ''}`,
   getQueryEmbeddingCacheId: (text: string) => `query-text:${text}`,
+  // Pure; kept real so the test follows the actual list of embedded types.
+  isEmbeddedMediaType:
+    jest.requireActual<typeof import('util/embedding')>('util/embedding')
+      .isEmbeddedMediaType,
 }));
 
 jest.mock('util/mediaManager', () => ({
@@ -76,6 +85,7 @@ describe('backfillVertexEmbeddings', () => {
   beforeEach(() => {
     mockBulk.mockClear();
     mockCount.mockReset();
+    mockUpdateByQuery.mockClear();
     mockCreateEmbedding.mockReset();
     mockCreateMediaEmbedding.mockReset();
     mockGetAllDocs.mockReset();
@@ -124,7 +134,7 @@ describe('backfillVertexEmbeddings', () => {
     });
   });
 
-  it('embeds AUDIO/VIDEO articles from their media entry', async () => {
+  it('embeds VIDEO articles from their media entry, and skips AUDIO', async () => {
     mockCount.mockResolvedValueOnce({ count: 2 });
     mockGetAllDocs.mockReturnValueOnce(
       docsGen([
@@ -153,12 +163,10 @@ describe('backfillVertexEmbeddings', () => {
       batchSize: 100,
     });
 
-    expect(mockCreateMediaEmbedding).toHaveBeenCalledTimes(2);
-    expect(mockCreateMediaEmbedding).toHaveBeenCalledWith(
-      { id: 'ha', type: 'audio' },
-      mediaEntries.ha,
-      expect.objectContaining({ appId: 'RUMORS_AI' })
-    );
+    // The scan query leaves AUDIO out; one that gets through is still skipped
+    // (cofacts/rumors-api#418).
+    expect(mockCreateMediaEmbedding).toHaveBeenCalledTimes(1);
+    expect(mockMediaManagerGet).not.toHaveBeenCalledWith('ha');
     expect(mockCreateMediaEmbedding).toHaveBeenCalledWith(
       { id: 'hv', type: 'video' },
       mediaEntries.hv,
@@ -166,6 +174,39 @@ describe('backfillVertexEmbeddings', () => {
     );
     expect(mockCreateEmbedding).not.toHaveBeenCalled();
     expect(mockBulk).toHaveBeenCalledTimes(1);
+    expect(mockBulk.mock.calls[0][0].operations).toEqual([
+      { update: { _index: 'articles', _id: 'vid1' } },
+      { doc: { embeddings: [{ vector: [0.3] }] } },
+    ]);
+  });
+
+  it('removes the embeddings made for AUDIO articles before', async () => {
+    mockUpdateByQuery.mockResolvedValueOnce({ updated: 2 });
+    mockGetAllDocs.mockReturnValueOnce(docsGen([]));
+
+    await main({ index: 'articles', concurrency: 1, batchSize: 100 });
+
+    expect(mockUpdateByQuery).toHaveBeenCalledTimes(1);
+    expect(mockUpdateByQuery.mock.calls[0][0]).toMatchObject({
+      index: 'articles',
+      query: {
+        bool: {
+          filter: [
+            { term: { articleType: 'AUDIO' } },
+            { nested: { path: 'embeddings', query: { match_all: {} } } },
+          ],
+        },
+      },
+      script: { source: "ctx._source.remove('embeddings')" },
+    });
+  });
+
+  it('leaves AUDIO articles alone when only replies are backfilled', async () => {
+    mockGetAllDocs.mockReturnValueOnce(docsGen([]));
+
+    await main({ index: 'replies', concurrency: 1, batchSize: 100 });
+
+    expect(mockUpdateByQuery).not.toHaveBeenCalled();
   });
 
   it('uses reply cache key for replies', async () => {
@@ -187,6 +228,14 @@ describe('backfillVertexEmbeddings', () => {
     expect((mockCreateEmbedding.mock.calls[0][0] as { id: string }).id).toBe(
       'reply:r-text:http://x'
     );
+
+    // Replies have no articleType, so only the "already embedded" exclusion.
+    const query = mockGetAllDocs.mock.calls[0][1] as {
+      bool: { must_not?: unknown[] };
+    };
+    expect(query.bool.must_not).toEqual([
+      { nested: { path: 'embeddings', query: { match_all: {} } } },
+    ]);
 
     const ops = mockBulk.mock.calls[0][0].operations;
     expect(ops[0]).toEqual({ update: { _index: 'replies', _id: 'rep1' } });
@@ -271,6 +320,8 @@ describe('backfillVertexEmbeddings', () => {
     // `embeddings` is nested, so the "already embedded" exclusion must be a
     // nested query; a top-level `exists` would exclude nothing.
     expect(query.bool.must_not).toEqual([
+      // Audio is not embedded, so it is left out of the scan.
+      { term: { articleType: 'AUDIO' } },
       {
         nested: {
           path: 'embeddings',
@@ -305,11 +356,11 @@ describe('backfillVertexEmbeddings', () => {
       reembed: true,
     });
 
-    // No "already embedded" exclusion; other filters still apply.
+    // No "already embedded" exclusion; audio and other filters still apply.
     const query = mockGetAllDocs.mock.calls[0][1] as {
       bool: { must_not?: unknown[]; filter?: unknown[] };
     };
-    expect(query.bool.must_not).toBeUndefined();
+    expect(query.bool.must_not).toEqual([{ term: { articleType: 'AUDIO' } }]);
     expect(query.bool.filter).toEqual([
       { range: { createdAt: { gte: '2026-01-01T00:00:00Z' } } },
     ]);
