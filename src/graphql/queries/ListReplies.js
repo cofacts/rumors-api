@@ -17,6 +17,7 @@ import {
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import { createEmbedding, getQueryEmbeddingCacheId } from 'util/embedding';
+import isUrlOnlyText from 'util/isUrlOnlyText';
 
 import { ReplyConnection } from 'graphql/models/Reply';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
@@ -196,14 +197,22 @@ export default {
     // Set when a kNN clause is added: the highlighter cannot walk one.
     let highlightQuery;
 
+    // Validated whenever given, whatever the query: a bad `k` is the client's
+    // error to see.
+    const k = filter.embedding ? getKnnK(filter.embedding.k) : undefined;
+
     // Given (even as null, which skips kNN) takes precedence over the default.
     const similarity =
       filter.embedding && 'textDocSimilarity' in filter.embedding
         ? filter.embedding.textDocSimilarity
         : DEFAULT_DOC_SIMILARITY.text.TEXT;
-    if (filter.embedding && similarity != null && filter.moreLikeThis?.like) {
-      // Outside the try below: a bad `k` is the client's error to see.
-      const k = getKnnK(filter.embedding.k);
+    if (
+      filter.embedding &&
+      similarity != null &&
+      filter.moreLikeThis?.like &&
+      // A URL-only query embeds as a URL string; see isUrlOnlyText.
+      !isUrlOnlyText(filter.moreLikeThis.like)
+    ) {
       try {
         const queryChunks = await createEmbedding(
           {

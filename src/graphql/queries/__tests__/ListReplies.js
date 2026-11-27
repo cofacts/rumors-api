@@ -7,6 +7,7 @@ import fixtures, {
   knnUnionFixtures,
 } from '../__fixtures__/ListReplies';
 import { queryVector } from 'util/vectors';
+import ListReplies from '../ListReplies';
 
 jest.mock('util/embedding', () => ({
   createEmbedding: jest.fn(),
@@ -644,5 +645,50 @@ describe('ListReplies kNN with BM25', () => {
     expect(bm25Data.ListReplies.edges.map(({ node }) => node.id)).toEqual([
       'knnUnionNoEmbedding',
     ]);
+  });
+});
+
+describe('ListReplies kNN with a URL-only query', () => {
+  const like = 'https://youtu.be/QoJeDjBfVFE?si=0waZA 轉傳';
+  const context = {
+    user: { id: 'u', appId: 'a' },
+    userId: 'u',
+    appId: 'a',
+    // The URL is cached, so that it is not fetched.
+    loaders: {
+      urlLoader: {
+        load: jest.fn().mockResolvedValue({
+          url: 'https://youtu.be/QoJeDjBfVFE?si=0waZA',
+          canonical: 'https://youtu.be/QoJeDjBfVFE',
+          title: 'A video',
+          summary: 'About a video',
+        }),
+      },
+    },
+  };
+
+  beforeEach(() => {
+    createEmbedding.mockReset();
+    createEmbedding.mockResolvedValue([{ vector: queryVector }]);
+  });
+
+  it('skips kNN', async () => {
+    const result = await ListReplies.resolve(
+      {},
+      { filter: { moreLikeThis: { like }, embedding: {} } },
+      context
+    );
+    expect(createEmbedding).not.toHaveBeenCalled();
+    expect(result.highlightQuery).toBeUndefined();
+  });
+
+  it('still rejects an invalid k', async () => {
+    await expect(
+      ListReplies.resolve(
+        {},
+        { filter: { moreLikeThis: { like }, embedding: { k: 999 } } },
+        context
+      )
+    ).rejects.toThrow('embedding.k');
   });
 });

@@ -1354,6 +1354,35 @@ describe('ListArticles kNN retriever', () => {
     result.body.query.bool.should.find((c) => c?.bool?.should?.[0]?.nested)
       ?.bool.should[0].nested.query.knn.query_vector;
 
+  it('skips kNN for a URL-only text query', async () => {
+    const result = await ListArticles.resolve(
+      {},
+      {
+        filter: {
+          moreLikeThis: { like: 'https://youtu.be/QoJeDjBfVFE?si=0waZA 轉傳' },
+          embedding: emb(0.6),
+        },
+      },
+      {
+        ...baseContext,
+        // The URL is cached, so that it is not fetched.
+        loaders: {
+          urlLoader: {
+            load: jest.fn().mockResolvedValue({
+              url: 'https://youtu.be/QoJeDjBfVFE?si=0waZA',
+              canonical: 'https://youtu.be/QoJeDjBfVFE',
+              title: 'A video',
+              summary: 'About a video',
+            }),
+          },
+        },
+      }
+    );
+
+    expect(createEmbedding).not.toHaveBeenCalled();
+    expect(getKnnVector(result)).toBeUndefined();
+  });
+
   it('falls through to BM25 when createEmbedding throws', async () => {
     createEmbedding.mockRejectedValue(new Error('vertex offline'));
 
