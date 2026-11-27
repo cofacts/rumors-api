@@ -1,4 +1,5 @@
 import { getArticleReplyFeedbackId } from 'graphql/mutations/CreateOrUpdateArticleReplyFeedback';
+import { vectorWithSimilarity } from 'util/vectors';
 
 export default {
   '/articles/doc/foo': {
@@ -287,5 +288,63 @@ export default {
     type: 'TRANSCRIPT',
     status: 'SUCCESS',
     text: 'Lorum ipsum',
+  },
+};
+
+// relatedArticles with kNN: the texts share no words, so only kNN relates them.
+export const knnRelatedFixtures = {
+  '/articles/doc/knnRelSelf': {
+    status: 'NORMAL',
+    articleType: 'VIDEO',
+    text: 'Quokka trampoline',
+    normalArticleReplyCount: 0,
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(1) }],
+  },
+  '/articles/doc/knnRelNear': {
+    status: 'NORMAL',
+    articleType: 'VIDEO',
+    text: 'Wombat skateboard',
+    normalArticleReplyCount: 0,
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.9) }],
+  },
+  '/articles/doc/knnRelFar': {
+    status: 'NORMAL',
+    articleType: 'VIDEO',
+    text: 'Platypus snorkel',
+    normalArticleReplyCount: 0,
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.8) }],
+  },
+  '/articles/doc/knnRelTextNear': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'Kangaroo hammock',
+    normalArticleReplyCount: 0,
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.95) }],
+  },
+  // A legacy text article: no articleType. Text -> TEXT applies.
+  '/articles/doc/knnRelLegacy': {
+    status: 'NORMAL',
+    text: 'Koala bicycle',
+    normalArticleReplyCount: 0,
+    createdAt: '2020-02-05T00:00:00.000Z',
+    embeddings: [{ vector: vectorWithSimilarity(0.99) }],
+  },
+  '/articles/doc/knnRelNoEmbeddingTwin': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'Echidna kayak paddle',
+    normalArticleReplyCount: 0,
+    createdAt: '2020-02-05T00:00:00.000Z',
+  },
+  '/articles/doc/knnRelNoEmbedding': {
+    status: 'NORMAL',
+    articleType: 'TEXT',
+    text: 'Echidna kayak',
+    normalArticleReplyCount: 0,
+    createdAt: '2020-02-05T00:00:00.000Z',
   },
 };

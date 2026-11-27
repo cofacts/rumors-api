@@ -24,8 +24,14 @@ import {
   DEFAULT_ARTICLE_REPLY_STATUSES,
   DEFAULT_ARTICLE_CATEGORY_STATUSES,
   DEFAULT_REPLY_REQUEST_STATUSES,
+  buildKnnQuery,
+  ArticleEmbeddingFilterInput,
+  getDocSimilarities,
+  articleTypeQuery,
+  getKnnK,
 } from 'graphql/util';
 
+import client from 'util/client';
 import Node from '../interfaces/Node';
 import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
@@ -317,6 +323,13 @@ const Article = new GraphQLObjectType({
         filter: {
           type: createFilterType('RelatedArticleFilter', {
             replyCount: { type: intRangeInput },
+            embedding: {
+              type: ArticleEmbeddingFilterInput,
+              description:
+                "Opt-in hybrid search; pass `{}` for the default thresholds. This article's stored " +
+                'embeddings are the kNN query, and its article type is the query type. ' +
+                'Articles that have no embeddings yet get the text and media similarity only.',
+            },
           }),
         },
         orderBy: {
@@ -328,7 +341,7 @@ const Article = new GraphQLObjectType({
         ...pagingArgs,
       },
       async resolve(
-        { id, attachmentHash, status },
+        { id, attachmentHash, status, articleType },
         { filter = {}, orderBy = [{ _score: 'DESC' }], ...otherParams }
       ) {
         const body = {
@@ -385,6 +398,30 @@ const Article = new GraphQLObjectType({
           sort: getSortArgs(orderBy),
           track_scores: true, // required to always populate score
         };
+
+        // The article type is the query type of kNN (see DEFAULT_DOC_SIMILARITY);
+        // legacy text articles may have no articleType.
+        const docSimilarities = getDocSimilarities({
+          queryType: (articleType || 'TEXT').toLowerCase(),
+          embeddingFilter: filter.embedding,
+        });
+        const k = getKnnK(filter.embedding?.k);
+
+        // Read along with the media manager query below. Fetched only when kNN
+        // is to run; the vectors are not in the default _source.
+        const embeddingsPromise =
+          docSimilarities.length > 0
+            ? client
+                .get({
+                  index: 'articles',
+                  id,
+                  _source_includes: ['embeddings'],
+                })
+                .catch((e) => {
+                  console.warn('[relatedArticles] cannot read embeddings:', e);
+                  return {};
+                })
+            : null;
 
         if (filter.replyCount) {
           body.query.bool.filter.push({
@@ -453,9 +490,55 @@ const Article = new GraphQLObjectType({
           ];
         }
 
+        // Hybrid: the article's own stored vectors are the query, so this
+        // takes no Vertex call. See ListArticles for why kNN is one should-query
+        // per doc type, with the filters inside the knn clause.
+        let highlightQuery;
+        if (docSimilarities.length > 0) {
+          try {
+            const { _source } = await embeddingsPromise;
+            const queryVectors = (_source?.embeddings ?? [])
+              .map(({ vector }) => vector)
+              .filter((vector) => vector?.length > 0);
+
+            if (queryVectors.length > 0) {
+              const knnPreFilters = [...body.query.bool.filter];
+              highlightQuery = {
+                bool: {
+                  ...body.query.bool,
+                  should: [...body.query.bool.should],
+                },
+              };
+              body.query.bool.should.push(
+                ...docSimilarities.map(({ docType, similarity }) =>
+                  buildKnnQuery({
+                    queryVectors,
+                    similarity,
+                    filter: {
+                      bool: {
+                        filter: [articleTypeQuery(docType), ...knnPreFilters],
+                        // The article itself is its own nearest neighbor; keep
+                        // it from taking one of the k nearest.
+                        must_not: [{ ids: { values: [id] } }],
+                      },
+                    },
+                    name: `knn-${docType}`,
+                    k,
+                  })
+                )
+              );
+              body.query.bool.must_not = [{ ids: { values: [id] } }];
+            }
+          } catch (e) {
+            // kNN must never break the rest of the search.
+            console.warn('[relatedArticles] kNN failed:', e);
+          }
+        }
+
         return {
           index: 'articles',
           body,
+          highlightQuery,
           ...otherParams,
         };
       },

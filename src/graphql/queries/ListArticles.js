@@ -3,7 +3,6 @@ import {
   GraphQLList,
   GraphQLBoolean,
   GraphQLInputObjectType,
-  GraphQLFloat,
   GraphQLNonNull,
 } from 'graphql';
 import client from 'util/client';
@@ -30,6 +29,10 @@ import {
   createCommonListFilter,
   attachCommonListFilter,
   buildKnnQuery,
+  ArticleEmbeddingFilterInput,
+  getDocSimilarities,
+  articleTypeQuery,
+  getKnnK,
   DEFAULT_ARTICLE_STATUSES,
   DEFAULT_ARTICLE_REPLY_STATUSES,
   getAIResponse,
@@ -183,13 +186,12 @@ export default {
             'Show the media article similar to the input url. The transcript and embedding of the media are only created when logged in; otherwise only the ones made before are used.',
         },
         embedding: {
-          type: GraphQLFloat,
+          type: ArticleEmbeddingFilterInput,
           description:
-            'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
-            'to also retrieve the nearest neighbors via kNN, in addition to what BM25 matches. ' +
-            'Omit for BM25-only (default). ' +
-            '`totalCount` then also counts the nearest neighbors (up to 100 per query vector), ' +
-            'so it no longer tells how many match the keywords.',
+            'Opt-in hybrid search with `moreLikeThis` or `mediaUrl`; pass `{}` for the default thresholds. ' +
+            'With `mediaUrl`, the media itself is the kNN query (its embedding is only created when logged in; ' +
+            'otherwise only the one made before is used). Without it, the `moreLikeThis` text is the query ' +
+            '(created only when logged in, as well). Omit for BM25-only (default).',
         },
         transcript: {
           description:
@@ -631,6 +633,7 @@ export default {
 
     // Hoisted so the kNN block below can use the vectors of the queried media.
     let mediaQueryVectors = [];
+    let mediaDocSimilarities = [];
     if (filter.mediaUrl) {
       const queryResult = await mediaManager.query({ url: filter.mediaUrl });
       const similarityMap = queryResult.hits.reduce((map, hit) => {
@@ -705,14 +708,20 @@ export default {
       // What this query needs from the media itself.
       // - Transcript: when no transcript is found from similar articles. The
       //   one made before is used, or it is made right away.
-      // - Embedding: for kNN. The media takes precedence over a text query
-      //   (see the kNN block below). Audio is not embedded (see
-      //   EMBEDDED_MEDIA_TYPES), so an audio query has no media vector and
-      //   gets kNN only from `filter.moreLikeThis.like`, when it is given.
+      // - Embedding: for kNN. The media itself is the kNN query; a
+      //   `moreLikeThis` given along with it is still searched by BM25 only.
+      //   Audio is not embedded (see EMBEDDED_MEDIA_TYPES), so an audio query
+      //   gets no kNN.
       //
       const needsTranscript = !transcript;
-      const needsEmbedding =
-        filter.embedding != null && isEmbeddedMediaType(queryInfo.type);
+      mediaDocSimilarities = isEmbeddedMediaType(queryInfo.type)
+        ? getDocSimilarities({
+            queryType: queryInfo.type,
+            embeddingFilter: filter.embedding,
+            articleTypes: filter.articleTypes,
+          })
+        : [];
+      const needsEmbedding = mediaDocSimilarities.length > 0;
 
       // Media manager is the one that knows whether the file is there: get the
       // stored media entry, or upload the media when there is none. Transcript
@@ -786,41 +795,58 @@ export default {
       },
     };
 
-    // Hybrid of BM25 and kNN. Opt in by passing `filter.embedding` as the
-    // minimum cosine similarity: the nearest neighbors are retrieved in addition
-    // to what the existing should-queries match — text `moreLikeThis`, or for a
-    // media search the perceptual-hash function_score + transcript moreLikeThis.
-    // Omit for BM25-only.
+    // Hybrid of BM25 and kNN. Opt in by passing `filter.embedding`: the nearest
+    // neighbors are retrieved in addition to what the existing should-queries
+    // match — text `moreLikeThis`, or for a media search the perceptual-hash
+    // function_score + transcript moreLikeThis. Omit for BM25-only.
     // Set when a kNN clause is added: the highlighter cannot walk one.
     let highlightQuery;
 
-    if (filter.embedding != null) {
+    if (filter.embedding) {
+      // Outside the try below: a bad `k` is the client's error to see.
+      const k = getKnnK(filter.embedding.k);
       try {
-        // Media query: resolved along with the transcript above. It takes
-        // precedence over a text query given along with it. When the media
-        // has no vector (audio, which is not embedded, or an embedding that
-        // could not be made or read), the text query is used instead.
+        // Media query: the vectors are resolved along with the transcript above.
         let queryVectors = mediaQueryVectors;
+        let docSimilarities = mediaDocSimilarities;
 
-        if (queryVectors.length === 0 && filter.moreLikeThis?.like) {
-          // Text query: vectorize the query text (as a query, cached).
-          const queryChunks = await createEmbedding(
-            {
-              id: getQueryEmbeddingCacheId(filter.moreLikeThis.like),
-              type: 'text',
-            },
-            [{ text: filter.moreLikeThis.like }],
-            user,
-            { role: 'query' }
-          );
-          queryVectors = queryChunks.map((c) => c.vector);
+        if (!filter.mediaUrl && filter.moreLikeThis?.like) {
+          docSimilarities = getDocSimilarities({
+            queryType: 'text',
+            embeddingFilter: filter.embedding,
+            articleTypes: filter.articleTypes,
+          });
+          if (docSimilarities.length > 0) {
+            // Text query: vectorize the query text (as a query, cached).
+            const queryChunks = await createEmbedding(
+              {
+                id: getQueryEmbeddingCacheId(filter.moreLikeThis.like),
+                type: 'text',
+              },
+              [{ text: filter.moreLikeThis.like }],
+              user,
+              { role: 'query' }
+            );
+            queryVectors = queryChunks.map((c) => c.vector);
+          }
         }
 
-        if (queryVectors.length > 0) {
+        if (queryVectors.length > 0 && docSimilarities.length > 0) {
           // kNN is one more should-query, so a doc is returned when either side
           // finds it. It must not be a filter: that drops every doc kNN cannot
           // reach even when BM25 matches it — docs with no embedding yet, and
-          // media docs under a text query (cross-modal similarity runs low).
+          // docs of types kNN does not search.
+          //
+          // One kNN per doc type, each pre-filtered to that type. Similarity
+          // across modalities runs lower than within one: a text query is
+          // closer to loosely related text than to a near-identical video, so
+          // a single kNN would fill its k nearest with text. The types do not
+          // overlap, so a doc matches at most one of them.
+          //
+          // The pre-filter (and the article status in it) must sit inside the
+          // knn clause: Elasticsearch does not push the outer bool.filter down
+          // into a nested knn, so docs that bool.filter drops would take up
+          // the k nearest.
           //
           // Scores of the matching should-queries add up. The kNN score is at
           // most 1 while BM25 is unbounded, so BM25 dominates the order and docs
@@ -832,11 +858,32 @@ export default {
           // data, '30%' dropped Hit@1 from 68% to 63% (eval on the 2026-10-25
           // snapshot, 300 text queries over 10k articles). Rank fusion
           // (RRF) would fix that, but it takes a paid Elasticsearch license.
+          const statuses = filter.statuses || DEFAULT_ARTICLE_STATUSES;
           highlightQuery = {
             bool: { ...body.query.bool, should: [...body.query.bool.should] },
           };
           body.query.bool.should.push(
-            buildKnnQuery({ queryVectors, similarity: filter.embedding })
+            ...docSimilarities.map(({ docType, similarity }) =>
+              buildKnnQuery({
+                queryVectors,
+                similarity,
+                filter: {
+                  bool: {
+                    filter: [
+                      // With articleTypes, the outer filter drops docs without
+                      // articleType; match that, so they cannot take up the k
+                      // nearest.
+                      filter.articleTypes
+                        ? { term: { articleType: docType } }
+                        : articleTypeQuery(docType),
+                      { terms: { status: statuses } },
+                    ],
+                  },
+                },
+                name: `knn-${docType}`,
+                k,
+              })
+            )
           );
         }
       } catch (e) {

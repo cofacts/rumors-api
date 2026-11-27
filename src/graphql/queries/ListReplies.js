@@ -1,4 +1,4 @@
-import { GraphQLList, GraphQLFloat } from 'graphql';
+import { GraphQLList } from 'graphql';
 import client from 'util/client';
 
 import {
@@ -11,6 +11,9 @@ import {
   pagingArgs,
   moreLikeThisInput,
   buildKnnQuery,
+  ReplyEmbeddingFilterInput,
+  DEFAULT_DOC_SIMILARITY,
+  getKnnK,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
 import { createEmbedding, getQueryEmbeddingCacheId } from 'util/embedding';
@@ -27,13 +30,10 @@ export default {
           type: moreLikeThisInput,
         },
         embedding: {
-          type: GraphQLFloat,
+          type: ReplyEmbeddingFilterInput,
           description:
-            'Opt-in hybrid search. Provide the minimum cosine similarity (e.g. `0.7`) ' +
-            'to also retrieve the nearest neighbors via kNN, in addition to what BM25 matches. ' +
-            'Omit for BM25-only (default). ' +
-            '`totalCount` then also counts the nearest neighbors (up to 100 per query vector), ' +
-            'so it no longer tells how many match the keywords.',
+            'Opt-in hybrid search with `moreLikeThis`; pass `{}` for the default threshold. ' +
+            'The query text embedding is only created when logged in. Omit for BM25-only (default).',
         },
         type: {
           type: ReplyTypeEnum,
@@ -189,13 +189,21 @@ export default {
       },
     };
 
-    // Hybrid of BM25 and kNN. Opt in by passing `filter.embedding` as the
-    // minimum cosine similarity: the nearest neighbors are retrieved in addition
-    // to what the BM25 should-queries match. Omit for BM25-only.
+    // Hybrid of BM25 and kNN. Opt in by passing `filter.embedding` (`{}` for the
+    // default threshold, the one of text -> TEXT in DEFAULT_DOC_SIMILARITY): the
+    // nearest neighbors are retrieved in addition to what the BM25
+    // should-queries match. Omit for BM25-only.
     // Set when a kNN clause is added: the highlighter cannot walk one.
     let highlightQuery;
 
-    if (filter.embedding != null && filter.moreLikeThis?.like) {
+    // Given (even as null, which skips kNN) takes precedence over the default.
+    const similarity =
+      filter.embedding && 'textDocSimilarity' in filter.embedding
+        ? filter.embedding.textDocSimilarity
+        : DEFAULT_DOC_SIMILARITY.text.TEXT;
+    if (filter.embedding && similarity != null && filter.moreLikeThis?.like) {
+      // Outside the try below: a bad `k` is the client's error to see.
+      const k = getKnnK(filter.embedding.k);
       try {
         const queryChunks = await createEmbedding(
           {
@@ -218,7 +226,14 @@ export default {
             bool: { ...body.query.bool, should: [...body.query.bool.should] },
           };
           body.query.bool.should.push(
-            buildKnnQuery({ queryVectors, similarity: filter.embedding })
+            buildKnnQuery({
+              queryVectors,
+              similarity,
+              // ES does not push the outer bool.filter into a nested knn; these
+              // are all top-level filters.
+              filter: { bool: { filter: [...filterQueries] } },
+              k,
+            })
           );
         }
       } catch (e) {
