@@ -45,7 +45,6 @@ import {
   getEmbeddingVersion,
   getEmbeddingCacheDocId,
   getCachedEmbedding,
-  isUrlOnlyText,
 } from '../embedding';
 
 const user = { id: 'test-user', appId: 'WEBSITE' };
@@ -492,30 +491,5 @@ describe('createMediaEmbedding', () => {
       query: { prefix: { docId: 'media-embedding-4' } },
     });
     expect(count).toBe(0);
-  });
-});
-
-describe('isUrlOnlyText', () => {
-  it('is true for bare links and links with a word or two', () => {
-    expect(
-      isUrlOnlyText('https://youtu.be/QoJeDjBfVFE?si=0waZA-_y1Ew2po-e')
-    ).toBe(true);
-    expect(
-      isUrlOnlyText(
-        'https://www.facebook.com/share/r/1ZmxzxF11i/?mibextid=wwXIfr\nhttps://youtu.be/abc'
-      )
-    ).toBe(true);
-    expect(isUrlOnlyText('轉傳 https://youtu.be/abc 這是真的嗎？')).toBe(true);
-  });
-
-  it('is false for text without links, or with enough text besides them', () => {
-    expect(isUrlOnlyText('')).toBe(false);
-    expect(isUrlOnlyText(null)).toBe(false);
-    expect(isUrlOnlyText('開票')).toBe(false);
-    expect(
-      isUrlOnlyText(
-        '切記！6月1號開始取締行人違規！只要不走斑馬線，一律開罰 https://example.com/a'
-      )
-    ).toBe(false);
   });
 });

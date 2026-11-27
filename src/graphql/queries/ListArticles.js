@@ -12,7 +12,6 @@ import {
   createMediaEmbedding,
   getCachedEmbedding,
   getQueryEmbeddingCacheId,
-  isUrlOnlyText,
   isEmbeddedMediaType,
 } from 'util/embedding';
 
@@ -42,6 +41,7 @@ import {
   VALID_ARTICLE_TYPE_TO_MEDIA_TYPE,
 } from 'graphql/util';
 import scrapUrls from 'util/scrapUrls';
+import isUrlOnlyText from 'util/isUrlOnlyText';
 import ArticleStatusEnum from 'graphql/models/ArticleStatusEnum';
 import ReplyTypeEnum from 'graphql/models/ReplyTypeEnum';
 import ArticleTypeEnum from 'graphql/models/ArticleTypeEnum';

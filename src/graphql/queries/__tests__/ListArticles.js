@@ -43,7 +43,6 @@ function mockUploadedMedia() {
 }
 
 jest.mock('util/embedding', () => ({
-  isUrlOnlyText: jest.requireActual('util/embedding').isUrlOnlyText,
   createEmbedding: jest.fn(),
   createMediaEmbedding: jest.fn(),
   // Reads airesponses for real

@@ -32,7 +32,7 @@ import {
 } from 'graphql/util';
 
 import client from 'util/client';
-import { isUrlOnlyText } from 'util/embedding';
+import isUrlOnlyText from 'util/isUrlOnlyText';
 import Node from '../interfaces/Node';
 import Analytics from 'graphql/models/Analytics';
 import ArticleReference from 'graphql/models/ArticleReference';
@@ -405,7 +405,7 @@ const Article = new GraphQLObjectType({
         const queryType = (articleType || 'TEXT').toLowerCase();
         // A URL-only article embeds as a URL string; see isUrlOnlyText.
         const docSimilarities =
-          queryType === 'text' && isUrlOnlyText(text)
+          filter.embedding && queryType === 'text' && isUrlOnlyText(text)
             ? []
             : getDocSimilarities({
                 queryType,
