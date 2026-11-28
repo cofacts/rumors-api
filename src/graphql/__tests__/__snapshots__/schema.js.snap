@@ -200,6 +200,10 @@ type Query {
   GetBadge(id: String): Badge
   ListArticles(
     filter: ListArticleFilter
+
+    \\"\\"\\"
+    Defaults to \`_score\` descending when \`filter.moreLikeThis\` or \`filter.mediaUrl\` is given.
+    \\"\\"\\"
     orderBy: [ListArticleOrderBy]
 
     \\"\\"\\"Returns only first <first> results\\"\\"\\"
@@ -217,6 +221,8 @@ type Query {
   ): ArticleConnection
   ListReplies(
     filter: ListReplyFilter
+
+    \\"\\"\\"Defaults to \`_score\` descending when \`filter.moreLikeThis\` is given.\\"\\"\\"
     orderBy: [ListReplyOrderBy]
 
     \\"\\"\\"Returns only first <first> results\\"\\"\\"
@@ -952,6 +958,11 @@ type ArticleConnectionPageInfo implements PageInfo {
 
 input RelatedArticleFilter {
   replyCount: RangeInput
+
+  \\"\\"\\"
+  Opt-in hybrid search; pass \`{}\` for the default thresholds. This article's stored embeddings are the kNN query, and its article type is the query type. Articles that have no embeddings yet get the text and media similarity only.
+  \\"\\"\\"
+  embedding: ArticleEmbeddingFilter
 }
 
 \\"\\"\\"List only the entries whose field match the criteria.\\"\\"\\"
@@ -961,6 +972,31 @@ input RangeInput {
   GT: Int
   GTE: Int
   EQ: Int
+}
+
+\\"\\"\\"
+Opt-in hybrid search: also retrieve the nearest neighbors via kNN, in addition to what BM25 matches. Pass \`{}\` to use the default threshold of each doc type, which depends on the type of the query. kNN runs separately for each doc type (TEXT, IMAGE, VIDEO; AUDIO is never searched by kNN), taking up to \`k\` nearest neighbors of each doc type. A doc type without a default threshold for the query type is not searched by kNN unless a threshold is given here. Docs only kNN finds come after the BM25 matches. \`totalCount\` then also counts the nearest neighbors, so it no longer tells how many match the keywords.
+\\"\\"\\"
+input ArticleEmbeddingFilter {
+  \\"\\"\\"
+  Minimum cosine similarity for TEXT docs to be found by kNN. Defaults to a value that depends on the type of the query (text, image or video); \`null\` skips kNN on TEXT docs.
+  \\"\\"\\"
+  textDocSimilarity: Float
+
+  \\"\\"\\"
+  Minimum cosine similarity for IMAGE docs to be found by kNN. Defaults to a value that depends on the type of the query (text, image or video); \`null\` skips kNN on IMAGE docs.
+  \\"\\"\\"
+  imageDocSimilarity: Float
+
+  \\"\\"\\"
+  Minimum cosine similarity for VIDEO docs to be found by kNN. Defaults to a value that depends on the type of the query (text, image or video); \`null\` skips kNN on VIDEO docs.
+  \\"\\"\\"
+  videoDocSimilarity: Float
+
+  \\"\\"\\"
+  How many nearest neighbors kNN takes for each doc type (TEXT, IMAGE and VIDEO each), between 1 and 250. Defaults to 100.
+  \\"\\"\\"
+  k: Int
 }
 
 \\"\\"\\"
@@ -1160,9 +1196,9 @@ input ListArticleFilter {
   mediaUrl: String
 
   \\"\\"\\"
-  Opt-in hybrid search. Provide the minimum cosine similarity (e.g. \`0.7\`) to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).
+  Opt-in hybrid search with \`moreLikeThis\` or \`mediaUrl\`; pass \`{}\` for the default thresholds. With \`mediaUrl\`, the media itself is the kNN query (its embedding is only created when logged in; otherwise only the one made before is used). Without it, the \`moreLikeThis\` text is the query (created only when logged in, as well). Omit for BM25-only (default).
   \\"\\"\\"
-  embedding: Float
+  embedding: ArticleEmbeddingFilter
 
   \\"\\"\\"
   Specifies how the transcript of \`mediaUrl\` can be used to search. Can only specify \`transcript\` when \`mediaUrl\` is specified.
@@ -1281,15 +1317,30 @@ input ListReplyFilter {
   moreLikeThis: MoreLikeThisInput
 
   \\"\\"\\"
-  Opt-in hybrid search. Provide the minimum cosine similarity (e.g. \`0.7\`) to retrieve candidates via kNN and rank them by BM25. Omit for BM25-only (default).
+  Opt-in hybrid search with \`moreLikeThis\`; pass \`{}\` for the default threshold. The query text embedding is only created when logged in. Omit for BM25-only (default).
   \\"\\"\\"
-  embedding: Float
+  embedding: ReplyEmbeddingFilter
 
   \\"\\"\\"[Deprecated] use types instead.\\"\\"\\"
   type: ReplyTypeEnum
 
   \\"\\"\\"List the replies of certain types\\"\\"\\"
   types: [ReplyTypeEnum]
+}
+
+\\"\\"\\"
+Opt-in hybrid search: also retrieve the nearest neighbors via kNN, in addition to what BM25 matches (up to \`k\`). Pass \`{}\` to use the defaults. \`totalCount\` then also counts the nearest neighbors, so it no longer tells how many match the keywords.
+\\"\\"\\"
+input ReplyEmbeddingFilter {
+  \\"\\"\\"
+  Minimum cosine similarity for replies to be found by kNN. Defaults to 0.75.
+  \\"\\"\\"
+  textDocSimilarity: Float
+
+  \\"\\"\\"
+  How many nearest neighbors kNN takes, between 1 and 250. Defaults to 100.
+  \\"\\"\\"
+  k: Int
 }
 
 \\"\\"\\"
