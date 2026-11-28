@@ -684,6 +684,17 @@ describe('GetArticle relatedArticles with kNN', () => {
     expect(ids(result)).toEqual(['knnRelNear']);
   });
 
+  it('runs no kNN when RELATED_ARTICLES_KNN is off', async () => {
+    process.env.RELATED_ARTICLES_KNN = 'off';
+    try {
+      const result = await query({ id: 'knnRelSelf', embedding: {} });
+      expect(result.errors).toBeUndefined();
+      expect(ids(result)).toEqual([]);
+    } finally {
+      delete process.env.RELATED_ARTICLES_KNN;
+    }
+  });
+
   it('relates nothing by vector without embedding', async () => {
     const result = await query({ id: 'knnRelSelf' });
     expect(result.errors).toBeUndefined();

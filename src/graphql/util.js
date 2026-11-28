@@ -155,8 +155,23 @@ export function getKnnK(k) {
   return k;
 }
 
-/** Names the clause built by buildKnnQuery, so that it can be told apart. */
-const KNN_QUERY_NAME = 'knn';
+/**
+ * relatedArticles runs on every article page (twice per page on the website),
+ * so it takes fewer neighbors and a narrower HNSW search than a search query:
+ * 100 candidates found 93.8% of the exact top 10 in the #411 eval (200: 96.3%
+ * at about 1.5x the latency). A page shows only a handful of related articles.
+ */
+export const RELATED_ARTICLES_KNN_DEFAULT_K = 20;
+export const RELATED_ARTICLES_KNN_NUM_CANDIDATES = 100;
+
+/**
+ * Whether relatedArticles may run kNN. Set RELATED_ARTICLES_KNN=off to turn it
+ * off without a release, e.g. when it loads Elasticsearch too much.
+ *
+ * @returns {boolean}
+ */
+export const isRelatedArticlesKnnEnabled = () =>
+  process.env.RELATED_ARTICLES_KNN !== 'off';
 
 /**
  * Default minimum cosine similarity of kNN hits, by the type of the query
@@ -284,16 +299,17 @@ export function getDocSimilarities({
  *   `{ term: { articleType: 'VIDEO' } }`), so that the `k` nearest are
  *   taken among the matching docs only. A filter in the enclosing bool query is
  *   NOT applied before kNN; it only drops hits after the k nearest are taken.
- * @param {string} [param.name] - `_name` of the returned query
  * @param {number} [param.k] - nearest neighbors to take; see getKnnK
+ * @param {number} [param.numCandidates] - HNSW candidates; defaults to
+ *   max(200, 2k)
  * @returns {object} a bool/should query suitable as a `should` clause
  */
 export function buildKnnQuery({
   queryVectors,
   similarity,
   filter,
-  name = KNN_QUERY_NAME,
   k = KNN_DEFAULT_K,
+  numCandidates = getNumCandidates(k),
 }) {
   const nestedKnnQueries = queryVectors.map((qv) => ({
     nested: {
@@ -304,7 +320,7 @@ export function buildKnnQuery({
           field: 'embeddings.vector',
           query_vector: qv,
           k,
-          num_candidates: getNumCandidates(k),
+          num_candidates: Math.max(numCandidates, k),
           similarity,
           ...(filter ? { filter } : {}),
         },
@@ -312,7 +328,9 @@ export function buildKnnQuery({
     },
   }));
 
-  return { bool: { should: nestedKnnQueries, _name: name } };
+  // No `_name`: a named query makes Elasticsearch work out the matched
+  // queries of each hit in the fetch phase, which runs the kNN once more.
+  return { bool: { should: nestedKnnQueries } };
 }
 
 export const userAndExistInput = new GraphQLInputObjectType({

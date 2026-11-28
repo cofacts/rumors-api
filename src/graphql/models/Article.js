@@ -29,6 +29,9 @@ import {
   getDocSimilarities,
   articleTypeQuery,
   getKnnK,
+  RELATED_ARTICLES_KNN_DEFAULT_K,
+  RELATED_ARTICLES_KNN_NUM_CANDIDATES,
+  isRelatedArticlesKnnEnabled,
 } from 'graphql/util';
 
 import client from 'util/client';
@@ -401,11 +404,16 @@ const Article = new GraphQLObjectType({
 
         // The article type is the query type of kNN (see DEFAULT_DOC_SIMILARITY);
         // legacy text articles may have no articleType.
-        const docSimilarities = getDocSimilarities({
-          queryType: (articleType || 'TEXT').toLowerCase(),
-          embeddingFilter: filter.embedding,
-        });
-        const k = getKnnK(filter.embedding?.k);
+        const docSimilarities = isRelatedArticlesKnnEnabled()
+          ? getDocSimilarities({
+              queryType: (articleType || 'TEXT').toLowerCase(),
+              embeddingFilter: filter.embedding,
+            })
+          : [];
+        const k =
+          filter.embedding?.k == null
+            ? RELATED_ARTICLES_KNN_DEFAULT_K
+            : getKnnK(filter.embedding.k);
 
         // Read along with the media manager query below. Fetched only when kNN
         // is to run; the vectors are not in the default _source.
@@ -522,8 +530,8 @@ const Article = new GraphQLObjectType({
                         must_not: [{ ids: { values: [id] } }],
                       },
                     },
-                    name: `knn-${docType}`,
                     k,
+                    numCandidates: RELATED_ARTICLES_KNN_NUM_CANDIDATES,
                   })
                 )
               );
