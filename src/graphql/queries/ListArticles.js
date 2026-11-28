@@ -880,7 +880,6 @@ export default {
                     ],
                   },
                 },
-                name: `knn-${docType}`,
                 k,
               })
             )

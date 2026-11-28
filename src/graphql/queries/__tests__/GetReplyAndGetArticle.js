@@ -4,6 +4,8 @@ import fixtures, {
   knnRelatedFixtures,
 } from '../__fixtures__/GetReplyAndArticle';
 import mediaManager from 'util/mediaManager';
+import client from 'util/client';
+import Article from 'graphql/models/Article';
 
 jest.mock('util/mediaManager');
 
@@ -682,6 +684,50 @@ describe('GetArticle relatedArticles with kNN', () => {
     });
     expect(result.errors).toBeUndefined();
     expect(ids(result)).toEqual(['knnRelNear']);
+  });
+
+  it('runs no kNN when RELATED_ARTICLES_KNN is off', async () => {
+    const before = process.env.RELATED_ARTICLES_KNN;
+    process.env.RELATED_ARTICLES_KNN = ' OFF ';
+    try {
+      const result = await query({ id: 'knnRelSelf', embedding: {} });
+      expect(result.errors).toBeUndefined();
+      expect(ids(result)).toEqual([]);
+    } finally {
+      if (before === undefined) delete process.env.RELATED_ARTICLES_KNN;
+      else process.env.RELATED_ARTICLES_KNN = before;
+    }
+  });
+
+  it('sends a light kNN: k 20, 100 candidates and no _name', async () => {
+    const { resolve } = Article.getFields().relatedArticles;
+    const { _source } = await client.get({
+      index: 'articles',
+      id: 'knnRelSelf',
+    });
+    const { body } = await resolve(
+      { ..._source, id: 'knnRelSelf' },
+      { filter: { embedding: {} } }
+    );
+    const knnClauses = body.query.bool.should.filter(
+      (clause) => clause.bool?.should?.[0]?.nested?.query?.knn
+    );
+    expect(knnClauses.length).toBeGreaterThan(0);
+    for (const clause of knnClauses) {
+      expect(clause.bool._name).toBeUndefined();
+      const { knn } = clause.bool.should[0].nested.query;
+      expect(knn.k).toBe(20);
+      expect(knn.num_candidates).toBe(100);
+    }
+
+    const { body: bigK } = await resolve(
+      { ..._source, id: 'knnRelSelf' },
+      { filter: { embedding: { k: 150 } } }
+    );
+    const bigKnn = bigK.query.bool.should.find(
+      (clause) => clause.bool?.should?.[0]?.nested?.query?.knn
+    ).bool.should[0].nested.query.knn;
+    expect(bigKnn.num_candidates).toBe(300);
   });
 
   it('relates nothing by vector without embedding', async () => {
