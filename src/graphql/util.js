@@ -135,26 +135,6 @@ export const KNN_DEFAULT_K = 100;
  */
 export const KNN_MAX_K = 250;
 
-const knnKField = (perWhat) => ({
-  type: GraphQLInt,
-  description:
-    `How many nearest neighbors kNN takes${
-      perWhat ? ` ${perWhat}` : ''
-    }, between 1 and ${KNN_MAX_K}. ` + `Defaults to ${KNN_DEFAULT_K}.`,
-});
-
-/**
- * @param {number} [k] - `filter.embedding.k` as given
- * @returns {number} k to use
- */
-export function getKnnK(k) {
-  if (k == null) return KNN_DEFAULT_K;
-  if (!Number.isInteger(k) || k < 1 || k > KNN_MAX_K) {
-    throw new Error(`embedding.k must be between 1 and ${KNN_MAX_K}`);
-  }
-  return k;
-}
-
 /**
  * relatedArticles runs on every article page (twice per page on the website),
  * so it takes fewer neighbors and a narrower HNSW search than a search query:
@@ -164,14 +144,39 @@ export function getKnnK(k) {
 export const RELATED_ARTICLES_KNN_DEFAULT_K = 20;
 export const RELATED_ARTICLES_KNN_NUM_CANDIDATES = 100;
 
+const knnKField = (perWhat) => ({
+  type: GraphQLInt,
+  description:
+    `How many nearest neighbors kNN takes${
+      perWhat ? ` ${perWhat}` : ''
+    }, between 1 and ${KNN_MAX_K}. ` +
+    `Defaults to ${KNN_DEFAULT_K} (${RELATED_ARTICLES_KNN_DEFAULT_K} for Article.relatedArticles).`,
+});
+
 /**
- * Whether relatedArticles may run kNN. Set RELATED_ARTICLES_KNN=off to turn it
- * off without a release, e.g. when it loads Elasticsearch too much.
+ * @param {number} [k] - `filter.embedding.k` as given
+ * @param {number} [defaultK] - k when none is given
+ * @returns {number} k to use
+ */
+export function getKnnK(k, defaultK = KNN_DEFAULT_K) {
+  if (k == null) return defaultK;
+  if (!Number.isInteger(k) || k < 1 || k > KNN_MAX_K) {
+    throw new Error(`embedding.k must be between 1 and ${KNN_MAX_K}`);
+  }
+  return k;
+}
+
+/**
+ * Whether relatedArticles may run kNN. Set RELATED_ARTICLES_KNN=off (or false,
+ * 0, no) to turn it off without a release, e.g. when it loads Elasticsearch
+ * too much; the api container needs to be recreated to pick it up.
  *
  * @returns {boolean}
  */
 export const isRelatedArticlesKnnEnabled = () =>
-  process.env.RELATED_ARTICLES_KNN !== 'off';
+  !['off', 'false', '0', 'no'].includes(
+    (process.env.RELATED_ARTICLES_KNN ?? '').trim().toLowerCase()
+  );
 
 /**
  * Default minimum cosine similarity of kNN hits, by the type of the query

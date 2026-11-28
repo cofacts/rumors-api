@@ -410,10 +410,7 @@ const Article = new GraphQLObjectType({
               embeddingFilter: filter.embedding,
             })
           : [];
-        const k =
-          filter.embedding?.k == null
-            ? RELATED_ARTICLES_KNN_DEFAULT_K
-            : getKnnK(filter.embedding.k);
+        const k = getKnnK(filter.embedding?.k, RELATED_ARTICLES_KNN_DEFAULT_K);
 
         // Read along with the media manager query below. Fetched only when kNN
         // is to run; the vectors are not in the default _source.
@@ -531,7 +528,10 @@ const Article = new GraphQLObjectType({
                       },
                     },
                     k,
-                    numCandidates: RELATED_ARTICLES_KNN_NUM_CANDIDATES,
+                    numCandidates: Math.max(
+                      RELATED_ARTICLES_KNN_NUM_CANDIDATES,
+                      2 * k
+                    ),
                   })
                 )
               );

@@ -994,7 +994,7 @@ input ArticleEmbeddingFilter {
   videoDocSimilarity: Float
 
   \\"\\"\\"
-  How many nearest neighbors kNN takes for each doc type (TEXT, IMAGE and VIDEO each), between 1 and 250. Defaults to 100.
+  How many nearest neighbors kNN takes for each doc type (TEXT, IMAGE and VIDEO each), between 1 and 250. Defaults to 100 (20 for Article.relatedArticles).
   \\"\\"\\"
   k: Int
 }
@@ -1338,7 +1338,7 @@ input ReplyEmbeddingFilter {
   textDocSimilarity: Float
 
   \\"\\"\\"
-  How many nearest neighbors kNN takes, between 1 and 250. Defaults to 100.
+  How many nearest neighbors kNN takes, between 1 and 250. Defaults to 100 (20 for Article.relatedArticles).
   \\"\\"\\"
   k: Int
 }
