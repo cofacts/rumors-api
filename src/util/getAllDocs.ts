@@ -8,18 +8,24 @@ import client from 'util/client';
  * @param settings Query param settings in ES.
  * @param settings.size Number of docs per batch. Default to 1000.
  * @param settings.scroll The scroll timeout setting. Default to 30s.
+ * @param settings._source Fields to fetch. Fetches all fields if not given.
  * @yields {Object} the document
  */
 async function* getAllDocs<T extends object>(
   index: string,
   query: object = { match_all: {} },
-  { scroll = '30s', size = 1000 }: { size?: number; scroll?: string } = {}
+  {
+    scroll = '30s',
+    size = 1000,
+    _source,
+  }: { size?: number; scroll?: string; _source?: string[] } = {}
 ): AsyncGenerator<{ _id: string; _source: T }> {
   let resp = await client.search({
     index,
     scroll,
     size,
     query,
+    _source,
   });
 
   while (true) {

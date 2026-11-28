@@ -55,3 +55,6 @@ gcs.json
 
 # Claude Code local guidance
 CLAUDE.local.md
+
+# Backups and results of src/scripts/migrations/cleanupPollutedText.js
+loginwall-migration*/
