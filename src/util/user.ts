@@ -231,7 +231,7 @@ export async function createOrUpdateUser({
     // of the same user (e.g. the website sending two batches at once) update
     // the same doc; without retries, all but one fail with a version conflict
     // and the whole request errors at context creation.
-    retry_on_conflict: 5,
+    retry_on_conflict: 10,
     doc: {
       lastActiveAt: now,
     },

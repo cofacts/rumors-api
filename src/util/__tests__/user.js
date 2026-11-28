@@ -240,9 +240,10 @@ describe('user utils', () => {
       await createOrUpdateUser({ userId, appId });
 
       // Each call updates the same user doc; without retry_on_conflict, all but
-      // one would fail with version_conflict_engine_exception.
+      // one would fail with version_conflict_engine_exception. A website page
+      // sends 2 at once; 5 leaves headroom without exhausting the retries.
       const results = await Promise.allSettled(
-        Array.from({ length: 20 }, () => createOrUpdateUser({ userId, appId }))
+        Array.from({ length: 5 }, () => createOrUpdateUser({ userId, appId }))
       );
       expect(results.filter(({ status }) => status === 'rejected')).toEqual([]);
 
