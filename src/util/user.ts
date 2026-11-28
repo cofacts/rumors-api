@@ -227,6 +227,11 @@ export async function createOrUpdateUser({
   const { result, get: userFound } = await client.update({
     index: 'users',
     id: dbUserId,
+    // Every request of a logged-in user comes through here. Concurrent requests
+    // of the same user (e.g. the website sending two batches at once) update
+    // the same doc; without retries, all but one fail with a version conflict
+    // and the whole request errors at context creation.
+    retry_on_conflict: 5,
     doc: {
       lastActiveAt: now,
     },

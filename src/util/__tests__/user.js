@@ -234,6 +234,21 @@ describe('user utils', () => {
       await client.delete({ index: 'users', id });
     });
 
+    it('handles concurrent requests of the same user', async () => {
+      const userId = 'testUserConcurrent';
+      const appId = 'TEST_BACKEND';
+      await createOrUpdateUser({ userId, appId });
+
+      // Each call updates the same user doc; without retry_on_conflict, all but
+      // one would fail with version_conflict_engine_exception.
+      const results = await Promise.allSettled(
+        Array.from({ length: 20 }, () => createOrUpdateUser({ userId, appId }))
+      );
+      expect(results.filter(({ status }) => status === 'rejected')).toEqual([]);
+
+      await client.delete({ index: 'users', id: getUserId({ userId, appId }) });
+    });
+
     it("updates backend users' last active time if user already existed", async () => {
       MockDate.set(1602291600000);
 
